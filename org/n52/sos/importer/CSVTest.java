@@ -1,33 +1,21 @@
 package org.n52.sos.importer;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
 
-import au.com.bytecode.opencsv.CSVReader;
+import javax.swing.JFrame;
 
 
 public class CSVTest {
 
 	public static void main(String[] args) {
-		File f = new File("C:\\Users\\Raimund\\Documents\\Mappe1.csv");
-		try {
-			CSVReader reader = new CSVReader(new FileReader(f), ';');
-			
-			String [] nextLine;
-		    while ((nextLine = reader.readNext()) != null) {
-				for (String s: nextLine) {
-					System.out.println(s);
-				}
-		    }
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		JFrame bla= new JFrame();
+		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
+		bla.getContentPane().add(new Step4cPanel(null, 0, o));
+		bla.setVisible(true);
+		bla.pack();
+		*/
+		
+		MainFrame bla= new MainFrame();
+		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
+		bla.setStepPanel(new Step3Panel(bla, o));
 	}
 }

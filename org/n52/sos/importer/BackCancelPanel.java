@@ -23,6 +23,10 @@ public class BackCancelPanel extends JPanel {
 		this.add(next);
 	}
 	
+	public JButton getBackButton() {
+		return back;
+	}
+	
 	public void setStepPanel(StepPanel stepPanel) {
 		this.stepPanel = stepPanel;
 	}

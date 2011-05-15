@@ -2,41 +2,53 @@ package org.n52.sos.importer;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
-	private StepPanel stepPanel;
+
 	private final StepDescriptionPanel stepDescriptionPanel = new StepDescriptionPanel();
+	private final JPanel stepPanel = new JPanel();
 	private final BackCancelPanel backCancelPanel = new BackCancelPanel();
+	
+	private final Step1Panel step1Panel = new Step1Panel(this);
+	private final Step2Panel step2Panel = new Step2Panel(this);
 	
 	public MainFrame() {
 		this.setTitle("CSV to SOS");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setStepPanel(new Step1(this));
-		redraw();
-
-
-		this.setVisible(true);
-	}
-	
-	private void redraw() {
-		this.getContentPane().removeAll();
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		this.getContentPane().add(stepDescriptionPanel);
 		this.getContentPane().add(stepPanel);
 		this.getContentPane().add(backCancelPanel);
+		
+		this.setStepPanel(step1Panel);
 		this.pack();
 		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 	}
 	
-	public void setStepPanel(StepPanel stepPanel) {
-		this.stepPanel = stepPanel; 
-		stepDescriptionPanel.setText(stepPanel.getDescription());
-		backCancelPanel.setStepPanel(stepPanel);
-		redraw();
+	
+	public void setStepPanel(StepPanel newStepPanel) {		
+		stepPanel.removeAll();
+		stepPanel.add(newStepPanel);
+	    stepDescriptionPanel.setText(newStepPanel.getDescription());
+		backCancelPanel.setStepPanel(newStepPanel);
+		this.pack();
+	}
+
+	public Step1Panel getStep1Panel() {
+		return step1Panel;
+	}
+	
+	public Step2Panel getStep2Panel() {
+		return step2Panel;
+	}
+	
+	public BackCancelPanel getBackCancelPanel() {
+		return backCancelPanel;
 	}
 	
 	private void exitDialog() {

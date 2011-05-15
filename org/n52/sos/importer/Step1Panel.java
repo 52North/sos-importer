@@ -15,17 +15,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-public class Step1 extends StepPanel {
-
-	private static final long serialVersionUID = 1L;
+public class Step1Panel extends StepPanel {
 	
+	static final long serialVersionUID = 1L;
 	private final JLabel csvFileLabel = new JLabel("CSV file:   ");
 	private final JTextField csvFileTextField = new JTextField(25);
 	private final JButton browse = new JButton("Browse");
 	
-	public Step1(MainFrame mainFrame) {
+	public Step1Panel(MainFrame mainFrame) {
 		super(mainFrame);
-
+		
+		//hide "back" button
+		getMainFrame().getBackCancelPanel().getBackButton().setVisible(false);
+		this.loadSettings();
+		
 		csvFileTextField.setMinimumSize(new Dimension(100, 0));
 		browse.addActionListener(new BrowseButtonClicked());
 		
@@ -33,6 +36,12 @@ public class Step1 extends StepPanel {
 		this.add(csvFileLabel);
 		this.add(csvFileTextField);
 		this.add(browse);
+	}
+	
+	@Override
+	protected void loadSettings() {
+		if (Settings.getCSVFilePath() != null)
+			csvFileTextField.setText(Settings.getCSVFilePath());
 	}
 	
 	public void chooseCSVFile() {
@@ -60,6 +69,33 @@ public class Step1 extends StepPanel {
 		public void actionPerformed(ActionEvent e) {
 		    chooseCSVFile();
 		}
+	}
+	
+	private boolean isValid(File f) {		
+		if (!f.exists()) {
+			JOptionPane.showMessageDialog(getMainFrame(),
+				    "The specified file does not exist.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		if (!f.isFile()) {
+			JOptionPane.showMessageDialog(getMainFrame(),
+				    "Please specify a file, not a directory.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+			
+		if (!f.canRead()) {
+			JOptionPane.showMessageDialog(getMainFrame(),
+				    "No reading access on the specified file.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 	
 	private String readFile(File f) {
@@ -90,27 +126,24 @@ public class Step1 extends StepPanel {
 	protected void next() {
 		String filePath = csvFileTextField.getText();
 		
-		System.out.println(filePath);
-		
 		if (filePath.equals("")) {
 			JOptionPane.showMessageDialog(getMainFrame(),
 				    "Please choose a CSV file",
 				    "File missing",
 				    JOptionPane.WARNING_MESSAGE);
 			return;
-		}	
-
+		}		
+		
 		File f = new File(filePath);
-		//TODO
-		/*
-		if (!f.exists() || !f.isDirectory()) {
-			JOptionPane.showMessageDialog(getMainFrame(),
-				    "The specified file does not exist",
-				    "File not found",
-				    JOptionPane.ERROR_MESSAGE);
-			return;
-		}*/
-		String s = readFile(f);
-		getMainFrame().setStepPanel(new Step2(getMainFrame(), s));	
+		if (isValid(f)) {
+			Settings.setCSVFilePath(filePath);
+			String s = readFile(f);
+			Step2Panel s2p = getMainFrame().getStep2Panel();
+			s2p.setCSVFileContent(s);
+			getMainFrame().setStepPanel(s2p);	
+			
+			//show "back" button
+			getMainFrame().getBackCancelPanel().getBackButton().setVisible(true);
+		}
 	}
 }

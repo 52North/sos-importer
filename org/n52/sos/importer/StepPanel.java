@@ -12,6 +12,8 @@ public abstract class StepPanel extends JPanel {
 		this.mainFrame = mainFrame;
 	}
 	
+	protected abstract void loadSettings();
+	
 	protected abstract String getDescription();
 	
 	protected abstract void back();
