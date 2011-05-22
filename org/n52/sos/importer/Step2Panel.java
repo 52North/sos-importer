@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -27,7 +28,7 @@ public class Step2Panel extends StepPanel {
 	
 	private final String[] columnSeparatorValues = { ";", ",", ":", "Tab"};
 	private final String[] commentIndicatorValues = { "#" };
-	private final String[] textQualifierValues = { "\"" };	
+	private final String[] textQualifierValues = { "\"", "'" };	
 	private final String[] decimalSeparatorValues = { ",", "." };
 	private final String[] thousandsSeparatorValues = { ".", ",", "'", " " };
 	
@@ -43,7 +44,7 @@ public class Step2Panel extends StepPanel {
 		super(mainFrame);
 		this.loadSettings();
 
-		csvFileTextArea.setEditable(false);
+		csvFileTextArea.setEditable(true);
 		
 		JPanel csvSettingsPanel = new JPanel();
 		csvSettingsPanel.setLayout(new GridLayout(5,2));
@@ -65,17 +66,18 @@ public class Step2Panel extends StepPanel {
 	
 	public void setCSVFileContent(String csvFileContent) {
 		csvFileTextArea.setText(csvFileContent);
-		System.out.println(csvFileTextArea.getText());
+		csvFileTextArea.setCaretPosition(0);
 	}
 	
-	private Object[][] parseCSVFile(File f) {
+	private Object[][] parseCSVFile() {
 		Object[][] content = null;
-		try {
+		try {	
 			String separator = (String) columnSeparatorCombobox.getSelectedItem();
 			if (separator.equals("Tab")) separator = "\t";
 			String quoteChar = (String) commentIndicatorCombobox.getSelectedItem();
 			String escape = (String) textQualifierCombobox.getSelectedItem();
-			CSVReader reader = new CSVReader(new FileReader(f), separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
+			StringReader sr = new StringReader(csvFileTextArea.getText());
+			CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
 			List<String[]> lines = reader.readAll();
 			int rows = lines.size();
 			String[] firstLine = lines.get(0);
@@ -109,10 +111,11 @@ public class Step2Panel extends StepPanel {
 
 	@Override
 	protected void next() {
-		File f = new File(Settings.getCSVFilePath());
-		Object[][] content = parseCSVFile(f);
+		Object[][] content = parseCSVFile();
 		saveSettings();
-		getMainFrame().setStepPanel(getMainFrame().getStep1Panel());
+		Step3Panel s3p = getMainFrame().getStep3Panel();
+		s3p.setTableContent(content);
+		getMainFrame().setStepPanel(s3p);
 	}
 	
 	protected void saveSettings() {

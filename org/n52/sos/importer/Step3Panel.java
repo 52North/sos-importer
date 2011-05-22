@@ -1,18 +1,22 @@
 package org.n52.sos.importer;
+import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Step3Panel extends StepPanel {
 	
@@ -22,28 +26,20 @@ public class Step3Panel extends StepPanel {
 	private final String[] selectionModeValues = { "Columns", "Rows", "Cells" };
 	private final JComboBox selectionModeComboBox = new JComboBox(selectionModeValues);
 	
-	private final JRadioButton undefinedButton = new JRadioButton("Undefined");
-	private final JRadioButton measuredValueButton = new JRadioButton("Measured Value");
-	private final JRadioButton dateAndTimeButton = new JRadioButton("Date & Time");
-	private final JRadioButton positionButton = new JRadioButton("Position");
-	private final JRadioButton featureOfInterestButton = new JRadioButton("Feature of Interest");
-	private final JRadioButton sensorNameButton = new JRadioButton("Sensor Name");
-	private final JRadioButton observedPropertyButton = new JRadioButton("Observed Property");
-	private final JRadioButton unitOfMeasurementButton = new JRadioButton("Unit of Measurement");
-	private final JRadioButton combinationButton = new JRadioButton("Combination");
-	private final JRadioButton doNotExportButton = new JRadioButton("Do not export");
+	private JTable table = new JTable();
 	
-	private final JPanel additionalPanel1 = new JPanel();
-	private final JPanel additionalPanel2 = new JPanel();
+	private JPanel rootPanel = new JPanel();
+	private final SelectionPanel radioButtonPanel;
+	private JPanel additionalPanel1 = new JPanel();
+	private JPanel additionalPanel2 = new JPanel();
+	private JPanel tablePanel = new JPanel();
 	
-	private final MeasuredValuePanel measuredValuePanel = new MeasuredValuePanel();
-	private final DateAndTimePanel dateAndTimePanel = new DateAndTimePanel();
-	private final PositionPanel positionPanel = new PositionPanel();
+	private final HashMap<Integer, List<String>> columnStore = new HashMap<Integer, List<String>>();
+	private final HashMap<Integer, List<String>> rowStore = new HashMap<Integer, List<String>>();
 	
-	private final JTable table;
-	
-	public Step3Panel(MainFrame mainFrame, Object[][] csvFileContent) {
+	public Step3Panel(MainFrame mainFrame) {
 		super(mainFrame);
+		radioButtonPanel = new RadioButtonPanel(mainFrame);
 		selectionModeComboBox.addActionListener(new SelectionModeChanged());
 		
 		JPanel selectionModelPanel = new JPanel();
@@ -52,66 +48,41 @@ public class Step3Panel extends StepPanel {
 		selectionModelPanel.add(selectionModeComboBox);
 		this.add(selectionModelPanel);
 		
+	    this.add(rootPanel);
+	    this.add(additionalPanel1);
+	    this.add(additionalPanel2);
+	    this.add(tablePanel);
+	}
+	
+	public void setTableContent(Object[][] content) {
 		//initialize blank table headers
-		int columns = csvFileContent[0].length;
+		int columns = content[0].length;
 		String[] columnHeaders = new String[columns];
 		for (int i = 0; i < columns; i++) {
 			columnHeaders[i] = "";
 		}
-		table = new JTable(csvFileContent, columnHeaders) {  
+		table = new JTable(content, columnHeaders) {  
 			private static final long serialVersionUID = 1L;
 			//turn editing of cells off
 			public boolean isCellEditable(int row, int col) {  
                 return false;  
             }  
         };
+        
         setSelectionMode("Columns");
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		//select first column
+		table.setColumnSelectionInterval(0, 0);
 		
-		//ListSelectionModel.MULTIPLE_INTERVAL_SELECTIONS
+		SelectionListener listener = new SelectionListener(table);
+		table.getSelectionModel().addListSelectionListener(listener);
+		table.getColumnModel().getSelectionModel()
+		    .addListSelectionListener(listener);
+		
 		JScrollPane scrollPane = new JScrollPane(table);
-		this.add(scrollPane);
-		undefinedButton.setSelected(true);
-		
-		measuredValueButton.addActionListener(new MeasuredValueSelected());
-		dateAndTimeButton.addActionListener(new DateAndTimeSelected());
-		positionButton.addActionListener(new PositionSelected());
-		
-		RemoveAdditionalPanels removeAdditionalPanels = new RemoveAdditionalPanels();
-		undefinedButton.addActionListener(removeAdditionalPanels);
-		featureOfInterestButton.addActionListener(removeAdditionalPanels);
-		sensorNameButton.addActionListener(removeAdditionalPanels);
-		observedPropertyButton.addActionListener(removeAdditionalPanels);
-		unitOfMeasurementButton.addActionListener(removeAdditionalPanels);
-		combinationButton.addActionListener(removeAdditionalPanels);
-		doNotExportButton.addActionListener(removeAdditionalPanels);
-		
-		ButtonGroup group = new ButtonGroup();
-		group.add(undefinedButton);
-	    group.add(measuredValueButton);
-	    group.add(dateAndTimeButton);
-	    group.add(positionButton);
-	    group.add(featureOfInterestButton);
-	    group.add(sensorNameButton);
-	    group.add(observedPropertyButton);
-	    group.add(unitOfMeasurementButton);
-	    group.add(combinationButton);
-	    group.add(doNotExportButton);
-	    
-        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-        radioPanel.add(undefinedButton);
-        radioPanel.add(measuredValueButton);
-        radioPanel.add(dateAndTimeButton);
-        radioPanel.add(positionButton);
-        radioPanel.add(featureOfInterestButton);
-        radioPanel.add(sensorNameButton);
-        radioPanel.add(observedPropertyButton);
-        radioPanel.add(unitOfMeasurementButton);
-	    radioPanel.add(combinationButton);
-        radioPanel.add(doNotExportButton);
-        
-	    this.add(radioPanel);
-	    this.add(additionalPanel1);
+		tablePanel.removeAll();
+		tablePanel.add(scrollPane);	
+		getMainFrame().pack();
 	}
 	
 	private void setSelectionMode(String sm) {
@@ -131,6 +102,16 @@ public class Step3Panel extends StepPanel {
 			table.setShowVerticalLines(true);
 			table.setShowHorizontalLines(true);
 		}
+	}
+	
+	public List<String> getSelectedValues() {
+		//column selection
+		ArrayList<String> values = new ArrayList<String>();
+		int column = table.getSelectedColumn();
+		int rows = table.getRowCount();
+		for (int i = 0; i < rows; i++)
+			values.add((String)table.getValueAt(i, column));
+		return values;
 	}
 
 	@Override
@@ -157,215 +138,283 @@ public class Step3Panel extends StepPanel {
 	    }
 	}		
 	
-	public void changeAddtionalPanels(JPanel p1, JPanel p2) {
-		additionalPanel1.removeAll();
-		additionalPanel2.removeAll();
-		if (p1 != null) additionalPanel1.add(p1);
-		if (p2 != null) additionalPanel1.add(p2);
-		getMainFrame().pack();
-	}
-	
-	public void changeAdditionalPanel2(JPanel p2) {
-		additionalPanel2.removeAll();
-		if (p2 != null) additionalPanel1.add(p2);
-		getMainFrame().pack();
-	}
-	
-	private class RemoveAdditionalPanels implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			changeAddtionalPanels(null, null);
-		}		
-	}
-
-	
-	private class MeasuredValueSelected implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			changeAddtionalPanels(measuredValuePanel, null);
-		}
-	}
-	
-	private class DateAndTimeSelected implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			changeAddtionalPanels(dateAndTimePanel, null);
-		}
-	}
-	
-	private class PositionSelected implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			changeAddtionalPanels(positionPanel, null);
-		}
-	}
-
-	private class MeasuredValuePanel extends JPanel {
-
+	private class RadioButtonPanel extends ButtonGroupPanel {
+		
 		private static final long serialVersionUID = 1L;
 		
-		private final JRadioButton numericValueButton = new JRadioButton("Numeric Value");
-		private final JRadioButton countButton = new JRadioButton("Count");
-		private final JRadioButton textButton = new JRadioButton("Text");
-		private final JRadioButton booleanButton = new JRadioButton("Boolean");	
-		
-		public MeasuredValuePanel() {
-			ButtonGroup group = new ButtonGroup();
-		    group.add(numericValueButton);
-		    group.add(countButton);
-		    group.add(textButton);
-		    group.add(booleanButton);
-			
-	        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-	        radioPanel.add(numericValueButton);
-	        radioPanel.add(countButton);
-	        radioPanel.add(textButton);
-	        radioPanel.add(booleanButton);
-	        add(radioPanel);
+		public RadioButtonPanel(MainFrame mainFrame) {	
+			super(mainFrame, rootPanel);
+			addRadioButton("Undefined");
+			addRadioButton("Measured Value", new MeasuredValuePanel(mainFrame, additionalPanel1));
+			addRadioButton("Date & Time", new DateAndTimePanel(mainFrame, additionalPanel1));
+			addRadioButton("Position", new PositionPanel(mainFrame, additionalPanel1));
+			addRadioButton("Feature of Interest");
+			addRadioButton("Sensor Name");
+			addRadioButton("Observed Property");
+			addRadioButton("Unit of Measurement");
+			addRadioButton("Combination");
+			addRadioButton("Do not export");				
 		}
-	}
-	
-	private class DateAndTimePanel extends JPanel {
 
-		private static final long serialVersionUID = 1L;
-		
-		private final JRadioButton combinationButton = new JRadioButton("Combination");
-		private final JRadioButton dateButton = new JRadioButton("Date");
-		private final JRadioButton timeButton = new JRadioButton("Time");
-		private final JRadioButton timezoneButton = new JRadioButton("Timezone");
-		private final JRadioButton unixButton = new JRadioButton("UNIX time");	
-		
-		private final DateAndTimeCombinationPanel dateAndTimeCombinationPanel = new DateAndTimeCombinationPanel();
-		
-		public DateAndTimePanel() {
-			super();
-			ButtonGroup group = new ButtonGroup();
-		    group.add(combinationButton);
-		    group.add(dateButton);
-		    group.add(timeButton);
-		    group.add(timezoneButton);
-		    group.add(unixButton);
-			
-	        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-	        radioPanel.add(combinationButton);
-	        radioPanel.add(dateButton);
-	        radioPanel.add(timeButton);
-	        radioPanel.add(timezoneButton);
-	        radioPanel.add(unixButton);
-	        this.add(radioPanel);
-	        
-	        combinationButton.addActionListener(new DateAndTimeCombinationSelected());
-		}
-		
-		private class DateAndTimeCombinationSelected implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				changeAdditionalPanel2(dateAndTimeCombinationPanel);
-			}		
-		}
-		
-		private class DateAndTimeCombinationPanel extends JPanel {
+		private class MeasuredValuePanel extends ButtonGroupPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			private final JLabel formatLabel = new JLabel("Format: ");
-	        String[] patternExamples = {
-	                 "yyyy.MM.dd G 'at' hh:mm:ss z",
-	                 "yyyy.MMMMM.dd GGG hh:mm aaa"
-	                 };
+			private final ParseTestPanel parseTestLabel = new ParseTestPanel();
 			
-			private final JComboBox dateAndTimeFormatComboBox = new JComboBox(patternExamples);
-			private final JButton removeButton = new JButton("remove");
-			
-			public DateAndTimeCombinationPanel() {	
-				super();
-				dateAndTimeFormatComboBox.setEditable(true);
+			public MeasuredValuePanel(MainFrame mainFrame, JPanel containerPanel) {	
+				super(mainFrame, containerPanel);		
+				addRadioButton("Numeric Value");
+				addRadioButton("Count");
+				addRadioButton("Text");
+				addRadioButton("Boolean");
+				add(parseTestLabel);
+			}
+
+			@Override
+			protected void selectionChanged() {
 				
-				removeButton.setBorderPainted(false);
-				removeButton.setContentAreaFilled(false);
-				removeButton.addActionListener(new RemoveButtonClicked());
-				
-				this.setLayout(new FlowLayout(FlowLayout.LEFT));
-				this.add(formatLabel);
-				this.add(dateAndTimeFormatComboBox);
-				this.add(removeButton);
+				String s = getSelection();
+				if (s.equals("Numeric Value")) {
+					parseTestLabel.parseValues();
+				}
 			}
 			
-			private class RemoveButtonClicked implements ActionListener {
+			private class ParseTestPanel extends JLabel {
+
+				private static final long serialVersionUID = 1L;
+				
+				public ParseTestPanel() {
+					super();
+				}
+				
+				public void parseValues() {
+					int notParseableValues = 0;
+					StringBuilder notParseable = new StringBuilder();
+					notParseable.append("<html>");
+					List<String> values = getSelectedValues();
+
+					for (String value: values) {
+						try {
+							parse(value);
+						} catch (Exception e) {
+							notParseable.append(value + "<br>");
+							notParseableValues++;
+						}
+					}
+					
+					this.setForeground(Color.blue);
+					this.setText("<html><u>" + notParseableValues + " values not parseable</u></html>");
+					
+					notParseable.append("</html>");
+					this.setToolTipText(notParseable.toString());
+				}
+				
+				public void parse(String value) {
+					Integer.parseInt(value);
+				}				
+			}
+			
+		}
+		
+		private class DateAndTimePanel extends ButtonGroupPanel {
+
+			private static final long serialVersionUID = 1L;
+			
+			public DateAndTimePanel(MainFrame mainFrame, JPanel containerPanel) {
+				super(mainFrame, containerPanel);
+				addRadioButton("Combination", new DateAndTimeCombinationPanel(mainFrame, additionalPanel2));
+				//addRadioButton("Date", new DatePanel());
+				//addRadioButton("Time", new TimePanel());
+				addRadioButton("Timezone", new TimeZonePanel(mainFrame, additionalPanel2));
+				addRadioButton("UNIX time");
+			}
+			
+			/*
+			private class DatePanel extends ComboBoxPanel {
+
+				private static final long serialVersionUID = 1L;
+			
+				private String format = "Format: ";
+				
+		        private String[] patternExamples = {
+		                "dd MMMMM yyyy",
+		                "dd.MM.yy",
+		                "MM/dd/yy",
+		                "EEE, MMM d, ''yy",
+		                 };
+				
+				public DatePanel() {	
+					super();
+					setLabelText(format);
+					setComboBoxObjects(patternExamples);
+				}
+				
+				@Override
+				protected JPanel getChildContainerPanel() {
+					return null;
+				}
+			}
+			
+			
+			private class TimePanel extends ComboBoxPanel {
+
+				private static final long serialVersionUID = 1L;
+				
+				private String format = "Format: ";
+				
+		        String[] patternExamples = {
+		        		"h:mm a",
+		                "H:mm:ss:SSS",
+		                "K:mm a,z",
+		                 };
+				
+				public TimePanel() {	
+					super();
+					setLabelText(format);
+					setComboBoxObjects(patternExamples);
+				}
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
-					int index = dateAndTimeFormatComboBox.getSelectedIndex();
-					dateAndTimeFormatComboBox.removeItemAt(index);
-				}		
+				protected JPanel getChildContainerPanel() {
+					return null;
+				}
+			}
+			*/
+			private class TimeZonePanel extends ButtonGroupPanel {
+
+				private static final long serialVersionUID = 1L;
+				
+				public TimeZonePanel(MainFrame mainFrame, JPanel containerPanel) {
+					super(mainFrame, containerPanel);	
+					super.addRadioButton("Country or City Name");
+					super.addRadioButton("UTC Offset");		       
+				}
+			}
+			
+			private class DateAndTimeCombinationPanel extends ComboBoxPanel {
+				//source: 	http://download.oracle.com/javase/tutorial/uiswing/
+				// 			examples/components/ComboBoxDemo2Project/src/components/
+				// 			ComboBoxDemo2.java
+				private static final long serialVersionUID = 1L;
+
+				private String format = "Format: ";
+				
+		        String[] patternExamples = {
+		                 "dd MMMMM yyyy",
+		                 "dd.MM.yy",
+		                 "MM/dd/yy",
+		                 "yyyy.MM.dd G 'at' hh:mm:ss z",
+		                 "EEE, MMM d, ''yy",
+		                 "h:mm a",
+		                 "H:mm:ss:SSS",
+		                 "K:mm a,z",
+		                 "yyyy.MMMMM.dd GGG hh:mm aaa"
+		                 };
+		        
+		        private JLabel exampleDateTime = new JLabel("");
+				
+				public DateAndTimeCombinationPanel(MainFrame mainFrame, JPanel containerPanel) {	
+					super(mainFrame, containerPanel);	
+					setLabelText(format);
+					setComboBoxObjects(patternExamples);
+					this.add(exampleDateTime);
+					reformat();
+				}
+				
+			    /** Formats and displays today's date. */
+			    public void reformat() {
+			    	String currentPattern = getSelection();
+			        Date today = new Date();		        
+			        try {
+			        	SimpleDateFormat formatter =
+					           new SimpleDateFormat(currentPattern);
+			            String dateString = formatter.format(today);
+			            exampleDateTime.setForeground(Color.black);
+			            exampleDateTime.setText("e.g. " + dateString);
+			        } catch (IllegalArgumentException iae) {
+			        	exampleDateTime.setForeground(Color.red);
+			        	exampleDateTime.setText("Error: " + iae.getMessage());
+			        }
+			    }
+			    
+			    @Override
+			    protected void selectionChanged() {
+			    	reformat();
+			    }
 			}
 		}
-	}
 
-	private class PositionPanel extends JPanel {
-
-		private static final long serialVersionUID = 1L;
-		
-		private final JRadioButton longitudeButton = new JRadioButton("Longitude / X");
-		private final JRadioButton latitudeButton = new JRadioButton("Latitude / Y");
-		private final JRadioButton altitudeButton = new JRadioButton("Altitude / Z");
-		private final JRadioButton referenceSystemButton = new JRadioButton("Reference System");
-		private final JRadioButton combinationButton = new JRadioButton("Combination");	
-		
-		private final ReferenceSystemPanel referenceSystemPanel = new ReferenceSystemPanel();
-		
-		public PositionPanel() {
-			super();
-			
-			referenceSystemButton.addActionListener(new ReferenceSystemSelected());
-			
-			ButtonGroup group = new ButtonGroup();
-		    group.add(longitudeButton);
-		    group.add(latitudeButton);
-		    group.add(altitudeButton);
-		    group.add(referenceSystemButton);
-		    group.add(combinationButton);
-			
-	        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-	        radioPanel.add(longitudeButton);
-	        radioPanel.add(latitudeButton);
-	        radioPanel.add(altitudeButton);
-	        radioPanel.add(referenceSystemButton);
-	        radioPanel.add(combinationButton);
-	        this.add(radioPanel);
-		}
-		
-		private class ReferenceSystemPanel extends JPanel {
+		private class PositionPanel extends ButtonGroupPanel {
 
 			private static final long serialVersionUID = 1L;
-			private final JRadioButton referenceSystemNameButton = new JRadioButton("Name");
-			private final JRadioButton referenceSystemEPSGCodeButton = new JRadioButton("EPSG-Code");
 			
-			public ReferenceSystemPanel() {
-				super();
-				
-				ButtonGroup group = new ButtonGroup();
-			    group.add(referenceSystemNameButton);
-			    group.add(referenceSystemEPSGCodeButton);
-			    
-		        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-		        radioPanel.add(referenceSystemNameButton);
-		        radioPanel.add(referenceSystemEPSGCodeButton);
-		        this.add(radioPanel);
+			public PositionPanel(MainFrame mainFrame, JPanel containerPanel) {
+				super(mainFrame, containerPanel);	
+				addRadioButton("Longitude / X");
+				addRadioButton("Latitude / Y");
+				addRadioButton("Altitude / Z");
+				addRadioButton("Reference System", new ReferenceSystemPanel(mainFrame, additionalPanel2));
+				addRadioButton("Combination");
 			}
-		}
-		
-		private class ReferenceSystemSelected implements ActionListener {
+			
+			private class ReferenceSystemPanel extends ButtonGroupPanel {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				changeAdditionalPanel2(referenceSystemPanel);			
-			}		
-		}		
+				private static final long serialVersionUID = 1L;
+				
+				public ReferenceSystemPanel(MainFrame mainFrame, JPanel containerPanel) {
+					super(mainFrame, containerPanel);				
+					addRadioButton("Name");
+					addRadioButton("EPSG-Code");
+				}
+			}	
+		}	
 	}
 	
 	@Override
 	protected void loadSettings() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public class SelectionListener implements ListSelectionListener {
+	    JTable table;
+	    int columnSelection;
+	    // It is necessary to keep the table since it is not possible
+	    // to determine the table from the event's source
+	    SelectionListener(JTable table) {
+	        this.table = table;
+	    }
+	    public void valueChanged(ListSelectionEvent e) {
+	        // If cell selection is enabled, both row and column change events are fired
+            // Row selection changed
+	        if (e.getSource() == table.getSelectionModel()
+	              && table.getRowSelectionAllowed()) {
+	            // Column selection changed
+	            
+	            System.out.println(table.getSelectedRow());
+	            
+	        } else if (e.getSource() == table.getColumnModel().getSelectionModel()
+	               && table.getColumnSelectionAllowed() ){
+	            List<String> selections = new ArrayList<String>();
+	            radioButtonPanel.store(selections);
+	            columnStore.put(columnSelection, selections);
+	            
+	            columnSelection = table.getSelectedColumn();
+	            
+	            selections = columnStore.get(columnSelection);
+	            additionalPanel1.removeAll();
+	            additionalPanel2.removeAll();
+
+	            if (selections == null) {
+	            	radioButtonPanel.setDefaultSelection();
+	            } else radioButtonPanel.restore(selections);
+	            getMainFrame().pack();
+	        }
+
+	        if (e.getValueIsAdjusting()) {
+	            // The mouse button has not yet been released
+	        }
+	    }
 	}
 }
