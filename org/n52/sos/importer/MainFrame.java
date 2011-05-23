@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
 	
 	private final Step1Panel step1Panel = new Step1Panel(this);
 	private final Step2Panel step2Panel = new Step2Panel(this);
+	private final TablePanel tablePanel = new TablePanel();
 	private final Step3Panel step3Panel = new Step3Panel(this);
 	
 	public MainFrame() {
@@ -49,6 +50,10 @@ public class MainFrame extends JFrame {
 	
 	public Step3Panel getStep3Panel() {
 		return step3Panel;
+	}
+	
+	public TablePanel getTablePanel() {
+		return tablePanel;
 	}
 	
 	public BackCancelPanel getBackCancelPanel() {

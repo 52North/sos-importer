@@ -48,7 +48,8 @@ public abstract class ComboBoxPanel extends SelectionPanel implements ActionList
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-        String newSelection = getSelection();
+		//TODO remove and add selection to the list when enter pressed
+        //String newSelection = getSelection();
         selectionChanged();
     }
 }

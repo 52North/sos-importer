@@ -1,117 +1,53 @@
 package org.n52.sos.importer;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.JComboBox;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class Step3Panel extends StepPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel selectionModeLabel = new JLabel("Selection mode: ");
-	private final String[] selectionModeValues = { "Columns", "Rows", "Cells" };
-	private final JComboBox selectionModeComboBox = new JComboBox(selectionModeValues);
 	
-	private JTable table = new JTable();
-	
-	private JPanel rootPanel = new JPanel();
 	private final SelectionPanel radioButtonPanel;
+	private JPanel rootPanel = new JPanel();
 	private JPanel additionalPanel1 = new JPanel();
 	private JPanel additionalPanel2 = new JPanel();
-	private JPanel tablePanel = new JPanel();
+	private TablePanel tablePanel;
 	
 	private final HashMap<Integer, List<String>> columnStore = new HashMap<Integer, List<String>>();
 	private final HashMap<Integer, List<String>> rowStore = new HashMap<Integer, List<String>>();
 	
 	public Step3Panel(MainFrame mainFrame) {
 		super(mainFrame);
-		radioButtonPanel = new RadioButtonPanel(mainFrame);
-		selectionModeComboBox.addActionListener(new SelectionModeChanged());
+		radioButtonPanel = new RadioButtonPanel(mainFrame);	
+		radioButtonPanel.getContainerPanel().add(radioButtonPanel);
+		this.tablePanel = getMainFrame().getTablePanel();
 		
-		JPanel selectionModelPanel = new JPanel();
-		selectionModelPanel.setLayout(new FlowLayout());
-		selectionModelPanel.add(selectionModeLabel);
-		selectionModelPanel.add(selectionModeComboBox);
-		this.add(selectionModelPanel);
+		changeSelectionMode(TablePanel.COLUMNS);
+		tablePanel.addSelectionListener(new TableSelectionChanged());
 		
-	    this.add(rootPanel);
-	    this.add(additionalPanel1);
-	    this.add(additionalPanel2);
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		
+		JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		selectionModePanel.add(selectionModeLabel);
+		this.add(selectionModePanel);
+		
 	    this.add(tablePanel);
-	}
-	
-	public void setTableContent(Object[][] content) {
-		//initialize blank table headers
-		int columns = content[0].length;
-		String[] columnHeaders = new String[columns];
-		for (int i = 0; i < columns; i++) {
-			columnHeaders[i] = "";
-		}
-		table = new JTable(content, columnHeaders) {  
-			private static final long serialVersionUID = 1L;
-			//turn editing of cells off
-			public boolean isCellEditable(int row, int col) {  
-                return false;  
-            }  
-        };
-        
-        setSelectionMode("Columns");
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//select first column
-		table.setColumnSelectionInterval(0, 0);
 		
-		SelectionListener listener = new SelectionListener(table);
-		table.getSelectionModel().addListSelectionListener(listener);
-		table.getColumnModel().getSelectionModel()
-		    .addListSelectionListener(listener);
-		
-		JScrollPane scrollPane = new JScrollPane(table);
-		tablePanel.removeAll();
-		tablePanel.add(scrollPane);	
-		getMainFrame().pack();
-	}
-	
-	private void setSelectionMode(String sm) {
-		if (sm.equals("Columns")) {
-			table.setColumnSelectionAllowed(true);
-			table.setRowSelectionAllowed(false);
-			table.setShowVerticalLines(true);
-			table.setShowHorizontalLines(false);
-		} else if (sm.equals("Rows")) {
-			table.setColumnSelectionAllowed(false);
-			table.setRowSelectionAllowed(true);
-			table.setShowVerticalLines(false);
-			table.setShowHorizontalLines(true);
-		} else { //Cells
-			table.setColumnSelectionAllowed(true);
-			table.setRowSelectionAllowed(true);
-			table.setShowVerticalLines(true);
-			table.setShowHorizontalLines(true);
-		}
-	}
-	
-	public List<String> getSelectedValues() {
-		//column selection
-		ArrayList<String> values = new ArrayList<String>();
-		int column = table.getSelectedColumn();
-		int rows = table.getRowCount();
-		for (int i = 0; i < rows; i++)
-			values.add((String)table.getValueAt(i, column));
-		return values;
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		buttonPanel.add(rootPanel);
+		buttonPanel.add(additionalPanel1);
+		buttonPanel.add(additionalPanel2);
+		this.add(buttonPanel);
 	}
 
 	@Override
@@ -119,24 +55,58 @@ public class Step3Panel extends StepPanel {
 		return "Step 3: Choose Metadata";
 	}
 
+	private void changeSelectionMode(int sm) {
+		switch(sm) {
+		case TablePanel.COLUMNS:
+			tablePanel.setSelectionMode(TablePanel.COLUMNS);
+			selectionModeLabel.setText("Columns");
+			break;
+		case TablePanel.ROWS:
+			tablePanel.setSelectionMode(TablePanel.ROWS);
+			selectionModeLabel.setText("Rows");
+			break;
+		case TablePanel.CELLS:
+			tablePanel.setSelectionMode(TablePanel.CELLS);
+			selectionModeLabel.setText("Cells");
+			break;
+		}
+	}
+	
 	@Override
 	protected void back() {
-		getMainFrame().setStepPanel(getMainFrame().getStep2Panel());
-		
+		switch(tablePanel.getSelectionMode()) {
+		case TablePanel.COLUMNS:
+			getMainFrame().setStepPanel(getMainFrame().getStep2Panel());
+			break;
+		case TablePanel.ROWS:
+			changeSelectionMode(TablePanel.COLUMNS);
+			break;
+		case TablePanel.CELLS:
+			changeSelectionMode(TablePanel.ROWS);
+			break;
+		}			
 	}
 
 	@Override
 	protected void next() {
+		switch(tablePanel.getSelectionMode()) {
+		case TablePanel.COLUMNS:
+			changeSelectionMode(TablePanel.ROWS);
+			break;
+		case TablePanel.ROWS:
+			changeSelectionMode(TablePanel.CELLS);
+			break;
+		case TablePanel.CELLS:
+			// TODO Auto-generated method stub
+			break;
+		}	
+	}	
+	
+	@Override
+	protected void loadSettings() {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	private class SelectionModeChanged implements ActionListener {
-	    public void actionPerformed(ActionEvent e) {
-	        String sm = (String)selectionModeComboBox.getSelectedItem();
-	        setSelectionMode(sm);
-	    }
-	}		
 	
 	private class RadioButtonPanel extends ButtonGroupPanel {
 		
@@ -192,7 +162,7 @@ public class Step3Panel extends StepPanel {
 					int notParseableValues = 0;
 					StringBuilder notParseable = new StringBuilder();
 					notParseable.append("<html>");
-					List<String> values = getSelectedValues();
+					List<String> values = tablePanel.getSelectedValues();
 
 					for (String value: values) {
 						try {
@@ -369,52 +339,40 @@ public class Step3Panel extends StepPanel {
 				}
 			}	
 		}	
-	}
+	}	
 	
-	@Override
-	protected void loadSettings() {
-		// TODO Auto-generated method stub
+	private class TableSelectionChanged implements TableSelectionListener {
 		
-	}
-
-	public class SelectionListener implements ListSelectionListener {
-	    JTable table;
-	    int columnSelection;
-	    // It is necessary to keep the table since it is not possible
-	    // to determine the table from the event's source
-	    SelectionListener(JTable table) {
-	        this.table = table;
-	    }
-	    public void valueChanged(ListSelectionEvent e) {
-	        // If cell selection is enabled, both row and column change events are fired
-            // Row selection changed
-	        if (e.getSource() == table.getSelectionModel()
-	              && table.getRowSelectionAllowed()) {
-	            // Column selection changed
-	            
-	            System.out.println(table.getSelectedRow());
-	            
-	        } else if (e.getSource() == table.getColumnModel().getSelectionModel()
-	               && table.getColumnSelectionAllowed() ){
-	            List<String> selections = new ArrayList<String>();
-	            radioButtonPanel.store(selections);
-	            columnStore.put(columnSelection, selections);
-	            
-	            columnSelection = table.getSelectedColumn();
-	            
-	            selections = columnStore.get(columnSelection);
-	            additionalPanel1.removeAll();
-	            additionalPanel2.removeAll();
-
-	            if (selections == null) {
-	            	radioButtonPanel.setDefaultSelection();
-	            } else radioButtonPanel.restore(selections);
-	            getMainFrame().pack();
-	        }
-
-	        if (e.getValueIsAdjusting()) {
-	            // The mouse button has not yet been released
-	        }
-	    }
+		@Override
+		public void columnSelectionChanged(int oldColumn, int newColumn) {
+			List<String> selections = new ArrayList<String>();
+			radioButtonPanel.store(selections);
+			columnStore.put(oldColumn, selections);
+			    
+			selections = columnStore.get(newColumn);
+			additionalPanel1.removeAll();
+			additionalPanel2.removeAll();
+			
+			if (selections == null) radioButtonPanel.restoreDefault();
+			else radioButtonPanel.restore(selections);
+			
+			getMainFrame().pack();
+		}
+		
+		@Override
+		public void rowSelectionChanged(int oldRow, int newRow) {
+			List<String> selections = new ArrayList<String>();
+			radioButtonPanel.store(selections);
+			rowStore.put(oldRow, selections);
+			
+			selections = rowStore.get(newRow);
+			additionalPanel1.removeAll();
+			additionalPanel2.removeAll();
+			
+			if (selections == null) radioButtonPanel.restoreDefault();
+			else radioButtonPanel.restore(selections);
+			
+			getMainFrame().pack();
+		}
 	}
 }

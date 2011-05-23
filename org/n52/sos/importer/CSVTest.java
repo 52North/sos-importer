@@ -3,16 +3,16 @@ package org.n52.sos.importer;
 import java.io.File;
 import java.io.IOException;
 
+
 public class CSVTest {
 
 	public static void main(String[] args) {
-		/*
-		JFrame bla= new JFrame();
+		
+		MainFrame bla= new MainFrame();
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
-		bla.getContentPane().add(new Step4cPanel(null, 0, o));
-		bla.setVisible(true);
-		bla.pack();
-		*/
+		bla.setStepPanel(new Step5bPanel(bla));
+
+		
 		/*
 		InsertObservationDocument i = InsertObservationDocument.Factory.newInstance();
 		InsertObservation io = i.addNewInsertObservation();
@@ -37,12 +37,13 @@ public class CSVTest {
 		}
 */
 		
-		
+		/*
 		MainFrame bla= new MainFrame(); 
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
+		bla.getTablePanel().setTableContent(o);
 		Step3Panel sp  = new Step3Panel(bla);
-		sp.setTableContent(o);
+
 		bla.setStepPanel(sp);
-		
+		*/
 	}
 }

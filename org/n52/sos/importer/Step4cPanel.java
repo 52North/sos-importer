@@ -114,7 +114,7 @@ public class Step4cPanel extends StepPanel {
 
 	@Override
 	protected String getDescription() {
-		return "Step 4: Add missing Metadata";
+		return "Step 5: Add missing Metadata";
 	}
 
 	@Override

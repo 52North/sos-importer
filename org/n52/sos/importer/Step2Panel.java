@@ -1,8 +1,5 @@
 package org.n52.sos.importer;
 import java.awt.GridLayout;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -14,7 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import au.com.bytecode.opencsv.CSVReader;
-
 
 public class Step2Panel extends StepPanel {
 	
@@ -87,10 +83,6 @@ public class Step2Panel extends StepPanel {
 			for (int i = 0; i < rows; i++) {
 				content[i] = lines.get(i);
 			}
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,9 +105,8 @@ public class Step2Panel extends StepPanel {
 	protected void next() {
 		Object[][] content = parseCSVFile();
 		saveSettings();
-		Step3Panel s3p = getMainFrame().getStep3Panel();
-		s3p.setTableContent(content);
-		getMainFrame().setStepPanel(s3p);
+		getMainFrame().getTablePanel().setTableContent(content);
+		getMainFrame().setStepPanel(getMainFrame().getStep3Panel());
 	}
 	
 	protected void saveSettings() {

@@ -24,19 +24,23 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	
 	protected void addRadioButton(String name) {
 		JRadioButton radioButton = new JRadioButton(name);
+		radioButton.addActionListener(new RemoveChildPanel());
 		if (group.getButtonCount() == 0) 
 			radioButton.setSelected(true);
 		group.add(radioButton);
 		this.add(radioButton);
-		radioButton.addActionListener(new RemoveChildPanel());
 	}
 	
-	protected void addRadioButton(String name, SelectionPanel panel) {
+	protected void addRadioButton(String name, SelectionPanel childPanel) {
 		JRadioButton radioButton = new JRadioButton(name);
+		addChildPanel(name, childPanel);
+		radioButton.addActionListener(new AddChildPanel(childPanel));
+		if (group.getButtonCount() == 0) {
+			radioButton.setSelected(true);
+			setSelectedChildPanel(childPanel);
+		}
 		group.add(radioButton);
 		this.add(radioButton);
-		radioButton.addActionListener(new AddChildPanel(name, panel));
-		childSelectionPanels.put(name, panel);
 	}
 
 	@Override
@@ -55,8 +59,9 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	
 	@Override
 	public void setDefaultSelection() {
-		ButtonModel firstButton = group.getElements().nextElement().getModel();
-		group.setSelected(firstButton, true);
+		JRadioButton firstButton = (JRadioButton) group.getElements().nextElement();
+		group.setSelected(firstButton.getModel(), true);
+		setSelectedChildPanel(firstButton.getName());
 	}
 
 	@Override
@@ -72,20 +77,20 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	}
 	
 	private class AddChildPanel implements ActionListener {
-		SelectionPanel panel;
-		String name;
+		SelectionPanel childPanel;
 		
-		public AddChildPanel(String name, SelectionPanel panel) {
-			this.name = name;
-			this.panel = panel;
+		public AddChildPanel(SelectionPanel childPanel) {
+			this.childPanel = childPanel;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getChildSelectionPanel() != null) 
-				getChildSelectionPanel().removeFromContainerPanel();
-			panel.getContainerPanel().add(panel);
-			setChildSelectionPanel(name);
+			if (getSelectedChildPanel() != null) 
+				getSelectedChildPanel().removeFromContainerPanel();
+			
+			setSelectedChildPanel(childPanel);
+			childPanel.addToContainerPanel();		
+			
 			getMainFrame().pack();
 			selectionChanged();
 		}	
@@ -94,11 +99,11 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	private class RemoveChildPanel implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			selectionChanged();
-			if (getChildSelectionPanel() != null) {
-				getChildSelectionPanel().removeFromContainerPanel();
+			if (getSelectedChildPanel() != null) {
+				getSelectedChildPanel().removeFromContainerPanel();
 				getMainFrame().pack();
 			}
+			selectionChanged();
 		}		
 	}
 }
