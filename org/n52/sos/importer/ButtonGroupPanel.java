@@ -61,7 +61,7 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	public void setDefaultSelection() {
 		JRadioButton firstButton = (JRadioButton) group.getElements().nextElement();
 		group.setSelected(firstButton.getModel(), true);
-		setSelectedChildPanel(firstButton.getName());
+		setSelectedChildPanel(firstButton.getText());
 	}
 
 	@Override
@@ -97,11 +97,15 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	}
 	
 	private class RemoveChildPanel implements ActionListener {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
 				getMainFrame().pack();
+				
+				SelectionPanel childPanel = null;
+				setSelectedChildPanel(childPanel);
 			}
 			selectionChanged();
 		}		

@@ -31,12 +31,17 @@ public abstract class SelectionPanel extends JPanel {
 		//TODO selectionListener instead
 	}
 	
+	protected void reinit() {
+
+	}
+	
 	public void restore(List<String> selections) {
 		getContainerPanel().add(this);
 		String s = selections.get(0);
 		setSelection(s);
 		SelectionPanel childPanel = childPanels.get(s);
 		selections.remove(0);
+		reinit();
 		
 		if (childPanel != null) {
 			childPanel.restore(selections);
@@ -92,6 +97,7 @@ public abstract class SelectionPanel extends JPanel {
 	public void addToContainerPanel() {
 		getContainerPanel().add(this);		
 		SelectionPanel childPanel = getSelectedChildPanel();
+		reinit();
 		
 		if (childPanel != null) {
 			setSelectedChildPanel(childPanel);

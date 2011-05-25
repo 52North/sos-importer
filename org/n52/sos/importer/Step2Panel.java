@@ -19,20 +19,15 @@ public class Step2Panel extends StepPanel {
 	private final JLabel columnSeparatorLabel = new JLabel("Column separator:");
 	private final JLabel commentIndicatorLabel = new JLabel("Comment indicator:");
 	private final JLabel textQualifierLabel = new JLabel("Text qualifier:");
-	private final JLabel decimalSeparatorLabel = new JLabel("Decimal separator:");
-	private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator:");
+
 	
 	private final String[] columnSeparatorValues = { ";", ",", ":", "Tab"};
 	private final String[] commentIndicatorValues = { "#" };
 	private final String[] textQualifierValues = { "\"", "'" };	
-	private final String[] decimalSeparatorValues = { ",", "." };
-	private final String[] thousandsSeparatorValues = { ".", ",", "'", " " };
 	
 	private final JComboBox columnSeparatorCombobox = new JComboBox(columnSeparatorValues);
 	private final JComboBox commentIndicatorCombobox = new JComboBox(commentIndicatorValues);
 	private final JComboBox textQualifierCombobox = new JComboBox(textQualifierValues);
-	private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparatorValues);
-	private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparatorValues);
 	
 	private final JTextArea csvFileTextArea = new JTextArea(7, 30); 
 	
@@ -50,10 +45,7 @@ public class Step2Panel extends StepPanel {
 		csvSettingsPanel.add(commentIndicatorCombobox);
 		csvSettingsPanel.add(textQualifierLabel);
 		csvSettingsPanel.add(textQualifierCombobox);
-		csvSettingsPanel.add(decimalSeparatorLabel);
-		csvSettingsPanel.add(decimalSeparatorCombobox);
-		csvSettingsPanel.add(thousandsSeparatorLabel);
-		csvSettingsPanel.add(thousandsSeparatorCombobox);
+
 		this.add(csvSettingsPanel);
 		
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
@@ -105,7 +97,7 @@ public class Step2Panel extends StepPanel {
 	protected void next() {
 		Object[][] content = parseCSVFile();
 		saveSettings();
-		getMainFrame().getTablePanel().setTableContent(content);
+		getMainFrame().getTablePanel().setContent(content);
 		getMainFrame().setStepPanel(getMainFrame().getStep3Panel());
 	}
 	
@@ -116,10 +108,6 @@ public class Step2Panel extends StepPanel {
 		Settings.setCommentIndicator(commentIndicator);
 		String textQualifier = (String) textQualifierCombobox.getSelectedItem();
 		Settings.setTextQualifier(textQualifier);
-		String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
-		Settings.setThousandsSeparator(thousandsSeparator);
-		String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
-		Settings.setDecimalSeparator(decimalSeparator);
 	}
 
 	@Override
@@ -130,9 +118,5 @@ public class Step2Panel extends StepPanel {
 			commentIndicatorCombobox.setSelectedItem(Settings.getCommentIndicator());
 		if (Settings.getTextQualifier() != null) 
 			textQualifierCombobox.setSelectedItem(Settings.getTextQualifier());
-		if (Settings.getThousandsSeparator() != null)
-			thousandsSeparatorCombobox.setSelectedItem(Settings.getThousandsSeparator());
-		if (Settings.getDecimalSeparator() != null)
-			decimalSeparatorCombobox.setSelectedItem(Settings.getDecimalSeparator());
 	}
 }

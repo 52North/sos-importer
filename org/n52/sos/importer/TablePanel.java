@@ -1,5 +1,6 @@
 package org.n52.sos.importer;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +19,14 @@ public class TablePanel extends JPanel {
 	public static final int ROWS = 2;
 	public static final int CELLS = 3;
 	
-	private int currentSelectionMode = TablePanel.COLUMNS;
+	private int currentSelectionMode;
 	
 	private TableSelectionListener tableSelectionListener;
 	
 	private JTable table = new JTable();	
 	
-	public void setTableContent(Object[][] content) {
+	public void setContent(Object[][] content) {
+		removeAll();
 		//initialize blank table headers
 		int columns = content[0].length;
 		String[] columnHeaders = new String[columns];
@@ -40,6 +42,7 @@ public class TablePanel extends JPanel {
         };
         
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setSelectionMode(TablePanel.COLUMNS);
 		//select first column
 		table.setColumnSelectionInterval(0, 0);
 		
@@ -47,6 +50,8 @@ public class TablePanel extends JPanel {
 		table.getSelectionModel().addListSelectionListener(listener);
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(listener);
+		
+		table.setPreferredScrollableViewportSize(new Dimension(700, 150));
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		this.add(scrollPane);	

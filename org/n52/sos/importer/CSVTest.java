@@ -10,7 +10,8 @@ public class CSVTest {
 		
 		MainFrame bla= new MainFrame();
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
-		bla.setStepPanel(new Step5bPanel(bla));
+		bla.getTablePanel().setContent(o);
+		bla.setStepPanel(new Step3Panel(bla));
 
 		
 		/*
