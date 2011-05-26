@@ -4,10 +4,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger logger = Logger.getLogger(MainFrame.class);
+	
 	private final StepDescriptionPanel stepDescriptionPanel = new StepDescriptionPanel();
 	private final JPanel stepPanel = new JPanel();
 	private final BackCancelPanel backCancelPanel = new BackCancelPanel();
@@ -18,6 +22,7 @@ public class MainFrame extends JFrame {
 	private final Step3Panel step3Panel = new Step3Panel(this);
 	
 	public MainFrame() {
+		logger.info("Starte Programm");
 		this.setTitle("CSV to SOS");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

@@ -4,6 +4,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -233,14 +236,16 @@ public class Step3Panel extends StepPanel {
 			private class NumericValuePanel extends SelectionPanel {
 
 				private static final long serialVersionUID = 1L;
-				private final String[] decimalSeparatorValues = { ",", "." };
-				private final String[] thousandsSeparatorValues = { ".", ",", "'", " " };
+				private final String[] decimalSeparatorValues = { ".", "," };
+				private final String[] thousandsSeparatorValues = { ",", ".", "'", " " };
 				
 				private final JLabel decimalSeparatorLabel = new JLabel("Decimal separator: ");
 				private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
+				private final JLabel exampleLabel = new JLabel("Example: ");
 			
 				private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparatorValues);
 				private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparatorValues);
+				private final JLabel exampleNumberLabel = new JLabel();
 				
 				private final ParseTestLabel parseTestLabel = new ParseTestLabel(new NumericValueParser());
 			
@@ -252,13 +257,16 @@ public class Step3Panel extends StepPanel {
 					
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
 					JPanel separatorPanel = new JPanel();
-					separatorPanel.setLayout(new GridLayout(2,2));
+					separatorPanel.setLayout(new GridLayout(3,2));
 					separatorPanel.add(decimalSeparatorLabel);
 					separatorPanel.add(decimalSeparatorCombobox);
 					separatorPanel.add(thousandsSeparatorLabel);
 					separatorPanel.add(thousandsSeparatorCombobox);
+					separatorPanel.add(exampleLabel);
+					separatorPanel.add(exampleNumberLabel);
 					this.add(separatorPanel);
 					this.add(parseTestLabel);
+					//reformat();
 				}
 
 				@Override
@@ -284,11 +292,34 @@ public class Step3Panel extends StepPanel {
 				@Override
 				protected void selectionChanged() {
 					parseTestLabel.parseValues(tablePanel.getSelectedValues());
+					//reformat();
 				};
 				
 				@Override
 				protected void reinit() {
 					parseTestLabel.parseValues(tablePanel.getSelectedValues());
+					//reformat();
+				}
+				
+				private void reformat() {
+					String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+					String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+					
+					DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
+					unusualSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
+					unusualSymbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+					
+					try {
+						DecimalFormat weirdFormatter = new DecimalFormat("###,###.###", unusualSymbols);
+						
+						String n = weirdFormatter.format("123.456,78");
+						exampleNumberLabel.setText(n);
+						exampleNumberLabel.setForeground(Color.black);
+			        } catch (IllegalArgumentException iae) {
+			        	System.out.println(iae);
+			        	exampleNumberLabel.setForeground(Color.red);
+			        	exampleNumberLabel.setText("Error: " + iae.getMessage());
+			        }
 				}
 				
 				private class SeparatorChanged implements ActionListener {
@@ -304,9 +335,10 @@ public class Step3Panel extends StepPanel {
 					@Override
 					public Object parse(String s) {
 						String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
-						String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();	
-						s = s.replaceAll(thousandsSeparator, "");
-						s = s.replaceFirst(decimalSeparator, ".");
+						String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+							
+						s = s.replace(thousandsSeparator, "");
+						s = s.replace(decimalSeparator, ".");
 						return Double.parseDouble(s);
 					}
 				}			
@@ -463,6 +495,12 @@ public class Step3Panel extends StepPanel {
 			    	reformat();
 			    	parseTestLabel.parseValues(tablePanel.getSelectedValues());
 			    }
+			    
+			    @Override
+			    protected void reinit() {
+			    	reformat();
+			    	parseTestLabel.parseValues(tablePanel.getSelectedValues());
+			    };
 			    
 			    private class DateAndTimeParser implements Parser {
 
