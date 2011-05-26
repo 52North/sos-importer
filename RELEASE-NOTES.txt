@@ -1,0 +1,9 @@
+RELEASE NOTES
+
+Main functions
+========================
+
+ To setup the SOS importer please refer to the installation guide, found in the documentation folder
+ 
+Release 52n-sensorweb-sos-importer-v0-00-01
+==================================
