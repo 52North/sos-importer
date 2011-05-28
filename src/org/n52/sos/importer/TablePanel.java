@@ -41,7 +41,7 @@ public class TablePanel extends JPanel {
             }  
         };
         
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        allowSingleSelection();
 		setSelectionMode(TablePanel.COLUMNS);
 		//select first column
 		table.setColumnSelectionInterval(0, 0);
@@ -82,6 +82,14 @@ public class TablePanel extends JPanel {
 		return currentSelectionMode;
 	}
 	
+	public void allowSingleSelection() {
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	public void allowMultipleSelection() {
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+	}
+	
 	public List<String> getSelectedValues() {
 		//column selection
 		//TODO
@@ -92,6 +100,11 @@ public class TablePanel extends JPanel {
 			values.add((String)table.getValueAt(i, column));
 		return values;
 	}
+	
+	public int[] getSelectedColumns() {
+		return table.getSelectedColumns();
+	}
+	
 	
 	public void addSelectionListener(TableSelectionListener tableSelectionListner) {
 		this.tableSelectionListener = tableSelectionListner;

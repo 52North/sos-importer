@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.bean.FeatureOfInterest;
-import org.n52.sos.importer.bean.MeasuredValueColumn;
+import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.ObservedProperty;
 import org.n52.sos.importer.bean.SensorName;
 import org.n52.sos.importer.bean.UnitOfMeasurement;
@@ -68,6 +67,10 @@ public class Step3Panel extends StepPanel {
 	protected String getDescription() {
 		return "Step 3: Choose Metadata";
 	}
+	
+	public List<String> getColumnFromStore(int column) {
+		return columnStore.get(column);
+	}
 
 	private void changeSelectionMode(int sm) {
 		switch(sm) {
@@ -111,7 +114,7 @@ public class Step3Panel extends StepPanel {
 			changeSelectionMode(TablePanel.CELLS);
 			break;
 		case TablePanel.CELLS:
-			List<MeasuredValueColumn> measuredValues = new ArrayList<MeasuredValueColumn>();
+			List<MeasuredValue> measuredValues = new ArrayList<MeasuredValue>();
 			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
@@ -120,7 +123,7 @@ public class Step3Panel extends StepPanel {
 			for (Integer i: columnStore.keySet()) {
 				List<String> column = columnStore.get(i);
 				if (column.get(0).equals("Measured Value")) {
-					MeasuredValueColumn mvc = new MeasuredValueColumn(column.get(1));
+					MeasuredValue mvc = new MeasuredValue(column.get(1));
 					mvc.setColumnNumber(i);
 					measuredValues.add(mvc);
 				} else if (column.get(0).equals("Date & Time")) {
@@ -266,7 +269,7 @@ public class Step3Panel extends StepPanel {
 					separatorPanel.add(exampleNumberLabel);
 					this.add(separatorPanel);
 					this.add(parseTestLabel);
-					//reformat();
+					reformat();
 				}
 
 				@Override
@@ -292,7 +295,7 @@ public class Step3Panel extends StepPanel {
 				@Override
 				protected void selectionChanged() {
 					parseTestLabel.parseValues(tablePanel.getSelectedValues());
-					//reformat();
+					reformat();
 				};
 				
 				@Override
@@ -305,14 +308,14 @@ public class Step3Panel extends StepPanel {
 					String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 					String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
 					
-					DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
-					unusualSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
-					unusualSymbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+					DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+					symbols.setDecimalSeparator(decimalSeparator.charAt(0));
+					symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
 					
 					try {
-						DecimalFormat weirdFormatter = new DecimalFormat("###,###.###", unusualSymbols);
-						
-						String n = weirdFormatter.format("123.456,78");
+						DecimalFormat formatter = new DecimalFormat();
+						formatter.setDecimalFormatSymbols(symbols);
+						String n = formatter.format(1234567.89);
 						exampleNumberLabel.setText(n);
 						exampleNumberLabel.setForeground(Color.black);
 			        } catch (IllegalArgumentException iae) {
@@ -336,10 +339,21 @@ public class Step3Panel extends StepPanel {
 					public Object parse(String s) {
 						String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 						String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
-							
-						s = s.replace(thousandsSeparator, "");
-						s = s.replace(decimalSeparator, ".");
-						return Double.parseDouble(s);
+						
+						DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+						symbols.setDecimalSeparator(decimalSeparator.charAt(0));
+						symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+						
+						Number n;
+						try {
+							DecimalFormat formatter = new DecimalFormat();
+							formatter.setDecimalFormatSymbols(symbols);
+							n = formatter.parse(s);
+				        } catch (ParseException e) {
+					        throw new NumberFormatException();
+						}					
+						
+						return n.doubleValue();
 					}
 				}			
 			}	
@@ -493,7 +507,7 @@ public class Step3Panel extends StepPanel {
 			    @Override
 			    protected void selectionChanged() {
 			    	reformat();
-			    	parseTestLabel.parseValues(tablePanel.getSelectedValues());
+			    	//parseTestLabel.parseValues(tablePanel.getSelectedValues());
 			    }
 			    
 			    @Override

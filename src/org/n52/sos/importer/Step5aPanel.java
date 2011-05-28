@@ -2,6 +2,9 @@ package org.n52.sos.importer;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,10 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.bean.FeatureOfInterest;
+import org.n52.sos.importer.bean.MeasuredValue;
+
 
 public class Step5aPanel extends StepPanel {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(Step5aPanel.class);
 	
 	public static final int FEATURE_OF_INTEREST = 0;
 	public static final int OBSERVED_PROPERTY = 1;
@@ -70,6 +79,8 @@ public class Step5aPanel extends StepPanel {
 		
 		tablePanel = getMainFrame().getTablePanel();
 		tablePanel.setSelectionMode(TablePanel.COLUMNS);
+		tablePanel.allowMultipleSelection();
+		tablePanel.addSelectionListener(new TableSelectionChanged());
 		this.add(tablePanel);	
 	}
 
@@ -85,14 +96,49 @@ public class Step5aPanel extends StepPanel {
 	}
 
 	@Override
-	protected void next() {
-		// TODO Auto-generated method stub
+	protected void next() {	
+		//get and check name
+		String name = (String) nameComboBox.getSelectedItem();
+		if (name == null) {
+			logger.error("No Name.");
+			return;
+		}
+		FeatureOfInterest foi = new FeatureOfInterest();
+		foi.setName(name);
+		
+		//get and check URI
+		String uri = (String) URITextField.getText();
+		URI URI = null;
+		try {
+			URI = new URI(uri);
+		} catch (URISyntaxException e) {
+			logger.error("Wrong URI", e);
+			return;
+		}
+		foi.setURI(URI);
+		
+		//get selected columns
+		int[] columns = tablePanel.getSelectedColumns();
+		if (columns.length == 0) {
+			logger.warn("No Columns selected.");
+			return;
+		}
+		
+		for (int c: columns) {
+			MeasuredValue mv = getMainFrame().getMeasuredValueAtColumn(c); 
+			mv.setFeatureOfInterest(foi);
+		}
+
 		
 	}
 
 	@Override
 	protected void loadSettings() {
 		// TODO Auto-generated method stub
+		// rows or columns
+		// which rows or columns were selected
+		// name 
+		// uri
 		
 	}
 	
@@ -102,5 +148,29 @@ public class Step5aPanel extends StepPanel {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub		
 		}		
+	}
+	
+	
+	private class TableSelectionChanged implements TableSelectionListener {
+		
+		@Override
+		public void columnSelectionChanged(int oldColumn, int newColumn) {
+			MeasuredValue mv = getMainFrame().getMeasuredValueAtColumn(newColumn);
+			if (mv == null) {
+				logger.error("This is not a measured value.");
+				return;
+			}
+
+			if (mv.getFeatureOfInterest() != null) {
+				logger.error("Feature of Interest already set for this measured value.");
+				return;
+			}
+
+		}
+		
+		@Override
+		public void rowSelectionChanged(int oldRow, int newRow) {
+
+		}
 	}
 }

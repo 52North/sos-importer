@@ -27,12 +27,16 @@ Modified: 2011-05-26
 */
 
 package org.n52.sos.importer;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.bean.MeasuredValue;
 
 public class MainFrame extends JFrame {
 
@@ -48,6 +52,8 @@ public class MainFrame extends JFrame {
 	private final Step2Panel step2Panel = new Step2Panel(this);
 	private final TablePanel tablePanel = new TablePanel();
 	private final Step3Panel step3Panel = new Step3Panel(this);
+	
+	public List<MeasuredValue> measuredValues = new ArrayList<MeasuredValue>();
 	
 	public MainFrame() {
 		logger.info("Starte Programm");
@@ -91,6 +97,14 @@ public class MainFrame extends JFrame {
 	
 	public BackCancelPanel getBackCancelPanel() {
 		return backCancelPanel;
+	}
+	
+	public MeasuredValue getMeasuredValueAtColumn(int column) {
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getColumnNumber() == column)
+				return mv;
+		}
+		return null;
 	}
 	
 	private void exitDialog() {
