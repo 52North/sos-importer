@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.n52.sos.importer.view.MainFrame;
+
 import au.com.bytecode.opencsv.CSVReader;
 
 public class Step2Panel extends StepPanel {
@@ -20,7 +22,6 @@ public class Step2Panel extends StepPanel {
 	private final JLabel commentIndicatorLabel = new JLabel("Comment indicator:");
 	private final JLabel textQualifierLabel = new JLabel("Text qualifier:");
 
-	
 	private final String[] columnSeparatorValues = { ";", ",", ":", "Tab"};
 	private final String[] commentIndicatorValues = { "#" };
 	private final String[] textQualifierValues = { "\"", "'" };	

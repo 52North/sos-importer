@@ -1,26 +1,16 @@
 package org.n52.sos.importer.bean;
 
-import java.net.URI;
-
-public class FeatureOfInterest extends TableConnection {
+public class FeatureOfInterest extends Resource {
 	
-	private String name;
+	public void assign(MeasuredValue measuredValue) {
+		measuredValue.setFeatureOfInterest(this);
+	}
 	
-	private URI uri;
-
-	public void setName(String name) {
-		this.name = name;
+	public boolean isAssigned(MeasuredValue measuredValue) {
+		return measuredValue.getFeatureOfInterest() != null;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setURI(URI uri) {
-		this.uri = uri;
-	}
-
-	public URI getURI() {
-		return uri;
+	
+	public String toString() {
+		return "Feature Of Interest";
 	}
 }

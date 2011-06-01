@@ -11,6 +11,8 @@ import javax.swing.ButtonModel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import org.n52.sos.importer.view.MainFrame;
+
 public abstract class ButtonGroupPanel extends SelectionPanel {
 	
 	private static final long serialVersionUID = 1L;

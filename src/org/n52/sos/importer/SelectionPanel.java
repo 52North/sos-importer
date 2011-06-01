@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.view.MainFrame;
+
 public abstract class SelectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

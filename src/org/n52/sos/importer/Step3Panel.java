@@ -23,6 +23,8 @@ import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.ObservedProperty;
 import org.n52.sos.importer.bean.SensorName;
 import org.n52.sos.importer.bean.UnitOfMeasurement;
+import org.n52.sos.importer.controller.Step6aController;
+import org.n52.sos.importer.view.MainFrame;
 
 public class Step3Panel extends StepPanel {
 	
@@ -108,24 +110,33 @@ public class Step3Panel extends StepPanel {
 	protected void next() {
 		switch(tablePanel.getSelectionMode()) {
 		case TablePanel.COLUMNS:
+			List<String> selections = new ArrayList<String>();
+			radioButtonPanel.store(selections);
+			columnStore.put(tablePanel.getSelectedColumn(), selections);
+			
 			changeSelectionMode(TablePanel.ROWS);
 			break;
 		case TablePanel.ROWS:
 			changeSelectionMode(TablePanel.CELLS);
 			break;
 		case TablePanel.CELLS:
-			List<MeasuredValue> measuredValues = new ArrayList<MeasuredValue>();
 			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 			List<SensorName> sensorNames = new ArrayList<SensorName>();
 			
-			for (Integer i: columnStore.keySet()) {
-				List<String> column = columnStore.get(i);
+			for (Integer k: columnStore.keySet()) {
+				System.out.println(k);
+				for (String s: columnStore.get(k)) {
+					System.out.println(s);
+				}
+			}
+			for (Integer k: columnStore.keySet()) {
+				List<String> column = columnStore.get(k);
 				if (column.get(0).equals("Measured Value")) {
 					MeasuredValue mvc = new MeasuredValue(column.get(1));
-					mvc.setColumnNumber(i);
-					measuredValues.add(mvc);
+					mvc.setColumnNumber(k);
+					getMainFrame().addMeasuredValue(mvc);
 				} else if (column.get(0).equals("Date & Time")) {
 					if (column.get(1).equals("Combination")) {
 						String pattern = column.get(1);
@@ -142,35 +153,35 @@ public class Step3Panel extends StepPanel {
 					//DateAndTimeColumn dtc = new DateAndTimeColumn(i, )
 				} else if (column.get(0).equals("Feature Of Interest")) {
 					FeatureOfInterest foi = new FeatureOfInterest();
-					foi.setColumnNumber(i);
+					foi.setColumnNumber(k);
 					featuresOfInterest.add(foi);
 				} else if (column.get(0).equals("Observed Property")) {
 					ObservedProperty op = new ObservedProperty();
-					op.setColumnNumber(i);
+					op.setColumnNumber(k);
 					observedProperties.add(op);
 				} else if (column.get(0).equals("Unit of Measurement")) {
 					UnitOfMeasurement uom = new UnitOfMeasurement();
-					uom.setColumnNumber(i);
+					uom.setColumnNumber(k);
 					unitOfMeasurements.add(uom);
 				} else if (column.get(0).equals("Sensor Name")) {
 					SensorName sm = new SensorName();
-					sm.setColumnNumber(i);
+					sm.setColumnNumber(k);
 					sensorNames.add(sm);
 				}
 			}
 			
 			if (featuresOfInterest.isEmpty())
 				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step5aPanel(getMainFrame(), Step5aPanel.FEATURE_OF_INTEREST));	
+				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));	
 			
 			//else if 1:1 mapping
 			
-			else { //featuresOfInterest.isNotEmpty()
+			else { //featuresOfInterest is not empty
 				//for each foi columns or row choose measurement column:
 				//getMainFrame().setStepPanel(new Step4aPanel(getMainFrame(), Step4aPanel.FEATURE_OF_INTEREST));
 				
 				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step5aPanel(getMainFrame(), Step5aPanel.FEATURE_OF_INTEREST));				
+				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));				
 			}
 			
 			// TODO Auto-generated method stub

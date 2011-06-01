@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.n52.sos.importer.view.MainFrame;
+
 public class Step5cPanel extends StepPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -32,7 +34,7 @@ public class Step5cPanel extends StepPanel {
 	private final JTextField heightTextField = new JTextField(8);
 	
 	private final JLabel latitudeUnitLabel = new JLabel("   Unit: ");
-	private final String[] latLonUnits = {"° ' ''"};
+	private final String[] latLonUnits = {"ï¿½ ' ''"};
 	private final JComboBox latitudeUnitComboBox = new JComboBox(latLonUnits);
 	private final JLabel longitudeUnitLabel = new JLabel("   Unit: ");
 	private final JComboBox longitudeUnitComboBox = new JComboBox(latLonUnits);

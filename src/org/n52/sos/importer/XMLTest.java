@@ -1,41 +1,38 @@
 package org.n52.sos.importer;
 
-import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
+import javax.swing.JFrame;
+
+import org.n52.sos.importer.bean.FeatureOfInterest;
+import org.n52.sos.importer.bean.MeasuredValue;
+import org.n52.sos.importer.bean.Store;
+import org.n52.sos.importer.controller.Step4aController;
+import org.n52.sos.importer.controller.Step6aController;
+import org.n52.sos.importer.controller.TableController;
 
 
 public class XMLTest {
 
 	public static void main(String[] args) {
-		
-		DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
-		unusualSymbols.setDecimalSeparator(',');
-		unusualSymbols.setGroupingSeparator('.');
-		
-		try {
-			DecimalFormat weirdFormatter = new DecimalFormat();
-			weirdFormatter.setDecimalFormatSymbols(unusualSymbols);
-			String n = weirdFormatter.format(123456.78);
-			System.out.println(n);
-			Number nu = weirdFormatter.parse("1,234567.89");
-			System.out.println(nu.doubleValue());
-        } catch (IllegalArgumentException iae) {
-        	iae.printStackTrace();
-        } catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 
+		JFrame f = new JFrame();
+		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
+		TableController.getInstance().setContent(o);
+		MeasuredValue mv = new MeasuredValue("tes");
+		mv.setColumnNumber(2);
+		Store.getInstance().addMeasuredValue(mv);
+		f.add(new Step6aController(new FeatureOfInterest()).getView());
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.pack();
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+
+		
+		/*
 		MainFrame bla= new MainFrame();
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
 		bla.getTablePanel().setContent(o);
 		bla.setStepPanel(new Step3Panel(bla));
-
+*/
 		/*
 		InsertObservationDocument i = InsertObservationDocument.Factory.newInstance();
 		InsertObservation io = i.addNewInsertObservation();

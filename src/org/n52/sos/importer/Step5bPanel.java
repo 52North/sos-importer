@@ -12,6 +12,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 
+import org.n52.sos.importer.view.MainFrame;
+
 
 public class Step5bPanel extends StepPanel {
 

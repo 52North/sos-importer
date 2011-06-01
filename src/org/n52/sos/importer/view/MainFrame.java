@@ -26,17 +26,13 @@ Created: 2011-05-26
 Modified: 2011-05-26
 */
 
-package org.n52.sos.importer;
-import java.util.ArrayList;
-import java.util.List;
-
+package org.n52.sos.importer.view;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.bean.MeasuredValue;
 
 public class MainFrame extends JFrame {
 
@@ -44,67 +40,31 @@ public class MainFrame extends JFrame {
 
 	private static final Logger logger = Logger.getLogger(MainFrame.class);
 	
-	private final StepDescriptionPanel stepDescriptionPanel = new StepDescriptionPanel();
-	private final JPanel stepPanel = new JPanel();
-	private final BackCancelPanel backCancelPanel = new BackCancelPanel();
-	
-	private final Step1Panel step1Panel = new Step1Panel(this);
-	private final Step2Panel step2Panel = new Step2Panel(this);
-	private final TablePanel tablePanel = new TablePanel();
-	private final Step3Panel step3Panel = new Step3Panel(this);
-	
-	public List<MeasuredValue> measuredValues = new ArrayList<MeasuredValue>();
+	//private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
+	private final JPanel stepContainerPanel = new JPanel();
+	private final BackNextPanel backNextPanel = BackNextPanel.getInstance();
 	
 	public MainFrame() {
-		logger.info("Starte Programm");
-		this.setTitle("CSV to SOS");
+		super();
+		logger.info("Initialize Main Frame");
+		this.setTitle("SOS Importer");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		this.getContentPane().add(stepDescriptionPanel);
-		this.getContentPane().add(stepPanel);
-		this.getContentPane().add(backCancelPanel);
-		
-		this.setStepPanel(step1Panel);
+		//this.getContentPane().add(descriptionPanel);
+		this.getContentPane().add(stepContainerPanel);
+		this.getContentPane().add(backNextPanel);
+
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 	
-	public void setStepPanel(StepPanel newStepPanel) {		
-		stepPanel.removeAll();
-		stepPanel.add(newStepPanel);
-	    stepDescriptionPanel.setText(newStepPanel.getDescription());
-		backCancelPanel.setStepPanel(newStepPanel);
+	public void setStepPanel(JPanel stepPanel) {		
+		stepContainerPanel.removeAll();
+		stepContainerPanel.add(stepPanel);
 		this.pack();
-	}
-
-	public Step1Panel getStep1Panel() {
-		return step1Panel;
-	}
-	
-	public Step2Panel getStep2Panel() {
-		return step2Panel;
-	}
-	
-	public Step3Panel getStep3Panel() {
-		return step3Panel;
-	}
-	
-	public TablePanel getTablePanel() {
-		return tablePanel;
-	}
-	
-	public BackCancelPanel getBackCancelPanel() {
-		return backCancelPanel;
-	}
-	
-	public MeasuredValue getMeasuredValueAtColumn(int column) {
-		for (MeasuredValue mv: measuredValues) {
-			if (mv.getColumnNumber() == column)
-				return mv;
-		}
-		return null;
+		this.setLocationRelativeTo(null);
 	}
 	
 	private void exitDialog() {
@@ -114,13 +74,5 @@ public class MainFrame extends JFrame {
 			    "Exit", JOptionPane.YES_NO_OPTION,
 			    JOptionPane.WARNING_MESSAGE);
 		if (n == JOptionPane.YES_OPTION) System.exit(0);
-	}
-	
-	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	new MainFrame();
-            }
-        });
 	}
 }
