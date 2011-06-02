@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.n52.sos.importer.Settings;
+import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
 
 public class Step1Controller extends StepController {
@@ -18,9 +18,11 @@ public class Step1Controller extends StepController {
 	private static final long serialVersionUID = 1L;
 	
 	private Step1Panel step1Panel;
+	private Step1Model step1Model;
 
 	public Step1Controller() {
 		step1Panel = new Step1Panel(this);
+		step1Model = new Step1Model();
 		//disable "back" button
 		BackNextController.getInstance().setBackButtonEnabled(false);
 	}
@@ -32,12 +34,17 @@ public class Step1Controller extends StepController {
 
 	@Override
 	public void back() {
+		//not necessary
 	}
 	
-
-	protected void loadSettings() {
-		if (Settings.getCSVFilePath() != null)
-			step1Panel.setCSVFilePath(Settings.getCSVFilePath());
+	public void load() {
+		String csvFilePath = step1Model.getCSVFilePath();
+		step1Panel.setCSVFilePath(csvFilePath);
+	}
+	
+	public void save() {
+		String csvFilePath = step1Panel.getCSVFilePath();
+		step1Model.setCSVFilePath(csvFilePath);
 	}
 
 	@Override
@@ -54,13 +61,13 @@ public class Step1Controller extends StepController {
 		
 		File f = new File(filePath);
 		if (isValid(f)) {
-			Settings.setCSVFilePath(filePath);
-			String CSVFileContent = readFile(f);
-			//Step2Controller s2c = new Step2Controller(String CSVFileContent);
-			//MainController.getInstance().setStepController(s2c);	
+			String csvFileContent = readFile(f);
+			Step2Controller s2c = new Step2Controller(csvFileContent);
+			MainController.getInstance().setStepController(s2c);	
 			
 			//show "back" button
 			BackNextController.getInstance().setBackButtonEnabled(true);
+			save();
 		}
 	}
 	
