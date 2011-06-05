@@ -1,10 +1,12 @@
 package org.n52.sos.importer.bean;
 
+import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+
 public class MeasuredValue extends TableConnection {
 	
 	private String type;
 	
-	private DateAndTime dateAndTime;
+	private DateAndTimeController dateAndTime;
 	
 	private ObservedProperty observedProperty;
 	

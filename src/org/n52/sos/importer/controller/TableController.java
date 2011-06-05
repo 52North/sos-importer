@@ -2,6 +2,7 @@ package org.n52.sos.importer.controller;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +150,10 @@ public class TableController {
 	public void colorRow(Color color, int number) {
 		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, -1, number));
 	}
+	
+	public void colorCell(Color color, Point p) {
+		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, p));
+	}
 
 	public void addSingleSelectionListener(SingleSelectionListener singleSelectionListener) {
 		this.singleSelectionListener = singleSelectionListener;
@@ -168,10 +173,17 @@ public class TableController {
 		
 		private int rowToColor;
 		
+		private Point cellToColor;
+		
 		public ColoredTableCellRenderer(Color color, int columnToColor, int rowToColor) {
 			this.color = color;
 			this.columnToColor = columnToColor;
 			this.rowToColor = rowToColor;
+		}
+		
+		public ColoredTableCellRenderer(Color color, Point cellToColor) {
+			this.color = color;
+			this.cellToColor = cellToColor;
 		}
 		
 		@Override
@@ -180,6 +192,7 @@ public class TableController {
 
 	        if (row == rowToColor) setBackground(color);
 	        else if (column == columnToColor) setBackground(color);
+	        else if (column == cellToColor.x && row == cellToColor.y) setBackground(color);
 	        else setBackground(null);
 	        
 	        super.getTableCellRendererComponent(table, value, selected, focused, row, column);

@@ -1,11 +1,15 @@
 package org.n52.sos.importer.bean;
 
+import java.awt.Point;
+
 public class TableConnection {
 
-	private int columnNumber;
+	private int columnNumber = -1;
 	
-	private int rowNumber;
+	private int rowNumber = -1;
 
+	private Point cellCoordinates = null;
+	
 	public int getColumnNumber() {
 		return columnNumber;
 	}
@@ -20,5 +24,13 @@ public class TableConnection {
 
 	public void setRowNumber(int rowNumber) {
 		this.rowNumber = rowNumber;
+	}
+
+	public void setCellCoordinates(Point cellCoordinates) {
+		this.cellCoordinates = cellCoordinates;
+	}
+
+	public Point getCellCoordinates() {
+		return cellCoordinates;
 	}
 }

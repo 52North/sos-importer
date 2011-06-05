@@ -21,6 +21,7 @@ public class Step1Controller extends StepController {
 	private Step1Model step1Model;
 
 	public Step1Controller() {
+		super();
 		step1Panel = new Step1Panel(this);
 		step1Model = new Step1Model();
 		//disable "back" button
