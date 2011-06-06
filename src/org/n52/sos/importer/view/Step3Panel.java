@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.view;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -8,9 +8,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -18,37 +16,28 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.bean.FeatureOfInterest;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ObservedProperty;
-import org.n52.sos.importer.bean.SensorName;
-import org.n52.sos.importer.bean.UnitOfMeasurement;
-import org.n52.sos.importer.controller.Step6aController;
-import org.n52.sos.importer.view.MainFrame;
+import org.n52.sos.importer.ButtonGroupPanel;
+import org.n52.sos.importer.ParseTestLabel;
+import org.n52.sos.importer.Parser;
+import org.n52.sos.importer.SelectionPanel;
+import org.n52.sos.importer.controller.TableController;
 
-public class Step3Panel extends StepPanel {
+public class Step3Panel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final JLabel selectionModeLabel = new JLabel("Selection mode: ");
+	private final JLabel selectionModeLabel = new JLabel();
 	
 	private JPanel rootPanel = new JPanel();
 	private JPanel additionalPanel1 = new JPanel();
 	private JPanel additionalPanel2 = new JPanel();
-	private TablePanel tablePanel;
+	private TablePanel tablePanel = TablePanel.getInstance();
 	private final SelectionPanel radioButtonPanel;
 	
-	private final HashMap<Integer, List<String>> columnStore = new HashMap<Integer, List<String>>();
-	private final HashMap<Integer, List<String>> rowStore = new HashMap<Integer, List<String>>();
-	
-	public Step3Panel(MainFrame mainFrame) {
-		super(mainFrame);
-		radioButtonPanel = new RadioButtonPanel(mainFrame);	
+	public Step3Panel() {
+		super();
+		radioButtonPanel = new RadioButtonPanel();	
 		radioButtonPanel.getContainerPanel().add(radioButtonPanel);
-		this.tablePanel = getMainFrame().getTablePanel();
-		
-		changeSelectionMode(TablePanel.COLUMNS);
-		tablePanel.addSelectionListener(new TableSelectionChanged());
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -65,146 +54,37 @@ public class Step3Panel extends StepPanel {
 		this.add(buttonPanel);
 	}
 
-	@Override
-	protected String getDescription() {
-		return "Step 3: Choose Metadata";
+	public void setSelectionModeLabelText(String text) {
+		selectionModeLabel.setText(text);
 	}
 	
-	public List<String> getColumnFromStore(int column) {
-		return columnStore.get(column);
-	}
-
-	private void changeSelectionMode(int sm) {
-		switch(sm) {
-		case TablePanel.COLUMNS:
-			tablePanel.setSelectionMode(TablePanel.COLUMNS);
-			selectionModeLabel.setText("For Columns");
-			break;
-		case TablePanel.ROWS:
-			tablePanel.setSelectionMode(TablePanel.ROWS);
-			selectionModeLabel.setText("For Rows");
-			break;
-		case TablePanel.CELLS:
-			tablePanel.setSelectionMode(TablePanel.CELLS);
-			selectionModeLabel.setText("For Cells");
-			break;
-		}
+	public void clearAdditionalPanels() {
+		additionalPanel1.removeAll();
+		additionalPanel2.removeAll();
 	}
 	
-	@Override
-	protected void back() {
-		switch(tablePanel.getSelectionMode()) {
-		case TablePanel.COLUMNS:
-			getMainFrame().setStepPanel(getMainFrame().getStep2Panel());
-			break;
-		case TablePanel.ROWS:
-			changeSelectionMode(TablePanel.COLUMNS);
-			break;
-		case TablePanel.CELLS:
-			changeSelectionMode(TablePanel.ROWS);
-			break;
-		}			
+	public void store(List<String> selection) {
+		radioButtonPanel.store(selection);
 	}
-
-	@Override
-	protected void next() {
-		switch(tablePanel.getSelectionMode()) {
-		case TablePanel.COLUMNS:
-			List<String> selections = new ArrayList<String>();
-			radioButtonPanel.store(selections);
-			columnStore.put(tablePanel.getSelectedColumn(), selections);
-			
-			changeSelectionMode(TablePanel.ROWS);
-			break;
-		case TablePanel.ROWS:
-			changeSelectionMode(TablePanel.CELLS);
-			break;
-		case TablePanel.CELLS:
-			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
-			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
-			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
-			List<SensorName> sensorNames = new ArrayList<SensorName>();
-			
-			for (Integer k: columnStore.keySet()) {
-				System.out.println(k);
-				for (String s: columnStore.get(k)) {
-					System.out.println(s);
-				}
-			}
-			for (Integer k: columnStore.keySet()) {
-				List<String> column = columnStore.get(k);
-				if (column.get(0).equals("Measured Value")) {
-					MeasuredValue mvc = new MeasuredValue(column.get(1));
-					mvc.setColumnNumber(k);
-					getMainFrame().addMeasuredValue(mvc);
-				} else if (column.get(0).equals("Date & Time")) {
-					if (column.get(1).equals("Combination")) {
-						String pattern = column.get(1);
-			        	if (pattern.indexOf("y") != -1);
-			        	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1);
-			        	if (pattern.indexOf("d") != -1);
-			        	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1);
-			        	if (pattern.indexOf("K") != -1 || pattern.indexOf("h") != -1 && pattern.indexOf("a") != -1); //am/pm times
-			        	if (pattern.indexOf("m") != -1);
-			        	if (pattern.indexOf("s") != -1);
-			        	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1);
-					}
-		        		
-					//DateAndTimeColumn dtc = new DateAndTimeColumn(i, )
-				} else if (column.get(0).equals("Feature Of Interest")) {
-					FeatureOfInterest foi = new FeatureOfInterest();
-					foi.setColumnNumber(k);
-					featuresOfInterest.add(foi);
-				} else if (column.get(0).equals("Observed Property")) {
-					ObservedProperty op = new ObservedProperty();
-					op.setColumnNumber(k);
-					observedProperties.add(op);
-				} else if (column.get(0).equals("Unit of Measurement")) {
-					UnitOfMeasurement uom = new UnitOfMeasurement();
-					uom.setColumnNumber(k);
-					unitOfMeasurements.add(uom);
-				} else if (column.get(0).equals("Sensor Name")) {
-					SensorName sm = new SensorName();
-					sm.setColumnNumber(k);
-					sensorNames.add(sm);
-				}
-			}
-			
-			if (featuresOfInterest.isEmpty())
-				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));	
-			
-			//else if 1:1 mapping
-			
-			else { //featuresOfInterest is not empty
-				//for each foi columns or row choose measurement column:
-				//getMainFrame().setStepPanel(new Step4aPanel(getMainFrame(), Step4aPanel.FEATURE_OF_INTEREST));
-				
-				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));				
-			}
-			
-			// TODO Auto-generated method stub
-			break;
-		}	
-	}	
 	
-	@Override
-	protected void loadSettings() {
-		// TODO Auto-generated method stub
-		
+	public void restore(List<String> selection) {
+		radioButtonPanel.restore(selection);
+	}
+	
+	public void restoreDefault() {
+		radioButtonPanel.restoreDefault();
 	}
 	
 	private class RadioButtonPanel extends ButtonGroupPanel {
 		
 		private static final long serialVersionUID = 1L;
 		
-		public RadioButtonPanel(MainFrame mainFrame) {	
-			super(mainFrame, rootPanel);
+		public RadioButtonPanel() {	
+			super(rootPanel);
 			addRadioButton("Undefined");
-			addRadioButton("Measured Value", new MeasuredValuePanel(mainFrame, additionalPanel1));
-			addRadioButton("Date & Time", new DateAndTimePanel(mainFrame, additionalPanel1));
-			addRadioButton("Position", new PositionPanel(mainFrame, additionalPanel1));
+			addRadioButton("Measured Value", new MeasuredValuePanel());
+			addRadioButton("Date & Time", new DateAndTimePanel());
+			addRadioButton("Position", new PositionPanel());
 			addRadioButton("Feature of Interest");
 			addRadioButton("Sensor Name");
 			addRadioButton("Observed Property");
@@ -217,11 +97,11 @@ public class Step3Panel extends StepPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public MeasuredValuePanel(MainFrame mainFrame, JPanel containerPanel) {	
-				super(mainFrame, containerPanel);		
-				addRadioButton("Numeric Value" , new NumericValuePanel(mainFrame, additionalPanel2));
-				addRadioButton("Count", new ParseTestPanel(mainFrame, additionalPanel2, new CountParser()));
-				addRadioButton("Boolean", new ParseTestPanel(mainFrame, additionalPanel2, new BooleanParser()));
+			public MeasuredValuePanel() {	
+				super(additionalPanel1);		
+				addRadioButton("Numeric Value" , new NumericValuePanel());
+				addRadioButton("Count", new ParseTestPanel(new CountParser()));
+				addRadioButton("Boolean", new ParseTestPanel(new BooleanParser()));
 				addRadioButton("Text");
 			}
 			
@@ -263,8 +143,8 @@ public class Step3Panel extends StepPanel {
 				
 				private final ParseTestLabel parseTestLabel = new ParseTestLabel(new NumericValueParser());
 			
-				public NumericValuePanel(MainFrame mainFrame, JPanel containerPanel) {
-					super(mainFrame, containerPanel);
+				public NumericValuePanel() {
+					super(additionalPanel2);
 					ActionListener sc = new SeparatorChanged();
 					decimalSeparatorCombobox.addActionListener(sc);
 					thousandsSeparatorCombobox.addActionListener(sc);
@@ -305,13 +185,13 @@ public class Step3Panel extends StepPanel {
 				
 				@Override
 				protected void selectionChanged() {
-					parseTestLabel.parseValues(tablePanel.getSelectedValues());
+					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
 					reformat();
 				};
 				
 				@Override
 				protected void reinit() {
-					parseTestLabel.parseValues(tablePanel.getSelectedValues());
+					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
 					//reformat();
 				}
 				
@@ -375,8 +255,8 @@ public class Step3Panel extends StepPanel {
 				
 				private final ParseTestLabel parseTestLabel;
 				
-				public ParseTestPanel(MainFrame mainFrame, JPanel containerPanel, Parser parser) {
-					super(mainFrame, containerPanel);
+				public ParseTestPanel(Parser parser) {
+					super(additionalPanel2);
 					parseTestLabel = new ParseTestLabel(parser);
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
 					this.add(parseTestLabel);
@@ -397,7 +277,7 @@ public class Step3Panel extends StepPanel {
 				
 				@Override
 				protected void reinit() {
-					parseTestLabel.parseValues(tablePanel.getSelectedValues());
+					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
 				}		
 			}		
 		}
@@ -406,10 +286,10 @@ public class Step3Panel extends StepPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public DateAndTimePanel(MainFrame mainFrame, JPanel containerPanel) {
-				super(mainFrame, containerPanel);
-				addRadioButton("Combination", new DateAndTimeCombinationPanel(mainFrame, additionalPanel2));
-				addRadioButton("Timezone", new TimeZonePanel(mainFrame, additionalPanel2));
+			public DateAndTimePanel() {
+				super(additionalPanel1);
+				addRadioButton("Combination", new DateAndTimeCombinationPanel());
+				addRadioButton("Timezone", new TimeZonePanel());
 				addRadioButton("UNIX time");
 			}
 
@@ -417,8 +297,8 @@ public class Step3Panel extends StepPanel {
 
 				private static final long serialVersionUID = 1L;
 				
-				public TimeZonePanel(MainFrame mainFrame, JPanel containerPanel) {
-					super(mainFrame, containerPanel);	
+				public TimeZonePanel() {
+					super(additionalPanel2);	
 					super.addRadioButton("Country or City Name");
 					super.addRadioButton("UTC Offset");		       
 				}
@@ -451,8 +331,8 @@ public class Step3Panel extends StepPanel {
 		        
 		        private final ParseTestLabel parseTestLabel = new ParseTestLabel(new DateAndTimeParser());
 				
-				public DateAndTimeCombinationPanel(MainFrame mainFrame, JPanel containerPanel) {	
-					super(mainFrame, containerPanel);	
+				public DateAndTimeCombinationPanel() {	
+					super(additionalPanel2);	
 					dateAndTimeComboBox.setEditable(true);		
 					
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -524,7 +404,7 @@ public class Step3Panel extends StepPanel {
 			    @Override
 			    protected void reinit() {
 			    	reformat();
-			    	parseTestLabel.parseValues(tablePanel.getSelectedValues());
+			    	parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
 			    };
 			    
 			    private class DateAndTimeParser implements Parser {
@@ -550,12 +430,12 @@ public class Step3Panel extends StepPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public PositionPanel(MainFrame mainFrame, JPanel containerPanel) {
-				super(mainFrame, containerPanel);	
+			public PositionPanel() {
+				super(additionalPanel1);	
 				addRadioButton("Longitude / X");
 				addRadioButton("Latitude / Y");
 				addRadioButton("Altitude / Z");
-				addRadioButton("Reference System", new ReferenceSystemPanel(mainFrame, additionalPanel2));
+				addRadioButton("Reference System", new ReferenceSystemPanel());
 				addRadioButton("Combination");
 			}
 			
@@ -563,8 +443,8 @@ public class Step3Panel extends StepPanel {
 
 				private static final long serialVersionUID = 1L;
 				
-				public ReferenceSystemPanel(MainFrame mainFrame, JPanel containerPanel) {
-					super(mainFrame, containerPanel);				
+				public ReferenceSystemPanel() {
+					super(additionalPanel2);				
 					addRadioButton("Name");
 					addRadioButton("EPSG-Code");
 				}
@@ -572,38 +452,5 @@ public class Step3Panel extends StepPanel {
 		}	
 	}	
 	
-	private class TableSelectionChanged implements TableSelectionListener {
-		
-		@Override
-		public void columnSelectionChanged(int oldColumn, int newColumn) {
-			List<String> selections = new ArrayList<String>();
-			radioButtonPanel.store(selections);
-			columnStore.put(oldColumn, selections);
-			    
-			selections = columnStore.get(newColumn);
-			additionalPanel1.removeAll();
-			additionalPanel2.removeAll();
-			
-			if (selections == null) radioButtonPanel.restoreDefault();
-			else radioButtonPanel.restore(selections);
-			
-			getMainFrame().pack();
-		}
-		
-		@Override
-		public void rowSelectionChanged(int oldRow, int newRow) {
-			List<String> selections = new ArrayList<String>();
-			radioButtonPanel.store(selections);
-			rowStore.put(oldRow, selections);
-			
-			selections = rowStore.get(newRow);
-			additionalPanel1.removeAll();
-			additionalPanel2.removeAll();
-			
-			if (selections == null) radioButtonPanel.restoreDefault();
-			else radioButtonPanel.restore(selections);
-			
-			getMainFrame().pack();
-		}
-	}
+	
 }

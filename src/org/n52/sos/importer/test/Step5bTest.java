@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.test;
 
 import javax.swing.JFrame;
 

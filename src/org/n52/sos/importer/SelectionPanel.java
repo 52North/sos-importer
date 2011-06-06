@@ -5,13 +5,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.view.MainFrame;
-
 public abstract class SelectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final MainFrame mainFrame;
 	
 	private final JPanel containerPanel;
 	
@@ -19,9 +15,8 @@ public abstract class SelectionPanel extends JPanel {
 	
 	private SelectionPanel selectedChildPanel;
 	
-	public SelectionPanel(MainFrame mainFrame, JPanel containerPanel) {
+	public SelectionPanel(JPanel containerPanel) {
 		super();
-		this.mainFrame = mainFrame;
 		this.containerPanel = containerPanel;
 	}
 	
@@ -65,10 +60,6 @@ public abstract class SelectionPanel extends JPanel {
 		SelectionPanel childPanel = childPanels.get(s);
 		if (childPanel != null)
 			childPanel.store(selections);
-	}
-
-	public MainFrame getMainFrame() {
-		return mainFrame;
 	}
 	
 	public JPanel getContainerPanel() {

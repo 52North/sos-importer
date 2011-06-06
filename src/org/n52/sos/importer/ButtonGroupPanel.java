@@ -11,7 +11,7 @@ import javax.swing.ButtonModel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.n52.sos.importer.view.MainFrame;
+import org.n52.sos.importer.controller.MainController;
 
 public abstract class ButtonGroupPanel extends SelectionPanel {
 	
@@ -19,8 +19,8 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 	
 	protected ButtonGroup group = new ButtonGroup();
 	
-	public ButtonGroupPanel(MainFrame mainFrame, JPanel containerPanel) {
-		super(mainFrame, containerPanel);
+	public ButtonGroupPanel(JPanel containerPanel) {
+		super(containerPanel);
         this.setLayout(new GridLayout(0, 1));
 	}
 	
@@ -93,7 +93,7 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 			setSelectedChildPanel(childPanel);
 			childPanel.addToContainerPanel();		
 			
-			getMainFrame().pack();
+			MainController.getInstance().pack();
 			selectionChanged();
 		}	
 	}
@@ -104,7 +104,7 @@ public abstract class ButtonGroupPanel extends SelectionPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
-				getMainFrame().pack();
+				MainController.getInstance().pack();
 				
 				SelectionPanel childPanel = null;
 				setSelectedChildPanel(childPanel);

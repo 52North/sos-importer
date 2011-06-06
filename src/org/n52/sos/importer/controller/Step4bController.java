@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.Store;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
@@ -11,8 +12,8 @@ import org.n52.sos.importer.controller.dateAndTime.DateAndTimeComponentControlle
 import org.n52.sos.importer.view.Step4bPanel;
 
 public class Step4bController extends StepController {
-
-	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(Step4bController.class);
 
 	private Step4bPanel step4bPanel;
 	

@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.test;
 
 import javax.swing.JFrame;
 
@@ -26,13 +26,6 @@ public class XMLTest {
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 
-		
-		/*
-		MainFrame bla= new MainFrame();
-		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
-		bla.getTablePanel().setContent(o);
-		bla.setStepPanel(new Step3Panel(bla));
-*/
 		/*
 		InsertObservationDocument i = InsertObservationDocument.Factory.newInstance();
 		InsertObservation io = i.addNewInsertObservation();
@@ -56,14 +49,6 @@ public class XMLTest {
 			e1.printStackTrace();
 		}
 
-		*/
-		/*
-		MainFrame bla= new MainFrame(); 
-		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
-		bla.getTablePanel().setTableContent(o);
-		Step3Panel sp  = new Step3Panel(bla);
-
-		bla.setStepPanel(sp);
 		*/
 	}
 }

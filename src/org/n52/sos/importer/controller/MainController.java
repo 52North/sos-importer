@@ -23,6 +23,10 @@ public class MainController {
 		return instance;
 	}
 	
+	public void pack() {
+		mainFrame.pack();
+	}
+	
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {

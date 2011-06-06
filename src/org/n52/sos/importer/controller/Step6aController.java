@@ -3,6 +3,8 @@ package org.n52.sos.importer.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.swing.JPanel;
+
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.Resource;
@@ -10,8 +12,6 @@ import org.n52.sos.importer.bean.Store;
 import org.n52.sos.importer.view.Step6aPanel;
 
 public class Step6aController extends StepController {
-	
-	private static final long serialVersionUID = 1L;
 	
 	private static final Logger logger = Logger.getLogger(Step6aController.class);
 	
@@ -122,11 +122,17 @@ public class Step6aController extends StepController {
 	}
 
 	@Override
-	protected String getDescription() {
+	public String getDescription() {
 		return "Step 6a: Add missing Metadata";
 	}
 	
 	public Step6aPanel getView() {
 		return step6aView;
+	}
+
+	@Override
+	public JPanel getStepPanel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

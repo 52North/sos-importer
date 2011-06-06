@@ -2,13 +2,9 @@ package org.n52.sos.importer.controller;
 import javax.swing.JPanel;
 
 
-public abstract class StepController extends JPanel {
+public abstract class StepController {
 
 	private static final long serialVersionUID = 1L;
-
-	public StepController() {
-		super();
-	}
 	
 	//protected abstract void loadSettings();
 	

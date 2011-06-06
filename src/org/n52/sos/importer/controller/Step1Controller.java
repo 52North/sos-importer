@@ -14,8 +14,6 @@ import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
 
 public class Step1Controller extends StepController {
-
-	private static final long serialVersionUID = 1L;
 	
 	private Step1Panel step1Panel;
 	private Step1Model step1Model;
@@ -117,7 +115,7 @@ public class Step1Controller extends StepController {
 	public void browseButtonClicked() {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter()); 
-		if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
 			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
 		}
 	}
