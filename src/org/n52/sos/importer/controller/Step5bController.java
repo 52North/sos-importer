@@ -1,7 +1,7 @@
 package org.n52.sos.importer.controller;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -58,8 +58,7 @@ public class Step5bController extends StepController {
 				TableController.getInstance().colorCell(color, c.getCellCoordinates());
 		}*/
 		
-		ArrayList<JPanel> missingComponents = new ArrayList<JPanel>();
-		step5bModel.getDateAndTimeController().getMissingComponents(missingComponents);
+		List<JPanel> missingComponents = step5bModel.getDateAndTimeController().getMissingComponents();		
 		step5bPanel.addMissingComponents(missingComponents);
 	}
 

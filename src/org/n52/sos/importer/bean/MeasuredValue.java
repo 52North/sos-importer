@@ -51,14 +51,4 @@ public class MeasuredValue extends TableConnection {
 	public SensorName getSensorName() {
 		return sensorName;
 	}
-
-	public Resource getMissingResource() {
-		if (featureOfInterest == null) return new FeatureOfInterest();
-		if (observedProperty == null) return new ObservedProperty();
-		if (unitOfMeasurement == null) return new UnitOfMeasurement();
-		if (sensorName == null) return new SensorName();
-		return null;
-	}
-	
-
 }

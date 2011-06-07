@@ -1,5 +1,7 @@
 package org.n52.sos.importer.bean;
 
+import java.util.List;
+
 public class FeatureOfInterest extends Resource {
 	
 	public void assign(MeasuredValue measuredValue) {
@@ -12,5 +14,13 @@ public class FeatureOfInterest extends Resource {
 	
 	public String toString() {
 		return "Feature Of Interest";
+	}
+
+	@Override
+	public void unassignFromMeasuredValues() {
+		for (MeasuredValue mv: Store.getInstance().getMeasuredValues()) {
+			if (mv.getFeatureOfInterest() == this)
+				mv.setFeatureOfInterest(null);
+		}		
 	}
 }

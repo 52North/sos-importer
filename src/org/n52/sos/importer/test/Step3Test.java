@@ -8,7 +8,7 @@ public class Step3Test {
 	
 	public static void main(String[] args) {
 		MainController f = MainController.getInstance();
-		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
+		Object[][] o = {{"2011-10-12", "2011-10-13"},{"12.12", "123.123"},{"123.123", "32.123"}};
 		TableController.getInstance().setContent(o); 
 
 		f.setStepController(new Step3Controller());

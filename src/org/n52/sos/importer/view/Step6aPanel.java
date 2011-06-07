@@ -29,7 +29,6 @@ public class Step6aPanel extends JPanel {
 		super();
 		questionLabel.setText(questionText);
 		markingLabel.setText(markingText);
-		markingLabel.setBackground(Color.green);
 		nameComboBox.setEditable(true);
 		
 		removeButton.setBorderPainted(false);
@@ -65,6 +64,14 @@ public class Step6aPanel extends JPanel {
 	
 	public String getResourceURI() {
 		return URITextField.getText();
+	}
+	
+	public void setResourceName(String name) {
+		nameComboBox.setSelectedItem(name);
+	}
+	
+	public void setResourceURI(String uri) {
+		URITextField.setText(uri);
 	}
 
 	

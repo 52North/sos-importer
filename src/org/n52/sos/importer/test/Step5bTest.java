@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import org.n52.sos.importer.controller.Step5bController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.TimeZoneModel;
 
 public class Step5bTest {
 
@@ -15,7 +14,7 @@ public class Step5bTest {
 		TableController.getInstance().setContent(o);
 		
 		DateAndTimeController dtc = new DateAndTimeController();
-		dtc.getTimeZoneController().setTimeZoneModel(new TimeZoneModel(-1));
+		dtc.assignPattern("yyyy-MM-dd");
 		
 		f.add(new Step5bController(dtc).getStepPanel());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

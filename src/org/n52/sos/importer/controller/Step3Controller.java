@@ -8,9 +8,13 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.bean.FeatureOfInterest;
 import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.ObservedProperty;
+import org.n52.sos.importer.bean.Resource;
 import org.n52.sos.importer.bean.SensorName;
+import org.n52.sos.importer.bean.Store;
 import org.n52.sos.importer.bean.UnitOfMeasurement;
+import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.view.Step3Panel;
 
 public class Step3Controller extends StepController {
@@ -67,37 +71,25 @@ public class Step3Controller extends StepController {
 			changeSelectionMode(TableController.CELLS);
 			break;
 		case TableController.CELLS:
+			
 			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 			List<SensorName> sensorNames = new ArrayList<SensorName>();
 			
-			for (Integer k: columnStore.keySet()) {
-				System.out.println(k);
-				for (String s: columnStore.get(k)) {
-					System.out.println(s);
-				}
-			}
-			for (Integer k: columnStore.keySet()) {
-				List<String> column = columnStore.get(k);
+			for (Integer k: step3Model.getStoredColumns()) {
+				List<String> column = step3Model.getColumnFromStore(k);
 				if (column.get(0).equals("Measured Value")) {
 					MeasuredValue mvc = new MeasuredValue(column.get(1));
 					mvc.setColumnNumber(k);
-					getMainFrame().addMeasuredValue(mvc);
+					Store.getInstance().addMeasuredValue(mvc);
 				} else if (column.get(0).equals("Date & Time")) {
 					if (column.get(1).equals("Combination")) {
 						String pattern = column.get(1);
-			        	if (pattern.indexOf("y") != -1);
-			        	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1);
-			        	if (pattern.indexOf("d") != -1);
-			        	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1);
-			        	if (pattern.indexOf("K") != -1 || pattern.indexOf("h") != -1 && pattern.indexOf("a") != -1); //am/pm times
-			        	if (pattern.indexOf("m") != -1);
-			        	if (pattern.indexOf("s") != -1);
-			        	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1);
+						DateAndTimeController dtc = new DateAndTimeController();
+						dtc.assignPattern(pattern);
+						Store.getInstance().addDateAndTimeController(dtc);
 					}
-		        		
-					//DateAndTimeColumn dtc = new DateAndTimeColumn(i, )
 				} else if (column.get(0).equals("Feature Of Interest")) {
 					FeatureOfInterest foi = new FeatureOfInterest();
 					foi.setColumnNumber(k);
@@ -117,19 +109,32 @@ public class Step3Controller extends StepController {
 				}
 			}
 			
-			if (featuresOfInterest.isEmpty())
-				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));	
+			for (DateAndTimeController dtc: Store.getInstance().getDateAndTimeController()){
+				List<JPanel> missingComponents = dtc.getMissingComponents();
+				if (missingComponents.size() > 0) {
+					Step5bController step5bController = new Step5bController(dtc);
+					MainController.getInstance().setStepController(step5bController);
+				}
+			}
+			
+			//if there is a measurement column without any feature of interest,
+			//observed property, unit of measurement or sensor name do:
+			Resource r = Store.getInstance().getMissingResourceForMeasuredValues();
+			if (r != null) {
+				Step6aController step6aController = new Step6aController(new Step6aModel(r));
+				MainController.getInstance().setStepController(step6aController);
+			}
+
 			
 			//else if 1:1 mapping
 			
-			else { //featuresOfInterest is not empty
+			//featuresOfInterest is not empty
 				//for each foi columns or row choose measurement column:
 				//getMainFrame().setStepPanel(new Step4aPanel(getMainFrame(), Step4aPanel.FEATURE_OF_INTEREST));
 				
 				//while there are measurement columns or rows without any fois do:
-				getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));				
-			}
+				//getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));				
+			
 			
 			// TODO Auto-generated method stub
 			break;

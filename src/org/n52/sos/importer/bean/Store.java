@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 
 public class Store {
 	
@@ -12,6 +13,8 @@ public class Store {
 	public List<MeasuredValue> measuredValues;
 	
 	public List<Resource> resourcesWithoutMeasuredValue;
+	
+	public List<DateAndTimeController> dateAndTimeControllers;
 	
 	private Store() {
 		measuredValues = new ArrayList<MeasuredValue>();
@@ -50,7 +53,38 @@ public class Store {
 		return r;
 	}
 	
+	public void addDateAndTimeController(DateAndTimeController dtc) {
+		dateAndTimeControllers.add(dtc);
+	}
+	
+	public List<DateAndTimeController> getDateAndTimeController() {
+		return dateAndTimeControllers;
+	}
+	
 	public int getTableOrientation() {
 		return TableController.COLUMNS;
+	}
+	
+	public Resource getMissingResourceForMeasuredValues() {
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getFeatureOfInterest() == null) 
+				return new FeatureOfInterest();
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getObservedProperty() == null) {
+				return new ObservedProperty();
+			}
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getUnitOfMeasurement() == null) {
+				return new UnitOfMeasurement();
+			}
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getSensorName() == null) {
+				return new SensorName();
+			}
+		}
+		return null;
 	}
 }

@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-public class MissingSecondsPanel extends JPanel {
+public class MissingSecondPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class MissingSecondsPanel extends JPanel {
 	private SpinnerNumberModel secondModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner secondSpinner = new JSpinner(secondModel);
 	
-	public MissingSecondsPanel() {
+	public MissingSecondPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(secondLabel);
 		this.add(secondSpinner);

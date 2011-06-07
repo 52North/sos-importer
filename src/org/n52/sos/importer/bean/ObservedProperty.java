@@ -12,6 +12,14 @@ public class ObservedProperty extends Resource {
 		return measuredValue.getObservedProperty() != null;
 	}
 	
+	@Override
+	public void unassignFromMeasuredValues() {
+		for (MeasuredValue mv: Store.getInstance().getMeasuredValues()) {
+			if (mv.getObservedProperty() == this)
+				mv.setObservedProperty(null);
+		}		
+	}
+	
 	@Override 
 	public String toString() {
 		return "Observed Property";

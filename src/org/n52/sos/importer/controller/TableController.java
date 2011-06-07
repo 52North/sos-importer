@@ -99,6 +99,16 @@ public class TableController {
 		table.removeRowSelectionInterval(number, number);
 	}
 	
+	public void deselectAllColumns() {
+		int columns = table.getColumnCount() - 1;
+		table.removeColumnSelectionInterval(0, columns);
+	}
+	
+	public void deselectAllRows() {
+		int rows = table.getRowCount() - 1;
+		table.removeColumnSelectionInterval(0, rows);
+	}
+	
 	public int[] getSelectedColumns() {
 		return table.getSelectedColumns();
 	}

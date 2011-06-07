@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-public class MissingHoursPanel extends JPanel {
+public class MissingHourPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class MissingHoursPanel extends JPanel {
 	private SpinnerNumberModel hourModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner hourSpinner = new JSpinner(hourModel);
 	
-	public MissingHoursPanel() {
+	public MissingHourPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(hourLabel);
 		this.add(hourSpinner);

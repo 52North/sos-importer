@@ -11,8 +11,8 @@ public class Step5bPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final JLabel descriptionLabel = new JLabel("Complete time information " +
-														"for the marked components.");
+	private final JLabel descriptionLabel = new JLabel("Complete missing information " +
+														"for the marked date and time.");
 
 	private final JPanel containerPanel = new JPanel();
 	

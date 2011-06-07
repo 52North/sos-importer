@@ -12,6 +12,14 @@ public class SensorName extends Resource {
 		return measuredValue.getSensorName() != null;
 	}
 	
+	@Override
+	public void unassignFromMeasuredValues() {
+		for (MeasuredValue mv: Store.getInstance().getMeasuredValues()) {
+			if (mv.getSensorName() == this)
+				mv.setSensorName(null);
+		}		
+	}
+	
 	@Override 
 	public String toString() {
 		return "Sensor Name";

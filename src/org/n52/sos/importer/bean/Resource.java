@@ -27,4 +27,6 @@ public abstract class Resource extends TableConnection {
 	public abstract void assign(MeasuredValue measuredValue);
 	
 	public abstract boolean isAssigned(MeasuredValue mv);
+	
+	public abstract void unassignFromMeasuredValues();
 }

@@ -2,6 +2,7 @@ package org.n52.sos.importer.model;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Step3Model {
 	
@@ -20,6 +21,10 @@ public class Step3Model {
 	
 	public void putColumnIntoStore(int column, List<String> selection) {
 		columnStore.put(column, selection);
+	}
+	
+	public Set<Integer> getStoredColumns() {
+		return columnStore.keySet();
 	}
 	
 	public List<String> getRowFromStore(int row) {
