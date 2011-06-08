@@ -15,6 +15,7 @@ import org.n52.sos.importer.bean.UnitOfMeasurement;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.table.ColumnModel;
 import org.n52.sos.importer.view.Step3Panel;
 
 public class Step3Controller extends StepController {
@@ -81,30 +82,30 @@ public class Step3Controller extends StepController {
 				List<String> column = step3Model.getColumnFromStore(k);
 				if (column.get(0).equals("Measured Value")) {
 					MeasuredValue mvc = new MeasuredValue(column.get(1));
-					mvc.setColumnNumber(k);
+					mvc.setTableElement(new ColumnModel(k));
 					Store.getInstance().addMeasuredValue(mvc);
 				} else if (column.get(0).equals("Date & Time")) {
 					if (column.get(1).equals("Combination")) {
 						String pattern = column.get(1);
 						DateAndTimeController dtc = new DateAndTimeController();
-						dtc.assignPattern(pattern);
+						dtc.assignPattern(pattern, new ColumnModel(k));
 						Store.getInstance().addDateAndTimeController(dtc);
 					}
 				} else if (column.get(0).equals("Feature Of Interest")) {
 					FeatureOfInterest foi = new FeatureOfInterest();
-					foi.setColumnNumber(k);
+					foi.setTableElement(new ColumnModel(k));
 					featuresOfInterest.add(foi);
 				} else if (column.get(0).equals("Observed Property")) {
 					ObservedProperty op = new ObservedProperty();
-					op.setColumnNumber(k);
+					op.setTableElement(new ColumnModel(k));
 					observedProperties.add(op);
 				} else if (column.get(0).equals("Unit of Measurement")) {
 					UnitOfMeasurement uom = new UnitOfMeasurement();
-					uom.setColumnNumber(k);
+					uom.setTableElement(new ColumnModel(k));
 					unitOfMeasurements.add(uom);
 				} else if (column.get(0).equals("Sensor Name")) {
 					SensorName sm = new SensorName();
-					sm.setColumnNumber(k);
+					sm.setTableElement(new ColumnModel(k));
 					sensorNames.add(sm);
 				}
 			}

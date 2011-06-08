@@ -5,9 +5,10 @@ import javax.swing.JFrame;
 import org.n52.sos.importer.bean.FeatureOfInterest;
 import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.Store;
-import org.n52.sos.importer.controller.Step4aController;
 import org.n52.sos.importer.controller.Step6aController;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.table.ColumnModel;
 
 
 public class XMLTest {
@@ -18,9 +19,10 @@ public class XMLTest {
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
 		TableController.getInstance().setContent(o);
 		MeasuredValue mv = new MeasuredValue("tes");
-		mv.setColumnNumber(2);
+		mv.setTableElement(new ColumnModel(2));
 		Store.getInstance().addMeasuredValue(mv);
-		f.add(new Step6aController(new FeatureOfInterest()).getView());
+		Step6aModel step6aModel = new Step6aModel(new FeatureOfInterest());
+		f.add(new Step6aController(step6aModel).getStepPanel());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
 		f.setLocationRelativeTo(null);

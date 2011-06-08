@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.table.ColumnModel;
 
 public class Store {
 	
@@ -37,7 +38,7 @@ public class Store {
 	
 	public MeasuredValue getMeasuredValueAtColumn(int column) {
 		for (MeasuredValue mv: measuredValues) {
-			if (mv.getColumnNumber() == column)
+			if (((ColumnModel)mv.getTableElement()).getNumber() == column)
 				return mv;
 		}
 		return null;

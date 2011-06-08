@@ -1,8 +1,11 @@
 package org.n52.sos.importer.bean;
 
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.table.TableElement;
 
-public class MeasuredValue extends TableConnection {
+public class MeasuredValue  {
+	
+	private TableElement tableElement;
 	
 	private String type;
 	
@@ -50,5 +53,13 @@ public class MeasuredValue extends TableConnection {
 
 	public SensorName getSensorName() {
 		return sensorName;
+	}
+
+	public void setTableElement(TableElement tableElement) {
+		this.tableElement = tableElement;
+	}
+
+	public TableElement getTableElement() {
+		return tableElement;
 	}
 }

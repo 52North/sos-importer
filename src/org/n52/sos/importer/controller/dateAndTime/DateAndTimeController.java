@@ -1,9 +1,8 @@
 package org.n52.sos.importer.controller.dateAndTime;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
 import org.n52.sos.importer.model.dateAndTime.DayModel;
@@ -13,6 +12,8 @@ import org.n52.sos.importer.model.dateAndTime.MonthModel;
 import org.n52.sos.importer.model.dateAndTime.SecondModel;
 import org.n52.sos.importer.model.dateAndTime.TimeZoneModel;
 import org.n52.sos.importer.model.dateAndTime.YearModel;
+import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.dateAndTime.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingDayPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingHourPanel;
@@ -28,57 +29,86 @@ public class DateAndTimeController {
 	
 	private DateAndTimeModel dateAndTimeModel;
 	
+	private List<MissingComponentPanel> missingComponentPanels;
+	
 	public DateAndTimeController() {
 		dateAndTimeModel = new DateAndTimeModel();
 	}
 	
-	public List<JPanel> getMissingComponents() {
-		List<JPanel> missingComponents = new ArrayList<JPanel>();
+	public List<MissingComponentPanel> getMissingComponentPanels() {		
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		
 		if (dateAndTimeModel.getDayModel() == null && 
 			dateAndTimeModel.getMonthModel() == null && 
 			dateAndTimeModel.getYearModel() == null)
-			missingComponents.add(new MissingDatePanel());
+			missingComponentPanels.add(new MissingDatePanel(this));
 		else {
 			if (dateAndTimeModel.getDayModel() == null)
-				missingComponents.add(new MissingDayPanel());
+				missingComponentPanels.add(new MissingDayPanel(this));
 			if (dateAndTimeModel.getMonthModel() == null) 
-				missingComponents.add(new MissingMonthPanel());
+				missingComponentPanels.add(new MissingMonthPanel(this));
 			if (dateAndTimeModel.getYearModel() == null)
-				missingComponents.add(new MissingYearPanel());
+				missingComponentPanels.add(new MissingYearPanel(this));
 		}
 		if (dateAndTimeModel.getHourModel() == null && 
 			dateAndTimeModel.getMinuteModel() == null && 
 			dateAndTimeModel.getSecondModel() == null)
-				missingComponents.add(new MissingTimePanel());
+				missingComponentPanels.add(new MissingTimePanel(this));
 			else {
 				if (dateAndTimeModel.getHourModel() == null)
-					missingComponents.add(new MissingHourPanel());
+					missingComponentPanels.add(new MissingHourPanel(this));
 				if (dateAndTimeModel.getMinuteModel() == null) 
-					missingComponents.add(new MissingMinutePanel());
+					missingComponentPanels.add(new MissingMinutePanel(this));
 				if (dateAndTimeModel.getSecondModel() == null)
-					missingComponents.add(new MissingSecondPanel());
+					missingComponentPanels.add(new MissingSecondPanel(this));
 			}
 		
 		if (dateAndTimeModel.getTimeZoneModel() == null)
-			missingComponents.add(new MissingTimeZonePanel());
+			missingComponentPanels.add(new MissingTimeZonePanel(this));
 		
-		return missingComponents;
+		return missingComponentPanels;
 	}	
 	
-	public void assignPattern(String pattern) {
-    	if (pattern.indexOf("y") != -1) dateAndTimeModel.setYearModel(new YearModel());
-    	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) 
-    		dateAndTimeModel.setMonthModel(new MonthModel());
-    	if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) 
-    		dateAndTimeModel.setDayModel(new DayModel());
-    	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1 || ((pattern.indexOf("K") != -1 || (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) 
-    		dateAndTimeModel.setHourModel(new HourModel());
-    	if (pattern.indexOf("m") != -1)
-    		dateAndTimeModel.setMinuteModel(new MinuteModel());
-    	if (pattern.indexOf("s") != -1)
-    		dateAndTimeModel.setSecondModel(new SecondModel());
-    	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1)
-    		dateAndTimeModel.setTimeZoneModel(new TimeZoneModel());
+	public DateAndTimeModel getModel() {
+		return dateAndTimeModel;
 	}
+	
+	public void assignMissingComponentValues() {
+		for (MissingComponentPanel mcp: missingComponentPanels) 
+			mcp.assignValues();
+	}
+	
+	public void assignPattern(String pattern, TableElement tableElement) {
+    	if (pattern.indexOf("y") != -1) dateAndTimeModel.setYearModel(new YearModel(tableElement));
+    	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) 
+    		dateAndTimeModel.setMonthModel(new MonthModel(tableElement));
+    	if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) 
+    		dateAndTimeModel.setDayModel(new DayModel(tableElement));
+    	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1 || ((pattern.indexOf("K") != -1 || (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) 
+    		dateAndTimeModel.setHourModel(new HourModel(tableElement));
+    	if (pattern.indexOf("m") != -1)
+    		dateAndTimeModel.setMinuteModel(new MinuteModel(tableElement));
+    	if (pattern.indexOf("s") != -1)
+    		dateAndTimeModel.setSecondModel(new SecondModel(tableElement));
+    	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1)
+    		dateAndTimeModel.setTimeZoneModel(new TimeZoneModel(tableElement));
+	}
+	
+	public void mark(Color color) {
+		if (dateAndTimeModel.getSecondModel() != null)
+			dateAndTimeModel.getSecondModel().mark(color);
+		if (dateAndTimeModel.getMinuteModel() != null) 
+			dateAndTimeModel.getMinuteModel().mark(color);
+		if (dateAndTimeModel.getHourModel() != null)
+			dateAndTimeModel.getHourModel().mark(color);
+		if (dateAndTimeModel.getDayModel() != null)
+			dateAndTimeModel.getDayModel().mark(color);
+		if (dateAndTimeModel.getMonthModel() != null) 
+			dateAndTimeModel.getMonthModel().mark(color);
+		if (dateAndTimeModel.getYearModel() != null)
+			dateAndTimeModel.getYearModel().mark(color);
+		if (dateAndTimeModel.getTimeZoneModel() != null)
+			dateAndTimeModel.getTimeZoneModel().mark(color);
+	}
+	
 }

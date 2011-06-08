@@ -1,6 +1,5 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -8,6 +7,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 import org.n52.sos.importer.model.Step5bModel;
 import org.n52.sos.importer.view.Step5bPanel;
+import org.n52.sos.importer.view.dateAndTime.MissingComponentPanel;
 
 public class Step5bController extends StepController {
 
@@ -42,24 +42,21 @@ public class Step5bController extends StepController {
 
 	@Override
 	public void next() {
-		// TODO Auto-generated method stub
-		
+		step5bModel.getDateAndTimeController().assignMissingComponentValues();	
+		System.out.println(step5bModel.getDateAndTimeController().getModel().getYearModel().getValue());
+		System.out.println(step5bModel.getDateAndTimeController().getModel().getMonthModel().getValue());
+		System.out.println(step5bModel.getDateAndTimeController().getModel().getDayModel().getValue());
 	}
 	
 	public void load() {
-		Color color = step5bModel.getMarkingColor();
-		/*
-		for (DateAndTimeComponentController c: dateAndTimeController.getComponents()) {
-			if (c.getColumnNumber() != -1) 
-				TableController.getInstance().colorColumn(color, c.getColumnNumber());
-			else if (c.getRowNumber() != -1)
-				TableController.getInstance().colorRow(color, c.getRowNumber());
-			else if (c.getCellCoordinates() != null)
-				TableController.getInstance().colorCell(color, c.getCellCoordinates());
-		}*/
+		TableController.getInstance().deselectAllColumns();
+		TableController.getInstance().turnSelectionOff();
 		
-		List<JPanel> missingComponents = step5bModel.getDateAndTimeController().getMissingComponents();		
-		step5bPanel.addMissingComponents(missingComponents);
+		DateAndTimeController dateAndTimeController = step5bModel.getDateAndTimeController();
+		dateAndTimeController.mark(step5bModel.getMarkingColor());
+		
+		List<MissingComponentPanel> addMissingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
+		step5bPanel.addMissingComponentPanels(addMissingComponentPanels);
 	}
 
 }

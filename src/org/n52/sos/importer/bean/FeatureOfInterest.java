@@ -1,7 +1,5 @@
 package org.n52.sos.importer.bean;
 
-import java.util.List;
-
 public class FeatureOfInterest extends Resource {
 	
 	public void assign(MeasuredValue measuredValue) {

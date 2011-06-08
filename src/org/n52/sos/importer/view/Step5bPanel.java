@@ -7,6 +7,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.view.dateAndTime.MissingComponentPanel;
+
 public class Step5bPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -32,9 +34,9 @@ public class Step5bPanel extends JPanel {
 		this.add(tablePanel);
 	}
 	
-	public void addMissingComponents(List<JPanel> missingComponents) {
-		for (JPanel p: missingComponents) {
-			containerPanel.add(p);
+	public void addMissingComponentPanels(List<MissingComponentPanel> missingComponentPanels) {
+		for (MissingComponentPanel mcp: missingComponentPanels) {
+			containerPanel.add(mcp);
 		}
 	}
 }

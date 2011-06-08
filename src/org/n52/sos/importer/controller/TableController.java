@@ -109,6 +109,13 @@ public class TableController {
 		table.removeColumnSelectionInterval(0, rows);
 	}
 	
+	public void turnSelectionOff() {
+		table.setRowSelectionAllowed(false);
+		table.setColumnSelectionAllowed(false);
+		table.setCellSelectionEnabled(false);
+		table.setFocusable(false);
+	}
+	
 	public int[] getSelectedColumns() {
 		return table.getSelectedColumns();
 	}
@@ -202,7 +209,7 @@ public class TableController {
 
 	        if (row == rowToColor) setBackground(color);
 	        else if (column == columnToColor) setBackground(color);
-	        else if (column == cellToColor.x && row == cellToColor.y) setBackground(color);
+	        else if (cellToColor != null && column == cellToColor.x && row == cellToColor.y) setBackground(color);
 	        else setBackground(null);
 	        
 	        super.getTableCellRendererComponent(table, value, selected, focused, row, column);
