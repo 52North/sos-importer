@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.sos.importer.bean.MeasuredValue;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
 import org.n52.sos.importer.model.dateAndTime.DayModel;
 import org.n52.sos.importer.model.dateAndTime.HourModel;
@@ -33,6 +35,10 @@ public class DateAndTimeController {
 	
 	public DateAndTimeController() {
 		dateAndTimeModel = new DateAndTimeModel();
+	}
+	
+	public DateAndTimeController(DateAndTimeModel dateAndTimeModel) {
+		this.dateAndTimeModel = dateAndTimeModel;
 	}
 	
 	public List<MissingComponentPanel> getMissingComponentPanels() {		
@@ -73,6 +79,10 @@ public class DateAndTimeController {
 		return dateAndTimeModel;
 	}
 	
+	public void setModel(DateAndTimeModel dateAndTimeModel) {
+		this.dateAndTimeModel = dateAndTimeModel;
+	}
+	
 	public void assignMissingComponentValues() {
 		for (MissingComponentPanel mcp: missingComponentPanels) 
 			mcp.assignValues();
@@ -92,6 +102,21 @@ public class DateAndTimeController {
     		dateAndTimeModel.setSecondModel(new SecondModel(tableElement));
     	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1)
     		dateAndTimeModel.setTimeZoneModel(new TimeZoneModel(tableElement));
+	}
+	
+	public void assign(MeasuredValue measuredValue) {
+		measuredValue.setDateAndTimeModel(dateAndTimeModel);	
+	}
+
+	public boolean isAssigned(MeasuredValue measuredValue) {
+		return measuredValue.getDateAndTimeModel() != null;
+	}
+
+	public void unassignFromMeasuredValues() {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			if (mv.getDateAndTimeModel() == dateAndTimeModel)
+				mv.setDateAndTimeModel(null);
+		}		
 	}
 	
 	public void mark(Color color) {

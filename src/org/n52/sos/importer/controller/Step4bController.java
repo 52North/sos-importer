@@ -1,53 +1,46 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
-
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.Store;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeComponentController;
+import org.n52.sos.importer.model.Step4bModel;
+import org.n52.sos.importer.model.Step5bModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
 import org.n52.sos.importer.view.Step4bPanel;
 
 public class Step4bController extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step4bController.class);
-
+	
 	private Step4bPanel step4bPanel;
 	
 	private TableController tableController;
 	
-	public Step4bController(DateAndTimeController dateAndTime) {
-
-		for (DateAndTimeComponentController c: dateAndTime.getComponents()) {
-			if (c.getColumnNumber() != -1)
-				tableController.colorColumn(Color.yellow, c.getColumnNumber());
-			if (c.getRowNumber() != -1)
-				tableController.colorRow(Color.yellow, c.getRowNumber());
-		}
-		
-		tableController.allowColumnSelection();
-
+	private DateAndTimeController dateAndTimeController;
+	
+	public Step4bController(Step4bModel step4bModel) {
+		dateAndTimeController = new DateAndTimeController(step4bModel.getDateAndTimeModel());
+		dateAndTimeController.mark(step4bModel.getMarkingColor());
 		
 		tableController = TableController.getInstance();
+		tableController.allowColumnSelection();
 		tableController.allowMultipleSelection();
 		tableController.addMultipleSelectionListener(new SelectionChanged());
-		String text = "Mark all measured value columns where this Date & Time corresponds to.";
+		String text = "Mark all measured value columns where this Date and Time corresponds to.";
 		step4bPanel = new Step4bPanel(text);
 	}
 	
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Step 4: Solve ambiguities";
 	}
 
 	@Override
 	public JPanel getStepPanel() {
-		// TODO Auto-generated method stub
-		return null;
+		return step4bPanel;
 	}
 
 	@Override
@@ -58,8 +51,22 @@ public class Step4bController extends StepController {
 
 	@Override
 	public void next() {
-		// TODO Auto-generated method stub
+		int[] selectedColumns = tableController.getSelectedColumns();
 		
+		for (int column: selectedColumns) {
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
+			dateAndTimeController.assign(mv);
+		}
+		DateAndTimeModel dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
+		if (dtm != null) {
+			Step4bModel step4bModel = new Step4bModel(dtm);
+			MainController.getInstance().setStepController(new Step4bController(step4bModel));
+		} else {
+			DateAndTimeModel dtm2 = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();
+			
+			if (dtm2 != null) 
+				MainController.getInstance().setStepController(new Step5bController(new Step5bModel(dtm2)));
+		}		
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
@@ -67,15 +74,15 @@ public class Step4bController extends StepController {
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
 			for (int column: selectedColumns) {
-				MeasuredValue mv = Store.getInstance().getMeasuredValueAtColumn(column);
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 				if (mv == null) {
 					logger.error("This is not a measured value.");
 					tableController.deselectColumn(column);
 					return;
 				}
 
-				if (resource.isAssigned(mv)) {
-					logger.error(resource + " already set for this measured value.");
+				if (dateAndTimeController.isAssigned(mv)) {
+					logger.error("Date and Time already set for this measured value.");
 					tableController.deselectColumn(column);
 					return;
 				}

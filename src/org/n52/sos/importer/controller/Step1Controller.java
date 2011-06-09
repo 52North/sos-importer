@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
 
@@ -44,6 +45,7 @@ public class Step1Controller extends StepController {
 	public void save() {
 		String csvFilePath = step1Panel.getCSVFilePath();
 		step1Model.setCSVFilePath(csvFilePath);
+		ModelStore.getInstance().setStep1Model(step1Model);
 	}
 
 	@Override

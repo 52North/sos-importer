@@ -12,7 +12,7 @@ import org.n52.sos.importer.bean.MeasuredValue;
 import org.n52.sos.importer.bean.ObservedProperty;
 import org.n52.sos.importer.bean.Resource;
 import org.n52.sos.importer.bean.SensorName;
-import org.n52.sos.importer.bean.Store;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.bean.UnitOfMeasurement;
 import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.view.Step6aPanel;
@@ -86,14 +86,14 @@ public class Step6aController extends StepController {
 		resource.setURI(URI);
 		
 		for (int c: columns) {
-			MeasuredValue mv = Store.getInstance().getMeasuredValueAtColumn(c); 
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(c); 
 			resource.assign(mv);
 		}
 		
 		//check if there are any measured value rows or columns without this type
 		//if yes, call the particular panel 
 		//if no, go to the new step
-		Resource r = Store.getInstance().getMissingResourceForMeasuredValues();
+		Resource r = ModelStore.getInstance().getMissingResourceForMeasuredValues();
 		
 		if (r != null) {
 			Step6aController step6aController = new Step6aController(new Step6aModel(r));
@@ -116,8 +116,7 @@ public class Step6aController extends StepController {
 		public void columnSelectionChanged(int[] selectedColumns) {
 			
 			for (int column: selectedColumns) {
-				System.out.println(column);
-				MeasuredValue mv = Store.getInstance().getMeasuredValueAtColumn(column);
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 				if (mv == null) {
 					logger.error("This is not a measured value.");
 					tableController.deselectColumn(column);

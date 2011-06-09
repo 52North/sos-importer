@@ -9,9 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.view.MainFrame;
-
-public class Step5cPanel extends StepPanel {
+public class Step5cPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,8 +40,8 @@ public class Step5cPanel extends StepPanel {
 	private final String[] heightUnits = {"meters", "feet"};
 	private final JComboBox heightUnitComboBox = new JComboBox(heightUnits);
 	
-	public Step5cPanel(MainFrame mainFrame) {
-		super(mainFrame);
+	public Step5cPanel() {
+		super();
 		featureOfInterestTextField.setEditable(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -87,29 +85,6 @@ public class Step5cPanel extends StepPanel {
 		referenceSystemPanel.add(EPSGCodeLabel);
 		referenceSystemPanel.add(EPSGCodeComboBox);
 		this.add(referenceSystemPanel);
-	}
-	
-	@Override
-	protected void loadSettings() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected String getDescription() {
-		return "Step 5: Add missing metadata";
-	}
-
-	@Override
-	protected void back() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void next() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

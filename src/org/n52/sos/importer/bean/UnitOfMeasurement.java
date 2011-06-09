@@ -13,7 +13,7 @@ public class UnitOfMeasurement extends Resource {
 	}
 	
 	public void unassignFromMeasuredValues() {
-		for (MeasuredValue mv: Store.getInstance().getMeasuredValues()) {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			if (mv.getUnitOfMeasurement() == this)
 				mv.setUnitOfMeasurement(null);
 		}		

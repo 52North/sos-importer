@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import org.n52.sos.importer.bean.FeatureOfInterest;
 import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.Store;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.controller.Step6aController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Step6aModel;
@@ -20,7 +20,7 @@ public class XMLTest {
 		TableController.getInstance().setContent(o);
 		MeasuredValue mv = new MeasuredValue("tes");
 		mv.setTableElement(new ColumnModel(2));
-		Store.getInstance().addMeasuredValue(mv);
+		ModelStore.getInstance().addMeasuredValue(mv);
 		Step6aModel step6aModel = new Step6aModel(new FeatureOfInterest());
 		f.add(new Step6aController(step6aModel).getStepPanel());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

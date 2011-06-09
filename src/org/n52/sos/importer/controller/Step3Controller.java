@@ -1,20 +1,21 @@
 package org.n52.sos.importer.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.bean.FeatureOfInterest;
 import org.n52.sos.importer.bean.MeasuredValue;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.bean.ObservedProperty;
-import org.n52.sos.importer.bean.Resource;
 import org.n52.sos.importer.bean.SensorName;
-import org.n52.sos.importer.bean.Store;
 import org.n52.sos.importer.bean.UnitOfMeasurement;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 import org.n52.sos.importer.model.Step3Model;
-import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.Step4bModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
 import org.n52.sos.importer.model.table.ColumnModel;
 import org.n52.sos.importer.view.Step3Panel;
 
@@ -46,7 +47,8 @@ public class Step3Controller extends StepController {
 	public void back() {
 		switch(step3Model.getSelectionMode()) {
 		case TableController.COLUMNS:
-			MainController.getInstance().setPreviousStepController();
+			ModelStore.getInstance().getStep2Model();
+			//TODO MainController.getInstance().setPreviousStepController();
 			break;
 		case TableController.ROWS:
 			changeSelectionMode(TableController.COLUMNS);
@@ -72,24 +74,26 @@ public class Step3Controller extends StepController {
 			changeSelectionMode(TableController.CELLS);
 			break;
 		case TableController.CELLS:
-			
 			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 			List<SensorName> sensorNames = new ArrayList<SensorName>();
+			LinkedList<DateAndTimeModel> dateAndTimes = new LinkedList<DateAndTimeModel>();
 			
 			for (Integer k: step3Model.getStoredColumns()) {
 				List<String> column = step3Model.getColumnFromStore(k);
 				if (column.get(0).equals("Measured Value")) {
 					MeasuredValue mvc = new MeasuredValue(column.get(1));
 					mvc.setTableElement(new ColumnModel(k));
-					Store.getInstance().addMeasuredValue(mvc);
+					ModelStore.getInstance().addMeasuredValue(mvc);
 				} else if (column.get(0).equals("Date & Time")) {
 					if (column.get(1).equals("Combination")) {
-						String pattern = column.get(1);
+						String pattern = column.get(2);
 						DateAndTimeController dtc = new DateAndTimeController();
 						dtc.assignPattern(pattern, new ColumnModel(k));
-						Store.getInstance().addDateAndTimeController(dtc);
+						
+						DateAndTimeModel dtm = dtc.getModel();
+						dateAndTimes.add(dtm);
 					}
 				} else if (column.get(0).equals("Feature Of Interest")) {
 					FeatureOfInterest foi = new FeatureOfInterest();
@@ -110,31 +114,22 @@ public class Step3Controller extends StepController {
 				}
 			}
 			
-			for (DateAndTimeController dtc: Store.getInstance().getDateAndTimeController()){
-				List<JPanel> missingComponents = dtc.getMissingComponents();
-				if (missingComponents.size() > 0) {
-					Step5bController step5bController = new Step5bController(dtc);
-					MainController.getInstance().setStepController(step5bController);
-				}
-			}
+			ModelStore.getInstance().setDateAndTimeModelIterator(dateAndTimes.listIterator());
 			
-			//if there is a measurement column without any feature of interest,
-			//observed property, unit of measurement or sensor name do:
-			Resource r = Store.getInstance().getMissingResourceForMeasuredValues();
-			if (r != null) {
-				Step6aController step6aController = new Step6aController(new Step6aModel(r));
-				MainController.getInstance().setStepController(step6aController);
+			DateAndTimeModel dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
+			if (dtm != null) {
+				Step4bModel step4bModel = new Step4bModel(dtm);
+				MainController.getInstance().setStepController(new Step4bController(step4bModel));
 			}
-
 			
 			//else if 1:1 mapping
 			
 			//featuresOfInterest is not empty
 				//for each foi columns or row choose measurement column:
-				//getMainFrame().setStepPanel(new Step4aPanel(getMainFrame(), Step4aPanel.FEATURE_OF_INTEREST));
+				//getMainFrame().setStepPanel(new Step4aPanel());
 				
 				//while there are measurement columns or rows without any fois do:
-				//getMainFrame().setStepPanel(new Step6aController(getMainFrame(), Step6aController.FEATURE_OF_INTEREST));				
+				//getMainFrame().setStepPanel(new Step6aController());				
 			
 			
 			// TODO Auto-generated method stub

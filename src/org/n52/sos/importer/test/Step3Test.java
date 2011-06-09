@@ -12,7 +12,5 @@ public class Step3Test {
 		TableController.getInstance().setContent(o); 
 
 		f.setStepController(new Step3Controller());
-
-		
 	}
 }

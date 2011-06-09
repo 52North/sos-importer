@@ -4,6 +4,7 @@ import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step5bController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.Step5bModel;
 import org.n52.sos.importer.model.table.ColumnModel;
 
 public class Step5bTest {
@@ -16,6 +17,6 @@ public class Step5bTest {
 		DateAndTimeController dtc = new DateAndTimeController();
 		dtc.assignPattern("HH-mm-ss", new ColumnModel(0));
 		
-		f.setStepController(new Step5bController(dtc));
+		f.setStepController(new Step5bController(new Step5bModel(dtc.getModel())));
 	}
 }

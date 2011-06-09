@@ -1,13 +1,11 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
-
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.bean.MeasuredValue;
+import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.bean.Resource;
-import org.n52.sos.importer.bean.Store;
 import org.n52.sos.importer.view.Step4aPanel;
 
 public class Step4aController {
@@ -27,16 +25,16 @@ public class Step4aController {
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
 		String text = "";
-		switch(Store.getInstance().getTableOrientation()) {
+		switch(ModelStore.getInstance().getTableOrientation()) {
 		case TableController.COLUMNS:
 			tableController.allowColumnSelection();
-			tableController.colorColumn(Color.yellow, resource.getColumnNumber());
+			//tableController.colorColumn(Color.yellow, resource.getColumnNumber());
 			text = "Mark all measured value columns where this " + resource + 
 				" column corresponds to.";
 			break;
 		case TableController.ROWS: 
 			tableController.allowRowSelection();
-			tableController.colorRow(Color.yellow, resource.getRowNumber());
+			//tableController.colorRow(Color.yellow, resource.getRowNumber());
 			text = "Mark all measured value rows where this " + resource + 
 				" row corresponds to.";
 			break;
@@ -53,12 +51,12 @@ public class Step4aController {
 		int[] selectedColumns = tableController.getSelectedColumns();
 		
 		for (int column: selectedColumns) {
-			MeasuredValue mv = Store.getInstance().getMeasuredValueAtColumn(column);
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 			resource.assign(mv);
 		}
-		Resource r = Store.getInstance().pollResourceWithoutMeasuredValue();
+		Resource r = ModelStore.getInstance().pollResourceWithoutMeasuredValue();
 		if (r != null) new Step4aController(r);
-		else new Step4bController(); 	
+		//TODO	else 
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
@@ -66,7 +64,7 @@ public class Step4aController {
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
 			for (int column: selectedColumns) {
-				MeasuredValue mv = Store.getInstance().getMeasuredValueAtColumn(column);
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 				if (mv == null) {
 					logger.error("This is not a measured value.");
 					tableController.deselectColumn(column);
