@@ -1,0 +1,16 @@
+package org.n52.sos.importer.model.measuredValue;
+
+import org.n52.sos.importer.Parseable;
+
+public class Text extends MeasuredValue implements Parseable {
+	
+	@Override
+	public String toString() {
+		return "Text";
+	}
+
+	@Override
+	public Object parse(String s) {
+		return s.trim();
+	}
+}
