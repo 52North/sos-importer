@@ -1,11 +1,11 @@
 package org.n52.sos.importer.test;
 
+import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step5bController;
 import org.n52.sos.importer.controller.TableController;
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
 import org.n52.sos.importer.model.Step5bModel;
-import org.n52.sos.importer.model.table.ColumnModel;
+import org.n52.sos.importer.model.table.Column;
 
 public class Step5bTest {
 
@@ -15,8 +15,8 @@ public class Step5bTest {
 		TableController.getInstance().setContent(o);
 		
 		DateAndTimeController dtc = new DateAndTimeController();
-		dtc.assignPattern("HH-mm-ss", new ColumnModel(0));
+		dtc.assignPattern("HH-mm-ss", new Column(0));
 		
-		f.setStepController(new Step5bController(new Step5bModel(dtc.getModel())));
+		f.setStepController(new Step5bController(new Step5bModel(dtc.getDateAndTime())));
 	}
 }

@@ -2,13 +2,14 @@ package org.n52.sos.importer.test;
 
 import javax.swing.JFrame;
 
-import org.n52.sos.importer.bean.FeatureOfInterest;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ModelStore;
 import org.n52.sos.importer.controller.Step6aController;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
-import org.n52.sos.importer.model.table.ColumnModel;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.table.Column;
 
 
 public class XMLTest {
@@ -18,8 +19,8 @@ public class XMLTest {
 		JFrame f = new JFrame();
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
 		TableController.getInstance().setContent(o);
-		MeasuredValue mv = new MeasuredValue("tes");
-		mv.setTableElement(new ColumnModel(2));
+		MeasuredValue mv = new NumericValue();
+		mv.setTableElement(new Column(2));
 		ModelStore.getInstance().addMeasuredValue(mv);
 		Step6aModel step6aModel = new Step6aModel(new FeatureOfInterest());
 		f.add(new Step6aController(step6aModel).getStepPanel());
@@ -35,7 +36,7 @@ public class XMLTest {
 		StringOrRefType s = ot.addNewDescription();
 		s.setStringValue("TEST");
 		LocationPropertyType l = ot.addNewLocation();
-		*/
+*/
 		/*
 		RegisterSensorDocument r;
 		try {
