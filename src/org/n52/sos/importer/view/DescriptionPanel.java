@@ -8,13 +8,21 @@ public class DescriptionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel descriptionLabel = new JLabel();
+	private static DescriptionPanel instance = null;
 	
-	public DescriptionPanel() {
+	private final JLabel descriptionLabel = new JLabel();
+
+	private DescriptionPanel() {
 		super();
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(descriptionLabel);
 	}
+
+	public static DescriptionPanel getInstance() {
+		if (instance == null)
+			instance = new DescriptionPanel();
+		return instance;
+	}	
 	
 	public void setText(String stepDescription) {
 		descriptionLabel.setText(stepDescription);

@@ -42,6 +42,7 @@ public class MainFrame extends JFrame {
 	
 	//private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
 	private final JPanel stepContainerPanel = new JPanel();
+	private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
 	private final BackNextPanel backNextPanel = BackNextPanel.getInstance();
 	
 	public MainFrame() {
@@ -51,7 +52,7 @@ public class MainFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		//this.getContentPane().add(descriptionPanel);
+		this.getContentPane().add(descriptionPanel);
 		this.getContentPane().add(stepContainerPanel);
 		this.getContentPane().add(backNextPanel);
 

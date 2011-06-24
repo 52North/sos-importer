@@ -1,28 +1,36 @@
 package org.n52.sos.importer.view;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.ButtonGroupPanel;
+import org.n52.sos.importer.EditableJComboBox;
+import org.n52.sos.importer.ExampleFormatLabel;
 import org.n52.sos.importer.ParseTestLabel;
-import org.n52.sos.importer.Parser;
+import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.SelectionPanel;
+import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.config.NonEditableComboBoxItems;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.measuredValue.Boolean;
+import org.n52.sos.importer.model.measuredValue.Count;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.measuredValue.Text;
 
 public class Step3Panel extends JPanel {
+	
+	private static final Logger logger = Logger.getLogger(Step3Panel.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -100,54 +108,37 @@ public class Step3Panel extends JPanel {
 			public MeasuredValuePanel() {	
 				super(additionalPanel1);		
 				addRadioButton("Numeric Value" , new NumericValuePanel());
-				addRadioButton("Count", new ParseTestPanel(new CountParser()));
-				addRadioButton("Boolean", new ParseTestPanel(new BooleanParser()));
-				addRadioButton("Text");
+				addRadioButton("Count", new ParseTestPanel(new Count()));
+				addRadioButton("Boolean", new ParseTestPanel(new Boolean()));
+				addRadioButton("Text", new ParseTestPanel(new Text()));
 			}
-			
-			private class CountParser implements Parser {
-				
-				@Override
-				public Object parse(String s) {
-					s = s.trim();
-					int i = Integer.parseInt(s);
-					if (i < 0) throw new NumberFormatException();
-					return i;
-				}
-			}
-			
-			private class BooleanParser implements Parser {
-				
-				@Override
-				public Object parse(String s) {
-					s = s.trim();
-					if (s.equals("0") || s.equals("false") || s.equals("False")) return false;
-					else if (s.equals("1") || s.equals("true") || s.equals("true")) return true;
-					else throw new NumberFormatException();
-				}
-			}
+
 			
 			private class NumericValuePanel extends SelectionPanel {
 
 				private static final long serialVersionUID = 1L;
-				private final String[] decimalSeparatorValues = { ".", "," };
-				private final String[] thousandsSeparatorValues = { ",", ".", "'", " " };
+				
+				private final NumericValue numericValue = new NumericValue();
+				private final double exampleValue = 1234567.89;
 				
 				private final JLabel decimalSeparatorLabel = new JLabel("Decimal separator: ");
 				private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
 				private final JLabel exampleLabel = new JLabel("Example: ");
 			
-				private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparatorValues);
-				private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparatorValues);
-				private final JLabel exampleNumberLabel = new JLabel();
+				private final String[] decimalSeparators = NonEditableComboBoxItems.getInstance().getDecimalSeparatorValues();
+				private final String[] thousandsSeparators = NonEditableComboBoxItems.getInstance().getThousandsSeparatorValues();
 				
-				private final ParseTestLabel parseTestLabel = new ParseTestLabel(new NumericValueParser());
+				private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparators);
+				private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparators);
+				
+				private final ParseTestLabel parseTestLabel = new ParseTestLabel(numericValue);
+				private final ExampleFormatLabel exampleNumberLabel = new ExampleFormatLabel(numericValue);
 			
 				public NumericValuePanel() {
 					super(additionalPanel2);
-					ActionListener sc = new SeparatorChanged();
-					decimalSeparatorCombobox.addActionListener(sc);
-					thousandsSeparatorCombobox.addActionListener(sc);
+					setDefaultSelection();
+					decimalSeparatorCombobox.addActionListener(new DecimalSeparatorChanged());
+					thousandsSeparatorCombobox.addActionListener(new ThousandsSeparatorChanged());
 					
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
 					JPanel separatorPanel = new JPanel();
@@ -160,14 +151,13 @@ public class Step3Panel extends JPanel {
 					separatorPanel.add(exampleNumberLabel);
 					this.add(separatorPanel);
 					this.add(parseTestLabel);
-					reformat();
 				}
 
 				@Override
 				protected void setSelection(String s) {
-					String[] separators = s.split("|");
+					String[] separators = s.split(":");
 					decimalSeparatorCombobox.setSelectedItem(separators[0]);
-					thousandsSeparatorCombobox.setSelectedItem(separators[1]);	
+					thousandsSeparatorCombobox.setSelectedItem(separators[1]);
 					selectionChanged();
 				}
 
@@ -175,78 +165,62 @@ public class Step3Panel extends JPanel {
 				protected String getSelection() {
 					String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 					String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();			
-					return decimalSeparator+"|"+thousandsSeparator;
+					return decimalSeparator+":"+thousandsSeparator;
 				}
 
 				@Override
 				public void setDefaultSelection() {
-					setSelection(decimalSeparatorValues[0]+"|"+thousandsSeparatorValues[0]);			
+					setSelection(decimalSeparators[0]+":"+thousandsSeparators[0]);	
 				}
 				
 				@Override
-				protected void selectionChanged() {
-					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
-					reformat();
+				protected void selectionChanged() {	
+					String[] separators = getSelection().split(":");
+					numericValue.setDecimalSeparator(separators[0]);
+					numericValue.setThousandsSeparator(separators[1]);
+					List<String> values = TableController.getInstance().getSelectedValues();				
+					parseTestLabel.parseValues(values);
+					exampleNumberLabel.reformat(exampleValue);
 				};
 				
 				@Override
 				protected void reinit() {
 					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
-					//reformat();
+					exampleNumberLabel.reformat(exampleValue);
 				}
 				
-				private void reformat() {
-					String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
-					String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
-					
-					DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-					symbols.setDecimalSeparator(decimalSeparator.charAt(0));
-					symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
-					
-					try {
-						DecimalFormat formatter = new DecimalFormat();
-						formatter.setDecimalFormatSymbols(symbols);
-						String n = formatter.format(1234567.89);
-						exampleNumberLabel.setText(n);
-						exampleNumberLabel.setForeground(Color.black);
-			        } catch (IllegalArgumentException iae) {
-			        	System.out.println(iae);
-			        	exampleNumberLabel.setForeground(Color.red);
-			        	exampleNumberLabel.setText("Error: " + iae.getMessage());
-			        }
-				}
-				
-				private class SeparatorChanged implements ActionListener {
+				private class DecimalSeparatorChanged implements ActionListener {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+						String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+						
+						if (thousandsSeparator.equals(",") && decimalSeparator.equals(","))
+							thousandsSeparatorCombobox.setSelectedItem(".");			
+						if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
+							thousandsSeparatorCombobox.setSelectedItem(",");
+						
 						selectionChanged();
 					}		
 				}
 				
-				private class NumericValueParser implements Parser {
-					
+				private class ThousandsSeparatorChanged implements ActionListener {
+
 					@Override
-					public Object parse(String s) {
+					public void actionPerformed(ActionEvent e) {
 						String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 						String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
 						
-						DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-						symbols.setDecimalSeparator(decimalSeparator.charAt(0));
-						symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+						if (thousandsSeparator.equals(",") && decimalSeparator.equals(","))
+							decimalSeparatorCombobox.setSelectedItem(".");			
+						if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
+							decimalSeparatorCombobox.setSelectedItem(",");
 						
-						Number n;
-						try {
-							DecimalFormat formatter = new DecimalFormat();
-							formatter.setDecimalFormatSymbols(symbols);
-							n = formatter.parse(s);
-				        } catch (ParseException e) {
-					        throw new NumberFormatException();
-						}					
+						selectionChanged();
+					}		
+				}
 						
-						return n.doubleValue();
-					}
-				}			
 			}	
 			
 			private class ParseTestPanel extends SelectionPanel {
@@ -255,7 +229,7 @@ public class Step3Panel extends JPanel {
 				
 				private final ParseTestLabel parseTestLabel;
 				
-				public ParseTestPanel(Parser parser) {
+				public ParseTestPanel(Parseable parser) {
 					super(additionalPanel2);
 					parseTestLabel = new ParseTestLabel(parser);
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -310,29 +284,22 @@ public class Step3Panel extends JPanel {
 				// 			ComboBoxDemo2.java
 				private static final long serialVersionUID = 1L;
 
+				private final DateAndTime dateAndTime = new DateAndTime();
+				
 				private final JLabel formatLabel = new JLabel("Format: ");
 		        private final JLabel exampleLabel = new JLabel("Example: ");
 			
-		        String[] patternExamples = {
-		                 "dd MMMMM yyyy",
-		                 "dd.MM.yy",
-		                 "MM/dd/yy",
-		                 "yyyy.MM.dd G 'at' hh:mm:ss z",
-		                 "EEE, MMM d, ''yy",
-		                 "h:mm a",
-		                 "H:mm:ss:SSS",
-		                 "K:mm a,z",
-		                 "yyyy.MMMMM.dd GGG hh:mm aaa"
-		                 };
+		        private final DefaultComboBoxModel dateAndTimePatterns = EditableComboBoxItems.getInstance().getDateAndTimePatterns();
+		        private final EditableJComboBox dateAndTimeComboBox = new EditableJComboBox(dateAndTimePatterns);
 		        
-		        private final JComboBox dateAndTimeComboBox = new JComboBox(patternExamples);
-		        
-		        private final JLabel exampleDateTime = new JLabel("");
-		        
-		        private final ParseTestLabel parseTestLabel = new ParseTestLabel(new DateAndTimeParser());
+		        private final ParseTestLabel parseTestLabel = new ParseTestLabel(dateAndTime);
+		        private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(dateAndTime);
 				
 				public DateAndTimeCombinationPanel() {	
-					super(additionalPanel2);	
+					super(additionalPanel2);
+					setDefaultSelection();
+					dateAndTimeComboBox.addActionListener(new FormatChanged());
+					
 					dateAndTimeComboBox.setEditable(true);		
 					
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -343,7 +310,7 @@ public class Step3Panel extends JPanel {
 										
 					JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 					examplePanel.add(exampleLabel);
-					examplePanel.add(exampleDateTime);
+					examplePanel.add(exampleFormatLabel);
 					
 					JPanel dateTimePanel = new JPanel();
 					dateTimePanel.setLayout(new BoxLayout(dateTimePanel, BoxLayout.PAGE_AXIS));
@@ -351,78 +318,43 @@ public class Step3Panel extends JPanel {
 					dateTimePanel.add(examplePanel);	
 					this.add(dateTimePanel);
 					this.add(parseTestLabel);
-					dateAndTimeComboBox.addActionListener(new FormatChanged());
-					reformat();
 				}
-				
-			    /** Formats and displays today's date. */
-			    public void reformat() {
-			    	String currentPattern = getSelection();
-			        Date today = new Date();		        
-			        try {
-			        	SimpleDateFormat formatter =
-					           new SimpleDateFormat(currentPattern);      	
-			            String dateString = formatter.format(today);
-			            exampleDateTime.setForeground(Color.black);
-			            exampleDateTime.setText(dateString);
-			        } catch (IllegalArgumentException iae) {
-			        	exampleDateTime.setForeground(Color.red);
-			        	exampleDateTime.setText("Error: " + iae.getMessage());
-			        }
-			    }
 
 			    @Override
 				public void setSelection(String s) {
 					dateAndTimeComboBox.setSelectedItem(s);
+			    	selectionChanged();
 				}
 				
 				@Override
 				public void setDefaultSelection() {
-					dateAndTimeComboBox.setSelectedIndex(0);
+					setSelection((String)dateAndTimePatterns.getElementAt(0));
 				}
 				
 				@Override
 				public String getSelection() {
 					return (String)dateAndTimeComboBox.getSelectedItem();
 				}
-				
-				private class FormatChanged implements ActionListener {
-					
-					public void actionPerformed(ActionEvent e) {
-						//TODO remove and add selection to the list when enter pressed
-				        //String newSelection = getSelection();
-				        selectionChanged();
-				    }
-				}
 			    
 			    @Override
 			    protected void selectionChanged() {
-			    	reformat();
-			    	//parseTestLabel.parseValues(tablePanel.getSelectedValues());
+			    	dateAndTime.setPattern(getSelection());
+			    	parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+			    	exampleFormatLabel.reformat(new Date());
 			    }
 			    
 			    @Override
 			    protected void reinit() {
-			    	reformat();
 			    	parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+			    	exampleFormatLabel.reformat(new Date());
 			    };
-			    
-			    private class DateAndTimeParser implements Parser {
-
-					@Override
-					public Object parse(String s) {
-						Date dateTime = null;
-						String currentPattern = getSelection();
-						SimpleDateFormat formatter =
-					           new SimpleDateFormat(currentPattern);      	
-			            try {
-			            	dateTime = formatter.parse(s);
-						} catch (ParseException e) {
-							throw new NumberFormatException();
-						}
-						return dateTime;
-					}			    	
-			    }		    
+			  	    
+				private class FormatChanged implements ActionListener {
+					
+					public void actionPerformed(ActionEvent e) {
+				        selectionChanged();
+				    }
+				}
 			}
 		}
 

@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 public class Step4bPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+		
+	private final Color markingColor = Color.yellow;
 	private final JLabel markingLabel = new JLabel();
 	
 	private final JPanel tablePanel = TablePanel.getInstance();
@@ -18,10 +19,14 @@ public class Step4bPanel extends JPanel {
 		super();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		markingLabel.setText(text);
-		markingLabel.setBackground(Color.yellow);
+		markingLabel.setBackground(markingColor);
 		markingLabel.setOpaque(true);
 		this.add(markingLabel);
 		
 		this.add(tablePanel);
+	}
+
+	public Color getMarkingColor() {
+		return markingColor;
 	}
 }

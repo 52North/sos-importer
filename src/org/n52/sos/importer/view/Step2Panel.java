@@ -1,33 +1,37 @@
 package org.n52.sos.importer.view;
 import java.awt.GridLayout;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.n52.sos.importer.EditableJComboBox;
+import org.n52.sos.importer.config.EditableComboBoxItems;
+
 public class Step2Panel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final JLabel columnSeparatorLabel = new JLabel("Column separator:"); //$NON-NLS-1$
-	private final JLabel commentIndicatorLabel = new JLabel("Comment indicator:"); //$NON-NLS-1$
-	private final JLabel textQualifierLabel = new JLabel("Text qualifier:"); //$NON-NLS-1
+	private final JLabel columnSeparatorLabel = new JLabel("Column separator:");
+	private final JLabel commentIndicatorLabel = new JLabel("Comment indicator:");
+	private final JLabel textQualifierLabel = new JLabel("Text qualifier:");
 	
-	private final JComboBox columnSeparatorCombobox = new JComboBox();
-	private final JComboBox commentIndicatorCombobox = new JComboBox();
-	private final JComboBox textQualifierCombobox = new JComboBox();
+	private final EditableJComboBox columnSeparatorCombobox;
+	private final EditableJComboBox commentIndicatorCombobox;
+	private final EditableJComboBox textQualifierCombobox;
 	
 	private final JTextArea csvFileTextArea = new JTextArea(7, 30); 
 	
 	public Step2Panel() {
 		super();
-
+		
+		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
+		columnSeparatorCombobox = new EditableJComboBox(items.getColumnSeparators());
+		commentIndicatorCombobox = new EditableJComboBox(items.getCommentIndicators());
+		textQualifierCombobox = new EditableJComboBox(items.getTextQualifiers());
+		
 		csvFileTextArea.setEditable(false);		
-		columnSeparatorCombobox.setEditable(true);
-		commentIndicatorCombobox.setEditable(true);
-		textQualifierCombobox.setEditable(true);
 		
 		JPanel csvSettingsPanel = new JPanel();
 		csvSettingsPanel.setLayout(new GridLayout(5,2));
@@ -66,7 +70,7 @@ public class Step2Panel extends JPanel {
 	public void setSelectedTextQualifier(String textQualifier) {
 		textQualifierCombobox.setSelectedItem(textQualifier);
 	}
-	
+		
 	public String getCSVFileContent() {
 		return csvFileTextArea.getText();
 	}
