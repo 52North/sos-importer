@@ -11,9 +11,9 @@ public class ParseTestLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Parser parser;
+	private Parseable parser;
 	
-	public ParseTestLabel(Parser parser) {
+	public ParseTestLabel(Parseable parser) {
 		super();
 		this.parser = parser;
 	}
