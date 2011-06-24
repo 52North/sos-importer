@@ -22,9 +22,11 @@ public class Step2Controller extends StepController {
 	
 	private Step2Panel step2Panel;
 	
-	public Step2Controller(String csvFileContent) {
-		step2Model = new Step2Model();
+	public Step2Controller(Step2Model step2Model) {
+		this.step2Model = step2Model;
 		step2Panel = new Step2Panel();
+		
+		load();
 	}
 	
 	@Override
@@ -34,19 +36,19 @@ public class Step2Controller extends StepController {
 
 	@Override
 	public void back() {
-		saveSettings();
+		save();
 		MainController.getInstance().setStepController(new Step1Controller());
 	}
 	
 	@Override
 	public void next() {
 		Object[][] content = parseCSVFile();
-		saveSettings();
+		save();
 		TableController.getInstance().setContent(content);
-		//MainController.getInstance().setStepController(new Step3Controller());
+		MainController.getInstance().setStepController(new Step3Controller());
 	}
 	
-	protected void saveSettings() {
+	public void save() {
 		String columnSeparator = step2Panel.getSelectedColumnSeparator();
 		step2Model.setSelectedColumnSeparator(columnSeparator);
 		String commentIndicator = step2Panel.getSelectedCommentIndicator();
@@ -57,13 +59,15 @@ public class Step2Controller extends StepController {
 		step2Model.setCSVFileContent(csvFileContent);
 	}
 	
-	protected void loadSettings() {
+	public void load() {
 		String columnSeparator = step2Model.getSelectedColumnSeparator();
 		step2Panel.setSelectedColumnSeparator(columnSeparator);
 		String commentIndicator = step2Model.getSelectedCommentIndicator();
 		step2Panel.setSelectedCommentIndicator(commentIndicator);
 		String textQualifier = step2Model.getSelectedTextQualifier();
 		step2Panel.setSelectedTextQualifier(textQualifier);
+		String csvFileContent = step2Model.getCSVFileContent();
+		step2Panel.setCSVFileContent(csvFileContent);
 	}
 	
 	private Object[][] parseCSVFile() {

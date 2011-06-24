@@ -3,12 +3,11 @@ package org.n52.sos.importer.controller;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ModelStore;
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.Step5bModel;
-import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.view.Step4bPanel;
 
 public class Step4bController extends StepController {
@@ -22,15 +21,17 @@ public class Step4bController extends StepController {
 	private DateAndTimeController dateAndTimeController;
 	
 	public Step4bController(Step4bModel step4bModel) {
-		dateAndTimeController = new DateAndTimeController(step4bModel.getDateAndTimeModel());
-		dateAndTimeController.mark(step4bModel.getMarkingColor());
-		
-		tableController = TableController.getInstance();
-		tableController.allowColumnSelection();
-		tableController.allowMultipleSelection();
-		tableController.addMultipleSelectionListener(new SelectionChanged());
 		String text = "Mark all measured value columns where this Date and Time corresponds to.";
 		step4bPanel = new Step4bPanel(text);
+		
+		dateAndTimeController = new DateAndTimeController(step4bModel.getDateAndTimeModel());
+		dateAndTimeController.mark(step4bPanel.getMarkingColor());
+		
+		tableController = TableController.getInstance();
+		tableController.setTableSelectionMode(TableController.COLUMNS);
+		tableController.allowMultipleSelection();
+		tableController.addMultipleSelectionListener(new SelectionChanged());
+
 	}
 	
 	@Override
@@ -57,12 +58,12 @@ public class Step4bController extends StepController {
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 			dateAndTimeController.assign(mv);
 		}
-		DateAndTimeModel dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
+		DateAndTime dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
 		if (dtm != null) {
 			Step4bModel step4bModel = new Step4bModel(dtm);
 			MainController.getInstance().setStepController(new Step4bController(step4bModel));
 		} else {
-			DateAndTimeModel dtm2 = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();
+			DateAndTime dtm2 = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();
 			
 			if (dtm2 != null) 
 				MainController.getInstance().setStepController(new Step5bController(new Step5bModel(dtm2)));

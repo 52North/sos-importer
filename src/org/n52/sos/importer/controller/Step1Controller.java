@@ -10,8 +10,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.n52.sos.importer.bean.ModelStore;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step1Model;
+import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step1Panel;
 
 public class Step1Controller extends StepController {
@@ -23,8 +24,11 @@ public class Step1Controller extends StepController {
 		super();
 		step1Panel = new Step1Panel(this);
 		step1Model = new Step1Model();
+		
 		//disable "back" button
 		BackNextController.getInstance().setBackButtonEnabled(false);
+		
+		load();
 	}
 	
 	@Override
@@ -63,7 +67,8 @@ public class Step1Controller extends StepController {
 		File f = new File(filePath);
 		if (isValid(f)) {
 			String csvFileContent = readFile(f);
-			Step2Controller s2c = new Step2Controller(csvFileContent);
+			Step2Model s2m = new Step2Model(csvFileContent);
+			Step2Controller s2c = new Step2Controller(s2m);
 			MainController.getInstance().setStepController(s2c);	
 			
 			//show "back" button

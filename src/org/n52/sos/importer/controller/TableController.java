@@ -2,7 +2,6 @@ package org.n52.sos.importer.controller;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.view.TablePanel;
 
 public class TableController {
@@ -30,6 +30,10 @@ public class TableController {
 	private SingleSelectionListener singleSelectionListener;
 	
 	private MultipleSelectionListener multipleSelectionListener;
+	
+	private int tableSelectionMode;
+	
+	private int orientation = COLUMNS;
 
 	private TableController() {
 		tableView = TablePanel.getInstance();
@@ -47,11 +51,21 @@ public class TableController {
 	
 	public void setContent(Object[][] content) {
 		DefaultTableModel dtm = new EditableTableModel(false);
-		int columns = content.length;
-		for (int i = 0; i < columns; i++) {
-			dtm.addColumn("", content[i]);
+
+		int columns = content[0].length;
+		dtm.setColumnCount(columns);
+		//Object[] columnIdentifiers = new Object[columns];
+		//dtm.setColumnIdentifiers(columnIdentifiers);
+		int rows = content.length;
+
+		for (int i = 0; i < rows; i++) {
+			dtm.addRow(content[i]);
 		}
 		table.setModel(dtm);
+	}
+	
+	public void setColumnHeading(int column, String heading) {
+		table.getColumnModel().getColumn(column).setHeaderValue(heading);
 	}
 	
 	public void allowSingleSelection() {
@@ -62,27 +76,35 @@ public class TableController {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 	
-	public void allowRowSelection() {
-		table.setColumnSelectionAllowed(false);
-		table.setRowSelectionAllowed(true);
-		table.setShowVerticalLines(false);
-		table.setShowHorizontalLines(true);
+	public void setTableSelectionMode(int tableSelectionMode) {
+		this.tableSelectionMode = tableSelectionMode;
+		
+		switch(tableSelectionMode) {
+		case ROWS:
+			table.setColumnSelectionAllowed(false);
+			table.setRowSelectionAllowed(true);
+			table.setShowVerticalLines(false);
+			table.setShowHorizontalLines(true);
+			break;
+		case COLUMNS:
+			table.setColumnSelectionAllowed(true);
+			table.setRowSelectionAllowed(false);
+			table.setShowVerticalLines(true);
+			table.setShowHorizontalLines(false);
+			break;
+		case CELLS:
+			table.setColumnSelectionAllowed(true);
+			table.setRowSelectionAllowed(true);
+			table.setShowVerticalLines(true);
+			table.setShowHorizontalLines(true);
+			break;
+		}
 	}
 	
-	public void allowColumnSelection() {
-		table.setColumnSelectionAllowed(true);
-		table.setRowSelectionAllowed(false);
-		table.setShowVerticalLines(true);
-		table.setShowHorizontalLines(false);
+	public int getTableSelectionMode() {
+		return tableSelectionMode;
 	}
-	
-	public void allowCellSelection() {
-		table.setColumnSelectionAllowed(true);
-		table.setRowSelectionAllowed(true);
-		table.setShowVerticalLines(true);
-		table.setShowHorizontalLines(true);
-	}
-	
+
 	public void selectColumn(int number) {
 		table.addColumnSelectionInterval(number, number);
 	}
@@ -135,22 +157,27 @@ public class TableController {
 	public List<String> getSelectedValues() {
 		ArrayList<String> values = new ArrayList<String>();
 		
-		int[] columns = table.getSelectedColumns();
-		int rowCount = table.getRowCount();
+		switch(tableSelectionMode) {
+		case COLUMNS:
+			int column = table.getSelectedColumn();		
+			int rowCount = table.getRowCount();
 		
-		for (int c: columns) {
 			for (int i = 0; i < rowCount; i++)
-				values.add((String)table.getValueAt(i, c));
-		}
+				values.add((String)table.getValueAt(i, column));
 		
-		int[] rows = table.getSelectedRows();
-		int columnCount = table.getRowCount();
-		
-		for (int r: rows) {
+			break;
+		case ROWS:		
+			int row = table.getSelectedRow();
+			int columnCount = table.getColumnCount();
+			
 			for (int i = 0; i < columnCount; i++)
-				values.add((String)table.getValueAt(r, i));
+				values.add((String)table.getValueAt(row, i));
+
+			break;
+		case CELLS:
+			values.add((String)table.getValueAt(getSelectedRow(), getSelectedColumn()));
+			break;
 		}
-		
 		return values;
 	}
 	
@@ -158,6 +185,18 @@ public class TableController {
 		int column = table.getSelectedColumn();
 		int row = table.getSelectedRow();
 		return (String)table.getValueAt(row, column);
+	}
+	
+	public String getValueAt(Cell c) {
+		return (String) table.getValueAt(c.getRow(), c.getColumn());
+	}
+	
+	public String getValueAt(int row, int column) {
+		return (String) table.getValueAt(row, column);
+	}
+	
+	public int getRowCount() {
+		return table.getRowCount();
 	}
 	
 	public void colorColumn(Color color, int number) {
@@ -168,8 +207,8 @@ public class TableController {
 		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, -1, number));
 	}
 	
-	public void colorCell(Color color, Point p) {
-		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, p));
+	public void colorCell(Color color, Cell cell) {
+		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, cell));
 	}
 
 	public void addSingleSelectionListener(SingleSelectionListener singleSelectionListener) {
@@ -180,6 +219,14 @@ public class TableController {
 		this.multipleSelectionListener = multipleSelectionListener;
 	}
 	
+	public void setOrientation(int orientation) {
+		this.orientation = orientation;
+	}
+
+	public int getOrientation() {
+		return orientation;
+	}
+
 	private class ColoredTableCellRenderer extends DefaultTableCellRenderer {
     
 		private static final long serialVersionUID = 1L;
@@ -190,7 +237,7 @@ public class TableController {
 		
 		private int rowToColor;
 		
-		private Point cellToColor;
+		private Cell cellToColor;
 		
 		public ColoredTableCellRenderer(Color color, int columnToColor, int rowToColor) {
 			this.color = color;
@@ -198,7 +245,7 @@ public class TableController {
 			this.rowToColor = rowToColor;
 		}
 		
-		public ColoredTableCellRenderer(Color color, Point cellToColor) {
+		public ColoredTableCellRenderer(Color color, Cell cellToColor) {
 			this.color = color;
 			this.cellToColor = cellToColor;
 		}
@@ -209,7 +256,7 @@ public class TableController {
 
 	        if (row == rowToColor) setBackground(color);
 	        else if (column == columnToColor) setBackground(color);
-	        else if (cellToColor != null && column == cellToColor.x && row == cellToColor.y) setBackground(color);
+	        else if (cellToColor != null && column == cellToColor.getColumn() && row == cellToColor.getRow()) setBackground(color);
 	        else setBackground(null);
 	        
 	        super.getTableCellRendererComponent(table, value, selected, focused, row, column);

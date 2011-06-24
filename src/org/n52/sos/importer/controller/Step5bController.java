@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.bean.Resource;
-import org.n52.sos.importer.bean.ModelStore;
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step5bModel;
 import org.n52.sos.importer.model.Step6aModel;
-import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.Step5bPanel;
-import org.n52.sos.importer.view.dateAndTime.MissingComponentPanel;
+import org.n52.sos.importer.view.dateAndTime.MissingDateAndTimePanel;
 
 public class Step5bController extends StepController {
 
@@ -28,9 +28,9 @@ public class Step5bController extends StepController {
 		TableController.getInstance().deselectAllColumns();
 		TableController.getInstance().turnSelectionOff();
 		
-		dateAndTimeController.mark(step5bModel.getMarkingColor());
+		dateAndTimeController.mark(step5bPanel.getMarkingColor());
 		
-		List<MissingComponentPanel> addMissingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
+		List<MissingDateAndTimePanel> addMissingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
 		step5bPanel.addMissingComponentPanels(addMissingComponentPanels);
 	}
 	
@@ -54,18 +54,12 @@ public class Step5bController extends StepController {
 	public void next() {
 		dateAndTimeController.assignMissingComponentValues();	
 		
-		DateAndTimeModel dtm = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();
+		DateAndTime dtm = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();
 		
 		if (dtm != null) {
 			MainController.getInstance().setStepController(new Step5bController(new Step5bModel(dtm)));
 		} else {
-			//if there is a measurement column without any feature of interest,
-			//observed property, unit of measurement or sensor name do:
-			Resource r = ModelStore.getInstance().getMissingResourceForMeasuredValues();
-			if (r != null) {
-				Step6aController step6aController = new Step6aController(new Step6aModel(r));
-				MainController.getInstance().setStepController(step6aController);
-			}
+			new Step6aController(new Step6aModel(new FeatureOfInterest())).check();
 		}
 	}
 }

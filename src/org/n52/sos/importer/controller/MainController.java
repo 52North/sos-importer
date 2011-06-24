@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 
 public class MainController {
@@ -12,7 +13,7 @@ public class MainController {
 	}
 	
 	public void setStepController(StepController stepController) {
-	    DescriptionController.getInstance().setText(stepController.getDescription());
+	    DescriptionPanel.getInstance().setText(stepController.getDescription());
 	    mainFrame.setStepPanel(stepController.getStepPanel());
 		BackNextController.getInstance().setStepController(stepController);
 	}

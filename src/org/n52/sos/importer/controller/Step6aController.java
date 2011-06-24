@@ -7,16 +7,21 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.bean.FeatureOfInterest;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ObservedProperty;
-import org.n52.sos.importer.bean.Resource;
-import org.n52.sos.importer.bean.SensorName;
-import org.n52.sos.importer.bean.ModelStore;
-import org.n52.sos.importer.bean.UnitOfMeasurement;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.Step7Model;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.Step6aPanel;
 
+/**
+ * Create missing resources for measured values
+ * @author Raimund
+ */
 public class Step6aController extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step6aController.class);
@@ -38,7 +43,7 @@ public class Step6aController extends StepController {
 		step6aView.setResourceName(resource.getName());
 		//step6aView.setResourceURI(resource.getURI().toString());
 		
-		tableController.allowColumnSelection();
+		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		tableController.allowMultipleSelection();
 		
@@ -85,20 +90,55 @@ public class Step6aController extends StepController {
 		resource.setName(name);
 		resource.setURI(URI);
 		
+		if (resource instanceof FeatureOfInterest)
+			ModelStore.getInstance().addFeatureOfInterest((FeatureOfInterest)resource);
+		
 		for (int c: columns) {
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(c); 
 			resource.assign(mv);
 		}
 		
+		check();
+	}
+	
+	public void check() {
 		//check if there are any measured value rows or columns without this type
 		//if yes, call the particular panel 
 		//if no, go to the new step
-		Resource r = ModelStore.getInstance().getMissingResourceForMeasuredValues();
+		Resource r = getMissingResourceForMeasuredValues();
 		
 		if (r != null) {
 			Step6aController step6aController = new Step6aController(new Step6aModel(r));
 			MainController.getInstance().setStepController(step6aController);
+		} else {
+			Step7Controller step7Controller = new Step7Controller(new Step7Model(new FeatureOfInterest()));
+			step7Controller.check();
 		}
+	}
+	
+	public Resource getMissingResourceForMeasuredValues() {
+		List<MeasuredValue> measuredValues = ModelStore.getInstance().getMeasuredValues();
+		
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getFeatureOfInterest() == null) 
+				return new FeatureOfInterest();
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getObservedProperty() == null) {
+				return new ObservedProperty();
+			}
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getUnitOfMeasurement() == null) {
+				return new UnitOfMeasurement();
+			}
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getSensorName() == null) {
+				return new SensorName();
+			}
+		}
+		return null;
 	}
 	
 	protected void loadSettings() {

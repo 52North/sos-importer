@@ -3,9 +3,9 @@ package org.n52.sos.importer.controller;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ModelStore;
-import org.n52.sos.importer.bean.Resource;
+import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.Step4aPanel;
 
 public class Step4aController {
@@ -25,15 +25,15 @@ public class Step4aController {
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
 		String text = "";
-		switch(ModelStore.getInstance().getTableOrientation()) {
+		switch(TableController.getInstance().getOrientation()) {
 		case TableController.COLUMNS:
-			tableController.allowColumnSelection();
+			tableController.setTableSelectionMode(TableController.COLUMNS);
 			//tableController.colorColumn(Color.yellow, resource.getColumnNumber());
 			text = "Mark all measured value columns where this " + resource + 
 				" column corresponds to.";
 			break;
 		case TableController.ROWS: 
-			tableController.allowRowSelection();
+			tableController.setTableSelectionMode(TableController.ROWS);
 			//tableController.colorRow(Color.yellow, resource.getRowNumber());
 			text = "Mark all measured value rows where this " + resource + 
 				" row corresponds to.";

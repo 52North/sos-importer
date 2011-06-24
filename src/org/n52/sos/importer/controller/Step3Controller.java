@@ -6,17 +6,17 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.bean.FeatureOfInterest;
-import org.n52.sos.importer.bean.MeasuredValue;
-import org.n52.sos.importer.bean.ModelStore;
-import org.n52.sos.importer.bean.ObservedProperty;
-import org.n52.sos.importer.bean.SensorName;
-import org.n52.sos.importer.bean.UnitOfMeasurement;
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step4bModel;
-import org.n52.sos.importer.model.dateAndTime.DateAndTimeModel;
-import org.n52.sos.importer.model.table.ColumnModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
 
 public class Step3Controller extends StepController {
@@ -45,7 +45,7 @@ public class Step3Controller extends StepController {
 
 	@Override
 	public void back() {
-		switch(step3Model.getSelectionMode()) {
+		switch(TableController.getInstance().getTableSelectionMode()) {
 		case TableController.COLUMNS:
 			ModelStore.getInstance().getStep2Model();
 			//TODO MainController.getInstance().setPreviousStepController();
@@ -62,7 +62,7 @@ public class Step3Controller extends StepController {
 
 	@Override
 	public void next() {
-		switch(step3Model.getSelectionMode()) {
+		switch(TableController.getInstance().getTableSelectionMode()) {
 		case TableController.COLUMNS:
 			List<String> selection = new ArrayList<String>();
 			step3Panel.store(selection);
@@ -78,45 +78,49 @@ public class Step3Controller extends StepController {
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 			List<SensorName> sensorNames = new ArrayList<SensorName>();
-			LinkedList<DateAndTimeModel> dateAndTimes = new LinkedList<DateAndTimeModel>();
+			LinkedList<DateAndTime> dateAndTimes = new LinkedList<DateAndTime>();
 			
 			for (Integer k: step3Model.getStoredColumns()) {
 				List<String> column = step3Model.getColumnFromStore(k);
+				TableController.getInstance().setColumnHeading(k, column.get(0));
+				
 				if (column.get(0).equals("Measured Value")) {
-					MeasuredValue mvc = new MeasuredValue(column.get(1));
-					mvc.setTableElement(new ColumnModel(k));
-					ModelStore.getInstance().addMeasuredValue(mvc);
+					MeasuredValue mv = null;
+					if (column.get(1).equals("Numeric Value"))
+						mv = new NumericValue();
+					mv.setTableElement(new Column(k));
+					ModelStore.getInstance().addMeasuredValue(mv);
 				} else if (column.get(0).equals("Date & Time")) {
 					if (column.get(1).equals("Combination")) {
 						String pattern = column.get(2);
 						DateAndTimeController dtc = new DateAndTimeController();
-						dtc.assignPattern(pattern, new ColumnModel(k));
+						dtc.assignPattern(pattern, new Column(k));
 						
-						DateAndTimeModel dtm = dtc.getModel();
+						DateAndTime dtm = dtc.getDateAndTime();
 						dateAndTimes.add(dtm);
 					}
 				} else if (column.get(0).equals("Feature Of Interest")) {
 					FeatureOfInterest foi = new FeatureOfInterest();
-					foi.setTableElement(new ColumnModel(k));
+					foi.setTableElement(new Column(k));
 					featuresOfInterest.add(foi);
 				} else if (column.get(0).equals("Observed Property")) {
 					ObservedProperty op = new ObservedProperty();
-					op.setTableElement(new ColumnModel(k));
+					op.setTableElement(new Column(k));
 					observedProperties.add(op);
 				} else if (column.get(0).equals("Unit of Measurement")) {
 					UnitOfMeasurement uom = new UnitOfMeasurement();
-					uom.setTableElement(new ColumnModel(k));
+					uom.setTableElement(new Column(k));
 					unitOfMeasurements.add(uom);
 				} else if (column.get(0).equals("Sensor Name")) {
 					SensorName sm = new SensorName();
-					sm.setTableElement(new ColumnModel(k));
+					sm.setTableElement(new Column(k));
 					sensorNames.add(sm);
 				}
 			}
 			
 			ModelStore.getInstance().setDateAndTimeModelIterator(dateAndTimes.listIterator());
 			
-			DateAndTimeModel dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
+			DateAndTime dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
 			if (dtm != null) {
 				Step4bModel step4bModel = new Step4bModel(dtm);
 				MainController.getInstance().setStepController(new Step4bController(step4bModel));
@@ -147,21 +151,18 @@ public class Step3Controller extends StepController {
 	private void changeSelectionMode(int sm) {
 		switch(sm) {
 		case TableController.COLUMNS:
-			tableController.allowColumnSelection();
+			tableController.setTableSelectionMode(TableController.COLUMNS);
 			step3Panel.setSelectionModeLabelText("For Columns");
-			step3Model.setSelectionMode(TableController.COLUMNS);
 			tableController.selectColumn(step3Model.getSelectedColumn());	
 			break;
 		case TableController.ROWS:
-			tableController.allowRowSelection();
+			tableController.setTableSelectionMode(TableController.ROWS);
 			step3Panel.setSelectionModeLabelText("For Rows");
-			step3Model.setSelectionMode(TableController.ROWS);
 			tableController.selectRow(step3Model.getSelectedRow());
 			break;
 		case TableController.CELLS:
-			tableController.allowCellSelection();
+			tableController.setTableSelectionMode(TableController.CELLS);
 			step3Panel.setSelectionModeLabelText("For Cells");
-			step3Model.setSelectionMode(TableController.CELLS);
 			break;
 		}
 	}
