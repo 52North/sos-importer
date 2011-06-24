@@ -4,11 +4,11 @@ import java.awt.Color;
 
 import org.n52.sos.importer.controller.TableController;
 
-public class RowModel extends TableElement {
+public class Column extends TableElement {
 	
 	private int number = -1;
 
-	public RowModel(int number) {
+	public Column(int number) {
 		this.number = number;
 	}
 	
@@ -21,6 +21,11 @@ public class RowModel extends TableElement {
 	}
 	
 	public void mark(Color color) {
-		TableController.getInstance().colorRow(color, number);
+		TableController.getInstance().colorColumn(color, number);
+	}
+
+	@Override
+	public String getValueFor(Cell c) {
+		return TableController.getInstance().getValueAt(c.getRow(), this.getNumber());
 	}
 }
