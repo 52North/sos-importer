@@ -6,10 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.SecondModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.Second;
 
-public class MissingSecondPanel extends MissingComponentPanel {
+public class MissingSecondPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class MissingSecondPanel extends MissingComponentPanel {
 	private SpinnerNumberModel secondModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner secondSpinner = new JSpinner(secondModel);
 	
-	public MissingSecondPanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingSecondPanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(secondLabel);
 		this.add(secondSpinner);
@@ -27,11 +27,11 @@ public class MissingSecondPanel extends MissingComponentPanel {
 
 	@Override
 	public void assignValues() {
-		dateAndTimeController.getModel().setSecondModel(new SecondModel(secondModel.getNumber().intValue()));	
+		dateAndTime.setSecond(new Second(secondModel.getNumber().intValue()));	
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setSecondModel(null);	
+		dateAndTime.setSecond(null);	
 	}
 }

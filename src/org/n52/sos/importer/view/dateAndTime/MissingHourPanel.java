@@ -6,10 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.HourModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.Hour;
 
-public class MissingHourPanel extends MissingComponentPanel {
+public class MissingHourPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class MissingHourPanel extends MissingComponentPanel {
 	private SpinnerNumberModel hourModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner hourSpinner = new JSpinner(hourModel);
 	
-	public MissingHourPanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingHourPanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(hourLabel);
 		this.add(hourSpinner);
@@ -27,11 +27,11 @@ public class MissingHourPanel extends MissingComponentPanel {
 	
 	@Override
 	public void assignValues() {
-		dateAndTimeController.getModel().setHourModel(new HourModel(hourModel.getNumber().intValue()));	
+		dateAndTime.setHour(new Hour(hourModel.getNumber().intValue()));	
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setHourModel(null);	
+		dateAndTime.setHour(null);	
 	}
 }

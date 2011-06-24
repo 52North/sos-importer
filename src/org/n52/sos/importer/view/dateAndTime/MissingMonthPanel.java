@@ -6,10 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.MonthModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.Month;
 
-public class MissingMonthPanel extends MissingComponentPanel {
+public class MissingMonthPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class MissingMonthPanel extends MissingComponentPanel {
 	private SpinnerNumberModel monthModel = new SpinnerNumberModel(1, 1, 12, 1);
 	private JSpinner monthSpinner = new JSpinner(monthModel);
 	
-	public MissingMonthPanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingMonthPanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(monthLabel);
 		this.add(monthSpinner);
@@ -27,11 +27,11 @@ public class MissingMonthPanel extends MissingComponentPanel {
 
 	@Override
 	public void assignValues() {
-		dateAndTimeController.getModel().setMonthModel(new MonthModel(monthModel.getNumber().intValue()));	
+		dateAndTime.setMonth(new Month(monthModel.getNumber().intValue()));	
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setMonthModel(null);	
+		dateAndTime.setMonth(null);	
 	}
 }

@@ -6,10 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.TimeZoneModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.TimeZone;
 
-public class MissingTimeZonePanel extends MissingComponentPanel {
+public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class MissingTimeZonePanel extends MissingComponentPanel {
 	private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
 	private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
 	
-	public MissingTimeZonePanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingTimeZonePanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(timeZoneLabel);
 		this.add(timeZoneSpinner);
@@ -27,11 +27,11 @@ public class MissingTimeZonePanel extends MissingComponentPanel {
 
 	@Override
 	public void assignValues() {
-		dateAndTimeController.getModel().setTimeZoneModel(new TimeZoneModel(timeZoneModel.getNumber().intValue()));	
+		dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));	
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setTimeZoneModel(null);	
+		dateAndTime.setTimeZone(null);	
 	}
 }

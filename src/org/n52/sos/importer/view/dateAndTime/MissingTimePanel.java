@@ -8,12 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.HourModel;
-import org.n52.sos.importer.model.dateAndTime.MinuteModel;
-import org.n52.sos.importer.model.dateAndTime.SecondModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.Hour;
+import org.n52.sos.importer.model.dateAndTime.Minute;
+import org.n52.sos.importer.model.dateAndTime.Second;
 
-public class MissingTimePanel extends MissingComponentPanel {
+public class MissingTimePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,8 +22,8 @@ public class MissingTimePanel extends MissingComponentPanel {
 	private SpinnerDateModel timeModel;
 	private JSpinner timeSpinner;
 	
-	public MissingTimePanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingTimePanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		timeModel = new SpinnerDateModel();
 		timeModel.setCalendarField(Calendar.HOUR_OF_DAY);
 		timeSpinner = new JSpinner(timeModel);
@@ -38,15 +38,15 @@ public class MissingTimePanel extends MissingComponentPanel {
 	public void assignValues() {
 		Calendar c = new GregorianCalendar();
 		c.setTime(timeModel.getDate());
-		dateAndTimeController.getModel().setHourModel(new HourModel(c.get(Calendar.HOUR_OF_DAY)));
-		dateAndTimeController.getModel().setMinuteModel(new MinuteModel(c.get(Calendar.MINUTE)));
-		dateAndTimeController.getModel().setSecondModel(new SecondModel(c.get(Calendar.SECOND)));
+		dateAndTime.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
+		dateAndTime.setMinute(new Minute(c.get(Calendar.MINUTE)));
+		dateAndTime.setSecond(new Second(c.get(Calendar.SECOND)));
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setHourModel(null);
-		dateAndTimeController.getModel().setMinuteModel(null);
-		dateAndTimeController.getModel().setSecondModel(null);	
+		dateAndTime.setHour(null);
+		dateAndTime.setMinute(null);
+		dateAndTime.setSecond(null);	
 	}
 }

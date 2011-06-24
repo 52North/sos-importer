@@ -6,10 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.controller.dateAndTime.DateAndTimeController;
-import org.n52.sos.importer.model.dateAndTime.DayModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.dateAndTime.Day;
 
-public class MissingDayPanel extends MissingComponentPanel {
+public class MissingDayPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,8 +18,8 @@ public class MissingDayPanel extends MissingComponentPanel {
 	private SpinnerNumberModel dayModel = new SpinnerNumberModel(1, 1, 31, 1);
 	private JSpinner daySpinner = new JSpinner(dayModel);
 	
-	public MissingDayPanel(DateAndTimeController dateAndTimeController) {
-		super(dateAndTimeController);
+	public MissingDayPanel(DateAndTime dateAndTime) {
+		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(dayLabel);
 		this.add(daySpinner);
@@ -27,11 +27,11 @@ public class MissingDayPanel extends MissingComponentPanel {
 
 	@Override
 	public void assignValues() {
-		dateAndTimeController.getModel().setDayModel(new DayModel(dayModel.getNumber().intValue()));	
+		dateAndTime.setDay(new Day(dayModel.getNumber().intValue()));	
 	}
 
 	@Override
 	public void unassignValues() {
-		dateAndTimeController.getModel().setDayModel(null);		
+		dateAndTime.setDay(null);		
 	}
 }
