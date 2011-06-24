@@ -1,6 +1,6 @@
 package org.n52.sos.importer.model;
 
-import java.util.List;
+import org.n52.sos.importer.config.EditableComboBoxItems;
 
 public class Step2Model {
 
@@ -10,13 +10,16 @@ public class Step2Model {
 	
 	private String selectedTextQualifier;
 	
-	private List<String> columnSeparators;
-	
-	private List<String> commentIndicators;
-	
-	private List<String> textQualifiers;
-	
 	private String CSVFileContent;
+	
+	public Step2Model(String CSVFileContent) {
+		this.CSVFileContent = CSVFileContent;
+		
+		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
+		selectedColumnSeparator = (String) items.getColumnSeparators().getElementAt(0);
+		selectedCommentIndicator = (String) items.getCommentIndicators().getElementAt(0);
+		selectedTextQualifier = (String) items.getTextQualifiers().getElementAt(0);
+	}
 
 	public String getSelectedColumnSeparator() {
 		return selectedColumnSeparator;
@@ -40,30 +43,6 @@ public class Step2Model {
 
 	public void setSelectedTextQualifier(String selectedTextQualifier) {
 		this.selectedTextQualifier = selectedTextQualifier;
-	}
-
-	public List<String> getColumnSeparators() {
-		return columnSeparators;
-	}
-
-	public void setColumnSeparators(List<String> columnSeparators) {
-		this.columnSeparators = columnSeparators;
-	}
-
-	public List<String> getCommentIndicators() {
-		return commentIndicators;
-	}
-
-	public void setCommentIndicators(List<String> commentIndicators) {
-		this.commentIndicators = commentIndicators;
-	}
-
-	public List<String> getTextQualifiers() {
-		return textQualifiers;
-	}
-
-	public void setTextQualifiers(List<String> textQualifiers) {
-		this.textQualifiers = textQualifiers;
 	}
 
 	public String getCSVFileContent() {

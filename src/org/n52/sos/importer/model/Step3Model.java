@@ -8,8 +8,6 @@ public class Step3Model {
 	
 	private final HashMap<Integer, List<String>> columnStore = new HashMap<Integer, List<String>>();
 	private final HashMap<Integer, List<String>> rowStore = new HashMap<Integer, List<String>>();
-
-	private int selectionMode;
 	
 	private int selectedColumn;
 	
@@ -33,14 +31,6 @@ public class Step3Model {
 	
 	public void putRowIntoStore(int row, List<String> selection) {
 		rowStore.put(row, selection);
-	}
-
-	public void setSelectionMode(int selectionMode) {
-		this.selectionMode = selectionMode;
-	}
-
-	public int getSelectionMode() {
-		return selectionMode;
 	}
 
 	/**

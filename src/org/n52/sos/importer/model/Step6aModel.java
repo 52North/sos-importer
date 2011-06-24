@@ -1,6 +1,6 @@
 package org.n52.sos.importer.model;
 
-import org.n52.sos.importer.bean.Resource;
+import org.n52.sos.importer.model.resources.Resource;
 
 public class Step6aModel {
 	
