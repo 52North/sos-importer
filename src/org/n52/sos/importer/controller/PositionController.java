@@ -3,7 +3,12 @@ package org.n52.sos.importer.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.sos.importer.model.position.EPSGCode;
+import org.n52.sos.importer.model.position.Height;
+import org.n52.sos.importer.model.position.Latitude;
+import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
@@ -48,12 +53,19 @@ public class PositionController {
 			mcp.assignValues();
 	}
 	
-	public String getParsed(Cell measuredValuePosition) {
-		String lat = position.getLatitude().getParsedValue(measuredValuePosition);
-		String lon = position.getLongitude().getParsedValue(measuredValuePosition);
-		String height = position.getHeight().getParsedValue(measuredValuePosition);
-		int epsgCode = position.getEPSGCode().getParsedValue(measuredValuePosition);
-		return "Position[lat=" + lat + ",lon=" + lon + ",height=" + height + ",epsgCode=" + epsgCode + "]";
+	public Position forThis(Cell featureOfInterestPosition) {
+		Position p = new Position();
+		String lat = position.getLatitude().getParsedValue(featureOfInterestPosition);
+		String lon = position.getLongitude().getParsedValue(featureOfInterestPosition);
+		String height = position.getHeight().getParsedValue(featureOfInterestPosition);
+		int epsgCode = position.getEPSGCode().getParsedValue(featureOfInterestPosition);
+		
+		p.setLatitude(new Latitude(lat));
+		p.setLongitude(new Longitude(lon));
+		p.setHeight(new Height(height));
+		p.setEPSGCode(new EPSGCode(epsgCode));
+		return p;
+		//return "Position[lat=" + lat + ",lon=" + lon + ",height=" + height + ",epsgCode=" + epsgCode + "]";
 	}
 	
 }

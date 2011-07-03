@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step7Model;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.Step7Panel;
@@ -61,9 +60,7 @@ public class Step7Controller extends StepController {
 		if (foiWithoutPosition != null) {
 			MainController.getInstance().setStepController(new Step7Controller(new Step7Model(foiWithoutPosition)));
 		} else {
-			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-				mv.print();
-			}
+			MainController.getInstance().setStepController(new Step8Controller());
 		}	
 	}
 	

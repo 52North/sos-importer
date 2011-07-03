@@ -1,5 +1,8 @@
 package org.n52.sos.importer.model.resources;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -38,13 +41,19 @@ public class FeatureOfInterest extends Resource {
 		return position;
 	}
 	
-	@Override
-	public String print(Cell measuredValuePosition) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(super.print(measuredValuePosition));
+	public FeatureOfInterest forThis(Cell measuredValuePosition) {
+		FeatureOfInterest foi = new FeatureOfInterest();
+		if (getTableElement() == null) {
+			foi.setName(getName());
+			foi.setURI(getURI());
+		} else {
+			String name = getTableElement().getValueFor(measuredValuePosition);
+			foi.setName(name);
+		}
+		
 		PositionController pc = new PositionController(position);
-		sb.append(pc.getParsed(new Cell(0,0)));
-		//TODO
-		return sb.toString();
+		Position p = pc.forThis(new Cell(0,0)); //TODO
+		foi.setPosition(p);
+		return foi;
 	}
 }

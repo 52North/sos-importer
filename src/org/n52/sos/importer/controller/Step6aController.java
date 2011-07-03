@@ -14,7 +14,7 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
-import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.Step6aPanel;
 
@@ -134,8 +134,8 @@ public class Step6aController extends StepController {
 			}
 		}
 		for (MeasuredValue mv: measuredValues) {
-			if (mv.getSensorName() == null) {
-				return new SensorName();
+			if (mv.getSensor() == null) {
+				return new Sensor();
 			}
 		}
 		return null;

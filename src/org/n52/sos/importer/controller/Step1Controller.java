@@ -105,7 +105,7 @@ public class Step1Controller extends StepController {
 	}
 	
 	private String readFile(File f) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		try {
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);

@@ -1,12 +1,17 @@
 package org.n52.sos.importer.model.measuredValue;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
-import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
@@ -26,7 +31,7 @@ public abstract class MeasuredValue  {
 	
 	private FeatureOfInterest featureOfInterest;
 	
-	private SensorName sensorName;
+	private Sensor sensor;
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
 		logger.info("Assign Feature Of Interest to Measured Value");
@@ -55,13 +60,13 @@ public abstract class MeasuredValue  {
 		return unitOfMeasurement;
 	}
 
-	public void setSensorName(SensorName sensorName) {
+	public void setSensor(Sensor sensor) {
 		logger.info("Assign Sensor Name to Measured Value");
-		this.sensorName = sensorName;
+		this.sensor = sensor;
 	}
 
-	public SensorName getSensorName() {
-		return sensorName;
+	public Sensor getSensor() {
+		return sensor;
 	}
 
 	public void setTableElement(TableElement tableElement) {
@@ -83,22 +88,38 @@ public abstract class MeasuredValue  {
 	}
 	
 	public void print() {
-		Column cm = (Column) getTableElement();
+		Column column = (Column) getTableElement();
 		DateAndTimeController dtc = new DateAndTimeController();
 		
 		for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
-			StringBuilder sb = new StringBuilder();
-			Cell c = new Cell(i, cm.getNumber());
+			//StringBuilder sb = new StringBuilder();
+			InsertObservation io = new InsertObservation();
+			Cell c = new Cell(i, column.getNumber());
 			String value = TableController.getInstance().getValueAt(c);
-			sb.append(this + "[value=" + value + "] -> ");
-			//String parsedValue = parse(value);
+			io.setValue(value);
+			//sb.append(this + "[value=" + value + "] -> ");
+			//TODO String parsedValue = parse(value);
 			dtc.setDateAndTime(getDateAndTime());
-			sb.append(dtc.getParsed(c));
-			sb.append(getObservedProperty().print(c));
-			sb.append(getUnitOfMeasurement().print(c));
-			sb.append(getSensorName().print(c));
-			sb.append(getFeatureOfInterest().print(c));
-			logger.info(sb.toString());
+			GregorianCalendar gc = dtc.forThis(c);	
+			Format formatter = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
+			String timeStamp = formatter.format(gc.getTime());
+			io.setTimeStamp(timeStamp);
+			
+			FeatureOfInterest foi = getFeatureOfInterest().forThis(c);
+			io.setFeatureOfInterestName(foi.getName());
+			io.setFeatureOfInterestURI(foi.getURIString());
+			io.setLatitude(foi.getPosition().getLatitude().getValue());
+			io.setLongitude(foi.getPosition().getLongitude().getValue());
+			io.setEpsgCode(foi.getPosition().getEPSGCode() + "");
+			
+			ObservedProperty op = getObservedProperty().forThis(c);
+			io.setObservedPropertyURI(op.getURIString());
+			UnitOfMeasurement uom = getUnitOfMeasurement().forThis(c);
+			io.setUnitOfMeasurementCode(uom.getName());
+			Sensor sensor = getSensor().forThis(c);
+			io.setSensorName(sensor.getName());
+			io.setSensorURI(sensor.getURIString());
+			//logger.info(sb.toString());
 		}
 	}
 	

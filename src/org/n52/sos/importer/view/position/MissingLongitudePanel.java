@@ -16,7 +16,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 
 	private final Position position;
 	
-	private final JLabel longitudeLabel = new JLabel("   Longitude / X: ");
+	private final JLabel longitudeLabel = new JLabel("   Longitude / Easting: ");
 	private final JTextField longitudeTextField = new JTextField(8);
 	private final JLabel longitudeUnitLabel = new JLabel("   Unit: ");
 	private final JComboBox longitudeUnitComboBox = new JComboBox(NonEditableComboBoxItems.getInstance().getLatLonUnits());

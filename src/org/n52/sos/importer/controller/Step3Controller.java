@@ -14,7 +14,7 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
-import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
@@ -77,7 +77,7 @@ public class Step3Controller extends StepController {
 			List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 			List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 			List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
-			List<SensorName> sensorNames = new ArrayList<SensorName>();
+			List<Sensor> sensorNames = new ArrayList<Sensor>();
 			LinkedList<DateAndTime> dateAndTimes = new LinkedList<DateAndTime>();
 			
 			for (Integer k: step3Model.getStoredColumns()) {
@@ -112,7 +112,7 @@ public class Step3Controller extends StepController {
 					uom.setTableElement(new Column(k));
 					unitOfMeasurements.add(uom);
 				} else if (column.get(0).equals("Sensor Name")) {
-					SensorName sm = new SensorName();
+					Sensor sm = new Sensor();
 					sm.setTableElement(new Column(k));
 					sensorNames.add(sm);
 				}

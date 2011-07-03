@@ -16,6 +16,8 @@ public class EditableComboBoxItems {
 	
 	private DefaultComboBoxModel EPSGCodes;
 	
+	private DefaultComboBoxModel sensorObservationServices;
+	
 	private EditableComboBoxItems() {
 		setColumnSeparators(new DefaultComboBoxModel(
 				new Object[]{";", ":", ",", "\t"}));
@@ -36,6 +38,8 @@ public class EditableComboBoxItems {
                 "yyyy.MMMMM.dd GGG hh:mm aaa"}));	
 		setEPSGCodes(new DefaultComboBoxModel(
 				new Object[]{5326, 1235}));
+		setSensorObservationServices(new DefaultComboBoxModel(
+				new Object[]{"http://localhost:8080/52nSOSv3/sos"}));
 	}
 
 	public static EditableComboBoxItems getInstance() {
@@ -82,6 +86,14 @@ public class EditableComboBoxItems {
 
 	public void setEPSGCodes(DefaultComboBoxModel ePSGCodes) {
 		EPSGCodes = ePSGCodes;
+	}
+
+	public void setSensorObservationServices(DefaultComboBoxModel sensorObservationServices) {
+		this.sensorObservationServices = sensorObservationServices;
+	}
+
+	public DefaultComboBoxModel getSensorObservationServices() {
+		return sensorObservationServices;
 	}
 	
 }

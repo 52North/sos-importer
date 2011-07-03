@@ -137,7 +137,7 @@ public class DateAndTimeController {
 			dateAndTime.getTimeZone().mark(color);
 	}
 	
-	public String getParsed(Cell measuredValuePosition) {
+	public GregorianCalendar forThis(Cell measuredValuePosition) {
 		int second = dateAndTime.getSecond().getParsedValue(measuredValuePosition);
 		int minute = dateAndTime.getMinute().getParsedValue(measuredValuePosition);
 		int hour = dateAndTime.getHour().getParsedValue(measuredValuePosition);
@@ -146,6 +146,8 @@ public class DateAndTimeController {
 		int year = dateAndTime.getYear().getParsedValue(measuredValuePosition);
 		int timezone = dateAndTime.getTimeZone().getParsedValue(measuredValuePosition);
 		
-		return "DateAndTime["+year+"-"+month+"-"+day+" "+hour+":"+minute+":"+ second+" UTC=" + timezone +"]";
+		GregorianCalendar gc = new GregorianCalendar(year, month, day, hour, minute, second);
+		gc.set(GregorianCalendar.ZONE_OFFSET, timezone);
+		return gc;
 	}
 }

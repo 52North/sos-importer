@@ -30,6 +30,13 @@ public abstract class Resource {
 		return uri;
 	}
 	
+	public String getURIString() {
+		if (uri == null)
+			return name;
+		else 
+			return uri.getPath();
+	}
+	
 	public abstract void assign(MeasuredValue measuredValue);
 	
 	public abstract boolean isAssigned(MeasuredValue mv);

@@ -12,7 +12,7 @@ import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
-import org.n52.sos.importer.model.resources.SensorName;
+import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 
@@ -34,7 +34,7 @@ public class Step7Test {
 		uom.setName("Degree Celsius");
 		FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("Air");
-		SensorName sn = new SensorName();
+		Sensor sn = new Sensor();
 		sn.setName("Thermometer xy");
 		
 		NumericValue nv1 = new NumericValue();
@@ -42,7 +42,7 @@ public class Step7Test {
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
 		nv1.setFeatureOfInterest(foi);
-		nv1.setSensorName(sn);
+		nv1.setSensor(sn);
 		nv1.setUnitOfMeasurement(uom);
 		
 		NumericValue nv2 = new NumericValue();
@@ -50,7 +50,7 @@ public class Step7Test {
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
-		nv2.setSensorName(sn);
+		nv2.setSensor(sn);
 		nv2.setUnitOfMeasurement(uom);	
 		
 		ModelStore.getInstance().addMeasuredValue(nv1);
