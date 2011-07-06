@@ -19,7 +19,7 @@ import org.n52.sos.importer.ParseTestLabel;
 import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.SelectionPanel;
 import org.n52.sos.importer.config.EditableComboBoxItems;
-import org.n52.sos.importer.config.NonEditableComboBoxItems;
+import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.Boolean;
@@ -113,8 +113,8 @@ public class Step3Panel extends JPanel {
 				private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
 				private final JLabel exampleLabel = new JLabel("Example: ");
 			
-				private final String[] decimalSeparators = NonEditableComboBoxItems.getInstance().getDecimalSeparatorValues();
-				private final String[] thousandsSeparators = NonEditableComboBoxItems.getInstance().getThousandsSeparatorValues();
+				private final String[] decimalSeparators = Settings.getInstance().getDecimalSeparators();
+				private final String[] thousandsSeparators = Settings.getInstance().getThousandsSeparators();
 				
 				private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 				private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparators);

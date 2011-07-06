@@ -6,7 +6,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.config.NonEditableComboBoxItems;
+import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Position;
 
@@ -19,7 +19,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
 	private final JLabel heightLabel = new JLabel("   Height: ");
 	private final JTextField heightTextField = new JTextField(8);
 	private final JLabel heightUnitLabel = new JLabel("   Unit: ");
-	private final JComboBox heightUnitComboBox = new JComboBox(NonEditableComboBoxItems.getInstance().getHeightUnits());
+	private final JComboBox heightUnitComboBox = new JComboBox(Settings.getInstance().getHeightUnits());
 	
 	public MissingHeightPanel(Position position) {
 		super();

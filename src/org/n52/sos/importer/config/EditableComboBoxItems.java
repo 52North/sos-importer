@@ -20,26 +20,17 @@ public class EditableComboBoxItems {
 	
 	private EditableComboBoxItems() {
 		setColumnSeparators(new DefaultComboBoxModel(
-				new Object[]{";", ":", ",", "\t"}));
+				Settings.getInstance().getColumnSeparators()));
 		setCommentIndicators(new DefaultComboBoxModel(
-				new Object[]{"#"}));
+				Settings.getInstance().getCommentIndicators()));
 		setTextQualifiers(new DefaultComboBoxModel(
-				new Object[]{"\"", "'"}));
+				Settings.getInstance().getTextQualifiers()));
 		setDateAndTimePatterns(new DefaultComboBoxModel(
-				new Object[] {
-                "dd MMMMM yyyy",
-                "dd.MM.yy",
-                "MM/dd/yy",
-                "yyyy.MM.dd G 'at' hh:mm:ss z",
-                "EEE, MMM d, ''yy",
-                "h:mm a",
-                "H:mm:ss:SSS",
-                "K:mm a,z",
-                "yyyy.MMMMM.dd GGG hh:mm aaa"}));	
+				Settings.getInstance().getDateAndTimePatterns()));	
 		setEPSGCodes(new DefaultComboBoxModel(
-				new Object[]{5326, 1235}));
+				Settings.getInstance().getEpsgCodes()));
 		setSensorObservationServices(new DefaultComboBoxModel(
-				new Object[]{"http://localhost:8080/52nSOSv3/sos"}));
+				Settings.getInstance().getSosURLs()));
 	}
 
 	public static EditableComboBoxItems getInstance() {
@@ -92,7 +83,7 @@ public class EditableComboBoxItems {
 		this.sensorObservationServices = sensorObservationServices;
 	}
 
-	public DefaultComboBoxModel getSensorObservationServices() {
+	public DefaultComboBoxModel getSosURLs() {
 		return sensorObservationServices;
 	}
 	

@@ -6,7 +6,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.config.NonEditableComboBoxItems;
+import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Position;
 
@@ -19,7 +19,7 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 	private final JLabel latitudeLabel = new JLabel("   Latitude / Northing: ");
 	private final JTextField latitudeTextField = new JTextField(8);
 	private final JLabel latitudeUnitLabel = new JLabel("   Unit: ");
-	private final JComboBox latitudeUnitComboBox = new JComboBox(NonEditableComboBoxItems.getInstance().getLatLonUnits());
+	private final JComboBox latitudeUnitComboBox = new JComboBox(Settings.getInstance().getLatLonUnits());
 	
 	public MissingLatitudePanel(Position position) {
 		super();

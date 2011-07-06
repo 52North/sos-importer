@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 
@@ -7,9 +8,15 @@ public class MainController {
 	
 	private static MainController instance = null;
 
-	private final MainFrame mainFrame = new MainFrame();
+	private final MainFrame mainFrame = new MainFrame(this);
 	
 	private MainController() {
+	}
+	
+	public static MainController getInstance() {
+		if (instance == null)
+			instance = new MainController();
+		return instance;
 	}
 	
 	public void setStepController(StepController stepController) {
@@ -18,11 +25,10 @@ public class MainController {
 	    mainFrame.setStepPanel(stepController.getStepPanel());
 		BackNextController.getInstance().getModel().setCurrentStepController(stepController);
 	}
-
-	public static MainController getInstance() {
-		if (instance == null)
-			instance = new MainController();
-		return instance;
+	
+	public void exit() {
+		Settings.getInstance().save();
+		//mainFrame.showExitDialog();
 	}
 	
 	public void pack() {

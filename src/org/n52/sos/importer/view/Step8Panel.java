@@ -12,7 +12,7 @@ public class Step8Panel extends JPanel {
 	private final EditableJComboBox sosComboBox;
 	
 	public Step8Panel() {
-		sosComboBox = new EditableJComboBox(EditableComboBoxItems.getInstance().getSensorObservationServices());
+		sosComboBox = new EditableJComboBox(EditableComboBoxItems.getInstance().getSosURLs());
 		this.add(sosComboBox);
 	}
 	

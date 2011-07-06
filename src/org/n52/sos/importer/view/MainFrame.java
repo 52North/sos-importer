@@ -27,29 +27,32 @@ Modified: 2011-05-26
 */
 
 package org.n52.sos.importer.view;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.n52.sos.importer.controller.MainController;
 
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger logger = Logger.getLogger(MainFrame.class);
 	
-	//private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
+	private final MainController mainController;
+	
 	private final JPanel stepContainerPanel = new JPanel();
 	private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
 	private final BackNextPanel backNextPanel = BackNextPanel.getInstance();
 	
-	public MainFrame() {
+	public MainFrame(MainController mainController) {
 		super();
-		logger.info("Initialize Main Frame");
+		this.mainController = mainController;
 		this.setTitle("SOS Importer");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.addWindowListener(new WindowChanged());
 		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		this.getContentPane().add(descriptionPanel);
@@ -68,12 +71,44 @@ public class MainFrame extends JFrame {
 		this.setLocationRelativeTo(null);
 	}
 	
-	private void exitDialog() {
+	public void showExitDialog() {
 		int n = JOptionPane.showConfirmDialog(
 			    this, "Do you really want to exit?\n"
 			    + "Your work progress will be lost.\n",
 			    "Exit", JOptionPane.YES_NO_OPTION,
 			    JOptionPane.WARNING_MESSAGE);
 		if (n == JOptionPane.YES_OPTION) System.exit(0);
+	}
+	
+	private class WindowChanged implements WindowListener {
+
+		@Override
+		public void windowActivated(WindowEvent arg0) {		
+		}
+
+		@Override
+		public void windowClosed(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			mainController.exit();		
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowIconified(WindowEvent arg0) {
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0) {
+		}		
 	}
 }

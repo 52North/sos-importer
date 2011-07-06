@@ -1,8 +1,7 @@
 package org.n52.sos.importer;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -19,21 +18,25 @@ public class EditableJComboBox extends JComboBox {
 		this.model = model;
 		this.setEditable(true);
 		this.setModel(model);
+		this.getEditor().getEditorComponent().addFocusListener(new FocusChanged());
 	}
 
 	public void saveSelectedItem() {
-		model.addElement(this.getSelectedItem());
+		String selectedItem = this.getEditor().getItem().toString();
+		if (selectedItem == null || selectedItem.equals("")) return;
+		if (model.getIndexOf(selectedItem) == -1)
+			model.addElement(selectedItem.trim());
 	}
 	
-	public void addItems(HashSet<Object> items) {
-		for (Object o: items)
-			this.addItem(o);
-	}
-	
-	public Object[] getItems() {
-		List<Object> items = new ArrayList<Object>();
-		for (int i = 0; i < this.getItemCount(); i++) 
-			items.add(this.getItemAt(i));		
-		return items.toArray();
+	private class FocusChanged implements FocusListener {
+
+		@Override
+		public void focusGained(FocusEvent arg0) {	
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			saveSelectedItem();		
+		}
 	}
 }
