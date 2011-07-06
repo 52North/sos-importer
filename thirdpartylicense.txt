@@ -1,6 +1,6 @@
 This document contains the license information about the following software.
-- APACHE XMLBEANS 2.1.0 
 - APACHE LOG4J 1.2.16
+- APACHE HTTP Client 4.1.1
 - OpenCSV 2.3
 
 ============================================================================

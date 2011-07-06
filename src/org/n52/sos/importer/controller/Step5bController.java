@@ -51,7 +51,7 @@ public class Step5bController extends StepController {
 	}
 
 	@Override
-	public void next() {
+	public void getNextStepController() {
 		dateAndTimeController.assignMissingComponentValues();	
 		
 		DateAndTime dtm = ModelStore.getInstance().getNextDateAndTimeModelWithMissingValues();

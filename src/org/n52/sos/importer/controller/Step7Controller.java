@@ -48,7 +48,7 @@ public class Step7Controller extends StepController {
 	}
 
 	@Override
-	public void next() {
+	public void getNextStepController() {
 		positionController.assignMissingComponentValues();
 		step7Model.getFeatureOfInterest().setPosition(step7Model.getPosition());
 		check();

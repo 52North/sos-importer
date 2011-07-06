@@ -146,7 +146,7 @@ public class DateAndTimeController {
 		int year = dateAndTime.getYear().getParsedValue(measuredValuePosition);
 		int timezone = dateAndTime.getTimeZone().getParsedValue(measuredValuePosition);
 		
-		GregorianCalendar gc = new GregorianCalendar(year, month, day, hour, minute, second);
+		GregorianCalendar gc = new GregorianCalendar(year, month - 1, day, hour, minute, second);
 		gc.set(GregorianCalendar.ZONE_OFFSET, timezone);
 		return gc;
 	}

@@ -12,7 +12,7 @@ public class PositionComponentModel {
 	
 	private TableElement tableElement;
 	
-	private String value = null;
+	private double value = -1;
 	
 	private String unit = null;
 
@@ -20,17 +20,26 @@ public class PositionComponentModel {
 		this.tableElement = tableElement;
 	}
 	
-	public PositionComponentModel(String value) {
+	public PositionComponentModel(double value, String unit) {
 		this.value = value;
+		this.unit = unit;
 	}
-	
-	public void setValue(String value) {
+
+	public void setValue(double value) {
 		logger.info("Assign Value to " + this.getClass().getName());
 		this.value = value;
 	}
 
-	public String getValue() {
+	public double getValue() {
 		return value;
+	}
+	
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getUnit() {
+		return unit;
 	}
 
 	public void setTableElement(TableElement tableElement) {
@@ -46,24 +55,28 @@ public class PositionComponentModel {
 		if (tableElement != null)
 			tableElement.mark(color);
 	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
 	
-	public String getParsedValue(Cell measuredValuePosition) {
+	public double getParsedValue(Cell measuredValuePosition) {
 		if (tableElement == null)
 			return getValue();
 		else 
 			return parse(tableElement.getValueFor(measuredValuePosition));
 	}
 	
-	public String parse(String s) {
+	public String getParsedUnit() {
+		if (unit == null || unit.equals(""))
+			return "n/a";
+		else if (unit.equals("meters")) 
+			return "m";
+		else if (unit.equals("feet"))
+			return "ft";
+		else if (unit.equals("°"))
+			return "degree";
+		return "n/a";
+	}
+	
+	public double parse(String s) {
 		//TODO
-		return s;
+		return Double.parseDouble(s);
 	}
 }

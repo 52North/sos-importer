@@ -1,12 +1,17 @@
 package org.n52.sos.importer.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Stack;
 
 import org.n52.sos.importer.controller.DateAndTimeController;
+import org.n52.sos.importer.controller.StepController;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.requests.InsertObservation;
+import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.Column;
@@ -16,10 +21,6 @@ public class ModelStore {
 	
 	private static ModelStore instance = null;
 	
-	private Step1Model step1Model;
-	
-	private Step2Model step2Model;
-	
 	private List<MeasuredValue> measuredValues;
 	
 	private List<Resource> resourcesWithoutMeasuredValue;
@@ -28,10 +29,16 @@ public class ModelStore {
 	
 	private List<FeatureOfInterest> featureOfInterests;
 	
+	private HashSet<InsertObservation> observationsToInsert;
+	
+	private HashSet<RegisterSensor> sensorsToRegister;
+	
 	private ModelStore() {
 		measuredValues = new ArrayList<MeasuredValue>();
 		featureOfInterests = new ArrayList<FeatureOfInterest>();
 		resourcesWithoutMeasuredValue = new ArrayList<Resource>();
+		observationsToInsert = new HashSet<InsertObservation>();
+		sensorsToRegister = new HashSet<RegisterSensor>();
 	}
 	
 	public static ModelStore getInstance() {
@@ -93,22 +100,6 @@ public class ModelStore {
 		return null;
 	}
 
-	public void setStep1Model(Step1Model step1Model) {
-		this.step1Model = step1Model;
-	}
-
-	public Step1Model getStep1Model() {
-		return step1Model;
-	}
-
-	public void setStep2Model(Step2Model step2Model) {
-		this.step2Model = step2Model;
-	}
-
-	public Step2Model getStep2Model() {
-		return step2Model;
-	}
-
 	public void setDateAndTimeModelIterator(ListIterator<DateAndTime> dateAndTimeModelIterator) {
 		this.dateAndTimeModels = dateAndTimeModelIterator;
 	}
@@ -123,5 +114,21 @@ public class ModelStore {
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
 		return featureOfInterests;
+	}
+	
+	public void addObservationToInsert(InsertObservation io) {
+		observationsToInsert.add(io);
+	}
+	
+	public void addSensorToRegister(RegisterSensor rs) {
+		sensorsToRegister.add(rs);
+	}
+	
+	public HashSet<RegisterSensor> getSensorsToRegister() {
+		return sensorsToRegister;
+	}
+
+	public HashSet<InsertObservation> getObservationsToInsert() {
+		return observationsToInsert;
 	}
 }

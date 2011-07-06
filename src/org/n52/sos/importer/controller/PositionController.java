@@ -8,7 +8,6 @@ import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
-import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
@@ -55,17 +54,19 @@ public class PositionController {
 	
 	public Position forThis(Cell featureOfInterestPosition) {
 		Position p = new Position();
-		String lat = position.getLatitude().getParsedValue(featureOfInterestPosition);
-		String lon = position.getLongitude().getParsedValue(featureOfInterestPosition);
-		String height = position.getHeight().getParsedValue(featureOfInterestPosition);
+		double lat = position.getLatitude().getParsedValue(featureOfInterestPosition);
+		String latUnit = position.getLatitude().getParsedUnit();
+		double lon = position.getLongitude().getParsedValue(featureOfInterestPosition);
+		String lonUnit = position.getLongitude().getParsedUnit();
+		double height = position.getHeight().getParsedValue(featureOfInterestPosition);
+		String heightUnit = position.getHeight().getParsedUnit();
 		int epsgCode = position.getEPSGCode().getParsedValue(featureOfInterestPosition);
 		
-		p.setLatitude(new Latitude(lat));
-		p.setLongitude(new Longitude(lon));
-		p.setHeight(new Height(height));
+		p.setLatitude(new Latitude(lat, latUnit));
+		p.setLongitude(new Longitude(lon, lonUnit));
+		p.setHeight(new Height(height, heightUnit));
 		p.setEPSGCode(new EPSGCode(epsgCode));
 		return p;
-		//return "Position[lat=" + lat + ",lon=" + lon + ",height=" + height + ",epsgCode=" + epsgCode + "]";
 	}
 	
 }

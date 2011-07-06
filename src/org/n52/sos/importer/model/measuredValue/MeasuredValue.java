@@ -7,8 +7,11 @@ import java.util.GregorianCalendar;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
+import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
@@ -92,34 +95,56 @@ public abstract class MeasuredValue  {
 		DateAndTimeController dtc = new DateAndTimeController();
 		
 		for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
-			//StringBuilder sb = new StringBuilder();
+			RegisterSensor rs = new RegisterSensor();
 			InsertObservation io = new InsertObservation();
+			
+			//the cell of the current Measured Value
 			Cell c = new Cell(i, column.getNumber());
 			String value = TableController.getInstance().getValueAt(c);
-			io.setValue(value);
-			//sb.append(this + "[value=" + value + "] -> ");
 			//TODO String parsedValue = parse(value);
+			io.setValue(value);
+			
+			//when was the current Measured Value measured
 			dtc.setDateAndTime(getDateAndTime());
 			GregorianCalendar gc = dtc.forThis(c);	
-			Format formatter = new SimpleDateFormat("yyyy-MM-ddThh:mm:ssZ");
+			Format formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
 			String timeStamp = formatter.format(gc.getTime());
 			io.setTimeStamp(timeStamp);
 			
 			FeatureOfInterest foi = getFeatureOfInterest().forThis(c);
 			io.setFeatureOfInterestName(foi.getName());
 			io.setFeatureOfInterestURI(foi.getURIString());
-			io.setLatitude(foi.getPosition().getLatitude().getValue());
-			io.setLongitude(foi.getPosition().getLongitude().getValue());
-			io.setEpsgCode(foi.getPosition().getEPSGCode() + "");
+			
+			//where was the current Measured Value measured
+			Position p = foi.getPosition();
+			io.setLatitudeValue(p.getLatitude().getValue() + "");
+			io.setLongitudeValue(p.getLongitude().getValue() + "");
+			io.setEpsgCode(p.getEPSGCode().getValue() + "");
+			rs.setLatitudeValue(p.getLatitude().getValue() + "");
+			rs.setLatitudeUnit(p.getLatitude().getUnit());
+			rs.setLongitudeValue(p.getLongitude().getValue() + "");
+			rs.setLongitudeUnit(p.getLongitude().getUnit());
+			rs.setHeightValue(p.getHeight().getValue() + "");
+			rs.setHeightUnit(p.getHeight().getUnit());
+			rs.setEpsgCode(p.getEPSGCode().getValue() + "");
 			
 			ObservedProperty op = getObservedProperty().forThis(c);
 			io.setObservedPropertyURI(op.getURIString());
+			rs.setObservedPropertyName(op.getName());
+			rs.setObservedPropertyURI(op.getURIString());
+			
 			UnitOfMeasurement uom = getUnitOfMeasurement().forThis(c);
 			io.setUnitOfMeasurementCode(uom.getName());
+			rs.setUnitOfMeasurementCode(uom.getName());
+			
 			Sensor sensor = getSensor().forThis(c);
 			io.setSensorName(sensor.getName());
 			io.setSensorURI(sensor.getURIString());
-			//logger.info(sb.toString());
+			rs.setSensorName(sensor.getName());
+			rs.setSensorURI(sensor.getURIString());
+			
+			ModelStore.getInstance().addObservationToInsert(io);
+			ModelStore.getInstance().addSensorToRegister(rs);
 		}
 	}
 	

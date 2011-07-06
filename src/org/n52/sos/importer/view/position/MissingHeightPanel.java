@@ -34,7 +34,10 @@ public class MissingHeightPanel extends MissingComponentPanel {
 	}
 	
 	public void assignValues() {
-		position.setHeight(new Height(heightTextField.getText()));
+		double value = Double.parseDouble(heightTextField.getText());
+		String unit = (String) heightUnitComboBox.getSelectedItem();
+		Height h = new Height(value, unit);
+		position.setHeight(h);
 	}
 	
 	public void unassignValues() {

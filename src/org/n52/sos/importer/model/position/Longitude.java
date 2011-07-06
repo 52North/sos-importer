@@ -8,7 +8,7 @@ public class Longitude extends PositionComponentModel {
 		super(tableElement);
 	}
 	
-	public Longitude(String value) {
-		super(value);
+	public Longitude(double value, String unit) {
+		super(value, unit);
 	}
 }

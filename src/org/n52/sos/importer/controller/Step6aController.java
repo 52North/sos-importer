@@ -59,7 +59,7 @@ public class Step6aController extends StepController {
 	}
 
 	@Override
-	public void next() {		
+	public void getNextStepController() {		
 		//get and check name
 		String name = step6aView.getResourceName();
 		if (name == null) {

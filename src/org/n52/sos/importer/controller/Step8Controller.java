@@ -4,16 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
-import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
-import org.n52.sos.importer.view.Step8Panel;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -21,6 +16,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.requests.InsertObservation;
+import org.n52.sos.importer.model.requests.RegisterSensor;
+import org.n52.sos.importer.view.Step8Panel;
 
 public class Step8Controller extends StepController {
 
@@ -73,19 +74,38 @@ public class Step8Controller extends StepController {
 	}
 
 	@Override
-	public void next() {
+	public void getNextStepController() {
 		String sosURL = step8Panel.getSOSURL();
-		String template = readTemplate("RegisterSensor_measurement_example");
-		try {
-			sendPostMessage(sosURL, template);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			mv.print();
 		}
-		//for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-		//	mv.print();
-		//}
 		
+		String registerSensorTemplate = readTemplate("RegisterSensor_measurement_template");
+		for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister()) {
+			logger.info(rs);
+			String completedTemplate = rs.fillTemplate(registerSensorTemplate);
+			try {
+				sendPostMessage(sosURL, completedTemplate);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		String insertObservationTemplate = readTemplate("InsertObservation_samplingPoint_template");
+		for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert()) {
+			String completedTemplate = io.fillTemplate(insertObservationTemplate);
+			logger.info(io);
+			
+			try {
+				sendPostMessage(sosURL, completedTemplate);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 	
     /**
@@ -98,7 +118,6 @@ public class Step8Controller extends StepController {
     public void sendPostMessage(String serviceURL, String request) throws IOException {
 
         logger.info("POST-request sent to: " + serviceURL);
-        logger.info("Sent request was: " + request);
     	
     	HttpClient httpClient = new DefaultHttpClient();
         HttpPost method = new HttpPost(serviceURL);

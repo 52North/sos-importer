@@ -8,8 +8,8 @@ public class Height extends PositionComponentModel {
 		super(tableElement);
 	}
 	
-	public Height(String value) {
-		super(value);
+	public Height(double value, String unit) {
+		super(value, unit);
 	}
 
 }

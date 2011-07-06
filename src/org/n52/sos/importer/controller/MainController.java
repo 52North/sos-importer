@@ -14,8 +14,9 @@ public class MainController {
 	
 	public void setStepController(StepController stepController) {
 	    DescriptionPanel.getInstance().setText(stepController.getDescription());
+	    stepController.loadSettings();
 	    mainFrame.setStepPanel(stepController.getStepPanel());
-		BackNextController.getInstance().setStepController(stepController);
+		BackNextController.getInstance().getModel().setCurrentStepController(stepController);
 	}
 
 	public static MainController getInstance() {

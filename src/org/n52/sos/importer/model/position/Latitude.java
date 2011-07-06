@@ -8,7 +8,7 @@ public class Latitude extends PositionComponentModel {
 		super(tableElement);
 	}
 	
-	public Latitude(String value) {
-		super(value);
+	public Latitude(double value, String unit) {
+		super(value, unit);
 	}
 }

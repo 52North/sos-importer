@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step1Panel;
@@ -19,41 +18,33 @@ public class Step1Controller extends StepController {
 	
 	private Step1Panel step1Panel;
 	private Step1Model step1Model;
-
+	
 	public Step1Controller() {
-		super();
-		step1Panel = new Step1Panel(this);
 		step1Model = new Step1Model();
-		
-		//disable "back" button
-		BackNextController.getInstance().setBackButtonEnabled(false);
-		
-		load();
+		step1Panel = new Step1Panel(this);
 	}
 	
 	@Override
 	public String getDescription() {
 		return "Step 1: Choose CSV file";
 	}
-
-	@Override
-	public void back() {
-		//not necessary
-	}
 	
-	public void load() {
+	@Override
+	public void loadSettings() {		
+		//disable "back" button
+		BackNextController.getInstance().setBackButtonEnabled(false);
+		
 		String csvFilePath = step1Model.getCSVFilePath();
 		step1Panel.setCSVFilePath(csvFilePath);
 	}
 	
-	public void save() {
+	public void saveSettings() {
 		String csvFilePath = step1Panel.getCSVFilePath();
 		step1Model.setCSVFilePath(csvFilePath);
-		ModelStore.getInstance().setStep1Model(step1Model);
 	}
 
 	@Override
-	public void next() {
+	public StepController getNextStepController() {
 		String filePath = step1Panel.getCSVFilePath();
 		
 		if (filePath.equals("")) {
@@ -61,20 +52,20 @@ public class Step1Controller extends StepController {
 				    "Please choose a CSV file",
 				    "File missing",
 				    JOptionPane.WARNING_MESSAGE);
-			return;
+			return null;
 		}		
 		
 		File f = new File(filePath);
 		if (isValid(f)) {
 			String csvFileContent = readFile(f);
-			Step2Model s2m = new Step2Model(csvFileContent);
-			Step2Controller s2c = new Step2Controller(s2m);
-			MainController.getInstance().setStepController(s2c);	
-			
 			//show "back" button
 			BackNextController.getInstance().setBackButtonEnabled(true);
-			save();
+					
+			Step2Model s2m = new Step2Model();
+			s2m.setCSVFileContent(csvFileContent);
+			return new Step2Controller(s2m);
 		}
+		return null;
 	}
 	
 	private boolean isValid(File f) {		

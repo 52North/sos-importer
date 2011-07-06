@@ -25,30 +25,24 @@ public class Step2Controller extends StepController {
 	public Step2Controller(Step2Model step2Model) {
 		this.step2Model = step2Model;
 		step2Panel = new Step2Panel();
-		
-		load();
 	}
 	
 	@Override
 	public String getDescription() {
 		return "Step 2: Import CSV file"; 
 	}
-
-	@Override
-	public void back() {
-		save();
-		MainController.getInstance().setStepController(new Step1Controller());
-	}
 	
 	@Override
-	public void next() {
+	public StepController getNextStepController() {
 		Object[][] content = parseCSVFile();
-		save();
 		TableController.getInstance().setContent(content);
-		MainController.getInstance().setStepController(new Step3Controller());
+		return new Step3aController();
 	}
 	
-	public void save() {
+	public void saveSettings() {
+		if (step2Model == null)
+			step2Model = new Step2Model();
+		
 		String columnSeparator = step2Panel.getSelectedColumnSeparator();
 		step2Model.setSelectedColumnSeparator(columnSeparator);
 		String commentIndicator = step2Panel.getSelectedCommentIndicator();
@@ -59,7 +53,7 @@ public class Step2Controller extends StepController {
 		step2Model.setCSVFileContent(csvFileContent);
 	}
 	
-	public void load() {
+	public void loadSettings() {
 		String columnSeparator = step2Model.getSelectedColumnSeparator();
 		step2Panel.setSelectedColumnSeparator(columnSeparator);
 		String commentIndicator = step2Model.getSelectedCommentIndicator();

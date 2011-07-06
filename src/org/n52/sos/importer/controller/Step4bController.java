@@ -51,7 +51,7 @@ public class Step4bController extends StepController {
 	}
 
 	@Override
-	public void next() {
+	public void getNextStepController() {
 		int[] selectedColumns = tableController.getSelectedColumns();
 		
 		for (int column: selectedColumns) {

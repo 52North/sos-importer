@@ -1,12 +1,13 @@
 package org.n52.sos.importer.controller;
 
+import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.view.BackNextPanel;
 
 public class BackNextController {
 	
 	private static BackNextController instance = null;
 
-	private StepController stepController;
+	private BackNextModel backNextModel = new BackNextModel();
 	
 	private BackNextPanel backNextPanel = BackNextPanel.getInstance();
 	
@@ -19,21 +20,28 @@ public class BackNextController {
 		return instance;
 	}
 	
-	public void setStepController(StepController stepController) {
-		this.stepController = stepController;
-	}
-	
 	public void setBackButtonEnabled(boolean flag) {
 		backNextPanel.setBackButtonEnabled(flag);
 	}
 	
 	public void backButtonPressed() {
-		if (stepController != null)
-			stepController.back();
+		StepController previousSC = backNextModel.getPreviousStepController();
+		MainController.getInstance().setStepController(previousSC);
 	}
 	
 	public void nextButtonClicked() {
-		if (stepController != null)
-			stepController.next();
+		StepController currentSC = backNextModel.getCurrentStepController();
+		currentSC.saveSettings();
+		
+		StepController nextSC = currentSC.getNextStepController();
+		if (nextSC == null) return;
+		
+		backNextModel.addStepController(currentSC);	
+		
+		MainController.getInstance().setStepController(nextSC);
+	}
+	
+	public BackNextModel getModel() {
+		return backNextModel;
 	}
 }

@@ -20,25 +20,25 @@ public class InsertObservation {
 	
 	private String epsgCode;
 	
-	private String latitude;
-	
-	private String longitude;
+	private String latitudeValue;
+
+	private String longitudeValue;
 	
 	public String fillTemplate(String template) {
-		template.replaceAll("sensorName", sensorName);
-		template.replaceAll("sensorURI", sensorURI);
-		template.replaceAll("featureOfInterestName", featureOfInterestName);
-		template.replaceAll("featureOfInterestURI", featureOfInterestURI);
-		template.replaceAll("observedPropertyURI", observedPropertyURI);
-		template.replaceAll("unitOfMeasurementCode", unitOfMeasurementCode);
-		template.replaceAll("value", value);
-		template.replaceAll("timeStamp", timeStamp);
-		template.replaceAll("epsgCode", epsgCode);
-		template.replaceAll("latitude", latitude);
-		template.replaceAll("longitude", longitude);
-		return template;
+		String filledTemplate = template;
+		filledTemplate = filledTemplate.replaceAll("THISsensorName", sensorName);
+		filledTemplate = filledTemplate.replaceAll("THISsensorURI", sensorURI);
+		filledTemplate = filledTemplate.replaceAll("THISfeatureOfInterestName", featureOfInterestName);
+		filledTemplate = filledTemplate.replaceAll("THISfeatureOfInterestURI", featureOfInterestURI);
+		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyURI", observedPropertyURI);
+		filledTemplate = filledTemplate.replaceAll("THISunitOfMeasurementCode", unitOfMeasurementCode);
+		filledTemplate = filledTemplate.replaceAll("THISvalue", value);
+		filledTemplate = filledTemplate.replaceAll("THIStimeStamp", timeStamp);
+		filledTemplate = filledTemplate.replaceAll("THISepsgCode", epsgCode);
+		filledTemplate = filledTemplate.replaceAll("THISlatitudeValue", latitudeValue);
+		filledTemplate = filledTemplate.replaceAll("THISlongitudeValue", longitudeValue);
+		return filledTemplate;
 	}
-	
 	
 	public String getSensorName() {
 		return sensorName;
@@ -112,22 +112,22 @@ public class InsertObservation {
 		this.epsgCode = epsgCode;
 	}
 
-	public String getLatitude() {
-		return latitude;
+	public String getLatitudeValue() {
+		return latitudeValue;
 	}
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+	public void setLatitudeValue(String latitudeValue) {
+		this.latitudeValue = latitudeValue;
 	}
 
-	public String getLongitude() {
-		return longitude;
+	public String getLongitudeValue() {
+		return longitudeValue;
 	}
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+	public void setLongitudeValue(String longitudeValue) {
+		this.longitudeValue = longitudeValue;
 	}
-
+	
 
 	@Override
 	public String toString() {
@@ -137,8 +137,8 @@ public class InsertObservation {
 				+ featureOfInterestURI + ", observedPropertyURI="
 				+ observedPropertyURI + ", unitOfMeasurementCode="
 				+ unitOfMeasurementCode + ", value=" + value + ", timeStamp="
-				+ timeStamp + ", epsgCode=" + epsgCode + ", latitude="
-				+ latitude + ", longitude=" + longitude + "]";
+				+ timeStamp + ", epsgCode=" + epsgCode + ", latitudeValue="
+				+ latitudeValue + ", longitudeValue=" + longitudeValue + "]";
 	}
 	
 }

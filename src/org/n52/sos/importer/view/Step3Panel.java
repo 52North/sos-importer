@@ -12,7 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.ButtonGroupPanel;
 import org.n52.sos.importer.EditableJComboBox;
 import org.n52.sos.importer.ExampleFormatLabel;
@@ -30,11 +29,7 @@ import org.n52.sos.importer.model.measuredValue.Text;
 
 public class Step3Panel extends JPanel {
 	
-	private static final Logger logger = Logger.getLogger(Step3Panel.class);
-	
 	private static final long serialVersionUID = 1L;
-	
-	private final JLabel selectionModeLabel = new JLabel();
 	
 	private JPanel rootPanel = new JPanel();
 	private JPanel additionalPanel1 = new JPanel();
@@ -49,10 +44,6 @@ public class Step3Panel extends JPanel {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		JPanel selectionModePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		selectionModePanel.add(selectionModeLabel);
-		this.add(selectionModePanel);
-		
 	    this.add(tablePanel);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -62,9 +53,6 @@ public class Step3Panel extends JPanel {
 		this.add(buttonPanel);
 	}
 
-	public void setSelectionModeLabelText(String text) {
-		selectionModeLabel.setText(text);
-	}
 	
 	public void clearAdditionalPanels() {
 		additionalPanel1.removeAll();

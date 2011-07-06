@@ -16,32 +16,32 @@
 	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
 	service="SOS" version="1.0.0">
 	
-	<AssignedSensorId>$sensorURI</AssignedSensorId>
+	<AssignedSensorId>THISsensorURI</AssignedSensorId>
 	
 	<om:Measurement>
 	     
 	     <om:samplingTime>
 	          <gml:TimeInstant>
-	               <gml:timePosition>$timeStamp</gml:timePosition>
+	               <gml:timePosition>THIStimeStamp</gml:timePosition>
 	          </gml:TimeInstant>
 	     </om:samplingTime>
 	     
-	     <om:procedure xlink:href="$sensorURI"/>
-	     <om:observedProperty xlink:href="$observedPropertyURI"/>
+	     <om:procedure xlink:href="THISsensorURI"/>
+	     <om:observedProperty xlink:href="THISobservedPropertyURI"/>
 	     
 	     <om:featureOfInterest>
-	          <sa:SamplingPoint gml:id="$featureOfInterestURI">
-	              <gml:name>$featureOfInterestName</gml:name>
+	          <sa:SamplingPoint gml:id="THISfeatureOfInterestURI">
+	              <gml:name>THISfeatureOfInterestName</gml:name>
 	              <sa:sampledFeature xlink:href=""/>
 	              <sa:position>
 	                <gml:Point>
-	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::$epsgCode">$latitude $longitude</gml:pos>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::THISepsgCode">THISlatitudeValue THISlongitudeValue</gml:pos>
 					</gml:Point>
 	              </sa:position>
 	            </sa:SamplingPoint>
 	     </om:featureOfInterest>
 	     
-	     <om:result uom="$unitOfMeasurementCode">$value</om:result>
+	     <om:result uom="THISunitOfMeasurementCode">THISvalue</om:result>
 	</om:Measurement>
 	
 </InsertObservation>

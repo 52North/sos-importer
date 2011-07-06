@@ -4,16 +4,16 @@ import org.n52.sos.importer.config.EditableComboBoxItems;
 
 public class Step2Model {
 
+	private String csvFileContent;
+	
 	private String selectedColumnSeparator;
 	
 	private String selectedCommentIndicator;
 	
 	private String selectedTextQualifier;
 	
-	private String CSVFileContent;
-	
-	public Step2Model(String CSVFileContent) {
-		this.CSVFileContent = CSVFileContent;
+	public Step2Model() {
+		csvFileContent = "";
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
 		selectedColumnSeparator = (String) items.getColumnSeparators().getElementAt(0);
@@ -46,10 +46,10 @@ public class Step2Model {
 	}
 
 	public String getCSVFileContent() {
-		return CSVFileContent;
+		return csvFileContent;
 	}
 
 	public void setCSVFileContent(String cSVFileContent) {
-		CSVFileContent = cSVFileContent;
+		csvFileContent = cSVFileContent;
 	}
 }

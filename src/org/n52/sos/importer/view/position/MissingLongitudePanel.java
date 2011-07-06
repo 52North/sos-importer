@@ -24,7 +24,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	public MissingLongitudePanel(Position position) {
 		super();
 		this.position = position;
-		longitudeTextField.setText("0°");
+		longitudeTextField.setText("0");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(longitudeLabel);
@@ -34,7 +34,10 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	}
 	
 	public void assignValues() {
-		position.setLongitude(new Longitude(longitudeTextField.getText()));
+		double value = Double.parseDouble(longitudeTextField.getText());
+		String unit = (String) longitudeUnitComboBox.getSelectedItem();
+		Longitude l = new Longitude(value, unit);
+		position.setLongitude(l);
 	}
 	
 	public void unassignValues() {
