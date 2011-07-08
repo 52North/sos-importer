@@ -8,87 +8,77 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.Step6aModel;
-import org.n52.sos.importer.model.Step7Model;
+import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.view.Step6aPanel;
+import org.n52.sos.importer.view.Step6bPanel;
 
 /**
  * Create missing resources for measured values
  * @author Raimund
  */
-public class Step6aController extends StepController {
+public class Step6bController extends StepController {
 	
-	private static final Logger logger = Logger.getLogger(Step6aController.class);
+	private static final Logger logger = Logger.getLogger(Step6bController.class);
 	
-	private Step6aPanel step6aView;
+	private Step6bPanel step6bView;
 	
-	private Step6aModel step6aModel;
+	private Step6bModel step6bModel;
 	
 	private TableController tableController = TableController.getInstance();
 	
-	public Step6aController(Step6aModel step6aModel) {
-		this.step6aModel = step6aModel;
-		Resource resource = step6aModel.getResource();
+	public Step6bController() {	
+	}
+	
+	public Step6bController(Step6bModel step6aModel) {
+		this.step6bModel = step6aModel;
+	}
+	
+	@Override
+	public void loadSettings() {
+		Resource resource = step6bModel.getResource();
 		resource.unassignFromMeasuredValues();
 		String questionText = "New " + resource.toString();	//TODO
 		String markingText = "Mark all measured value columns where the " + resource + " corresponds to:";
 		
-		step6aView = new Step6aPanel(questionText, markingText);
-		step6aView.setResourceName(resource.getName());
-		//step6aView.setResourceURI(resource.getURI().toString());
+		step6bView = new Step6bPanel(questionText, markingText);
+		step6bView.setResourceName(resource.getName());
+		step6bView.setResourceURI(resource.getURIString());
 		
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		tableController.allowMultipleSelection();
 		
-		int[] selectedColumns = step6aModel.getSelectedColumns();
+		int[] selectedColumns = step6bModel.getSelectedColumns();
 		for (int column: selectedColumns) 
 			tableController.selectColumn(column);
-	}
-
+	}	
+	
 	@Override
-	public void back() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getNextStepController() {		
-		//get and check name
-		String name = step6aView.getResourceName();
-		if (name == null) {
-			logger.error("No Name given.");
-			return;
-		}
-		
-		//get and check URI
-		String uri = step6aView.getResourceURI();
-		URI URI = null;
-		try {
-			URI = new URI(uri);
-		} catch (URISyntaxException e) {
-			logger.error("Wrong URI", e);
-			return;
-		}
-		
-		//get selected columns
-		int[] columns = tableController.getSelectedColumns();
-		if (columns.length == 0) {
-			logger.warn("No Columns selected.");
-			return;
-		}
-		step6aModel.setSelectedColumns(columns);
-		
+	public void saveSettings() {
 		//assign selected measured value columns or rows this type
-		Resource resource = step6aModel.getResource();
+		Resource resource = step6bModel.getResource();
+		String name = step6bView.getResourceName();
 		resource.setName(name);
-		resource.setURI(URI);
+	
+		String uri = step6bView.getResourceURI();
+		
+		if (!uri.equals("")) {
+			URI URI = null;
+			try {
+				URI = new URI(uri);
+			} catch (URISyntaxException e) {
+			}
+			resource.setURI(URI);
+		}
+		logger.info("Resource URI:" + resource.getURIString());
+		
+		int[] columns = tableController.getSelectedColumns();	
+		step6bModel.setSelectedColumns(columns);
 		
 		if (resource instanceof FeatureOfInterest)
 			ModelStore.getInstance().addFeatureOfInterest((FeatureOfInterest)resource);
@@ -97,23 +87,20 @@ public class Step6aController extends StepController {
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(c); 
 			resource.assign(mv);
 		}
-		
-		check();
 	}
 	
-	public void check() {
-		//check if there are any measured value rows or columns without this type
-		//if yes, call the particular panel 
-		//if no, go to the new step
+	@Override
+	public StepController getNext() {
 		Resource r = getMissingResourceForMeasuredValues();
 		
-		if (r != null) {
-			Step6aController step6aController = new Step6aController(new Step6aModel(r));
-			MainController.getInstance().setStepController(step6aController);
-		} else {
-			Step7Controller step7Controller = new Step7Controller(new Step7Model(new FeatureOfInterest()));
-			step7Controller.check();
-		}
+		if (r != null) return new Step6bController(new Step6bModel(r));
+			
+		return null;
+	}
+	
+	@Override
+	public StepController getNextStepController() {		
+		return new Step6cController();	
 	}
 	
 	public Resource getMissingResourceForMeasuredValues() {
@@ -141,15 +128,6 @@ public class Step6aController extends StepController {
 		return null;
 	}
 	
-	protected void loadSettings() {
-		// TODO Auto-generated method stub
-		// rows or columns
-		// which rows or columns were selected
-		// name 
-		// uri
-		
-	}	
-	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 
 		@Override
@@ -163,7 +141,7 @@ public class Step6aController extends StepController {
 					return;
 				} 
 				
-				Resource resource = step6aModel.getResource();
+				Resource resource = step6bModel.getResource();
 				if (resource.isAssigned(mv)) {
 					logger.error(resource + " already set for this measured value.");
 					tableController.deselectColumn(column);
@@ -180,11 +158,50 @@ public class Step6aController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 6a: Add missing Metadata";
+		return "Step 6b: Add missing Metadata";
 	}
 
 	@Override
 	public JPanel getStepPanel() {
-		return step6aView;
+		return step6bView;
+	}
+
+	@Override
+	public boolean isNecessary() {
+		Resource r = getMissingResourceForMeasuredValues();	
+		if (r == null) return false;
+		
+		step6bModel = new Step6bModel(r);
+		
+		return true;
+	}
+
+	@Override
+	public boolean isFinished() {
+		//get and check name
+		String name = step6bView.getResourceName();
+		if (name == null) {
+			logger.error("No Name given.");
+			return false;
+		}
+		
+		//get and check URI
+		String uri = step6bView.getResourceURI();
+		URI URI = null;
+		try {
+			URI = new URI(uri);
+		} catch (URISyntaxException e) {
+			logger.error("Wrong URI", e);
+			return false;
+		}
+		
+		//get selected columns
+		int[] columns = tableController.getSelectedColumns();
+		if (columns.length == 0) {
+			logger.warn("No Columns selected.");
+			return false;
+		}
+		
+		return true;
 	}
 }

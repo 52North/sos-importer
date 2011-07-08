@@ -12,8 +12,8 @@ public class Step2Model {
 	
 	private String selectedTextQualifier;
 	
-	public Step2Model() {
-		csvFileContent = "";
+	public Step2Model(String csvFileContent) {
+		this.csvFileContent = csvFileContent;
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
 		selectedColumnSeparator = (String) items.getColumnSeparators().getElementAt(0);

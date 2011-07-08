@@ -1,6 +1,5 @@
 package org.n52.sos.importer.view;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Step6aPanel extends JPanel {
+public class Step6bPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -25,7 +24,7 @@ public class Step6aPanel extends JPanel {
 	private final JLabel markingLabel = new JLabel();
 	private final TablePanel tablePanel = TablePanel.getInstance();
 	
-	public Step6aPanel(String questionText, String markingText) {
+	public Step6bPanel(String questionText, String markingText) {
 		super();
 		questionLabel.setText(questionText);
 		markingLabel.setText(markingText);

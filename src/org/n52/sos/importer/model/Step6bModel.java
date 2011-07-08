@@ -2,13 +2,13 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Resource;
 
-public class Step6aModel {
+public class Step6bModel {
 	
 	private Resource resource;
 	
 	private int[] selectedColumns;
 
-	public Step6aModel(Resource resource) {
+	public Step6bModel(Resource resource) {
 		this.resource = resource;
 		selectedColumns = new int[0];
 	}

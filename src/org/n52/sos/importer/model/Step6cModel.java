@@ -3,13 +3,13 @@ package org.n52.sos.importer.model;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
-public class Step7Model {
+public class Step6cModel {
 	
 	private FeatureOfInterest featureOfInterest;
 
 	private Position position;
 	
-	public Step7Model(FeatureOfInterest featureOfInterest) {
+	public Step6cModel(FeatureOfInterest featureOfInterest) {
 		this.featureOfInterest = featureOfInterest;
 		position = new Position();
 	}

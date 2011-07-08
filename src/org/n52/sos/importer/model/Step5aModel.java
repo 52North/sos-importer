@@ -1,17 +1,12 @@
 package org.n52.sos.importer.model;
 
-import java.util.List;
-
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 
-public class Step4bModel {
-	
-	private List<MeasuredValue> selectedMeasuredValues; //TODO to be replaced by table model
-	
+public class Step5aModel {
+
 	private DateAndTime dateAndTimeModel;
 	
-	public Step4bModel(DateAndTime dateAndTimeModel) {
+	public Step5aModel(DateAndTime dateAndTimeModel) {
 		this.dateAndTimeModel = dateAndTimeModel;
 	}
 
@@ -22,6 +17,5 @@ public class Step4bModel {
 	public DateAndTime getDateAndTimeModel() {
 		return dateAndTimeModel;
 	}
-
 
 }

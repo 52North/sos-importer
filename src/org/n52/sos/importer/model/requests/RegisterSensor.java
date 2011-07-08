@@ -37,7 +37,7 @@ public class RegisterSensor {
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeUnit", latitudeUnit);
 		filledTemplate = filledTemplate.replaceAll("THISlongitudeValue", longitudeValue);
 		filledTemplate = filledTemplate.replaceAll("THISlongitudeUnit", longitudeUnit);
-		filledTemplate = filledTemplate.replaceAll("THISheightValue", longitudeValue);
+		filledTemplate = filledTemplate.replaceAll("THISheightValue", heightValue);
 		filledTemplate = filledTemplate.replaceAll("THISheightUnit", heightUnit);
 		filledTemplate = filledTemplate.replaceAll("THISepsgCode", epsgCode);
 		return filledTemplate; 

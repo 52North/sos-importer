@@ -32,6 +32,24 @@ public class Step3bController extends StepController {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isNecessary() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isFinished() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public StepController getNext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	private class RowSelectionChanged {

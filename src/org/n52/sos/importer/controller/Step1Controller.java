@@ -17,11 +17,13 @@ import org.n52.sos.importer.view.Step1Panel;
 public class Step1Controller extends StepController {
 	
 	private Step1Panel step1Panel;
+	
 	private Step1Model step1Model;
+	
+	private String tmpCSVFileContent;
 	
 	public Step1Controller() {
 		step1Model = new Step1Model();
-		step1Panel = new Step1Panel(this);
 	}
 	
 	@Override
@@ -30,7 +32,9 @@ public class Step1Controller extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {		
+	public void loadSettings() {	
+		step1Panel = new Step1Panel(this);
+		
 		//disable "back" button
 		BackNextController.getInstance().setBackButtonEnabled(false);
 		
@@ -38,76 +42,15 @@ public class Step1Controller extends StepController {
 		step1Panel.setCSVFilePath(csvFilePath);
 	}
 	
+	@Override
 	public void saveSettings() {
 		String csvFilePath = step1Panel.getCSVFilePath();
 		step1Model.setCSVFilePath(csvFilePath);
-	}
-
-	@Override
-	public StepController getNextStepController() {
-		String filePath = step1Panel.getCSVFilePath();
 		
-		if (filePath.equals("")) {
-			JOptionPane.showMessageDialog(null,
-				    "Please choose a CSV file",
-				    "File missing",
-				    JOptionPane.WARNING_MESSAGE);
-			return null;
-		}		
+		//show "back" button
+		BackNextController.getInstance().setBackButtonEnabled(true);
 		
-		File f = new File(filePath);
-		if (isValid(f)) {
-			String csvFileContent = readFile(f);
-			//show "back" button
-			BackNextController.getInstance().setBackButtonEnabled(true);
-					
-			Step2Model s2m = new Step2Model();
-			s2m.setCSVFileContent(csvFileContent);
-			return new Step2Controller(s2m);
-		}
-		return null;
-	}
-	
-	private boolean isValid(File f) {		
-		if (!f.exists()) {
-			JOptionPane.showMessageDialog(null,
-				    "The specified file does not exist.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		
-		if (!f.isFile()) {
-			JOptionPane.showMessageDialog(null,
-				    "Please specify a file, not a directory.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-			
-		if (!f.canRead()) {
-			JOptionPane.showMessageDialog(null,
-				    "No reading access on the specified file.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		return true;
-	}
-	
-	private String readFile(File f) {
-		StringBuilder sb = new StringBuilder();
-		try {
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			
-			String line;
-			while ((line = br.readLine()) != null)
-				sb.append(line + "\n");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		return sb.toString();
+		step1Panel = null;
 	}
 	
 	public void browseButtonClicked() {
@@ -133,5 +76,81 @@ public class Step1Controller extends StepController {
 	@Override
 	public JPanel getStepPanel() {
 		return step1Panel;
+	}
+
+	@Override
+	public boolean isNecessary() {
+		return true;
+	}
+
+	@Override
+	public boolean isFinished() {
+		String filePath = step1Panel.getCSVFilePath();
+		
+		if (filePath.equals("")) {
+			JOptionPane.showMessageDialog(null,
+				    "Please choose a CSV file",
+				    "File missing",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}	
+			
+		File f = new File(filePath);
+		
+		if (!f.exists()) {
+			JOptionPane.showMessageDialog(null,
+				    "The specified file does not exist.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		if (!f.isFile()) {
+			JOptionPane.showMessageDialog(null,
+				    "Please specify a file, not a directory.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+			
+		if (!f.canRead()) {
+			JOptionPane.showMessageDialog(null,
+				    "No reading access on the specified file.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
+		tmpCSVFileContent = readFile(f);
+		
+		return true;
+	}
+	
+	private String readFile(File f) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			
+			String line;
+			while ((line = br.readLine()) != null)
+				sb.append(line + "\n");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public StepController getNext() {
+		return null;
+	}
+	
+	@Override
+	public StepController getNextStepController() {			
+		Step2Model s2m = new Step2Model(tmpCSVFileContent);
+		tmpCSVFileContent = null;
+		
+		return new Step2Controller(s2m);
 	}
 }

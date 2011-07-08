@@ -23,8 +23,18 @@ public abstract class StepController {
 	
 	/**
 	 * returns the controller for the next step
-	 * and null when this step is not finished yet
 	 * @return
 	 */
 	public abstract StepController getNextStepController();
+	
+	public abstract boolean isNecessary();
+	
+	public abstract boolean isFinished();
+	
+	/**
+	 * returns a StepController of the same type
+	 * or null when this step is finished
+	 * @return
+	 */
+	public abstract StepController getNext();
 }

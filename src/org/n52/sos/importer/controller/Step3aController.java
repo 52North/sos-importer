@@ -1,14 +1,12 @@
 package org.n52.sos.importer.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
-import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
@@ -28,7 +26,6 @@ public class Step3aController extends StepController {
 	private TableController tableController = TableController.getInstance();
 	
 	public Step3aController() {
-		step3Panel = new Step3Panel();
 		step3aModel = new Step3aModel();
 	}
 	
@@ -43,7 +40,9 @@ public class Step3aController extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {		
+	public void loadSettings() {	
+		step3Panel = new Step3Panel();
+		
 		tableController.allowSingleSelection();
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.addSingleSelectionListener(new TableSelectionChanged());
@@ -57,16 +56,11 @@ public class Step3aController extends StepController {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
 		step3aModel.putColumnIntoStore(step3aModel.getSelectedColumn(), selection);	
-	}
-
-	@Override
-	public StepController getNextStepController() {
-
+	
 		List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
 		List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
 		List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 		List<Sensor> sensorNames = new ArrayList<Sensor>();
-		LinkedList<DateAndTime> dateAndTimes = new LinkedList<DateAndTime>();
 		
 		for (Integer k: step3aModel.getStoredColumns()) {
 			System.out.print(k + ": ");
@@ -91,10 +85,9 @@ public class Step3aController extends StepController {
 				if (column.get(1).equals("Combination")) {
 					String pattern = column.get(2);
 					DateAndTimeController dtc = new DateAndTimeController();
-					dtc.assignPattern(pattern, new Column(k));
-					
+					dtc.assignPattern(pattern, new Column(k));			
 					DateAndTime dtm = dtc.getDateAndTime();
-					dateAndTimes.add(dtm);
+					ModelStore.getInstance().add(dtm);
 				}
 			} else if (column.get(0).equals("Feature Of Interest")) {
 				FeatureOfInterest foi = new FeatureOfInterest();
@@ -113,21 +106,14 @@ public class Step3aController extends StepController {
 				sm.setTableElement(new Column(k));
 				sensorNames.add(sm);
 			}
-		}
+		}	
 		
-		ModelStore.getInstance().setDateAndTimeModelIterator(dateAndTimes.listIterator());
-		
-		DateAndTime dtm = ModelStore.getInstance().getNextUnassignedDateAndTime();
-		if (dtm != null) {
-			Step4bModel step4bModel = new Step4bModel(dtm);
-			return new Step4bController(step4bModel);
-		}
-		
-		return null;
-		
-		
-		// TODO Auto-generated method stub
-		
+		step3Panel = null;
+	}
+
+	@Override
+	public StepController getNextStepController() {		
+		return new Step4aController();	
 	}
 	
 	private class TableSelectionChanged implements TableController.SingleSelectionListener {
@@ -154,5 +140,20 @@ public class Step3aController extends StepController {
 			// TODO Auto-generated method stub
 			
 		}
+	}
+
+	@Override
+	public boolean isNecessary() {
+		return true;
+	}
+
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
+
+	@Override
+	public StepController getNext() {
+		return null;
 	}	
 }

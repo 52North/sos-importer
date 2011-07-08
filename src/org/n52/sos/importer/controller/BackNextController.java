@@ -31,13 +31,26 @@ public class BackNextController {
 	
 	public void nextButtonClicked() {
 		StepController currentSC = backNextModel.getCurrentStepController();
+		if (!currentSC.isFinished()) return;
+		
 		currentSC.saveSettings();
+		backNextModel.addStepController(currentSC);	//put controller on stack
 		
-		StepController nextSC = currentSC.getNextStepController();
-		if (nextSC == null) return;
+		//next step controller of this type	
+		StepController nextSC = currentSC.getNext(); 
+		if (nextSC != null) {
+			MainController.getInstance().setStepController(nextSC);
+			return;
+		}
+
+		//next step controller of another type
+		nextSC = currentSC.getNextStepController();		
 		
-		backNextModel.addStepController(currentSC);	
+		if (nextSC == null) return; //TODO ende
 		
+		while (!nextSC.isNecessary())
+			nextSC = nextSC.getNextStepController();
+
 		MainController.getInstance().setStepController(nextSC);
 	}
 	

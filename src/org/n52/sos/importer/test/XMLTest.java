@@ -2,10 +2,10 @@ package org.n52.sos.importer.test;
 
 import javax.swing.JFrame;
 
-import org.n52.sos.importer.controller.Step6aController;
+import org.n52.sos.importer.controller.Step6bController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
@@ -22,8 +22,8 @@ public class XMLTest {
 		MeasuredValue mv = new NumericValue();
 		mv.setTableElement(new Column(2));
 		ModelStore.getInstance().addMeasuredValue(mv);
-		Step6aModel step6aModel = new Step6aModel(new FeatureOfInterest());
-		f.add(new Step6aController(step6aModel).getStepPanel());
+		Step6bModel step6aModel = new Step6bModel(new FeatureOfInterest());
+		f.add(new Step6bController(step6aModel).getStepPanel());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
 		f.setLocationRelativeTo(null);

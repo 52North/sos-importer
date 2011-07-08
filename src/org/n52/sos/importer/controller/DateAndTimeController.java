@@ -120,6 +120,31 @@ public class DateAndTimeController {
 		}		
 	}
 	
+	public DateAndTime getNextUnassignedDateAndTime() {
+		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes())
+			if (isAssignedToMeasuredValue(dateAndTime))
+				return dateAndTime;	
+		return null;
+	}
+	
+	public DateAndTime getNextDateAndTimeWithMissingValues() {
+		List<MissingDateAndTimePanel> missingComponentPanels;
+		
+		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
+			missingComponentPanels = getMissingComponentPanels();
+			if (missingComponentPanels.size() > 0)
+				return dateAndTime;
+		}
+		return null;
+	}
+	
+	public boolean isAssignedToMeasuredValue(DateAndTime dateAndTime) {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
+			if (mv.getDateAndTime().equals(dateAndTime))
+				return true;
+		return false;
+	}
+	
 	public void mark(Color color) {
 		if (dateAndTime.getSecond() != null)
 			dateAndTime.getSecond().mark(color);

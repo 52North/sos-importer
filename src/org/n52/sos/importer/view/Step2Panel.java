@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.n52.sos.importer.EditableJComboBox;
+import org.n52.sos.importer.EditableJComboBoxPanel;
 import org.n52.sos.importer.config.EditableComboBoxItems;
 
 public class Step2Panel extends JPanel {
@@ -17,9 +17,9 @@ public class Step2Panel extends JPanel {
 	private final JLabel commentIndicatorLabel = new JLabel("Comment indicator:");
 	private final JLabel textQualifierLabel = new JLabel("Text qualifier:");
 	
-	private final EditableJComboBox columnSeparatorCombobox;
-	private final EditableJComboBox commentIndicatorCombobox;
-	private final EditableJComboBox textQualifierCombobox;
+	private final EditableJComboBoxPanel columnSeparatorCombobox;
+	private final EditableJComboBoxPanel commentIndicatorCombobox;
+	private final EditableJComboBoxPanel textQualifierCombobox;
 	
 	private final JTextArea csvFileTextArea = new JTextArea(7, 30); 
 	
@@ -27,9 +27,9 @@ public class Step2Panel extends JPanel {
 		super();
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		columnSeparatorCombobox = new EditableJComboBox(items.getColumnSeparators());
-		commentIndicatorCombobox = new EditableJComboBox(items.getCommentIndicators());
-		textQualifierCombobox = new EditableJComboBox(items.getTextQualifiers());
+		columnSeparatorCombobox = new EditableJComboBoxPanel(items.getColumnSeparators());
+		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators());
+		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers());
 		
 		csvFileTextArea.setEditable(false);		
 		

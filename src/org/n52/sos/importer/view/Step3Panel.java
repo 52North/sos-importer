@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.ButtonGroupPanel;
-import org.n52.sos.importer.EditableJComboBox;
+import org.n52.sos.importer.EditableJComboBoxPanel;
 import org.n52.sos.importer.ExampleFormatLabel;
 import org.n52.sos.importer.ParseTestLabel;
 import org.n52.sos.importer.Parseable;
@@ -278,7 +278,7 @@ public class Step3Panel extends JPanel {
 		        private final JLabel exampleLabel = new JLabel("Example: ");
 			
 		        private final DefaultComboBoxModel dateAndTimePatterns = EditableComboBoxItems.getInstance().getDateAndTimePatterns();
-		        private final EditableJComboBox dateAndTimeComboBox = new EditableJComboBox(dateAndTimePatterns);
+		        private final EditableJComboBoxPanel dateAndTimeComboBox = new EditableJComboBoxPanel(dateAndTimePatterns);
 		        
 		        private final ParseTestLabel parseTestLabel = new ParseTestLabel(dateAndTime);
 		        private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(dateAndTime);
@@ -287,8 +287,6 @@ public class Step3Panel extends JPanel {
 					super(additionalPanel2);
 					setDefaultSelection();
 					dateAndTimeComboBox.addActionListener(new FormatChanged());
-					
-					dateAndTimeComboBox.setEditable(true);		
 					
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
 					

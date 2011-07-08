@@ -1,41 +1,49 @@
 package org.n52.sos.importer.view;
 
-import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+
+import org.n52.sos.importer.view.dateAndTime.MissingDateAndTimePanel;
 
 public class Step5aPanel extends JPanel {
-	
-	private static final long serialVersionUID = 1L;
 
-	private final JLabel questionLabel = new JLabel();
+	private static final long serialVersionUID = 1L;
 	
-	private final JLabel nameLabel = new JLabel();
+	private final Color markingColor = Color.green;
 	
-	private final JLabel uriLabel = new JLabel();
+	private final JLabel descriptionLabel = new JLabel("Complete missing information " +
+														"for the marked date and time.");
+
+	private final JPanel containerPanel = new JPanel();
 	
-	private final JTextField nameTextField = new JTextField(20);
+	private final TablePanel tablePanel = TablePanel.getInstance();
 	
-	private final JTextField uriTextField = new JTextField(20);
-	
-	public Step5aPanel(List<String> names) {
+	public Step5aPanel() {
 		super();
+
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.add(questionLabel);
+		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		descriptionPanel.add(descriptionLabel);
+		this.add(descriptionPanel);
 		
-		JPanel nameURIPanel = new JPanel();
-		nameURIPanel.setLayout(new GridLayout(names.size(), 4));
-		for (String name: names) {
-			nameURIPanel.add(nameLabel);
-			nameURIPanel.add(nameTextField);
-			nameTextField.setText(name);
-			nameTextField.setEditable(false);
-			nameURIPanel.add(uriLabel);
-			nameURIPanel.add(uriTextField);
+		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
+		this.add(containerPanel);
+
+		this.add(tablePanel);
+	}
+	
+	public void addMissingComponentPanels(List<MissingDateAndTimePanel> missingComponentPanels) {
+		for (MissingDateAndTimePanel mcp: missingComponentPanels) {
+			containerPanel.add(mcp);
 		}
+	}
+
+	public Color getMarkingColor() {
+		return markingColor;
 	}
 }

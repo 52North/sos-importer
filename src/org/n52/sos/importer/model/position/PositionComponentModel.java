@@ -66,11 +66,11 @@ public class PositionComponentModel {
 	public String getParsedUnit() {
 		if (unit == null || unit.equals(""))
 			return "n/a";
-		else if (unit.equals("meters")) 
+		else if (unit.equals("m") || unit.equals("meters")) 
 			return "m";
-		else if (unit.equals("feet"))
+		else if (unit.equals("ft") || unit.equals("feet"))
 			return "ft";
-		else if (unit.equals("°"))
+		else if (unit.equals("degree") || unit.equals("°"))
 			return "degree";
 		return "n/a";
 	}

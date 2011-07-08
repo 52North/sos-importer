@@ -1,47 +1,24 @@
 package org.n52.sos.importer.view;
 
-import java.awt.FlowLayout;
-import java.util.List;
-
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.EditableJComboBoxPanel;
+import org.n52.sos.importer.config.EditableComboBoxItems;
 
 public class Step7Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
-	private final JLabel featureOfInterestLabel = new JLabel("Please choose the position " +
-			"for the following feature of interest:");
-	private final JTextField featureOfInterestTextField = new JTextField(10);
 	
-	private final JPanel containerPanel = new JPanel();
+	private final EditableJComboBoxPanel sosComboBox;
 	
 	public Step7Panel() {
-		super();
-		featureOfInterestTextField.setEditable(false);
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
-		JPanel featureOfInterestPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		featureOfInterestPanel.add(featureOfInterestLabel);
-		featureOfInterestPanel.add(featureOfInterestTextField);
-		this.add(featureOfInterestPanel);
-		
-		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
-		this.add(containerPanel);
-		
+		sosComboBox = new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getSosURLs());
+		this.add(sosComboBox);
 	}
 	
-	public void addMissingComponentPanels(List<MissingComponentPanel> missingComponentPanels) {
-		for (MissingComponentPanel mcp: missingComponentPanels) {
-			containerPanel.add(mcp);
-		}
-	}
-	
-	public void setFeatureOfInterestName(String name) {
-		featureOfInterestTextField.setText(name);
+	public String getSOSURL() {
+		return (String) sosComboBox.getSelectedItem();
 	}
 }
+
+
