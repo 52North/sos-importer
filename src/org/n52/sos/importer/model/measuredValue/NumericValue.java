@@ -5,9 +5,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.n52.sos.importer.Formatable;
-import org.n52.sos.importer.Parseable;
 
-public class NumericValue extends MeasuredValue implements Formatable, Parseable {
+public class NumericValue extends MeasuredValue implements Formatable {
 
 	private String decimalSeparator;
 	
@@ -35,7 +34,7 @@ public class NumericValue extends MeasuredValue implements Formatable, Parseable
 	}
 	
 	@Override
-	public Object parse(String s) {
+	public Double parse(String s) {
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 		symbols.setDecimalSeparator(decimalSeparator.charAt(0));
 		symbols.setGroupingSeparator(thousandsSeparator.charAt(0));

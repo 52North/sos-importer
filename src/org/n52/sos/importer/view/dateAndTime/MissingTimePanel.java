@@ -18,7 +18,7 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel timeLabel = new JLabel("Time: ");
-	
+
 	private SpinnerDateModel timeModel;
 	private JSpinner timeSpinner;
 	

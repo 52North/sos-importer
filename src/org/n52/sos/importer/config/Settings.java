@@ -45,6 +45,22 @@ public class Settings {
 	private String[] epsgCodes;
 	
 	private String[] sosURLs;
+	
+	private String[] featureOfInterestNames;
+	
+	private String[] observedPropertyNames;
+	
+	private String[] unitOfMeasurementCodes;
+	
+	private String[] sensorNames;
+	
+	private String[] featureOfInterestURIs;
+	
+	private String[] observedPropertyURIs;
+	
+	private String[] unitOfMeasurementURIs;
+	
+	private String[] sensorURIs;
 
 	private Settings() {
 		load();
@@ -80,9 +96,20 @@ public class Settings {
 		this.dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));	
 		this.epsgCodes = parse(props.getProperty("epsgCodes"));	
 		this.sosURLs = parse(props.getProperty("sosURLs"));	
+		
+		this.featureOfInterestNames = parse(props.getProperty("featureOfInterestNames"));	
+		this.observedPropertyNames = parse(props.getProperty("observedPropertyNames"));	
+		this.unitOfMeasurementCodes = parse(props.getProperty("unitOfMeasurementCodes"));	
+		this.sensorNames = parse(props.getProperty("sensorNames"));	
+		this.featureOfInterestURIs = parse(props.getProperty("featureOfInterestURIs"));	
+		this.observedPropertyURIs = parse(props.getProperty("observedPropertyURIs"));	
+		this.unitOfMeasurementURIs = parse(props.getProperty("unitOfMeasurementURIs"));	
+		this.sensorURIs = parse(props.getProperty("sensorURIs"));	
+		
 	}
 	
 	public String[] parse(String property) {
+		if (property == null) return new String[0];
 		String[] values = property.split(SEPARATOR);
 		for (int i = 0; i < values.length; i++) 
 			values[i] = values[i].trim();
@@ -96,6 +123,15 @@ public class Settings {
 		props.setProperty("dateAndTimePatterns", format(EditableComboBoxItems.getInstance().getDateAndTimePatterns()));
 		props.setProperty("epsgCodes", format(EditableComboBoxItems.getInstance().getEPSGCodes()));
 		props.setProperty("sosURLs", format(EditableComboBoxItems.getInstance().getSosURLs()));
+		
+		props.setProperty("featureOfInterestNames", format(EditableComboBoxItems.getInstance().getFeatureOfInterestNames()));
+		props.setProperty("observedPropertyNames", format(EditableComboBoxItems.getInstance().getObservedPropertyNames()));
+		props.setProperty("unitOfMeasurementCodes", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes()));
+		props.setProperty("sensorNames", format(EditableComboBoxItems.getInstance().getSensorNames()));
+		props.setProperty("featureOfInterestURIs", format(EditableComboBoxItems.getInstance().getFeatureOfInterestURIs()));
+		props.setProperty("observedPropertyURIs", format(EditableComboBoxItems.getInstance().getObservedPropertyURIs()));
+		props.setProperty("unitOfMeasurementURIs", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
+		props.setProperty("sensorURIs", format(EditableComboBoxItems.getInstance().getSensorURIs()));
 		
 		URL url = this.getClass().getResource(FILE_PATH);
 		File file;
@@ -119,6 +155,70 @@ public class Settings {
 			sb.append(dcbm.getElementAt(i) + " " + SEPARATOR);
 		}
 		return sb.toString();
+	}
+	
+	public String[] getFeatureOfInterestNames() {
+		return featureOfInterestNames;
+	}
+
+	public void setFeatureOfInterestNames(String[] featureOfInterestNames) {
+		this.featureOfInterestNames = featureOfInterestNames;
+	}
+
+	public String[] getObservedPropertyNames() {
+		return observedPropertyNames;
+	}
+
+	public void setObservedPropertyNames(String[] observedPropertyNames) {
+		this.observedPropertyNames = observedPropertyNames;
+	}
+
+	public String[] getUnitOfMeasurementCodes() {
+		return unitOfMeasurementCodes;
+	}
+
+	public void setUnitOfMeasurementCodes(String[] unitOfMeasurementCodes) {
+		this.unitOfMeasurementCodes = unitOfMeasurementCodes;
+	}
+
+	public String[] getSensorNames() {
+		return sensorNames;
+	}
+
+	public void setSensorNames(String[] sensorNames) {
+		this.sensorNames = sensorNames;
+	}
+
+	public String[] getFeatureOfInterestURIs() {
+		return featureOfInterestURIs;
+	}
+
+	public void setFeatureOfInterestURIs(String[] featureOfInterestURIs) {
+		this.featureOfInterestURIs = featureOfInterestURIs;
+	}
+
+	public String[] getObservedPropertyURIs() {
+		return observedPropertyURIs;
+	}
+
+	public void setObservedPropertyURIs(String[] observedPropertyURIs) {
+		this.observedPropertyURIs = observedPropertyURIs;
+	}
+
+	public String[] getUnitOfMeasurementURIs() {
+		return unitOfMeasurementURIs;
+	}
+
+	public void setUnitOfMeasurementURIs(String[] unitOfMeasurementURIs) {
+		this.unitOfMeasurementURIs = unitOfMeasurementURIs;
+	}
+
+	public String[] getSensorURIs() {
+		return sensorURIs;
+	}
+
+	public void setSensorURIs(String[] sensorURIs) {
+		this.sensorURIs = sensorURIs;
 	}
 	
 	public String[] getDecimalSeparators() {

@@ -16,7 +16,23 @@ public class EditableComboBoxItems {
 	
 	private DefaultComboBoxModel EPSGCodes;
 	
-	private DefaultComboBoxModel sensorObservationServices;
+	private DefaultComboBoxModel featureOfInterestNames;
+	
+	private DefaultComboBoxModel observedPropertyNames;
+	
+	private DefaultComboBoxModel unitOfMeasurementCodes;
+	
+	private DefaultComboBoxModel sensorNames;
+	
+	private DefaultComboBoxModel featureOfInterestURIs;
+	
+	private DefaultComboBoxModel observedPropertyURIs;
+	
+	private DefaultComboBoxModel unitOfMeasurementURIs;
+	
+	private DefaultComboBoxModel sensorURIs;
+
+	private DefaultComboBoxModel sosURLs;
 	
 	private EditableComboBoxItems() {
 		setColumnSeparators(new DefaultComboBoxModel(
@@ -29,8 +45,25 @@ public class EditableComboBoxItems {
 				Settings.getInstance().getDateAndTimePatterns()));	
 		setEPSGCodes(new DefaultComboBoxModel(
 				Settings.getInstance().getEpsgCodes()));
-		setSensorObservationServices(new DefaultComboBoxModel(
+		setSosURLs(new DefaultComboBoxModel(
 				Settings.getInstance().getSosURLs()));
+		
+		setFeatureOfInterestNames(new DefaultComboBoxModel(
+				Settings.getInstance().getFeatureOfInterestNames()));
+		setObservedPropertyNames(new DefaultComboBoxModel(
+				Settings.getInstance().getObservedPropertyNames()));
+		setUnitOfMeasurementCodes(new DefaultComboBoxModel(
+				Settings.getInstance().getUnitOfMeasurementCodes()));
+		setSensorNames(new DefaultComboBoxModel(
+				Settings.getInstance().getSensorNames()));	
+		setFeatureOfInterestURIs(new DefaultComboBoxModel(
+				Settings.getInstance().getFeatureOfInterestURIs()));
+		setObservedPropertyURIs(new DefaultComboBoxModel(
+				Settings.getInstance().getObservedPropertyURIs()));
+		setUnitOfMeasurementURIs(new DefaultComboBoxModel(
+				Settings.getInstance().getUnitOfMeasurementURIs()));
+		setSensorURIs(new DefaultComboBoxModel(
+				Settings.getInstance().getSensorURIs()));
 	}
 
 	public static EditableComboBoxItems getInstance() {
@@ -79,12 +112,78 @@ public class EditableComboBoxItems {
 		EPSGCodes = ePSGCodes;
 	}
 
-	public void setSensorObservationServices(DefaultComboBoxModel sensorObservationServices) {
-		this.sensorObservationServices = sensorObservationServices;
+	public void setSosURLs(DefaultComboBoxModel sosURLs) {
+		this.sosURLs = sosURLs;
 	}
 
 	public DefaultComboBoxModel getSosURLs() {
-		return sensorObservationServices;
+		return sosURLs;
+	}
+	
+	public DefaultComboBoxModel getFeatureOfInterestNames() {
+		return featureOfInterestNames;
+	}
+
+	public void setFeatureOfInterestNames(
+			DefaultComboBoxModel featureOfInterestNames) {
+		this.featureOfInterestNames = featureOfInterestNames;
+	}
+
+	public DefaultComboBoxModel getObservedPropertyNames() {
+		return observedPropertyNames;
+	}
+
+	public void setObservedPropertyNames(DefaultComboBoxModel observedPropertyNames) {
+		this.observedPropertyNames = observedPropertyNames;
+	}
+
+	public DefaultComboBoxModel getUnitOfMeasurementCodes() {
+		return unitOfMeasurementCodes;
+	}
+
+	public void setUnitOfMeasurementCodes(
+			DefaultComboBoxModel unitOfMeasurementCodes) {
+		this.unitOfMeasurementCodes = unitOfMeasurementCodes;
+	}
+
+	public DefaultComboBoxModel getSensorNames() {
+		return sensorNames;
+	}
+
+	public void setSensorNames(DefaultComboBoxModel sensorNames) {
+		this.sensorNames = sensorNames;
+	}
+
+	public DefaultComboBoxModel getFeatureOfInterestURIs() {
+		return featureOfInterestURIs;
+	}
+
+	public void setFeatureOfInterestURIs(DefaultComboBoxModel featureOfInterestURIs) {
+		this.featureOfInterestURIs = featureOfInterestURIs;
+	}
+
+	public DefaultComboBoxModel getObservedPropertyURIs() {
+		return observedPropertyURIs;
+	}
+
+	public void setObservedPropertyURIs(DefaultComboBoxModel observedPropertyURIs) {
+		this.observedPropertyURIs = observedPropertyURIs;
+	}
+
+	public DefaultComboBoxModel getUnitOfMeasurementURIs() {
+		return unitOfMeasurementURIs;
+	}
+
+	public void setUnitOfMeasurementURIs(DefaultComboBoxModel unitOfMeasurementURIs) {
+		this.unitOfMeasurementURIs = unitOfMeasurementURIs;
+	}
+
+	public DefaultComboBoxModel getSensorURIs() {
+		return sensorURIs;
+	}
+
+	public void setSensorURIs(DefaultComboBoxModel sensorURIs) {
+		this.sensorURIs = sensorURIs;
 	}
 	
 }

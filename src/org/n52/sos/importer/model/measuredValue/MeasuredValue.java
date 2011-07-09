@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
@@ -20,7 +21,7 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 
-public abstract class MeasuredValue  {
+public abstract class MeasuredValue implements Parseable {
 	
 	private static final Logger logger = Logger.getLogger(MeasuredValue.class);
 	
@@ -101,8 +102,8 @@ public abstract class MeasuredValue  {
 			//the cell of the current Measured Value
 			Cell c = new Cell(i, column.getNumber());
 			String value = TableController.getInstance().getValueAt(c);
-			//TODO String parsedValue = parse(value);
-			io.setValue(value);
+			String parsedValue = parse(value).toString();
+			io.setValue(parsedValue);
 			
 			//when was the current Measured Value measured
 			dtc.setDateAndTime(getDateAndTime());

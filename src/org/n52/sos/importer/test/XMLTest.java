@@ -16,18 +16,6 @@ public class XMLTest {
 
 	public static void main(String[] args) {
 
-		JFrame f = new JFrame();
-		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
-		TableController.getInstance().setContent(o);
-		MeasuredValue mv = new NumericValue();
-		mv.setTableElement(new Column(2));
-		ModelStore.getInstance().addMeasuredValue(mv);
-		Step6bModel step6aModel = new Step6bModel(new FeatureOfInterest());
-		f.add(new Step6bController(step6aModel).getStepPanel());
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.pack();
-		f.setLocationRelativeTo(null);
-		f.setVisible(true);
 
 		/*
 		InsertObservationDocument i = InsertObservationDocument.Factory.newInstance();

@@ -1,16 +1,25 @@
 package org.n52.sos.importer.model;
 
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.Resource;
 
 public class Step6bModel {
 	
-	private Resource resource;
+	private MeasuredValue measuredValue;
 	
-	private int[] selectedColumns;
+	private Resource resource;
 
-	public Step6bModel(Resource resource) {
-		this.resource = resource;
-		selectedColumns = new int[0];
+	public Step6bModel(MeasuredValue measuredValue, Resource resource) {
+		setMeasuredValue(measuredValue);
+		setResource(resource);
+	}
+	
+	public void setMeasuredValue(MeasuredValue measuredValue) {
+		this.measuredValue = measuredValue;
+	}
+
+	public MeasuredValue getMeasuredValue() {
+		return measuredValue;
 	}
 	
 	public void setResource(Resource resource) {
@@ -19,13 +28,5 @@ public class Step6bModel {
 
 	public Resource getResource() {
 		return resource;
-	}
-
-	public void setSelectedColumns(int[] selectedColumns) {
-		this.selectedColumns = selectedColumns;
-	}
-
-	public int[] getSelectedColumns() {
-		return selectedColumns;
 	}
 }

@@ -20,6 +20,8 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 
 	private final JLabel dateLabel = new JLabel("Date: ");
 	
+	private DateAndTime dateAndTime;
+	
 	private SpinnerDateModel dateModel;
 	private JSpinner dateSpinner;
 	

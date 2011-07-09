@@ -1,8 +1,7 @@
 package org.n52.sos.importer.model.measuredValue;
 
-import org.n52.sos.importer.Parseable;
 
-public class Boolean extends MeasuredValue implements Parseable {
+public class Boolean extends MeasuredValue {
 
 	@Override
 	public String toString() {

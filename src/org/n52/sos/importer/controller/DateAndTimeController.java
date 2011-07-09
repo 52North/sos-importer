@@ -17,7 +17,6 @@ import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.view.dateAndTime.MissingDateAndTimePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingDayPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingHourPanel;
@@ -27,12 +26,13 @@ import org.n52.sos.importer.view.dateAndTime.MissingSecondPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingYearPanel;
+import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class DateAndTimeController {
 	
 	private DateAndTime dateAndTime;
 	
-	private List<MissingDateAndTimePanel> missingComponentPanels;
+	private List<MissingComponentPanel> missingComponentPanels;
 	
 	public DateAndTimeController() {
 		dateAndTime = new DateAndTime();
@@ -42,8 +42,8 @@ public class DateAndTimeController {
 		this.dateAndTime = dateAndTime;
 	}
 	
-	public List<MissingDateAndTimePanel> getMissingComponentPanels() {		
-		missingComponentPanels = new ArrayList<MissingDateAndTimePanel>();
+	public List<MissingComponentPanel> getMissingComponentPanels() {		
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		
 		if (dateAndTime.getDay() == null && 
 			dateAndTime.getMonth() == null && 
@@ -85,7 +85,7 @@ public class DateAndTimeController {
 	}
 	
 	public void assignMissingComponentValues() {
-		for (MissingDateAndTimePanel mcp: missingComponentPanels) 
+		for (MissingComponentPanel mcp: missingComponentPanels) 
 			mcp.assignValues();
 	}
 	
@@ -128,7 +128,7 @@ public class DateAndTimeController {
 	}
 	
 	public DateAndTime getNextDateAndTimeWithMissingValues() {
-		List<MissingDateAndTimePanel> missingComponentPanels;
+		List<MissingComponentPanel> missingComponentPanels;
 		
 		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
 			missingComponentPanels = getMissingComponentPanels();

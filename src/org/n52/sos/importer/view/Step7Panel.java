@@ -12,7 +12,8 @@ public class Step7Panel extends JPanel {
 	private final EditableJComboBoxPanel sosComboBox;
 	
 	public Step7Panel() {
-		sosComboBox = new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getSosURLs());
+		sosComboBox = new EditableJComboBoxPanel(
+				EditableComboBoxItems.getInstance().getSosURLs(), "URL");
 		this.add(sosComboBox);
 	}
 	

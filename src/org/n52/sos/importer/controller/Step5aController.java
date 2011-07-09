@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -7,7 +8,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.Step5aPanel;
-import org.n52.sos.importer.view.dateAndTime.MissingDateAndTimePanel;
+import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class Step5aController extends StepController {
 
@@ -27,17 +28,16 @@ public class Step5aController extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {
-		step5aPanel = new Step5aPanel();
-		
+	public void loadSettings() {		
 		TableController.getInstance().deselectAllColumns();
 		TableController.getInstance().turnSelectionOff();
 		
 		dateAndTimeController = new DateAndTimeController(step5aModel.getDateAndTimeModel());
-		dateAndTimeController.mark(step5aPanel.getMarkingColor());
+		dateAndTimeController.mark(Color.green);
 		
-		List<MissingDateAndTimePanel> addMissingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
-		step5aPanel.addMissingComponentPanels(addMissingComponentPanels);
+		String description = "Complete missing information for the marked date and time.";
+		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
+		step5aPanel = new Step5aPanel(description, missingComponentPanels);
 	}
 
 	@Override

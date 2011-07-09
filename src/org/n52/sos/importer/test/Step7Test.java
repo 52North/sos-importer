@@ -23,8 +23,8 @@ import org.n52.sos.importer.model.table.Column;
 public class Step7Test {
 	public static void main(String[] args) {
 		Object[][] o = {
-				{"01/06/2010 00:00", "12.12", "23.123"},
-				{"01/06/2010 01:00", "323.123", "432.123"}};
+				{"01/06/2010 00:00", "12,12", "23,123"},
+				{"01/06/2010 01:00", "323,123", "432,123"}};
 		TableController.getInstance().setContent(o); 
 		
 		DateAndTime dtm = new DateAndTime();
@@ -50,9 +50,11 @@ public class Step7Test {
 		FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("Weatherstation Muenster");
 		Sensor sn = new Sensor();
-		sn.setName("Thermometer xy");
+		sn.setName("Thermometer xyz");
 		
 		NumericValue nv1 = new NumericValue();
+		nv1.setDecimalSeparator(",");
+		nv1.setThousandsSeparator(".");
 		nv1.setTableElement(new Column(1));
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
@@ -61,6 +63,8 @@ public class Step7Test {
 		nv1.setUnitOfMeasurement(uom);
 		
 		NumericValue nv2 = new NumericValue();
+		nv2.setDecimalSeparator(",");
+		nv2.setThousandsSeparator(".");
 		nv2.setTableElement(new Column(2));
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);

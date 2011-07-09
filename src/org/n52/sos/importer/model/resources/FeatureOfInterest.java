@@ -1,8 +1,8 @@
 package org.n52.sos.importer.model.resources;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import javax.swing.DefaultComboBoxModel;
 
+import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -15,6 +15,7 @@ public class FeatureOfInterest extends Resource {
 	
 	public void assign(MeasuredValue measuredValue) {
 		measuredValue.setFeatureOfInterest(this);
+		ModelStore.getInstance().addFeatureOfInterest(this);
 	}
 	
 	public boolean isAssigned(MeasuredValue measuredValue) {
@@ -26,11 +27,8 @@ public class FeatureOfInterest extends Resource {
 	}
 
 	@Override
-	public void unassignFromMeasuredValues() {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			if (mv.getFeatureOfInterest() == this)
-				mv.setFeatureOfInterest(null);
-		}		
+	public void unassign(MeasuredValue mv) {
+		mv.setFeatureOfInterest(null);		
 	}
 
 	public void setPosition(Position position) {
@@ -55,5 +53,15 @@ public class FeatureOfInterest extends Resource {
 		Position p = pc.forThis(new Cell(0,0)); //TODO
 		foi.setPosition(p);
 		return foi;
+	}
+
+	@Override
+	public DefaultComboBoxModel getNames() {
+		return EditableComboBoxItems.getInstance().getFeatureOfInterestNames();
+	}
+
+	@Override
+	public DefaultComboBoxModel getURIs() {
+		return EditableComboBoxItems.getInstance().getFeatureOfInterestURIs();
 	}
 }

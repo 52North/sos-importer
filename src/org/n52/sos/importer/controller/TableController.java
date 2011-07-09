@@ -225,6 +225,14 @@ public class TableController {
 
 	public int getOrientation() {
 		return orientation;
+	}	
+	
+	public String getOrientationString() {
+		switch(orientation) {
+			case COLUMNS: return "Column";
+			case ROWS: return "Row";
+			default: return "";
+		}
 	}
 
 	private class ColoredTableCellRenderer extends DefaultTableCellRenderer {

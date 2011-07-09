@@ -274,11 +274,10 @@ public class Step3Panel extends JPanel {
 
 				private final DateAndTime dateAndTime = new DateAndTime();
 				
-				private final JLabel formatLabel = new JLabel("Format: ");
 		        private final JLabel exampleLabel = new JLabel("Example: ");
 			
 		        private final DefaultComboBoxModel dateAndTimePatterns = EditableComboBoxItems.getInstance().getDateAndTimePatterns();
-		        private final EditableJComboBoxPanel dateAndTimeComboBox = new EditableJComboBoxPanel(dateAndTimePatterns);
+		        private final EditableJComboBoxPanel dateAndTimeComboBox = new EditableJComboBoxPanel(dateAndTimePatterns, "Format");
 		        
 		        private final ParseTestLabel parseTestLabel = new ParseTestLabel(dateAndTime);
 		        private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(dateAndTime);
@@ -291,7 +290,6 @@ public class Step3Panel extends JPanel {
 					this.setLayout(new FlowLayout(FlowLayout.LEFT));
 					
 					JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-					formatPanel.add(formatLabel);
 					formatPanel.add(dateAndTimeComboBox);
 										
 					JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

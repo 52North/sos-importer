@@ -12,6 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -19,6 +20,8 @@ public class EditableJComboBoxPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	private JLabel label;
+	
 	private JComboBox comboBox;
 	
 	private DefaultComboBoxModel model;
@@ -27,14 +30,16 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	private JButton deleteItemButton;
 	
-	public EditableJComboBoxPanel(DefaultComboBoxModel model) {
+	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName) {
 		super();
 		this.model = model;
+		label = new JLabel(labelName + ": ");
 		comboBox = new JComboBox(model);
 		newItemButton = createIconButton("newItem.png", "Add a new item to the list");
 		deleteItemButton = createIconButton("deleteItem.png", "Delete the selected item from the list");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.add(label);
 		this.add(comboBox);
 		this.add(newItemButton);
 		this.add(deleteItemButton);
@@ -43,7 +48,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		deleteItemButton.addActionListener(new DeleteItem());
 		comboBox.addActionListener(new EnterPressed());
 		comboBox.getEditor().getEditorComponent().addFocusListener(new FocusChanged());
-	}
+	}	
 	
 	public Object getSelectedItem() {
 		return model.getSelectedItem();

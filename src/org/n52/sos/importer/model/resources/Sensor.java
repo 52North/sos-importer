@@ -1,6 +1,8 @@
 package org.n52.sos.importer.model.resources;
 
-import org.n52.sos.importer.model.ModelStore;
+import javax.swing.DefaultComboBoxModel;
+
+import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 
@@ -17,11 +19,8 @@ public class Sensor extends Resource {
 	}
 	
 	@Override
-	public void unassignFromMeasuredValues() {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			if (mv.getSensor() == this)
-				mv.setSensor(null);
-		}		
+	public void unassign(MeasuredValue mv) {
+		mv.setSensor(null);		
 	}
 	
 	@Override 
@@ -39,5 +38,15 @@ public class Sensor extends Resource {
 			s.setName(name);
 		}
 		return s;
+	}
+
+	@Override
+	public DefaultComboBoxModel getNames() {
+		return EditableComboBoxItems.getInstance().getSensorNames();
+	}
+
+	@Override
+	public DefaultComboBoxModel getURIs() {
+		return EditableComboBoxItems.getInstance().getSensorURIs();
 	}
 }
