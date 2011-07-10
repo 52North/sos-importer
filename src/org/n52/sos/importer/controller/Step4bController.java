@@ -54,8 +54,8 @@ public class Step4bController {
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 			resource.assign(mv);
 		}
-		Resource r = ModelStore.getInstance().pollResourceWithoutMeasuredValue();
-		if (r != null) new Step4bController(r);
+		//Resource r = ModelStore.getInstance().pollResourceWithoutMeasuredValue();
+		//if (r != null) new Step4bController(r);
 		//TODO	else 
 	}
 	

@@ -15,7 +15,7 @@ public class FeatureOfInterest extends Resource {
 	
 	public void assign(MeasuredValue measuredValue) {
 		measuredValue.setFeatureOfInterest(this);
-		ModelStore.getInstance().addFeatureOfInterest(this);
+		ModelStore.getInstance().add(this);
 	}
 	
 	public boolean isAssigned(MeasuredValue measuredValue) {

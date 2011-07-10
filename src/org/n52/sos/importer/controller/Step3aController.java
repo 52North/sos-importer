@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +24,18 @@ public class Step3aController extends StepController {
 	
 	private Step3aModel step3aModel;
 	
-	private TableController tableController = TableController.getInstance();
+	private TableController tableController = TableController.getInstance();	
 	
 	public Step3aController() {
-		step3aModel = new Step3aModel();
+	}
+	
+	public Step3aController(Step3aModel step3aModel) {
+		this.step3aModel = step3aModel;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Step 3a: Choose Metadata for Columns";
+		return "Step 3a: Choose Metadata for the selected column";
 	}
 
 	@Override
@@ -41,72 +45,61 @@ public class Step3aController extends StepController {
 	
 	@Override
 	public void loadSettings() {	
-		step3Panel = new Step3Panel();
-		
-		tableController.allowSingleSelection();
-		tableController.setTableSelectionMode(TableController.COLUMNS);
-		tableController.addSingleSelectionListener(new TableSelectionChanged());
-		
 		int number = step3aModel.getSelectedColumn();
-		tableController.selectColumn(number);
+		List<String> selection = step3aModel.getSelection();
+		step3Panel = new Step3Panel();
+		step3Panel.restore(selection);
+
+		tableController.colorColumn(Color.lightGray, number);
+		tableController.setTableSelectionMode(TableController.COLUMNS);
+		tableController.turnSelectionOff();
 	}
 	
 	@Override
 	public void saveSettings() {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
-		step3aModel.putColumnIntoStore(step3aModel.getSelectedColumn(), selection);	
-	
-		List<FeatureOfInterest> featuresOfInterest = new ArrayList<FeatureOfInterest>();
-		List<ObservedProperty> observedProperties = new ArrayList<ObservedProperty>();
-		List<UnitOfMeasurement> unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
-		List<Sensor> sensorNames = new ArrayList<Sensor>();
+		step3aModel.setSelection(selection);	
 		
-		for (Integer k: step3aModel.getStoredColumns()) {
-			System.out.print(k + ": ");
-			List<String> column = step3aModel.getColumnFromStore(k);
-			for (String c: column)  {
-				System.out.print(c + " ");
-			}
-			System.out.println();
-		}
-		
-		for (Integer k: step3aModel.getStoredColumns()) {
-			List<String> column = step3aModel.getColumnFromStore(k);
-			TableController.getInstance().setColumnHeading(k, column.get(0));
+		int number = step3aModel.getSelectedColumn();
+		TableController.getInstance().setColumnHeading(number, selection.get(0));		
 			
-			if (column.get(0).equals("Measured Value")) {
-				MeasuredValue mv = null;
-				if (column.get(1).equals("Numeric Value"))
-					mv = new NumericValue();
-				mv.setTableElement(new Column(k));
-				ModelStore.getInstance().addMeasuredValue(mv);
-			} else if (column.get(0).equals("Date & Time")) {
-				if (column.get(1).equals("Combination")) {
-					String pattern = column.get(2);
-					DateAndTimeController dtc = new DateAndTimeController();
-					dtc.assignPattern(pattern, new Column(k));			
-					DateAndTime dtm = dtc.getDateAndTime();
-					ModelStore.getInstance().add(dtm);
-				}
-			} else if (column.get(0).equals("Feature Of Interest")) {
-				FeatureOfInterest foi = new FeatureOfInterest();
-				foi.setTableElement(new Column(k));
-				featuresOfInterest.add(foi);
-			} else if (column.get(0).equals("Observed Property")) {
-				ObservedProperty op = new ObservedProperty();
-				op.setTableElement(new Column(k));
-				observedProperties.add(op);
-			} else if (column.get(0).equals("Unit of Measurement")) {
-				UnitOfMeasurement uom = new UnitOfMeasurement();
-				uom.setTableElement(new Column(k));
-				unitOfMeasurements.add(uom);
-			} else if (column.get(0).equals("Sensor Name")) {
-				Sensor sm = new Sensor();
-				sm.setTableElement(new Column(k));
-				sensorNames.add(sm);
+		if (selection.get(0).equals("Measured Value")) {
+			MeasuredValue mv = null;
+			if (selection.get(1).equals("Numeric Value")) {
+				NumericValue nv = new NumericValue();
+				String[] separators = selection.get(2).split(":");
+				nv.setDecimalSeparator(separators[0]);
+				nv.setThousandsSeparator(separators[1]);
+				mv = nv;
 			}
-		}	
+			mv.setTableElement(new Column(number));
+			ModelStore.getInstance().add(mv);
+		} else if (selection.get(0).equals("Date & Time")) {
+			if (selection.get(1).equals("Combination")) {
+				String pattern = selection.get(2);
+				DateAndTimeController dtc = new DateAndTimeController();
+				dtc.assignPattern(pattern, new Column(number));			
+				DateAndTime dtm = dtc.getDateAndTime();
+				ModelStore.getInstance().add(dtm);
+			}
+		} else if (selection.get(0).equals("Feature Of Interest")) {
+			FeatureOfInterest foi = new FeatureOfInterest();
+			foi.setTableElement(new Column(number));
+			ModelStore.getInstance().add(foi);
+		} else if (selection.get(0).equals("Observed Property")) {
+			ObservedProperty op = new ObservedProperty();
+			op.setTableElement(new Column(number));
+			ModelStore.getInstance().add(op);
+		} else if (selection.get(0).equals("Unit of Measurement")) {
+			UnitOfMeasurement uom = new UnitOfMeasurement();
+			uom.setTableElement(new Column(number));
+			ModelStore.getInstance().add(uom);
+		} else if (selection.get(0).equals("Sensor Name")) {
+			Sensor sm = new Sensor();
+			sm.setTableElement(new Column(number));
+			ModelStore.getInstance().add(sm);
+		}
 		
 		step3Panel = null;
 	}
@@ -115,35 +108,10 @@ public class Step3aController extends StepController {
 	public StepController getNextStepController() {		
 		return new Step4aController();	
 	}
-	
-	private class TableSelectionChanged implements TableController.SingleSelectionListener {
-
-		@Override
-		public void columnSelectionChanged(int newColumn) {
-			int oldColumn = step3aModel.getSelectedColumn();
-			List<String> selection = new ArrayList<String>();
-			step3Panel.store(selection);
-			step3aModel.putColumnIntoStore(oldColumn, selection);
-			    
-			selection = step3aModel.getColumnFromStore(newColumn);
-			step3Panel.clearAdditionalPanels();
-			
-			if (selection == null) step3Panel.restoreDefault();
-			else step3Panel.restore(selection);
-			
-			MainController.getInstance().pack();
-			step3aModel.setSelectedColumn(newColumn);
-		}
-
-		@Override
-		public void rowSelectionChanged(int selectedRow) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
 
 	@Override
 	public boolean isNecessary() {
+		step3aModel = new Step3aModel(0);
 		return true;
 	}
 
@@ -154,6 +122,10 @@ public class Step3aController extends StepController {
 
 	@Override
 	public StepController getNext() {
-		return null;
+		int nextColumn = step3aModel.getSelectedColumn() + 1;
+		if (nextColumn == tableController.getColumnCount())
+			return null;
+		
+		return new Step3aController(new Step3aModel(nextColumn));
 	}	
 }

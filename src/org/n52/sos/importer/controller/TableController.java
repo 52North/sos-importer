@@ -34,6 +34,8 @@ public class TableController {
 	private int tableSelectionMode;
 	
 	private int orientation = COLUMNS;
+	
+	private int coloredColumn;
 
 	private TableController() {
 		tableView = TablePanel.getInstance();
@@ -52,11 +54,14 @@ public class TableController {
 	public void setContent(Object[][] content) {
 		DefaultTableModel dtm = new EditableTableModel(false);
 
+		int rows = content.length;
 		int columns = content[0].length;
 		dtm.setColumnCount(columns);
-		//Object[] columnIdentifiers = new Object[columns];
-		//dtm.setColumnIdentifiers(columnIdentifiers);
-		int rows = content.length;
+		
+		String[] columnIdentifiers = new String[columns];
+		for (int i = 0; i < columnIdentifiers.length; i++)
+			columnIdentifiers[i] = "n/a";
+		dtm.setColumnIdentifiers(columnIdentifiers);
 
 		for (int i = 0; i < rows; i++) {
 			dtm.addRow(content[i]);
@@ -154,12 +159,12 @@ public class TableController {
 		return table.getSelectedRow();
 	}
 	
-	public List<String> getSelectedValues() {
+	public List<String> getMarkedValues() {
 		ArrayList<String> values = new ArrayList<String>();
 		
 		switch(tableSelectionMode) {
 		case COLUMNS:
-			int column = table.getSelectedColumn();		
+			int column = coloredColumn;		
 			int rowCount = table.getRowCount();
 		
 			for (int i = 0; i < rowCount; i++)
@@ -199,8 +204,13 @@ public class TableController {
 		return table.getRowCount();
 	}
 	
+	public int getColumnCount() {
+		return table.getColumnCount();
+	}
+	
 	public void colorColumn(Color color, int number) {
 		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, number, -1));
+		coloredColumn = number;
 	}
 	
 	public void colorRow(Color color, int number) {

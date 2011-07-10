@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
-import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 
 public class ModelStore {
@@ -18,11 +21,17 @@ public class ModelStore {
 	
 	private List<MeasuredValue> measuredValues;
 	
-	private List<Resource> resourcesWithoutMeasuredValue;
-	
 	private List<DateAndTime> dateAndTimes;
 	
 	private List<FeatureOfInterest> featureOfInterests;
+	
+	private List<ObservedProperty> observedProperties;
+
+	private List<UnitOfMeasurement> unitOfMeasurements;
+	
+	private List<Sensor> sensors;
+	
+	private List<Position> positions;
 	
 	private HashSet<InsertObservation> observationsToInsert;
 	
@@ -32,7 +41,6 @@ public class ModelStore {
 		measuredValues = new ArrayList<MeasuredValue>();
 		dateAndTimes = new ArrayList<DateAndTime>();
 		featureOfInterests = new ArrayList<FeatureOfInterest>();
-		resourcesWithoutMeasuredValue = new ArrayList<Resource>();
 		observationsToInsert = new HashSet<InsertObservation>();
 		sensorsToRegister = new HashSet<RegisterSensor>();
 	}
@@ -43,7 +51,7 @@ public class ModelStore {
 		return instance;
 	}
 	
-	public void addMeasuredValue(MeasuredValue mv) {
+	public void add(MeasuredValue mv) {
 		measuredValues.add(mv);
 	}
 	
@@ -59,16 +67,6 @@ public class ModelStore {
 		return null;
 	}
 	
-	public void addResourcesWithoutMeasuredValue(List<Resource> resources) {
-		resourcesWithoutMeasuredValue.addAll(resources);
-	}
-	
-	public Resource pollResourceWithoutMeasuredValue() {
-		if (resourcesWithoutMeasuredValue.isEmpty()) return null;
-		Resource r = resourcesWithoutMeasuredValue.remove(0);
-		return r;
-	}
-	
 	public void add(DateAndTime dateAndTime) {
 		dateAndTimes.add(dateAndTime);
 	}
@@ -77,12 +75,44 @@ public class ModelStore {
 		return dateAndTimes;
 	}
 
-	public void addFeatureOfInterest(FeatureOfInterest featureOfInterest) {
+	public void add(FeatureOfInterest featureOfInterest) {
 		featureOfInterests.add(featureOfInterest);
 	}
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
 		return featureOfInterests;
+	}
+	
+	public void add(ObservedProperty observedProperty) {
+		observedProperties.add(observedProperty);
+	}
+	
+	public List<ObservedProperty> getObservedProperties() {
+		return observedProperties;
+	}
+		
+	public void add(UnitOfMeasurement unitOfMeasurement) {
+		unitOfMeasurements.add(unitOfMeasurement);
+	}
+
+	public List<UnitOfMeasurement> getUnitOfMeasurements() {
+		return unitOfMeasurements;
+	}
+	
+	public void add(Sensor sensor) {
+		sensors.add(sensor);
+	}
+
+	public List<Sensor> getSensors() {
+		return sensors;
+	}
+	
+	public void add(Position position) {
+		positions.add(position);
+	}
+
+	public List<Position> getPositions() {
+		return positions;
 	}
 	
 	public void addObservationToInsert(InsertObservation io) {

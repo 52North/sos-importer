@@ -102,8 +102,12 @@ public abstract class MeasuredValue implements Parseable {
 			//the cell of the current Measured Value
 			Cell c = new Cell(i, column.getNumber());
 			String value = TableController.getInstance().getValueAt(c);
-			String parsedValue = parse(value).toString();
-			io.setValue(parsedValue);
+			try {
+				String parsedValue = parse(value).toString();
+				io.setValue(parsedValue);
+			} catch (Exception e) {
+				continue;
+			}
 			
 			//when was the current Measured Value measured
 			dtc.setDateAndTime(getDateAndTime());

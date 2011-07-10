@@ -74,9 +74,9 @@ public class Step7Test {
 		
 		foi.setPosition(p);
 		
-		ModelStore.getInstance().addMeasuredValue(nv1);
-		ModelStore.getInstance().addMeasuredValue(nv2);
-		ModelStore.getInstance().addFeatureOfInterest(foi);
+		ModelStore.getInstance().add(nv1);
+		ModelStore.getInstance().add(nv2);
+		ModelStore.getInstance().add(foi);
 		
 		MainController f = MainController.getInstance();
 		

@@ -18,7 +18,7 @@ public class Step6bTest {
 		TableController.getInstance().setContent(o);
 		MeasuredValue mv = new NumericValue();
 		mv.setTableElement(new Column(0));
-		ModelStore.getInstance().addMeasuredValue(mv);
+		ModelStore.getInstance().add(mv);
 		Step6bModel step6aModel = new Step6bModel(mv, new FeatureOfInterest());
 		f.setStepController(new Step6bController(step6aModel));
 	}

@@ -100,7 +100,6 @@ public class Step3Panel extends JPanel {
 				addRadioButton("Boolean", new ParseTestPanel(new Boolean()));
 				addRadioButton("Text", new ParseTestPanel(new Text()));
 			}
-
 			
 			private class NumericValuePanel extends SelectionPanel {
 
@@ -166,14 +165,14 @@ public class Step3Panel extends JPanel {
 					String[] separators = getSelection().split(":");
 					numericValue.setDecimalSeparator(separators[0]);
 					numericValue.setThousandsSeparator(separators[1]);
-					List<String> values = TableController.getInstance().getSelectedValues();				
+					List<String> values = TableController.getInstance().getMarkedValues();				
 					parseTestLabel.parseValues(values);
 					exampleNumberLabel.reformat(exampleValue);
 				};
 				
 				@Override
 				protected void reinit() {
-					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+					parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 					exampleNumberLabel.reformat(exampleValue);
 				}
 				
@@ -239,7 +238,7 @@ public class Step3Panel extends JPanel {
 				
 				@Override
 				protected void reinit() {
-					parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+					parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 				}		
 			}		
 		}
@@ -323,13 +322,13 @@ public class Step3Panel extends JPanel {
 			    @Override
 			    protected void selectionChanged() {
 			    	dateAndTime.setPattern(getSelection());
-			    	parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+			    	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 			    	exampleFormatLabel.reformat(new Date());
 			    }
 			    
 			    @Override
 			    protected void reinit() {
-			    	parseTestLabel.parseValues(TableController.getInstance().getSelectedValues());
+			    	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 			    	exampleFormatLabel.reformat(new Date());
 			    };
 			  	    
