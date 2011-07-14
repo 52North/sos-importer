@@ -53,19 +53,21 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return true;
 	}
 	
-	
 	@Override
 	public void assignValues() {
 		String name = (String) nameComboBox.getSelectedItem();
+		name = name.trim();
 		resource.setName(name);
 		String uri = (String) uriComboBox.getSelectedItem();
-		try {
-			if (uri != null) {
-				URI URI = new URI(uri);
-				resource.setURI(URI);
-			}
-		} catch (URISyntaxException e) {
-		}	
+		if (uri == null || uri.trim().equals(""))
+			resource.setURI(null);
+		else {
+			try {
+				URI URI = new URI(uri.trim());
+				resource.setURI(URI);		
+			} catch (URISyntaxException e) {
+			}	
+		}
 	}
 
 	@Override

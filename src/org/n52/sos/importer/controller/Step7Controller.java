@@ -4,14 +4,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -30,6 +34,10 @@ public class Step7Controller extends StepController {
 	
 	private Step7Panel step7Panel;
 	
+	private HttpClient httpClient;
+	
+	private HttpPost httpPost;
+	
 	public Step7Controller() {
 	}
 	
@@ -46,39 +54,66 @@ public class Step7Controller extends StepController {
 			mv.print();
 		}
 		
-		logger.info(ModelStore.getInstance().getSensorsToRegister().size() +
-		" Sensors to register:");
-		
 		String registerSensorTemplate = readTemplate("RegisterSensor_measurement_template");
 		String completedTemplate = "";
 		
+		int successfullyRegisteredSensors = 0;
+		int sensorsToRegister = ModelStore.getInstance().getSensorsToRegister().size();
+		ArrayList<String> sensorErrors = new ArrayList<String>();
+		ArrayList<String> wrongSensors = new ArrayList<String>();
+		
+		connectToSOS(sosURL);
 		for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister()) {
 			completedTemplate = rs.fillTemplate(registerSensorTemplate);
-			logger.debug(rs);
-			logger.info(completedTemplate);
-			try {
-				sendPostMessage(sosURL, completedTemplate);
-			} catch (IOException e) {
-				logger.error("Could not send RegisterSensor to SOS", e);
+			//logger.info(rs);
+			
+			String answer = sendPostMessage(completedTemplate);
+			if (answer.contains("AssignedSensorId"))
+				successfullyRegisteredSensors++;
+			if (answer.contains("Exception")) {
+				sensorErrors.add(answer);
+				wrongSensors.add(rs.toString());
 			}
 		}
 		
+		logger.info("Sensors to register: " + sensorsToRegister);
+		logger.info("Successful: " + successfullyRegisteredSensors);
+		for (int i = 0; i < sensorErrors.size(); i++) {
+			logger.error(wrongSensors.get(i));			
+			logger.error(sensorErrors.get(i));
+		}
+		
+		ArrayList<String> observationErrors = new ArrayList<String>();
+		ArrayList<String> wrongObservations = new ArrayList<String>();
+		
+		int observationsToInsert = ModelStore.getInstance().getObservationsToInsert().size();
+		int successfullyInsertedObservations = 0;
 		String insertObservationTemplate = readTemplate("InsertObservation_samplingPoint_template");
+		
 		for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert()) {
 			completedTemplate = io.fillTemplate(insertObservationTemplate);
-			logger.debug(io);		
+			//logger.info(io);		
 			
-			try {
-				sendPostMessage(sosURL, completedTemplate);
-			} catch (IOException e) {
-				logger.error("Could not send InsertObservation to SOS", e);
+			String answer = sendPostMessage(completedTemplate);
+			if (answer.contains("AssignedObservationId"))
+				successfullyInsertedObservations++;	
+			if (answer.contains("Exception")) {
+				observationErrors.add(answer);
+				wrongObservations.add(io.toString());
 			}
 			
+			if (observationErrors.size() > 50) break;
+		}
+		disconnectFromSOS();
+		
+		logger.info("Observations to insert: " + observationsToInsert);
+		logger.info("Successful: " + successfullyInsertedObservations);
+		
+		for (int i = 0; i < observationErrors.size(); i++) {
+			logger.error(observationErrors.get(i));			
+			logger.error(wrongObservations.get(i));
 		}
 		
-		logger.info(ModelStore.getInstance().getObservationsToInsert().size() +
-		" Observations to insert. For example: ");	
-		logger.info(completedTemplate);
 	}
 	
 	private String readTemplate(String templateName) {
@@ -127,20 +162,37 @@ public class Step7Controller extends StepController {
      * @param request
      * @return
      */
-    public void sendPostMessage(String serviceURL, String request) throws IOException {   	
-    	HttpClient httpClient = new DefaultHttpClient();
-        HttpPost method = new HttpPost(serviceURL);
+    public String sendPostMessage(String request) { 
+    	String answer = "";
 
-        method.setEntity(new StringEntity(request, "text/xml", "UTF-8"));
+        try {
+			httpPost.setEntity(new StringEntity(request, "text/xml", "UTF-8"));
+			HttpResponse response = httpClient.execute(httpPost);
+			HttpEntity resEntity = response.getEntity();
+			if (resEntity != null) 
+	        	answer = EntityUtils.toString(resEntity);
 
-        HttpResponse response = httpClient.execute(method);
-        HttpEntity resEntity = response.getEntity();
-
-        logger.info("POST-request sent to: " + serviceURL);
-        logger.info("Response Status: " + response.getStatusLine());
-        if (resEntity != null) {
-        	logger.info("Answer: " + EntityUtils.toString(resEntity));
-        }
+	        return answer;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
+    }
+    
+    public void connectToSOS(String serviceURL) {
+    	httpClient = new DefaultHttpClient();
+        httpPost = new HttpPost(serviceURL);
+    }
+    
+    public void disconnectFromSOS() {
         httpClient.getConnectionManager().shutdown();
     }
 
@@ -152,15 +204,36 @@ public class Step7Controller extends StepController {
 	@Override
 	public boolean isFinished() {
 		//get and check URI
-		String uri = step7Panel.getSOSURL();
-		URI URI = null;
-		try {
-			URI = new URI(uri);
-		} catch (URISyntaxException e) {
-			logger.error("Wrong URI", e);
-			return false;
-		}
-		return true;
+		String url = step7Panel.getSOSURL();
+		return testConnection(url);
+	}
+	
+	public boolean testConnection(String strURL) {
+	    try {
+	        URL url = new URL(strURL);
+	        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+	        urlConn.connect();
+
+	        if (HttpURLConnection.HTTP_OK == urlConn.getResponseCode()) {
+	    		logger.info("Successfully tested connection to Sensor Observation Service: " + strURL);
+	        	return true;
+	        } else {
+				JOptionPane.showMessageDialog(null,
+						"Could not connect to Sensor Observation Service: " + strURL +
+	    				". HTTP Response Code: " + urlConn.getResponseCode(),
+					    "Warning",
+					    JOptionPane.WARNING_MESSAGE);
+	    		logger.warn("Could not connect to Sensor Observation Service: " + strURL +
+	    				". HTTP Response Code: " + urlConn.getResponseCode());
+	        	return false;
+	        }        	
+	    } catch (IOException e) {
+			JOptionPane.showMessageDialog(null,
+				    "Connection to Sensor Observation Service " + strURL + " failed. " + e.getMessage(),
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
+	    	return false;
+	    }
 	}
 
 	@Override

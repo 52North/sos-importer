@@ -4,59 +4,82 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.Step4aPanel;
 
-public class Step4bController {
+public class Step4bController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step4bController.class);
 	
-	private Resource resource;
+	private Step4bModel step4bModel;
 	
-	private TableController tableController;
+	private TableController tableController = TableController.getInstance();;
 	
-	private Step4aPanel step4aView;
+	private Step4aPanel step4aPanel;
 	
-	public Step4bController(Resource resource) {
-		this.resource = resource;
-		tableController = TableController.getInstance();
+	public Step4bController() {
+	}
+	
+	public Step4bController(Step4bModel step4bModel) {
+		this.step4bModel = step4bModel;
+	}
+
+	@Override
+	public void loadSettings() {
+		Resource resource = step4bModel.getResource();
+		int[] selectedRowsOrColumns = step4bModel.getSelectedRowsOrColumns();
+		
+		String orientation = null;
+		if (resource.getTableElement() instanceof Column) {
+			tableController.setTableSelectionMode(TableController.COLUMNS);
+			orientation = "column";		
+			
+			for (int column: selectedRowsOrColumns) {
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
+				resource.unassign(mv);
+			}
+		} else if (resource.getTableElement() instanceof Row) {
+			tableController.setTableSelectionMode(TableController.ROWS);
+			orientation = "row";
+			
+			//TODO
+		}
+			
+		String text = step4bModel.getDescription();
+
+		text = text.replaceAll("ORIENTATION", orientation);
+		text = text.replaceAll("RESOURCE", resource.toString());
+			
+		resource.getTableElement().mark(tableController.getMarkingColor());
+		
 		tableController.allowMultipleSelection();
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
-		String text = "";
-		switch(TableController.getInstance().getOrientation()) {
-		case TableController.COLUMNS:
-			tableController.setTableSelectionMode(TableController.COLUMNS);
-			//tableController.colorColumn(Color.yellow, resource.getColumnNumber());
-			text = "Mark all measured value columns where this " + resource + 
-				" column corresponds to.";
-			break;
-		case TableController.ROWS: 
-			tableController.setTableSelectionMode(TableController.ROWS);
-			//tableController.colorRow(Color.yellow, resource.getRowNumber());
-			text = "Mark all measured value rows where this " + resource + 
-				" row corresponds to.";
-			break;
-		}
-		step4aView = new Step4aPanel(text);
-	}
-
-	
-	public JPanel getView() {
-		return step4aView;
+		step4aPanel = new Step4aPanel(text);
 	}
 	
-	public void next() {
-		int[] selectedColumns = tableController.getSelectedColumns();
+	@Override
+	public void saveSettings() {
+		Resource resource = step4bModel.getResource();
 		
-		for (int column: selectedColumns) {
-			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
-			resource.assign(mv);
+		if (resource.getTableElement() instanceof Column) {
+			int[] selectedColumns = tableController.getSelectedColumns();
+			
+			for (int column: selectedColumns) {
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
+				resource.assign(mv);
+			}
+			step4bModel.setSelectedRowsOrColumns(selectedColumns);
+		} else if (resource.getTableElement() instanceof Row) {
+			//TODO
 		}
-		//Resource r = ModelStore.getInstance().pollResourceWithoutMeasuredValue();
-		//if (r != null) new Step4bController(r);
-		//TODO	else 
+
+		step4aPanel = null;
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
@@ -70,7 +93,7 @@ public class Step4bController {
 					tableController.deselectColumn(column);
 					return;
 				}
-
+				Resource resource = step4bModel.getResource();
 				if (resource.isAssigned(mv)) {
 					logger.error(resource + " already set for this measured value.");
 					tableController.deselectColumn(column);
@@ -84,5 +107,70 @@ public class Step4bController {
 			// TODO Auto-generated method stub
 			
 		}	
+	}
+
+	@Override
+	public String getDescription() {
+		return "Step 4b: Solve ambiguities";
+	}
+
+
+	@Override
+	public JPanel getStepPanel() {
+		return step4aPanel;
+	}
+
+
+	@Override
+	public StepController getNextStepController() {
+		return new Step5aController();
+	}
+
+
+	@Override
+	public boolean isNecessary() {	
+		Resource resourceType = new FeatureOfInterest();
+		Resource resource = null;
+		
+		while (resourceType != null) {
+			int number = resourceType.getList().size();
+			// in case there is just one resource of this type:
+			if (number == 1) {
+				Resource oneResource = resourceType.getList().get(0);
+				
+				for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+					oneResource.assign(mv);
+				
+				logger.info("Assign one " + oneResource + " to Measured Value");
+			//in case there are more than two resources of this type:
+			} else if (resource == null && number >= 2){
+				ResourceController rc = new ResourceController();
+				resource = rc.getNextUnassignedResource(resourceType);
+			}
+			resourceType = resourceType.getNextResourceType();
+		}
+		
+		step4bModel = new Step4bModel(resource);
+		return resource != null;
+	}
+	
+	@Override
+	public StepController getNext() {
+		Resource resourceType = step4bModel.getResource();
+		ResourceController rc = new ResourceController();
+		
+		Resource nextResource = null;
+		while (resourceType != null) {
+			nextResource = rc.getNextUnassignedResource(resourceType);
+			if (nextResource != null)
+				return new Step4bController(new Step4bModel(nextResource));
+			resourceType = resourceType.getNextResourceType();
+		}
+		return null;
 	}	
+
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
 }

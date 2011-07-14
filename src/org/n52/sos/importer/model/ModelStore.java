@@ -11,6 +11,7 @@ import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
@@ -41,6 +42,10 @@ public class ModelStore {
 		measuredValues = new ArrayList<MeasuredValue>();
 		dateAndTimes = new ArrayList<DateAndTime>();
 		featureOfInterests = new ArrayList<FeatureOfInterest>();
+		observedProperties = new ArrayList<ObservedProperty>();
+		unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
+		sensors = new ArrayList<Sensor>();
+		positions = new ArrayList<Position>();
 		observationsToInsert = new HashSet<InsertObservation>();
 		sensorsToRegister = new HashSet<RegisterSensor>();
 	}
@@ -74,7 +79,22 @@ public class ModelStore {
 	public List<DateAndTime> getDateAndTimes() {
 		return dateAndTimes;
 	}
+	
+	public void setDateAndTimes(List<DateAndTime> dateAndTimes) {
+		this.dateAndTimes = dateAndTimes;
+	}
 
+	public void add(Resource resource) {
+		if (resource instanceof FeatureOfInterest)
+			add((FeatureOfInterest) resource);
+		else if (resource instanceof ObservedProperty)
+			add((ObservedProperty) resource);
+		else if (resource instanceof UnitOfMeasurement)
+			add((UnitOfMeasurement) resource);
+		else if (resource instanceof Sensor)
+			add((Sensor) resource);
+	}
+	
 	public void add(FeatureOfInterest featureOfInterest) {
 		featureOfInterests.add(featureOfInterest);
 	}
@@ -113,6 +133,10 @@ public class ModelStore {
 
 	public List<Position> getPositions() {
 		return positions;
+	}
+	
+	public void setPositions(List<Position> positions) {
+		this.positions = positions;
 	}
 	
 	public void addObservationToInsert(InsertObservation io) {

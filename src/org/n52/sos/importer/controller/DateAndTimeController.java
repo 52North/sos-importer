@@ -122,7 +122,7 @@ public class DateAndTimeController {
 	
 	public DateAndTime getNextUnassignedDateAndTime() {
 		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes())
-			if (isAssignedToMeasuredValue(dateAndTime))
+			if (!isAssignedToMeasuredValue(dateAndTime))
 				return dateAndTime;	
 		return null;
 	}
@@ -174,5 +174,41 @@ public class DateAndTimeController {
 		GregorianCalendar gc = new GregorianCalendar(year, month - 1, day, hour, minute, second);
 		gc.set(GregorianCalendar.ZONE_OFFSET, timezone);
 		return gc;
+	}
+	
+	
+	public void mergeDateAndTimes() {
+		List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
+		List<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>();
+		for (int i = 0; i < dateAndTimes.size(); i++) {
+			DateAndTime dt1 = dateAndTimes.get(i);
+			dateAndTimes.remove(dt1);
+			for (int j = 0; j < dateAndTimes.size(); j++) {
+				DateAndTime dt2 = dateAndTimes.get(j);
+				if (dt1.getGroup().equals(dt2.getGroup())) {
+					merge(dt1, dt2);
+					dateAndTimes.remove(dt2);
+				}
+			}
+			mergedDateAndTimes.add(dt1);
+		}
+		ModelStore.getInstance().setDateAndTimes(mergedDateAndTimes);
+	}
+	
+	private void merge(DateAndTime dateAndTime1, DateAndTime dateAndTime2) {
+		if (dateAndTime1.getSecond() == null)
+			dateAndTime1.setSecond(dateAndTime2.getSecond());
+		if (dateAndTime1.getMinute() == null) 
+			dateAndTime1.setMinute(dateAndTime2.getMinute());
+		if (dateAndTime1.getHour() == null)
+			dateAndTime1.setHour(dateAndTime2.getHour());
+		if (dateAndTime1.getDay() == null)
+			dateAndTime1.setDay(dateAndTime2.getDay());
+		if (dateAndTime1.getMonth() == null) 
+			dateAndTime1.setMonth(dateAndTime2.getMonth());
+		if (dateAndTime1.getYear() == null)
+			dateAndTime1.setYear(dateAndTime2.getYear());
+		if (dateAndTime1.getTimeZone() == null)
+			dateAndTime1.setTimeZone(dateAndTime2.getTimeZone());
 	}
 }

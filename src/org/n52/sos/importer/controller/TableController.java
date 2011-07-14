@@ -36,6 +36,8 @@ public class TableController {
 	private int orientation = COLUMNS;
 	
 	private int coloredColumn;
+	
+	private Color markingColor = Color.lightGray;
 
 	private TableController() {
 		tableView = TablePanel.getInstance();
@@ -239,10 +241,14 @@ public class TableController {
 	
 	public String getOrientationString() {
 		switch(orientation) {
-			case COLUMNS: return "Column";
-			case ROWS: return "Row";
+			case COLUMNS: return "column";
+			case ROWS: return "row";
 			default: return "";
 		}
+	}
+	
+	public Color getMarkingColor() {
+		return markingColor;
 	}
 
 	private class ColoredTableCellRenderer extends DefaultTableCellRenderer {

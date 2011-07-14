@@ -1,11 +1,12 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.Resource;
@@ -18,6 +19,8 @@ import org.n52.sos.importer.view.resources.MissingResourcePanel;
  * @author Raimund
  */
 public class Step6bController extends StepController {
+	
+	private static final Logger logger = Logger.getLogger(Step6bController.class);
 		
 	private Step6bModel step6bModel;
 	
@@ -46,22 +49,24 @@ public class Step6bController extends StepController {
 		List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		missingComponentPanels.add(missingResourcePanel);
 		
-		
-		String question = "What is the <b>" + resource.toString() + "</b> for " + 
-		"the marked measured value " + tableController.getOrientationString() + "?";
+		String question = step6bModel.getDescription();
+		question = question.replaceAll("RESOURCE", resource.toString());
+		question = question.replaceAll("ORIENTATION", tableController.getOrientationString());
 		step5aPanel = new Step5aPanel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
-		measuredValue.getTableElement().mark(Color.yellow);		
+		measuredValue.getTableElement().mark(tableController.getMarkingColor());		
 	}	
 	
 	@Override
 	public void saveSettings() {
-		Resource resource = step6bModel.getResource();
-		MeasuredValue measuredValue = step6bModel.getMeasuredValue();
-		resource.assign(measuredValue);
 		missingResourcePanel.assignValues();
 		
+		Resource resource = step6bModel.getResource();
+		logger.info(resource);
+		MeasuredValue measuredValue = step6bModel.getMeasuredValue();
+		resource.assign(measuredValue);
+		ModelStore.getInstance().add(resource);
 		step5aPanel = null;
 		missingResourcePanel = null;
 	}

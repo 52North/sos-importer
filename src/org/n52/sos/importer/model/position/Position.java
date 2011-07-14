@@ -10,6 +10,8 @@ public class Position {
 	
 	private EPSGCode epsgCode;
 
+	private String group;
+	
 	public Height getHeight() {
 		return height;
 	}
@@ -40,6 +42,14 @@ public class Position {
 
 	public Latitude getLatitude() {
 		return latitude;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public String getGroup() {
+		return group;
 	}
 	
 }

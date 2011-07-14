@@ -1,5 +1,7 @@
 package org.n52.sos.importer.model.position;
 
+import java.awt.Color;
+
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
@@ -48,5 +50,10 @@ public class EPSGCode {
 	public int parse(String s) {
 		//TODO
 		return Integer.valueOf(s);
+	}
+	
+	public void mark(Color color) {
+		if (tableElement != null)
+			tableElement.mark(color);
 	}
 }

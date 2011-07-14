@@ -1,11 +1,11 @@
 package org.n52.sos.importer.model.resources;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
-import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 
 public abstract class Resource {
@@ -39,12 +39,6 @@ public abstract class Resource {
 			return uri.getPath();
 	}
 	
-	public abstract void assign(MeasuredValue mv);
-	
-	public abstract boolean isAssigned(MeasuredValue mv);
-	
-	public abstract void unassign(MeasuredValue mv);
-
 	public void setTableElement(TableElement tableElement) {
 		this.tableElement = tableElement;
 	}
@@ -53,14 +47,17 @@ public abstract class Resource {
 		return tableElement;
 	}
 	
-	public String print(Cell measuredValuePosition) {
-		if (tableElement == null)
-			return this + "[name=" + name + ",URI=" + uri + "]";
-		else 
-			return this + "[name=" + tableElement.getValueFor(measuredValuePosition) + "]";
-	}
+	public abstract void assign(MeasuredValue mv);
+	
+	public abstract boolean isAssigned(MeasuredValue mv);
+	
+	public abstract void unassign(MeasuredValue mv);
 	
 	public abstract DefaultComboBoxModel getNames();
 	
 	public abstract DefaultComboBoxModel getURIs();
+	
+	public abstract List<Resource> getList();
+	
+	public abstract Resource getNextResourceType();
 }

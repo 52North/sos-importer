@@ -271,6 +271,10 @@ public class Step3Panel extends JPanel {
 				// 			ComboBoxDemo2.java
 				private static final long serialVersionUID = 1L;
 
+				private final JLabel groupLabel = new JLabel("Group: ");
+				
+				private final JComboBox groupComboBox = new JComboBox(Settings.getInstance().getDateAndTimeGroups());
+				
 				private final DateAndTime dateAndTime = new DateAndTime();
 				
 		        private final JLabel exampleLabel = new JLabel("Example: ");
@@ -291,6 +295,10 @@ public class Step3Panel extends JPanel {
 					JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 					formatPanel.add(dateAndTimeComboBox);
 										
+					JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+					groupPanel.add(groupLabel);
+					groupPanel.add(groupComboBox);
+					
 					JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 					examplePanel.add(exampleLabel);
 					examplePanel.add(exampleFormatLabel);

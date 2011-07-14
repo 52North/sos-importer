@@ -22,6 +22,9 @@ public class Step5aPanel extends JPanel {
 		descriptionPanel.add(descriptionLabel);
 		this.add(descriptionPanel);
 		
+		TablePanel tablePanel = TablePanel.getInstance();
+		this.add(tablePanel);
+		
 		JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
 		
@@ -29,8 +32,5 @@ public class Step5aPanel extends JPanel {
 			containerPanel.add(mcp);
 		
 		this.add(containerPanel);
-		
-		TablePanel tablePanel = TablePanel.getInstance();
-		this.add(tablePanel);
 	}
 }

@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -83,12 +84,18 @@ public class Step2Controller extends StepController {
 	
 	private Object[][] parseCSVFile() {
 		Object[][] content = null;
+		
 		try {	
+			String csvFileContent = step2Model.getCSVFileContent();
 			String separator = step2Model.getSelectedColumnSeparator();
 			if (separator.equals("Tab")) separator = "\t"; 
+			if (separator.equals("Space")) {
+				separator = ";";
+				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
+			}
 			String quoteChar = step2Model.getSelectedCommentIndicator();
 			String escape = step2Model.getSelectedTextQualifier();
-			StringReader sr = new StringReader(step2Model.getCSVFileContent());
+			StringReader sr = new StringReader(csvFileContent);
 			CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
 			List<String[]> lines = reader.readAll();
 			int rows = lines.size();
@@ -103,6 +110,48 @@ public class Step2Controller extends StepController {
 			logger.error("Error while parsing CSV file.", e);
 		}
 		return content;
+	}
+	
+	public String convertSpaceSeparatedText(String text, String separator) {
+		StringBuilder replacedText = new StringBuilder();
+		StringReader sr = new StringReader(text);
+		BufferedReader br = new BufferedReader(sr);
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				line = replaceWhiteSpace(line, separator);
+				replacedText.append(line + "\n");
+			}
+		} catch (IOException e) {
+			logger.info("Error while parsing space-separated file", e);
+		}
+		return replacedText.toString();
+	}
+	
+	/**
+	 * replaces any whitespace in the text by the given separator
+	 * @param text
+	 * @param replacement
+	 * @return
+	 */
+	public String replaceWhiteSpace(String text, String separator) {
+		StringBuilder replacedText = new StringBuilder();
+		boolean lastCharacterWasAWhiteSpace = false;
+		for (int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if (Character.isWhitespace(ch)) {
+				if (lastCharacterWasAWhiteSpace) continue;
+				else {
+					replacedText.append(separator);
+					lastCharacterWasAWhiteSpace = true;
+				}
+			} else {
+				replacedText.append(ch);
+				lastCharacterWasAWhiteSpace = false;
+			}
+		}
+		return replacedText.toString();
 	}
 
 	@Override

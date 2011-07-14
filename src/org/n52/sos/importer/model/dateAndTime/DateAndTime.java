@@ -17,7 +17,11 @@ public class DateAndTime implements Formatable, Parseable {
 	private Second second;
 	private TimeZone timeZone;
 	
+	/** for parsing */
 	private String pattern;
+	
+	/** for merging */
+	private String group;
 	
 	public Year getYear() {
 		return year;
@@ -92,5 +96,11 @@ public class DateAndTime implements Formatable, Parseable {
         String dateString = formatter.format(date);
 
 		return dateString;
+	}
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	public String getGroup() {
+		return group;
 	}
 }

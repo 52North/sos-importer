@@ -13,7 +13,7 @@ public class Step4aController extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step4aController.class);
 	
-	private Step4aModel step4bModel;
+	private Step4aModel step4aModel;
 	
 	private Step4aPanel step4bPanel;
 	
@@ -25,7 +25,7 @@ public class Step4aController extends StepController {
 	}
 	
 	public Step4aController(Step4aModel step4bModel) {
-		this.step4bModel = step4bModel;
+		this.step4aModel = step4bModel;
 	}
 	
 	@Override
@@ -33,8 +33,8 @@ public class Step4aController extends StepController {
 		String text = "Mark all measured value columns where this Date and Time corresponds to.";
 		step4bPanel = new Step4aPanel(text);		
 
-		dateAndTimeController = new DateAndTimeController(step4bModel.getDateAndTimeModel());
-		dateAndTimeController.mark(step4bPanel.getMarkingColor());
+		dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());
+		dateAndTimeController.mark(tableController.getMarkingColor());
 		
 		tableController = TableController.getInstance();
 		tableController.setTableSelectionMode(TableController.COLUMNS);
@@ -82,7 +82,7 @@ public class Step4aController extends StepController {
 		
 		DateAndTimeController dateAndTimeController = new DateAndTimeController();
 		DateAndTime dtm = dateAndTimeController.getNextUnassignedDateAndTime();
-		step4bModel = new Step4aModel(dtm);
+		step4aModel = new Step4aModel(dtm);
 		return true;
 	}
 
@@ -99,7 +99,7 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {	
-		return new Step5aController(); 
+		return new Step4bController(); 
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {

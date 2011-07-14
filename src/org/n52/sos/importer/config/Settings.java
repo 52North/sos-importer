@@ -34,6 +34,10 @@ public class Settings {
 	
 	private String[] heightUnits;
 	
+	private String[] dateAndTimeGroups;
+	
+	private String[] positionGroups;
+	
 	private String[] columnSeparators;
 	
 	private String[] commentIndicators;
@@ -89,6 +93,8 @@ public class Settings {
 		this.latLonUnits = parse(props.getProperty("latLonUnits"));	
 		this.heightUnits = parse(props.getProperty("heightUnits"));	
 		this.thousandsSeparators = parse(props.getProperty("thousandsSeparators"));	
+		this.dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
+		this.positionGroups = parse(props.getProperty("positionGroups"));
 		
 		this.columnSeparators = parse(props.getProperty("columnSeparators"));	
 		this.commentIndicators = parse(props.getProperty("commentIndicators"));	
@@ -299,5 +305,13 @@ public class Settings {
 
 	public void setSosURLs(String[] sosURLs) {
 		this.sosURLs = sosURLs;
+	}
+
+	public String[] getDateAndTimeGroups() {
+		return dateAndTimeGroups;
+	}
+
+	public String[] getPositionGroups() {
+		return positionGroups;
 	}
 }

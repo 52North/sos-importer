@@ -23,13 +23,25 @@ import org.n52.sos.importer.model.table.Column;
 public class Step7Test {
 	public static void main(String[] args) {
 		Object[][] o = {
-				{"01/06/2010 00:00", "12,12", "23,123"},
-				{"01/06/2010 01:00", "323,123", "432,123"}};
+				{"01/06/2010", "00:01", "12,12", "23,123"},
+				{"01/06/2010", "01:01", "323,123", "432,123"}};
 		TableController.getInstance().setContent(o); 
 		
-		DateAndTime dtm = new DateAndTime();
-		DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0));
+		DateAndTime dtm1 = new DateAndTime();
+		dtm1.setGroup("1");
+		DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
+		dtc1.assignPattern("dd/MM/yyyy", new Column(0));
+		ModelStore.getInstance().add(dtm1);
+		
+		DateAndTime dtm2 = new DateAndTime();
+		dtm2.setGroup("1");
+		DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
+		dtc2.assignPattern("HH:mm", new Column(1));
+		ModelStore.getInstance().add(dtm2);
+		
+		dtc2.mergeDateAndTimes();
+		
+		DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
 		dtm.setSecond(new Second(0));
 		dtm.setTimeZone(new TimeZone(1));
 

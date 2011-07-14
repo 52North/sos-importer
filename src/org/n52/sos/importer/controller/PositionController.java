@@ -1,8 +1,10 @@
 package org.n52.sos.importer.controller;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Latitude;
@@ -29,14 +31,33 @@ public class PositionController {
 		this.position = position;
 	}
 	
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
+	public Position getNextPositionWithMissingValues() {
+		List<MissingComponentPanel> missingComponentPanels;
+		
+		for (Position position: ModelStore.getInstance().getPositions()) {
+			missingComponentPanels = getMissingComponentPanels();
+			if (missingComponentPanels.size() > 0)
+				return position;
+		}
+		return null;
+	}
+
 	public List<MissingComponentPanel> getMissingComponentPanels() {		
 		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		
-		if (position.getLongitude() == null) 
-			missingComponentPanels.add(new MissingLongitudePanel(position));
-		
 		if (position.getLatitude() == null)
 			missingComponentPanels.add(new MissingLatitudePanel(position));
+		
+		if (position.getLongitude() == null) 
+			missingComponentPanels.add(new MissingLongitudePanel(position));
 		
 		if (position.getHeight() == null)
 			missingComponentPanels.add(new MissingHeightPanel(position));
@@ -67,6 +88,53 @@ public class PositionController {
 		p.setHeight(new Height(height, heightUnit));
 		p.setEPSGCode(new EPSGCode(epsgCode));
 		return p;
+	}
+	
+	
+	public void mark(Color color) {
+		if (position.getLatitude() != null)
+			position.getLatitude().mark(color);
+		
+		if (position.getLongitude() == null) 
+			position.getLongitude().mark(color);
+		
+		if (position.getHeight() == null)
+			position.getHeight().mark(color);
+		
+		if (position.getEPSGCode() == null) 
+			position.getEPSGCode().mark(color);
+	}
+	
+	public void mergePositions() {
+		List<Position> positions = ModelStore.getInstance().getPositions();
+		List<Position> mergedPositions = new ArrayList<Position>();
+		for (int i = 0; i < positions.size(); i++) {
+			Position p1 = positions.get(i);
+			positions.remove(p1);
+			for (int j = 0; j < positions.size(); j++) {
+				Position p2 = positions.get(j);
+				if (p1.getGroup().equals(p2.getGroup())) {
+					merge(p1, p2);
+					positions.remove(p2);
+				}
+			}
+			mergedPositions.add(p1);
+		}
+		ModelStore.getInstance().setPositions(mergedPositions);
+	}
+	
+	public void merge(Position position1, Position position2) {
+		if (position1.getLatitude() == null)
+			position1.setLatitude(position2.getLatitude());
+		
+		if (position1.getLongitude() == null) 
+			position1.setLongitude(position2.getLongitude());
+		
+		if (position1.getHeight() == null)
+			position1.setHeight(position2.getHeight());
+		
+		if (position1.getEPSGCode() == null) 
+			position1.setEPSGCode(position2.getEPSGCode());
 	}
 	
 }

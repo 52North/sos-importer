@@ -83,7 +83,7 @@ public class Step3aController extends StepController {
 				DateAndTime dtm = dtc.getDateAndTime();
 				ModelStore.getInstance().add(dtm);
 			}
-		} else if (selection.get(0).equals("Feature Of Interest")) {
+		} else if (selection.get(0).equals("Feature of Interest")) {
 			FeatureOfInterest foi = new FeatureOfInterest();
 			foi.setTableElement(new Column(number));
 			ModelStore.getInstance().add(foi);

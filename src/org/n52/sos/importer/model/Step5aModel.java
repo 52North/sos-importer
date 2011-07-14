@@ -4,18 +4,25 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 
 public class Step5aModel {
 
-	private DateAndTime dateAndTimeModel;
+	private final String description = 
+		"Complete missing information for the marked date and time.";
 	
-	public Step5aModel(DateAndTime dateAndTimeModel) {
-		this.dateAndTimeModel = dateAndTimeModel;
+	private DateAndTime dateAndTime;
+	
+	public Step5aModel(DateAndTime dateAndTime) {
+		this.dateAndTime = dateAndTime;
 	}
 
-	public void setDateAndTimeModel(DateAndTime dateAndTimeModel) {
-		this.dateAndTimeModel = dateAndTimeModel;
+	public void setDateAndTimeModel(DateAndTime dateAndTime) {
+		this.dateAndTime = dateAndTime;
 	}
 
-	public DateAndTime getDateAndTimeModel() {
-		return dateAndTimeModel;
+	public DateAndTime getDateAndTime() {
+		return dateAndTime;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 }

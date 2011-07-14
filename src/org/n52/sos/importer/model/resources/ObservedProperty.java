@@ -1,8 +1,12 @@
 package org.n52.sos.importer.model.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 
 import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 
@@ -48,5 +52,17 @@ public class ObservedProperty extends Resource {
 	@Override
 	public DefaultComboBoxModel getURIs() {
 		return EditableComboBoxItems.getInstance().getObservedPropertyURIs();
+	}
+	
+	@Override
+	public List<Resource> getList() {
+		List<Resource> resources = new ArrayList<Resource>();
+		resources.addAll(ModelStore.getInstance().getObservedProperties());
+		return resources;
+	}
+	
+	@Override
+	public Resource getNextResourceType() {
+		return new UnitOfMeasurement();
 	}
 }

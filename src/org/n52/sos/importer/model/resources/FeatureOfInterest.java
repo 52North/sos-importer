@@ -1,5 +1,8 @@
 package org.n52.sos.importer.model.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 
 import org.n52.sos.importer.config.EditableComboBoxItems;
@@ -15,13 +18,13 @@ public class FeatureOfInterest extends Resource {
 	
 	public void assign(MeasuredValue measuredValue) {
 		measuredValue.setFeatureOfInterest(this);
-		ModelStore.getInstance().add(this);
 	}
 	
 	public boolean isAssigned(MeasuredValue measuredValue) {
 		return measuredValue.getFeatureOfInterest() != null;
 	}
 	
+	@Override
 	public String toString() {
 		return "Feature Of Interest";
 	}
@@ -63,5 +66,17 @@ public class FeatureOfInterest extends Resource {
 	@Override
 	public DefaultComboBoxModel getURIs() {
 		return EditableComboBoxItems.getInstance().getFeatureOfInterestURIs();
+	}
+
+	@Override
+	public List<Resource> getList() {
+		List<Resource> resources = new ArrayList<Resource>();
+		resources.addAll(ModelStore.getInstance().getFeatureOfInterests());
+		return resources;
+	}
+
+	@Override
+	public Resource getNextResourceType() {
+		return new ObservedProperty();
 	}
 }
