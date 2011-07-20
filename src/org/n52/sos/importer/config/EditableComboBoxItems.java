@@ -14,6 +14,8 @@ public class EditableComboBoxItems {
 	
 	private DefaultComboBoxModel dateAndTimePatterns;
 	
+	private DefaultComboBoxModel positionPatterns;
+	
 	private DefaultComboBoxModel EPSGCodes;
 	
 	private DefaultComboBoxModel featureOfInterestNames;
@@ -43,6 +45,8 @@ public class EditableComboBoxItems {
 				Settings.getInstance().getTextQualifiers()));
 		setDateAndTimePatterns(new DefaultComboBoxModel(
 				Settings.getInstance().getDateAndTimePatterns()));	
+		setPositionPatterns(new DefaultComboBoxModel(
+				Settings.getInstance().getPositionPatterns()));
 		setEPSGCodes(new DefaultComboBoxModel(
 				Settings.getInstance().getEpsgCodes()));
 		setSosURLs(new DefaultComboBoxModel(
@@ -185,5 +189,12 @@ public class EditableComboBoxItems {
 	public void setSensorURIs(DefaultComboBoxModel sensorURIs) {
 		this.sensorURIs = sensorURIs;
 	}
-	
+
+	public void setPositionPatterns(DefaultComboBoxModel positionPatterns) {
+		this.positionPatterns = positionPatterns;
+	}
+
+	public DefaultComboBoxModel getPositionPatterns() {
+		return positionPatterns;
+	}
 }

@@ -25,7 +25,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		this.resource = resource;
 		nameComboBox = new EditableJComboBoxPanel(resource.getNames(), "Name");
 		uriComboBox = new EditableJComboBoxPanel(resource.getURIs(), "URI");
-		
+		nameComboBox.setPartnerComboBox(uriComboBox);
+		uriComboBox.setPartnerComboBox(nameComboBox);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(nameComboBox);
 		this.add(uriComboBox);

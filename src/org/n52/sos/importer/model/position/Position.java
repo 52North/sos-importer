@@ -1,8 +1,9 @@
 package org.n52.sos.importer.model.position;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Combination;
 
-public class Position {
+public class Position extends Combination {
 
 	private static final Logger logger = Logger.getLogger(Position.class);
 	
@@ -63,6 +64,17 @@ public class Position {
 	@Override
 	public String toString() {
 		return "Position group " + getGroup();
+	}
+
+	@Override
+	public String format(Object o) {
+		return (String)o;
+	}
+
+	@Override
+	public Object parse(String s) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

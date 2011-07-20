@@ -12,63 +12,72 @@ public class Step8Panel extends JPanel {
 
 	private JProgressBar sensorProgressBar = new JProgressBar();
 	
-	private JLabel registerSensorLabel = new JLabel("Register Sensors...");
+	private JLabel registerSensorLabel = new JLabel("Register 0 Sensors...");
 	
-	private int sensorNumber;
+	private JLabel successfulSensorsLabel = new JLabel("Successful: 0");
 	
-	private JLabel sensorSuccessLabel = new JLabel();
+	private JLabel erroneousSensorsLabel = new JLabel("Errors: 0");
 	
-	private JLabel insertObservationLabel = new JLabel("Insert Observations...");
+	private JLabel insertObservationLabel = new JLabel("Insert 0 Observations...");
 	
 	private JProgressBar observationProgressBar = new JProgressBar();
 	
-	private int observationNumber;
+	private JLabel successfulObservationsLabel = new JLabel("Successful: 0");
 	
-	private JLabel observationSuccessLabel = new JLabel();
+	private JLabel erroneousObservationsLabel = new JLabel("Errors: 0");
+	
 	
 	public Step8Panel() {
 		sensorProgressBar.setStringPainted(true);
 		observationProgressBar.setStringPainted(true);
 		
 		this.setLayout(new GridLayout(2, 1));
-		JPanel sensorPanel = new JPanel(new GridLayout(4, 1));
+		JPanel sensorPanel = new JPanel(new GridLayout(5, 1));
 		sensorPanel.add(registerSensorLabel);
 		sensorPanel.add(sensorProgressBar);
-		sensorPanel.add(sensorSuccessLabel);
+		sensorPanel.add(successfulSensorsLabel);
+		sensorPanel.add(erroneousSensorsLabel);
 		sensorPanel.add(new JLabel(""));
 		this.add(sensorPanel);
 
-		JPanel observationPanel = new JPanel(new GridLayout(4, 1));
+		JPanel observationPanel = new JPanel(new GridLayout(5, 1));
 		observationPanel.add(insertObservationLabel);
 		observationPanel.add(observationProgressBar);
-		observationPanel.add(observationSuccessLabel);
+		observationPanel.add(successfulObservationsLabel);
+		observationPanel.add(erroneousObservationsLabel);
 		observationPanel.add(new JLabel(""));
 		this.add(observationPanel);
 	}
 	
 	public void setTotalNumberOfSensors(int n) {
-		this.sensorNumber = n;
-		sensorSuccessLabel.setText("Successful: 0/" + sensorNumber);
+		registerSensorLabel.setText("Register " + n + " sensors...");
 	}
 	
 	public void setRegisterSensorProgress(int n) {
 		sensorProgressBar.setValue(n);
 	}
 	
-	public void setSensorSuccess(int n) {
-		sensorSuccessLabel.setText("Successful: " + n + "/" + sensorNumber);
+	public void setNumberOfSuccessfulSensors(int n) {
+		successfulSensorsLabel.setText("Successful: " + n);
 	}
 	
-	public void setTotalNumberOfObservations(int n) {
-		this.observationNumber = n;
-		observationSuccessLabel.setText("Successful: 0/" + observationNumber);
+	public void setNumberOfErroneousSensors(int n) {
+		erroneousSensorsLabel.setText("Errors: " + n);
 	}
 	
 	public void setInsertObservationProgress(int n) {
 		observationProgressBar.setValue(n);
 	}
 	
-	public void setObservationSuccess(int n) {
-		observationSuccessLabel.setText("Successful: " + n + "/" + observationNumber);
+	public void setNumberOfSuccessfulObservations(int n) {
+		successfulObservationsLabel.setText("Successful: " + n );
+	}
+	
+	public void setNumberOfErroneousObservations(int n) {
+		erroneousObservationsLabel.setText("Errors: " + n);
+	}
+	
+	public void setTotalNumberOfObservations(int n) {
+		insertObservationLabel.setText("Insert " + n + " observations...");
 	}
 }

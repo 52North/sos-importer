@@ -177,4 +177,8 @@ public class ModelStore {
 	public HashSet<InsertObservation> getObservationsToInsert() {
 		return observationsToInsert;
 	}
+	
+	public void remove(Position position) {
+		positions.remove(position);
+	}
 }

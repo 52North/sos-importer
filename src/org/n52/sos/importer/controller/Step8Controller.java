@@ -79,6 +79,7 @@ public class Step8Controller extends StepController {
     		
     		int counter = 0;
     		int successful = 0;
+    		int errors = 0;
     		int total = ModelStore.getInstance().getSensorsToRegister().size();
     		step8Panel.setTotalNumberOfSensors(total);
     		Iterator<RegisterSensor> i = ModelStore.getInstance().getSensorsToRegister().iterator();
@@ -89,10 +90,11 @@ public class Step8Controller extends StepController {
     			
     			String answer = sendPostMessage(completedTemplate);
     			if (answer.contains("AssignedSensorId")) {
-    				step8Panel.setSensorSuccess(++successful);
+    				step8Panel.setNumberOfSuccessfulSensors(++successful);
     			} else if (answer.contains("Exception")) {
     				logger.error(rs.toString());
     				logger.error(answer);
+    				step8Panel.setNumberOfErroneousSensors(++errors);
     			}
     			counter++;
     			double process = (double) counter / (double) total * 100;
@@ -117,6 +119,7 @@ public class Step8Controller extends StepController {
         	
     		int counter = 0;
     		int successful = 0;
+    		int errors = 0;
     		int total = ModelStore.getInstance().getObservationsToInsert().size();
     		step8Panel.setTotalNumberOfObservations(total);
     		Iterator<InsertObservation> i = ModelStore.getInstance().getObservationsToInsert().iterator();
@@ -127,10 +130,11 @@ public class Step8Controller extends StepController {
     			
     			String answer = sendPostMessage(completedTemplate);
     			if (answer.contains("AssignedObservationId"))
-    				step8Panel.setObservationSuccess(++successful);	
+    				step8Panel.setNumberOfSuccessfulObservations(++successful);	
     			if (answer.contains("Exception")) {
     				logger.error(io.toString());
     				logger.error(answer);
+    				step8Panel.setNumberOfErroneousObservations(++errors);
     			}
     			counter++;
     			double process = (double) counter / (double) total * 100;

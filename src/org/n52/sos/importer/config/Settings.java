@@ -46,6 +46,8 @@ public class Settings {
 	
 	private String[] dateAndTimePatterns;
 	
+	private String[] positionPatterns;
+	
 	private String[] epsgCodes;
 	
 	private String[] sosURLs;
@@ -99,7 +101,8 @@ public class Settings {
 		this.columnSeparators = parse(props.getProperty("columnSeparators"));	
 		this.commentIndicators = parse(props.getProperty("commentIndicators"));	
 		this.textQualifiers = parse(props.getProperty("textQualifiers"));	
-		this.dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));	
+		this.dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));
+		this.positionPatterns = parse(props.getProperty("positionPatterns"));
 		this.epsgCodes = parse(props.getProperty("epsgCodes"));	
 		this.sosURLs = parse(props.getProperty("sosURLs"));	
 		
@@ -127,6 +130,7 @@ public class Settings {
 		props.setProperty("commentIndicators", format(EditableComboBoxItems.getInstance().getCommentIndicators()));
 		props.setProperty("textQualifiers", format(EditableComboBoxItems.getInstance().getTextQualifiers()));
 		props.setProperty("dateAndTimePatterns", format(EditableComboBoxItems.getInstance().getDateAndTimePatterns()));
+		props.setProperty("positionPatterns", format(EditableComboBoxItems.getInstance().getPositionPatterns()));
 		props.setProperty("epsgCodes", format(EditableComboBoxItems.getInstance().getEPSGCodes()));
 		props.setProperty("sosURLs", format(EditableComboBoxItems.getInstance().getSosURLs()));
 		
@@ -313,5 +317,13 @@ public class Settings {
 
 	public String[] getPositionGroups() {
 		return positionGroups;
+	}
+
+	public void setPositionPatterns(String[] positionPatterns) {
+		this.positionPatterns = positionPatterns;
+	}
+
+	public String[] getPositionPatterns() {
+		return positionPatterns;
 	}
 }

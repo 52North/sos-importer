@@ -140,8 +140,7 @@ public class Step4bController extends StepController {
 				
 				for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 					oneResource.assign(mv);
-				
-				logger.info("Assign one " + oneResource + " to Measured Value");
+			
 			//in case there are more than two resources of this type:
 			} else if (resource == null && number >= 2){
 				ResourceController rc = new ResourceController();

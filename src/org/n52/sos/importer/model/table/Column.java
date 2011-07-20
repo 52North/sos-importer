@@ -40,7 +40,8 @@ public class Column extends TableElement {
 		HashSet<String> values = new HashSet<String>();
 		for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
 			String value = TableController.getInstance().getValueAt(i, this.getNumber());
-			values.add(value);
+			if (value != null && value != "")
+				values.add(value);
 		}
 		return values;
 	}

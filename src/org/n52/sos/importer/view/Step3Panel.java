@@ -12,6 +12,7 @@ import org.n52.sos.importer.view.step3.ButtonGroupPanel;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.ParsingTestPanel;
+import org.n52.sos.importer.view.step3.PositionCombinationPanel;
 import org.n52.sos.importer.view.step3.SelectionPanel;
 
 public class Step3Panel extends JPanel {
@@ -105,11 +106,7 @@ public class Step3Panel extends JPanel {
 			
 			public PositionPanel() {
 				super(additionalPanel1);	
-				addRadioButton("Latitude / Northing");
-				addRadioButton("Longitude / Easting");
-				addRadioButton("Height");
-				addRadioButton("EPSG-Code");
-				addRadioButton("Combination");
+				addRadioButton("Combination", new PositionCombinationPanel(additionalPanel2));
 			}
 		}	
 	}		

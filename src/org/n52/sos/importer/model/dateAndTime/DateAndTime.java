@@ -5,10 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.Formatable;
-import org.n52.sos.importer.Parseable;
+import org.n52.sos.importer.Combination;
 
-public class DateAndTime implements Formatable, Parseable {
+public class DateAndTime extends Combination {
 	
 	private static final Logger logger = Logger.getLogger(DateAndTime.class);
 	
@@ -19,12 +18,6 @@ public class DateAndTime implements Formatable, Parseable {
 	private Minute minute;
 	private Second second;
 	private TimeZone timeZone;
-	
-	/** for parsing */
-	private String pattern;
-	
-	/** for merging */
-	private String group;
 	
 	public Year getYear() {
 		return year;
@@ -90,14 +83,6 @@ public class DateAndTime implements Formatable, Parseable {
 		return dateTime;
 	}
 	
-	public void setPattern(String pattern) {
-		this.pattern = pattern;
-	}
-	
-	public String getPattern() {
-		return pattern;
-	}
-	
 	@Override
 	public String format(Object o) {
         Date date = (Date)o;		        
@@ -106,14 +91,6 @@ public class DateAndTime implements Formatable, Parseable {
         String dateString = formatter.format(date);
 
 		return dateString;
-	}
-	
-	public void setGroup(String group) {
-		this.group = group;
-	}
-	
-	public String getGroup() {
-		return group;
 	}
 	
 	@Override
