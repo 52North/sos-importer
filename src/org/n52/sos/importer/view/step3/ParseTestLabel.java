@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.view.step3;
 
 import java.awt.Color;
 import java.util.HashSet;
@@ -7,8 +7,13 @@ import java.util.Set;
 
 import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.Parseable;
+
 public class ParseTestLabel extends JLabel {
 
+	private static final Logger logger = Logger.getLogger(ParseTestLabel.class);
+	
 	private static final long serialVersionUID = 1L;
 	
 	private Parseable parser;
@@ -18,7 +23,8 @@ public class ParseTestLabel extends JLabel {
 		this.parser = parser;
 	}
 	
-	public void parseValues (List<String> values) {
+	public void parseValues(List<String> values) {
+		logger.info("Parse Values for " + parser.getClass().getName());
 		int notParseableValues = 0;
 		StringBuilder notParseable = new StringBuilder();
 		Set<String> notParseableStrings = new HashSet<String>();

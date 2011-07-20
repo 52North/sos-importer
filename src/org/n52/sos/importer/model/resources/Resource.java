@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.TableElement;
 
 public abstract class Resource {
+	
+	private static final Logger logger = Logger.getLogger(Resource.class);
 	
 	private TableElement tableElement;
 	
@@ -36,10 +39,11 @@ public abstract class Resource {
 		if (uri == null)
 			return name;
 		else 
-			return uri.getPath();
+			return uri.toString();
 	}
 	
 	public void setTableElement(TableElement tableElement) {
+		logger.info("In " + tableElement + " are " + this + "s");
 		this.tableElement = tableElement;
 	}
 
@@ -60,4 +64,12 @@ public abstract class Resource {
 	public abstract List<Resource> getList();
 	
 	public abstract Resource getNextResourceType();
+	
+	@Override 
+	public String toString() {
+		if (getTableElement() == null)
+			return " \"" + getName() + "\"";
+		else 
+			return " " + getTableElement();
+	}
 }

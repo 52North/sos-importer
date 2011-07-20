@@ -1,8 +1,10 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.view.step3;
 
 import java.awt.Color;
 
 import javax.swing.JLabel;
+
+import org.n52.sos.importer.Formatable;
 
 public class ExampleFormatLabel extends JLabel {
 

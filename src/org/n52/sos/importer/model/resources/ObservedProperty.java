@@ -27,11 +27,6 @@ public class ObservedProperty extends Resource {
 		mv.setObservedProperty(null);		
 	}
 	
-	@Override 
-	public String toString() {
-		return "Observed Property";
-	}
-	
 	public ObservedProperty forThis(Cell measuredValuePosition) {
 		ObservedProperty op = new ObservedProperty();
 		if (getTableElement() == null) {
@@ -64,5 +59,10 @@ public class ObservedProperty extends Resource {
 	@Override
 	public Resource getNextResourceType() {
 		return new UnitOfMeasurement();
+	}
+	
+	@Override
+	public String toString() {
+		return "Observed Property" + super.toString();
 	}
 }

@@ -11,4 +11,9 @@ public class Longitude extends PositionComponentModel {
 	public Longitude(double value, String unit) {
 		super(value, unit);
 	}
+	
+	@Override
+	public String toString() {
+		return "Longitude" + super.toString();
+	}
 }

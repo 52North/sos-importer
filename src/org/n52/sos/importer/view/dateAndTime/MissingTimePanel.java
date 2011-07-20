@@ -25,6 +25,8 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 	public MissingTimePanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		timeModel = new SpinnerDateModel();
+		GregorianCalendar gc = new GregorianCalendar(0, 0, 0, 0, 0, 0);
+		timeModel.setValue(gc.getTime());
 		timeModel.setCalendarField(Calendar.HOUR_OF_DAY);
 		timeSpinner = new JSpinner(timeModel);
 		timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm:ss"));

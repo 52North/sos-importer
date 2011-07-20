@@ -7,10 +7,19 @@ public class Step6cModel {
 	
 	private FeatureOfInterest featureOfInterest;
 
+	/** a feature of interest name in the feature of interest column/row */
+	private String featureOfInterestName;
+	
 	private Position position;
 	
 	public Step6cModel(FeatureOfInterest featureOfInterest) {
 		this.featureOfInterest = featureOfInterest;
+		position = new Position();
+	}
+	
+	public Step6cModel(FeatureOfInterest featureOfInterest, String featureOfInterestName) {
+		this.featureOfInterest = featureOfInterest;
+		this.featureOfInterestName = featureOfInterestName;
 		position = new Position();
 	}
 	
@@ -28,5 +37,13 @@ public class Step6cModel {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	public void setFeatureOfInterestName(String featureOfInterestName) {
+		this.featureOfInterestName = featureOfInterestName;
+	}
+
+	public String getFeatureOfInterestName() {
+		return featureOfInterestName;
 	}
 }

@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.view.step3;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

@@ -1,7 +1,11 @@
 package org.n52.sos.importer.model.position;
 
+import org.apache.log4j.Logger;
+
 public class Position {
 
+	private static final Logger logger = Logger.getLogger(Position.class);
+	
 	private Longitude longitude;
 	
 	private Latitude latitude;
@@ -17,6 +21,7 @@ public class Position {
 	}
 
 	public void setHeight(Height height) {
+		logger.info("Add " + height + " to " + this);
 		this.height = height;
 	}
 
@@ -25,10 +30,12 @@ public class Position {
 	}
 
 	public void setEPSGCode(EPSGCode epsgCode) {
+		logger.info("Add " + epsgCode + " to " + this);
 		this.epsgCode = epsgCode;
 	}
 
 	public void setLongitude(Longitude longitude) {
+		logger.info("Add " + longitude + " to " + this);
 		this.longitude = longitude;
 	}
 
@@ -37,6 +44,7 @@ public class Position {
 	}
 
 	public void setLatitude(Latitude latitude) {
+		logger.info("Add " + latitude + " to " + this);
 		this.latitude = latitude;
 	}
 
@@ -50,6 +58,11 @@ public class Position {
 
 	public String getGroup() {
 		return group;
+	}
+	
+	@Override
+	public String toString() {
+		return "Position group " + getGroup();
 	}
 	
 }

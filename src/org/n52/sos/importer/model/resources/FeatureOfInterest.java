@@ -1,6 +1,7 @@
 package org.n52.sos.importer.model.resources;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -14,7 +15,10 @@ import org.n52.sos.importer.model.table.Cell;
 
 public class FeatureOfInterest extends Resource {
 	
+	/** single position or position column/row */
 	private Position position;
+	
+	private HashMap<String,Position> positions = new HashMap<String, Position>();
 	
 	public void assign(MeasuredValue measuredValue) {
 		measuredValue.setFeatureOfInterest(this);
@@ -23,38 +27,38 @@ public class FeatureOfInterest extends Resource {
 	public boolean isAssigned(MeasuredValue measuredValue) {
 		return measuredValue.getFeatureOfInterest() != null;
 	}
-	
-	@Override
-	public String toString() {
-		return "Feature Of Interest";
-	}
 
 	@Override
 	public void unassign(MeasuredValue mv) {
 		mv.setFeatureOfInterest(null);		
 	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
 	
 	public FeatureOfInterest forThis(Cell measuredValuePosition) {
 		FeatureOfInterest foi = new FeatureOfInterest();
+		//case: this is not a feature of interest row or column
 		if (getTableElement() == null) {
 			foi.setName(getName());
-			foi.setURI(getURI());
+			foi.setURI(getURI());		
+			foi.setPosition(position);
 		} else {
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			foi.setName(name);
+			
+			//case: this feature of interest row or column is
+			//associated with a position row or column in the table
+			if (position != null) {
+				PositionController pc = new PositionController(position);
+				Cell c = getTableElement().getCellFor(measuredValuePosition);
+				Position p = pc.forThis(c); 
+				foi.setPosition(p);
+			//case: this feature of interest row or column is not
+			//associated with a position row or column in the table
+			} else {
+				Position p = positions.get(name);
+				foi.setPosition(p);
+			}
 		}
 		
-		PositionController pc = new PositionController(position);
-		Position p = pc.forThis(new Cell(0,0)); //TODO
-		foi.setPosition(p);
 		return foi;
 	}
 
@@ -78,5 +82,26 @@ public class FeatureOfInterest extends Resource {
 	@Override
 	public Resource getNextResourceType() {
 		return new ObservedProperty();
+	}
+	
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+	
+	public void setPositionFor(String featureOfInterestName, Position position) {
+		positions.put(featureOfInterestName, position);
+	}	
+	
+	public Position getPositionFor(String featureOfInterestName) {
+		return positions.get(featureOfInterestName);
+	}
+	
+	@Override
+	public String toString() {
+		return "Feature Of Interest" + super.toString();
 	}
 }

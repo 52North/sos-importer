@@ -40,11 +40,11 @@ public class EPSGCode {
 		return tableElement;
 	}
 	
-	public int getParsedValue(Cell measuredValuePosition) {
+	public int getParsedValue(Cell featureOfInterestPosition) {
 		if (tableElement == null)
 			return getValue();
 		else 
-			return parse(tableElement.getValueFor(measuredValuePosition));
+			return parse(tableElement.getValueFor(featureOfInterestPosition));
 	}
 	
 	public int parse(String s) {
@@ -55,5 +55,13 @@ public class EPSGCode {
 	public void mark(Color color) {
 		if (tableElement != null)
 			tableElement.mark(color);
+	}
+	
+	@Override 
+	public String toString() {
+		if (getTableElement() == null)
+			return "EPSG-Code "  + getValue();
+		else 
+			return "EPSG-Code " + getTableElement();
 	}
 }

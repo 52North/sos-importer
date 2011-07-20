@@ -19,4 +19,8 @@ public class Day extends DateAndTimeComponent {
 		return GregorianCalendar.DAY_OF_MONTH;
 	}
 
+	@Override
+	public String toString() {
+		return "Day" + super.toString();
+	}
 }

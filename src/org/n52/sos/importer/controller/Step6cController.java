@@ -21,16 +21,21 @@ public class Step6cController extends StepController {
 	public Step6cController() {
 	}
 	
-	public Step6cController(Step6cModel step7Model) {
-		this.step6cModel = step7Model;
+	public Step6cController(Step6cModel step6cModel) {
+		this.step6cModel = step6cModel;
 	}
 
 	@Override
 	public void loadSettings() {
 		step6cPanel = new Step6cPanel();
 
-		FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
-		step6cPanel.setFeatureOfInterestName(foi.getName());
+		String name = step6cModel.getFeatureOfInterestName();
+		if (name != null)
+			step6cPanel.setFeatureOfInterestName(name);
+		else {
+			FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
+			step6cPanel.setFeatureOfInterestName(foi.getName());
+		}
 		
 		Position p = step6cModel.getPosition();
 		positionController = new PositionController(p);
@@ -41,7 +46,14 @@ public class Step6cController extends StepController {
 	@Override
 	public void saveSettings() {
 		positionController.assignMissingComponentValues();
-		step6cModel.getFeatureOfInterest().setPosition(step6cModel.getPosition());
+		
+		String name = step6cModel.getFeatureOfInterestName();
+		Position position = step6cModel.getPosition();
+		if (name != null)
+			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
+		else 
+			step6cModel.getFeatureOfInterest().setPosition(position);
+		
 		step6cPanel = null;
 	}
 	
@@ -58,10 +70,10 @@ public class Step6cController extends StepController {
 
 	@Override
 	public StepController getNext() {
-		FeatureOfInterest foiWithoutPosition = getNextFeatureOfInterestWithoutPosition();
+		Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithoutPosition();
 		if (foiWithoutPosition == null) return null;
 		
-		return new Step6cController(new Step6cModel(foiWithoutPosition));
+		return new Step6cController(foiWithoutPosition);
 	}
 	
 	@Override
@@ -69,21 +81,37 @@ public class Step6cController extends StepController {
 		return new Step7Controller();
 	}
 	
-	private FeatureOfInterest getNextFeatureOfInterestWithoutPosition() {
+	private Step6cModel getNextFeatureOfInterestWithoutPosition() {
 		List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
-		
-		for (FeatureOfInterest foi: featureOfInterests) 
-			if (foi.getPosition() == null) 
-				return foi;
+
+		for (FeatureOfInterest foi: featureOfInterests) {
+			System.out.println(foi.getTableElement().getValues().size());
+			if (foi.getTableElement() == null) {
+				if (foi.getPosition() == null) 
+					return new Step6cModel(foi);
+				//otherwise the feature has already a position
+			} else {
+				if (foi.getPosition() == null) {
+					for (String name: foi.getTableElement().getValues()) {
+						
+						Position p = foi.getPositionFor(name);
+						if (p == null)
+							return new Step6cModel(foi, name); 
+						//otherwise the feature in this row/column has already a position
+					}
+				}
+				//otherwise the feature row/column has already a position row/column
+			}
+		}
+
 		return null;
 	}
 
 	@Override
 	public boolean isNecessary() {
-		FeatureOfInterest foiWithoutPosition = getNextFeatureOfInterestWithoutPosition();
-		if (foiWithoutPosition == null) return false;
-		
-		step6cModel = new Step6cModel(foiWithoutPosition);
+		step6cModel = getNextFeatureOfInterestWithoutPosition();
+		if (step6cModel == null) return false;
+
 		return true;
 	}
 

@@ -18,4 +18,9 @@ public class Hour extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.HOUR_OF_DAY;
 	}
+	
+	@Override
+	public String toString() {
+		return "Hour" + super.toString();
+	}
 }

@@ -18,4 +18,9 @@ public class Minute extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.MINUTE;
 	}
+	
+	@Override
+	public String toString() {
+		return "Minute" + super.toString();
+	}
 }

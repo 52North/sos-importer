@@ -90,7 +90,6 @@ public class PositionController {
 		return p;
 	}
 	
-	
 	public void mark(Color color) {
 		if (position.getLatitude() != null)
 			position.getLatitude().mark(color);

@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.view.step3;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +29,6 @@ public abstract class SelectionPanel extends JPanel {
 	}
 	
 	protected void reinit() {
-
 	}
 	
 	public void restore(List<String> selections) {

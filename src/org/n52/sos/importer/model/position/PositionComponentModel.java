@@ -56,11 +56,11 @@ public class PositionComponentModel {
 			tableElement.mark(color);
 	}
 	
-	public double getParsedValue(Cell measuredValuePosition) {
+	public double getParsedValue(Cell featureOfInterestPosition) {
 		if (tableElement == null)
 			return getValue();
 		else 
-			return parse(tableElement.getValueFor(measuredValuePosition));
+			return parse(tableElement.getValueFor(featureOfInterestPosition));
 	}
 	
 	public String getParsedUnit() {
@@ -78,5 +78,13 @@ public class PositionComponentModel {
 	public double parse(String s) {
 		//TODO
 		return Double.parseDouble(s);
+	}
+	
+	@Override 
+	public String toString() {
+		if (getTableElement() == null)
+			return " " + getValue() + getParsedUnit();
+		else 
+			return " " + getTableElement();
 	}
 }

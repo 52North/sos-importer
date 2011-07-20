@@ -18,4 +18,9 @@ public class Month extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.MONTH;
 	}
+	
+	@Override
+	public String toString() {
+		return "Month" + super.toString();
+	}
 }

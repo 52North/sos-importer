@@ -18,4 +18,9 @@ public class TimeZone extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.ZONE_OFFSET;
 	}	
+	
+	@Override
+	public String toString() {
+		return "Timezone" + super.toString();
+	}
 }

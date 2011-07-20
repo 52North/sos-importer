@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
@@ -29,6 +30,8 @@ import org.n52.sos.importer.view.dateAndTime.MissingYearPanel;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class DateAndTimeController {
+	
+	private static final Logger logger = Logger.getLogger(DateAndTimeController.class);
 	
 	private DateAndTime dateAndTime;
 	
@@ -89,8 +92,11 @@ public class DateAndTimeController {
 			mcp.assignValues();
 	}
 	
-	public void assignPattern(String pattern, TableElement tableElement) {
-    	if (pattern.indexOf("y") != -1) dateAndTime.setYear(new Year(tableElement, pattern));
+	public void assignPattern(String pattern, TableElement tableElement) {		
+		logger.info("Assign pattern " + pattern + " in " + tableElement + " to " + dateAndTime);
+		
+    	if (pattern.indexOf("y") != -1) 
+    		dateAndTime.setYear(new Year(tableElement, pattern));
     	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) 
     		dateAndTime.setMonth(new Month(tableElement, pattern));
     	if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) 
@@ -196,19 +202,19 @@ public class DateAndTimeController {
 	}
 	
 	private void merge(DateAndTime dateAndTime1, DateAndTime dateAndTime2) {
-		if (dateAndTime1.getSecond() == null)
+		if (dateAndTime1.getSecond() == null && dateAndTime2.getSecond() != null)
 			dateAndTime1.setSecond(dateAndTime2.getSecond());
-		if (dateAndTime1.getMinute() == null) 
+		if (dateAndTime1.getMinute() == null && dateAndTime2.getMinute() != null) 
 			dateAndTime1.setMinute(dateAndTime2.getMinute());
-		if (dateAndTime1.getHour() == null)
+		if (dateAndTime1.getHour() == null && dateAndTime2.getHour() != null)
 			dateAndTime1.setHour(dateAndTime2.getHour());
-		if (dateAndTime1.getDay() == null)
+		if (dateAndTime1.getDay() == null && dateAndTime2.getDay() != null)
 			dateAndTime1.setDay(dateAndTime2.getDay());
-		if (dateAndTime1.getMonth() == null) 
+		if (dateAndTime1.getMonth() == null && dateAndTime2.getMonth() != null) 
 			dateAndTime1.setMonth(dateAndTime2.getMonth());
-		if (dateAndTime1.getYear() == null)
+		if (dateAndTime1.getYear() == null && dateAndTime2.getYear() != null)
 			dateAndTime1.setYear(dateAndTime2.getYear());
-		if (dateAndTime1.getTimeZone() == null)
+		if (dateAndTime1.getTimeZone() == null && dateAndTime2.getTimeZone() != null)
 			dateAndTime1.setTimeZone(dateAndTime2.getTimeZone());
 	}
 }

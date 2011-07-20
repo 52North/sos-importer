@@ -6,7 +6,7 @@ public class Text extends MeasuredValue implements Parseable {
 	
 	@Override
 	public String toString() {
-		return "Text";
+		return "Text" + super.toString();
 	}
 
 	@Override

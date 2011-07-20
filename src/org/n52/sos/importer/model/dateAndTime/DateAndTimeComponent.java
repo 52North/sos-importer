@@ -79,4 +79,12 @@ public abstract class DateAndTimeComponent {
 	
 	public abstract int getGregorianCalendarField();
 	
+	@Override
+	public String toString() {
+		if (getTableElement() == null)
+			return " '" + getValue() + "'";
+		else 
+			return " " + getTableElement();
+	}
+	
 }

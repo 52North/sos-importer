@@ -11,11 +11,6 @@ public class NumericValue extends MeasuredValue implements Formatable {
 	private String decimalSeparator;
 	
 	private String thousandsSeparator;
-	
-	@Override
-	public String toString() {
-		return "Numeric Value";
-	}
 
 	public void setDecimalSeparator(String selectedDecimalSeparator) {
 		this.decimalSeparator = selectedDecimalSeparator;
@@ -63,5 +58,10 @@ public class NumericValue extends MeasuredValue implements Formatable {
 		formatter.setDecimalFormatSymbols(symbols);
 		String n = formatter.format(number);
 		return n;
+	}
+	
+	@Override
+	public String toString() {
+		return "Numeric Value" + super.toString();
 	}
 }

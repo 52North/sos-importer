@@ -1,5 +1,8 @@
 package org.n52.sos.importer.test;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step7Controller;
@@ -23,8 +26,8 @@ import org.n52.sos.importer.model.table.Column;
 public class Step7Test {
 	public static void main(String[] args) {
 		Object[][] o = {
-				{"01/06/2010", "00:01", "12,12", "23,123"},
-				{"01/06/2010", "01:01", "323,123", "432,123"}};
+				{"01/06/2010", "11:45", "12,12", "23,123"},
+				{"01/06/2010", "23:45", "323,123", "432,123"}};
 		TableController.getInstance().setContent(o); 
 		
 		DateAndTime dtm1 = new DateAndTime();
@@ -43,9 +46,10 @@ public class Step7Test {
 		
 		DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
 		dtm.setSecond(new Second(0));
-		dtm.setTimeZone(new TimeZone(1));
+		dtm.setTimeZone(new TimeZone(0));
 
 		Position p = new Position();
+		p.setGroup("A");
 		Latitude lat = new Latitude(52.5, "°");
 		Longitude lon = new Longitude(7.5, "°");
 		Height h = new Height(100, "m");
@@ -62,7 +66,15 @@ public class Step7Test {
 		FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("Weatherstation Muenster");
 		Sensor sn = new Sensor();
-		sn.setName("Thermometer xyz");
+		sn.setName("Thermometer 1");
+		
+		Sensor sn2 = new Sensor();
+		sn2.setName("Thermometer 2");
+		try {
+			sn2.setURI(new URI("http://thermo.org/123"));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 		
 		NumericValue nv1 = new NumericValue();
 		nv1.setDecimalSeparator(",");
@@ -81,7 +93,7 @@ public class Step7Test {
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
-		nv2.setSensor(sn);
+		nv2.setSensor(sn2);
 		nv2.setUnitOfMeasurement(uom);	
 		
 		foi.setPosition(p);

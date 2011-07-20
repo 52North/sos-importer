@@ -6,7 +6,7 @@ public class Count extends MeasuredValue implements Parseable {
 
 	@Override
 	public String toString() {
-		return "Count";
+		return "Count" + super.toString();
 	}
 	
 	@Override

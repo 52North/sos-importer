@@ -11,4 +11,9 @@ public class Latitude extends PositionComponentModel {
 	public Latitude(double value, String unit) {
 		super(value, unit);
 	}
+	
+	@Override
+	public String toString() {
+		return "Latitude" + super.toString();
+	}
 }

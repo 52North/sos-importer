@@ -18,4 +18,9 @@ public class Year extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.YEAR;
 	}
+	
+	@Override 
+	public String toString() {
+		return "Year" + super.toString();
+	}
 }

@@ -25,13 +25,7 @@ public class UnitOfMeasurement extends Resource {
 	@Override
 	public void unassign(MeasuredValue mv) {
 		mv.setUnitOfMeasurement(null);		
-	}
-	
-	@Override 
-	public String toString() {
-		return "Unit Of Measurement";
-	}
-	
+	}	
 	
 	public UnitOfMeasurement forThis(Cell measuredValuePosition) {
 		UnitOfMeasurement uom = new UnitOfMeasurement();
@@ -65,5 +59,10 @@ public class UnitOfMeasurement extends Resource {
 	@Override
 	public Resource getNextResourceType() {
 		return new Sensor();
+	}
+	
+	@Override
+	public String toString() {
+		return "Unit Of Measurement" + super.toString();
 	}
 }

@@ -12,4 +12,8 @@ public class Height extends PositionComponentModel {
 		super(value, unit);
 	}
 
+	@Override
+	public String toString() {
+		return "Height" + super.toString();
+	}
 }

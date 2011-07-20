@@ -38,8 +38,8 @@ public abstract class MeasuredValue implements Parseable {
 	private Sensor sensor;
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
-		logger.info("Assign Feature Of Interest to Measured Value");
 		this.featureOfInterest = featureOfInterest;
+		logger.info("Assign " + featureOfInterest + " to " + this);
 	}
 
 	public FeatureOfInterest getFeatureOfInterest() {
@@ -47,8 +47,8 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setObservedProperty(ObservedProperty observedProperty) {
-		logger.info("Assign Observed Property to Measured Value");
 		this.observedProperty = observedProperty;
+		logger.info("Assign " + observedProperty + " to " + this);
 	}
 
 	public ObservedProperty getObservedProperty() {
@@ -56,8 +56,8 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setUnitOfMeasurement(UnitOfMeasurement unitOfMeasurement) {
-		logger.info("Assign Unit of Measurement to Measured Value");
 		this.unitOfMeasurement = unitOfMeasurement;
+		logger.info("Assign " + unitOfMeasurement + " to " + this);
 	}
 
 	public UnitOfMeasurement getUnitOfMeasurement() {
@@ -65,7 +65,7 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setSensor(Sensor sensor) {
-		logger.info("Assign Sensor Name to Measured Value");
+		logger.info("Assign " + sensor + " to " + this);
 		this.sensor = sensor;
 	}
 
@@ -74,7 +74,7 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setTableElement(TableElement tableElement) {
-		logger.info("Assign Column to Measured Value");
+		logger.info("In " + tableElement + " are " + this + "s");
 		this.tableElement = tableElement;
 	}
 
@@ -83,8 +83,8 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setDateAndTime(DateAndTime dateAndTime) {
-		logger.info("Assign Date & Time to Measured Value");
 		this.dateAndTime = dateAndTime;
+		logger.info("Assign " + dateAndTime + " to " + this);
 	}
 
 	public DateAndTime getDateAndTime() {
@@ -112,7 +112,7 @@ public abstract class MeasuredValue implements Parseable {
 			//when was the current Measured Value measured
 			dtc.setDateAndTime(getDateAndTime());
 			GregorianCalendar gc = dtc.forThis(c);	
-			Format formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
+			Format formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 			String timeStamp = formatter.format(gc.getTime());
 			io.setTimeStamp(timeStamp);
 			
@@ -151,6 +151,14 @@ public abstract class MeasuredValue implements Parseable {
 			ModelStore.getInstance().addObservationToInsert(io);
 			ModelStore.getInstance().addSensorToRegister(rs);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		if (getTableElement() == null)
+			return "";
+		else
+			return " " + getTableElement();
 	}
 	
 	//public abstract String parse(String s);

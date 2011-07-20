@@ -46,7 +46,11 @@ public class Step3aController extends StepController {
 	@Override
 	public void loadSettings() {	
 		int number = step3aModel.getSelectedColumn();
-		List<String> selection = step3aModel.getSelection();
+		List<String> selection = ModelStore.getInstance().getColumnFromStore(number);
+		if (selection == null) {
+			selection = new ArrayList<String>();
+			selection.add("Undefined");
+		}
 		step3Panel = new Step3Panel();
 		step3Panel.restore(selection);
 
@@ -57,11 +61,10 @@ public class Step3aController extends StepController {
 	
 	@Override
 	public void saveSettings() {
+		int number = step3aModel.getSelectedColumn();
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
-		step3aModel.setSelection(selection);	
-		
-		int number = step3aModel.getSelectedColumn();
+		ModelStore.getInstance().putColumnIntoStore(number, selection);	
 		TableController.getInstance().setColumnHeading(number, selection.get(0));		
 			
 		if (selection.get(0).equals("Measured Value")) {

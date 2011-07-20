@@ -18,4 +18,9 @@ public class Second extends DateAndTimeComponent {
 	public int getGregorianCalendarField() {
 		return GregorianCalendar.SECOND;
 	}
+	
+	@Override
+	public String toString() {
+		return "Second" + super.toString();
+	}
 }
