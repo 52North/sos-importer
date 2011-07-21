@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
@@ -39,8 +40,7 @@ public class Step4aController extends StepController {
 		tableController = TableController.getInstance();
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.allowMultipleSelection();
-		tableController.addMultipleSelectionListener(new SelectionChanged());
-		
+		tableController.addMultipleSelectionListener(new SelectionChanged());	
 	}
 
 	@Override
@@ -70,9 +70,13 @@ public class Step4aController extends StepController {
 	public boolean isNecessary() {
 		int dateAndTimes = ModelStore.getInstance().getDateAndTimes().size();
 		
-		if (dateAndTimes == 0) return false;
+		if (dateAndTimes == 0) {
+			logger.info("Skip Step 4a since there are not any Date&Times");
+			return false;
+		}
 		if (dateAndTimes == 1) {
 			DateAndTime dateAndTime = ModelStore.getInstance().getDateAndTimes().get(0);
+			logger.info("Skip Step 4a since there is just " + dateAndTime);
 			
 			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 				mv.setDateAndTime(dateAndTime);
@@ -109,13 +113,19 @@ public class Step4aController extends StepController {
 			for (int column: selectedColumns) {
 				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
 				if (mv == null) {
-					logger.error("This is not a measured value.");
+					JOptionPane.showMessageDialog(null,
+						    "This is not a measured value.",
+						    "Info",
+						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(column);
 					return;
 				}
 
 				if (dateAndTimeController.isAssigned(mv)) {
-					logger.error("Date and Time already set for this measured value.");
+					JOptionPane.showMessageDialog(null,
+						    "Date and Time are already set for this measured value.",
+						    "Info",
+						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(column);
 					return;
 				}

@@ -13,13 +13,13 @@ import javax.swing.JRadioButton;
 
 import org.n52.sos.importer.controller.MainController;
 
-public abstract class ButtonGroupPanel extends SelectionPanel {
+public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
 	protected ButtonGroup group = new ButtonGroup();
 	
-	public ButtonGroupPanel(JPanel containerPanel) {
+	public RadioButtonPanel(JPanel containerPanel) {
 		super(containerPanel);
         this.setLayout(new GridLayout(0, 1));
 	}

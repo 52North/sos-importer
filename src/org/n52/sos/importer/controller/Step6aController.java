@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
@@ -17,6 +18,8 @@ import org.n52.sos.importer.view.position.MissingComponentPanel;
  *
  */
 public class Step6aController extends StepController {
+	
+	private static final Logger logger = Logger.getLogger(Step6aController.class);
 	
 	private Step6aModel step6aModel;
 	
@@ -61,7 +64,7 @@ public class Step6aController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 6a: Add missing time information";
+		return "Step 6a: Add missing dates and times";
 	}
 
 	@Override
@@ -82,6 +85,8 @@ public class Step6aController extends StepController {
 			step6aModel = new Step6aModel(dateAndTime);
 			return true;
 		}
+		
+		logger.info("Skip Step 6a since there is at least one Date&Time");
 			
 		return false;
 	}

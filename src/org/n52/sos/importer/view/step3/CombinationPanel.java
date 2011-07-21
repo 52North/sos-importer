@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.Combination;
-import org.n52.sos.importer.EditableJComboBoxPanel;
+import org.n52.sos.importer.config.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 
 public abstract class CombinationPanel extends SelectionPanel {
@@ -100,7 +100,8 @@ public abstract class CombinationPanel extends SelectionPanel {
 	private class FormatChanged implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
-	        selectionChanged();
+			if (!patternComboBox.isEditable())
+				selectionChanged();
 	    }
 	}
 }

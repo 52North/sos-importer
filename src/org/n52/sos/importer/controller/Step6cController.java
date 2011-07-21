@@ -85,7 +85,7 @@ public class Step6cController extends StepController {
 		List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
 
 		for (FeatureOfInterest foi: featureOfInterests) {
-			System.out.println(foi.getTableElement().getValues().size());
+			
 			if (foi.getTableElement() == null) {
 				if (foi.getPosition() == null) 
 					return new Step6cModel(foi);

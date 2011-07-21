@@ -16,15 +16,19 @@ public class BackNextPanel extends JPanel {
 
 	private final JButton back = new JButton("Back");
 	private final JButton next = new JButton("Next");
+	private final JButton finish = new JButton("Finish");
 	
 	private BackNextPanel() {
 		super();
 		this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		this.add(back);
 		this.add(next);
+		this.add(finish);
+		finish.setVisible(false);
 		
 		back.addActionListener(new BackButtonClicked());
 		next.addActionListener(new NextButtonClicked());
+		finish.addActionListener(new FinishButtonClicked());
 	}
 
 	public static BackNextPanel getInstance() {
@@ -33,8 +37,22 @@ public class BackNextPanel extends JPanel {
 		return instance;
 	}
 	
-	public void setBackButtonEnabled(boolean flag) {
-		back.setEnabled(flag);
+	public void setBackButtonVisible(boolean flag) {
+		back.setVisible(flag);
+	}
+	
+	public void changeNextToFinish() {
+		next.setVisible(false);
+		finish.setVisible(true);
+	}
+	
+	public void changeFinishToNext() {
+		finish.setVisible(false);
+		next.setVisible(true);
+	}
+	
+	public void setFinishButtonEnabled(boolean aFlag) {
+		finish.setEnabled(aFlag);
 	}
 	
 	private class BackButtonClicked implements ActionListener {
@@ -46,6 +64,12 @@ public class BackNextPanel extends JPanel {
 	private class NextButtonClicked implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			BackNextController.getInstance().nextButtonClicked();
+		}
+	}
+	
+	private class FinishButtonClicked implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			BackNextController.getInstance().finishButtonClicked();
 		}
 	}
 }

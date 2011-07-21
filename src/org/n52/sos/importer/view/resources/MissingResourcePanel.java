@@ -4,8 +4,9 @@ import java.awt.FlowLayout;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.Logger;
-import org.n52.sos.importer.EditableJComboBoxPanel;
+import javax.swing.JOptionPane;
+
+import org.n52.sos.importer.config.EditableJComboBoxPanel;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 
@@ -13,8 +14,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(MissingResourcePanel.class);
-
 	private Resource resource;
 	
 	private final EditableJComboBoxPanel nameComboBox; 
@@ -33,24 +32,30 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 	}
 	
+	@Override
 	public boolean checkValues() {
-		//get and check name
-		String name = (String) nameComboBox.getSelectedItem();
-		if (name == null) {
-			logger.warn("No Name given.");
+		String name = nameComboBox.getSelectedItem().toString().trim();
+		String uri = uriComboBox.getSelectedItem().toString().trim();
+		
+		//check syntax of URI
+		try {
+			new URI(uri);
+		} catch (URISyntaxException e) {
+			JOptionPane.showMessageDialog(null,
+				    "The entered URI is syntactically not correct.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		
-		//get and check URI
-		String uri = (String) uriComboBox.getSelectedItem();
-		URI URI = null;
-		try {
-			if (uri != null)
-				URI = new URI(uri);
-		} catch (URISyntaxException e) {
-			logger.warn("Wrong URI", e);
+		if (name.equals("") && uri.equals("")) {
+			JOptionPane.showMessageDialog(null,
+				    "You have to type in at least a name or a URI.",
+				    "Information",
+				    JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -59,16 +64,14 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		String name = (String) nameComboBox.getSelectedItem();
 		name = name.trim();
 		resource.setName(name);
+		
 		String uri = (String) uriComboBox.getSelectedItem();
-		if (uri == null || uri.trim().equals(""))
-			resource.setURI(null);
-		else {
-			try {
-				URI URI = new URI(uri.trim());
-				resource.setURI(URI);		
-			} catch (URISyntaxException e) {
-			}	
-		}
+		uri = uri.trim();
+		try {
+			URI URI = new URI(uri);
+			resource.setURI(URI);		
+		} catch (URISyntaxException e) {
+		}	
 	}
 
 	@Override
@@ -76,5 +79,4 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		resource.setName(null);
 		resource.setURI(null);
 	}
-
 }

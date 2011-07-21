@@ -49,6 +49,10 @@ public class Step8Panel extends JPanel {
 		this.add(observationPanel);
 	}
 	
+	public void setIndeterminate(boolean aFlag) {
+		sensorProgressBar.setIndeterminate(aFlag);
+	}
+	
 	public void setTotalNumberOfSensors(int n) {
 		registerSensorLabel.setText("Register " + n + " sensors...");
 	}

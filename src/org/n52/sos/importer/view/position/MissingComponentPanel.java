@@ -9,4 +9,8 @@ public abstract class MissingComponentPanel extends JPanel {
 	public abstract void assignValues();
 	
 	public abstract void unassignValues();
+	
+	public boolean checkValues() {
+		return true;
+	}
 }

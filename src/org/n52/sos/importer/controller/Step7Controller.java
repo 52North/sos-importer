@@ -26,23 +26,7 @@ public class Step7Controller extends StepController {
 	}
 
 	@Override
-	public void saveSettings() {
-		String sosURL = step7Panel.getSOSURL();
-		
-		/*
-		ArrayList<String> observationErrors = new ArrayList<String>();
-		ArrayList<String> wrongObservations = new ArrayList<String>();
-		
-
-		
-		logger.info("Observations to insert: " + observationsToInsert);
-		logger.info("Successful: " + successfullyInsertedObservations);
-		
-		for (int i = 0; i < observationErrors.size(); i++) {
-			logger.error(observationErrors.get(i));			
-			logger.error(wrongObservations.get(i));
-		}
-		*/
+	public void saveSettings() {		
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package org.n52.sos.importer.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,10 +19,6 @@ import org.n52.sos.importer.model.table.Column;
 public class ModelStore {
 	
 	private static ModelStore instance = null;
-	
-	private HashMap<Integer, List<String>> columnStore;
-	
-	private HashMap<Integer, List<String>> rowStore;
 	
 	private List<MeasuredValue> measuredValues;
 	
@@ -44,8 +39,6 @@ public class ModelStore {
 	private HashSet<RegisterSensor> sensorsToRegister;
 	
 	private ModelStore() {
-		columnStore = new HashMap<Integer, List<String>>();
-		rowStore = new HashMap<Integer, List<String>>();
 		measuredValues = new ArrayList<MeasuredValue>();
 		dateAndTimes = new ArrayList<DateAndTime>();
 		featureOfInterests = new ArrayList<FeatureOfInterest>();
@@ -61,22 +54,6 @@ public class ModelStore {
 		if (instance == null)
 			instance = new ModelStore();
 		return instance;
-	}
-	
-	public List<String> getColumnFromStore(int column) {
-		return columnStore.get(column);
-	}
-	
-	public void putColumnIntoStore(int column, List<String> selection) {
-		columnStore.put(column, selection);
-	}
-	
-	public List<String> getRowFromStore(int row) {
-		return rowStore.get(row);
-	}
-	
-	public void putRowIntoStore(int row, List<String> selection) {
-		rowStore.put(row, selection);
 	}
 	
 	public void add(MeasuredValue mv) {

@@ -37,4 +37,19 @@ public abstract class StepController {
 	 * @return
 	 */
 	public abstract StepController getNext();
+	
+	/**
+	 * contains actions when back button was pressed
+	 */
+	public void back() {	
+	}
+	
+	/**
+	 * checks if all conditions for this step controller 
+	 * which has been already been displayed are up to date
+	 * @return
+	 */
+	public boolean isStillValid() {
+		return true;
+	}
 }

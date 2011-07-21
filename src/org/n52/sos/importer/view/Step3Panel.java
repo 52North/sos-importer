@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.model.measuredValue.Boolean;
 import org.n52.sos.importer.model.measuredValue.Count;
 import org.n52.sos.importer.model.measuredValue.Text;
-import org.n52.sos.importer.view.step3.ButtonGroupPanel;
+import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.ParsingTestPanel;
@@ -27,7 +27,7 @@ public class Step3Panel extends JPanel {
 	
 	public Step3Panel() {
 		super();
-		radioButtonPanel = new RadioButtonPanel();	
+		radioButtonPanel = new RootPanel();	
 		radioButtonPanel.getContainerPanel().add(radioButtonPanel);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -58,11 +58,11 @@ public class Step3Panel extends JPanel {
 		radioButtonPanel.restoreDefault();
 	}
 	
-	private class RadioButtonPanel extends ButtonGroupPanel {
+	private class RootPanel extends RadioButtonPanel {
 		
 		private static final long serialVersionUID = 1L;
 		
-		public RadioButtonPanel() {	
+		public RootPanel() {	
 			super(rootPanel);
 			addRadioButton("Undefined");
 			addRadioButton("Measured Value", new MeasuredValuePanel());
@@ -76,7 +76,7 @@ public class Step3Panel extends JPanel {
 			addRadioButton("Do not export");				
 		}
 
-		private class MeasuredValuePanel extends ButtonGroupPanel {
+		private class MeasuredValuePanel extends RadioButtonPanel {
 
 			private static final long serialVersionUID = 1L;
 			
@@ -89,7 +89,7 @@ public class Step3Panel extends JPanel {
 			}	
 		}
 		
-		private class DateAndTimePanel extends ButtonGroupPanel {
+		private class DateAndTimePanel extends RadioButtonPanel {
 
 			private static final long serialVersionUID = 1L;
 			
@@ -100,7 +100,7 @@ public class Step3Panel extends JPanel {
 			}	
 		}
 
-		private class PositionPanel extends ButtonGroupPanel {
+		private class PositionPanel extends RadioButtonPanel {
 
 			private static final long serialVersionUID = 1L;
 			

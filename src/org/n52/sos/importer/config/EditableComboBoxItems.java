@@ -18,6 +18,8 @@ public class EditableComboBoxItems {
 	
 	private DefaultComboBoxModel EPSGCodes;
 	
+	private DefaultComboBoxModel referenceSystemNames;
+	
 	private DefaultComboBoxModel featureOfInterestNames;
 	
 	private DefaultComboBoxModel observedPropertyNames;
@@ -49,6 +51,8 @@ public class EditableComboBoxItems {
 				Settings.getInstance().getPositionPatterns()));
 		setEPSGCodes(new DefaultComboBoxModel(
 				Settings.getInstance().getEpsgCodes()));
+		setReferenceSystemNames(new DefaultComboBoxModel(
+				Settings.getInstance().getReferenceSystemNames()));
 		setSosURLs(new DefaultComboBoxModel(
 				Settings.getInstance().getSosURLs()));
 		
@@ -196,5 +200,13 @@ public class EditableComboBoxItems {
 
 	public DefaultComboBoxModel getPositionPatterns() {
 		return positionPatterns;
+	}
+
+	public void setReferenceSystemNames(DefaultComboBoxModel referenceSystemNames) {
+		this.referenceSystemNames = referenceSystemNames;
+	}
+
+	public DefaultComboBoxModel getReferenceSystemNames() {
+		return referenceSystemNames;
 	}
 }

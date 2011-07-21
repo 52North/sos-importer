@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -47,30 +48,53 @@ public class Step8Controller extends StepController {
 	@Override
 	public void loadSettings() {
 		step8Panel = new Step8Panel();
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			mv.print();
-		}
-		
-		/*
-		for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
-			logger.info(rs);
-		for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert())
-			logger.info(io);	
-		*/
-		
+		BackNextController.getInstance().setFinishButtonEnabled(false);
+		BackNextController.getInstance().changeNextToFinish();
+
+		new AssembleInformation().execute();
+	}
+	
+	public void assembleInformationDone() {
 		String sosURL = step8Model.getSosURL();
 		connectToSOS(sosURL);
-		RegisterSensors registerSensors = new RegisterSensors();
-        registerSensors.execute();
+
+		new RegisterSensors().execute();
 	}
 	
 	public void registerSensorsDone() {
-		InsertObservations insertObservations = new InsertObservations();
-        insertObservations.execute();
+		new InsertObservations().execute();
 	}
+
+    private class AssembleInformation extends SwingWorker<Void, Void> {
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			step8Panel.setIndeterminate(true);
+			
+			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+				mv.print();
+			}
+			
+			/*
+			for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
+				logger.info(rs);
+			for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert())
+				logger.info(io);	
+			*/
+			
+			return null;
+		}
+    	
+        @Override
+        public void done() {
+        	step8Panel.setIndeterminate(false);
+            assembleInformationDone();
+        }
+		
+    }
 	
 	
-    class RegisterSensors extends SwingWorker<Void, Void> {
+    private class RegisterSensors extends SwingWorker<Void, Void> {
 
         @Override
         public Void doInBackground() {
@@ -147,6 +171,8 @@ public class Step8Controller extends StepController {
         @Override
         public void done() {
     		disconnectFromSOS();
+    		Toolkit.getDefaultToolkit().beep();
+    		BackNextController.getInstance().setFinishButtonEnabled(true);
         }
     }
     
@@ -250,4 +276,8 @@ public class Step8Controller extends StepController {
 		return null;
 	}
  
+	@Override
+	public void back() {
+		BackNextController.getInstance().changeFinishToNext();
+	}
 }

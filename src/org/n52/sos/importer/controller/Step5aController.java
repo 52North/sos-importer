@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.Step5aPanel;
@@ -11,6 +12,8 @@ import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class Step5aController extends StepController {
 
+	private static final Logger logger = Logger.getLogger(Step5aController.class);
+	
 	private static final long serialVersionUID = 1L;
 	
 	private Step5aModel step5aModel;
@@ -53,7 +56,7 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 5a: Add missing time data";
+		return "Step 5a: Complete time data";
 	}
 
 	@Override
@@ -66,7 +69,11 @@ public class Step5aController extends StepController {
 		dateAndTimeController = new DateAndTimeController();
 		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
 		
-		if (dtm == null) return false;
+		if (dtm == null) {
+			logger.info("Skip Step 5c since there are not any Date&Times" +
+				" with missing values");
+			return false;
+		}
 		
 		step5aModel = new Step5aModel(dtm);
 		return true;

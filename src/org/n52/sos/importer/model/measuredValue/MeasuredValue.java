@@ -1,9 +1,5 @@
 package org.n52.sos.importer.model.measuredValue;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.controller.DateAndTimeController;
@@ -39,7 +35,10 @@ public abstract class MeasuredValue implements Parseable {
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
 		this.featureOfInterest = featureOfInterest;
-		logger.info("Assign " + featureOfInterest + " to " + this);
+		if (featureOfInterest == null)
+			logger.info("Unassign Feature Of Interest from " + this);
+		else
+			logger.info("Assign " + featureOfInterest + " to " + this);
 	}
 
 	public FeatureOfInterest getFeatureOfInterest() {
@@ -111,13 +110,11 @@ public abstract class MeasuredValue implements Parseable {
 			
 			//when was the current Measured Value measured
 			dtc.setDateAndTime(getDateAndTime());
-			GregorianCalendar gc = dtc.forThis(c);	
-			Format formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-			String timeStamp = formatter.format(gc.getTime());
+			String timeStamp = dtc.forThis(c);	
 			io.setTimeStamp(timeStamp);
 			
 			FeatureOfInterest foi = getFeatureOfInterest().forThis(c);
-			io.setFeatureOfInterestName(foi.getName());
+			io.setFeatureOfInterestName(foi.getNameString());
 			io.setFeatureOfInterestURI(foi.getURIString());
 			
 			//where was the current Measured Value measured
@@ -135,17 +132,17 @@ public abstract class MeasuredValue implements Parseable {
 			
 			ObservedProperty op = getObservedProperty().forThis(c);
 			io.setObservedPropertyURI(op.getURIString());
-			rs.setObservedPropertyName(op.getName());
+			rs.setObservedPropertyName(op.getNameString());
 			rs.setObservedPropertyURI(op.getURIString());
 			
 			UnitOfMeasurement uom = getUnitOfMeasurement().forThis(c);
-			io.setUnitOfMeasurementCode(uom.getName());
-			rs.setUnitOfMeasurementCode(uom.getName());
+			io.setUnitOfMeasurementCode(uom.getNameString());
+			rs.setUnitOfMeasurementCode(uom.getNameString());
 			
 			Sensor sensor = getSensor().forThis(c);
-			io.setSensorName(sensor.getName());
+			io.setSensorName(sensor.getNameString());
 			io.setSensorURI(sensor.getURIString());
-			rs.setSensorName(sensor.getName());
+			rs.setSensorName(sensor.getNameString());
 			rs.setSensorURI(sensor.getURIString());
 			
 			ModelStore.getInstance().addObservationToInsert(io);

@@ -63,10 +63,18 @@ public class Step6bController extends StepController {
 		missingResourcePanel.assignValues();
 		
 		Resource resource = step6bModel.getResource();
-		logger.info(resource);
 		MeasuredValue measuredValue = step6bModel.getMeasuredValue();
+		
+		//check if there is already such a resource
+		List<Resource> resources = resource.getList();
+		int index = resources.indexOf(resource);
+		if (index == -1)
+			ModelStore.getInstance().add(resource);
+		else 
+			resource = resources.get(index);
+		
 		resource.assign(measuredValue);
-		ModelStore.getInstance().add(resource);
+		
 		step5aPanel = null;
 		missingResourcePanel = null;
 	}
@@ -78,7 +86,7 @@ public class Step6bController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 6b: Add missing Metadata";
+		return "Step 6b: Add missing metadata";
 	}
 
 	@Override
@@ -90,7 +98,12 @@ public class Step6bController extends StepController {
 	public boolean isNecessary() {
 		MeasuredValueController measuredValueController = new MeasuredValueController();
 		step6bModel = measuredValueController.getMissingResourceForMeasuredValue();	
-		if (step6bModel == null) return false;
+		if (step6bModel == null) {
+			logger.info("Skip Step 6b since all Measured Values are already" +
+					" assigned to Features Of Interest, Observed Properties," +
+					" Unit Of Measurements and Sensors");
+			return false;
+		}
 		
 		return true;
 	}

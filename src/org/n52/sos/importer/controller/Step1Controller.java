@@ -10,11 +10,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step1Panel;
 
 public class Step1Controller extends StepController {
+	
+	private static final Logger logger = Logger.getLogger(Step1Controller.class);
 	
 	private Step1Panel step1Panel;
 	
@@ -36,7 +39,7 @@ public class Step1Controller extends StepController {
 		step1Panel = new Step1Panel(this);
 		
 		//disable "back" button
-		BackNextController.getInstance().setBackButtonEnabled(false);
+		BackNextController.getInstance().setBackButtonVisible(false);
 		
 		String csvFilePath = step1Model.getCSVFilePath();
 		step1Panel.setCSVFilePath(csvFilePath);
@@ -48,7 +51,7 @@ public class Step1Controller extends StepController {
 		step1Model.setCSVFilePath(csvFilePath);
 		
 		//show "back" button
-		BackNextController.getInstance().setBackButtonEnabled(true);
+		BackNextController.getInstance().setBackButtonVisible(true);
 		
 		step1Panel = null;
 	}
@@ -127,6 +130,7 @@ public class Step1Controller extends StepController {
 	}
 	
 	private String readFile(File f) {
+		logger.info("Read CSV file " + f.getAbsolutePath());
 		StringBuilder sb = new StringBuilder();
 		try {
 			FileReader fr = new FileReader(f);

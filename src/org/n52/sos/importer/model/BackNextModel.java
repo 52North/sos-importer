@@ -6,20 +6,23 @@ import org.n52.sos.importer.controller.StepController;
 
 public class BackNextModel {
 
-	private Stack<StepController> stepControllers;
+	private Stack<StepController> previousStepControllers;
+	
+	private Stack<StepController> followingStepControllers;
 	
 	private StepController currentStepController;
 	
 	public BackNextModel() {
-		stepControllers = new Stack<StepController>();
+		previousStepControllers = new Stack<StepController>();
+		followingStepControllers = new Stack<StepController>();
 	}
 	
 	public StepController getPreviousStepController() {
-		return stepControllers.pop();
+		return previousStepControllers.pop();
 	}
 	
-	public void addStepController(StepController sc) {
-		stepControllers.push(sc);
+	public void addPreviousStepController(StepController sc) {
+		previousStepControllers.push(sc);
 	}
 
 	public void setCurrentStepController(StepController currentStepController) {
@@ -28,5 +31,14 @@ public class BackNextModel {
 
 	public StepController getCurrentStepController() {
 		return currentStepController;
+	}
+	
+	public StepController getFollowingStepController() {
+		if (followingStepControllers.size() == 0) return null;
+		return followingStepControllers.pop();
+	}
+	
+	public void addFollowingStepController(StepController sc) {
+		followingStepControllers.push(sc);
 	}
 }

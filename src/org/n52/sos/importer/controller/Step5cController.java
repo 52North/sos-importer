@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.Step5aPanel;
@@ -11,6 +12,8 @@ import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class Step5cController extends StepController {
 
+	private static final Logger logger = Logger.getLogger(Step5cController.class);
+	
 	private static final long serialVersionUID = 1L;
 	
 	private Step5cModel step5cModel;
@@ -54,7 +57,7 @@ public class Step5cController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 5c: Add missing position data";
+		return "Step 5c: Complete position data";
 	}
 
 	@Override
@@ -67,7 +70,11 @@ public class Step5cController extends StepController {
 		positionController = new PositionController();
 		Position p = positionController.getNextPositionWithMissingValues();
 		
-		if (p == null) return false;
+		if (p == null) {
+			logger.info("Skip Step 5c since there are not any Positions" +
+					" with missing values");
+			return false;
+		}
 		
 		step5cModel = new Step5cModel(p);
 		return true;

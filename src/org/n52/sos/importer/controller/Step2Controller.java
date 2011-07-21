@@ -84,17 +84,22 @@ public class Step2Controller extends StepController {
 	
 	private Object[][] parseCSVFile() {
 		Object[][] content = null;
+		String csvFileContent = step2Model.getCSVFileContent();
+		String separator = step2Model.getSelectedColumnSeparator();
+		String quoteChar = step2Model.getSelectedCommentIndicator();
+		String escape = step2Model.getSelectedTextQualifier();
+		
+		logger.info("Parse CSV file with " +
+				"column separator '" + separator + "', " +
+				"comment indicator '" + quoteChar + "' and " +
+				"text qualifier '" + escape + "'.");
 		
 		try {	
-			String csvFileContent = step2Model.getCSVFileContent();
-			String separator = step2Model.getSelectedColumnSeparator();
 			if (separator.equals("Tab")) separator = "\t"; 
 			if (separator.equals("Space")) {
 				separator = ";";
 				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
 			}
-			String quoteChar = step2Model.getSelectedCommentIndicator();
-			String escape = step2Model.getSelectedTextQualifier();
 			StringReader sr = new StringReader(csvFileContent);
 			CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
 			List<String[]> lines = reader.readAll();

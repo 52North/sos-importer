@@ -38,6 +38,7 @@ public abstract class SelectionPanel extends JPanel {
 		SelectionPanel childPanel = childPanels.get(s);
 		selections.remove(0);
 		reinit();
+		setSelectedChildPanel(childPanel);
 		
 		if (childPanel != null) {
 			childPanel.restore(selections);

@@ -2,7 +2,6 @@ package org.n52.sos.importer.controller;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -168,7 +167,7 @@ public class DateAndTimeController {
 			dateAndTime.getTimeZone().mark(color);
 	}
 	
-	public GregorianCalendar forThis(Cell measuredValuePosition) {
+	public String forThis(Cell measuredValuePosition) {
 		int second = dateAndTime.getSecond().getParsedValue(measuredValuePosition);
 		int minute = dateAndTime.getMinute().getParsedValue(measuredValuePosition);
 		int hour = dateAndTime.getHour().getParsedValue(measuredValuePosition);
@@ -177,9 +176,20 @@ public class DateAndTimeController {
 		int year = dateAndTime.getYear().getParsedValue(measuredValuePosition);
 		int timezone = dateAndTime.getTimeZone().getParsedValue(measuredValuePosition);
 		
-		GregorianCalendar gc = new GregorianCalendar(year, month - 1, day, hour, minute, second);
-		gc.set(GregorianCalendar.ZONE_OFFSET, timezone);
-		return gc;
+		String timeStamp = year + "-" + month + "-" + day + "T" +
+			hour + ":" + minute + ":" + second + convertTimeZone(timezone);	
+		
+		return timeStamp;
+	}
+	
+	private String convertTimeZone(int timeZone) {
+		if (timeZone >= 0) {
+			if (timeZone >= 10) return "+" + timeZone + ":00";
+			else return "+0" + timeZone + ":00";
+		} else {
+			if (timeZone <= -10) return timeZone + ":00";
+			else return "-0" + Math.abs(timeZone) + ":00";
+		}
 	}
 	
 	

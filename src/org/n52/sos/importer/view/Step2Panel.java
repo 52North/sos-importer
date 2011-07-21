@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.n52.sos.importer.EditableJComboBoxPanel;
 import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.config.EditableJComboBoxPanel;
 
 public class Step2Panel extends JPanel {
 	

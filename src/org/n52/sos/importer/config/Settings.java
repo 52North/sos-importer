@@ -50,6 +50,8 @@ public class Settings {
 	
 	private String[] epsgCodes;
 	
+	private String[] referenceSystemNames;
+	
 	private String[] sosURLs;
 	
 	private String[] featureOfInterestNames;
@@ -104,6 +106,7 @@ public class Settings {
 		this.dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));
 		this.positionPatterns = parse(props.getProperty("positionPatterns"));
 		this.epsgCodes = parse(props.getProperty("epsgCodes"));	
+		this.referenceSystemNames = parse(props.getProperty("referenceSystemNames"));
 		this.sosURLs = parse(props.getProperty("sosURLs"));	
 		
 		this.featureOfInterestNames = parse(props.getProperty("featureOfInterestNames"));	
@@ -132,6 +135,7 @@ public class Settings {
 		props.setProperty("dateAndTimePatterns", format(EditableComboBoxItems.getInstance().getDateAndTimePatterns()));
 		props.setProperty("positionPatterns", format(EditableComboBoxItems.getInstance().getPositionPatterns()));
 		props.setProperty("epsgCodes", format(EditableComboBoxItems.getInstance().getEPSGCodes()));
+		props.setProperty("referenceSystemNames", format(EditableComboBoxItems.getInstance().getReferenceSystemNames()));
 		props.setProperty("sosURLs", format(EditableComboBoxItems.getInstance().getSosURLs()));
 		
 		props.setProperty("featureOfInterestNames", format(EditableComboBoxItems.getInstance().getFeatureOfInterestNames()));
@@ -150,7 +154,7 @@ public class Settings {
 		} catch (URISyntaxException e) {
 			file = new File(url.getPath());
 		}
-		System.out.println(file.getAbsolutePath());
+		logger.info("Save settings at " + file.getAbsolutePath());
 		try { //save properties
 			OutputStream os = new FileOutputStream(file);
 			props.store(os, null);  
@@ -325,5 +329,13 @@ public class Settings {
 
 	public String[] getPositionPatterns() {
 		return positionPatterns;
+	}
+
+	public void setReferenceSystemNames(String[] referenceSystemNames) {
+		this.referenceSystemNames = referenceSystemNames;
+	}
+
+	public String[] getReferenceSystemNames() {
+		return referenceSystemNames;
 	}
 }

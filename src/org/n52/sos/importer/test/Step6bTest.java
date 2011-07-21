@@ -14,11 +14,14 @@ public class Step6bTest {
 
 	public static void main(String[] args) {
 		MainController f = MainController.getInstance();
-		Object[][] o = {{"1", "bla2"},{"2", "bla4"},{"3", "bla6"}};
+		Object[][] o = {{"1", "4"},{"2", "5"},{"3", "6"}};
 		TableController.getInstance().setContent(o);
 		MeasuredValue mv = new NumericValue();
 		mv.setTableElement(new Column(0));
+		MeasuredValue mv2 = new NumericValue();
+		mv2.setTableElement(new Column(1));
 		ModelStore.getInstance().add(mv);
+		ModelStore.getInstance().add(mv2);
 		Step6bModel step6aModel = new Step6bModel(mv, new FeatureOfInterest());
 		f.setStepController(new Step6bController(step6aModel));
 	}

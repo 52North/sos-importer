@@ -137,6 +137,8 @@ public class Step4bController extends StepController {
 			// in case there is just one resource of this type:
 			if (number == 1) {
 				Resource oneResource = resourceType.getList().get(0);
+				logger.info("Skip Step 4b for " + resourceType + "s" +
+						" since there is just " + oneResource);
 				
 				for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 					oneResource.assign(mv);
@@ -145,6 +147,9 @@ public class Step4bController extends StepController {
 			} else if (resource == null && number >= 2){
 				ResourceController rc = new ResourceController();
 				resource = rc.getNextUnassignedResource(resourceType);
+			} else { //number == 0
+				logger.info("Skip Step 4b for " + resourceType + "s" +
+						" since there are not any " + resourceType + "s");
 			}
 			resourceType = resourceType.getNextResourceType();
 		}

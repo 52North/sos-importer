@@ -2,8 +2,8 @@ package org.n52.sos.importer.view;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.EditableJComboBoxPanel;
 import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.config.EditableJComboBoxPanel;
 
 public class Step7Panel extends JPanel {
 

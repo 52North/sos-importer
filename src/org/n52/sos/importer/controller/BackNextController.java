@@ -20,11 +20,26 @@ public class BackNextController {
 		return instance;
 	}
 	
-	public void setBackButtonEnabled(boolean flag) {
-		backNextPanel.setBackButtonEnabled(flag);
+	public void setBackButtonVisible(boolean aFlag) {
+		backNextPanel.setBackButtonVisible(aFlag);
+	}
+	
+	public void changeNextToFinish() {
+		backNextPanel.changeNextToFinish();
+	}
+	
+	public void changeFinishToNext() {
+		backNextPanel.changeFinishToNext();
+	}
+	
+	public void setFinishButtonEnabled(boolean aFlag) {
+		backNextPanel.setFinishButtonEnabled(aFlag);
 	}
 	
 	public void backButtonPressed() {
+		StepController currentSC = backNextModel.getCurrentStepController();
+		currentSC.back();
+		backNextModel.addFollowingStepController(currentSC);
 		StepController previousSC = backNextModel.getPreviousStepController();
 		MainController.getInstance().setStepController(previousSC);
 	}
@@ -34,7 +49,14 @@ public class BackNextController {
 		if (!currentSC.isFinished()) return;
 		
 		currentSC.saveSettings();
-		backNextModel.addStepController(currentSC);	//put controller on stack
+		backNextModel.addPreviousStepController(currentSC);	//put controller on stack
+		
+		//when has already been to the next step
+		StepController followingSC = backNextModel.getFollowingStepController();
+		if (followingSC != null && followingSC.isStillValid()) {
+			MainController.getInstance().setStepController(followingSC);
+			return;
+		}
 		
 		//next step controller of this type	
 		StepController nextSC = currentSC.getNext(); 
@@ -46,12 +68,14 @@ public class BackNextController {
 		//next step controller of another type
 		nextSC = currentSC.getNextStepController();		
 		
-		if (nextSC == null) return; //TODO ende
-		
 		while (!nextSC.isNecessary())
 			nextSC = nextSC.getNextStepController();
 
 		MainController.getInstance().setStepController(nextSC);
+	}
+	
+	public void finishButtonClicked() {
+		MainController.getInstance().exit();
 	}
 	
 	public BackNextModel getModel() {
