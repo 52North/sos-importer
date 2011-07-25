@@ -10,7 +10,7 @@ public class Cell extends TableElement {
 	private int column;
 	
 	private int row;
-	
+
 	public Cell() {
 		column = -1;
 		row = -1;
@@ -62,5 +62,21 @@ public class Cell extends TableElement {
 	@Override
 	public String toString() {
 		return "cell "+row+"|"+column;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cell other = (Cell) obj;
+		if (column != other.column)
+			return false;
+		if (row != other.row)
+			return false;
+		return true;
 	}
 }

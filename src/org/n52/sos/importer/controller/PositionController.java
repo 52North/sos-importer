@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Height;
@@ -11,6 +12,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 import org.n52.sos.importer.view.position.MissingHeightPanel;
@@ -18,6 +20,8 @@ import org.n52.sos.importer.view.position.MissingLatitudePanel;
 import org.n52.sos.importer.view.position.MissingLongitudePanel;
 
 public class PositionController {
+	
+	private static final Logger logger = Logger.getLogger(PositionController.class);
 	
 	private Position position;
 	
@@ -37,6 +41,19 @@ public class PositionController {
 
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+	
+	public void assignPattern(String pattern, TableElement tableElement) {		
+		logger.info("Assign pattern " + pattern + " in " + tableElement + " to " + position);
+		
+    	if (pattern.indexOf("LAT") != -1) 
+    		position.setLatitude(new Latitude(tableElement, pattern));
+    	if (pattern.indexOf("LON") != -1) 
+    		position.setLongitude(new Longitude(tableElement, pattern));
+    	if (pattern.indexOf("ALT") != -1) 
+    		position.setHeight(new Height(tableElement, pattern));
+    	if (pattern.indexOf("EPSG") != -1) 
+    		position.setEPSGCode(new EPSGCode(tableElement, pattern));
 	}
 	
 	public Position getNextPositionWithMissingValues() {

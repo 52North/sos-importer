@@ -12,7 +12,10 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.table.TableElement;
 
 public class NumericValuePanel extends SelectionPanel {
 
@@ -59,7 +62,7 @@ public class NumericValuePanel extends SelectionPanel {
 		decimalSeparatorCombobox.setSelectedItem(separators[0]);
 		if (separators[1].equals(" ")) thousandsSeparatorCombobox.setSelectedItem("Space");
 		else thousandsSeparatorCombobox.setSelectedItem(separators[1]);
-		selectionChanged();
+		patternChanged();
 	}
 
 	@Override
@@ -78,8 +81,7 @@ public class NumericValuePanel extends SelectionPanel {
 		numericValue.setThousandsSeparator(thousandsSeparators[0]);
 	}
 	
-	@Override
-	protected void selectionChanged() {	
+	protected void patternChanged() {	
 		String[] separators = getSelection().split(":");
 		numericValue.setDecimalSeparator(separators[0]);
 		numericValue.setThousandsSeparator(separators[1]);
@@ -94,6 +96,29 @@ public class NumericValuePanel extends SelectionPanel {
 		exampleNumberLabel.reformat(exampleValue);
 	}
 	
+	@Override
+	public void assign(TableElement tableElement) {
+		String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+		String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+		NumericValue nv = new NumericValue();
+		nv.setDecimalSeparator(decimalSeparator);
+		nv.setThousandsSeparator(thousandsSeparator);
+		nv.setTableElement(tableElement);
+		ModelStore.getInstance().add(nv);
+	}
+	
+	@Override
+	public void unassign(TableElement tableElement) {
+		MeasuredValue measuredValueToRemove = null;
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+			if (tableElement.equals(mv.getTableElement())) {
+				measuredValueToRemove = mv;
+				break;
+			}
+				
+		ModelStore.getInstance().remove(measuredValueToRemove);
+	}
+	
 	private class DecimalSeparatorChanged implements ActionListener {
 
 		@Override
@@ -106,7 +131,7 @@ public class NumericValuePanel extends SelectionPanel {
 			else if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
 				thousandsSeparatorCombobox.setSelectedItem(",");
 			else 
-				selectionChanged();
+				patternChanged();
 		}		
 	}
 	
@@ -122,7 +147,7 @@ public class NumericValuePanel extends SelectionPanel {
 			else if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
 				decimalSeparatorCombobox.setSelectedItem(",");
 			else				
-				selectionChanged();
+				patternChanged();
 		}		
 	}
 	

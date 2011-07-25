@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.n52.sos.importer.controller.MainController;
+import org.n52.sos.importer.model.table.TableElement;
 
 public abstract class RadioButtonPanel extends SelectionPanel {
 	
@@ -78,6 +79,14 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		return null;
 	}
 	
+	@Override
+	public void assign(TableElement tableElement) {		
+	}
+	
+	@Override
+	public void unassign(TableElement tableElement) {
+	};
+	
 	private class AddChildPanel implements ActionListener {
 		SelectionPanel childPanel;
 		
@@ -94,7 +103,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 			childPanel.addToContainerPanel();		
 			
 			MainController.getInstance().pack();
-			selectionChanged();
+			patternChanged();
 		}	
 	}
 	
@@ -109,7 +118,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 				SelectionPanel childPanel = null;
 				setSelectedChildPanel(childPanel);
 			}
-			selectionChanged();
+			patternChanged();
 		}		
 	}
 }

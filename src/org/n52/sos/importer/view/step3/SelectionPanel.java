@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.model.table.TableElement;
+
 public abstract class SelectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +26,7 @@ public abstract class SelectionPanel extends JPanel {
 	
 	protected abstract String getSelection();
 	
-	protected void selectionChanged() {	
+	protected void patternChanged() {	
 		//TODO selectionListener instead
 	}
 	
@@ -108,4 +110,8 @@ public abstract class SelectionPanel extends JPanel {
 		for (SelectionPanel sp: childPanels.values()) 
 			sp.removeFromContainerPanel();
 	}
+	
+	public abstract void assign(TableElement tableElement);
+	
+	public abstract void unassign(TableElement tableElement);
 }

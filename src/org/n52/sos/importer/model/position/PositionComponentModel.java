@@ -12,12 +12,15 @@ public class PositionComponentModel {
 	
 	private TableElement tableElement;
 	
+	private String pattern;
+	
 	private double value = -1;
 	
 	private String unit = null;
 
-	public PositionComponentModel(TableElement tableElement) {
+	public PositionComponentModel(TableElement tableElement, String pattern) {
 		this.tableElement = tableElement;
+		this.pattern = pattern;
 	}
 	
 	public PositionComponentModel(double value, String unit) {
@@ -86,5 +89,13 @@ public class PositionComponentModel {
 			return " " + getValue() + getParsedUnit();
 		else 
 			return " " + getTableElement();
+	}
+
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
+
+	public String getPattern() {
+		return pattern;
 	}
 }

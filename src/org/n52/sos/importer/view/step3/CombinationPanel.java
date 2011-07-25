@@ -68,25 +68,31 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
 	public void setSelection(String s) {
-		patternComboBox.setSelectedItem(s);
-    	selectionChanged();
+    	String[] part = s.split("SEP");
+		patternComboBox.setSelectedItem(part[0]);
+		groupComboBox.setSelectedItem(part[1]);
+    	patternChanged();
 	}
 	
 	@Override
 	public void setDefaultSelection() {
-		patternComboBox.setSelectedItem((String)getPatterns().getElementAt(0));
-		getCombination().
-		setPattern(getSelection());
+		String pattern = (String) getPatterns().getElementAt(0);
+		String group = (String) getGroupItems()[0];
+		patternComboBox.setSelectedItem(pattern);
+		getCombination().setPattern(pattern);
+		groupComboBox.setSelectedItem(group);
 	}
 	
 	@Override
 	public String getSelection() {
-		return (String)patternComboBox.getSelectedItem();
+		String pattern = (String) patternComboBox.getSelectedItem();
+		String group = (String) groupComboBox.getSelectedItem();
+		return pattern + "SEP" + group;
 	}
     
-    @Override
-    protected void selectionChanged() {
-    	getCombination().setPattern(getSelection());
+    protected void patternChanged() {
+    	String pattern = (String) patternComboBox.getSelectedItem();
+    	getCombination().setPattern(pattern);
     	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
     	exampleFormatLabel.reformat(getTestValue());
     }
@@ -101,7 +107,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 		
 		public void actionPerformed(ActionEvent e) {
 			if (!patternComboBox.isEditable())
-				selectionChanged();
+				patternChanged();
 	    }
 	}
 }

@@ -12,10 +12,13 @@ public class EPSGCode {
 	
 	private TableElement tableElement;
 	
+	private String pattern;
+	
 	private int value = -1;
 
-	public EPSGCode(TableElement tableElement) {
+	public EPSGCode(TableElement tableElement, String pattern) {
 		this.tableElement = tableElement;
+		this.pattern = pattern;
 	}
 	
 	public EPSGCode(int value) {
@@ -63,5 +66,13 @@ public class EPSGCode {
 			return "EPSG-Code "  + getValue();
 		else 
 			return "EPSG-Code " + getTableElement();
+	}
+
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
+
+	public String getPattern() {
+		return pattern;
 	}
 }

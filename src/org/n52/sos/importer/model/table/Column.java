@@ -12,7 +12,7 @@ public class Column extends TableElement {
 	public Column(int number) {
 		this.number = number;
 	}
-	
+
 	public void setNumber(int number) {
 		this.number = number;
 	}
@@ -49,5 +49,19 @@ public class Column extends TableElement {
 	@Override
 	public String toString() {
 		return "column "+number;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Column other = (Column) obj;
+		if (number != other.number)
+			return false;
+		return true;
 	}
 }

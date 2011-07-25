@@ -6,15 +6,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
-import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
-import org.n52.sos.importer.model.measuredValue.NumericValue;
-import org.n52.sos.importer.model.resources.FeatureOfInterest;
-import org.n52.sos.importer.model.resources.ObservedProperty;
-import org.n52.sos.importer.model.resources.Sensor;
-import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
 
@@ -50,8 +42,10 @@ public class Step3aController extends StepController {
 
 		step3Panel = new Step3Panel();
 		step3Panel.restore(selection);
+		step3Panel.getLastChildPanel().unassign(new Column(number));
 
 		tableController.colorColumn(Color.lightGray, number);
+		tableController.setColumnHeading(number, "???");
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.turnSelectionOff();
 	}
@@ -61,6 +55,10 @@ public class Step3aController extends StepController {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
 		step3aModel.setSelection(selection);
+		
+		int number = step3aModel.getSelectedColumn();
+		tableController.setColumnHeading(number, selection.get(0));	
+		
 		step3Panel = null;
 	}
 	
@@ -71,45 +69,9 @@ public class Step3aController extends StepController {
 		step3aModel.setSelection(selection);
 		
 		int number = step3aModel.getSelectedColumn();
-		TableController.getInstance().setColumnHeading(number, selection.get(0));		
-			
-		if (selection.get(0).equals("Measured Value")) {
-			MeasuredValue mv = null;
-			if (selection.get(1).equals("Numeric Value")) {
-				NumericValue nv = new NumericValue();
-				String[] separators = selection.get(2).split(":");
-				nv.setDecimalSeparator(separators[0]);
-				nv.setThousandsSeparator(separators[1]);
-				mv = nv;
-			}
-			mv.setTableElement(new Column(number));
-			ModelStore.getInstance().add(mv);
-		} else if (selection.get(0).equals("Date & Time")) {
-			if (selection.get(1).equals("Combination")) {
-				String pattern = selection.get(2);
-				DateAndTimeController dtc = new DateAndTimeController();
-				dtc.assignPattern(pattern, new Column(number));			
-				DateAndTime dtm = dtc.getDateAndTime();
-				ModelStore.getInstance().add(dtm);
-			}
-		} else if (selection.get(0).equals("Feature of Interest")) {
-			FeatureOfInterest foi = new FeatureOfInterest();
-			foi.setTableElement(new Column(number));
-			ModelStore.getInstance().add(foi);
-		} else if (selection.get(0).equals("Observed Property")) {
-			ObservedProperty op = new ObservedProperty();
-			op.setTableElement(new Column(number));
-			ModelStore.getInstance().add(op);
-		} else if (selection.get(0).equals("Unit of Measurement")) {
-			UnitOfMeasurement uom = new UnitOfMeasurement();
-			uom.setTableElement(new Column(number));
-			ModelStore.getInstance().add(uom);
-		} else if (selection.get(0).equals("Sensor Name")) {
-			Sensor sm = new Sensor();
-			sm.setTableElement(new Column(number));
-			ModelStore.getInstance().add(sm);
-		}
+		step3Panel.getLastChildPanel().assign(new Column(number));
 		
+		tableController.setColumnHeading(number, selection.get(0));
 		step3Panel = null;
 	}
 

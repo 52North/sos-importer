@@ -8,11 +8,16 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.model.measuredValue.Boolean;
 import org.n52.sos.importer.model.measuredValue.Count;
 import org.n52.sos.importer.model.measuredValue.Text;
-import org.n52.sos.importer.view.step3.RadioButtonPanel;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
-import org.n52.sos.importer.view.step3.ParsingTestPanel;
+import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
 import org.n52.sos.importer.view.step3.PositionCombinationPanel;
+import org.n52.sos.importer.view.step3.RadioButtonPanel;
+import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
 import org.n52.sos.importer.view.step3.SelectionPanel;
 
 public class Step3Panel extends JPanel {
@@ -46,6 +51,16 @@ public class Step3Panel extends JPanel {
 		additionalPanel2.removeAll();
 	}
 	
+	public SelectionPanel getLastChildPanel() {
+		SelectionPanel lastChildPanel = radioButtonPanel;
+		SelectionPanel nextPanel = radioButtonPanel.getSelectedChildPanel();
+		while (nextPanel != null) {
+			lastChildPanel = nextPanel;
+			nextPanel = nextPanel.getSelectedChildPanel();
+		}
+		return lastChildPanel;
+	}
+	
 	public void store(List<String> selection) {
 		radioButtonPanel.store(selection);
 	}
@@ -68,10 +83,10 @@ public class Step3Panel extends JPanel {
 			addRadioButton("Measured Value", new MeasuredValuePanel());
 			addRadioButton("Date & Time", new DateAndTimePanel());
 			addRadioButton("Position", new PositionPanel());
-			addRadioButton("Feature of Interest");
-			addRadioButton("Sensor Name");
-			addRadioButton("Observed Property");
-			addRadioButton("Unit of Measurement");
+			addRadioButton("Feature of Interest", new ResourceSelectionPanel(additionalPanel1, new FeatureOfInterest()));
+			addRadioButton("Observed Property", new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
+			addRadioButton("Unit of Measurement", new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
+			addRadioButton("Sensor Name", new ResourceSelectionPanel(additionalPanel1, new Sensor()));
 			addRadioButton("Combination");
 			addRadioButton("Do not export");				
 		}
@@ -83,9 +98,9 @@ public class Step3Panel extends JPanel {
 			public MeasuredValuePanel() {	
 				super(additionalPanel1);		
 				addRadioButton("Numeric Value" , new NumericValuePanel(additionalPanel2));
-				addRadioButton("Count", new ParsingTestPanel(additionalPanel2, new Count()));
-				addRadioButton("Boolean", new ParsingTestPanel(additionalPanel2, new Boolean()));
-				addRadioButton("Text", new ParsingTestPanel(additionalPanel2, new Text()));
+				addRadioButton("Count", new MeasuredValueSelectionPanel(additionalPanel2, new Count()));
+				addRadioButton("Boolean", new MeasuredValueSelectionPanel(additionalPanel2, new Boolean()));
+				addRadioButton("Text", new MeasuredValueSelectionPanel(additionalPanel2, new Text()));
 			}	
 		}
 		

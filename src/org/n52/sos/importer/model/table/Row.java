@@ -6,7 +6,7 @@ import java.util.HashSet;
 import org.n52.sos.importer.controller.TableController;
 
 public class Row extends TableElement {
-	
+
 	private int number = -1;
 
 	public Row(int number) {
@@ -48,5 +48,19 @@ public class Row extends TableElement {
 	@Override
 	public String toString() {
 		return "row "+number;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Row other = (Row) obj;
+		if (number != other.number)
+			return false;
+		return true;
 	}
 }

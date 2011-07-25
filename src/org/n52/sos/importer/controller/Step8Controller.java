@@ -21,6 +21,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step8Model;
@@ -46,10 +48,14 @@ public class Step8Controller extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {
+	public void loadSettings() {		
 		step8Panel = new Step8Panel();
 		BackNextController.getInstance().setFinishButtonEnabled(false);
 		BackNextController.getInstance().changeNextToFinish();
+		
+		FileAppender a = (FileAppender) LogManager.getRootLogger().getAppender("RoFi");
+		File f = new File(a.getFile());
+		step8Panel.setLogFileURI(f.toURI());		
 
 		new AssembleInformation().execute();
 	}

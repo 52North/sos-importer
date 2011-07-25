@@ -4,8 +4,8 @@ import org.n52.sos.importer.model.table.TableElement;
 
 public class Longitude extends PositionComponentModel {
 
-	public Longitude(TableElement tableElement) {
-		super(tableElement);
+	public Longitude(TableElement tableElement, String pattern) {
+		super(tableElement, pattern);
 	}
 	
 	public Longitude(double value, String unit) {

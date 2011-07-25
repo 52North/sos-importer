@@ -7,7 +7,7 @@
 		</layout>
 	</appender>
 	<appender name="RoFi" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="./52n-sensorweb-sos-importer.log" />
+		<param name="file" value="logs/52n-sensorweb-sos-importer.log" />
 		<param name="datePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">

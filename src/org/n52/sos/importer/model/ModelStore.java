@@ -72,6 +72,10 @@ public class ModelStore {
 		return null;
 	}
 	
+	public void remove(MeasuredValue mv) {
+		measuredValues.remove(mv);
+	}
+	
 	public void add(DateAndTime dateAndTime) {
 		dateAndTimes.add(dateAndTime);
 	}
@@ -82,6 +86,10 @@ public class ModelStore {
 	
 	public void setDateAndTimes(List<DateAndTime> dateAndTimes) {
 		this.dateAndTimes = dateAndTimes;
+	}
+	
+	public void remove(DateAndTime dateAndTime) {
+		dateAndTimes.remove(dateAndTime);
 	}
 
 	public void add(Resource resource) {
@@ -95,8 +103,23 @@ public class ModelStore {
 			add((Sensor) resource);
 	}
 	
+	public void remove(Resource resource) {
+		if (resource instanceof FeatureOfInterest)
+			remove((FeatureOfInterest) resource);
+		else if (resource instanceof ObservedProperty)
+			remove((ObservedProperty) resource);
+		else if (resource instanceof UnitOfMeasurement)
+			remove((UnitOfMeasurement) resource);
+		else if (resource instanceof Sensor)
+			remove((Sensor) resource);
+	}
+	
 	public void add(FeatureOfInterest featureOfInterest) {
 		featureOfInterests.add(featureOfInterest);
+	}
+	
+	public void remove(FeatureOfInterest featureOfInterest) {
+		featureOfInterests.remove(featureOfInterest);
 	}
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
@@ -107,12 +130,20 @@ public class ModelStore {
 		observedProperties.add(observedProperty);
 	}
 	
+	public void remove(ObservedProperty observedProperty) {
+		observedProperties.remove(observedProperty);
+	}
+	
 	public List<ObservedProperty> getObservedProperties() {
 		return observedProperties;
 	}
 		
 	public void add(UnitOfMeasurement unitOfMeasurement) {
 		unitOfMeasurements.add(unitOfMeasurement);
+	}
+	
+	public void remove(UnitOfMeasurement unitOfMeasurement) {
+		unitOfMeasurements.remove(unitOfMeasurement);
 	}
 
 	public List<UnitOfMeasurement> getUnitOfMeasurements() {
@@ -121,6 +152,10 @@ public class ModelStore {
 	
 	public void add(Sensor sensor) {
 		sensors.add(sensor);
+	}
+	
+	public void remove(Sensor sensor) {
+		sensors.remove(sensor);
 	}
 
 	public List<Sensor> getSensors() {
