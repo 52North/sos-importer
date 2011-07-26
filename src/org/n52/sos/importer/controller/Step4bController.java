@@ -9,8 +9,7 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.Column;
-import org.n52.sos.importer.model.table.Row;
-import org.n52.sos.importer.view.Step4aPanel;
+import org.n52.sos.importer.view.Step4Panel;
 
 public class Step4bController extends StepController {
 
@@ -20,7 +19,7 @@ public class Step4bController extends StepController {
 	
 	private TableController tableController = TableController.getInstance();;
 	
-	private Step4aPanel step4aPanel;
+	private Step4Panel step4Panel;
 	
 	public Step4bController() {
 	}
@@ -34,69 +33,59 @@ public class Step4bController extends StepController {
 		Resource resource = step4bModel.getResource();
 		int[] selectedRowsOrColumns = step4bModel.getSelectedRowsOrColumns();
 		
-		String orientation = null;
-		if (resource.getTableElement() instanceof Column) {
-			tableController.setTableSelectionMode(TableController.COLUMNS);
-			orientation = "column";		
-			
-			for (int column: selectedRowsOrColumns) {
-				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
-				resource.unassign(mv);
-			}
-		} else if (resource.getTableElement() instanceof Row) {
-			tableController.setTableSelectionMode(TableController.ROWS);
-			orientation = "row";
-			
-			//TODO
-		}
-			
 		String text = step4bModel.getDescription();
-
+		String orientation = tableController.getOrientationString();
 		text = text.replaceAll("ORIENTATION", orientation);
 		text = text.replaceAll("RESOURCE", resource.toString());
-			
-		resource.getTableElement().mark(tableController.getMarkingColor());
 		
+		step4Panel = new Step4Panel(text);
+		
+		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.allowMultipleSelection();
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
-		step4aPanel = new Step4aPanel(text);
+		for (int number: selectedRowsOrColumns) {
+			Column column = new Column(number);
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
+			resource.unassign(mv);
+			tableController.selectColumn(number);
+		}		
+			
+		resource.getTableElement().mark(tableController.getMarkingColor());
 	}
 	
 	@Override
 	public void saveSettings() {
-		Resource resource = step4bModel.getResource();
+		Resource resource = step4bModel.getResource();	
+		int[] selectedColumns = tableController.getSelectedColumns();		
+		step4bModel.setSelectedRowsOrColumns(selectedColumns);
 		
-		if (resource.getTableElement() instanceof Column) {
-			int[] selectedColumns = tableController.getSelectedColumns();
-			
-			for (int column: selectedColumns) {
-				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
-				resource.assign(mv);
-			}
-			step4bModel.setSelectedRowsOrColumns(selectedColumns);
-		} else if (resource.getTableElement() instanceof Row) {
-			//TODO
+		for (int number: selectedColumns) {
+			Column column = new Column(number);
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
+			resource.assign(mv);
 		}
 
-		step4aPanel = null;
+		step4Panel = null;
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
-			for (int column: selectedColumns) {
-				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
+			for (int number: selectedColumns) {
+				Column column = new Column(number);
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 				if (mv == null) {
 					logger.error("This is not a measured value.");
-					tableController.deselectColumn(column);
+					tableController.deselectColumn(number);
 					return;
 				}
+				
 				Resource resource = step4bModel.getResource();
 				if (resource.isAssigned(mv)) {
 					logger.error(resource + " already set for this measured value.");
-					tableController.deselectColumn(column);
+					tableController.deselectColumn(number);
 					return;
 				}
 			}
@@ -117,7 +106,7 @@ public class Step4bController extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step4aPanel;
+		return step4Panel;
 	}
 
 
@@ -132,6 +121,8 @@ public class Step4bController extends StepController {
 		Resource resourceType = new FeatureOfInterest();
 		Resource resource = null;
 		
+		//find how many Feature of Interests, Observed Properties, Units of 
+		//Measurement or Sensors there are and handle the cases 0, 1 and n
 		while (resourceType != null) {
 			int number = resourceType.getList().size();
 			// in case there is just one resource of this type:
@@ -145,8 +136,7 @@ public class Step4bController extends StepController {
 			
 			//in case there are more than two resources of this type:
 			} else if (resource == null && number >= 2){
-				ResourceController rc = new ResourceController();
-				resource = rc.getNextUnassignedResource(resourceType);
+				resource = getNextUnassignedResource(resourceType);
 			} else { //number == 0
 				logger.info("Skip Step 4b for " + resourceType + "s" +
 						" since there are not any " + resourceType + "s");
@@ -161,17 +151,41 @@ public class Step4bController extends StepController {
 	@Override
 	public StepController getNext() {
 		Resource resourceType = step4bModel.getResource();
-		ResourceController rc = new ResourceController();
 		
 		Resource nextResource = null;
 		while (resourceType != null) {
-			nextResource = rc.getNextUnassignedResource(resourceType);
+			nextResource = getNextUnassignedResource(resourceType);
 			if (nextResource != null)
 				return new Step4bController(new Step4bModel(nextResource));
+			
 			resourceType = resourceType.getNextResourceType();
 		}
 		return null;
 	}	
+	
+	private Resource getNextUnassignedResource(Resource resourceType) {
+		boolean unassignedMeasuredValues = areThereAnyUnassignedMeasuredValuesOf(resourceType);
+		if (!unassignedMeasuredValues) return null;
+		
+		for (Resource resource: resourceType.getList())
+			if (!isAssignedToMeasuredValues(resource))
+				return resource;	
+		return null;
+	}
+	
+	private boolean areThereAnyUnassignedMeasuredValuesOf(Resource resourceType) {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
+			if (!resourceType.isAssigned(mv))
+				return true;
+		return false;
+	}
+	
+	private boolean isAssignedToMeasuredValues(Resource resource) {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
+			if (resource.isAssignedTo(mv))
+				return true;
+		return false;
+	}
 
 	@Override
 	public boolean isFinished() {

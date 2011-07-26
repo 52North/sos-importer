@@ -43,6 +43,14 @@ public class Step8Controller extends StepController {
 	
 	private HttpPost httpPost;
 	
+	private boolean cancelled;
+	
+	private AssembleInformation assembleInformation;
+	
+	private RegisterSensors registerSensors;
+	
+	private InsertObservations insertObservations;
+	
 	public Step8Controller(Step8Model step8Model) {
 		this.step8Model = step8Model;
 	}
@@ -57,18 +65,22 @@ public class Step8Controller extends StepController {
 		File f = new File(a.getFile());
 		step8Panel.setLogFileURI(f.toURI());		
 
-		new AssembleInformation().execute();
+		assembleInformation = new AssembleInformation();
+		registerSensors = new RegisterSensors();
+		insertObservations = new InsertObservations();
+		cancelled = false;
+		assembleInformation.execute();
 	}
 	
 	public void assembleInformationDone() {
 		String sosURL = step8Model.getSosURL();
 		connectToSOS(sosURL);
 
-		new RegisterSensors().execute();
+		registerSensors.execute();
 	}
 	
 	public void registerSensorsDone() {
-		new InsertObservations().execute();
+		insertObservations.execute();
 	}
 
     private class AssembleInformation extends SwingWorker<Void, Void> {
@@ -176,9 +188,11 @@ public class Step8Controller extends StepController {
 
         @Override
         public void done() {
+        	if (!cancelled) {
     		disconnectFromSOS();
     		Toolkit.getDefaultToolkit().beep();
     		BackNextController.getInstance().setFinishButtonEnabled(true);
+        	}
         }
     }
     
@@ -285,5 +299,11 @@ public class Step8Controller extends StepController {
 	@Override
 	public void back() {
 		BackNextController.getInstance().changeFinishToNext();
+		cancelled = true;
+		assembleInformation.cancel(true);
+		registerSensors.cancel(true);
+		insertObservations.cancel(true);
+		ModelStore.getInstance().clearObservationsToInsert();
+		ModelStore.getInstance().clearSensorsToRegister();
 	}
 }

@@ -29,6 +29,7 @@ public class MainController {
 	public void exit() {
 		Settings.getInstance().save();
 		//mainFrame.showExitDialog();
+		mainFrame.dispose();
 	}
 	
 	public void pack() {

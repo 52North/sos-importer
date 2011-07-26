@@ -20,12 +20,19 @@ public class FeatureOfInterest extends Resource {
 	
 	private HashMap<String,Position> positions = new HashMap<String, Position>();
 	
+	@Override
 	public void assign(MeasuredValue measuredValue) {
 		measuredValue.setFeatureOfInterest(this);
 	}
 	
+	@Override
 	public boolean isAssigned(MeasuredValue measuredValue) {
 		return measuredValue.getFeatureOfInterest() != null;
+	}
+	
+	@Override
+	public boolean isAssignedTo(MeasuredValue measuredValue) {
+		return measuredValue.getFeatureOfInterest() == this;
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.model.table.TableElement;
 
 public class ModelStore {
 	
@@ -64,9 +64,9 @@ public class ModelStore {
 		return measuredValues;
 	}
 	
-	public MeasuredValue getMeasuredValueAtColumn(int column) {
+	public MeasuredValue getMeasuredValueAt(TableElement tableElement) {
 		for (MeasuredValue mv: measuredValues) {
-			if (((Column)mv.getTableElement()).getNumber() == column)
+			if (mv.getTableElement().equals(tableElement))
 				return mv;
 		}
 		return null;
@@ -188,6 +188,14 @@ public class ModelStore {
 
 	public HashSet<InsertObservation> getObservationsToInsert() {
 		return observationsToInsert;
+	}
+	
+	public void clearSensorsToRegister() {
+		sensorsToRegister.clear();
+	}
+
+	public void clearObservationsToInsert() {
+		observationsToInsert.clear();
 	}
 	
 	public void remove(Position position) {

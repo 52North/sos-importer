@@ -23,6 +23,11 @@ public class UnitOfMeasurement extends Resource {
 	}
 	
 	@Override
+	public boolean isAssignedTo(MeasuredValue measuredValue) {
+		return measuredValue.getUnitOfMeasurement() == this;
+	}
+	
+	@Override
 	public void unassign(MeasuredValue mv) {
 		mv.setUnitOfMeasurement(null);		
 	}	

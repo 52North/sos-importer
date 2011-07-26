@@ -23,6 +23,11 @@ public class Sensor extends Resource {
 	}
 	
 	@Override
+	public boolean isAssignedTo(MeasuredValue measuredValue) {
+		return measuredValue.getSensor() == this;
+	}
+	
+	@Override
 	public void unassign(MeasuredValue mv) {
 		mv.setSensor(null);		
 	}

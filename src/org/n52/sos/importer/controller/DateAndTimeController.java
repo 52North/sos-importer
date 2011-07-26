@@ -14,7 +14,6 @@ import org.n52.sos.importer.model.dateAndTime.Month;
 import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
@@ -110,28 +109,6 @@ public class DateAndTimeController {
     		dateAndTime.setTimeZone(new TimeZone(tableElement, pattern));
 	}
 	
-	public void assign(MeasuredValue measuredValue) {
-		measuredValue.setDateAndTime(dateAndTime);	
-	}
-
-	public boolean isAssigned(MeasuredValue measuredValue) {
-		return measuredValue.getDateAndTime() != null;
-	}
-
-	public void unassignFromMeasuredValues() {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			if (mv.getDateAndTime() == dateAndTime)
-				mv.setDateAndTime(null);
-		}		
-	}
-	
-	public DateAndTime getNextUnassignedDateAndTime() {
-		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes())
-			if (!isAssignedToMeasuredValue(dateAndTime))
-				return dateAndTime;	
-		return null;
-	}
-	
 	public DateAndTime getNextDateAndTimeWithMissingValues() {
 		List<MissingComponentPanel> missingComponentPanels;
 		
@@ -141,13 +118,6 @@ public class DateAndTimeController {
 				return dateAndTime;
 		}
 		return null;
-	}
-	
-	public boolean isAssignedToMeasuredValue(DateAndTime dateAndTime) {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
-			if (mv.getDateAndTime().equals(dateAndTime))
-				return true;
-		return false;
 	}
 	
 	public void mark(Color color) {

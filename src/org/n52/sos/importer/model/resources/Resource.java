@@ -66,7 +66,19 @@ public abstract class Resource {
 	
 	public abstract void assign(MeasuredValue mv);
 	
+	/**
+	 * indicates if the measured value is assigned to a resource of this type
+	 * @param mv
+	 * @return
+	 */
 	public abstract boolean isAssigned(MeasuredValue mv);
+	
+	/**
+	 * indicates if the measured value is assigned to this resource
+	 * @param mv
+	 * @return
+	 */
+	public abstract boolean isAssignedTo(MeasuredValue mv);
 	
 	public abstract void unassign(MeasuredValue mv);
 	

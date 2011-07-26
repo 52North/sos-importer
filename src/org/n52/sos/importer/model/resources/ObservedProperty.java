@@ -23,6 +23,11 @@ public class ObservedProperty extends Resource {
 	}
 	
 	@Override
+	public boolean isAssignedTo(MeasuredValue measuredValue) {
+		return measuredValue.getObservedProperty() == this;
+	}
+	
+	@Override
 	public void unassign(MeasuredValue mv) {
 		mv.setObservedProperty(null);		
 	}

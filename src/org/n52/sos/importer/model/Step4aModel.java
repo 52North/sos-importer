@@ -4,6 +4,10 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 
 public class Step4aModel {
 	
+	private final String description = 
+		"Select all measured value ORIENTATIONs " +
+		"where the marked Date & Time group corresponds to.";
+	
 	private int[] selectedRowsOrColumns;
 	
 	private DateAndTime dateAndTimeModel;
@@ -29,5 +33,7 @@ public class Step4aModel {
 		return selectedRowsOrColumns;
 	}
 
-
+	public String getDescription() {
+		return description;
+	}
 }

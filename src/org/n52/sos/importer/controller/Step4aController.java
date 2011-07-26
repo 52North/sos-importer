@@ -8,7 +8,8 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
-import org.n52.sos.importer.view.Step4aPanel;
+import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.view.Step4Panel;
 
 public class Step4aController extends StepController {
 	
@@ -16,12 +17,10 @@ public class Step4aController extends StepController {
 	
 	private Step4aModel step4aModel;
 	
-	private Step4aPanel step4bPanel;
+	private Step4Panel step4Panel;
 	
-	private TableController tableController;
-	
-	private DateAndTimeController dateAndTimeController;
-	
+	private TableController tableController = TableController.getInstance();
+
 	public Step4aController() {
 	}
 	
@@ -31,39 +30,50 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public void loadSettings() {
-		String text = "Mark all measured value columns where this Date and Time corresponds to.";
-		step4bPanel = new Step4aPanel(text);		
+		String text = step4aModel.getDescription();
+		String orientation = tableController.getOrientationString();
+		text = text.replaceAll("ORIENTATION", orientation);
+		step4Panel = new Step4Panel(text);		
 
-		dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());
-		dateAndTimeController.mark(tableController.getMarkingColor());
-		
-		tableController = TableController.getInstance();
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.allowMultipleSelection();
-		tableController.addMultipleSelectionListener(new SelectionChanged());	
+		tableController.addMultipleSelectionListener(new SelectionChanged());
+		
+		int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
+		for (int number: selectedRowsOrColumns) {
+			Column c = new Column(number);
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
+			mv.setDateAndTime(null);
+			tableController.selectColumn(number);
+		}
+		
+		DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());	
+		dateAndTimeController.mark(tableController.getMarkingColor());	
 	}
 
 	@Override
 	public void saveSettings() {
-		int[] selectedColumns = tableController.getSelectedColumns();
+		int[] selectedRowsOrColumns = tableController.getSelectedColumns();
+		DateAndTime dateAndTime = step4aModel.getDateAndTimeModel();
+		step4aModel.setSelectedRowsOrColumns(selectedRowsOrColumns);
 		
-		for (int column: selectedColumns) {
-			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
-			dateAndTimeController.assign(mv);
+		for (int number: selectedRowsOrColumns) {
+			Column c = new Column(number);
+			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
+			mv.setDateAndTime(dateAndTime);
 		}
 		
-		step4bPanel = null;
-		dateAndTimeController = null;
+		step4Panel = null;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Step 4a: Solve time ambiguities";
+		return "Step 4a: Solve Date & Time ambiguities";
 	}
 
 	@Override
 	public JPanel getStepPanel() {
-		return step4bPanel;
+		return step4Panel;
 	}
 	
 	@Override
@@ -84,20 +94,19 @@ public class Step4aController extends StepController {
 			return false;
 		}
 		
-		DateAndTimeController dateAndTimeController = new DateAndTimeController();
-		DateAndTime dtm = dateAndTimeController.getNextUnassignedDateAndTime();
+		DateAndTime dtm = getNextUnassignedDateAndTime();
 		step4aModel = new Step4aModel(dtm);
 		return true;
 	}
 
 	@Override
 	public StepController getNext() {
-		DateAndTime dtm = dateAndTimeController.getNextUnassignedDateAndTime();
+		DateAndTime dtm = getNextUnassignedDateAndTime();
 		if (dtm != null) {
-			Step4aModel step4bModel = new Step4aModel(dtm);
-			return new Step4aController(step4bModel);
+			Step4aModel step4aModel = new Step4aModel(dtm);
+			return new Step4aController(step4aModel);
 		} 
-		
+	
 		return null;
 	}
 	
@@ -106,27 +115,53 @@ public class Step4aController extends StepController {
 		return new Step4bController(); 
 	}
 	
+	private DateAndTime getNextUnassignedDateAndTime() {
+		boolean unassignedMeasuredValues = areThereAnyUnassignedMeasuredValuesLeft();
+		if (!unassignedMeasuredValues) return null;
+		
+		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes())
+			if (!isAssignedToMeasuredValue(dateAndTime))
+				return dateAndTime;	
+		return null;
+	}
+	
+	private boolean areThereAnyUnassignedMeasuredValuesLeft() {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
+			if (mv.getDateAndTime() == null)
+				return true;
+		return false;
+	}
+	
+	private boolean isAssignedToMeasuredValue(DateAndTime dateAndTime) {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
+			if (dateAndTime.equals(mv.getDateAndTime()))
+				return true;
+		return false;
+	}
+	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
-			for (int column: selectedColumns) {
-				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAtColumn(column);
+			for (int number: selectedColumns) {
+				Column c = new Column(number);
+				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 				if (mv == null) {
 					JOptionPane.showMessageDialog(null,
 						    "This is not a measured value.",
 						    "Info",
 						    JOptionPane.INFORMATION_MESSAGE);
-					tableController.deselectColumn(column);
+					tableController.deselectColumn(number);
 					return;
 				}
 
-				if (dateAndTimeController.isAssigned(mv)) {
+				//measured value has already assigned a date&time
+				if (mv.getDateAndTime() != null) {
 					JOptionPane.showMessageDialog(null,
 						    "Date and Time are already set for this measured value.",
 						    "Info",
 						    JOptionPane.INFORMATION_MESSAGE);
-					tableController.deselectColumn(column);
+					tableController.deselectColumn(number);
 					return;
 				}
 			}
@@ -141,7 +176,6 @@ public class Step4aController extends StepController {
 
 	@Override
 	public boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
