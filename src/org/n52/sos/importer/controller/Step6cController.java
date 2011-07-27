@@ -9,6 +9,7 @@ import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.Step6cPanel;
+import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class Step6cController extends StepController {
 
@@ -27,20 +28,19 @@ public class Step6cController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		step6cPanel = new Step6cPanel();
+		String description = step6cModel.getDescription();
 
 		String name = step6cModel.getFeatureOfInterestName();
-		if (name != null)
-			step6cPanel.setFeatureOfInterestName(name);
-		else {
+		if (name == null) {
 			FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
-			step6cPanel.setFeatureOfInterestName(foi.getName());
+			name = foi.getName();
 		}
 		
 		Position p = step6cModel.getPosition();
 		positionController = new PositionController(p);
-		
-		step6cPanel.addMissingComponentPanels(positionController.getMissingComponentPanels());	
+		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
+			
+		step6cPanel = new Step6cPanel(description, name, null, missingComponentPanels);	
 	}
 
 	@Override

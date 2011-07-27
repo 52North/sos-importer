@@ -5,6 +5,8 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
 public class Step6cModel {
 	
+	private final String description = "What is the position of";
+	
 	private FeatureOfInterest featureOfInterest;
 
 	/** a feature of interest name in the feature of interest column/row */
@@ -45,5 +47,9 @@ public class Step6cModel {
 
 	public String getFeatureOfInterestName() {
 		return featureOfInterestName;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 }

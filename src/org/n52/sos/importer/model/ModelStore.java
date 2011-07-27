@@ -34,6 +34,8 @@ public class ModelStore {
 	
 	private List<Position> positions;
 	
+	private HashSet<Step6bSpecialModel> step6bSpecialModels;
+	
 	private HashSet<InsertObservation> observationsToInsert;
 	
 	private HashSet<RegisterSensor> sensorsToRegister;
@@ -46,6 +48,7 @@ public class ModelStore {
 		unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
 		sensors = new ArrayList<Sensor>();
 		positions = new ArrayList<Position>();
+		step6bSpecialModels = new HashSet<Step6bSpecialModel>();
 		observationsToInsert = new HashSet<InsertObservation>();
 		sensorsToRegister = new HashSet<RegisterSensor>();
 	}
@@ -201,4 +204,45 @@ public class ModelStore {
 	public void remove(Position position) {
 		positions.remove(position);
 	}
+	
+	public List<FeatureOfInterest> getFeatureOfInterestsInTable() {
+		ArrayList<FeatureOfInterest> foisInTable = new ArrayList<FeatureOfInterest>();
+		for (FeatureOfInterest foi: featureOfInterests) {
+			if (foi.getTableElement() != null) 
+				foisInTable.add(foi);
+		}
+		return foisInTable;
+	}
+	
+	public List<Sensor> getSensorsInTable() {
+		ArrayList<Sensor> sensorsInTable = new ArrayList<Sensor>();
+		for (Sensor s: sensors) {
+			if (s.getTableElement() != null) 
+				sensorsInTable.add(s);
+		}
+		return sensorsInTable;
+	}
+
+	public List<ObservedProperty> getObservedPropertiesInTable() {
+		ArrayList<ObservedProperty> opsInTable = new ArrayList<ObservedProperty>();
+		for (ObservedProperty op: observedProperties) {
+			if (op.getTableElement() != null) 
+				opsInTable.add(op);
+		}
+		return opsInTable;
+	}
+
+	public void add(Step6bSpecialModel step6bSpecialModel) {
+		System.out.println("Add special model");
+		step6bSpecialModels.add(step6bSpecialModel);
+	} 
+	
+	public void remove(Step6bSpecialModel step6bSpecialModel) {
+		step6bSpecialModels.remove(step6bSpecialModel);
+	}
+
+	public HashSet<Step6bSpecialModel> getStep6bSpecialModels() {
+		return step6bSpecialModels;
+	}
+	
 }

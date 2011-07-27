@@ -1,10 +1,13 @@
 package org.n52.sos.importer.model.measuredValue;
 
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
@@ -139,15 +142,37 @@ public abstract class MeasuredValue implements Parseable {
 			io.setUnitOfMeasurementCode(uom.getNameString());
 			rs.setUnitOfMeasurementCode(uom.getNameString());
 			
-			Sensor sensor = getSensor().forThis(c);
+			Sensor sensor = this.sensor;
+			if (sensor != null) {
+				 sensor = getSensor().forThis(c);
+			} else { //Step6bSpecialController
+				sensor = getSensorFor(foi.getNameString(), op.getNameString());
+			}
+			
 			io.setSensorName(sensor.getNameString());
 			io.setSensorURI(sensor.getURIString());
 			rs.setSensorName(sensor.getNameString());
 			rs.setSensorURI(sensor.getURIString());
-			
+				
 			ModelStore.getInstance().addObservationToInsert(io);
 			ModelStore.getInstance().addSensorToRegister(rs);
 		}
+	}
+	
+	public Sensor getSensorFor(String featureOfInterestName, String observedPropertyName) {
+		Iterator<Step6bSpecialModel> iterator = 
+			ModelStore.getInstance().getStep6bSpecialModels().iterator();
+		
+		Step6bSpecialModel step6bSpecialModel;
+		while (iterator.hasNext()) {
+			step6bSpecialModel = iterator.next();
+			if (step6bSpecialModel.getFeatureOfInterestName().equals(featureOfInterestName) &&
+				step6bSpecialModel.getObservedPropertyName().equals(observedPropertyName))
+				return step6bSpecialModel.getSensor();
+		}
+		
+		//should never get here
+		return null;
 	}
 	
 	@Override
@@ -157,6 +182,4 @@ public abstract class MeasuredValue implements Parseable {
 		else
 			return " " + getTableElement();
 	}
-	
-	//public abstract String parse(String s);
 }

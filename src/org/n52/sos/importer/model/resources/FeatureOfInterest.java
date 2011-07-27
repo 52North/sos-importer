@@ -61,7 +61,7 @@ public class FeatureOfInterest extends Resource {
 			//case: this feature of interest row or column is not
 			//associated with a position row or column in the table
 			} else {
-				Position p = positions.get(name);
+				Position p = getPositionFor(name);
 				foi.setPosition(p);
 			}
 		}

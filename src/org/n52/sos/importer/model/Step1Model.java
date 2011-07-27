@@ -1,6 +1,6 @@
 package org.n52.sos.importer.model;
 
-public class Step1Model extends StepModel {
+public class Step1Model {
 
 	private String csvFilePath = "";
 	

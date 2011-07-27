@@ -93,12 +93,10 @@ public class Step8Controller extends StepController {
 				mv.print();
 			}
 			
-			/*
 			for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
 				logger.info(rs);
 			for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert())
 				logger.info(io);	
-			*/
 			
 			return null;
 		}
@@ -108,9 +106,7 @@ public class Step8Controller extends StepController {
         	step8Panel.setIndeterminate(false);
             assembleInformationDone();
         }
-		
     }
-	
 	
     private class RegisterSensors extends SwingWorker<Void, Void> {
 

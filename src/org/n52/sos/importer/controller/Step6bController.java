@@ -9,7 +9,11 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.Step5aPanel;
 import org.n52.sos.importer.view.position.MissingComponentPanel;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
@@ -81,7 +85,7 @@ public class Step6bController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {		
-		return new Step6cController();	
+		return new Step6bSpecialController();	
 	}
 
 	@Override
@@ -96,8 +100,7 @@ public class Step6bController extends StepController {
 
 	@Override
 	public boolean isNecessary() {
-		MeasuredValueController measuredValueController = new MeasuredValueController();
-		step6bModel = measuredValueController.getMissingResourceForMeasuredValue();	
+		step6bModel = getMissingResourceForMeasuredValue();	
 		if (step6bModel == null) {
 			logger.info("Skip Step 6b since all Measured Values are already" +
 					" assigned to Features Of Interest, Observed Properties," +
@@ -110,10 +113,41 @@ public class Step6bController extends StepController {
 	
 	@Override
 	public StepController getNext() {
-		MeasuredValueController measuredValueController = new MeasuredValueController();		
-		Step6bModel model = measuredValueController.getMissingResourceForMeasuredValue();	
+		Step6bModel model = getMissingResourceForMeasuredValue();	
 		if (model != null) return new Step6bController(model);
 			
+		return null;
+	}
+	
+	public Step6bModel getMissingResourceForMeasuredValue() {
+		List<MeasuredValue> measuredValues = ModelStore.getInstance().getMeasuredValues();
+		
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getFeatureOfInterest() == null) 
+				return new Step6bModel(mv, new FeatureOfInterest());
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getObservedProperty() == null) {
+				return new Step6bModel(mv, new ObservedProperty());
+			}
+		}
+		for (MeasuredValue mv: measuredValues) {
+			if (mv.getUnitOfMeasurement() == null) {
+				return new Step6bModel(mv, new UnitOfMeasurement());
+			}
+		}
+		
+		if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
+			ModelStore.getInstance().getObservedPropertiesInTable().size() == 0 &&
+			ModelStore.getInstance().getSensorsInTable().size() == 0) {
+			for (MeasuredValue mv: measuredValues) {
+				if (mv.getSensor() == null) {
+					return new Step6bModel(mv, new Sensor());
+				}
+			}
+			
+		}
+
 		return null;
 	}
 
