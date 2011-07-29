@@ -1,6 +1,7 @@
 package org.n52.sos.importer.controller;
 
 import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 

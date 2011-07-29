@@ -1,4 +1,4 @@
-package org.n52.sos.importer.controller;
+package org.n52.sos.importer.interfaces;
 
 import javax.swing.JPanel;
 
@@ -50,6 +50,6 @@ public abstract class StepController {
 	 * @return
 	 */
 	public boolean isStillValid() {
-		return true;
+		return false;
 	}
 }

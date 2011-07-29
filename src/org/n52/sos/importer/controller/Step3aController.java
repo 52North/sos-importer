@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.interfaces.StepController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
@@ -72,6 +75,15 @@ public class Step3aController extends StepController {
 		step3Panel.getLastChildPanel().assign(new Column(number));
 		
 		tableController.setColumnHeading(number, selection.get(0));
+		
+		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
+			DateAndTimeController dtc = new DateAndTimeController();
+			dtc.mergeDateAndTimes();
+			
+			PositionController pc = new PositionController();
+			pc.mergePositions();
+		}
+		
 		step3Panel = null;
 	}
 
@@ -88,6 +100,16 @@ public class Step3aController extends StepController {
 
 	@Override
 	public boolean isFinished() {
+		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {
+			if (ModelStore.getInstance().getMeasuredValues().size() == 0) {
+				JOptionPane.showMessageDialog(null,
+					    "You have to specify at least one measured value column.",
+					    "Measured value column missing",
+					    JOptionPane.WARNING_MESSAGE);
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
@@ -99,4 +121,11 @@ public class Step3aController extends StepController {
 		
 		return new Step3aController(new Step3aModel(nextColumn));
 	}	
+	
+	@Override
+	public boolean isStillValid() {
+		//TODO: check whether the CSV file parsing settings have been changed
+		if (step3aModel.getSelectedColumn() == 0) return false;
+		return true;
+	}
 }

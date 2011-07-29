@@ -10,9 +10,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.Combination;
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.interfaces.Combination;
 
 public abstract class CombinationPanel extends SelectionPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/

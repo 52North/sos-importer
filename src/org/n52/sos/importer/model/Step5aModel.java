@@ -1,5 +1,9 @@
 package org.n52.sos.importer.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 
 public class Step5aModel {
@@ -9,8 +13,11 @@ public class Step5aModel {
 	
 	private DateAndTime dateAndTime;
 	
+	private List<Component> missingDateAndTimeComponents;
+	
 	public Step5aModel(DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
+		missingDateAndTimeComponents = new ArrayList<Component>();
 	}
 
 	public void setDateAndTimeModel(DateAndTime dateAndTime) {
@@ -23,6 +30,14 @@ public class Step5aModel {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public void setMissingDateAndTimeComponents(List<Component> missingDateAndTimeComponents) {
+		this.missingDateAndTimeComponents = missingDateAndTimeComponents;
+	}
+
+	public List<Component> getMissingDateAndTimeComponents() {
+		return missingDateAndTimeComponents;
 	}
 
 }

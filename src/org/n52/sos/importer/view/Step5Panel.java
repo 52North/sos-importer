@@ -7,13 +7,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
-public class Step5aPanel extends JPanel {
+public class Step5Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	public Step5aPanel(String description, List<MissingComponentPanel> missingComponentPanels) {
+	public Step5Panel(String description, List<MissingComponentPanel> missingComponentPanels) {
 		super();
 		JLabel descriptionLabel = new JLabel(description);
 		

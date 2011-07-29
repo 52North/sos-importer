@@ -3,10 +3,10 @@ package org.n52.sos.importer.view.step3;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.Combination;
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.controller.PositionController;
+import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Height;
@@ -23,7 +23,6 @@ public class PositionCombinationPanel extends CombinationPanel {
 	
 	public PositionCombinationPanel(JPanel containerPanel) {
 		super(containerPanel);
-		
 	}
 
 	@Override
@@ -38,7 +37,11 @@ public class PositionCombinationPanel extends CombinationPanel {
 
 	@Override
 	public Object getTestValue() {
-		return "52.14° 7.52° 100m 4236";
+		Latitude latitude = new Latitude(52.4, "°");
+		Longitude longitude = new Longitude(7.52, "°");
+		Height height = new Height(126.2, "m");
+		EPSGCode epsgCode = new EPSGCode(4236);
+		return new Position(latitude, longitude, height, epsgCode);
 	}
 
 	@Override
@@ -52,11 +55,11 @@ public class PositionCombinationPanel extends CombinationPanel {
     	String[] part = getSelection().split("SEP");
 		String pattern = part[0];
 		String group = part[1];
-		
-		PositionController pc = new PositionController();
-		pc.assignPattern(pattern, tableElement);			
-		Position position = pc.getPosition();
+	
+		Position position = new Position();
 		position.setGroup(group);
+		PositionController pc = new PositionController(position);
+		pc.assignPattern(pattern, tableElement);			
 		ModelStore.getInstance().add(position);
 	}
 

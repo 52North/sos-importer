@@ -1,4 +1,4 @@
-package org.n52.sos.importer.view.position;
+package org.n52.sos.importer.interfaces;
 
 import javax.swing.JPanel;
 
@@ -10,7 +10,9 @@ public abstract class MissingComponentPanel extends JPanel {
 	
 	public abstract void unassignValues();
 	
-	public boolean checkValues() {
-		return true;
-	}
+	public abstract boolean checkValues();
+	
+	public abstract Component getMissingComponent();
+	
+	public abstract void setMissingComponent(Component c);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
@@ -14,6 +15,8 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
 
 public class FeatureOfInterest extends Resource {
+	
+	private static final Logger logger = Logger.getLogger(FeatureOfInterest.class);
 	
 	/** single position or position column/row */
 	private Position position;
@@ -93,6 +96,7 @@ public class FeatureOfInterest extends Resource {
 	
 	public void setPosition(Position position) {
 		this.position = position;
+		logger.info("Assign " + position + " to " + this);
 	}
 
 	public Position getPosition() {

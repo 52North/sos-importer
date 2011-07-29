@@ -2,7 +2,7 @@ package org.n52.sos.importer.model;
 
 import java.util.Stack;
 
-import org.n52.sos.importer.controller.StepController;
+import org.n52.sos.importer.interfaces.StepController;
 
 public class BackNextModel {
 

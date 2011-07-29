@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
-import org.n52.sos.importer.Formatable;
+import org.n52.sos.importer.interfaces.Formatable;
 
 public class NumericValue extends MeasuredValue implements Formatable {
 

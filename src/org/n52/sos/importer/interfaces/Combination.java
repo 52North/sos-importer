@@ -1,4 +1,4 @@
-package org.n52.sos.importer;
+package org.n52.sos.importer.interfaces;
 
 public abstract class Combination implements Formatable, Parseable {
 

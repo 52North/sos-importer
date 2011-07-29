@@ -7,10 +7,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 
-public abstract class DateAndTimeComponent {
+public abstract class DateAndTimeComponent extends Component {
 
 	private static final Logger logger = Logger.getLogger(DateAndTimeComponent.class);
 	

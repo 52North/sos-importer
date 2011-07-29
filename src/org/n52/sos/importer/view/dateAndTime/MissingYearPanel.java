@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Year;
 
@@ -25,6 +26,7 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
 		yearSpinner.setEditor(new JSpinner.NumberEditor(yearSpinner, "#"));
 		this.add(yearSpinner);
 	}
+	
 	@Override
 	public void assignValues() {
 		dateAndTime.setYear(new Year(yearModel.getNumber().intValue()));	
@@ -33,5 +35,19 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
 	@Override
 	public void unassignValues() {
 		dateAndTime.setYear(null);	
+	}
+	
+	@Override
+	public boolean checkValues() {
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		return new Year(yearModel.getNumber().intValue());
+	}
+	
+	public void setMissingComponent(Component c) {
+		yearModel.setValue(((Year)c).getValue());
 	}
 }

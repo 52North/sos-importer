@@ -5,12 +5,14 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
-import org.n52.sos.importer.view.Step5aPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.view.Step5Panel;
 
 /**
  * in case of no date&time 
@@ -23,9 +25,9 @@ public class Step6aController extends StepController {
 	
 	private Step6aModel step6aModel;
 	
-	private Step5aPanel step5aPanel;
+	private Step5Panel step5Panel;
 	
-	private DateAndTimeController dtc;
+	private DateAndTimeController dateAndTimeController;
 	
 	public Step6aController() {
 	}
@@ -36,30 +38,36 @@ public class Step6aController extends StepController {
 
 	@Override
 	public void loadSettings() {
+		TableController.getInstance().deselectAllColumns();
+		TableController.getInstance().turnSelectionOff();
+		
 		DateAndTime dateAndTime = step6aModel.getDateAndTime();
-		String description = step6aModel.getDescription();
+		dateAndTimeController = new DateAndTimeController(dateAndTime);
+		List<Component> components = step6aModel.getMissingDateAndTimeComponents();
+		dateAndTimeController.setMissingComponents(components);
+		dateAndTimeController.unassignMissingComponentValues();
 		
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			mv.setDateAndTime(null);
 		
-		dtc = new DateAndTimeController(dateAndTime);
-		List<MissingComponentPanel> mcp = dtc.getMissingComponentPanels();
-		step5aPanel = new Step5aPanel(description, mcp);
-		
-		TableController.getInstance().deselectAllColumns();
-		TableController.getInstance().turnSelectionOff();
+		String description = step6aModel.getDescription();
+		List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
+		step5Panel = new Step5Panel(description, mcp);
 	}
 
 	@Override
 	public void saveSettings() {
-		dtc.assignMissingComponentValues();
-		DateAndTime dateAndTime = dtc.getDateAndTime();
+		dateAndTimeController.assignMissingComponentValues();	
+		
+		List<Component> components = dateAndTimeController.getMissingComponents();
+		step6aModel.setMissingDateAndTimeComponents(components);
+
+		DateAndTime dateAndTime = dateAndTimeController.getDateAndTime();
 		
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			mv.setDateAndTime(dateAndTime);
 		
-		dtc = null;
-		step5aPanel = null;
+		step5Panel = null;
 	}
 
 	@Override
@@ -69,7 +77,7 @@ public class Step6aController extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step5aPanel;
+		return step5Panel;
 	}
 
 	@Override

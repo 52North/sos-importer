@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
@@ -25,7 +27,6 @@ import org.n52.sos.importer.view.dateAndTime.MissingSecondPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingYearPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class DateAndTimeController {
 	
@@ -37,15 +38,17 @@ public class DateAndTimeController {
 	
 	public DateAndTimeController() {
 		dateAndTime = new DateAndTime();
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
 	
 	public DateAndTimeController(DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
 	
-	public List<MissingComponentPanel> getMissingComponentPanels() {		
-		missingComponentPanels = new ArrayList<MissingComponentPanel>();
-		
+	public List<MissingComponentPanel> getMissingComponentPanels() {	
+		if (!missingComponentPanels.isEmpty()) return missingComponentPanels;
+	
 		if (dateAndTime.getDay() == null && 
 			dateAndTime.getMonth() == null && 
 			dateAndTime.getYear() == null)
@@ -77,6 +80,21 @@ public class DateAndTimeController {
 		return missingComponentPanels;
 	}	
 	
+	public void setMissingComponents(List<Component> components) {
+		for (Component c: components) {
+			MissingComponentPanel mcp = c.getMissingComponentPanel(dateAndTime);
+			mcp.setMissingComponent(c);
+			missingComponentPanels.add(mcp);
+		}
+	}
+	
+	public List<Component> getMissingComponents() {
+		List<Component> components = new ArrayList<Component>();
+		for (MissingComponentPanel mcp: missingComponentPanels) 
+			components.add((Component)mcp.getMissingComponent());
+		return components;
+	}
+	
 	public DateAndTime getDateAndTime() {
 		return dateAndTime;
 	}
@@ -89,6 +107,12 @@ public class DateAndTimeController {
 		for (MissingComponentPanel mcp: missingComponentPanels) 
 			mcp.assignValues();
 	}
+	
+	public void unassignMissingComponentValues() {
+		for (MissingComponentPanel mcp: missingComponentPanels) 
+			mcp.unassignValues();
+	}
+	
 	
 	public void assignPattern(String pattern, TableElement tableElement) {		
 		logger.info("Assign pattern " + pattern + " in " + tableElement + " to " + dateAndTime);
@@ -113,6 +137,7 @@ public class DateAndTimeController {
 		List<MissingComponentPanel> missingComponentPanels;
 		
 		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
+			setDateAndTime(dateAndTime);
 			missingComponentPanels = getMissingComponentPanels();
 			if (missingComponentPanels.size() > 0)
 				return dateAndTime;
@@ -164,6 +189,7 @@ public class DateAndTimeController {
 	
 	
 	public void mergeDateAndTimes() {
+		logger.info("Merge Date & Times");
 		List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
 		List<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>();
 		for (int i = 0; i < dateAndTimes.size(); i++) {

@@ -3,10 +3,14 @@ package org.n52.sos.importer.model.position;
 import java.awt.Color;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 
-public class EPSGCode {
+public class EPSGCode extends Component {
 
 	private static final Logger logger = Logger.getLogger(EPSGCode.class);
 	
@@ -43,16 +47,13 @@ public class EPSGCode {
 		return tableElement;
 	}
 	
-	public int getParsedValue(Cell featureOfInterestPosition) {
+	public EPSGCode forThis(Cell featureOfInterestPosition) {
 		if (tableElement == null)
-			return getValue();
-		else 
-			return parse(tableElement.getValueFor(featureOfInterestPosition));
-	}
-	
-	public int parse(String s) {
-		//TODO
-		return Integer.valueOf(s);
+			return new EPSGCode(value);
+		else {
+			String epsgString = tableElement.getValueFor(featureOfInterestPosition);
+			return EPSGCode.parse(epsgString);
+		}
 	}
 	
 	public void mark(Color color) {
@@ -75,4 +76,15 @@ public class EPSGCode {
 	public String getPattern() {
 		return pattern;
 	}
+
+	@Override
+	public MissingComponentPanel getMissingComponentPanel(Combination c) {
+		return new MissingEPSGCodePanel((Position)c);
+	}
+	
+	public static EPSGCode parse(String s) {
+		int value = Integer.valueOf(s);
+		return new EPSGCode(value);
+	}
+	
 }

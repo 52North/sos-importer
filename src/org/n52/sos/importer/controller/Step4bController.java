@@ -1,8 +1,10 @@
 package org.n52.sos.importer.controller;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -77,14 +79,20 @@ public class Step4bController extends StepController {
 				Column column = new Column(number);
 				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 				if (mv == null) {
-					logger.error("This is not a measured value.");
+					JOptionPane.showMessageDialog(null,
+						    "This is not a measured value.",
+						    "Info",
+						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
 				}
 				
 				Resource resource = step4bModel.getResource();
 				if (resource.isAssigned(mv)) {
-					logger.error(resource + " already set for this measured value.");
+					JOptionPane.showMessageDialog(null,
+						    resource + " already set for this measured value.",
+						    "Info",
+						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
 				}
@@ -112,7 +120,7 @@ public class Step4bController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step5aController();
+		return new Step4cController();
 	}
 
 

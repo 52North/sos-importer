@@ -1,7 +1,7 @@
 package org.n52.sos.importer.view.dateAndTime;
 
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public abstract class MissingDateAndTimePanel extends MissingComponentPanel {
 
@@ -12,5 +12,5 @@ public abstract class MissingDateAndTimePanel extends MissingComponentPanel {
 	public MissingDateAndTimePanel(DateAndTime dateAndTime) {
 		super();
 		this.dateAndTime = dateAndTime;
-	}
+	}	
 }

@@ -24,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step8Model;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;

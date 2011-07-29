@@ -3,9 +3,9 @@ package org.n52.sos.importer.model.measuredValue;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.Parseable;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.TableController;
+import org.n52.sos.importer.interfaces.Parseable;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step2Panel;
 
@@ -172,5 +173,11 @@ public class Step2Controller extends StepController {
 	@Override
 	public StepController getNext() {
 		return null;
+	}
+	
+	@Override
+	public boolean isStillValid() {
+		//TODO: check whether the CSV file has changed
+		return false;
 	}
 }

@@ -4,9 +4,12 @@ import java.awt.FlowLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Position;
 
@@ -42,5 +45,33 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 	
 	public void unassignValues() {
 		position.setLatitude(null);
+	}
+
+	@Override
+	public boolean checkValues() {
+		try {
+			Double.parseDouble(latitudeTextField.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+				    "The latitude/northing can only be a decimal number so far.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		double value = Double.parseDouble(latitudeTextField.getText());
+		String unit = (String) latitudeUnitComboBox.getSelectedItem();
+		return new Latitude(value, unit);
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		Latitude latitude = (Latitude)c;
+		latitudeTextField.setText(latitude.getValue() + "");
+		latitudeUnitComboBox.setSelectedItem(latitude.getUnit());
 	}
 }

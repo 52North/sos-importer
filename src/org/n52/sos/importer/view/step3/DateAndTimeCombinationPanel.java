@@ -5,10 +5,10 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.Combination;
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.controller.DateAndTimeController;
+import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;

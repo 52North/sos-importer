@@ -5,10 +5,12 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.position.Position;
-import org.n52.sos.importer.view.Step5aPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.view.Step5Panel;
 
 public class Step5cController extends StepController {
 
@@ -18,7 +20,7 @@ public class Step5cController extends StepController {
 	
 	private Step5cModel step5cModel;
 	
-	private Step5aPanel step5aPanel;
+	private Step5Panel step5Panel;
 	
 	private PositionController positionController;
 	
@@ -34,12 +36,16 @@ public class Step5cController extends StepController {
 		TableController.getInstance().deselectAllColumns();
 		TableController.getInstance().turnSelectionOff();
 		
-		positionController = new PositionController(step5cModel.getPosition());
-		positionController.mark(TableController.getInstance().getMarkingColor());
+		Position position = step5cModel.getPosition();
+		positionController = new PositionController(position);
+		List<Component> components = step5cModel.getMissingPositionComponents();
+		positionController.setMissingComponents(components);
+		positionController.unassignMissingComponentValues();
 		
 		String description = step5cModel.getDescription();
-		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();		
-		step5aPanel = new Step5aPanel(description, missingComponentPanels);
+		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();	
+		step5Panel = new Step5Panel(description, missingComponentPanels);
+		positionController.mark(TableController.getInstance().getMarkingColor());
 	}
 	
 	
@@ -47,12 +53,16 @@ public class Step5cController extends StepController {
 	public void saveSettings() {
 		positionController.assignMissingComponentValues();	
 		
-		step5aPanel = null;
+		List<Component> components = positionController.getMissingComponents();
+		step5cModel.setMissingPositionComponents(components);
+		
+		positionController = null;
+		step5Panel = null;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return true;
+		return positionController.checkMissingComponentValues();
 	}
 	
 	@Override
@@ -62,7 +72,7 @@ public class Step5cController extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step5aPanel;
+		return step5Panel;
 	}
 
 	@Override
@@ -81,7 +91,8 @@ public class Step5cController extends StepController {
 	}
 	
 	@Override
-	public StepController getNext() {	
+	public StepController getNext() {
+		positionController = new PositionController();
 		Position p = positionController.getNextPositionWithMissingValues();
 		if (p != null) return new Step5cController(new Step5cModel(p));
 		
@@ -91,6 +102,6 @@ public class Step5cController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step6bController();
+		return new Step6aController();
 	}
 }

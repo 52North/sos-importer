@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Second;
 
@@ -33,5 +34,20 @@ public class MissingSecondPanel extends MissingDateAndTimePanel {
 	@Override
 	public void unassignValues() {
 		dateAndTime.setSecond(null);	
+	}
+	
+	@Override
+	public boolean checkValues() {
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		return new Second(secondModel.getNumber().intValue());
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		secondModel.setValue(((Second)c).getValue());
 	}
 }

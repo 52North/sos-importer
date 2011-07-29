@@ -4,15 +4,19 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.Step6cPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class Step6cController extends StepController {
 
+	private static final Logger logger = Logger.getLogger(Step6cController.class);
+	
 	private Step6cModel step6cModel;
 	
 	private PositionController positionController;
@@ -110,14 +114,15 @@ public class Step6cController extends StepController {
 	@Override
 	public boolean isNecessary() {
 		step6cModel = getNextFeatureOfInterestWithoutPosition();
-		if (step6cModel == null) return false;
+		if (step6cModel != null) return true;
 
-		return true;
+		logger.info("Skip Step 6c since there is at least one position");
+		return false;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return true;
+		return positionController.checkMissingComponentValues();
 	}
 
 }

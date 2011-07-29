@@ -233,7 +233,6 @@ public class ModelStore {
 	}
 
 	public void add(Step6bSpecialModel step6bSpecialModel) {
-		System.out.println("Add special model");
 		step6bSpecialModels.add(step6bSpecialModel);
 	} 
 	

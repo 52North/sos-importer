@@ -6,9 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class MissingDayPanel extends MissingComponentPanel {
 
@@ -36,5 +37,20 @@ public class MissingDayPanel extends MissingComponentPanel {
 	@Override
 	public void unassignValues() {
 		dateAndTime.setDay(null);		
+	}
+	
+	@Override
+	public boolean checkValues() {
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		return new Day(dayModel.getNumber().intValue());
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		dayModel.setValue(((Day)c).getValue());
 	}
 }

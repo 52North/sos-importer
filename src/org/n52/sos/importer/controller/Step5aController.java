@@ -5,10 +5,12 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.view.Step5aPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.view.Step5Panel;
 
 public class Step5aController extends StepController {
 
@@ -18,7 +20,7 @@ public class Step5aController extends StepController {
 	
 	private Step5aModel step5aModel;
 	
-	private Step5aPanel step5aPanel;
+	private Step5Panel step5Panel;
 	
 	private DateAndTimeController dateAndTimeController;
 	
@@ -34,12 +36,16 @@ public class Step5aController extends StepController {
 		TableController.getInstance().deselectAllColumns();
 		TableController.getInstance().turnSelectionOff();
 		
-		dateAndTimeController = new DateAndTimeController(step5aModel.getDateAndTime());
-		dateAndTimeController.mark(TableController.getInstance().getMarkingColor());
+		DateAndTime dateAndTime = step5aModel.getDateAndTime();
+		dateAndTimeController = new DateAndTimeController(dateAndTime);
+		List<Component> components = step5aModel.getMissingDateAndTimeComponents();
+		dateAndTimeController.setMissingComponents(components);
+		dateAndTimeController.unassignMissingComponentValues();
 		
 		String description = step5aModel.getDescription();
-		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();		
-		step5aPanel = new Step5aPanel(description, missingComponentPanels);
+		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
+		step5Panel = new Step5Panel(description, missingComponentPanels);
+		dateAndTimeController.mark(TableController.getInstance().getMarkingColor());
 	}
 
 	@Override
@@ -51,7 +57,11 @@ public class Step5aController extends StepController {
 	public void saveSettings() {
 		dateAndTimeController.assignMissingComponentValues();	
 		
-		step5aPanel = null;
+		List<Component> components = dateAndTimeController.getMissingComponents();
+		step5aModel.setMissingDateAndTimeComponents(components);
+		
+		dateAndTimeController = null;
+		step5Panel = null;
 	}
 	
 	@Override
@@ -61,7 +71,7 @@ public class Step5aController extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step5aPanel;
+		return step5Panel;
 	}
 
 	@Override
@@ -70,7 +80,7 @@ public class Step5aController extends StepController {
 		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
 		
 		if (dtm == null) {
-			logger.info("Skip Step 5c since there are not any Date&Times" +
+			logger.info("Skip Step 5a since there are not any Date&Times" +
 				" with missing values");
 			return false;
 		}
@@ -81,6 +91,7 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public StepController getNext() {	
+		dateAndTimeController = new DateAndTimeController();
 		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
 		if (dtm != null) return new Step5aController(new Step5aModel(dtm));
 		
@@ -90,6 +101,6 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step6bController();
+		return new Step5cController();
 	}
 }

@@ -3,12 +3,12 @@ package org.n52.sos.importer.model.position;
 import java.awt.Color;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.table.TableElement;
 
-public class PositionComponentModel {
+public abstract class PositionComponent extends Component {
 
-	private static final Logger logger = Logger.getLogger(PositionComponentModel.class);
+	private static final Logger logger = Logger.getLogger(PositionComponent.class);
 	
 	private TableElement tableElement;
 	
@@ -18,12 +18,12 @@ public class PositionComponentModel {
 	
 	private String unit = null;
 
-	public PositionComponentModel(TableElement tableElement, String pattern) {
+	public PositionComponent(TableElement tableElement, String pattern) {
 		this.tableElement = tableElement;
 		this.pattern = pattern;
 	}
 	
-	public PositionComponentModel(double value, String unit) {
+	public PositionComponent(double value, String unit) {
 		this.value = value;
 		this.unit = unit;
 	}
@@ -58,14 +58,7 @@ public class PositionComponentModel {
 		if (tableElement != null)
 			tableElement.mark(color);
 	}
-	
-	public double getParsedValue(Cell featureOfInterestPosition) {
-		if (tableElement == null)
-			return getValue();
-		else 
-			return parse(tableElement.getValueFor(featureOfInterestPosition));
-	}
-	
+
 	public String getParsedUnit() {
 		if (unit == null || unit.equals(""))
 			return "n/a";
@@ -78,15 +71,10 @@ public class PositionComponentModel {
 		return "n/a";
 	}
 	
-	public double parse(String s) {
-		//TODO
-		return Double.parseDouble(s);
-	}
-	
 	@Override 
 	public String toString() {
 		if (getTableElement() == null)
-			return " " + getValue() + getParsedUnit();
+			return " " + getValue() + getUnit();
 		else 
 			return " " + getTableElement();
 	}

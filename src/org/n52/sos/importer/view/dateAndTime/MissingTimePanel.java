@@ -8,10 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Hour;
 import org.n52.sos.importer.model.dateAndTime.Minute;
 import org.n52.sos.importer.model.dateAndTime.Second;
+import org.n52.sos.importer.model.dateAndTime.Time;
 
 public class MissingTimePanel extends MissingDateAndTimePanel {
 
@@ -50,5 +52,31 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 		dateAndTime.setHour(null);
 		dateAndTime.setMinute(null);
 		dateAndTime.setSecond(null);	
+	}
+	
+	@Override
+	public boolean checkValues() {
+		return true;
+	}
+
+	@Override
+	public Component getMissingComponent() {
+		Calendar c = new GregorianCalendar();
+		c.setTime(timeModel.getDate());
+		Time time = new Time();
+		time.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
+		time.setMinute(new Minute(c.get(Calendar.MINUTE)));
+		time.setSecond(new Second(c.get(Calendar.SECOND)));
+		return time;
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		Time time = (Time)c;
+		int hour = time.getHour().getValue();
+		int minute = time.getMinute().getValue();
+		int second = time.getSecond().getValue();
+		GregorianCalendar gc = new GregorianCalendar(0, 0, 0, hour, minute, second);
+		timeModel.setValue(gc.getTime());
 	}
 }

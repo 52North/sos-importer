@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
 public class Step6cPanel extends JPanel {
 

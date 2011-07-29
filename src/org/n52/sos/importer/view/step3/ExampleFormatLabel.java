@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 
-import org.n52.sos.importer.Formatable;
+import org.n52.sos.importer.interfaces.Formatable;
 
 public class ExampleFormatLabel extends JLabel {
 

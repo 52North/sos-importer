@@ -1,5 +1,6 @@
 package org.n52.sos.importer.controller;
 
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.view.BackNextPanel;
 

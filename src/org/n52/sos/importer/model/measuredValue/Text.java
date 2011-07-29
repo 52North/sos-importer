@@ -1,6 +1,6 @@
 package org.n52.sos.importer.model.measuredValue;
 
-import org.n52.sos.importer.Parseable;
+import org.n52.sos.importer.interfaces.Parseable;
 
 public class Text extends MeasuredValue implements Parseable {
 	

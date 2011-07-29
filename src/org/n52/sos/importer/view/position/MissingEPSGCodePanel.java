@@ -2,8 +2,12 @@ package org.n52.sos.importer.view.position;
 
 import java.awt.FlowLayout;
 
+import javax.swing.JOptionPane;
+
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
 
@@ -33,9 +37,44 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 		int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
 		position.setEPSGCode(new EPSGCode(code));
 	}
+	
 	@Override
 	public void unassignValues() {
 		position.setEPSGCode(null);	
 	}
 	
+	@Override
+	public boolean checkValues() {
+		int code = 0;
+		try {
+			code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+				    "The EPSG-Code has to be a natural number.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
+		if (code < 0 || code > 32767) {
+			JOptionPane.showMessageDialog(null,
+				    "The EPSG-Code has to be in the range of 0 and 32767.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+		return new EPSGCode(code);
+	}
+	
+	@Override
+	public void setMissingComponent(Component c) {
+		EPSGCodeComboBox.setSelectedItem(String.valueOf(((EPSGCode)c).getValue()));
+	}	
 }

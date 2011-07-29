@@ -4,9 +4,12 @@ import java.awt.FlowLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Position;
 
@@ -42,5 +45,34 @@ public class MissingHeightPanel extends MissingComponentPanel {
 	
 	public void unassignValues() {
 		position.setHeight(null);
+	}
+
+	@Override
+	public boolean checkValues() {
+		try {
+			Double.parseDouble(heightTextField.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+				    "The height has to be a decimal number.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public Component getMissingComponent() {
+		double value = Double.parseDouble(heightTextField.getText());
+		String unit = (String) heightUnitComboBox.getSelectedItem();
+		return new Height(value, unit);
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		Height height = (Height)c;
+		heightTextField.setText(height.getValue() + "");
+		heightUnitComboBox.setSelectedItem(height.getUnit());
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import javax.swing.JLabel;
 
-import org.n52.sos.importer.Parseable;
+import org.n52.sos.importer.interfaces.Parseable;
 
 public class ParseTestLabel extends JLabel {
 

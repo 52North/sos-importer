@@ -7,8 +7,8 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.resources.Resource;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 
 public class MissingResourcePanel extends MissingComponentPanel {
 

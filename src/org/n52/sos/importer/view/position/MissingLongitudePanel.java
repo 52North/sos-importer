@@ -4,9 +4,12 @@ import java.awt.FlowLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 
@@ -42,5 +45,33 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	
 	public void unassignValues() {
 		position.setLongitude(null);
+	}
+
+	@Override
+	public boolean checkValues() {
+		try {
+			Double.parseDouble(longitudeTextField.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+				    "The longitude/easting can only be a decimal number so far.",
+				    "Warning",
+				    JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		double value = Double.parseDouble(longitudeTextField.getText());
+		String unit = (String) longitudeUnitComboBox.getSelectedItem();
+		return new Longitude(value, unit);
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		Longitude longitude = (Longitude)c;
+		longitudeTextField.setText(longitude.getValue() + "");
+		longitudeUnitComboBox.setSelectedItem(longitude.getUnit());
 	}
 }

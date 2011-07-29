@@ -1,20 +1,17 @@
 package org.n52.sos.importer.test;
 
-import java.text.MessageFormat;
-import java.text.ParseException;
-import java.util.Arrays;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.position.Position;
 
 public class SandBox {
 public static void main(String[] args) {
-	String position = "52.3° n.Br. 7.3° ö.L.";
-	MessageFormat mf = new MessageFormat("{0} n.Br. {2} ö.L.");
-	Object[] o = null;
-	try {
-		o = mf.parse(position);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	NumericValue nv = new NumericValue();
+		nv.setDecimalSeparator(",");
+	nv.setThousandsSeparator(" ");
+	System.out.println(nv.parse("1"));
+	
+		Position p = new Position();
+		p.setPattern("LAT n.Br. LON ö.L. ALT EPSG");
+		Position p1 = (Position) p.parse("-72 n.Br. 7.3° ö.L. 50m 4236");
 	}
-	System.out.println(Arrays.toString(o));
-}
 }

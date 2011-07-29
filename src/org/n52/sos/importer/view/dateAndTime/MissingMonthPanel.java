@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Month;
 
@@ -33,5 +34,20 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
 	@Override
 	public void unassignValues() {
 		dateAndTime.setMonth(null);	
+	}
+	
+	@Override
+	public boolean checkValues() {
+		return true;
+	}
+	
+	@Override
+	public Component getMissingComponent() {
+		return new Month(monthModel.getNumber().intValue());
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		monthModel.setValue(((Month)c).getValue());
 	}
 }

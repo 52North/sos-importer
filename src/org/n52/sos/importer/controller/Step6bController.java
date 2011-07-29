@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -14,8 +16,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.view.Step5aPanel;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
+import org.n52.sos.importer.view.Step5Panel;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
 
 /**
@@ -30,7 +31,7 @@ public class Step6bController extends StepController {
 	
 	private TableController tableController = TableController.getInstance();
 	
-	private Step5aPanel step5aPanel;
+	private Step5Panel step5aPanel;
 	
 	private MissingResourcePanel missingResourcePanel;
 	
@@ -56,7 +57,7 @@ public class Step6bController extends StepController {
 		String question = step6bModel.getDescription();
 		question = question.replaceAll("RESOURCE", resource.toString());
 		question = question.replaceAll("ORIENTATION", tableController.getOrientationString());
-		step5aPanel = new Step5aPanel(question, missingComponentPanels);
+		step5aPanel = new Step5Panel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
 		measuredValue.getTableElement().mark(tableController.getMarkingColor());		

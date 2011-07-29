@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Height;
@@ -13,7 +15,6 @@ import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.view.position.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 import org.n52.sos.importer.view.position.MissingHeightPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
@@ -29,10 +30,12 @@ public class PositionController {
 	
 	public PositionController() {
 		position = new Position();
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
 	
 	public PositionController(Position position) {
 		this.position = position;
+		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
 	
 	public Position getPosition() {
@@ -60,6 +63,7 @@ public class PositionController {
 		List<MissingComponentPanel> missingComponentPanels;
 		
 		for (Position position: ModelStore.getInstance().getPositions()) {
+			setPosition(position);
 			missingComponentPanels = getMissingComponentPanels();
 			if (missingComponentPanels.size() > 0)
 				return position;
@@ -68,7 +72,7 @@ public class PositionController {
 	}
 
 	public List<MissingComponentPanel> getMissingComponentPanels() {		
-		missingComponentPanels = new ArrayList<MissingComponentPanel>();
+		if (!missingComponentPanels.isEmpty()) return missingComponentPanels;
 		
 		if (position.getLatitude() == null)
 			missingComponentPanels.add(new MissingLatitudePanel(position));
@@ -85,43 +89,64 @@ public class PositionController {
 		return missingComponentPanels;
 	}	
 	
+	public void setMissingComponents(List<Component> components) {
+		for (Component c: components) {
+			MissingComponentPanel mcp = c.getMissingComponentPanel(position);
+			mcp.setMissingComponent(c);
+			missingComponentPanels.add(mcp);
+		}
+	}
+	
+	public List<Component> getMissingComponents() {
+		List<Component> components = new ArrayList<Component>();
+		for (MissingComponentPanel mcp: missingComponentPanels) 
+			components.add((Component)mcp.getMissingComponent());
+		return components;
+	}
+	
 	public void assignMissingComponentValues() {
 		for (MissingComponentPanel mcp: missingComponentPanels) 
 			mcp.assignValues();
 	}
 	
+	public boolean checkMissingComponentValues() {
+		boolean ok;
+		for (MissingComponentPanel mcp: missingComponentPanels) {
+			ok = mcp.checkValues();
+			if (!ok) return false;
+		}
+		return true;
+	}
+	
+	public void unassignMissingComponentValues() {
+		for (MissingComponentPanel mcp: missingComponentPanels) 
+			mcp.unassignValues();
+	}
+	
 	public Position forThis(Cell featureOfInterestPosition) {
-		Position p = new Position();
-		double lat = position.getLatitude().getParsedValue(featureOfInterestPosition);
-		String latUnit = position.getLatitude().getParsedUnit();
-		double lon = position.getLongitude().getParsedValue(featureOfInterestPosition);
-		String lonUnit = position.getLongitude().getParsedUnit();
-		double height = position.getHeight().getParsedValue(featureOfInterestPosition);
-		String heightUnit = position.getHeight().getParsedUnit();
-		int epsgCode = position.getEPSGCode().getParsedValue(featureOfInterestPosition);
-		
-		p.setLatitude(new Latitude(lat, latUnit));
-		p.setLongitude(new Longitude(lon, lonUnit));
-		p.setHeight(new Height(height, heightUnit));
-		p.setEPSGCode(new EPSGCode(epsgCode));
-		return p;
+		Latitude latitude = position.getLatitude().forThis(featureOfInterestPosition);
+		Longitude longitude = position.getLongitude().forThis(featureOfInterestPosition);
+		Height height = position.getHeight().forThis(featureOfInterestPosition);
+		EPSGCode epsgCode = position.getEPSGCode().forThis(featureOfInterestPosition);
+		return new Position(latitude, longitude, height, epsgCode);
 	}
 	
 	public void mark(Color color) {
 		if (position.getLatitude() != null)
 			position.getLatitude().mark(color);
 		
-		if (position.getLongitude() == null) 
+		if (position.getLongitude() != null) 
 			position.getLongitude().mark(color);
 		
-		if (position.getHeight() == null)
+		if (position.getHeight() != null)
 			position.getHeight().mark(color);
 		
-		if (position.getEPSGCode() == null) 
+		if (position.getEPSGCode() != null) 
 			position.getEPSGCode().mark(color);
 	}
 	
 	public void mergePositions() {
+		logger.info("Merge Positions");
 		List<Position> positions = ModelStore.getInstance().getPositions();
 		List<Position> mergedPositions = new ArrayList<Position>();
 		for (int i = 0; i < positions.size(); i++) {
@@ -140,16 +165,16 @@ public class PositionController {
 	}
 	
 	public void merge(Position position1, Position position2) {
-		if (position1.getLatitude() == null)
+		if (position1.getLatitude() == null && position2.getLatitude() != null)
 			position1.setLatitude(position2.getLatitude());
 		
-		if (position1.getLongitude() == null) 
+		if (position1.getLongitude() == null && position2.getLongitude() != null) 
 			position1.setLongitude(position2.getLongitude());
 		
-		if (position1.getHeight() == null)
+		if (position1.getHeight() == null && position2.getHeight() != null)
 			position1.setHeight(position2.getHeight());
 		
-		if (position1.getEPSGCode() == null) 
+		if (position1.getEPSGCode() == null && position2.getEPSGCode() != null) 
 			position1.setEPSGCode(position2.getEPSGCode());
 	}
 	
