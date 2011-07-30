@@ -31,7 +31,7 @@ public class Step6bController extends StepController {
 	
 	private TableController tableController = TableController.getInstance();
 	
-	private Step5Panel step5aPanel;
+	private Step5Panel step5Panel;
 	
 	private MissingResourcePanel missingResourcePanel;
 	
@@ -50,14 +50,16 @@ public class Step6bController extends StepController {
 		resource.unassign(measuredValue);
 		
 		missingResourcePanel = new MissingResourcePanel(resource);
+		missingResourcePanel.setMissingComponent(resource);
 		missingResourcePanel.unassignValues();
+		
 		List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		missingComponentPanels.add(missingResourcePanel);
 		
 		String question = step6bModel.getDescription();
 		question = question.replaceAll("RESOURCE", resource.toString());
 		question = question.replaceAll("ORIENTATION", tableController.getOrientationString());
-		step5aPanel = new Step5Panel(question, missingComponentPanels);
+		step5Panel = new Step5Panel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
 		measuredValue.getTableElement().mark(tableController.getMarkingColor());		
@@ -80,7 +82,7 @@ public class Step6bController extends StepController {
 		
 		resource.assign(measuredValue);
 		
-		step5aPanel = null;
+		step5Panel = null;
 		missingResourcePanel = null;
 	}
 	
@@ -96,7 +98,7 @@ public class Step6bController extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step5aPanel;
+		return step5Panel;
 	}
 
 	@Override

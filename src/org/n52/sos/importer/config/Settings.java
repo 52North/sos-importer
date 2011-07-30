@@ -123,8 +123,6 @@ public class Settings {
 	public String[] parse(String property) {
 		if (property == null) return new String[0];
 		String[] values = property.split(SEPARATOR);
-		for (int i = 0; i < values.length; i++) 
-			values[i] = values[i].trim();
 		return values;
 	}
 	
@@ -165,9 +163,8 @@ public class Settings {
 	
 	public String format(DefaultComboBoxModel dcbm) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < dcbm.getSize(); i++) {
-			sb.append(dcbm.getElementAt(i) + " " + SEPARATOR);
-		}
+		for (int i = 0; i < dcbm.getSize(); i++) 
+			sb.append(dcbm.getElementAt(i) + SEPARATOR);
 		return sb.toString();
 	}
 	

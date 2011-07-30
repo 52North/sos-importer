@@ -42,6 +42,7 @@ public class Step6bSpecialController extends StepController {
 		
 		Sensor sensor = step6bSpecialModel.getSensor();
 		missingResourcePanel = new MissingResourcePanel(sensor);
+		missingResourcePanel.setMissingComponent(sensor);
 		missingResourcePanel.unassignValues();
 		ModelStore.getInstance().remove(step6bSpecialModel);
 		

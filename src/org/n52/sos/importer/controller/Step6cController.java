@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
@@ -32,18 +33,20 @@ public class Step6cController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		String description = step6cModel.getDescription();
+		Position position = step6cModel.getPosition();
+		positionController = new PositionController(position);
+		List<Component> components = step6cModel.getMissingPositionComponents();
+		positionController.setMissingComponents(components);
+		positionController.unassignMissingComponentValues();	
 
 		String name = step6cModel.getFeatureOfInterestName();
-		if (name == null) {
+		if (name == null) { //when this feature is not contained in the table
 			FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 			name = foi.getName();
 		}
 		
-		Position p = step6cModel.getPosition();
-		positionController = new PositionController(p);
+		String description = step6cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
-			
 		step6cPanel = new Step6cPanel(description, name, null, missingComponentPanels);	
 	}
 
@@ -51,14 +54,18 @@ public class Step6cController extends StepController {
 	public void saveSettings() {
 		positionController.assignMissingComponentValues();
 		
+		List<Component> components = positionController.getMissingComponents();
+		step6cModel.setMissingPositionComponents(components);
+		
 		String name = step6cModel.getFeatureOfInterestName();
 		Position position = step6cModel.getPosition();
-		if (name != null)
-			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
-		else 
+		if (name == null) //when this feature is not contained in the table
 			step6cModel.getFeatureOfInterest().setPosition(position);
+		else 
+			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
 		
 		step6cPanel = null;
+		positionController = null;
 	}
 	
 	

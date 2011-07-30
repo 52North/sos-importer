@@ -7,8 +7,10 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 
 public class MissingResourcePanel extends MissingComponentPanel {
 
@@ -22,7 +24,9 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	
 	public MissingResourcePanel(Resource resource) {
 		this.resource = resource;
-		nameComboBox = new EditableJComboBoxPanel(resource.getNames(), "Name");
+		String name = "Name";
+		if (resource instanceof UnitOfMeasurement) name = "Code";
+		nameComboBox = new EditableJComboBoxPanel(resource.getNames(), name);
 		uriComboBox = new EditableJComboBoxPanel(resource.getURIs(), "URI");
 		nameComboBox.setPartnerComboBox(uriComboBox);
 		uriComboBox.setPartnerComboBox(nameComboBox);
@@ -78,5 +82,18 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	public void unassignValues() {
 		resource.setName(null);
 		resource.setURI(null);
+	}
+
+	@Override
+	public Component getMissingComponent() {
+		return resource;
+	}
+
+	@Override
+	public void setMissingComponent(Component c) {
+		Resource r = (Resource) c;
+		String name = r.getName();
+		if (name != null)
+			nameComboBox.setSelectedItem(name);
 	}
 }

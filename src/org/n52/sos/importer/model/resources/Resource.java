@@ -6,6 +6,9 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.TableElement;
 
@@ -15,7 +18,7 @@ import org.n52.sos.importer.model.table.TableElement;
  * a sensor.
  * @author Raimund
  */
-public abstract class Resource {
+public abstract class Resource extends Component {
 	
 	private static final Logger logger = Logger.getLogger(Resource.class);
 	
@@ -89,6 +92,12 @@ public abstract class Resource {
 	public abstract List<Resource> getList();
 	
 	public abstract Resource getNextResourceType();
+	
+	@Override
+	public MissingComponentPanel getMissingComponentPanel(Combination c) {
+		//not used since all resources have the same panel
+		return null; 
+	}
 	
 	@Override 
 	public String toString() {

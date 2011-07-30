@@ -1,5 +1,9 @@
 package org.n52.sos.importer.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
@@ -14,15 +18,19 @@ public class Step6cModel {
 	
 	private Position position;
 	
+	private List<Component> missingPositionComponents;
+	
 	public Step6cModel(FeatureOfInterest featureOfInterest) {
 		this.featureOfInterest = featureOfInterest;
 		position = new Position();
+		missingPositionComponents = new ArrayList<Component>();
 	}
 	
 	public Step6cModel(FeatureOfInterest featureOfInterest, String featureOfInterestName) {
 		this.featureOfInterest = featureOfInterest;
 		this.featureOfInterestName = featureOfInterestName;
 		position = new Position();
+		missingPositionComponents = new ArrayList<Component>();
 	}
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
@@ -51,5 +59,13 @@ public class Step6cModel {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public void setMissingPositionComponents(List<Component> missingPositionComponents) {
+		this.missingPositionComponents = missingPositionComponents;
+	}
+
+	public List<Component> getMissingPositionComponents() {
+		return missingPositionComponents;
 	}
 }

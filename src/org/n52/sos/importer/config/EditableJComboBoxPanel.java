@@ -36,13 +36,17 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	private DefaultComboBoxModel model;
 	
-	private boolean enterPressed = false;
-	
 	private ActionListener selectionChanged = new SelectionChanged();
+	
+	private JButton newItemButton;
+	
+	private JButton deleteItemButton;
 	
 	private EditableJComboBoxPanel partnerComboBox;
 	
 	private boolean secondComboBox = false;
+	
+	private boolean enterPressed = false;
 	
 	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName) {
 		super();
@@ -53,8 +57,8 @@ public class EditableJComboBoxPanel extends JPanel {
 		if (model.getSize() == 0) 
 			model.addElement(WHITESPACE);
 		
-		JButton newItemButton = createIconButton("newItem.png", "Add a new item to the list");
-		JButton deleteItemButton = createIconButton("deleteItem.png", "Delete the selected item from the list");
+		newItemButton = createIconButton("newItem.png", "Add a new item to the list");
+		deleteItemButton = createIconButton("deleteItem.png", "Delete the selected item from the list");
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.add(label);
@@ -110,8 +114,12 @@ public class EditableJComboBoxPanel extends JPanel {
 	}
 	
 	public void insertNewItem() {
-		if (getPartnerComboBox() != null) 
+		disableButtons();
+		
+		if (getPartnerComboBox() != null) {
 			comboBox.removeActionListener(selectionChanged);
+			getPartnerComboBox().disableButtons();
+		}
 		
 		lastSelectedItem = (String) comboBox.getSelectedItem();
 		comboBox.setEditable(true);
@@ -129,11 +137,13 @@ public class EditableJComboBoxPanel extends JPanel {
 		
 		if (newItem.equals("")) { //whitespace entered
 			if (getPartnerComboBox() == null || !isSecondComboBox()) {
-				newItem = lastSelectedItem;
-				comboBox.setSelectedItem(newItem);
 				comboBox.setEditable(false);
+				comboBox.setSelectedItem(lastSelectedItem);
+				enableButtons();
+				if (getPartnerComboBox() != null)
+					getPartnerComboBox().enableButtons();
 				return;
-			} else { //is second combobox
+			} else { //when it is the second combobox
 				newItem = getNextBiggestWhiteSpace(); //since no duplicate values are allowed
 			}
 		} else if (model.getSize() == 1 && model.getIndexOf(WHITESPACE) != -1) {
@@ -145,8 +155,33 @@ public class EditableJComboBoxPanel extends JPanel {
 				if (this.isSecondComboBox()) 
 					getPartnerComboBox().deleteFirstItem();
 				comboBox.setSelectedItem(newItem);
+				enableButtons();
+				getPartnerComboBox().enableButtons();
 				return;
 			}
+		} else if (lastSelectedItem.trim().length() == 0) { //when last element was an empty string
+			if (getPartnerComboBox() != null && !isSecondComboBox()) {
+				//put element at the place of the old element
+				int index = model.getIndexOf(lastSelectedItem);
+				model.removeElement(lastSelectedItem);
+				
+				Object[] items = new Object[model.getSize()];
+				for (int i = 0; i < model.getSize(); i++)
+					items[i] = model.getElementAt(i);
+				model.removeAllElements();
+				
+				for (int i = 0; i < index; i++)
+					model.addElement(items[i]);
+				model.addElement(newItem);
+				for (int i = index; i < items.length; i++)
+					model.addElement(items[i]);
+				
+				comboBox.setEditable(false);
+				comboBox.setSelectedItem(newItem);
+				enableButtons();
+				getPartnerComboBox().enableButtons();
+				return;
+			}			
 		}
 		//put the new element at the first position of the list
 		Object[] items = new Object[model.getSize()];
@@ -160,12 +195,13 @@ public class EditableJComboBoxPanel extends JPanel {
 		
 		comboBox.setEditable(false);
 		comboBox.setSelectedItem(newItem);
-		System.out.println("TEST");
 		
 		if (getPartnerComboBox() != null) {
 			if (this.isSecondComboBox())  {
 				comboBox.addActionListener(selectionChanged);
 				setSecondComboBox(false);
+				enableButtons();
+				getPartnerComboBox().enableButtons();
 			} else {
 				comboBox.addActionListener(selectionChanged);
 				getPartnerComboBox().setSecondComboBox(true);
@@ -261,6 +297,16 @@ public class EditableJComboBoxPanel extends JPanel {
 	public boolean isSecondComboBox() {
 		return secondComboBox;
 	}
+	
+	public void enableButtons() {
+		newItemButton.setEnabled(true);
+		deleteItemButton.setEnabled(true);
+	}
+	
+	public void disableButtons() {
+		newItemButton.setEnabled(false);
+		deleteItemButton.setEnabled(false);
+	}
 
 	public void setEnterPressed(boolean enterPressed) {
 		this.enterPressed = enterPressed;
@@ -285,7 +331,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		}
 	}
 	
-	public class EnterPressed implements KeyListener {
+	private class EnterPressed implements KeyListener {
 
 		@Override
 		public void keyPressed(KeyEvent arg0) {
