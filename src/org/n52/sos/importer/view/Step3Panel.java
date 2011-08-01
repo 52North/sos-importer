@@ -87,7 +87,6 @@ public class Step3Panel extends JPanel {
 			addRadioButton("Observed Property", new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
 			addRadioButton("Unit of Measurement", new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
 			addRadioButton("Sensor Name", new ResourceSelectionPanel(additionalPanel1, new Sensor()));
-			addRadioButton("Combination");
 			addRadioButton("Do not export");				
 		}
 

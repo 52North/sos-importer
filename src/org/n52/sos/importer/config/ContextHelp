@@ -1,0 +1,82 @@
+CSVFiles= \
+Comma-Separated Values (CSV) files represent
+tabular data in a textual format. An CSV file
+could for example look like this:
+Date, Sensor1, Sensor2
+01.01.2011, 1.3, 1.4
+02.01.2011, 2.5, 4.4
+03.01.2011, 1.7, 2.3
+
+For more information, visit: 
+http://en.wikipedia.org/wiki/Comma-separated_values
+ColumnSeparator=
+Columns in a CSV file are delimited by a 
+special character. For example ';' separates 
+the columns in the following CSV file:
+Date; Sensor1; Sensor2
+01.01.2011; 1.3; 1.4
+02.01.2011; 2.5; 4.4
+03.01.2011; 1.7; 2.3
+CommentIndicator=
+Lines beginning with a comment character will
+not be parsed. For example '#' indicates
+comments in the following CSV file:
+# This is a comment
+Date, Sensor1, Sensor2
+01.01.2011, 1.3, 1.4
+02.01.2011, 2.5, 4.4
+03.01.2011, 1.7, 2.3
+TextQualifier=
+Fields in a CSV file that contain a special character 
+(e.g. the column separator or a newline) have to be
+enclosed by a text qualifier. For example '"'
+escapes special symbols in the following CSV file:
+Nr, Observation
+1, "New \n line"
+2, "Separate , column"
+3, "A ""quote"" within"
+MeasuredValue=
+A measured value is the result of a measurement or 
+an observation. For example, '37.1' would be the measured
+value of the temperature 37.1°C.
+NumericValue=
+Numeric values are decimal numbers like 2.3 or -52.0.
+DecimalSeparator=
+The decimal mark delimits the decimal places of a 
+numeric value. For example ',' would be the decimal 
+separator for the numeric value 1234,52133.
+ThousandsSeparator=
+For a better overview, numeric values are structured
+with a thousands mark. For example '.'would be the 
+thousands separator of the number 1.254.623.129 
+meaning 1254623129.
+Boolean=
+Booleans are values like 'true' and 'false' or 
+'1' and '0'.
+Count=
+Counts are positive natural numbers like 1 2 3.
+Text=
+Observations like 'good' or 'the sun is shining' 
+can be classified as Text.
+FeatureOfInterest=
+A feature of interest is involved in making observations 
+concerning a domain feature. Exemplary features of interests
+are stations, transects, sections or specimen. [O&M]
+ObservedProperty=
+An observed property is a natural phenomenon, which may 
+use one of a variety of scales including nominal, ordinal, 
+ratio and interval. The term is used regardless of whether 
+the value is due to an instrumental observation or a subjective 
+assignment [SensorML]. 'Temperature', 'PM10', 'Soil type' or
+'Weather condition' are all examples for observed properties.
+UnitOfMeasurement=
+A unit of measurement is a definite magnitude of a 
+physical quantity, that is used as a standard for 
+measurement of the same physical quantity. For example
+'m' would be the unit of measurement of the length 10m.
+
+From: http://en.wikipedia.org/wiki/Units_of_measurement
+Sensor=
+A sensor is an entity capable of observing a phenomenon 
+and returning an observed value. [SensorML] 'ThermometerXYZ'
+and 'PM10SensorMünster123' would be examples of sensors.

@@ -1,0 +1,199 @@
+2011-07-30 16:54:33,872 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 16:54:33,872 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 16:54:33,888 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 16:55:07,321 INFO (MeasuredValue.java:44) - Assign Feature Of Interest "Settlers" to Numeric Value column 0 
+2011-07-30 16:55:07,321 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-07-30 16:55:19,942 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 16:56:13,935 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 16:56:17,696 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 16:56:17,696 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 16:56:17,712 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 16:58:31,903 INFO (MeasuredValue.java:44) - Assign Feature Of Interest "Settlers" to Numeric Value column 0 
+2011-07-30 16:58:31,919 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-07-30 16:58:47,395 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:00:19,249 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:00:52,104 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:00:56,770 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 17:00:56,770 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 17:00:56,786 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:00:59,001 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:01:03,543 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 17:01:03,543 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 17:01:03,558 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:01:11,951 INFO (MeasuredValue.java:44) - Assign Feature Of Interest "Settlers" to Numeric Value column 0 
+2011-07-30 17:01:11,951 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-07-30 17:01:22,529 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:03:26,207 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:10:38,255 INFO (DateAndTimeController.java:118) - Assign pattern dd.MM.yy in column 0 to Date&Time group 1 
+2011-07-30 17:10:38,270 INFO (DateAndTime.java:26) - Add Year column 0 to Date&Time group 1 
+2011-07-30 17:10:38,287 INFO (DateAndTime.java:33) - Add Month column 0 to Date&Time group 1 
+2011-07-30 17:10:38,287 INFO (DateAndTime.java:40) - Add Day column 0 to Date&Time group 1 
+2011-07-30 17:10:38,302 INFO (DateAndTime.java:47) - Add Hour '0' to Date&Time group 1 
+2011-07-30 17:10:38,318 INFO (DateAndTime.java:54) - Add Minute '0' to Date&Time group 1 
+2011-07-30 17:10:38,318 INFO (DateAndTime.java:61) - Add Second '0' to Date&Time group 1 
+2011-07-30 17:10:38,334 INFO (DateAndTime.java:68) - Add Timezone '1' to Date&Time group 1 
+2011-07-30 17:10:38,365 INFO (Resource.java:62) - In column 1 are Feature Of Interests 
+2011-07-30 17:10:38,365 INFO (MeasuredValue.java:79) - In column 3 are Numeric Values 
+2011-07-30 17:10:38,365 INFO (MeasuredValue.java:89) - Assign Date&Time group 1 to Numeric Value column 3 
+2011-07-30 17:10:38,365 INFO (MeasuredValue.java:44) - Assign Feature Of Interest column 1 to Numeric Value column 3 
+2011-07-30 17:10:38,396 INFO (MeasuredValue.java:53) - Assign null to Numeric Value column 3 
+2011-07-30 17:11:00,002 INFO (MeasuredValue.java:53) - Assign Observed Property "SO2" to Numeric Value column 3 
+2011-07-30 17:11:00,002 INFO (MeasuredValue.java:62) - Assign null to Numeric Value column 3 
+2011-07-30 17:11:01,579 INFO (MeasuredValue.java:62) - Assign Unit Of Measurement "myg/m3" to Numeric Value column 3 
+2011-07-30 17:11:01,610 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:12,578 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:12,593 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:12,593 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:11:19,099 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:19,099 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:19,099 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:11:19,099 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:11:27,524 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:11:31,536 INFO (DateAndTimeController.java:118) - Assign pattern dd.MM.yy in column 0 to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:26) - Add Year column 0 to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:33) - Add Month column 0 to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:40) - Add Day column 0 to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:47) - Add Hour '0' to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:54) - Add Minute '0' to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:61) - Add Second '0' to Date&Time group 1 
+2011-07-30 17:11:31,536 INFO (DateAndTime.java:68) - Add Timezone '1' to Date&Time group 1 
+2011-07-30 17:11:31,551 INFO (Resource.java:62) - In column 1 are Feature Of Interests 
+2011-07-30 17:11:31,551 INFO (MeasuredValue.java:79) - In column 3 are Numeric Values 
+2011-07-30 17:11:31,551 INFO (MeasuredValue.java:89) - Assign Date&Time group 1 to Numeric Value column 3 
+2011-07-30 17:11:31,551 INFO (MeasuredValue.java:44) - Assign Feature Of Interest column 1 to Numeric Value column 3 
+2011-07-30 17:11:31,551 INFO (MeasuredValue.java:53) - Assign null to Numeric Value column 3 
+2011-07-30 17:11:34,578 INFO (MeasuredValue.java:53) - Assign Observed Property "SO2" to Numeric Value column 3 
+2011-07-30 17:11:34,578 INFO (MeasuredValue.java:62) - Assign null to Numeric Value column 3 
+2011-07-30 17:11:35,015 INFO (MeasuredValue.java:62) - Assign Unit Of Measurement "myg/m3" to Numeric Value column 3 
+2011-07-30 17:11:35,031 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:38,635 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:38,635 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:38,635 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:11:52,660 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:52,660 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:11:52,660 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:12:16,841 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:12:16,841 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:12:16,841 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:12:19,525 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:12:19,525 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Klinthal" 
+2011-07-30 17:12:19,525 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:12:19,525 INFO (FeatureOfInterest.java:99) - Assign null to Feature Of Interest "Zwickau" 
+2011-07-30 17:12:25,162 INFO (Position.java:64) - Add Latitude 10.0° to Position group null 
+2011-07-30 17:12:25,162 INFO (Position.java:55) - Add Longitude 0.0° to Position group null 
+2011-07-30 17:12:25,162 INFO (Position.java:41) - Add Height 0.0meters to Position group null 
+2011-07-30 17:12:25,162 INFO (Position.java:50) - Add EPSG-Code 4236 to Position group null 
+2011-07-30 17:12:56,145 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:24:33,531 INFO (DateAndTimeController.java:118) - Assign pattern dd.MM.yy in column 0 to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:26) - Add Year column 0 to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:33) - Add Month column 0 to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:40) - Add Day column 0 to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:47) - Add Hour '0' to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:54) - Add Minute '0' to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:61) - Add Second '0' to Date&Time group null 
+2011-07-30 17:24:33,531 INFO (DateAndTime.java:68) - Add Timezone '1' to Date&Time group null 
+2011-07-30 17:24:33,546 INFO (Resource.java:62) - In column 1 are Feature Of Interests 
+2011-07-30 17:24:33,546 INFO (Resource.java:62) - In column 2 are Observed Propertys 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:79) - In column 3 are Numeric Values 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:89) - Assign Date&Time group null to Numeric Value column 3 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:44) - Assign Feature Of Interest column 1 to Numeric Value column 3 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:53) - Assign Observed Property column 2 to Numeric Value column 3 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:70) - Assign Sensor "PM10Sensor" to Numeric Value column 3 
+2011-07-30 17:24:33,546 INFO (MeasuredValue.java:62) - Assign Unit Of Measurement "myg/m3" to Numeric Value column 3 
+2011-07-30 17:26:05,291 INFO (DateAndTimeController.java:118) - Assign pattern dd.MM.yy in column 0 to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:26) - Add Year column 0 to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:33) - Add Month column 0 to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:40) - Add Day column 0 to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:47) - Add Hour '0' to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:54) - Add Minute '0' to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:61) - Add Second '0' to Date&Time group null 
+2011-07-30 17:26:05,291 INFO (DateAndTime.java:68) - Add Timezone '1' to Date&Time group null 
+2011-07-30 17:26:05,307 INFO (Resource.java:62) - In column 1 are Feature Of Interests 
+2011-07-30 17:26:05,307 INFO (Resource.java:62) - In column 2 are Observed Propertys 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:79) - In column 3 are Numeric Values 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:89) - Assign Date&Time group null to Numeric Value column 3 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:44) - Assign Feature Of Interest column 1 to Numeric Value column 3 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:53) - Assign Observed Property column 2 to Numeric Value column 3 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:70) - Assign Sensor "PM10Sensor" to Numeric Value column 3 
+2011-07-30 17:26:05,307 INFO (MeasuredValue.java:62) - Assign Unit Of Measurement "myg/m3" to Numeric Value column 3 
+2011-07-30 17:26:45,414 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:26:47,990 INFO (DateAndTimeController.java:118) - Assign pattern dd.MM.yy in column 0 to Date&Time group null 
+2011-07-30 17:26:47,990 INFO (DateAndTime.java:26) - Add Year column 0 to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:33) - Add Month column 0 to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:40) - Add Day column 0 to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:47) - Add Hour '0' to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:54) - Add Minute '0' to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:61) - Add Second '0' to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (DateAndTime.java:68) - Add Timezone '1' to Date&Time group null 
+2011-07-30 17:26:48,006 INFO (Resource.java:62) - In column 1 are Feature Of Interests 
+2011-07-30 17:26:48,006 INFO (Resource.java:62) - In column 2 are Observed Propertys 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:79) - In column 3 are Numeric Values 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:89) - Assign Date&Time group null to Numeric Value column 3 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:44) - Assign Feature Of Interest column 1 to Numeric Value column 3 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:53) - Assign Observed Property column 2 to Numeric Value column 3 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:70) - Assign Sensor "PM10Sensor" to Numeric Value column 3 
+2011-07-30 17:26:48,006 INFO (MeasuredValue.java:62) - Assign Unit Of Measurement "myg/m3" to Numeric Value column 3 
+2011-07-30 17:27:01,313 INFO (Position.java:64) - Add Latitude 10.0° to Position group null 
+2011-07-30 17:27:01,313 INFO (Position.java:55) - Add Longitude 212.0° to Position group null 
+2011-07-30 17:27:01,313 INFO (Position.java:41) - Add Height 0.0meters to Position group null 
+2011-07-30 17:27:01,313 INFO (Position.java:50) - Add EPSG-Code 4236 to Position group null 
+2011-07-30 17:27:03,108 INFO (Position.java:64) - Add null to Position group null 
+2011-07-30 17:27:03,108 INFO (Position.java:55) - Add null to Position group null 
+2011-07-30 17:27:03,108 INFO (Position.java:41) - Add null to Position group null 
+2011-07-30 17:27:03,108 INFO (Position.java:50) - Add null to Position group null 
+2011-07-30 17:28:14,479 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:28:17,039 INFO (Settings.java:157) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:39:51,160 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 17:39:51,162 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 17:39:51,165 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 17:40:24,891 INFO (MeasuredValue.java:44) - Assign Feature Of Interest "Settlers" to Numeric Value column 0 
+2011-07-30 17:40:24,893 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-07-30 17:41:44,854 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 17:41:48,215 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 17:41:48,217 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 17:41:48,220 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:01:59,111 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:01:59,113 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:01:59,117 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:04:09,951 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:04:13,417 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:04:16,408 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:04:16,410 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:04:16,425 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:06:55,928 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:07:01,234 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:07:01,236 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:07:01,239 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:12:49,651 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:12:51,907 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:12:51,909 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:12:51,913 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:12:57,383 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:12:59,570 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:12:59,572 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:12:59,586 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:15:10,282 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:15:10,285 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:15:10,298 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:29:36,466 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:29:36,468 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:29:36,472 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:29:58,434 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:30:38,182 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:30:38,184 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:30:38,188 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:30:41,245 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:31:11,808 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:31:11,810 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:31:11,813 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:34:08,193 INFO (MeasuredValue.java:44) - Assign Feature Of Interest "" to Numeric Value column 0 
+2011-07-30 18:34:08,195 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-07-30 18:37:05,161 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:37:07,687 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:37:07,690 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:37:07,704 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:38:16,212 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
+2011-07-30 18:38:56,136 INFO (MeasuredValue.java:79) - In column 0 are Numeric Values 
+2011-07-30 18:38:56,139 INFO (MeasuredValue.java:79) - In column 1 are Numeric Values 
+2011-07-30 18:38:56,143 INFO (MeasuredValue.java:42) - Unassign Feature Of Interest from Numeric Value column 0 
+2011-07-30 18:39:36,459 INFO (Settings.java:155) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\config\SOSImporter.properties 
