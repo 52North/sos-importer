@@ -1,6 +1,5 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,18 +130,18 @@ public class PositionController {
 		return new Position(latitude, longitude, height, epsgCode);
 	}
 	
-	public void mark(Color color) {
+	public void markComponents() {
 		if (position.getLatitude() != null)
-			position.getLatitude().mark(color);
+			position.getLatitude().mark();
 		
 		if (position.getLongitude() != null) 
-			position.getLongitude().mark(color);
+			position.getLongitude().mark();
 		
 		if (position.getHeight() != null)
-			position.getHeight().mark(color);
+			position.getHeight().mark();
 		
 		if (position.getEPSGCode() != null) 
-			position.getEPSGCode().mark(color);
+			position.getEPSGCode().mark();
 	}
 	
 	public void mergePositions() {

@@ -24,6 +24,8 @@ public class Step5cController extends StepController {
 	
 	private PositionController positionController;
 	
+	private TableController tableController = TableController.getInstance();
+	
 	public Step5cController() {	
 	}
 	
@@ -33,8 +35,8 @@ public class Step5cController extends StepController {
 	
 	@Override
 	public void loadSettings() {		
-		TableController.getInstance().deselectAllColumns();
-		TableController.getInstance().turnSelectionOff();
+		tableController.deselectAllColumns();
+		tableController.turnSelectionOff();
 		
 		Position position = step5cModel.getPosition();
 		positionController = new PositionController(position);
@@ -45,7 +47,9 @@ public class Step5cController extends StepController {
 		String description = step5cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
-		positionController.mark(TableController.getInstance().getMarkingColor());
+		
+		tableController.clearMarkedTableElements();
+		positionController.markComponents();
 	}
 	
 	

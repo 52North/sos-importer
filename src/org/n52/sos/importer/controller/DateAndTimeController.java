@@ -1,6 +1,5 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,21 +144,21 @@ public class DateAndTimeController {
 		return null;
 	}
 	
-	public void mark(Color color) {
+	public void markComponents() {
 		if (dateAndTime.getSecond() != null)
-			dateAndTime.getSecond().mark(color);
+			dateAndTime.getSecond().mark();
 		if (dateAndTime.getMinute() != null) 
-			dateAndTime.getMinute().mark(color);
+			dateAndTime.getMinute().mark();
 		if (dateAndTime.getHour() != null)
-			dateAndTime.getHour().mark(color);
+			dateAndTime.getHour().mark();
 		if (dateAndTime.getDay() != null)
-			dateAndTime.getDay().mark(color);
+			dateAndTime.getDay().mark();
 		if (dateAndTime.getMonth() != null) 
-			dateAndTime.getMonth().mark(color);
+			dateAndTime.getMonth().mark();
 		if (dateAndTime.getYear() != null)
-			dateAndTime.getYear().mark(color);
+			dateAndTime.getYear().mark();
 		if (dateAndTime.getTimeZone() != null)
-			dateAndTime.getTimeZone().mark(color);
+			dateAndTime.getTimeZone().mark();
 	}
 	
 	public String forThis(Cell measuredValuePosition) {

@@ -46,7 +46,7 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 		Calendar c = new GregorianCalendar();
 		c.setTime(dateModel.getDate());
 		dateAndTime.setDay(new Day(c.get(Calendar.DAY_OF_MONTH)));
-		dateAndTime.setMonth(new Month(c.get(Calendar.MONTH) + 1));
+		dateAndTime.setMonth(new Month(c.get(Calendar.MONTH)));
 		dateAndTime.setYear(new Year(c.get(Calendar.YEAR)));
 	}
 

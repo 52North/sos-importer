@@ -1,6 +1,5 @@
 package org.n52.sos.importer.model.table;
 
-import java.awt.Color;
 import java.util.HashSet;
 
 import org.n52.sos.importer.controller.TableController;
@@ -37,8 +36,8 @@ public class Cell extends TableElement {
 		return row;
 	}
 
-	public void mark(Color color) {
-		TableController.getInstance().colorCell(color, this);
+	public void mark() {
+		TableController.getInstance().mark(this);
 	}
 	
 	@Override
@@ -65,6 +64,15 @@ public class Cell extends TableElement {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + column;
+		result = prime * result + row;
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -79,4 +87,5 @@ public class Cell extends TableElement {
 			return false;
 		return true;
 	}
+
 }

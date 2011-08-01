@@ -96,7 +96,8 @@ public class FeatureOfInterest extends Resource {
 	
 	public void setPosition(Position position) {
 		this.position = position;
-		logger.info("Assign " + position + " to " + this);
+		if (position != null)
+			logger.info("Assign " + position + " to " + this);
 	}
 
 	public Position getPosition() {

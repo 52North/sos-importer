@@ -1,14 +1,11 @@
 package org.n52.sos.importer.controller;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.interfaces.StepController;
-import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
@@ -41,13 +38,14 @@ public class Step3aController extends StepController {
 	@Override
 	public void loadSettings() {	
 		int number = step3aModel.getSelectedColumn();
+		Column column = new Column(number);
 		List<String> selection = step3aModel.getSelection();
 
 		step3Panel = new Step3Panel();
 		step3Panel.restore(selection);
-		step3Panel.getLastChildPanel().unassign(new Column(number));
+		step3Panel.getLastChildPanel().unassign(column);
 
-		tableController.colorColumn(Color.lightGray, number);
+		tableController.mark(column);
 		tableController.setColumnHeading(number, "???");
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.turnSelectionOff();
@@ -61,6 +59,7 @@ public class Step3aController extends StepController {
 		
 		int number = step3aModel.getSelectedColumn();
 		tableController.setColumnHeading(number, selection.get(0));	
+		tableController.clearMarkedTableElements();
 		
 		step3Panel = null;
 	}
@@ -75,6 +74,7 @@ public class Step3aController extends StepController {
 		step3Panel.getLastChildPanel().assign(new Column(number));
 		
 		tableController.setColumnHeading(number, selection.get(0));
+		tableController.clearMarkedTableElements();
 		
 		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
@@ -100,6 +100,7 @@ public class Step3aController extends StepController {
 
 	@Override
 	public boolean isFinished() {
+		/*
 		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {
 			if (ModelStore.getInstance().getMeasuredValues().size() == 0) {
 				JOptionPane.showMessageDialog(null,
@@ -108,7 +109,7 @@ public class Step3aController extends StepController {
 					    JOptionPane.WARNING_MESSAGE);
 				return false;
 			}
-		}
+		}*/
 		
 		return true;
 	}

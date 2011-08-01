@@ -3,6 +3,7 @@ package org.n52.sos.importer.controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -13,6 +14,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.TablePanel;
 
 public class TableController {
@@ -31,17 +34,21 @@ public class TableController {
 	
 	private MultipleSelectionListener multipleSelectionListener;
 	
+	private ColoredTableCellRenderer tableMarker;
+	
 	private int tableSelectionMode;
 	
 	private int orientation = COLUMNS;
 	
-	private int coloredColumn;
-	
-	private Color markingColor = Color.lightGray;
+	private final Color markingColor = Color.lightGray;
 
 	private TableController() {
 		tableView = TablePanel.getInstance();
 		table = tableView.getTable();
+		tableMarker = new ColoredTableCellRenderer();
+		table.setDefaultRenderer(Object.class, null);
+		table.setDefaultRenderer(Object.class, tableMarker);
+		
 		table.getSelectionModel().addListSelectionListener(new RowSelectionListener());
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(new ColumnSelectionListener());
@@ -165,24 +172,25 @@ public class TableController {
 		ArrayList<String> values = new ArrayList<String>();
 		
 		switch(tableSelectionMode) {
-		case COLUMNS:
-			int column = coloredColumn;		
+		case COLUMNS:	
 			int rowCount = table.getRowCount();
-		
-			for (int i = 0; i < rowCount; i++)
-				values.add((String)table.getValueAt(i, column));
+			
+			for (Column c: tableMarker.getColumns())
+				for (int i = 0; i < rowCount; i++)
+					values.add((String)table.getValueAt(i, c.getNumber()));
 		
 			break;
 		case ROWS:		
-			int row = table.getSelectedRow();
 			int columnCount = table.getColumnCount();
 			
-			for (int i = 0; i < columnCount; i++)
-				values.add((String)table.getValueAt(row, i));
+			for (Row r: tableMarker.getRows())
+				for (int i = 0; i < columnCount; i++)
+					values.add((String)table.getValueAt(r.getNumber(), i));
 
 			break;
 		case CELLS:
-			values.add((String)table.getValueAt(getSelectedRow(), getSelectedColumn()));
+			for (Cell c: tableMarker.getCells())
+				values.add(getValueAt(c));
 			break;
 		}
 		return values;
@@ -210,17 +218,20 @@ public class TableController {
 		return table.getColumnCount();
 	}
 	
-	public void colorColumn(Color color, int number) {
-		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, number, -1));
-		coloredColumn = number;
+	public void mark(Column c) {
+		tableMarker.addColumn(c);
 	}
 	
-	public void colorRow(Color color, int number) {
-		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, -1, number));
+	public void mark(Row r) {
+		tableMarker.addRow(r);
 	}
 	
-	public void colorCell(Color color, Cell cell) {
-		table.setDefaultRenderer(Object.class, new ColoredTableCellRenderer(color, cell));
+	public void mark(Cell c) {
+		tableMarker.addCell(c);
+	}
+	
+	public void clearMarkedTableElements() {
+		tableMarker.removeTableElements();
 	}
 
 	public void addSingleSelectionListener(SingleSelectionListener singleSelectionListener) {
@@ -246,41 +257,62 @@ public class TableController {
 			default: return "";
 		}
 	}
-	
-	public Color getMarkingColor() {
-		return markingColor;
-	}
 
 	private class ColoredTableCellRenderer extends DefaultTableCellRenderer {
     
 		private static final long serialVersionUID = 1L;
-
-		private Color color;
 		
-		private int columnToColor;
+		private HashSet<Column> columns;
 		
-		private int rowToColor;
+		private HashSet<Row> rows;
 		
-		private Cell cellToColor;
+		private HashSet<Cell> cells;
 		
-		public ColoredTableCellRenderer(Color color, int columnToColor, int rowToColor) {
-			this.color = color;
-			this.columnToColor = columnToColor;
-			this.rowToColor = rowToColor;
+		public ColoredTableCellRenderer() {
+			columns = new HashSet<Column>();
+			rows = new HashSet<Row>();
+			cells = new HashSet<Cell>();
 		}
 		
-		public ColoredTableCellRenderer(Color color, Cell cellToColor) {
-			this.color = color;
-			this.cellToColor = cellToColor;
+		public void addColumn(Column c) {
+			columns.add(c);
+		}
+		
+		public HashSet<Column> getColumns() {
+			return columns;
+		}
+		
+		public void addRow(Row r) {
+			rows.add(r);
+		}
+		
+		public HashSet<Row> getRows() {
+			return rows;
+		}
+		
+		public void addCell(Cell c) {
+			cells.add(c);
+		}
+		
+		public HashSet<Cell> getCells() {
+			return cells;
+		}
+		
+		public void removeTableElements() {
+			columns.clear();
+			rows.clear();
+			cells.clear();
 		}
 		
 		@Override
 		public Component getTableCellRendererComponent (JTable table, Object value, boolean selected, boolean focused, int row, int column) {
 			setEnabled(table == null || table.isEnabled());
-
-	        if (row == rowToColor) setBackground(color);
-	        else if (column == columnToColor) setBackground(color);
-	        else if (cellToColor != null && column == cellToColor.getColumn() && row == cellToColor.getRow()) setBackground(color);
+			
+	        if (rows.contains(new Row(row)) || 
+	        	columns.contains(new Column(column)) ||
+	        	cells.contains(new Cell(row, column))) {
+        		setBackground(markingColor);
+	        }
 	        else setBackground(null);
 	        
 	        super.getTableCellRendererComponent(table, value, selected, focused, row, column);

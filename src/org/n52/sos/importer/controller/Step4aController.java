@@ -49,7 +49,8 @@ public class Step4aController extends StepController {
 		}
 		
 		DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());	
-		dateAndTimeController.mark(tableController.getMarkingColor());	
+		tableController.clearMarkedTableElements();
+		dateAndTimeController.markComponents();	
 	}
 
 	@Override

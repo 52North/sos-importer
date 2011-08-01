@@ -1,6 +1,5 @@
 package org.n52.sos.importer.model.dateAndTime;
 
-import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,9 +47,9 @@ public abstract class DateAndTimeComponent extends Component {
 		return tableElement;
 	}
 	
-	public void mark(Color color) {
+	public void mark() {
 		if (tableElement != null)
-			tableElement.mark(color);
+			tableElement.mark();
 	}
 	
 	public int getParsedValue(Cell measuredValuePosition) {

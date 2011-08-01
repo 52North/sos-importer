@@ -64,7 +64,8 @@ public class Step8Controller extends StepController {
 		
 		FileAppender a = (FileAppender) LogManager.getRootLogger().getAppender("RoFi");
 		File f = new File(a.getFile());
-		step8Panel.setLogFileURI(f.toURI());		
+		step8Panel.setLogFileURI(f.toURI());
+		logger.info("Log file is stored at: " + f.toString());
 
 		assembleInformation = new AssembleInformation();
 		registerSensors = new RegisterSensors();
@@ -95,9 +96,9 @@ public class Step8Controller extends StepController {
 			}
 			
 			for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
-				logger.info(rs);
+				logger.debug(rs);
 			for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert())
-				logger.info(io);	
+				logger.debug(io);	
 			
 			return null;
 		}

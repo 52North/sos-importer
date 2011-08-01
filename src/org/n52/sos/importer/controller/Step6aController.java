@@ -29,6 +29,8 @@ public class Step6aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
+	private TableController tableController = TableController.getInstance();
+	
 	public Step6aController() {
 	}
 	
@@ -38,8 +40,9 @@ public class Step6aController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		TableController.getInstance().deselectAllColumns();
-		TableController.getInstance().turnSelectionOff();
+		tableController.clearMarkedTableElements();
+		tableController.deselectAllColumns();
+		tableController.turnSelectionOff();
 		
 		DateAndTime dateAndTime = step6aModel.getDateAndTime();
 		dateAndTimeController = new DateAndTimeController(dateAndTime);

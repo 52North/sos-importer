@@ -52,8 +52,9 @@ public class Step4bController extends StepController {
 			resource.unassign(mv);
 			tableController.selectColumn(number);
 		}		
-			
-		resource.getTableElement().mark(tableController.getMarkingColor());
+		
+		tableController.clearMarkedTableElements();
+		resource.getTableElement().mark();
 	}
 	
 	@Override

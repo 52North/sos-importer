@@ -62,7 +62,8 @@ public class Step6bController extends StepController {
 		step5Panel = new Step5Panel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
-		measuredValue.getTableElement().mark(tableController.getMarkingColor());		
+		tableController.clearMarkedTableElements();
+		measuredValue.getTableElement().mark();		
 	}	
 	
 	@Override

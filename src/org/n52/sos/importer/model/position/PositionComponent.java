@@ -1,7 +1,5 @@
 package org.n52.sos.importer.model.position;
 
-import java.awt.Color;
-
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.table.TableElement;
@@ -54,9 +52,9 @@ public abstract class PositionComponent extends Component {
 		return tableElement;
 	}
 	
-	public void mark(Color color) {
+	public void mark() {
 		if (tableElement != null)
-			tableElement.mark(color);
+			tableElement.mark();
 	}
 
 	public String getParsedUnit() {

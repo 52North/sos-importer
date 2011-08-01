@@ -24,6 +24,8 @@ public class Step5aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
+	private TableController tableController = TableController.getInstance();
+	
 	public Step5aController() {	
 	}
 	
@@ -33,8 +35,8 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public void loadSettings() {		
-		TableController.getInstance().deselectAllColumns();
-		TableController.getInstance().turnSelectionOff();
+		tableController.deselectAllColumns();
+		tableController.turnSelectionOff();
 		
 		DateAndTime dateAndTime = step5aModel.getDateAndTime();
 		dateAndTimeController = new DateAndTimeController(dateAndTime);
@@ -45,7 +47,9 @@ public class Step5aController extends StepController {
 		String description = step5aModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
-		dateAndTimeController.mark(TableController.getInstance().getMarkingColor());
+		
+		tableController.clearMarkedTableElements();
+		dateAndTimeController.markComponents();	
 	}
 
 	@Override

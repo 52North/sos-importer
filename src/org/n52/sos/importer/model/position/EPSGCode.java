@@ -1,7 +1,5 @@
 package org.n52.sos.importer.model.position;
 
-import java.awt.Color;
-
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.interfaces.Component;
@@ -56,9 +54,9 @@ public class EPSGCode extends Component {
 		}
 	}
 	
-	public void mark(Color color) {
+	public void mark() {
 		if (tableElement != null)
-			tableElement.mark(color);
+			tableElement.mark();
 	}
 	
 	@Override 
