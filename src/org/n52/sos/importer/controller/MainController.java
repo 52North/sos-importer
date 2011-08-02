@@ -36,12 +36,4 @@ public class MainController {
 	public void pack() {
 		mainFrame.pack();
 	}
-	
-	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	MainController.getInstance().setStepController(new Step1Controller());
-            }
-        });
-	}
 }

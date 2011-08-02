@@ -19,7 +19,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
 
 	private final Position position;
 	
-	private final JLabel heightLabel = new JLabel("   Height: ");
+	private final JLabel heightLabel = new JLabel("   Altitude / Height: ");
 	private final JTextField heightTextField = new JTextField(8);
 	private final JLabel heightUnitLabel = new JLabel("   Unit: ");
 	private final JComboBox heightUnitComboBox = new JComboBox(Settings.getInstance().getHeightUnits());

@@ -34,10 +34,7 @@ public class Step5aController extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {		
-		tableController.deselectAllColumns();
-		tableController.turnSelectionOff();
-		
+	public void loadSettings() {				
 		DateAndTime dateAndTime = step5aModel.getDateAndTime();
 		dateAndTimeController = new DateAndTimeController(dateAndTime);
 		List<Component> components = step5aModel.getMissingDateAndTimeComponents();
@@ -48,7 +45,7 @@ public class Step5aController extends StepController {
 		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
 		
-		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOff();
 		dateAndTimeController.markComponents();	
 	}
 
@@ -63,6 +60,9 @@ public class Step5aController extends StepController {
 		
 		List<Component> components = dateAndTimeController.getMissingComponents();
 		step5aModel.setMissingDateAndTimeComponents(components);
+		
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
 		
 		dateAndTimeController = null;
 		step5Panel = null;

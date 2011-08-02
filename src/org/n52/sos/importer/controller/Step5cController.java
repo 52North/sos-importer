@@ -34,10 +34,7 @@ public class Step5cController extends StepController {
 	}
 	
 	@Override
-	public void loadSettings() {		
-		tableController.deselectAllColumns();
-		tableController.turnSelectionOff();
-		
+	public void loadSettings() {			
 		Position position = step5cModel.getPosition();
 		positionController = new PositionController(position);
 		List<Component> components = step5cModel.getMissingPositionComponents();
@@ -48,7 +45,7 @@ public class Step5cController extends StepController {
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
 		
-		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOff();
 		positionController.markComponents();
 	}
 	
@@ -59,6 +56,9 @@ public class Step5cController extends StepController {
 		
 		List<Component> components = positionController.getMissingComponents();
 		step5cModel.setMissingPositionComponents(components);
+		
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
 		
 		positionController = null;
 		step5Panel = null;

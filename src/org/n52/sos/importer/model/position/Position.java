@@ -38,7 +38,11 @@ public class Position extends Combination {
 	}
 
 	public void setHeight(Height height) {
-		logger.info("Add " + height + " to " + this);
+		if (getGroup() != null)
+			if (height != null)
+				logger.info("Add " + height + " to " + this);
+			else
+				logger.info("Remove " + this.height + " from " + this);
 		this.height = height;
 	}
 
@@ -47,12 +51,20 @@ public class Position extends Combination {
 	}
 
 	public void setEPSGCode(EPSGCode epsgCode) {
-		logger.info("Add " + epsgCode + " to " + this);
+		if (getGroup() != null)
+			if (epsgCode != null)
+				logger.info("Add " + epsgCode + " to " + this);
+			else
+				logger.info("Remove " + this.epsgCode + " from " + this);
 		this.epsgCode = epsgCode;
 	}
 
 	public void setLongitude(Longitude longitude) {
-		logger.info("Add " + longitude + " to " + this);
+		if (getGroup() != null)
+			if (longitude != null)
+				logger.info("Add " + longitude + " to " + this);
+			else
+				logger.info("Remove " + this.longitude + " from " + this);
 		this.longitude = longitude;
 	}
 
@@ -61,7 +73,11 @@ public class Position extends Combination {
 	}
 
 	public void setLatitude(Latitude latitude) {
-		logger.info("Add " + latitude + " to " + this);
+		if (getGroup() != null)
+			if (latitude != null)
+				logger.info("Add " + latitude + " to " + this);
+			else
+				logger.info("Remove " + this.latitude + " from " + this);
 		this.latitude = latitude;
 	}
 
@@ -75,11 +91,6 @@ public class Position extends Combination {
 
 	public String getGroup() {
 		return group;
-	}
-	
-	@Override
-	public String toString() {
-		return "Position group " + getGroup();
 	}
 
 	@Override
@@ -127,5 +138,14 @@ public class Position extends Combination {
 		if (o.length > 3 && o[3] != null)
 			epsgCode = EPSGCode.parse((String)o[3]);
 		return new Position(latitude, longitude, height, epsgCode);
+	}
+
+	@Override
+	public String toString() {
+		if (getGroup() != null)
+			return "Position group " + getGroup();
+		else
+		return "Position (" + latitude + ", " + longitude + ", " 
+			+ height + ", " + epsgCode + ")";
 	}
 }

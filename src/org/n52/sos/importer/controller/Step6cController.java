@@ -36,14 +36,17 @@ public class Step6cController extends StepController {
 		Position position = step6cModel.getPosition();
 		positionController = new PositionController(position);
 		List<Component> components = step6cModel.getMissingPositionComponents();
-		positionController.setMissingComponents(components);
-		positionController.unassignMissingComponentValues();	
+		positionController.setMissingComponents(components);	
 
+		FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 		String name = step6cModel.getFeatureOfInterestName();
 		if (name == null) { //when this feature is not contained in the table
-			FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 			name = foi.getName();
+			foi.unassignPosition();
+		} else {
+			foi.removePositionFor(name);
 		}
+		positionController.unassignMissingComponentValues();
 		
 		String description = step6cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
@@ -60,7 +63,7 @@ public class Step6cController extends StepController {
 		String name = step6cModel.getFeatureOfInterestName();
 		Position position = step6cModel.getPosition();
 		if (name == null) //when this feature is not contained in the table
-			step6cModel.getFeatureOfInterest().setPosition(position);
+			step6cModel.getFeatureOfInterest().assignPosition(position);
 		else 
 			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
 		

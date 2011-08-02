@@ -91,6 +91,7 @@ public class Step8Controller extends StepController {
 		protected Void doInBackground() throws Exception {
 			step8Panel.setIndeterminate(true);
 			
+			logger.info("Assemble information from table and previous steps");
 			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 				mv.print();
 			}
@@ -114,6 +115,7 @@ public class Step8Controller extends StepController {
 
         @Override
         public Void doInBackground() {
+        	logger.info("Register Sensors at Sensor Observation Service");
     		String registerSensorTemplate = readTemplate("RegisterSensor_measurement_template");
     		String completedTemplate = "";
     		
@@ -154,6 +156,7 @@ public class Step8Controller extends StepController {
     	
         @Override
         public Void doInBackground() {
+        	logger.info("Insert Observations at Sensor Observation Service");
         	String insertObservationTemplate = readTemplate("InsertObservation_samplingPoint_template");
         	String completedTemplate = "";
         	

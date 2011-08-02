@@ -40,8 +40,6 @@ public class Step6aController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		tableController.clearMarkedTableElements();
-		tableController.deselectAllColumns();
 		tableController.turnSelectionOff();
 		
 		DateAndTime dateAndTime = step6aModel.getDateAndTime();
@@ -69,6 +67,8 @@ public class Step6aController extends StepController {
 		
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			mv.setDateAndTime(dateAndTime);
+		
+		tableController.turnSelectionOn();
 		
 		step5Panel = null;
 	}

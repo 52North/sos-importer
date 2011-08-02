@@ -56,10 +56,12 @@ public class Step3aController extends StepController {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
 		step3aModel.setSelection(selection);
-		
 		int number = step3aModel.getSelectedColumn();
+		
 		tableController.setColumnHeading(number, selection.get(0));	
 		tableController.clearMarkedTableElements();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.turnSelectionOn();
 		
 		step3Panel = null;
 	}
@@ -73,9 +75,6 @@ public class Step3aController extends StepController {
 		int number = step3aModel.getSelectedColumn();
 		step3Panel.getLastChildPanel().assign(new Column(number));
 		
-		tableController.setColumnHeading(number, selection.get(0));
-		tableController.clearMarkedTableElements();
-		
 		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
 			dtc.mergeDateAndTimes();
@@ -83,6 +82,11 @@ public class Step3aController extends StepController {
 			PositionController pc = new PositionController();
 			pc.mergePositions();
 		}
+		
+		tableController.setColumnHeading(number, selection.get(0));
+		tableController.clearMarkedTableElements();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.turnSelectionOn();
 		
 		step3Panel = null;
 	}

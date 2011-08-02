@@ -96,17 +96,34 @@ public class FeatureOfInterest extends Resource {
 	
 	public void setPosition(Position position) {
 		this.position = position;
-		if (position != null)
-			logger.info("Assign " + position + " to " + this);
 	}
 
 	public Position getPosition() {
 		return position;
 	}
 	
+	public void assignPosition(Position position) {
+		logger.info("Assign " + position + " to " + this);
+		this.setPosition(position);
+	}
+
+	public void unassignPosition() {
+		if (position != null)
+			logger.info("Unassign " + position + " from " + this);
+		this.setPosition(null);
+	}
+	
 	public void setPositionFor(String featureOfInterestName, Position position) {
+		logger.info("Assign " + position + " to " + featureOfInterestName);
 		positions.put(featureOfInterestName, position);
 	}	
+	
+	public void removePositionFor(String featureOfInterestName) {
+		Position p = getPositionFor(featureOfInterestName);
+		if (p != null)
+			logger.info("Unassign " + p + " from " + featureOfInterestName);
+		positions.remove(featureOfInterestName);
+	}
 	
 	public Position getPositionFor(String featureOfInterestName) {
 		return positions.get(featureOfInterestName);

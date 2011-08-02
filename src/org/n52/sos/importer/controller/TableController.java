@@ -52,6 +52,7 @@ public class TableController {
 		table.getSelectionModel().addListSelectionListener(new RowSelectionListener());
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(new ColumnSelectionListener());
+		allowMultipleSelection();
 	}
 
 	public static TableController getInstance() {
@@ -152,6 +153,13 @@ public class TableController {
 		table.setFocusable(false);
 	}
 	
+	public void turnSelectionOn() {
+		table.setRowSelectionAllowed(true);
+		table.setColumnSelectionAllowed(true);
+		table.setCellSelectionEnabled(true);
+		table.setFocusable(true);
+	}
+	
 	public int[] getSelectedColumns() {
 		return table.getSelectedColumns();
 	}
@@ -240,6 +248,10 @@ public class TableController {
 	
 	public void addMultipleSelectionListener(MultipleSelectionListener multipleSelectionListener) {
 		this.multipleSelectionListener = multipleSelectionListener;
+	}
+	
+	public void removeMultipleSelectionListener() {
+		this.multipleSelectionListener = null;
 	}
 	
 	public void setOrientation(int orientation) {

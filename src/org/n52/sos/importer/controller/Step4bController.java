@@ -43,7 +43,6 @@ public class Step4bController extends StepController {
 		step4Panel = new Step4Panel(text);
 		
 		tableController.setTableSelectionMode(TableController.COLUMNS);
-		tableController.allowMultipleSelection();
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
 		for (int number: selectedRowsOrColumns) {
@@ -53,7 +52,6 @@ public class Step4bController extends StepController {
 			tableController.selectColumn(number);
 		}		
 		
-		tableController.clearMarkedTableElements();
 		resource.getTableElement().mark();
 	}
 	
@@ -68,6 +66,11 @@ public class Step4bController extends StepController {
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 			resource.assign(mv);
 		}
+		
+		tableController.clearMarkedTableElements();
+		tableController.deselectAllColumns();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.removeMultipleSelectionListener();
 
 		step4Panel = null;
 	}

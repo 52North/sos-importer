@@ -8,7 +8,7 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.Column;
 
-public class Step5bTest {
+public class Step5aTest {
 
 	public static void main(String[] args) {
 		MainController f = MainController.getInstance();

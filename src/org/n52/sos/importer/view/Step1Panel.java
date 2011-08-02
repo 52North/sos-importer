@@ -9,13 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.controller.Step1Controller;
+import org.n52.sos.importer.model.tooltips.ToolTipLabel;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class Step1Panel extends JPanel {
 	
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 	
-	private final JLabel csvFileLabel = new JLabel("CSV File: ");
+	private final JLabel csvFileLabel = new ToolTipLabel("CSV File: ", ToolTips.get("CSVFileToolTip"));
 	private final JTextField csvFileTextField = new JTextField(25);
 	private final JButton browse = new JButton("Browse");
 	

@@ -62,7 +62,6 @@ public class Step6bController extends StepController {
 		step5Panel = new Step5Panel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
-		tableController.clearMarkedTableElements();
 		measuredValue.getTableElement().mark();		
 	}	
 	
@@ -82,6 +81,9 @@ public class Step6bController extends StepController {
 			resource = resources.get(index);
 		
 		resource.assign(measuredValue);
+		
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
 		
 		step5Panel = null;
 		missingResourcePanel = null;

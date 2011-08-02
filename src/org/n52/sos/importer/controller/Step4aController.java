@@ -37,7 +37,6 @@ public class Step4aController extends StepController {
 		step4Panel = new Step4Panel(text);		
 
 		tableController.setTableSelectionMode(TableController.COLUMNS);
-		tableController.allowMultipleSelection();
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
 		int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
@@ -49,7 +48,6 @@ public class Step4aController extends StepController {
 		}
 		
 		DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());	
-		tableController.clearMarkedTableElements();
 		dateAndTimeController.markComponents();	
 	}
 
@@ -65,6 +63,10 @@ public class Step4aController extends StepController {
 			mv.setDateAndTime(dateAndTime);
 		}
 		
+		tableController.clearMarkedTableElements();
+		tableController.deselectAllColumns();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.removeMultipleSelectionListener();
 		step4Panel = null;
 	}
 	
