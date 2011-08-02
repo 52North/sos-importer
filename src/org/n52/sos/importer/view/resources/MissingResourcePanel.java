@@ -11,6 +11,7 @@ import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class MissingResourcePanel extends MissingComponentPanel {
 
@@ -26,8 +27,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		this.resource = resource;
 		String name = "Name";
 		if (resource instanceof UnitOfMeasurement) name = "Code";
-		nameComboBox = new EditableJComboBoxPanel(resource.getNames(), name);
-		uriComboBox = new EditableJComboBoxPanel(resource.getURIs(), "URI");
+		nameComboBox = new EditableJComboBoxPanel(resource.getNames(), name, ToolTips.get("Name"));
+		uriComboBox = new EditableJComboBoxPanel(resource.getURIs(), "URI", ToolTips.get("URI"));
 		nameComboBox.setPartnerComboBox(uriComboBox);
 		uriComboBox.setPartnerComboBox(nameComboBox);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));

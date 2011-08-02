@@ -10,6 +10,7 @@ import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class MissingEPSGCodePanel extends MissingComponentPanel {
 	
@@ -18,9 +19,9 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 	private final Position position;
 	
 	private final EditableJComboBoxPanel EPSGCodeComboBox
-		= new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getEPSGCodes(), "EPSG-Code");;
+		= new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getEPSGCodes(), "EPSG-Code", ToolTips.get("EPSG"));
 	private final EditableJComboBoxPanel referenceSystemNameComboBox
-		= new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getReferenceSystemNames(), "Reference System");
+		= new EditableJComboBoxPanel(EditableComboBoxItems.getInstance().getReferenceSystemNames(), "Reference System", ToolTips.get("ReferenceSystem"));
 
 	public MissingEPSGCodePanel(Position position) {
 		super();

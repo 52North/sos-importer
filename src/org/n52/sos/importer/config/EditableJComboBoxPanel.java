@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.model.tooltips.ToolTipLabel;
 
 public class EditableJComboBoxPanel extends JPanel {
 
@@ -48,10 +49,10 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	private boolean enterPressed = false;
 	
-	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName) {
+	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName, String toolTip) {
 		super();
 		this.model = model;
-		label = new JLabel(labelName + ":   ");
+		label = new ToolTipLabel(labelName + ":   ", toolTip);
 		comboBox = new JComboBox(model);
 		
 		if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) 

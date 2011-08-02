@@ -19,6 +19,7 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class DateAndTimeCombinationPanel extends CombinationPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
@@ -51,6 +52,16 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	@Override
 	public Object getTestValue() {
 		return new Date();
+	}
+	
+	@Override
+	public String getPatternToolTip() {
+		return ToolTips.get("DateAndTimePatterns");
+	}
+	
+	@Override
+	public String getGroupToolTip() {
+		return ToolTips.get("DateAndTimeGroups");
 	}
 	
 	@Override

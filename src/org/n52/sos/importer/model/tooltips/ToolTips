@@ -1,4 +1,4 @@
-CSVFileToolTip =
+CSVFile=
 Comma-Separated Values (CSV) files represent
 tabular data in textual format. A CSV file
 could for example look like this:
@@ -10,7 +10,7 @@ Date, Sensor1, Sensor2
 ---
 ColumnSeparator=
 Columns in a CSV file are delimited by a 
-special character. For example ';' separates 
+special character. For example ; separates 
 the columns in the following CSV file:
 
 Date; Sensor1; Sensor2
@@ -20,23 +20,25 @@ Date; Sensor1; Sensor2
 ---
 CommentIndicator=
 Lines beginning with a comment character will
-not be parsed. For example '#' indicates
+not be imported. For example # indicates
 comments in the following CSV file:
-# This is a comment
+
 Date, Sensor1, Sensor2
+# This is a comment
 01.01.2011, 1.3, 1.4
 02.01.2011, 2.5, 4.4
 03.01.2011, 1.7, 2.3
 ---
 TextQualifier=
 Fields in a CSV file that contain a special character 
-(e.g. the column separator or a newline) have to be
-enclosed by a text qualifier. For example '"'
+(e.g. the column separator or a new line) have to be
+enclosed by a text qualifier. For example "
 escapes special symbols in the following CSV file:
+
 Nr, Observation
 1, "New \n line"
 2, "Separate , column"
-3, "A ""quote"" within"
+3, "A ""quote"" in a text"
 ---
 MeasuredValue=
 A measured value is the result of a measurement or 
@@ -93,4 +95,93 @@ Sensor=
 A sensor is an entity capable of observing a phenomenon 
 and returning an observed value. [SensorML] 'ThermometerXYZ'
 and 'PM10SensorMÃ¼nster123' would be examples of sensors.
+---
+DateAndTimePatterns=
+G - Era designator (e.g. AD)
+y - Year (e.g. 1996; 96)
+M - Month in year (e.g. July; Jul; 07)
+w - Week in year (e.g. 27)
+W - Week in month (e.g. 2)
+D - Day in year (e.g. 189)
+d -	Day in month (e.g. 10)
+F -	Day of week in month (e.g. 2)
+E - Day in week (e.g. Tuesday; Tue)
+a - Am/pm marker (e.g. PM)
+H - Hour in day (from 0 to 23)
+k - Hour in day (from 1 to 24)
+K - Hour in am/pm (from 0 to 11)
+h - Hour in am/pm (from 1 to 12)
+m - Minute in hour (e.g. 30)
+s - Second in minute (e.g. 55)
+S - Millisecond (e.g. 978)
+z -	General time zone (e.g. Pacific Standard Time; PST; GMT-08:00
+Z - RFC 822 Time zone (e.g. -0800)
+[Java]
+---
+DateAndTime=
+Date and time describe when a measurement was performed
+or a phenomenon has been observed.
+---
+DateAndTimeGroups=
+When date and time are split into different columns
+(e.g. date in one, and time another column), they
+have to be put in the same group to be later combined.
+
+For example:
+Date, Time, Value
+01.01.2011, 00:00:00, 4.3
+02.01.2011, 01:00:00, 5.2
+03.01.2011, 02:00:00, 6.5
+---
+Position=
+The position indicates where the measurement took place. 
+In this application, the position is interpreted as the 
+location of the feature of interest. 
+---
+PositionPatterns=
+LAT - Latitude (e.g. -31.4°) or Northing (e.g. 3.531.233m)
+LON - Longitude (e.g. 9.1) or Easting (e.g. 400.114m)
+ALT - Height (e.g. 100m)
+EPSG - EPGS-Code (e.g. 25832)
+---
+PositionGroups=
+When positions are split into different columns
+(e.g. latitude in one, and longitude in another column), 
+they have to be put in the same group to be later combined.
+
+For example:
+Latitude, Longitude; Station
+52.51°, 8.15°; Weatherstation1
+52.62°, 8.11°; Weatherstation2
+52.59°, 8.16°; Weatherstation3
+---
+Name=
+This can be a human-readable name, term or ID.
+---
+URI=
+The uniform resource identifier (URI) distinctively 
+identifies a source of information. A URI can either be a 
+URL (e.g. http://www.eo2heaven.org/) or a URN 
+(e.g. urn:ogc:def:phenomenon:OGC:1.0.30:Temperature).
+---
+SOS=
+A Sensor Observation Service provides an API for 
+managing deployed sensors and retrieving sensor data 
+and specifically "observation" data. [SOS]
+---
+EPSG=
+The European Petroleum Survey Group (EPSG) has 
+established a system of unique identifiers 
+for spatial references systems. EPSG-Codes are
+positive integers ranging from 0 to 32767.
+---
+ReferenceSystem=
+This is the name of the spatial reference system
+corresponding to the EPSG-Code.
+---
+UTCOffset=
+The UTC offset is the offset from the Coordinated
+Universal Time (UTC). It is usually given in hours 
+and minutes (e.g. +06:30). In this application, 
+only hours ranging from -12 to 12 are available.
 ---

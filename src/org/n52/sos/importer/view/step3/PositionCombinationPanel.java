@@ -14,6 +14,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class PositionCombinationPanel extends CombinationPanel {
 
@@ -48,6 +49,16 @@ public class PositionCombinationPanel extends CombinationPanel {
 	public Combination getCombination() {
 		if (position == null) position = new Position();
 		return position;
+	}
+	
+	@Override
+	public String getPatternToolTip() {
+		return ToolTips.get("PositionPatterns");
+	}
+	
+	@Override
+	public String getGroupToolTip() {
+		return ToolTips.get("PositionGroups");
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import javax.swing.JTextArea;
 
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class Step2Panel extends JPanel {
 	
@@ -22,9 +23,9 @@ public class Step2Panel extends JPanel {
 		super();
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		columnSeparatorCombobox = new EditableJComboBoxPanel(items.getColumnSeparators(), "Column separator");
-		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators(), "Comment indicator");
-		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers(), "Text qualifier");
+		columnSeparatorCombobox = new EditableJComboBoxPanel(items.getColumnSeparators(), "Column separator", ToolTips.get("ColumnSeparator"));
+		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators(), "Comment indicator", ToolTips.get("CommentIndicator"));
+		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers(), "Text qualifier", ToolTips.get("TextQualifier"));
 		
 		csvFileTextArea.setEditable(false);		
 		

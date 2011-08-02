@@ -9,12 +9,14 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
+import org.n52.sos.importer.model.tooltips.ToolTipLabel;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel timeZoneLabel = new JLabel("Timezone: ");
+	private final JLabel timeZoneLabel = new ToolTipLabel("UTC offset: ", ToolTips.get("UTCOffset"));
 	
 	private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
 	private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);

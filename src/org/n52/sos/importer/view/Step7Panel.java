@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.config.EditableComboBoxItems;
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class Step7Panel extends JPanel {
 
@@ -13,7 +14,7 @@ public class Step7Panel extends JPanel {
 	
 	public Step7Panel() {
 		sosComboBox = new EditableJComboBoxPanel(
-				EditableComboBoxItems.getInstance().getSosURLs(), "URL");
+				EditableComboBoxItems.getInstance().getSosURLs(), "SOS-URL", ToolTips.get("SOS"));
 		this.add(sosComboBox);
 	}
 	

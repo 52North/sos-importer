@@ -17,7 +17,7 @@ public class Step1Panel extends JPanel {
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 	
-	private final JLabel csvFileLabel = new ToolTipLabel("CSV File: ", ToolTips.get("CSVFileToolTip"));
+	private final JLabel csvFileLabel = new ToolTipLabel("CSV File: ", ToolTips.get("CSVFile"));
 	private final JTextField csvFileTextField = new JTextField(25);
 	private final JButton browse = new JButton("Browse");
 	
