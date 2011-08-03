@@ -3,9 +3,11 @@ package org.n52.sos.importer.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.interfaces.StepController;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
@@ -52,21 +54,6 @@ public class Step3aController extends StepController {
 	}
 	
 	@Override
-	public void back() {
-		List<String> selection = new ArrayList<String>();
-		step3Panel.store(selection);
-		step3aModel.setSelection(selection);
-		int number = step3aModel.getSelectedColumn();
-		
-		tableController.setColumnHeading(number, selection.get(0));	
-		tableController.clearMarkedTableElements();
-		tableController.setTableSelectionMode(TableController.CELLS);
-		tableController.turnSelectionOn();
-		
-		step3Panel = null;
-	}
-	
-	@Override
 	public void saveSettings() {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
@@ -90,6 +77,21 @@ public class Step3aController extends StepController {
 		
 		step3Panel = null;
 	}
+	
+	@Override
+	public void back() {
+		List<String> selection = new ArrayList<String>();
+		step3Panel.store(selection);
+		step3aModel.setSelection(selection);
+		int number = step3aModel.getSelectedColumn();
+		
+		tableController.setColumnHeading(number, selection.get(0));	
+		tableController.clearMarkedTableElements();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.turnSelectionOn();
+		
+		step3Panel = null;
+	}
 
 	@Override
 	public StepController getNextStepController() {		
@@ -104,16 +106,19 @@ public class Step3aController extends StepController {
 
 	@Override
 	public boolean isFinished() {
-		/*
+		
 		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {
-			if (ModelStore.getInstance().getMeasuredValues().size() == 0) {
+			List<String> currentSelection = new ArrayList<String>();
+			step3Panel.store(currentSelection);
+			
+			if (ModelStore.getInstance().getMeasuredValues().size() == 0 && currentSelection.get(0) != "Measured Value") {
 				JOptionPane.showMessageDialog(null,
 					    "You have to specify at least one measured value column.",
 					    "Measured value column missing",
 					    JOptionPane.WARNING_MESSAGE);
 				return false;
 			}
-		}*/
+		}
 		
 		return true;
 	}

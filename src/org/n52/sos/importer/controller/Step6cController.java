@@ -41,7 +41,7 @@ public class Step6cController extends StepController {
 		FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 		String name = step6cModel.getFeatureOfInterestName();
 		if (name == null) { //when this feature is not contained in the table
-			name = foi.getName();
+			name = foi.getNameString();
 			foi.unassignPosition();
 		} else {
 			foi.removePositionFor(name);

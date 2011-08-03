@@ -93,7 +93,7 @@ public class Step1Controller extends StepController {
 		
 		if (filePath.equals("")) {
 			JOptionPane.showMessageDialog(null,
-				    "Please choose a CSV file",
+				    "Please choose a CSV file.",
 				    "File missing",
 				    JOptionPane.WARNING_MESSAGE);
 			return false;

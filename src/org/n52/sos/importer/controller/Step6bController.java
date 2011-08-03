@@ -47,6 +47,15 @@ public class Step6bController extends StepController {
 		Resource resource = step6bModel.getResource();
 		MeasuredValue measuredValue = step6bModel.getMeasuredValue();
 		
+		//when this resource is still assigned with measured values,
+		//do not remove it from the ModelStore
+		int count = 0;
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+			if (resource.isAssignedTo(mv))
+				count++;
+		if (count == 1)
+			ModelStore.getInstance().remove(resource);
+		
 		resource.unassign(measuredValue);
 		
 		missingResourcePanel = new MissingResourcePanel(resource);
@@ -90,6 +99,15 @@ public class Step6bController extends StepController {
 	}
 	
 	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
+		
+		step5Panel = null;
+		missingResourcePanel = null;
+	}
+	
+	@Override
 	public StepController getNextStepController() {		
 		return new Step6bSpecialController();	
 	}
@@ -125,7 +143,7 @@ public class Step6bController extends StepController {
 		return null;
 	}
 	
-	public Step6bModel getMissingResourceForMeasuredValue() {
+	private Step6bModel getMissingResourceForMeasuredValue() {
 		List<MeasuredValue> measuredValues = ModelStore.getInstance().getMeasuredValues();
 		
 		for (MeasuredValue mv: measuredValues) {

@@ -46,10 +46,11 @@ public class Step6aController extends StepController {
 		dateAndTimeController = new DateAndTimeController(dateAndTime);
 		List<Component> components = step6aModel.getMissingDateAndTimeComponents();
 		dateAndTimeController.setMissingComponents(components);
-		dateAndTimeController.unassignMissingComponentValues();
 		
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			mv.setDateAndTime(null);
+		
+		dateAndTimeController.unassignMissingComponentValues();
 		
 		String description = step6aModel.getDescription();
 		List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
@@ -73,6 +74,13 @@ public class Step6aController extends StepController {
 		step5Panel = null;
 	}
 
+	@Override
+	public void back() {
+		tableController.turnSelectionOn();
+		
+		step5Panel = null;
+	}
+	
 	@Override
 	public String getDescription() {
 		return "Step 6a: Add missing dates and times";

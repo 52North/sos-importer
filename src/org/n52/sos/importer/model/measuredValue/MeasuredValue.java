@@ -37,11 +37,11 @@ public abstract class MeasuredValue implements Parseable {
 	private Sensor sensor;
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
-		this.featureOfInterest = featureOfInterest;
 		if (featureOfInterest == null)
 			logger.info("Unassign Feature Of Interest from " + this);
 		else
 			logger.info("Assign " + featureOfInterest + " to " + this);
+		this.featureOfInterest = featureOfInterest;
 	}
 
 	public FeatureOfInterest getFeatureOfInterest() {
@@ -49,8 +49,11 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setObservedProperty(ObservedProperty observedProperty) {
+		if (observedProperty != null)
+			logger.info("Assign " + observedProperty + " to " + this);
+		else 
+			logger.info("Unassign Observed Property from " + this);
 		this.observedProperty = observedProperty;
-		logger.info("Assign " + observedProperty + " to " + this);
 	}
 
 	public ObservedProperty getObservedProperty() {
@@ -58,8 +61,11 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setUnitOfMeasurement(UnitOfMeasurement unitOfMeasurement) {
+		if (unitOfMeasurement != null)
+			logger.info("Assign " + unitOfMeasurement + " to " + this);
+		else 
+			logger.info("Unassign Unit of Measurement from " + this);
 		this.unitOfMeasurement = unitOfMeasurement;
-		logger.info("Assign " + unitOfMeasurement + " to " + this);
 	}
 
 	public UnitOfMeasurement getUnitOfMeasurement() {
@@ -67,7 +73,10 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setSensor(Sensor sensor) {
-		logger.info("Assign " + sensor + " to " + this);
+		if (sensor != null)
+			logger.info("Assign " + sensor + " to " + this);
+		else 
+			logger.info("Unassign Sensor from " + this);
 		this.sensor = sensor;
 	}
 
@@ -85,8 +94,11 @@ public abstract class MeasuredValue implements Parseable {
 	}
 
 	public void setDateAndTime(DateAndTime dateAndTime) {
+		if (dateAndTime != null)
+			logger.info("Assign " + dateAndTime + " to " + this);
+		else 
+			logger.info("Unassign " + this.dateAndTime + " from " + this);
 		this.dateAndTime = dateAndTime;
-		logger.info("Assign " + dateAndTime + " to " + this);
 	}
 
 	public DateAndTime getDateAndTime() {

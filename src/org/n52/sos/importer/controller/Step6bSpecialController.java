@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
@@ -20,6 +21,8 @@ import org.n52.sos.importer.view.Step6cPanel;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
 
 public class Step6bSpecialController extends StepController {
+	
+	private static final Logger logger = Logger.getLogger(Step6bSpecialController.class);
 
 	private Step6bSpecialModel step6bSpecialModel;
 	
@@ -43,8 +46,8 @@ public class Step6bSpecialController extends StepController {
 		Sensor sensor = step6bSpecialModel.getSensor();
 		missingResourcePanel = new MissingResourcePanel(sensor);
 		missingResourcePanel.setMissingComponent(sensor);
-		missingResourcePanel.unassignValues();
 		ModelStore.getInstance().remove(step6bSpecialModel);
+		missingResourcePanel.unassignValues();
 		
 		List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		missingComponentPanels.add(missingResourcePanel);
@@ -78,12 +81,17 @@ public class Step6bSpecialController extends StepController {
 
 	@Override
 	public boolean isNecessary() {
-		if (ModelStore.getInstance().getSensorsInTable().size() > 0)
+		if (ModelStore.getInstance().getSensorsInTable().size() > 0) {
+			logger.info("Skip 6b (Special) since there are sensors in the table.");
 			return false;
+		}
 		
 		if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-			ModelStore.getInstance().getObservedPropertiesInTable().size() == 0)
+			ModelStore.getInstance().getObservedPropertiesInTable().size() == 0) {
+			logger.info("Skip 6b (Special) since there are not any features of interest" +
+					"and observed properties in the table.");
 			return false;
+		}
 		
 		step6bSpecialModel = getNextModel();
 		return true;

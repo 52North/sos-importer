@@ -114,7 +114,7 @@ public class DateAndTimeController {
 	
 	
 	public void assignPattern(String pattern, TableElement tableElement) {		
-		logger.info("Assign pattern " + pattern + " in " + tableElement + " to " + dateAndTime);
+		logger.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
 		
     	if (pattern.indexOf("y") != -1) 
     		dateAndTime.setYear(new Year(tableElement, pattern));

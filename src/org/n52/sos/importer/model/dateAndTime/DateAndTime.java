@@ -23,49 +23,77 @@ public class DateAndTime extends Combination {
 		return year;
 	}
 	public void setYear(Year year) {
-		logger.info("Add " + year + " to " + this);
+		if (getGroup() != null)
+			if (year != null)
+				logger.info("Add " + year + " to " + this);
+			else
+				logger.info("Remove " + this.year + " from " + this);
 		this.year = year;
 	}
 	public Month getMonth() {
 		return month;
 	}
 	public void setMonth(Month month) {
-		logger.info("Add " + month + " to " + this);
+		if (getGroup() != null)
+			if (month != null)
+				logger.info("Add " + month + " to " + this);
+			else
+				logger.info("Remove " + this.month + " from " + this);
 		this.month = month;
 	}
 	public Day getDay() {
 		return day;
 	}
 	public void setDay(Day day) {
-		logger.info("Add " + day + " to " + this);
+		if (getGroup() != null)
+			if (day != null)
+				logger.info("Add " + day + " to " + this);
+			else
+				logger.info("Remove " + this.day + " from " + this);
 		this.day = day;
 	}
 	public Hour getHour() {
 		return hour;
 	}
 	public void setHour(Hour hour) {
-		logger.info("Add " + hour + " to " + this);
+		if (getGroup() != null)
+			if (hour != null)
+				logger.info("Add " + hour + " to " + this);
+			else
+				logger.info("Remove " + this.hour + " from " + this);
 		this.hour = hour;
 	}
 	public Minute getMinute() {
 		return minute;
 	}
 	public void setMinute(Minute minute) {
-		logger.info("Add " + minute + " to " + this);
+		if (getGroup() != null)
+			if (minute != null)
+				logger.info("Add " + minute + " to " + this);
+			else
+				logger.info("Remove " + this.minute + " from " + this);
 		this.minute = minute;
 	}
 	public Second getSecond() {
 		return second;
 	}
 	public void setSecond(Second second) {
-		logger.info("Add " + second + " to " + this);
+		if (getGroup() != null)
+			if (second != null)
+				logger.info("Add " + second + " to " + this);
+			else
+				logger.info("Remove " + this.second + " from " + this);
 		this.second = second;
 	}
 	public TimeZone getTimeZone() {
 		return timeZone;
 	}
 	public void setTimeZone(TimeZone timeZone) {
-		logger.info("Add " + timeZone + " to " + this);
+		if (getGroup() != null)
+			if (timeZone != null)
+				logger.info("Add " + timeZone + " to " + this);
+			else
+				logger.info("Remove " + this.timeZone + " from " + this);
 		this.timeZone = timeZone;
 	}	
 	
@@ -92,9 +120,13 @@ public class DateAndTime extends Combination {
 
 		return dateString;
 	}
-	
 	@Override
 	public String toString() {
-		return "Date&Time group " + getGroup();
+		if (getGroup() == null)
+			return "Date and Time(" + year + ", " + month + ", "
+					+ day + ", " + hour + ", " + minute + ", "
+					+ second + ", " + timeZone + ")";
+		else 
+			return "Date&Time group " + getGroup();
 	}
 }

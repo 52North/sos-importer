@@ -35,7 +35,7 @@ public class FeatureOfInterest extends Resource {
 	
 	@Override
 	public boolean isAssignedTo(MeasuredValue measuredValue) {
-		return measuredValue.getFeatureOfInterest() == this;
+		return this.equals(measuredValue.getFeatureOfInterest());
 	}
 
 	@Override

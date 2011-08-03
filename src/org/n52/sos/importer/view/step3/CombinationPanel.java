@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.config.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
-import org.n52.sos.importer.model.tooltips.ToolTipLabel;
 
 public abstract class CombinationPanel extends SelectionPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
@@ -21,7 +20,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	// 			ComboBoxDemo2.java
 	private static final long serialVersionUID = 1L;
 
-	private JLabel groupLabel = new ToolTipLabel("Group: ", getGroupToolTip());
+	private JLabel groupLabel = new JLabel("Group: ");
 	private JComboBox groupComboBox = new JComboBox(getGroupItems());
 	
 	private EditableJComboBoxPanel patternComboBox = new EditableJComboBoxPanel(getPatterns(), "Format", getPatternToolTip());
@@ -36,6 +35,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 		
 		setDefaultSelection();
 		patternComboBox.addActionListener(new FormatChanged());
+		groupComboBox.setToolTipText(getGroupToolTip());
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		

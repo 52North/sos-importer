@@ -34,8 +34,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		this.add(radioButton);
 	}
 	
-	protected void addRadioButton(String name, SelectionPanel childPanel) {
+	protected void addRadioButton(String name, String toolTip, SelectionPanel childPanel) {
 		JRadioButton radioButton = new JRadioButton(name);
+		if (toolTip != null) 
+			radioButton.setToolTipText(toolTip);
 		addChildPanel(name, childPanel);
 		radioButton.addActionListener(new AddChildPanel(childPanel));
 		if (group.getButtonCount() == 0) {

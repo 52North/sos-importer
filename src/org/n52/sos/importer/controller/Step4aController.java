@@ -71,6 +71,16 @@ public class Step4aController extends StepController {
 	}
 	
 	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.deselectAllColumns();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.removeMultipleSelectionListener();
+		
+		step4Panel = null;
+	};
+	
+	@Override
 	public String getDescription() {
 		return "Step 4a: Solve Date & Time ambiguities";
 	}

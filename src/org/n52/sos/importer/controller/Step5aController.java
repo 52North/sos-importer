@@ -69,6 +69,15 @@ public class Step5aController extends StepController {
 	}
 	
 	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
+		
+		dateAndTimeController = null;
+		step5Panel = null;
+	}
+	
+	@Override
 	public String getDescription() {
 		return "Step 5a: Complete time data";
 	}

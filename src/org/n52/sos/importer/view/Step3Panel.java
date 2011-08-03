@@ -12,6 +12,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
@@ -80,13 +81,13 @@ public class Step3Panel extends JPanel {
 		public RootPanel() {	
 			super(rootPanel);
 			addRadioButton("Undefined");
-			addRadioButton("Measured Value", new MeasuredValuePanel());
-			addRadioButton("Date & Time", new DateAndTimePanel());
-			addRadioButton("Position", new PositionPanel());
-			addRadioButton("Feature of Interest", new ResourceSelectionPanel(additionalPanel1, new FeatureOfInterest()));
-			addRadioButton("Observed Property", new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
-			addRadioButton("Unit of Measurement", new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
-			addRadioButton("Sensor Name", new ResourceSelectionPanel(additionalPanel1, new Sensor()));
+			addRadioButton("Measured Value", ToolTips.get("MeasuredValue"), new MeasuredValuePanel());
+			addRadioButton("Date & Time", ToolTips.get("DateAndTime"), new DateAndTimePanel());
+			addRadioButton("Position", ToolTips.get("Position"), new PositionPanel());
+			addRadioButton("Feature of Interest", ToolTips.get("FeatureOfInterest"), new ResourceSelectionPanel(additionalPanel1, new FeatureOfInterest()));
+			addRadioButton("Observed Property", ToolTips.get("ObservedProperty"), new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
+			addRadioButton("Unit of Measurement", ToolTips.get("UnitOfMeasurement"), new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
+			addRadioButton("Sensor", ToolTips.get("Sensor"), new ResourceSelectionPanel(additionalPanel1, new Sensor()));
 			addRadioButton("Do not export");				
 		}
 
@@ -96,10 +97,10 @@ public class Step3Panel extends JPanel {
 			
 			public MeasuredValuePanel() {	
 				super(additionalPanel1);		
-				addRadioButton("Numeric Value" , new NumericValuePanel(additionalPanel2));
-				addRadioButton("Count", new MeasuredValueSelectionPanel(additionalPanel2, new Count()));
-				addRadioButton("Boolean", new MeasuredValueSelectionPanel(additionalPanel2, new Boolean()));
-				addRadioButton("Text", new MeasuredValueSelectionPanel(additionalPanel2, new Text()));
+				addRadioButton("Numeric Value", ToolTips.get("NumericValue"), new NumericValuePanel(additionalPanel2));
+				addRadioButton("Count", ToolTips.get("Count"), new MeasuredValueSelectionPanel(additionalPanel2, new Count()));
+				addRadioButton("Boolean", ToolTips.get("Boolean"), new MeasuredValueSelectionPanel(additionalPanel2, new Boolean()));
+				addRadioButton("Text", ToolTips.get("Text"), new MeasuredValueSelectionPanel(additionalPanel2, new Text()));
 			}	
 		}
 		
@@ -109,7 +110,7 @@ public class Step3Panel extends JPanel {
 			
 			public DateAndTimePanel() {
 				super(additionalPanel1);
-				addRadioButton("Combination", new DateAndTimeCombinationPanel(additionalPanel2));
+				addRadioButton("Combination", null, new DateAndTimeCombinationPanel(additionalPanel2));
 				addRadioButton("UNIX time");
 			}	
 		}
@@ -120,7 +121,7 @@ public class Step3Panel extends JPanel {
 			
 			public PositionPanel() {
 				super(additionalPanel1);	
-				addRadioButton("Combination", new PositionCombinationPanel(additionalPanel2));
+				addRadioButton("Combination", null, new PositionCombinationPanel(additionalPanel2));
 			}
 		}	
 	}		

@@ -1,7 +1,7 @@
 package org.n52.sos.importer.controller;
 
-import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.interfaces.StepController;
+import org.n52.sos.importer.model.tooltips.ToolTips;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 
@@ -12,6 +12,7 @@ public class MainController {
 	private final MainFrame mainFrame = new MainFrame(this);
 	
 	private MainController() {
+		ToolTips.loadSettings();
 	}
 	
 	public static MainController getInstance() {
@@ -28,7 +29,6 @@ public class MainController {
 	}
 	
 	public void exit() {
-		Settings.getInstance().save();
 		//mainFrame.showExitDialog();
 		mainFrame.dispose();
 	}

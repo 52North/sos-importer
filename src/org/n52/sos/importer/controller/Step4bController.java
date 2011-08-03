@@ -75,6 +75,16 @@ public class Step4bController extends StepController {
 		step4Panel = null;
 	}
 	
+	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.deselectAllColumns();
+		tableController.setTableSelectionMode(TableController.CELLS);
+		tableController.removeMultipleSelectionListener();
+		
+		step4Panel = null;
+	};
+	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 
 		@Override

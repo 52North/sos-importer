@@ -1,7 +1,7 @@
 CSVFile=
 Comma-Separated Values (CSV) files represent
-tabular data in textual format. A CSV file
-could for example look like this:
+tabular data in textual format. A CSV file could
+have the following content:
 
 Date, Sensor1, Sensor2
 01.01.2011, 1.3, 1.4
@@ -10,7 +10,7 @@ Date, Sensor1, Sensor2
 ---
 ColumnSeparator=
 Columns in a CSV file are delimited by a 
-special character. For example ; separates 
+special character. For example, ; separates 
 the columns in the following CSV file:
 
 Date; Sensor1; Sensor2
@@ -20,7 +20,7 @@ Date; Sensor1; Sensor2
 ---
 CommentIndicator=
 Lines beginning with a comment character will
-not be imported. For example # indicates
+not be imported. For example, # indicates
 comments in the following CSV file:
 
 Date, Sensor1, Sensor2
@@ -31,8 +31,8 @@ Date, Sensor1, Sensor2
 ---
 TextQualifier=
 Fields in a CSV file that contain a special character 
-(e.g. the column separator or a new line) have to be
-enclosed by a text qualifier. For example "
+(e.g. a column separator or a new line) have to be
+enclosed by a text qualifier. For example, "
 escapes special symbols in the following CSV file:
 
 Nr, Observation
@@ -42,8 +42,8 @@ Nr, Observation
 ---
 MeasuredValue=
 A measured value is the result of a measurement or 
-an observation. For example, '37.1' would be the measured
-value of the temperature 37.1Â°C.
+an observation. For example '37.1' would be the measured
+value of the temperature 37.1°C.
 ---
 NumericValue=
 Numeric values are decimal numbers like 2.3 or -52.0.
@@ -73,28 +73,26 @@ can be classified as Text.
 FeatureOfInterest=
 A feature of interest is involved in making observations 
 concerning a domain feature. Exemplary features of interests
-are stations, transects, sections or specimen. [O&M]
+are stations, transects, sections or specimen. 
 ---
 ObservedProperty=
 An observed property is a natural phenomenon, which may 
 use one of a variety of scales including nominal, ordinal, 
 ratio and interval. The term is used regardless of whether 
 the value is due to an instrumental observation or a subjective 
-assignment [SensorML]. 'Temperature', 'PM10', 'Soil type' or
-'Weather condition' are all examples for observed properties.
+assignment. 'Temperature', 'PM10', 'Soil type' or
+'Weather condition' are examples for observed properties.
 ---
 UnitOfMeasurement=
 A unit of measurement is a definite magnitude of a 
 physical quantity, that is used as a standard for 
 measurement of the same physical quantity. For example
 'm' would be the unit of measurement of the length 10m.
-
-From: http://en.wikipedia.org/wiki/Units_of_measurement
 ---
 Sensor=
 A sensor is an entity capable of observing a phenomenon 
-and returning an observed value. [SensorML] 'ThermometerXYZ'
-and 'PM10SensorMÃ¼nster123' would be examples of sensors.
+and returning an observed value. 'ThermometerXYZ'
+and 'PM10SensorMünster123' are examples of sensors.
 ---
 DateAndTimePatterns=
 G - Era designator (e.g. AD)
@@ -116,11 +114,10 @@ s - Second in minute (e.g. 55)
 S - Millisecond (e.g. 978)
 z -	General time zone (e.g. Pacific Standard Time; PST; GMT-08:00
 Z - RFC 822 Time zone (e.g. -0800)
-[Java]
 ---
 DateAndTime=
 Date and time describe when a measurement was performed
-or a phenomenon has been observed.
+or when a phenomenon was observed.
 ---
 DateAndTimeGroups=
 When date and time are split into different columns
@@ -134,7 +131,7 @@ Date, Time, Value
 03.01.2011, 02:00:00, 6.5
 ---
 Position=
-The position indicates where the measurement took place. 
+The position indicates where a measurement took place. 
 In this application, the position is interpreted as the 
 location of the feature of interest. 
 ---
@@ -167,7 +164,7 @@ URL (e.g. http://www.eo2heaven.org/) or a URN
 SOS=
 A Sensor Observation Service provides an API for 
 managing deployed sensors and retrieving sensor data 
-and specifically "observation" data. [SOS]
+and specifically observation data. 
 ---
 EPSG=
 The European Petroleum Survey Group (EPSG) has 
@@ -177,11 +174,18 @@ positive integers ranging from 0 to 32767.
 ---
 ReferenceSystem=
 This is the name of the spatial reference system
-corresponding to the EPSG-Code.
+corresponding to the EPSG-Code on the right.
 ---
 UTCOffset=
 The UTC offset is the offset from the Coordinated
 Universal Time (UTC). It is usually given in hours 
 and minutes (e.g. +06:30). In this application, 
 only hours ranging from -12 to 12 are available.
+---
+REFERENCES=
+DateAndTimePatterns [http://download.oracle.com/javase/1.4.2/docs/api/java/text/SimpleDateFormat.html]
+FeatureOfInterest [O&M specification]
+UnitsOfMeasurement [http://en.wikipedia.org/wiki/Units_of_measurement]
+ObservedProperty, Sensor [SensorML specification]
+SOS [SOS specification]
 ---

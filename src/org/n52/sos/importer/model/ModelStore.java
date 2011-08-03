@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
@@ -17,6 +18,8 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
 
 public class ModelStore {
+	
+	private static final Logger logger = Logger.getLogger(ModelStore.class);
 	
 	private static ModelStore instance = null;
 	
@@ -233,10 +236,18 @@ public class ModelStore {
 	}
 
 	public void add(Step6bSpecialModel step6bSpecialModel) {
+		logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
+				step6bSpecialModel.getFeatureOfInterestName() + "\" and Observed Property \"" +
+				step6bSpecialModel.getObservedPropertyName() + "\"");
 		step6bSpecialModels.add(step6bSpecialModel);
 	} 
 	
 	public void remove(Step6bSpecialModel step6bSpecialModel) {
+		if (step6bSpecialModel.getSensor().getName() != null ||
+				step6bSpecialModel.getSensor().getURI() != null)
+			logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
+				step6bSpecialModel.getFeatureOfInterestName() + " and Observed Property \"" +
+				step6bSpecialModel.getObservedPropertyName()+ "\"");
 		step6bSpecialModels.remove(step6bSpecialModel);
 	}
 

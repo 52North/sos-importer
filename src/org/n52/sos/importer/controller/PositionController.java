@@ -46,7 +46,7 @@ public class PositionController {
 	}
 	
 	public void assignPattern(String pattern, TableElement tableElement) {		
-		logger.info("Assign pattern " + pattern + " in " + tableElement + " to " + position);
+		logger.info("Assign pattern " + pattern + " to " + position + " in " + tableElement);
 		
     	if (pattern.indexOf("LAT") != -1) 
     		position.setLatitude(new Latitude(tableElement, pattern));

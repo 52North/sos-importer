@@ -1,7 +1,6 @@
 package org.n52.sos.importer.model.tooltips;
 
 import javax.swing.JLabel;
-import javax.swing.ToolTipManager;
 
 public class ToolTipLabel extends JLabel {
 
@@ -9,9 +8,8 @@ public class ToolTipLabel extends JLabel {
 
 	public ToolTipLabel(String caption, String toolTip) {
 		super();
-		this.setText("<html><u>" + caption + "</u></html>");
+		this.setText("<html><span style='BORDER-BOTTOM: #FF7F50 dotted'>" + 
+				caption + "</span></html>");
 		this.setToolTipText(toolTip);
-		ToolTipManager.sharedInstance().setInitialDelay(250);
-		ToolTipManager.sharedInstance().setDismissDelay(50000);
 	}
 }

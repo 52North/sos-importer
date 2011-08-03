@@ -63,6 +63,15 @@ public class Step5cController extends StepController {
 		positionController = null;
 		step5Panel = null;
 	}
+	
+	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
+		
+		positionController = null;
+		step5Panel = null;
+	}
 
 	@Override
 	public boolean isFinished() {

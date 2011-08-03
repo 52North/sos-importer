@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.config.Settings;
 import org.n52.sos.importer.controller.MainController;
 
 public class MainFrame extends JFrame {
@@ -51,7 +52,7 @@ public class MainFrame extends JFrame {
 		super();
 		this.mainController = mainController;
 		this.setTitle("SOS Importer");
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowChanged());
 		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
@@ -73,11 +74,14 @@ public class MainFrame extends JFrame {
 	
 	public void showExitDialog() {
 		int n = JOptionPane.showConfirmDialog(
-			    this, "Do you really want to exit?\n"
-			    + "Your work progress will be lost.\n",
+			    this, "Do you really want to exit?\n",
 			    "Exit", JOptionPane.YES_NO_OPTION,
 			    JOptionPane.WARNING_MESSAGE);
-		if (n == JOptionPane.YES_OPTION) System.exit(0);
+
+		if (n == JOptionPane.YES_OPTION) {
+			Settings.getInstance().save();
+			System.exit(0);
+		}
 	}
 	
 	private class WindowChanged implements WindowListener {

@@ -142,10 +142,10 @@ public class Position extends Combination {
 
 	@Override
 	public String toString() {
-		if (getGroup() != null)
-			return "Position group " + getGroup();
-		else
-		return "Position (" + latitude + ", " + longitude + ", " 
+		if (getGroup() == null)
+			return "Position (" + latitude + ", " + longitude + ", " 
 			+ height + ", " + epsgCode + ")";
+		else
+			return "Position group " + getGroup();
 	}
 }

@@ -16,7 +16,6 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.model.tooltips.ToolTipLabel;
 import org.n52.sos.importer.model.tooltips.ToolTips;
 
 public class NumericValuePanel extends SelectionPanel {
@@ -26,8 +25,8 @@ public class NumericValuePanel extends SelectionPanel {
 	private final NumericValue numericValue = new NumericValue();
 	private final double exampleValue = 1234567.89;
 	
-	private final JLabel decimalSeparatorLabel = new ToolTipLabel("Decimal separator: ", ToolTips.get("DecimalSeparator"));
-	private final JLabel thousandsSeparatorLabel = new ToolTipLabel("Thousands separator: ", ToolTips.get("ThousandsSeparator"));
+	private final JLabel decimalSeparatorLabel = new JLabel("Decimal separator: ");
+	private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
 	private final JLabel exampleLabel = new JLabel("Example: ");
 
 	private final String[] decimalSeparators = Settings.getInstance().getDecimalSeparators();
@@ -43,7 +42,9 @@ public class NumericValuePanel extends SelectionPanel {
 		super(containerPanel);
 		setDefaultSelection();
 		decimalSeparatorCombobox.addActionListener(new DecimalSeparatorChanged());
+		decimalSeparatorCombobox.setToolTipText(ToolTips.get("DecimalSeparator"));
 		thousandsSeparatorCombobox.addActionListener(new ThousandsSeparatorChanged());
+		thousandsSeparatorCombobox.setToolTipText(ToolTips.get("ThousandsSeparator"));
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel separatorPanel = new JPanel();
