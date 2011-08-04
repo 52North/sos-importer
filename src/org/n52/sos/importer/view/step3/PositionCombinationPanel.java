@@ -3,8 +3,8 @@ package org.n52.sos.importer.view.step3;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.config.EditableComboBoxItems;
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
+import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.model.ModelStore;
@@ -14,7 +14,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class PositionCombinationPanel extends CombinationPanel {
 
@@ -28,7 +28,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 
 	@Override
 	public String[] getGroupItems() {
-		return Settings.getInstance().getPositionGroups();
+		return ComboBoxItems.getInstance().getPositionGroups();
 	}
 
 	@Override

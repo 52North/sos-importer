@@ -5,8 +5,8 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.config.EditableComboBoxItems;
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
+import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.model.ModelStore;
@@ -19,7 +19,7 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class DateAndTimeCombinationPanel extends CombinationPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
@@ -41,7 +41,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 
 	@Override
 	public String[] getGroupItems() {
-		return Settings.getInstance().getDateAndTimeGroups();
+		return ComboBoxItems.getInstance().getDateAndTimeGroups();
 	}
 
 	@Override

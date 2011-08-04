@@ -10,13 +10,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class NumericValuePanel extends SelectionPanel {
 
@@ -29,8 +29,8 @@ public class NumericValuePanel extends SelectionPanel {
 	private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
 	private final JLabel exampleLabel = new JLabel("Example: ");
 
-	private final String[] decimalSeparators = Settings.getInstance().getDecimalSeparators();
-	private final String[] thousandsSeparators = Settings.getInstance().getThousandsSeparators();
+	private final String[] decimalSeparators = ComboBoxItems.getInstance().getDecimalSeparators();
+	private final String[] thousandsSeparators = ComboBoxItems.getInstance().getThousandsSeparators();
 	
 	private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 	private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparators);
