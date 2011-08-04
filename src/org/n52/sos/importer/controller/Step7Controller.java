@@ -12,6 +12,12 @@ import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.Step8Model;
 import org.n52.sos.importer.view.Step7Panel;
 
+/**
+ * lets the user choose a URL of a Sensor Observation Service
+ * and test the connection
+ * @author Raimund
+ *
+ */
 public class Step7Controller extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step7Controller.class);

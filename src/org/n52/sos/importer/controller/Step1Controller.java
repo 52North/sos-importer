@@ -16,6 +16,11 @@ import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step1Panel;
 
+/**
+ * chooses a CSV file
+ * @author Raimund
+ *
+ */
 public class Step1Controller extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step1Controller.class);

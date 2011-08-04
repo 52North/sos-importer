@@ -12,6 +12,11 @@ import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.Step5Panel;
 
+/**
+ * lets the user add missing metadata for identified date&times
+ * @author Raimund
+ *
+ */
 public class Step5aController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step5aController.class);

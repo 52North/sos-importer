@@ -3,21 +3,14 @@ package org.n52.sos.importer.model.measuredValue;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.controller.DateAndTimeController;
-import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Parseable;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.model.position.Position;
-import org.n52.sos.importer.model.requests.InsertObservation;
-import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.model.table.Cell;
-import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 
 public abstract class MeasuredValue implements Parseable {
@@ -103,72 +96,6 @@ public abstract class MeasuredValue implements Parseable {
 
 	public DateAndTime getDateAndTime() {
 		return dateAndTime;
-	}
-	
-	public void print() {
-		Column column = (Column) getTableElement();
-		DateAndTimeController dtc = new DateAndTimeController();
-		
-		for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
-			RegisterSensor rs = new RegisterSensor();
-			InsertObservation io = new InsertObservation();
-			
-			//the cell of the current Measured Value
-			Cell c = new Cell(i, column.getNumber());
-			String value = TableController.getInstance().getValueAt(c);
-			try {
-				String parsedValue = parse(value).toString();
-				io.setValue(parsedValue);
-			} catch (Exception e) {
-				continue;
-			}
-			
-			//when was the current Measured Value measured
-			dtc.setDateAndTime(getDateAndTime());
-			String timeStamp = dtc.forThis(c);	
-			io.setTimeStamp(timeStamp);
-			
-			FeatureOfInterest foi = getFeatureOfInterest().forThis(c);
-			io.setFeatureOfInterestName(foi.getNameString());
-			io.setFeatureOfInterestURI(foi.getURIString());
-			
-			//where was the current Measured Value measured
-			Position p = foi.getPosition();
-			io.setLatitudeValue(p.getLatitude().getValue() + "");
-			io.setLongitudeValue(p.getLongitude().getValue() + "");
-			io.setEpsgCode(p.getEPSGCode().getValue() + "");
-			rs.setLatitudeValue(p.getLatitude().getValue() + "");
-			rs.setLatitudeUnit(p.getLatitude().getUnit());
-			rs.setLongitudeValue(p.getLongitude().getValue() + "");
-			rs.setLongitudeUnit(p.getLongitude().getUnit());
-			rs.setHeightValue(p.getHeight().getValue() + "");
-			rs.setHeightUnit(p.getHeight().getUnit());
-			rs.setEpsgCode(p.getEPSGCode().getValue() + "");
-			
-			ObservedProperty op = getObservedProperty().forThis(c);
-			io.setObservedPropertyURI(op.getURIString());
-			rs.setObservedPropertyName(op.getNameString());
-			rs.setObservedPropertyURI(op.getURIString());
-			
-			UnitOfMeasurement uom = getUnitOfMeasurement().forThis(c);
-			io.setUnitOfMeasurementCode(uom.getNameString());
-			rs.setUnitOfMeasurementCode(uom.getNameString());
-			
-			Sensor sensor = this.sensor;
-			if (sensor != null) {
-				 sensor = getSensor().forThis(c);
-			} else { //Step6bSpecialController
-				sensor = getSensorFor(foi.getNameString(), op.getNameString());
-			}
-			
-			io.setSensorName(sensor.getNameString());
-			io.setSensorURI(sensor.getURIString());
-			rs.setSensorName(sensor.getNameString());
-			rs.setSensorURI(sensor.getURIString());
-				
-			ModelStore.getInstance().addObservationToInsert(io);
-			ModelStore.getInstance().addSensorToRegister(rs);
-		}
 	}
 	
 	public Sensor getSensorFor(String featureOfInterestName, String observedPropertyName) {

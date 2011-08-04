@@ -12,6 +12,12 @@ import org.n52.sos.importer.model.Step3aModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
 
+/**
+ * lets the user identify different types of metadata 
+ * for each column in the CSV file
+ * @author Raimund
+ *
+ */
 public class Step3aController extends StepController {
 
 	private Step3Panel step3Panel;

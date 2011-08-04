@@ -15,6 +15,12 @@ import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
 
+/**
+ * shows progress while assembling data, registering sensors
+ * and inserting observations, provides a link to the log file
+ * @author Raimund
+ *
+ */
 public class Step8Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

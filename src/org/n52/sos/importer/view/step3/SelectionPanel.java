@@ -7,6 +7,11 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.table.TableElement;
 
+/**
+ * used for different kinds of selections in step 3
+ * @author Raimund
+ *
+ */
 public abstract class SelectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -26,13 +31,24 @@ public abstract class SelectionPanel extends JPanel {
 	
 	protected abstract String getSelection();
 	
+	/**
+	 * called when a combobox which contains patterns 
+	 * changes its selection
+	 */
 	protected void patternChanged() {	
-		//TODO selectionListener instead
 	}
 	
+	/**
+	 * called when a selection has been restored
+	 */
 	protected void reinit() {
 	}
 	
+	/**
+	 * called to restore the selection of a column
+	 * in step 3
+	 * @param selections
+	 */
 	public void restore(List<String> selections) {
 		getContainerPanel().add(this);
 		String s = selections.get(0);
@@ -47,6 +63,10 @@ public abstract class SelectionPanel extends JPanel {
 		}
 	}	
 	
+	/**
+	 * called when a column in step 3 has
+	 * not been visited yet
+	 */
 	public void restoreDefault() {
 		setDefaultSelection();
 		
@@ -56,6 +76,11 @@ public abstract class SelectionPanel extends JPanel {
 	
 	public abstract void setDefaultSelection();
 	
+	/**
+	 * stores the current selection for this column
+	 * in step 3
+	 * @param selections
+	 */
 	public void store(List<String> selections) {
 		String s = getSelection();
 		selections.add(s);
@@ -72,10 +97,18 @@ public abstract class SelectionPanel extends JPanel {
 		return selectedChildPanel;
 	}
 	
+	/**
+	 * called when the child panel's selection changes 
+	 * @param childPanel
+	 */
 	public void setSelectedChildPanel(SelectionPanel childPanel) {
 		this.selectedChildPanel = childPanel;
 	}
 	
+	/**
+	 * called when the child panel's selection changes
+	 * @param childPanel
+	 */
 	public void setSelectedChildPanel(String childPanelName) {
 		this.selectedChildPanel = childPanels.get(childPanelName);
 	}
@@ -89,6 +122,10 @@ public abstract class SelectionPanel extends JPanel {
 		childPanels.put(childPanelName, childPanel);
 	}
 	
+	/**
+	 * adds this and recursively the selected child panel 
+	 * to one of the container panels of step 3
+	 */
 	public void addToContainerPanel() {
 		getContainerPanel().add(this);		
 		SelectionPanel childPanel = getSelectedChildPanel();
@@ -111,7 +148,15 @@ public abstract class SelectionPanel extends JPanel {
 			sp.removeFromContainerPanel();
 	}
 	
+	/**
+	 * assigns this selection to a column, row or a cell
+	 * @param tableElement
+	 */
 	public abstract void assign(TableElement tableElement);
 	
+	/**
+	 * unassigns this selection from a column, row or a cell
+	 * @param tableElement
+	 */
 	public abstract void unassign(TableElement tableElement);
 }

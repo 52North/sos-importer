@@ -9,6 +9,11 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.TableElement;
 
+/**
+ * assigns or unassigns columns to Booleans, Counts and Text
+ * @author Raimund
+ *
+ */
 public class MeasuredValueSelectionPanel extends SelectionPanel {
 
 	private static final long serialVersionUID = 1L;

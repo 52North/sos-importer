@@ -1,5 +1,11 @@
 package org.n52.sos.importer.interfaces;
 
+/**
+ * represents composed objects (e.g. position) which consist
+ * of individual parts (e.g. latitude and longitude)
+ * @author Raimund
+ *
+ */
 public abstract class Combination implements Formatable, Parseable {
 
 	/** for parsing */

@@ -8,6 +8,12 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
+/**
+ * solves ambiguities in case there is more than one position column
+ * (needs apparently to be implemented)
+ * @author Raimund
+ *
+ */
 public class Step4cController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step4cController.class);

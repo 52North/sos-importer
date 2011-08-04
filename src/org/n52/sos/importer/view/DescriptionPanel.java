@@ -4,6 +4,11 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * description label at the top of the main frame
+ * @author Raimund
+ *
+ */
 public class DescriptionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

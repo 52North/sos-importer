@@ -13,6 +13,12 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
 
+/**
+ * solves ambiguities in case there is more than one feature of interest,
+ * observed property, unit of measurement or sensor column
+ * @author Raimund
+ *
+ */
 public class Step4bController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step4bController.class);

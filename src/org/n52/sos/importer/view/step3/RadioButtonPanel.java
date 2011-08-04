@@ -14,6 +14,11 @@ import javax.swing.JRadioButton;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.model.table.TableElement;
 
+/**
+ * used for all radio buttons in step 3
+ * @author Raimund
+ *
+ */
 public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	private static final long serialVersionUID = 1L;
@@ -25,6 +30,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
         this.setLayout(new GridLayout(0, 1));
 	}
 	
+	/**
+	 * creates a radio button with the given name on the panel
+	 * @param name
+	 */
 	protected void addRadioButton(String name) {
 		JRadioButton radioButton = new JRadioButton(name);
 		radioButton.addActionListener(new RemoveChildPanel());
@@ -34,6 +43,11 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		this.add(radioButton);
 	}
 	
+	/**
+	 * creates a radio button with the given name on the panel,
+	 * when this button is pressed the given selection panel appears
+	 * @param name
+	 */
 	protected void addRadioButton(String name, String toolTip, SelectionPanel childPanel) {
 		JRadioButton radioButton = new JRadioButton(name);
 		if (toolTip != null) 
@@ -89,6 +103,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	public void unassign(TableElement tableElement) {
 	};
 	
+	/**
+	 * action when a radio button with selection panel is pressed
+	 * @author Raimund
+	 */
 	private class AddChildPanel implements ActionListener {
 		SelectionPanel childPanel;
 		
@@ -109,6 +127,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		}	
 	}
 	
+	/**
+	 * action when a radio button without any child panels is pressed
+	 * @author Raimund
+	 */
 	private class RemoveChildPanel implements ActionListener {
 		
 		@Override

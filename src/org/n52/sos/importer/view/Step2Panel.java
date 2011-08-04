@@ -9,6 +9,12 @@ import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * offers settings for parsing the CSV file and 
+ * displays a preview of the CSV file
+ * @author Raimund
+ *
+ */
 public class Step2Panel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;

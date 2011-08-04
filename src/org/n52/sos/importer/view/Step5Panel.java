@@ -9,6 +9,13 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
+/**
+ * consists of an instruction panel, the table and 
+ * a container panel for all missing components
+ * (used for steps 5a, 5c, 6a, 6b) 
+ * @author Raimund
+ *
+ */
 public class Step5Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

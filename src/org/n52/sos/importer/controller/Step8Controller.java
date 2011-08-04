@@ -28,10 +28,24 @@ import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step8Model;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step8Panel;
 
+/**
+ * assembles all information from previous steps,
+ * fills XML template files with it and uploads
+ * them to the Sensor Observation Service
+ * @author Raimund
+ *
+ */
 public class Step8Controller extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step8Controller.class);
@@ -92,9 +106,7 @@ public class Step8Controller extends StepController {
 			step8Panel.setIndeterminate(true);
 			
 			logger.info("Assemble information from table and previous steps");
-			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-				mv.print();
-			}
+			assembleInformation();
 			
 			for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
 				logger.debug(rs);
@@ -110,6 +122,74 @@ public class Step8Controller extends StepController {
             assembleInformationDone();
         }
     }
+    
+	public void assembleInformation() {
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			Column column = (Column) mv.getTableElement();
+			DateAndTimeController dtc = new DateAndTimeController();
+			
+			for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
+				RegisterSensor rs = new RegisterSensor();
+				InsertObservation io = new InsertObservation();
+				
+				//the cell of the current Measured Value
+				Cell c = new Cell(i, column.getNumber());
+				String value = TableController.getInstance().getValueAt(c);
+				try {
+					String parsedValue = mv.parse(value).toString();
+					io.setValue(parsedValue);
+				} catch (Exception e) {
+					continue;
+				}
+				
+				//when was the current Measured Value measured
+				dtc.setDateAndTime(mv.getDateAndTime());
+				String timeStamp = dtc.forThis(c);	
+				io.setTimeStamp(timeStamp);
+				
+				FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(c);
+				io.setFeatureOfInterestName(foi.getNameString());
+				io.setFeatureOfInterestURI(foi.getURIString());
+				
+				//where was the current Measured Value measured
+				Position p = foi.getPosition();
+				io.setLatitudeValue(p.getLatitude().getValue() + "");
+				io.setLongitudeValue(p.getLongitude().getValue() + "");
+				io.setEpsgCode(p.getEPSGCode().getValue() + "");
+				rs.setLatitudeValue(p.getLatitude().getValue() + "");
+				rs.setLatitudeUnit(p.getLatitude().getUnit());
+				rs.setLongitudeValue(p.getLongitude().getValue() + "");
+				rs.setLongitudeUnit(p.getLongitude().getUnit());
+				rs.setHeightValue(p.getHeight().getValue() + "");
+				rs.setHeightUnit(p.getHeight().getUnit());
+				rs.setEpsgCode(p.getEPSGCode().getValue() + "");
+				
+				ObservedProperty op = mv.getObservedProperty().forThis(c);
+				io.setObservedPropertyURI(op.getURIString());
+				rs.setObservedPropertyName(op.getNameString());
+				rs.setObservedPropertyURI(op.getURIString());
+				
+				UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(c);
+				io.setUnitOfMeasurementCode(uom.getNameString());
+				rs.setUnitOfMeasurementCode(uom.getNameString());
+				
+				Sensor sensor = mv.getSensor();
+				if (sensor != null) {
+					 sensor = mv.getSensor().forThis(c);
+				} else { //Step6bSpecialController
+					sensor = mv.getSensorFor(foi.getNameString(), op.getNameString());
+				}
+				
+				io.setSensorName(sensor.getNameString());
+				io.setSensorURI(sensor.getURIString());
+				rs.setSensorName(sensor.getNameString());
+				rs.setSensorURI(sensor.getURIString());
+					
+				ModelStore.getInstance().addObservationToInsert(io);
+				ModelStore.getInstance().addSensorToRegister(rs);
+			}
+		}
+	}
 	
     private class RegisterSensors extends SwingWorker<Void, Void> {
 
@@ -240,14 +320,11 @@ public class Step8Controller extends StepController {
 
 	        return answer;
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while sending POST request to SOS", e);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while sending POST request to SOS", e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while sending POST request to SOS", e);
 		}
 		
 		return "";

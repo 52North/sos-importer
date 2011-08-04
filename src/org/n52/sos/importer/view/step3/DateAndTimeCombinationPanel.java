@@ -21,6 +21,11 @@ import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * selection panel in step 3 for date&time combinations
+ * @author Raimund
+ *
+ */
 public class DateAndTimeCombinationPanel extends CombinationPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
 	// 			examples/components/ComboBoxDemo2Project/src/components/

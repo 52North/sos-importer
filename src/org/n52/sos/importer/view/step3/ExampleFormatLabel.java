@@ -6,6 +6,11 @@ import javax.swing.JLabel;
 
 import org.n52.sos.importer.interfaces.Formatable;
 
+/**
+ * formats an exemplary String along the selected pattern
+ * @author Raimund
+ *
+ */
 public class ExampleFormatLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;

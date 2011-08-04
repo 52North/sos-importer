@@ -12,8 +12,15 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
-import org.n52.sos.importer.view.Step6cPanel;
+import org.n52.sos.importer.view.Step6Panel;
 
+/**
+ * lets the user choose the position for each feature of interest
+ * (either stored in a column or manually selected) 
+ * in case there are not any positions given in the CSV file
+ * @author Raimund
+ *
+ */
 public class Step6cController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step6cController.class);
@@ -22,7 +29,7 @@ public class Step6cController extends StepController {
 	
 	private PositionController positionController;
 	
-	private Step6cPanel step6cPanel;
+	private Step6Panel step6cPanel;
 	
 	public Step6cController() {
 	}
@@ -50,7 +57,7 @@ public class Step6cController extends StepController {
 		
 		String description = step6cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
-		step6cPanel = new Step6cPanel(description, name, null, missingComponentPanels);	
+		step6cPanel = new Step6Panel(description, name, null, missingComponentPanels);	
 	}
 
 	@Override

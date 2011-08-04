@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+/**
+ * contains the table which is used by step panels 3, 4 and 5
+ * @author Raimund
+ *
+ */
 public class TablePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

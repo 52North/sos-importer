@@ -21,6 +21,12 @@ import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
 import org.n52.sos.importer.view.step3.SelectionPanel;
 
+/**
+ * consists of the table and a radio button panel for 
+ * different types of metadata
+ * @author Raimund
+ *
+ */
 public class Step3Panel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;

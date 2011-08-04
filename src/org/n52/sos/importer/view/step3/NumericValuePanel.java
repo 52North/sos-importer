@@ -18,6 +18,14 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * selection panel in step 3 for numeric values,
+ * offers the functions to choose different separators,
+ * to provide an example for the separators and 
+ * to test parsing the marked values in the table 
+ * @author Raimund
+ *
+ */
 public class NumericValuePanel extends SelectionPanel {
 
 	private static final long serialVersionUID = 1L;

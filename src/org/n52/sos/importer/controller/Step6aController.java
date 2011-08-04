@@ -15,7 +15,8 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.view.Step5Panel;
 
 /**
- * in case of no date&time 
+ * lets the user choose date&time for all measured value columns 
+ * in case there are not any date&times given in the CSV file
  * @author Raimund
  *
  */

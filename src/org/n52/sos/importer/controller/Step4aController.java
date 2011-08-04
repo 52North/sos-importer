@@ -12,6 +12,11 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
 
+/**
+ * solves ambiguities in case there is more than one date&time column
+ * @author Raimund
+ *
+ */
 public class Step4aController extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step4aController.class);

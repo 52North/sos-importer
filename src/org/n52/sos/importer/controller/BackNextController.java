@@ -4,6 +4,11 @@ import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.view.BackNextPanel;
 
+/**
+ * controls the actions when the back or next button is pressed
+ * @author Raimund
+ *
+ */
 public class BackNextController {
 	
 	private static BackNextController instance = null;

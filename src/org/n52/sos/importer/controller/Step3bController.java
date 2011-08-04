@@ -4,6 +4,13 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.interfaces.StepController;
 
+/**
+ * lets the user identify different types of metadata 
+ * for each row in the CSV file 
+ * (needs apparently to be implemented)
+ * @author Raimund
+ *
+ */
 public class Step3bController extends StepController {
 
 	@Override

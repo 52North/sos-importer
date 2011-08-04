@@ -4,6 +4,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * consists of a short instruction label and the table
+ * @author Raimund
+ *
+ */
 public class Step4Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

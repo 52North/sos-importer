@@ -9,6 +9,12 @@ import javax.swing.JLabel;
 
 import org.n52.sos.importer.interfaces.Parseable;
 
+/**
+ * label which shows the success of parsing a marked column 
+ * in the table and shows all values which could not be parsed
+ * @author Raimund
+ *
+ */
 public class ParseTestLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;

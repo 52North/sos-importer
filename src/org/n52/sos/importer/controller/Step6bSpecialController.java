@@ -17,16 +17,23 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
-import org.n52.sos.importer.view.Step6cPanel;
+import org.n52.sos.importer.view.Step6Panel;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
 
+/**
+ * used to determine sensors in case there is one of the following 
+ * relationships between feature of interest and observed property
+ * column: 0:1, 0:n, n:0, 1:0, 1:1, n:n
+ * @author Raimund
+ *
+ */
 public class Step6bSpecialController extends StepController {
 	
 	private static final Logger logger = Logger.getLogger(Step6bSpecialController.class);
 
 	private Step6bSpecialModel step6bSpecialModel;
 	
-	private Step6cPanel step6cPanel;
+	private Step6Panel step6cPanel;
 	
 	private MissingResourcePanel missingResourcePanel;
 
@@ -52,7 +59,7 @@ public class Step6bSpecialController extends StepController {
 		List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		missingComponentPanels.add(missingResourcePanel);
 		
-		step6cPanel = new Step6cPanel(description, foiName, opName, missingComponentPanels);
+		step6cPanel = new Step6Panel(description, foiName, opName, missingComponentPanels);
 	}
 
 	@Override

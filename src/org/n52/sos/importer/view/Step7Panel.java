@@ -6,6 +6,11 @@ import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * chooses the URL of the Sensor Observation Service
+ * @author Raimund
+ *
+ */
 public class Step7Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

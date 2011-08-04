@@ -11,6 +11,11 @@ import javax.swing.JTextField;
 import org.n52.sos.importer.controller.Step1Controller;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * chooses a CSV file
+ * @author Raimund
+ *
+ */
 public class Step1Panel extends JPanel {
 	
 	static final long serialVersionUID = 1L;

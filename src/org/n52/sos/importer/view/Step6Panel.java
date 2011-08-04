@@ -10,7 +10,14 @@ import javax.swing.JTextField;
 
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
-public class Step6cPanel extends JPanel {
+/**
+ * consists of a customized instruction panel and 
+ * a container panel for all missing components
+ * (used for steps 6bspecial and 6c) 
+ * @author Raimund
+ *
+ */
+public class Step6Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +29,7 @@ public class Step6cPanel extends JPanel {
 	
 	private final JPanel containerPanel = new JPanel();
 	
-	public Step6cPanel(String description, String featureOfInterestName, 
+	public Step6Panel(String description, String featureOfInterestName, 
 			String observedPropertyName, List<MissingComponentPanel> missingComponentPanels) {
 		super();
 		descriptionLabel1.setText(description + " feature of interest ");

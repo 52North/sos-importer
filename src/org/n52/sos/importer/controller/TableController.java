@@ -18,6 +18,11 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.TablePanel;
 
+/**
+ * provides all necessary functions for modifying the table
+ * @author Raimund
+ *
+ */
 public class TableController {
 	
 	private static TableController instance = null;

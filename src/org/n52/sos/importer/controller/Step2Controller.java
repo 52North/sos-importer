@@ -14,6 +14,11 @@ import org.n52.sos.importer.view.Step2Panel;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+/**
+ * offers settings for parsing the CSV file
+ * @author Raimund
+ *
+ */
 public class Step2Controller extends StepController {
 
 	private static final long serialVersionUID = 1L;

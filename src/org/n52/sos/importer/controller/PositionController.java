@@ -19,6 +19,11 @@ import org.n52.sos.importer.view.position.MissingHeightPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
 import org.n52.sos.importer.view.position.MissingLongitudePanel;
 
+/**
+ * handles operations on Position objects
+ * @author Raimund
+ *
+ */
 public class PositionController {
 	
 	private static final Logger logger = Logger.getLogger(PositionController.class);

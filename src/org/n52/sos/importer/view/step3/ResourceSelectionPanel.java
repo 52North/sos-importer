@@ -6,6 +6,12 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 
+/**
+ * assigns or unassigns columns to Feature of Interests, Observed 
+ * Properties, Units of Measurement and Sensors
+ * @author Raimund
+ *
+ */
 public class ResourceSelectionPanel extends SelectionPanel {
 
 	private static final long serialVersionUID = 1L;

@@ -16,6 +16,11 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * selection panel in step 3 for position combinations
+ * @author Raimund
+ *
+ */
 public class PositionCombinationPanel extends CombinationPanel {
 
 	private static final long serialVersionUID = 1L;

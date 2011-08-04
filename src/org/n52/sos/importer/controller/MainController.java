@@ -5,6 +5,12 @@ import org.n52.sos.importer.tooltips.ToolTips;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 
+/**
+ * controls the main frame of the application,
+ * changes step panels and exits the application
+ * @author Raimund
+ *
+ */
 public class MainController {
 	
 	private static MainController instance = null;

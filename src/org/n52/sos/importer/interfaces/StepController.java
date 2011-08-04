@@ -7,29 +7,47 @@ public abstract class StepController {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * called when Back is pressed or
-	 * when step controller is newly initialized
+	 * called when the step controller is newly initialized
+	 * or when the Back button is pressed, loads settings 
+	 * from the model and creates the view
 	 */
 	public abstract void loadSettings();
 	
 	/**
-	 * called when Next is pressed
+	 * called when the Next button is pressed,
+	 * checks if all information has been collected for this step
+	 */
+	public abstract boolean isFinished();
+	
+	/**
+	 * called when the Next button is pressed and the step is 
+	 * finished, saves all settings of this step in the model
+	 * and releases all views
 	 */
 	public abstract void saveSettings();
 	
+	/**
+	 * returns a short description of this step to be displayed
+	 * on the description panel of the main frame
+	 */
 	public abstract String getDescription();
 	
+	/**
+	 * returns the corresponding step panel
+	 */
 	public abstract JPanel getStepPanel();
 	
 	/**
 	 * returns the controller for the next step
-	 * @return
 	 */
 	public abstract StepController getNextStepController();
 	
+	/**
+	 * checks before loading the settings if this 
+	 * step is needed, if not it will be skipped
+	 * @return
+	 */
 	public abstract boolean isNecessary();
-	
-	public abstract boolean isFinished();
 	
 	/**
 	 * returns a StepController of the same type
@@ -47,7 +65,6 @@ public abstract class StepController {
 	/**
 	 * checks if all conditions for this step controller 
 	 * which has been already been displayed are up to date
-	 * @return
 	 */
 	public boolean isStillValid() {
 		return false;

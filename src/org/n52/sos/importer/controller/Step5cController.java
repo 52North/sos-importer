@@ -12,6 +12,11 @@ import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.Step5Panel;
 
+/**
+ * lets the user add missing metadata for identified positions
+ * @author Raimund
+ *
+ */
 public class Step5cController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step5cController.class);

@@ -14,6 +14,14 @@ import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
 
+/**
+ * selection panel in step 3 for date&time and position combinations,
+ * offers the functions to choose different patterns, to provide an 
+ * example for the pattern, to test parsing the marked values in the 
+ * table and to choose a group for the combination
+ * @author Raimund
+ *
+ */
 public abstract class CombinationPanel extends SelectionPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
 	// 			examples/components/ComboBoxDemo2Project/src/components/

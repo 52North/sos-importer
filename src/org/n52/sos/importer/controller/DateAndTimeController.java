@@ -27,6 +27,11 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 import org.n52.sos.importer.view.dateAndTime.MissingYearPanel;
 
+/**
+ * handles operations on DateAndTime objects
+ * @author Raimund
+ * 
+ */
 public class DateAndTimeController {
 	
 	private static final Logger logger = Logger.getLogger(DateAndTimeController.class);
