@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
