@@ -6,12 +6,12 @@ import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
-import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class MissingResourcePanel extends MissingComponentPanel {
 
