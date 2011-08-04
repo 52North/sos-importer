@@ -35,8 +35,7 @@ public class MainController {
 	}
 	
 	public void exit() {
-		//mainFrame.showExitDialog();
-		mainFrame.dispose();
+		mainFrame.showExitDialog();
 	}
 	
 	public void pack() {

@@ -1,13 +1,12 @@
 package org.n52.sos.importer.combobox;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Properties;
 
 import javax.swing.DefaultComboBoxModel;
@@ -27,7 +26,11 @@ public class ComboBoxItems {
 	
 	private static final String SEPARATOR = "SEP";
 	
-	private static final String FILE_PATH = "/org/n52/sos/importer/combobox/ComboBoxItems.properties";
+	private static final String EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator;
+	
+	private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";
+	
+	private static final String FILE_NAME = "ComboBoxItems.properties";
 	
 	private final Properties props = new Properties();
 	
@@ -85,9 +88,18 @@ public class ComboBoxItems {
 	}
 	
 	public void load() {
-        InputStream is;
 		try {
-			is = this.getClass().getResourceAsStream(FILE_PATH);
+			InputStream is;
+			String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
+			File file = new File(filePath);
+			if (!file.exists()) {//use default properties in jar file
+				filePath = INTERNAL_FILE_PATH + FILE_NAME;
+				is = getClass().getResourceAsStream(filePath);
+			} else {
+				is = new FileInputStream(file);
+			}
+			logger.info("Load settings from: " + filePath);
+			 
 			props.load(is);     
 		} catch (FileNotFoundException e) {
 			logger.error("SOS Importer Settings not found", e);
@@ -149,13 +161,7 @@ public class ComboBoxItems {
 		props.setProperty("unitOfMeasurementURIs", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
 		props.setProperty("sensorURIs", format(EditableComboBoxItems.getInstance().getSensorURIs()));
 		
-		URL url = this.getClass().getResource(FILE_PATH);
-		File file;
-		try {
-			file = new File(url.toURI());
-		} catch (URISyntaxException e) {
-			file = new File(url.getPath());
-		}
+		File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
 		logger.info("Save settings at " + file.getAbsolutePath());
 		try { //save properties
 			OutputStream os = new FileOutputStream(file);

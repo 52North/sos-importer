@@ -3,11 +3,10 @@ package org.n52.sos.importer.controller;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -203,6 +202,7 @@ public class Step8Controller extends StepController {
     		int successful = 0;
     		int errors = 0;
     		int total = ModelStore.getInstance().getSensorsToRegister().size();
+    		
     		step8Panel.setTotalNumberOfSensors(total);
     		Iterator<RegisterSensor> i = ModelStore.getInstance().getSensorsToRegister().iterator();
 
@@ -277,26 +277,18 @@ public class Step8Controller extends StepController {
         }
     }
     
-	private String readTemplate(String templateName) {
-		URL url = Step7Controller.class.getResource("/org/n52/sos/importer/templates/");
-		File file;
-		try {
-			file = new File(url.toURI());
-		} catch (URISyntaxException e) {
-			file = new File(url.getPath());
-		}
-		File f = new File(file.getAbsolutePath() + "/" + templateName + ".xml");
-		
+	private String readTemplate(String templateName) {	
 		StringBuilder sb = new StringBuilder();
 		try {
-			FileReader fr = new FileReader(f);
+			InputStream is = this.getClass().getResourceAsStream("/org/n52/sos/importer/templates/" + templateName + ".xml");
+			InputStreamReader fr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(fr);
 			
 			String line;
 			while ((line = br.readLine()) != null)
 				sb.append(line + "\n");
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			logger.error("Error while reading template.", ioe);
 		}
 		return sb.toString();
 	}
@@ -317,7 +309,6 @@ public class Step8Controller extends StepController {
 			HttpEntity resEntity = response.getEntity();
 			if (resEntity != null) 
 	        	answer = EntityUtils.toString(resEntity);
-
 	        return answer;
 		} catch (UnsupportedEncodingException e) {
 			logger.error("Error while sending POST request to SOS", e);
