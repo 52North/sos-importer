@@ -1,6 +1,6 @@
 package org.n52.sos.importer.model;
 
-import org.n52.sos.importer.config.EditableComboBoxItems;
+import org.n52.sos.importer.combobox.EditableComboBoxItems;
 
 public class Step2Model {
 
