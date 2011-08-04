@@ -12,7 +12,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;

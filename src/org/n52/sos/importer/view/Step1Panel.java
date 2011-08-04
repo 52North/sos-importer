@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.controller.Step1Controller;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class Step1Panel extends JPanel {
 	

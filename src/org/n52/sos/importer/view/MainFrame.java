@@ -35,7 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.controller.MainController;
 
 public class MainFrame extends JFrame {
@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
 			    JOptionPane.WARNING_MESSAGE);
 
 		if (n == JOptionPane.YES_OPTION) {
-			Settings.getInstance().save();
+			ComboBoxItems.getInstance().save();
 			System.exit(0);
 		}
 	}
