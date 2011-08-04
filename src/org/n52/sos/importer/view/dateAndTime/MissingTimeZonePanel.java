@@ -9,7 +9,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
