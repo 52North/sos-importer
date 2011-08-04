@@ -4,13 +4,13 @@ import java.awt.FlowLayout;
 
 import javax.swing.JOptionPane;
 
-import org.n52.sos.importer.config.EditableComboBoxItems;
-import org.n52.sos.importer.config.EditableJComboBoxPanel;
+import org.n52.sos.importer.combobox.EditableComboBoxItems;
+import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
-import org.n52.sos.importer.model.tooltips.ToolTips;
+import org.n52.sos.importer.tooltips.ToolTips;
 
 public class MissingEPSGCodePanel extends MissingComponentPanel {
 	

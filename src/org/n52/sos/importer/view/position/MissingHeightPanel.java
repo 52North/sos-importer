@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Height;
@@ -22,7 +22,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
 	private final JLabel heightLabel = new JLabel("   Altitude / Height: ");
 	private final JTextField heightTextField = new JTextField(8);
 	private final JLabel heightUnitLabel = new JLabel("   Unit: ");
-	private final JComboBox heightUnitComboBox = new JComboBox(Settings.getInstance().getHeightUnits());
+	private final JComboBox heightUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getHeightUnits());
 	
 	public MissingHeightPanel(Position position) {
 		super();

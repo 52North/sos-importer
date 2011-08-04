@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.config.Settings;
+import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Longitude;
@@ -22,7 +22,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	private final JLabel longitudeLabel = new JLabel("   Longitude / Easting: ");
 	private final JTextField longitudeTextField = new JTextField(8);
 	private final JLabel longitudeUnitLabel = new JLabel("   Unit: ");
-	private final JComboBox longitudeUnitComboBox = new JComboBox(Settings.getInstance().getLatLonUnits());
+	private final JComboBox longitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
 	
 	public MissingLongitudePanel(Position position) {
 		super();
