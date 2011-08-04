@@ -3,6 +3,10 @@ package org.n52.sos.importer;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step1Controller;
 
+/**
+ * Starts the SOS-Importer
+ * @author Raimund
+ */
 public class Start {
 	
 	public static void main(String[] args) {
