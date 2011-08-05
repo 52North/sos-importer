@@ -15,6 +15,10 @@ import org.n52.sos.importer.model.dateAndTime.Minute;
 import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.Time;
 
+/**
+ * consists of a label and a JSpinner for hour, minute and second
+ * @author Raimund
+ */
 public class MissingTimePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;

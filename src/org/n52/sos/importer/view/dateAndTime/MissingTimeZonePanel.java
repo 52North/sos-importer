@@ -11,6 +11,10 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * consists of a label and a JSpinner for the UTC offset
+ * @author Raimund
+ */
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;

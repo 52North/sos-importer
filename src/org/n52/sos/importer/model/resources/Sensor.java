@@ -32,6 +32,7 @@ public class Sensor extends Resource {
 		mv.setSensor(null);		
 	}
 	
+	@Override
 	public Sensor forThis(Cell measuredValuePosition) {
 		Sensor s = new Sensor();
 		if (getTableElement() == null) {

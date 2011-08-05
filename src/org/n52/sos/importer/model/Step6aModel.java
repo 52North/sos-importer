@@ -32,11 +32,19 @@ public class Step6aModel {
 		return description;
 	}
 
+	/**
+	 * saves the components which are missing for this step
+	 * (= all date&time components)
+	 */
 	public void setMissingDateAndTimeComponents(
 			List<Component> missingDateAndTimeComponents) {
 		this.missingDateAndTimeComponents = missingDateAndTimeComponents;
 	}
 
+	/**
+	 * returns the components which were missing for this step 
+	 * (= all date&time components)
+	 */
 	public List<Component> getMissingDateAndTimeComponents() {
 		return missingDateAndTimeComponents;
 	}

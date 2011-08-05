@@ -15,6 +15,10 @@ import org.n52.sos.importer.model.dateAndTime.Day;
 import org.n52.sos.importer.model.dateAndTime.Month;
 import org.n52.sos.importer.model.dateAndTime.Year;
 
+/**
+ * consists of a label and a JSpinner for year, month and day
+ * @author Raimund
+ */
 public class MissingDatePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;

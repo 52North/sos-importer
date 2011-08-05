@@ -5,6 +5,10 @@ import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 
+/**
+ * aggregates hour, minute and second
+ * @author Raimund
+ */
 public class Time extends Component {
 
 	private Hour hour;

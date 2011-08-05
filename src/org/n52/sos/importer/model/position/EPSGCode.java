@@ -45,6 +45,9 @@ public class EPSGCode extends Component {
 		return tableElement;
 	}
 	
+	/**
+	 * returns the corresponding position component for a feature of interest cell
+	 */
 	public EPSGCode forThis(Cell featureOfInterestPosition) {
 		if (tableElement == null)
 			return new EPSGCode(value);
@@ -54,6 +57,9 @@ public class EPSGCode extends Component {
 		}
 	}
 	
+	/**
+	 * colors this particular component
+	 */
 	public void mark() {
 		if (tableElement != null)
 			tableElement.mark();
@@ -80,6 +86,9 @@ public class EPSGCode extends Component {
 		return new MissingEPSGCodePanel((Position)c);
 	}
 	
+	/**
+	 * converts a given String into an EPSG code object
+	 */
 	public static EPSGCode parse(String s) {
 		int value = Integer.valueOf(s);
 		return new EPSGCode(value);

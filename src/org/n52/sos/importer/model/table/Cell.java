@@ -4,6 +4,11 @@ import java.util.HashSet;
 
 import org.n52.sos.importer.controller.TableController;
 
+/**
+ * represents a single cell in the table
+ * @author Raimund
+ *
+ */
 public class Cell extends TableElement {
 	
 	private int column;

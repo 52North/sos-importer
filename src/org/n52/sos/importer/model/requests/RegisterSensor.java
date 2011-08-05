@@ -1,5 +1,9 @@
 package org.n52.sos.importer.model.requests;
 
+/**
+ * collects all information for the RegisterSensor request
+ * @author Raimund
+ */
 public class RegisterSensor {
 
 	private String sensorName;

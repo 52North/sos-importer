@@ -13,6 +13,11 @@ import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Position;
 
+/**
+ * consists of a text field for the latitude and a combobox for the units
+ * @author Raimund
+ *
+ */
 public class MissingLatitudePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;

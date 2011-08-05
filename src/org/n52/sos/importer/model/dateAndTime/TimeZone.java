@@ -7,6 +7,11 @@ import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 
+/**
+ * UTC offset
+ * @author Raimund
+ *
+ */
 public class TimeZone extends DateAndTimeComponent {
 
 	public TimeZone(TableElement tableElement, String pattern) {

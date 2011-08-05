@@ -27,6 +27,9 @@ public class Height extends PositionComponent {
 		return new MissingHeightPanel((Position)c);
 	}
 	
+	/**
+	 * tries to convert a given String into a valid Height object
+	 */
 	public static Height parse(String s) {
 		double value = 0;
 		String unit = "m";
@@ -61,6 +64,7 @@ public class Height extends PositionComponent {
 		return new Height(value, unit);
 	}
 
+	@Override
 	public Height forThis(Cell featureOfInterestPosition) {
 		if (getTableElement() == null)
 			return new Height(getValue(), getParsedUnit());

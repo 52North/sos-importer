@@ -13,6 +13,12 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * consists of a combobox for the name and a combobox for the URI;
+ * both are linked with each other
+ * @author Raimund
+ *
+ */
 public class MissingResourcePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;

@@ -46,12 +46,19 @@ public abstract class DateAndTimeComponent extends Component {
 	public TableElement getTableElement() {
 		return tableElement;
 	}
-	
+
+	/**
+	 * colors the particular date&time component
+	 */
 	public void mark() {
 		if (tableElement != null)
 			tableElement.mark();
 	}
 	
+	/**
+	 * returns either the manually set value or 
+	 * the value of this component in the table
+	 */
 	public int getParsedValue(Cell measuredValuePosition) {
 		if (tableElement == null)
 			return getValue();
@@ -59,6 +66,11 @@ public abstract class DateAndTimeComponent extends Component {
 			return parse(tableElement.getValueFor(measuredValuePosition));
 	}
 	
+	/**
+	 * converts a String along a given pattern into the value of this component
+	 * @param s
+	 * @return
+	 */
 	public int parse(String s) {
 		Date date = null;
 		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -77,6 +89,11 @@ public abstract class DateAndTimeComponent extends Component {
 		return value;
 	}
 	
+	/**
+	 * returns the corresponding Gregorian calendar field 
+	 * for this component
+	 * @return
+	 */
 	public abstract int getGregorianCalendarField();
 	
 	@Override

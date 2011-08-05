@@ -1,5 +1,9 @@
 package org.n52.sos.importer.model.requests;
 
+/**
+ * collects all information for the InsertObservation request
+ * @author Raimund
+ */
 public class InsertObservation {
 	
 	private String sensorName;

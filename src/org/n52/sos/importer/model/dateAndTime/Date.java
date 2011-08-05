@@ -5,6 +5,10 @@ import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
 
+/**
+ * aggregates year, month and day
+ * @author Raimund
+ */
 public class Date extends Component {
 
 	private Year year;

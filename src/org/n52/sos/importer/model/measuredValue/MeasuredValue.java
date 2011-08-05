@@ -98,6 +98,11 @@ public abstract class MeasuredValue implements Parseable {
 		return dateAndTime;
 	}
 	
+	/**
+	 * returns a sensor for the given feature of interest name and observed property
+	 * name; this method is called when a sensor has been assigned to them in
+	 * step 6b (special)
+	 */
 	public Sensor getSensorFor(String featureOfInterestName, String observedPropertyName) {
 		Iterator<Step6bSpecialModel> iterator = 
 			ModelStore.getInstance().getStep6bSpecialModels().iterator();

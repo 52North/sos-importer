@@ -10,10 +10,11 @@ import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 
 /**
- * In this project, a resource has a URI and a name. This can be
+ * in this project, a resource has a URI and a name. This can be
  * a feature of interest, observed property, unit of measurement or
  * a sensor.
  * @author Raimund
@@ -44,6 +45,10 @@ public abstract class Resource extends Component {
 		return uri;
 	}
 	
+	/**
+	 * returns the name or alternatively the URI, when
+	 * the name is null
+	 */
 	public String getNameString() {
 		if (name == null || name.equals(""))
 			return uri.toString();
@@ -51,6 +56,10 @@ public abstract class Resource extends Component {
 			return name;
 	}
 	
+	/**
+	 * returns the URI or alternatively the name, when
+	 * the URI is null
+	 */
 	public String getURIString() {
 		if (uri == null || uri.toString().equals(""))
 			return name;
@@ -67,30 +76,44 @@ public abstract class Resource extends Component {
 		return tableElement;
 	}
 	
+	/**
+	 * assign this resource to a measured value column or row
+	 */
 	public abstract void assign(MeasuredValue mv);
 	
 	/**
 	 * indicates if the measured value is assigned to a resource of this type
-	 * @param mv
-	 * @return
 	 */
 	public abstract boolean isAssigned(MeasuredValue mv);
 	
 	/**
 	 * indicates if the measured value is assigned to this resource
-	 * @param mv
-	 * @return
 	 */
 	public abstract boolean isAssignedTo(MeasuredValue mv);
 	
+	/**
+	 * unassign this resource from a measured value column or row
+	 */
 	public abstract void unassign(MeasuredValue mv);
 	
+	/**
+	 * get names of the resource stored in the properties file
+	 */
 	public abstract DefaultComboBoxModel getNames();
 	
+	/**
+	 * get URIs of the resource stored in the properties file
+	 */
 	public abstract DefaultComboBoxModel getURIs();
 	
+	/**
+	 * get all resources of this type in the model store
+	 */
 	public abstract List<Resource> getList();
 	
+	/**
+	 * needed for iterating within one step
+	 */
 	public abstract Resource getNextResourceType();
 	
 	@Override
@@ -98,6 +121,11 @@ public abstract class Resource extends Component {
 		//not used since all resources have the same panel
 		return null; 
 	}
+	
+	/**
+	 * returns the corresponding resource for a measured value cell
+	 */
+	public abstract Resource forThis(Cell measuredValuePosition);
 	
 	@Override 
 	public String toString() {

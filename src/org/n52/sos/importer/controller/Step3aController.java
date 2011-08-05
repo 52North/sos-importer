@@ -45,7 +45,7 @@ public class Step3aController extends StepController {
 	
 	@Override
 	public void loadSettings() {	
-		int number = step3aModel.getSelectedColumn();
+		int number = step3aModel.getMarkedColumn();
 		Column column = new Column(number);
 		List<String> selection = step3aModel.getSelection();
 
@@ -65,10 +65,10 @@ public class Step3aController extends StepController {
 		step3Panel.store(selection);
 		step3aModel.setSelection(selection);
 		
-		int number = step3aModel.getSelectedColumn();
+		int number = step3aModel.getMarkedColumn();
 		step3Panel.getLastChildPanel().assign(new Column(number));
 		
-		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
+		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
 			dtc.mergeDateAndTimes();
 			
@@ -89,7 +89,7 @@ public class Step3aController extends StepController {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
 		step3aModel.setSelection(selection);
-		int number = step3aModel.getSelectedColumn();
+		int number = step3aModel.getMarkedColumn();
 		
 		tableController.setColumnHeading(number, selection.get(0));	
 		tableController.clearMarkedTableElements();
@@ -113,7 +113,7 @@ public class Step3aController extends StepController {
 	@Override
 	public boolean isFinished() {
 		
-		if (step3aModel.getSelectedColumn() + 1 == TableController.getInstance().getColumnCount()) {
+		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {
 			List<String> currentSelection = new ArrayList<String>();
 			step3Panel.store(currentSelection);
 			
@@ -131,7 +131,7 @@ public class Step3aController extends StepController {
 
 	@Override
 	public StepController getNext() {
-		int nextColumn = step3aModel.getSelectedColumn() + 1;
+		int nextColumn = step3aModel.getMarkedColumn() + 1;
 		if (nextColumn == tableController.getColumnCount())
 			return null;
 		
@@ -141,7 +141,7 @@ public class Step3aController extends StepController {
 	@Override
 	public boolean isStillValid() {
 		//TODO: check whether the CSV file parsing settings have been changed
-		if (step3aModel.getSelectedColumn() == 0) return false;
+		if (step3aModel.getMarkedColumn() == 0) return false;
 		return true;
 	}
 }

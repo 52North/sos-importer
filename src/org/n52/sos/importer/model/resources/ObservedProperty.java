@@ -32,6 +32,7 @@ public class ObservedProperty extends Resource {
 		mv.setObservedProperty(null);		
 	}
 	
+	@Override
 	public ObservedProperty forThis(Cell measuredValuePosition) {
 		ObservedProperty op = new ObservedProperty();
 		if (getTableElement() == null) {

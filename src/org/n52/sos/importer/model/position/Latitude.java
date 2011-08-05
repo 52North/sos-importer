@@ -27,6 +27,9 @@ public class Latitude extends PositionComponent {
 		return new MissingLatitudePanel((Position)c);
 	}
 	
+	/**
+	 * tries to convert a given String into a valid Latitude object
+	 */
 	public static Latitude parse(String s) {
 		double value = 0;
 		String unit = "";
@@ -63,6 +66,7 @@ public class Latitude extends PositionComponent {
 		return new Latitude(value, unit);
 	}
 	
+	@Override
 	public Latitude forThis(Cell featureOfInterestPosition) {
 		if (getTableElement() == null)
 			return new Latitude(getValue(), getParsedUnit());

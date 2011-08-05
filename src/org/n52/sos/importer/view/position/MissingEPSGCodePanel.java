@@ -12,6 +12,12 @@ import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.tooltips.ToolTips;
 
+/**
+ * consists of a combobox for the EPSG code and a combobox for the 
+ * name of the spatial reference system; both are linked with each other
+ * @author Raimund
+ *
+ */
 public class MissingEPSGCodePanel extends MissingComponentPanel {
 	
 	private static final long serialVersionUID = 1L;

@@ -27,6 +27,9 @@ public class Longitude extends PositionComponent {
 		return new MissingLongitudePanel((Position)c);
 	}
 	
+	/**
+	 * tries to convert a given String into a valid Longitude object
+	 */
 	public static Longitude parse(String s) {
 		double value = 0;
 		String unit = "";
@@ -61,6 +64,7 @@ public class Longitude extends PositionComponent {
 		return new Longitude(value, unit);
 	}
 	
+	@Override
 	public Longitude forThis(Cell featureOfInterestPosition) {
 		if (getTableElement() == null)
 			return new Longitude(getValue(), getParsedUnit());

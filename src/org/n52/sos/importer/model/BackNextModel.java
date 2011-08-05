@@ -4,6 +4,11 @@ import java.util.Stack;
 
 import org.n52.sos.importer.interfaces.StepController;
 
+/**
+ * stores past, future and present step controller
+ * @author Raimund
+ *
+ */
 public class BackNextModel {
 
 	private Stack<StepController> previousStepControllers;

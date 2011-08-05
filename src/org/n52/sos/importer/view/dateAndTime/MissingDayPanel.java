@@ -11,6 +11,10 @@ import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
 
+/**
+ * consists of a label and a JSpinner for a single day
+ * @author Raimund
+ */
 public class MissingDayPanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;

@@ -4,6 +4,11 @@ import java.util.HashSet;
 
 import org.n52.sos.importer.controller.TableController;
 
+/**
+ * represents a column in the table
+ * @author Raimund
+ *
+ */
 public class Column extends TableElement {
 	
 	private int number = -1;

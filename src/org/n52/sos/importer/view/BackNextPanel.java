@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.controller.BackNextController;
 
 /**
- * back and next (and finish) button at the bottom of the main frame
+ * panel for back and next (and finish) button at the bottom of the main frame
  * @author Raimund
  *
  */

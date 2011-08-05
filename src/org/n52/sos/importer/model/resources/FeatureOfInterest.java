@@ -21,6 +21,7 @@ public class FeatureOfInterest extends Resource {
 	/** single position or position column/row */
 	private Position position;
 	
+	/** corresponding positions for each feature of interest in this column/row */
 	private HashMap<String,Position> positions = new HashMap<String, Position>();
 	
 	@Override
@@ -43,6 +44,7 @@ public class FeatureOfInterest extends Resource {
 		mv.setFeatureOfInterest(null);		
 	}
 	
+	@Override
 	public FeatureOfInterest forThis(Cell measuredValuePosition) {
 		FeatureOfInterest foi = new FeatureOfInterest();
 		//case: this is not a feature of interest row or column

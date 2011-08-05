@@ -61,10 +61,18 @@ public class Step6cModel {
 		return description;
 	}
 
+	/**
+	 * saves the components which are missing for this step
+	 * (= all position components)
+	 */
 	public void setMissingPositionComponents(List<Component> missingPositionComponents) {
 		this.missingPositionComponents = missingPositionComponents;
 	}
 
+	/**
+	 * returns the components which were missing for this step 
+	 * (= all position components)
+	 */
 	public List<Component> getMissingPositionComponents() {
 		return missingPositionComponents;
 	}

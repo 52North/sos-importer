@@ -1,0 +1,1347 @@
+2011-08-04 18:28:03,871 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 18:28:03,887 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 18:28:03,887 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 18:28:03,887 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 18:28:03,887 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 18:28:03,902 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 18:28:06,757 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 18:28:06,913 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 18:28:07,164 INFO (Step8Controller.java:82) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 18:28:07,195 INFO (Step8Controller.java:108) - Assemble information from table and previous steps 
+2011-08-04 18:28:07,335 INFO (Step8Controller.java:198) - Register Sensors at Sensor Observation Service 
+2011-08-04 18:28:10,611 INFO (Step8Controller.java:239) - Insert Observations at Sensor Observation Service 
+2011-08-04 18:28:42,937 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 18:28:42,937 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 18:28:42,937 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 18:28:42,937 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 18:28:42,937 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 18:28:42,952 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 18:28:42,952 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 18:28:42,952 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 18:28:42,952 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 18:28:42,952 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 18:28:42,952 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 18:28:42,952 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 18:28:42,952 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 18:28:42,952 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 18:28:42,968 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 18:28:57,227 INFO (Step1Controller.java:139) - Read CSV file C:\Users\Raimund\Documents\in-situ_data.csv 
+2011-08-04 18:29:00,551 INFO (Step2Controller.java:98) - Parse CSV file with column separator ';', comment indicator '#' and text qualifier '"'. 
+2011-08-04 18:29:06,964 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy HH:mm to Date&Time group 1 in column 0 
+2011-08-04 18:29:06,964 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 18:29:06,964 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 18:29:06,964 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 18:29:06,964 INFO (DateAndTime.java:61) - Add Hour column 0 to Date&Time group 1 
+2011-08-04 18:29:06,964 INFO (DateAndTime.java:72) - Add Minute column 0 to Date&Time group 1 
+2011-08-04 18:29:10,568 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 18:29:14,766 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 18:29:14,766 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 18:29:14,766 INFO (PositionController.java:153) - Merge Positions 
+2011-08-04 18:29:14,766 INFO (Step4aController.java:108) - Skip Step 4a since there is just Date&Time group 1 
+2011-08-04 18:29:14,766 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 18:29:14,766 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 18:29:14,766 INFO (Step4bController.java:169) - Skip Step 4b for Feature Of Interests since there are not any Feature Of Interests 
+2011-08-04 18:29:14,766 INFO (Step4bController.java:169) - Skip Step 4b for Observed Propertys since there are not any Observed Propertys 
+2011-08-04 18:29:14,801 INFO (Step4bController.java:169) - Skip Step 4b for Unit Of Measurements since there are not any Unit Of Measurements 
+2011-08-04 18:29:14,802 INFO (Step4bController.java:169) - Skip Step 4b for Sensors since there are not any Sensors 
+2011-08-04 18:29:14,803 INFO (Step4cController.java:55) - Skip Step 4c since there are not any Positions 
+2011-08-04 18:29:16,644 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 18:29:16,644 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 18:29:16,644 INFO (Step5cController.java:102) - Skip Step 5c since there are not any Positions with missing values 
+2011-08-04 18:29:16,644 INFO (Step6aController.java:109) - Skip Step 6a since there is at least one Date&Time 
+2011-08-04 18:29:16,659 INFO (MeasuredValue.java:34) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-08-04 18:29:28,750 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Settlers" to Numeric Value column 1 
+2011-08-04 18:29:28,750 INFO (MeasuredValue.java:34) - Unassign Feature Of Interest from Numeric Value column 2 
+2011-08-04 18:29:32,464 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Settlers" to Numeric Value column 2 
+2011-08-04 18:29:32,464 INFO (MeasuredValue.java:48) - Unassign Observed Property from Numeric Value column 1 
+2011-08-04 18:29:41,186 INFO (MeasuredValue.java:46) - Assign Observed Property "SO2" to Numeric Value column 1 
+2011-08-04 18:29:41,186 INFO (MeasuredValue.java:48) - Unassign Observed Property from Numeric Value column 2 
+2011-08-04 18:29:46,272 INFO (MeasuredValue.java:46) - Assign Observed Property "TRS" to Numeric Value column 2 
+2011-08-04 18:29:46,272 INFO (MeasuredValue.java:60) - Unassign Unit of Measurement from Numeric Value column 1 
+2011-08-04 18:29:52,357 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "ppb" to Numeric Value column 1 
+2011-08-04 18:29:52,357 INFO (MeasuredValue.java:60) - Unassign Unit of Measurement from Numeric Value column 2 
+2011-08-04 18:29:54,667 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "ppb" to Numeric Value column 2 
+2011-08-04 18:29:54,667 INFO (MeasuredValue.java:72) - Unassign Sensor from Numeric Value column 1 
+2011-08-04 18:30:03,061 INFO (MeasuredValue.java:70) - Assign Sensor "SO2Sensor" to Numeric Value column 1 
+2011-08-04 18:30:03,061 INFO (MeasuredValue.java:72) - Unassign Sensor from Numeric Value column 2 
+2011-08-04 18:30:11,642 INFO (MeasuredValue.java:70) - Assign Sensor "TRSSensor" to Numeric Value column 2 
+2011-08-04 18:30:11,657 INFO (Step6bSpecialController.java:98) - Skip 6b (Special) since there are not any features of interestand observed properties in the table. 
+2011-08-04 18:30:13,686 INFO (FeatureOfInterest.java:106) - Assign Position (Latitude 0.0°, Longitude 0.0°, Height 0.0meters, EPSG-Code 4236) to Feature Of Interest "Settlers" 
+2011-08-04 18:30:14,904 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 18:30:14,904 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 18:30:14,904 INFO (Step8Controller.java:82) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 18:30:14,920 INFO (Step8Controller.java:108) - Assemble information from table and previous steps 
+2011-08-04 18:30:16,169 INFO (Step8Controller.java:198) - Register Sensors at Sensor Observation Service 
+2011-08-04 18:30:17,699 INFO (Step8Controller.java:239) - Insert Observations at Sensor Observation Service 
+2011-08-04 18:37:09,479 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 18:37:09,494 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 18:37:09,510 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 18:37:09,510 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 18:37:09,510 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 18:37:09,510 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 18:37:09,510 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 18:58:13,677 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 18:58:13,677 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 18:58:13,693 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 18:58:13,693 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 18:58:13,693 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 18:58:13,693 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 18:58:13,693 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 18:58:15,611 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 18:58:15,627 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 18:58:15,681 INFO (Step8Controller.java:82) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 18:58:15,688 INFO (Step8Controller.java:108) - Assemble information from table and previous steps 
+2011-08-04 18:58:15,736 INFO (Step8Controller.java:198) - Register Sensors at Sensor Observation Service 
+2011-08-04 18:58:15,736 INFO (Step8Controller.java:285) -  
+2011-08-04 18:58:15,783 INFO (Step8Controller.java:240) - Insert Observations at Sensor Observation Service 
+2011-08-04 18:58:15,783 INFO (Step8Controller.java:285) -  
+2011-08-04 18:58:24,020 INFO (ComboBoxItems.java:159) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\combobox\ComboBoxItems.properties 
+2011-08-04 19:48:00,370 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 19:48:00,377 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 19:48:00,378 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 19:48:00,379 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 19:48:00,381 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 19:48:00,383 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 19:48:00,384 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 19:48:00,384 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 19:48:00,385 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 19:48:00,387 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 19:48:00,395 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 19:48:00,395 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 19:48:00,395 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 19:48:00,395 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 19:48:00,401 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 19:48:00,401 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 19:48:00,403 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 19:48:00,403 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 19:48:00,403 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 19:48:00,403 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 19:48:00,403 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 19:48:00,404 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 19:48:00,404 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 19:48:00,404 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 19:48:00,404 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 19:48:00,404 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 19:48:03,469 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 19:48:03,482 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 19:48:03,487 INFO (Step8Controller.java:82) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 19:48:03,501 INFO (Step8Controller.java:108) - Assemble information from table and previous steps 
+2011-08-04 19:48:03,554 INFO (Step8Controller.java:198) - Register Sensors at Sensor Observation Service 
+2011-08-04 19:48:03,554 INFO (Step8Controller.java:285) - file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52%c2%b0North/Implementation/bin/org/n52/sos/importer/templates/RegisterSensor_measurement_template.xml 
+2011-08-04 19:48:03,558 INFO (Step8Controller.java:314) - <?xml version="1.0" encoding="UTF-8"?>
+<RegisterSensor service="SOS" version="1.0.0"
+	xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:ows="http://www.opengeospatial.net/ows"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosRegisterSensor.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd">
+
+	<!-- Sensor Description parameter; Currently, this has to be a sml:System -->
+	<SensorDescription>
+	
+		<sml:SensorML version="1.0.1">
+		<sml:member>
+	    <sml:System xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   >
+	     	  
+			<!--sml:identification element must contain the ID of the sensor-->
+			<sml:identification>
+				<sml:IdentifierList>
+					<sml:identifier>
+						<sml:Term definition="urn:ogc:def:identifier:OGC:uniqueID">
+							<sml:value>http://thermo.org/123</sml:value>
+						</sml:Term>
+					</sml:identifier>
+	              </sml:IdentifierList>
+			</sml:identification>
+	          
+			<!-- sml:capabilities element has to contain status and mobility information -->
+			<sml:capabilities>
+				<swe:SimpleDataRecord>
+					<!-- status indicates, whether sensor is collecting data at the moment (true) or not (false) -->
+					<swe:field name="status">
+						<swe:Boolean>
+							<swe:value>true</swe:value>
+						</swe:Boolean>
+					</swe:field>
+					<!-- status indicates, whether sensor is mobile (true) or fixed (false) -->
+					<swe:field name="mobile">
+	                	<swe:Boolean>
+	                    	<swe:value>false</swe:value>
+	                	</swe:Boolean>
+	                </swe:field>
+				</swe:SimpleDataRecord>
+			</sml:capabilities>
+	          
+			<!-- last measured position of sensor -->
+			<!-- Koordinaten vom Feature of Interest -->
+			<sml:position name="sensorPosition"> 
+	        	<swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4236">
+	            	<swe:location>
+	                	<swe:Vector gml:id="STATION_LOCATION">
+	                    	<swe:coordinate name="easting">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>7.5</swe:value>
+	                            </swe:Quantity>
+							</swe:coordinate>
+	                        <swe:coordinate name="northing">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>52.5</swe:value>
+	                        	</swe:Quantity>
+	                        </swe:coordinate>
+	                        <swe:coordinate name="altitude">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="m"/>
+	                            	<swe:value>100.0</swe:value>
+	                            </swe:Quantity>
+	                        </swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+				</swe:Position>
+			</sml:position>
+	          
+	          <!-- list containing the input phenomena for this sensor system -->
+	          <sml:inputs> <!-- koennen mehrfach sein -->
+	               <sml:InputList>
+	                    <sml:input name="Temperature">
+	                         <swe:ObservableProperty definition="Temperature"/>
+	                    </sml:input>
+	               </sml:InputList>
+	          </sml:inputs>
+	          
+	          <!-- list containing the output phenomena of this sensor system; ATTENTION: these phenomena are parsed and inserted into the database; they have to contain offering elements to determine the correct offering for the sensors and measured phenomena -->
+	          <sml:outputs>
+	               <sml:OutputList>
+	                    <sml:output name="Temperature">
+	                         <swe:Quantity definition="Temperature">
+	                                <gml:metaDataProperty>
+											<offering>
+												<id>http://thermo.org/123</id>
+												<name>Thermometer 2</name>
+											</offering>
+									</gml:metaDataProperty>
+	                              <swe:uom code="°C"/>
+	                         </swe:Quantity>
+	                    </sml:output>
+	               </sml:OutputList>
+	          </sml:outputs>			  
+	     </sml:System>
+	     </sml:member>
+	     </sml:SensorML>
+	</SensorDescription>
+	
+	<!-- ObservationTemplate parameter; this has to be an empty measurement at the moment, as the 52N SOS only supports Measurements to be inserted -->
+	<ObservationTemplate>
+		<om:Measurement>
+			<om:samplingTime/>
+			<om:procedure/>
+			<om:observedProperty/>
+			<om:featureOfInterest></om:featureOfInterest>
+			<om:result uom=""></om:result>
+		</om:Measurement>
+	</ObservationTemplate>
+	
+</RegisterSensor>
+ 
+2011-08-04 19:48:03,562 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,166 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,166 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,168 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,168 ERROR (Step8Controller.java:218) - RegisterSensor [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, observedPropertyName=Temperature, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, epsgCode=4236, latitudeValue=52.5, latitudeUnit=°, longitudeValue=7.5, longitudeUnit=°, heightValue=100.0, heightUnit=m] 
+2011-08-04 19:48:04,168 ERROR (Step8Controller.java:219) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>Sensor with ID: 'http://thermo.org/123' is already registered at this SOS!</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:04,170 INFO (Step8Controller.java:314) - <?xml version="1.0" encoding="UTF-8"?>
+<RegisterSensor service="SOS" version="1.0.0"
+	xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:ows="http://www.opengeospatial.net/ows"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosRegisterSensor.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd">
+
+	<!-- Sensor Description parameter; Currently, this has to be a sml:System -->
+	<SensorDescription>
+	
+		<sml:SensorML version="1.0.1">
+		<sml:member>
+	    <sml:System xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   >
+	     	  
+			<!--sml:identification element must contain the ID of the sensor-->
+			<sml:identification>
+				<sml:IdentifierList>
+					<sml:identifier>
+						<sml:Term definition="urn:ogc:def:identifier:OGC:uniqueID">
+							<sml:value>Thermometer 1</sml:value>
+						</sml:Term>
+					</sml:identifier>
+	              </sml:IdentifierList>
+			</sml:identification>
+	          
+			<!-- sml:capabilities element has to contain status and mobility information -->
+			<sml:capabilities>
+				<swe:SimpleDataRecord>
+					<!-- status indicates, whether sensor is collecting data at the moment (true) or not (false) -->
+					<swe:field name="status">
+						<swe:Boolean>
+							<swe:value>true</swe:value>
+						</swe:Boolean>
+					</swe:field>
+					<!-- status indicates, whether sensor is mobile (true) or fixed (false) -->
+					<swe:field name="mobile">
+	                	<swe:Boolean>
+	                    	<swe:value>false</swe:value>
+	                	</swe:Boolean>
+	                </swe:field>
+				</swe:SimpleDataRecord>
+			</sml:capabilities>
+	          
+			<!-- last measured position of sensor -->
+			<!-- Koordinaten vom Feature of Interest -->
+			<sml:position name="sensorPosition"> 
+	        	<swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4236">
+	            	<swe:location>
+	                	<swe:Vector gml:id="STATION_LOCATION">
+	                    	<swe:coordinate name="easting">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>7.5</swe:value>
+	                            </swe:Quantity>
+							</swe:coordinate>
+	                        <swe:coordinate name="northing">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>52.5</swe:value>
+	                        	</swe:Quantity>
+	                        </swe:coordinate>
+	                        <swe:coordinate name="altitude">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="m"/>
+	                            	<swe:value>100.0</swe:value>
+	                            </swe:Quantity>
+	                        </swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+				</swe:Position>
+			</sml:position>
+	          
+	          <!-- list containing the input phenomena for this sensor system -->
+	          <sml:inputs> <!-- koennen mehrfach sein -->
+	               <sml:InputList>
+	                    <sml:input name="Temperature">
+	                         <swe:ObservableProperty definition="Temperature"/>
+	                    </sml:input>
+	               </sml:InputList>
+	          </sml:inputs>
+	          
+	          <!-- list containing the output phenomena of this sensor system; ATTENTION: these phenomena are parsed and inserted into the database; they have to contain offering elements to determine the correct offering for the sensors and measured phenomena -->
+	          <sml:outputs>
+	               <sml:OutputList>
+	                    <sml:output name="Temperature">
+	                         <swe:Quantity definition="Temperature">
+	                                <gml:metaDataProperty>
+											<offering>
+												<id>Thermometer 1</id>
+												<name>Thermometer 1</name>
+											</offering>
+									</gml:metaDataProperty>
+	                              <swe:uom code="°C"/>
+	                         </swe:Quantity>
+	                    </sml:output>
+	               </sml:OutputList>
+	          </sml:outputs>			  
+	     </sml:System>
+	     </sml:member>
+	     </sml:SensorML>
+	</SensorDescription>
+	
+	<!-- ObservationTemplate parameter; this has to be an empty measurement at the moment, as the 52N SOS only supports Measurements to be inserted -->
+	<ObservationTemplate>
+		<om:Measurement>
+			<om:samplingTime/>
+			<om:procedure/>
+			<om:observedProperty/>
+			<om:featureOfInterest></om:featureOfInterest>
+			<om:result uom=""></om:result>
+		</om:Measurement>
+	</ObservationTemplate>
+	
+</RegisterSensor>
+ 
+2011-08-04 19:48:04,170 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,264 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,265 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,265 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,265 ERROR (Step8Controller.java:218) - RegisterSensor [sensorName=Thermometer 1, sensorURI=Thermometer 1, observedPropertyName=Temperature, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, epsgCode=4236, latitudeValue=52.5, latitudeUnit=°, longitudeValue=7.5, longitudeUnit=°, heightValue=100.0, heightUnit=m] 
+2011-08-04 19:48:04,265 ERROR (Step8Controller.java:219) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>Sensor with ID: 'Thermometer 1' is already registered at this SOS!</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:04,299 INFO (Step8Controller.java:240) - Insert Observations at Sensor Observation Service 
+2011-08-04 19:48:04,300 INFO (Step8Controller.java:285) - file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52%c2%b0North/Implementation/bin/org/n52/sos/importer/templates/InsertObservation_samplingPoint_template.xml 
+2011-08-04 19:48:04,301 INFO (Step8Controller.java:253) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=323.123, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,304 INFO (Step8Controller.java:314) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>http://thermo.org/123</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T23:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="http://thermo.org/123"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">323.123</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:48:04,305 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,489 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,490 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,490 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,490 ERROR (Step8Controller.java:260) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=323.123, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,490 ERROR (Step8Controller.java:261) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-02 01:45:00+02, http://thermo.org/123, Weatherstation Muenster, Temperature, http://thermo.org/123)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:04,491 INFO (Step8Controller.java:253) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=12.12, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,492 INFO (Step8Controller.java:314) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>http://thermo.org/123</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T11:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="http://thermo.org/123"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">12.12</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:48:04,493 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,519 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,519 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,520 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,520 ERROR (Step8Controller.java:260) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=12.12, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,520 ERROR (Step8Controller.java:261) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-01 13:45:00+02, http://thermo.org/123, Weatherstation Muenster, Temperature, http://thermo.org/123)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:04,520 INFO (Step8Controller.java:253) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=23.0, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,521 INFO (Step8Controller.java:314) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>Thermometer 1</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T23:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="Thermometer 1"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">23.0</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:48:04,523 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,537 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,538 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,538 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,538 ERROR (Step8Controller.java:260) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=23.0, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,538 ERROR (Step8Controller.java:261) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-02 01:45:00+02, Thermometer 1, Weatherstation Muenster, Temperature, Thermometer 1)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:04,549 INFO (Step8Controller.java:253) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=11.0, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,551 INFO (Step8Controller.java:314) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>Thermometer 1</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T11:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="Thermometer 1"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">11.0</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:48:04,552 INFO (Step8Controller.java:319) - B 
+2011-08-04 19:48:04,592 INFO (Step8Controller.java:321) - C 
+2011-08-04 19:48:04,592 INFO (Step8Controller.java:323) - D 
+2011-08-04 19:48:04,592 INFO (Step8Controller.java:326) - E 
+2011-08-04 19:48:04,592 ERROR (Step8Controller.java:260) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=11.0, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:48:04,592 ERROR (Step8Controller.java:261) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-01 13:45:00+02, Thermometer 1, Weatherstation Muenster, Temperature, Thermometer 1)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:48:08,560 INFO (ComboBoxItems.java:159) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\combobox\ComboBoxItems.properties 
+2011-08-04 19:58:26,151 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 19:58:26,156 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 19:58:26,157 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 19:58:26,158 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 19:58:26,159 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 19:58:26,161 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 19:58:26,162 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 19:58:26,162 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 19:58:26,163 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 19:58:26,163 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 19:58:26,169 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 19:58:26,169 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 19:58:26,169 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 19:58:26,169 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 19:58:26,174 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 19:58:26,175 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 19:58:26,177 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 19:58:26,177 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 19:58:26,178 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 19:58:27,706 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 19:58:27,719 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 19:58:27,765 INFO (Step8Controller.java:84) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 19:58:27,770 INFO (Step8Controller.java:110) - Assemble information from table and previous steps 
+2011-08-04 19:58:27,831 INFO (Step8Controller.java:200) - Register Sensors at Sensor Observation Service 
+2011-08-04 19:58:27,864 INFO (Step8Controller.java:242) - Insert Observations at Sensor Observation Service 
+2011-08-04 19:58:33,626 INFO (ComboBoxItems.java:159) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\combobox\ComboBoxItems.properties 
+2011-08-04 19:59:03,067 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy to Date&Time group 1 in column 0 
+2011-08-04 19:59:03,071 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 19:59:03,072 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 19:59:03,073 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 19:59:03,074 INFO (DateAndTimeController.java:122) - Assign pattern HH:mm to Date&Time group 1 in column 1 
+2011-08-04 19:59:03,075 INFO (DateAndTime.java:61) - Add Hour column 1 to Date&Time group 1 
+2011-08-04 19:59:03,076 INFO (DateAndTime.java:72) - Add Minute column 1 to Date&Time group 1 
+2011-08-04 19:59:03,076 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 19:59:03,077 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 19:59:03,077 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 19:59:03,083 INFO (Position.java:78) - Add Latitude 52.5° to Position group A 
+2011-08-04 19:59:03,083 INFO (Position.java:65) - Add Longitude 7.5° to Position group A 
+2011-08-04 19:59:03,083 INFO (Position.java:43) - Add Height 100.0m to Position group A 
+2011-08-04 19:59:03,083 INFO (Position.java:56) - Add EPSG-Code 4236 to Position group A 
+2011-08-04 19:59:03,087 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 19:59:03,087 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 19:59:03,089 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 1 
+2011-08-04 19:59:03,089 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 1 
+2011-08-04 19:59:03,089 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 1" to Numeric Value column 1 
+2011-08-04 19:59:03,090 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 1 
+2011-08-04 19:59:03,090 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 19:59:03,090 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 19:59:03,090 INFO (MeasuredValue.java:46) - Assign Observed Property "Temperature" to Numeric Value column 2 
+2011-08-04 19:59:03,090 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Weatherstation Muenster" to Numeric Value column 2 
+2011-08-04 19:59:03,091 INFO (MeasuredValue.java:70) - Assign Sensor "Thermometer 2" to Numeric Value column 2 
+2011-08-04 19:59:03,091 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "°C" to Numeric Value column 2 
+2011-08-04 19:59:04,243 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 19:59:04,255 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 19:59:04,301 INFO (Step8Controller.java:81) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 19:59:04,314 INFO (Step8Controller.java:107) - Assemble information from table and previous steps 
+2011-08-04 19:59:04,365 INFO (Step8Controller.java:197) - Register Sensors at Sensor Observation Service 
+2011-08-04 19:59:04,368 INFO (Step8Controller.java:306) - <?xml version="1.0" encoding="UTF-8"?>
+<RegisterSensor service="SOS" version="1.0.0"
+	xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:ows="http://www.opengeospatial.net/ows"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosRegisterSensor.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd">
+
+	<!-- Sensor Description parameter; Currently, this has to be a sml:System -->
+	<SensorDescription>
+	
+		<sml:SensorML version="1.0.1">
+		<sml:member>
+	    <sml:System xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   >
+	     	  
+			<!--sml:identification element must contain the ID of the sensor-->
+			<sml:identification>
+				<sml:IdentifierList>
+					<sml:identifier>
+						<sml:Term definition="urn:ogc:def:identifier:OGC:uniqueID">
+							<sml:value>http://thermo.org/123</sml:value>
+						</sml:Term>
+					</sml:identifier>
+	              </sml:IdentifierList>
+			</sml:identification>
+	          
+			<!-- sml:capabilities element has to contain status and mobility information -->
+			<sml:capabilities>
+				<swe:SimpleDataRecord>
+					<!-- status indicates, whether sensor is collecting data at the moment (true) or not (false) -->
+					<swe:field name="status">
+						<swe:Boolean>
+							<swe:value>true</swe:value>
+						</swe:Boolean>
+					</swe:field>
+					<!-- status indicates, whether sensor is mobile (true) or fixed (false) -->
+					<swe:field name="mobile">
+	                	<swe:Boolean>
+	                    	<swe:value>false</swe:value>
+	                	</swe:Boolean>
+	                </swe:field>
+				</swe:SimpleDataRecord>
+			</sml:capabilities>
+	          
+			<!-- last measured position of sensor -->
+			<!-- Koordinaten vom Feature of Interest -->
+			<sml:position name="sensorPosition"> 
+	        	<swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4236">
+	            	<swe:location>
+	                	<swe:Vector gml:id="STATION_LOCATION">
+	                    	<swe:coordinate name="easting">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>7.5</swe:value>
+	                            </swe:Quantity>
+							</swe:coordinate>
+	                        <swe:coordinate name="northing">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>52.5</swe:value>
+	                        	</swe:Quantity>
+	                        </swe:coordinate>
+	                        <swe:coordinate name="altitude">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="m"/>
+	                            	<swe:value>100.0</swe:value>
+	                            </swe:Quantity>
+	                        </swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+				</swe:Position>
+			</sml:position>
+	          
+	          <!-- list containing the input phenomena for this sensor system -->
+	          <sml:inputs> <!-- koennen mehrfach sein -->
+	               <sml:InputList>
+	                    <sml:input name="Temperature">
+	                         <swe:ObservableProperty definition="Temperature"/>
+	                    </sml:input>
+	               </sml:InputList>
+	          </sml:inputs>
+	          
+	          <!-- list containing the output phenomena of this sensor system; ATTENTION: these phenomena are parsed and inserted into the database; they have to contain offering elements to determine the correct offering for the sensors and measured phenomena -->
+	          <sml:outputs>
+	               <sml:OutputList>
+	                    <sml:output name="Temperature">
+	                         <swe:Quantity definition="Temperature">
+	                                <gml:metaDataProperty>
+											<offering>
+												<id>http://thermo.org/123</id>
+												<name>Thermometer 2</name>
+											</offering>
+									</gml:metaDataProperty>
+	                              <swe:uom code="°C"/>
+	                         </swe:Quantity>
+	                    </sml:output>
+	               </sml:OutputList>
+	          </sml:outputs>			  
+	     </sml:System>
+	     </sml:member>
+	     </sml:SensorML>
+	</SensorDescription>
+	
+	<!-- ObservationTemplate parameter; this has to be an empty measurement at the moment, as the 52N SOS only supports Measurements to be inserted -->
+	<ObservationTemplate>
+		<om:Measurement>
+			<om:samplingTime/>
+			<om:procedure/>
+			<om:observedProperty/>
+			<om:featureOfInterest></om:featureOfInterest>
+			<om:result uom=""></om:result>
+		</om:Measurement>
+	</ObservationTemplate>
+	
+</RegisterSensor>
+ 
+2011-08-04 19:59:04,372 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,656 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,656 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,660 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,660 ERROR (Step8Controller.java:217) - RegisterSensor [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, observedPropertyName=Temperature, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, epsgCode=4236, latitudeValue=52.5, latitudeUnit=°, longitudeValue=7.5, longitudeUnit=°, heightValue=100.0, heightUnit=m] 
+2011-08-04 19:59:04,660 ERROR (Step8Controller.java:218) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>Sensor with ID: 'http://thermo.org/123' is already registered at this SOS!</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:04,670 INFO (Step8Controller.java:306) - <?xml version="1.0" encoding="UTF-8"?>
+<RegisterSensor service="SOS" version="1.0.0"
+	xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:ows="http://www.opengeospatial.net/ows"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sml="http://www.opengis.net/sensorML/1.0.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosRegisterSensor.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd">
+
+	<!-- Sensor Description parameter; Currently, this has to be a sml:System -->
+	<SensorDescription>
+	
+		<sml:SensorML version="1.0.1">
+		<sml:member>
+	    <sml:System xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   >
+	     	  
+			<!--sml:identification element must contain the ID of the sensor-->
+			<sml:identification>
+				<sml:IdentifierList>
+					<sml:identifier>
+						<sml:Term definition="urn:ogc:def:identifier:OGC:uniqueID">
+							<sml:value>Thermometer 1</sml:value>
+						</sml:Term>
+					</sml:identifier>
+	              </sml:IdentifierList>
+			</sml:identification>
+	          
+			<!-- sml:capabilities element has to contain status and mobility information -->
+			<sml:capabilities>
+				<swe:SimpleDataRecord>
+					<!-- status indicates, whether sensor is collecting data at the moment (true) or not (false) -->
+					<swe:field name="status">
+						<swe:Boolean>
+							<swe:value>true</swe:value>
+						</swe:Boolean>
+					</swe:field>
+					<!-- status indicates, whether sensor is mobile (true) or fixed (false) -->
+					<swe:field name="mobile">
+	                	<swe:Boolean>
+	                    	<swe:value>false</swe:value>
+	                	</swe:Boolean>
+	                </swe:field>
+				</swe:SimpleDataRecord>
+			</sml:capabilities>
+	          
+			<!-- last measured position of sensor -->
+			<!-- Koordinaten vom Feature of Interest -->
+			<sml:position name="sensorPosition"> 
+	        	<swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4236">
+	            	<swe:location>
+	                	<swe:Vector gml:id="STATION_LOCATION">
+	                    	<swe:coordinate name="easting">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>7.5</swe:value>
+	                            </swe:Quantity>
+							</swe:coordinate>
+	                        <swe:coordinate name="northing">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="°"/>
+	                            	<swe:value>52.5</swe:value>
+	                        	</swe:Quantity>
+	                        </swe:coordinate>
+	                        <swe:coordinate name="altitude">
+	                        	<swe:Quantity>
+	                            	<swe:uom code="m"/>
+	                            	<swe:value>100.0</swe:value>
+	                            </swe:Quantity>
+	                        </swe:coordinate>
+						</swe:Vector>
+					</swe:location>
+				</swe:Position>
+			</sml:position>
+	          
+	          <!-- list containing the input phenomena for this sensor system -->
+	          <sml:inputs> <!-- koennen mehrfach sein -->
+	               <sml:InputList>
+	                    <sml:input name="Temperature">
+	                         <swe:ObservableProperty definition="Temperature"/>
+	                    </sml:input>
+	               </sml:InputList>
+	          </sml:inputs>
+	          
+	          <!-- list containing the output phenomena of this sensor system; ATTENTION: these phenomena are parsed and inserted into the database; they have to contain offering elements to determine the correct offering for the sensors and measured phenomena -->
+	          <sml:outputs>
+	               <sml:OutputList>
+	                    <sml:output name="Temperature">
+	                         <swe:Quantity definition="Temperature">
+	                                <gml:metaDataProperty>
+											<offering>
+												<id>Thermometer 1</id>
+												<name>Thermometer 1</name>
+											</offering>
+									</gml:metaDataProperty>
+	                              <swe:uom code="°C"/>
+	                         </swe:Quantity>
+	                    </sml:output>
+	               </sml:OutputList>
+	          </sml:outputs>			  
+	     </sml:System>
+	     </sml:member>
+	     </sml:SensorML>
+	</SensorDescription>
+	
+	<!-- ObservationTemplate parameter; this has to be an empty measurement at the moment, as the 52N SOS only supports Measurements to be inserted -->
+	<ObservationTemplate>
+		<om:Measurement>
+			<om:samplingTime/>
+			<om:procedure/>
+			<om:observedProperty/>
+			<om:featureOfInterest></om:featureOfInterest>
+			<om:result uom=""></om:result>
+		</om:Measurement>
+	</ObservationTemplate>
+	
+</RegisterSensor>
+ 
+2011-08-04 19:59:04,670 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,735 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,735 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,736 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,736 ERROR (Step8Controller.java:217) - RegisterSensor [sensorName=Thermometer 1, sensorURI=Thermometer 1, observedPropertyName=Temperature, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, epsgCode=4236, latitudeValue=52.5, latitudeUnit=°, longitudeValue=7.5, longitudeUnit=°, heightValue=100.0, heightUnit=m] 
+2011-08-04 19:59:04,736 ERROR (Step8Controller.java:218) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>Sensor with ID: 'Thermometer 1' is already registered at this SOS!</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:04,769 INFO (Step8Controller.java:239) - Insert Observations at Sensor Observation Service 
+2011-08-04 19:59:04,771 INFO (Step8Controller.java:252) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=12.12, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,772 INFO (Step8Controller.java:306) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>http://thermo.org/123</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T11:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="http://thermo.org/123"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">12.12</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:59:04,772 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,788 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,788 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,788 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,788 ERROR (Step8Controller.java:259) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=12.12, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,788 ERROR (Step8Controller.java:260) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-01 13:45:00+02, http://thermo.org/123, Weatherstation Muenster, Temperature, http://thermo.org/123)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:04,789 INFO (Step8Controller.java:252) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=23.0, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,790 INFO (Step8Controller.java:306) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>Thermometer 1</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T23:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="Thermometer 1"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">23.0</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:59:04,790 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,804 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,805 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,805 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,805 ERROR (Step8Controller.java:259) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=23.0, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,805 ERROR (Step8Controller.java:260) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-02 01:45:00+02, Thermometer 1, Weatherstation Muenster, Temperature, Thermometer 1)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:04,805 INFO (Step8Controller.java:252) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=323.123, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,806 INFO (Step8Controller.java:306) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>http://thermo.org/123</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T23:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="http://thermo.org/123"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">323.123</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:59:04,806 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,819 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,819 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,820 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,820 ERROR (Step8Controller.java:259) - InsertObservation [sensorName=Thermometer 2, sensorURI=http://thermo.org/123, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=323.123, timeStamp=2010-6-1T23:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,820 ERROR (Step8Controller.java:260) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-02 01:45:00+02, http://thermo.org/123, Weatherstation Muenster, Temperature, http://thermo.org/123)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:04,820 INFO (Step8Controller.java:252) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=11.0, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,821 INFO (Step8Controller.java:306) - <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
+	xmlns:ows="http://www.opengis.net/ows/1.1"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:om="http://www.opengis.net/om/1.0"
+	xmlns:sos="http://www.opengis.net/sos/1.0"
+	xmlns:sa="http://www.opengis.net/sampling/1.0"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:swe="http://www.opengis.net/swe/1.0.1"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/sos/1.0
+	http://schemas.opengis.net/sos/1.0.0/sosInsert.xsd
+	http://www.opengis.net/sampling/1.0
+	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
+	http://www.opengis.net/om/1.0
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	service="SOS" version="1.0.0">
+	
+	<AssignedSensorId>Thermometer 1</AssignedSensorId>
+	
+	<om:Measurement>
+	     
+	     <om:samplingTime>
+	          <gml:TimeInstant>
+	               <gml:timePosition>2010-6-1T11:45:0+00:00</gml:timePosition>
+	          </gml:TimeInstant>
+	     </om:samplingTime>
+	     
+	     <om:procedure xlink:href="Thermometer 1"/>
+	     <om:observedProperty xlink:href="Temperature"/>
+	     
+	     <om:featureOfInterest>
+	          <sa:SamplingPoint gml:id="Weatherstation Muenster">
+	              <gml:name>Weatherstation Muenster</gml:name>
+	              <sa:sampledFeature xlink:href=""/>
+	              <sa:position>
+	                <gml:Point>
+	                  <gml:pos srsName="urn:ogc:def:crs:EPSG::4236">52.5 7.5</gml:pos>
+					</gml:Point>
+	              </sa:position>
+	            </sa:SamplingPoint>
+	     </om:featureOfInterest>
+	     
+	     <om:result uom="°C">11.0</om:result>
+	</om:Measurement>
+	
+</InsertObservation>
+ 
+2011-08-04 19:59:04,821 INFO (Step8Controller.java:311) - B 
+2011-08-04 19:59:04,831 INFO (Step8Controller.java:313) - C 
+2011-08-04 19:59:04,831 INFO (Step8Controller.java:315) - D 
+2011-08-04 19:59:04,832 INFO (Step8Controller.java:318) - E 
+2011-08-04 19:59:04,832 ERROR (Step8Controller.java:259) - InsertObservation [sensorName=Thermometer 1, sensorURI=Thermometer 1, featureOfInterestName=Weatherstation Muenster, featureOfInterestURI=Weatherstation Muenster, observedPropertyURI=Temperature, unitOfMeasurementCode=°C, value=11.0, timeStamp=2010-6-1T11:45:0+00:00, epsgCode=4236, latitudeValue=52.5, longitudeValue=7.5] 
+2011-08-04 19:59:04,832 ERROR (Step8Controller.java:260) - <?xml version="1.0" encoding="UTF-8"?>
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://schemas.opengis.net/ows/1.1.0/owsAll.xsd" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ows:Exception exceptionCode="NoApplicableCode">
+    <ows:ExceptionText>FEHLER: doppelter SchlÃ¼sselwert verletzt Unique-Constraint Â»observation_time_stamp_procedure_id_feature_of_interest_id__keyÂ«
+  Detail: SchlÃ¼ssel Â»(time_stamp, procedure_id, feature_of_interest_id, phenomenon_id, offering_id)=(2010-06-01 13:45:00+02, Thermometer 1, Weatherstation Muenster, Temperature, Thermometer 1)Â« existiert bereits.</ows:ExceptionText>
+  </ows:Exception>
+</ows:ExceptionReport> 
+2011-08-04 19:59:09,712 INFO (ComboBoxItems.java:159) - Save settings at D:\Eigene Dateien\Studium\Master\2. Semester\52°North\Implementation\bin\org\n52\sos\importer\combobox\ComboBoxItems.properties 
+2011-08-04 23:08:09,792 INFO (Step1Controller.java:139) - Read CSV file C:\Users\Raimund\Documents\in-situ_data.csv 
+2011-08-04 23:08:09,852 INFO (ComboBoxItems.java:101) - Load settings from: C:\Users\Raimund\ComboBoxItems.properties 
+2011-08-04 23:09:09,764 INFO (Step2Controller.java:98) - Parse CSV file with column separator ',', comment indicator '#' and text qualifier '"'. 
+2011-08-04 23:09:18,831 INFO (Step2Controller.java:98) - Parse CSV file with column separator ';', comment indicator '#' and text qualifier '"'. 
+2011-08-04 23:09:57,116 INFO (DateAndTimeController.java:122) - Assign pattern dd/MM/yyyy HH:mm to Date&Time group 1 in column 0 
+2011-08-04 23:09:57,120 INFO (DateAndTime.java:28) - Add Year column 0 to Date&Time group 1 
+2011-08-04 23:09:57,121 INFO (DateAndTime.java:39) - Add Month column 0 to Date&Time group 1 
+2011-08-04 23:09:57,123 INFO (DateAndTime.java:50) - Add Day column 0 to Date&Time group 1 
+2011-08-04 23:09:57,125 INFO (DateAndTime.java:61) - Add Hour column 0 to Date&Time group 1 
+2011-08-04 23:09:57,126 INFO (DateAndTime.java:72) - Add Minute column 0 to Date&Time group 1 
+2011-08-04 23:10:05,613 INFO (MeasuredValue.java:81) - In column 1 are Numeric Values 
+2011-08-04 23:10:10,958 INFO (MeasuredValue.java:81) - In column 2 are Numeric Values 
+2011-08-04 23:10:10,959 INFO (DateAndTimeController.java:196) - Merge Date & Times 
+2011-08-04 23:10:10,960 INFO (PositionController.java:153) - Merge Positions 
+2011-08-04 23:10:10,963 INFO (Step4aController.java:108) - Skip Step 4a since there is just Date&Time group 1 
+2011-08-04 23:10:10,964 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 1 
+2011-08-04 23:10:10,985 INFO (MeasuredValue.java:91) - Assign Date&Time group 1 to Numeric Value column 2 
+2011-08-04 23:10:10,987 INFO (Step4bController.java:169) - Skip Step 4b for Feature Of Interests since there are not any Feature Of Interests 
+2011-08-04 23:10:10,987 INFO (Step4bController.java:169) - Skip Step 4b for Observed Propertys since there are not any Observed Propertys 
+2011-08-04 23:10:10,988 INFO (Step4bController.java:169) - Skip Step 4b for Unit Of Measurements since there are not any Unit Of Measurements 
+2011-08-04 23:10:10,988 INFO (Step4bController.java:169) - Skip Step 4b for Sensors since there are not any Sensors 
+2011-08-04 23:10:10,990 INFO (Step4cController.java:55) - Skip Step 4c since there are not any Positions 
+2011-08-04 23:10:14,088 INFO (DateAndTime.java:83) - Add Second '0' to Date&Time group 1 
+2011-08-04 23:10:14,089 INFO (DateAndTime.java:94) - Add Timezone '0' to Date&Time group 1 
+2011-08-04 23:10:14,090 INFO (Step5cController.java:102) - Skip Step 5c since there are not any Positions with missing values 
+2011-08-04 23:10:14,092 INFO (Step6aController.java:109) - Skip Step 6a since there is at least one Date&Time 
+2011-08-04 23:10:14,094 INFO (MeasuredValue.java:34) - Unassign Feature Of Interest from Numeric Value column 1 
+2011-08-04 23:10:24,561 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Settlers" to Numeric Value column 1 
+2011-08-04 23:10:24,562 INFO (MeasuredValue.java:34) - Unassign Feature Of Interest from Numeric Value column 2 
+2011-08-04 23:10:29,515 INFO (MeasuredValue.java:36) - Assign Feature Of Interest "Settlers" to Numeric Value column 2 
+2011-08-04 23:10:29,516 INFO (MeasuredValue.java:48) - Unassign Observed Property from Numeric Value column 1 
+2011-08-04 23:10:40,068 INFO (MeasuredValue.java:46) - Assign Observed Property "SO2" to Numeric Value column 1 
+2011-08-04 23:10:40,068 INFO (MeasuredValue.java:48) - Unassign Observed Property from Numeric Value column 2 
+2011-08-04 23:10:46,021 INFO (MeasuredValue.java:46) - Assign Observed Property "TRS" to Numeric Value column 2 
+2011-08-04 23:10:46,022 INFO (MeasuredValue.java:60) - Unassign Unit of Measurement from Numeric Value column 1 
+2011-08-04 23:10:52,740 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "ppb" to Numeric Value column 1 
+2011-08-04 23:10:52,741 INFO (MeasuredValue.java:60) - Unassign Unit of Measurement from Numeric Value column 2 
+2011-08-04 23:10:53,750 INFO (MeasuredValue.java:58) - Assign Unit Of Measurement "ppb" to Numeric Value column 2 
+2011-08-04 23:10:53,751 INFO (MeasuredValue.java:72) - Unassign Sensor from Numeric Value column 1 
+2011-08-04 23:11:01,589 INFO (MeasuredValue.java:70) - Assign Sensor "SO2Sensor" to Numeric Value column 1 
+2011-08-04 23:11:01,590 INFO (MeasuredValue.java:72) - Unassign Sensor from Numeric Value column 2 
+2011-08-04 23:11:10,172 INFO (MeasuredValue.java:70) - Assign Sensor "TRSSensor" to Numeric Value column 2 
+2011-08-04 23:11:10,174 INFO (Step6bSpecialController.java:98) - Skip 6b (Special) since there are not any features of interestand observed properties in the table. 
+2011-08-04 23:11:12,619 INFO (FeatureOfInterest.java:106) - Assign Position (Latitude 0.0°, Longitude 0.0°, Height 0.0meters, EPSG-Code 4236) to Feature Of Interest "Settlers" 
+2011-08-04 23:12:37,521 INFO (Step7Controller.java:74) - Successfully tested connection to Sensor Observation Service: http://localhost:8080/52nSOSv3/sos 
+2011-08-04 23:12:37,531 INFO (Step8Panel.java:113) - Log file is saved at: file:/D:/Eigene%20Dateien/Studium/Master/2.%20Semester/52°North/Implementation/logs/52n-sensorweb-sos-importer.log 
+2011-08-04 23:12:37,535 INFO (Step8Controller.java:81) - Log file is stored at: logs\52n-sensorweb-sos-importer.log 
+2011-08-04 23:12:37,547 INFO (Step8Controller.java:107) - Assemble information from table and previous steps 
+2011-08-04 23:12:38,672 INFO (Step8Controller.java:197) - Register Sensors at Sensor Observation Service 
+2011-08-04 23:12:41,009 INFO (Step8Controller.java:239) - Insert Observations at Sensor Observation Service 
+2011-08-04 23:13:17,136 INFO (ComboBoxItems.java:165) - Save settings at C:\Users\Raimund\ComboBoxItems.properties 

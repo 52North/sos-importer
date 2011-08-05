@@ -10,6 +10,10 @@ import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Year;
 
+/**
+ * consists of a label and a JSpinner for single years
+ * @author Raimund
+ */
 public class MissingYearPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;

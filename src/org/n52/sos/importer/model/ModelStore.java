@@ -17,6 +17,11 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
 
+/**
+ * stores all identified and manually set metadata instances;
+ * provides methods to add, retrieve and remove them
+ * @author Raimund
+ */
 public class ModelStore {
 	
 	private static final Logger logger = Logger.getLogger(ModelStore.class);

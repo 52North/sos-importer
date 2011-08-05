@@ -32,6 +32,7 @@ public class UnitOfMeasurement extends Resource {
 		mv.setUnitOfMeasurement(null);		
 	}	
 	
+	@Override
 	public UnitOfMeasurement forThis(Cell measuredValuePosition) {
 		UnitOfMeasurement uom = new UnitOfMeasurement();
 		if (getTableElement() == null) {

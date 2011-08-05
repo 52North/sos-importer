@@ -32,10 +32,16 @@ public class Step5cModel {
 		return description;
 	}
 
+	/**
+	 * saves the components which are missing for this step
+	 */
 	public void setMissingPositionComponents(List<Component> missingPositionComponents) {
 		this.missingPositionComponents = missingPositionComponents;
 	}
 
+	/**
+	 * returns the components which were missing for this step
+	 */
 	public List<Component> getMissingPositionComponents() {
 		return missingPositionComponents;
 	}

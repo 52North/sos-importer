@@ -2,6 +2,7 @@ package org.n52.sos.importer.model.position;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 
 public abstract class PositionComponent extends Component {
@@ -52,6 +53,9 @@ public abstract class PositionComponent extends Component {
 		return tableElement;
 	}
 	
+	/**
+	 * colors this particular component
+	 */
 	public void mark() {
 		if (tableElement != null)
 			tableElement.mark();
@@ -84,4 +88,9 @@ public abstract class PositionComponent extends Component {
 	public String getPattern() {
 		return pattern;
 	}
+	
+	/**
+	 * returns the corresponding position component for a feature of interest cell
+	 */
+	public abstract PositionComponent forThis(Cell featureOfInterestPosition);
 }
