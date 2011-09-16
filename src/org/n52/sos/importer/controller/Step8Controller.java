@@ -127,6 +127,8 @@ public class Step8Controller extends StepController {
 			Column column = (Column) mv.getTableElement();
 			DateAndTimeController dtc = new DateAndTimeController();
 			
+			// TODO insert firstLineWithData here?
+			
 			for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
 				RegisterSensor rs = new RegisterSensor();
 				InsertObservation io = new InsertObservation();

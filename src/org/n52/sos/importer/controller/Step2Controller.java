@@ -16,7 +16,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * offers settings for parsing the CSV file
- * @author Raimund
+ * @author Raimund, Eike
  *
  */
 public class Step2Controller extends StepController {
@@ -49,6 +49,9 @@ public class Step2Controller extends StepController {
 		String textQualifier = step2Panel.getSelectedTextQualifier();
 		if (textQualifier == null || textQualifier.equals(""))
 			return false;
+		int firstLineWithData = step2Panel.getFirstLineWithData();
+		if (firstLineWithData < 0)
+			return false;
 		
 		return true;
 	}
@@ -66,22 +69,35 @@ public class Step2Controller extends StepController {
 		
 		String columnSeparator = step2Model.getSelectedColumnSeparator();
 		step2Panel.setSelectedColumnSeparator(columnSeparator);
+		
 		String commentIndicator = step2Model.getSelectedCommentIndicator();
 		step2Panel.setSelectedCommentIndicator(commentIndicator);
+		
 		String textQualifier = step2Model.getSelectedTextQualifier();
 		step2Panel.setSelectedTextQualifier(textQualifier);
+		
+		int firstLineWithData = step2Model.getFirstLineWithData();
+		step2Panel.setFirstLineWithData(firstLineWithData);
+		
 		String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
+		
 	}
 	
 	@Override
 	public void saveSettings() {	
 		String columnSeparator = step2Panel.getSelectedColumnSeparator();
 		step2Model.setSelectedColumnSeparator(columnSeparator);
+		
 		String commentIndicator = step2Panel.getSelectedCommentIndicator();
 		step2Model.setSelectedCommentIndicator(commentIndicator);
+		
 		String textQualifier = step2Panel.getSelectedTextQualifier();
 		step2Model.setSelectedTextQualifier(textQualifier);
+		
+		int firstLineWithData = step2Panel.getFirstLineWithData();
+		step2Model.setFirstLineWithData(firstLineWithData);
+		
 		String csvFileContent = step2Panel.getCSVFileContent();
 		step2Model.setCSVFileContent(csvFileContent);
 		

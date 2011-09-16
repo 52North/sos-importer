@@ -19,24 +19,9 @@
 	FILTER
 	Level: OFF, ERROR, WARN, INFO, DEBUG
 	 -->
-	<logger name="org.n52.oxf">
+	<!-- <logger name="org.n52.sos.importer">
 		<level value="INFO" />
-	</logger>
-	<logger name="org.n52.client">
-		<level value="TRACE" />
-	</logger>
-	<logger name="org.n52.server">
-		<level value="TRACE" />
-	</logger>
-	<logger name="org.n52.shared">
-		<level value="TRACE" />
-	</logger>
-	<logger name="org.n52.server.updates">
-		<level value="TRACE" />
-	</logger>
-	<logger name="org.n52.server.oxf.util.crs">
-		<level value="TRACE" />
-	</logger>
+	</logger>-->
 	<!-- 
 	EXTERNAL - LIBS
 	 -->

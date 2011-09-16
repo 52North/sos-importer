@@ -12,6 +12,8 @@ public class Step2Model {
 	
 	private String selectedTextQualifier;
 	
+	private int firstLineWithData;
+	
 	public Step2Model(String csvFileContent) {
 		this.csvFileContent = csvFileContent;
 		
@@ -19,6 +21,8 @@ public class Step2Model {
 		selectedColumnSeparator = (String) items.getColumnSeparators().getElementAt(0);
 		selectedCommentIndicator = (String) items.getCommentIndicators().getElementAt(0);
 		selectedTextQualifier = (String) items.getTextQualifiers().getElementAt(0);
+		
+		firstLineWithData = 1;
 	}
 
 	public String getSelectedColumnSeparator() {
@@ -35,6 +39,20 @@ public class Step2Model {
 
 	public void setSelectedCommentIndicator(String selectedCommentIndicator) {
 		this.selectedCommentIndicator = selectedCommentIndicator;
+	}
+
+	/**
+	 * @return the firstLineWithData
+	 */
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	/**
+	 * @param firstLineWithData the firstLineWithData to set
+	 */
+	public void setFirstLineWithData(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 
 	public String getSelectedTextQualifier() {

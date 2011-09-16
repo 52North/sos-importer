@@ -1,18 +1,24 @@
 package org.n52.sos.importer.view;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.utils.JTextFieldFilter;
 
 /**
  * offers settings for parsing the CSV file and 
  * displays a preview of the CSV file
- * @author Raimund
+ * @author Raimund, Eike
  *
  */
 public class Step2Panel extends JPanel {
@@ -23,7 +29,10 @@ public class Step2Panel extends JPanel {
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
 	
-	private final JTextArea csvFileTextArea = new JTextArea(7, 30); 
+	private final JTextArea csvFileTextArea = new JTextArea(7, 30);
+	
+	private final JTextField firstLineWithDataTF;
+	private final JLabel firstLineWithDataJL;
 	
 	public Step2Panel() {
 		super();
@@ -33,17 +42,46 @@ public class Step2Panel extends JPanel {
 		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators(), "Comment indicator", ToolTips.get("CommentIndicator"));
 		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers(), "Text qualifier", ToolTips.get("TextQualifier"));
 		
+		firstLineWithDataTF = new JTextField(1);
+		firstLineWithDataTF.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC));
+		firstLineWithDataTF.setText("1");
+		firstLineWithDataJL = new JLabel("First Line with data:");
+		
+		JPanel firstLineWithDataJPanel = new JPanel();
+		firstLineWithDataJPanel.setLayout(new BoxLayout(firstLineWithDataJPanel, BoxLayout.LINE_AXIS));
+		firstLineWithDataJPanel.add(firstLineWithDataJL);
+		firstLineWithDataJPanel.add(firstLineWithDataTF);
+		
 		csvFileTextArea.setEditable(false);		
 		
 		JPanel csvSettingsPanel = new JPanel();
-		csvSettingsPanel.setLayout(new GridLayout(3,1));
+		csvSettingsPanel.setLayout(new GridLayout(4,1));
 		csvSettingsPanel.add(columnSeparatorCombobox);
 		csvSettingsPanel.add(commentIndicatorCombobox);
 		csvSettingsPanel.add(textQualifierCombobox);
+		// TODO add when it is used
+		//csvSettingsPanel.add(firstLineWithDataJPanel);
 		this.add(csvSettingsPanel);
 		
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
 		this.add(scrollPane);
+	}
+	
+	/**
+	 * @return user input or <code>-1</code> if invalid input is defined
+	 */
+	public int getFirstLineWithData() {
+		String text = firstLineWithDataTF.getText();
+		if(text == null || text.equalsIgnoreCase("")) {
+			return -1;
+		} else {
+			try {
+				int line = Integer.parseInt(text);
+				return line;
+			} catch (NumberFormatException nfe) {
+				return -1;
+			}
+		}
 	}
 	
 	public String getSelectedColumnSeparator() {
@@ -56,6 +94,10 @@ public class Step2Panel extends JPanel {
 	
 	public String getSelectedTextQualifier() {
 		return (String) textQualifierCombobox.getSelectedItem();
+	}
+	
+	public void setFirstLineWithData(int firstLineWithData) {
+		firstLineWithDataTF.setText("" + firstLineWithData);
 	}
 	
 	public void setSelectedColumnSeparator(String columnSeparator) {
