@@ -21,7 +21,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.FileAppender;
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
@@ -75,7 +74,7 @@ public class Step8Controller extends StepController {
 		BackNextController.getInstance().setFinishButtonEnabled(false);
 		BackNextController.getInstance().changeNextToFinish();
 		
-		FileAppender a = (FileAppender) LogManager.getRootLogger().getAppender("RoFi");
+		FileAppender a = LoggingController.getInstance().getFileAppender();
 		File f = new File(a.getFile());
 		step8Panel.setLogFileURI(f.toURI());
 		logger.info("Log file is stored at: " + f.toString());
@@ -127,7 +126,7 @@ public class Step8Controller extends StepController {
 			Column column = (Column) mv.getTableElement();
 			DateAndTimeController dtc = new DateAndTimeController();
 			
-			// TODO insert firstLineWithData here?
+			 // TODO insert firstLineWithData here?
 			
 			for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
 				RegisterSensor rs = new RegisterSensor();

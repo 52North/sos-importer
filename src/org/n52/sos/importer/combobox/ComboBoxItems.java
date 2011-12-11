@@ -26,11 +26,11 @@ public class ComboBoxItems {
 	
 	private static final String SEPARATOR = "SEP";
 	
-	private static final String EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator;
+	private static final String EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 	
 	private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";
 	
-	private static final String FILE_NAME = "52n-sensorweb-sos-importer.properties";
+	private static final String FILE_NAME = "ComboBoxItems.properties";
 	
 	private final Properties props = new Properties();
 	
@@ -92,13 +92,20 @@ public class ComboBoxItems {
 			InputStream is;
 			String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
 			File file = new File(filePath);
-			if (!file.exists()) {//use default properties in jar file
+			if (!file.exists()) {
+				logger.info("Load default settings from jar file");
 				filePath = INTERNAL_FILE_PATH + FILE_NAME;
 				is = getClass().getResourceAsStream(filePath);
-			} else {
+			} else if (!file.canRead()) {
+				logger.warn("Could not load settings.");
+				logger.warn("No reading permissions for " + file);
+				logger.info("Load default settings from jar file");
+				filePath = INTERNAL_FILE_PATH + FILE_NAME;
+				is = getClass().getResourceAsStream(filePath);
+			} else {		
+				logger.info("Load settings from " + file);
 				is = new FileInputStream(file);
 			}
-			logger.info("Load settings from: " + filePath);
 			 
 			props.load(is);     
 		} catch (FileNotFoundException e) {
@@ -161,8 +168,20 @@ public class ComboBoxItems {
 		props.setProperty("unitOfMeasurementURIs", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
 		props.setProperty("sensorURIs", format(EditableComboBoxItems.getInstance().getSensorURIs()));
 		
+		File folder = new File(EXTERNAL_FILE_PATH);
+		if (!folder.exists()) {
+			
+			boolean successful = folder.mkdir();	
+			if (!successful) {
+				logger.warn("SOS properties could not be saved.");
+				logger.warn("No writing permissions at " + folder);
+				return;
+			} 
+		}
+		
 		File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
-		logger.info("Save settings at " + file.getAbsolutePath());
+		logger.info("Save settings at " + file.getAbsolutePath());	
+		
 		try { //save properties
 			OutputStream os = new FileOutputStream(file);
 			props.store(os, null);  
