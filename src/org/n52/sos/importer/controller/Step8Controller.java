@@ -156,6 +156,7 @@ public class Step8Controller extends StepController {
 				io.setLatitudeValue(p.getLatitude().getValue() + "");
 				io.setLongitudeValue(p.getLongitude().getValue() + "");
 				io.setEpsgCode(p.getEPSGCode().getValue() + "");
+				rs.setFoiName(foi.getNameString());
 				rs.setLatitudeValue(p.getLatitude().getValue() + "");
 				rs.setLatitudeUnit(p.getLatitude().getUnit());
 				rs.setLongitudeValue(p.getLongitude().getValue() + "");

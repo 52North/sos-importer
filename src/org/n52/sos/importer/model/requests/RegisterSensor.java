@@ -10,6 +10,8 @@ public class RegisterSensor {
 	
 	private String sensorURI;
 	
+	private String foiName;
+	
 	private String observedPropertyName;
 	
 	private String observedPropertyURI;
@@ -34,6 +36,7 @@ public class RegisterSensor {
 		String filledTemplate = template;
 		filledTemplate = filledTemplate.replaceAll("THISsensorName", sensorName);
 		filledTemplate = filledTemplate.replaceAll("THISsensorURI", sensorURI);
+		filledTemplate = filledTemplate.replaceAll("THISfoi", foiName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyName", observedPropertyName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyURI", observedPropertyURI);
 		filledTemplate = filledTemplate.replaceAll("THISunitOfMeasurementCode", unitOfMeasurementCode);
@@ -64,7 +67,23 @@ public class RegisterSensor {
 		this.sensorURI = sensorURI;
 	}
 
-	public String getObservedPropertyName() {
+	/**
+     * @return the foiName
+     */
+    public String getFoiName() {
+        return foiName;
+    }
+
+
+    /**
+     * @param foiName the foiName to set
+     */
+    public void setFoiName(String foiName) {
+        this.foiName = foiName;
+    }
+
+
+    public String getObservedPropertyName() {
 		return observedPropertyName;
 	}
 

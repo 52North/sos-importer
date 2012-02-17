@@ -30,7 +30,7 @@ public class ComboBoxItems {
 	
 	private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";
 	
-	private static final String FILE_NAME = "ComboBoxItems.properties";
+	private static final String FILE_NAME = "52n-sensorweb-sos-importer.properties";
 	
 	private final Properties props = new Properties();
 	

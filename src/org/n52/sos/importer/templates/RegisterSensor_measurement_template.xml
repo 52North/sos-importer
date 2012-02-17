@@ -47,6 +47,11 @@
 	                    	<swe:value>false</swe:value>
 	                	</swe:Boolean>
 	                </swe:field>
+                    <swe:field name="FeatureOfInterestID">
+                        <swe:Text definition="FeatureOfInterest identifier">
+                            <swe:value>THISfoi</swe:value>
+                        </swe:Text>
+                    </swe:field>
 				</swe:SimpleDataRecord>
 			</sml:capabilities>
 	          
