@@ -16,6 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
+		<year>2012</year>
+		<!-- <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -63,6 +65,7 @@
 							<!--  <key>value</key> -->
 							<Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class>
 							<build-time>${timestamp}</build-time>
+							<year>${year}</year>
 							<Class-Path>.</Class-Path>
 							<Rsrc-Class-Path>./ commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path>
 						</manifestEntries>
@@ -76,6 +79,56 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.9.0</version>
+				<configuration>
+					<header>src/main/resources/52n_license_header.txt</header>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<strictCheck>true</strictCheck>
+					<properties>
+						<year>2012</year>
+					</properties>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<!-- <phase>test</phase> -->
+						<!-- test will fail if license headers are not correct, run license:format 
+							to add the headers. -->
+						<!-- <goals>
+							<goal>check</goal>
+						</goals>-->
+						<phase>generate-sources</phase>
+						<goals>
+                            <goal>format</goal>
+                        </goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assemlby/assemble.xml</descriptor>
+					</descriptors>
+					<finalName>${project.groudId}.${project.artifactId-${project.version}</finalName>
+					<!--  using default values:  
+						The output directory of the assembled distribution file.
+						Default value is: ${project.build.directory}.
+						Directory to unpack JARs into if needed
+						Default value is: ${project.build.directory}/assembly/work.
+					-->
+					<!-- <outputDirectory>${project.build.directory}/assembled-release</outputDirectory>
+					<workDirectory>${project.build.directory}/assembled-release/work</workDirectory>-->
+					<!-- <archive></archive>-->
 				</configuration>
 			</plugin>
 		</plugins>
