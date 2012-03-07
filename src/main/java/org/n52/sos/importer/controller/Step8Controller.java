@@ -280,8 +280,12 @@ public class Step8Controller extends StepController {
     			if (answer.contains("AssignedObservationId"))
     				step8Panel.setNumberOfSuccessfulObservations(++successful);	
     			if (answer.contains("Exception")) {
-    				logger.error(io.toString());
-    				logger.error(answer);
+    				String errorMsg = 
+    					"Error while sending request to SOS\nSended request:\n" +
+    					completedTemplate +
+    					"\nResponse:\n" +
+    					answer;
+    				logger.error(errorMsg);
     				step8Panel.setNumberOfErroneousObservations(++errors);
     			}
     			counter++;

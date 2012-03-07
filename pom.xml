@@ -112,14 +112,48 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+	  				<descriptorRefs>
+	    				<descriptorRef>jar-with-dependencies</descriptorRef>
+	  				</descriptorRefs>
+	  				<finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
+	  				<archive>
+						<index>false</index>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addClasspath>false</addClasspath>
+							<mainClass>org.n52.sos.importer.Start</mainClass>
+						</manifest>
+						<manifestEntries>
+							<build-time>${timestamp}</build-time>
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						 <!-- assembly is build through package phase: mvn package -->
+						<phase>package</phase>
+	 					<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+<!--
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
 					<descriptors>
-						<descriptor>src/main/assemlby/assemble.xml</descriptor>
+						<descriptor>src/main/assembly/assemble.xml</descriptor>
 					</descriptors>
-					<finalName>${project.groudId}.${project.artifactId-${project.version}</finalName>
+					<finalName>${project.groupId}.${project.artifactId-${project.version}</finalName>
+-->
 					<!--  using default values:  
 						The output directory of the assembled distribution file.
 						Default value is: ${project.build.directory}.
@@ -128,9 +162,40 @@
 					-->
 					<!-- <outputDirectory>${project.build.directory}/assembled-release</outputDirectory>
 					<workDirectory>${project.build.directory}/assembled-release/work</workDirectory>-->
-					<!-- <archive></archive>-->
+<!-- 
+					<archive>
+						<index>false</index>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<addClasspath>false</addClasspath>
+							<mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
+						</manifest>
+						<manifestEntries>
+ -->
+							<!--  <key>value</key> -->
+<!-- 						<Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class>
+							<build-time>${timestamp}</build-time>
+							<year>${year}</year>
+							<Class-Path>.</Class-Path>
+							<Rsrc-Class-Path>./ ./lib commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path>
+						</manifestEntries>
+					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+-->
+						 <!-- assembly is build through package phase: mvn package -->
+<!--
+						<phase>package</phase>
+	 					<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+ -->
 		</plugins>
 	</build>
 </project>
