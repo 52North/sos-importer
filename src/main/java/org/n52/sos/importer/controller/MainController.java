@@ -41,7 +41,7 @@ public class MainController {
 	private final MainFrame mainFrame = new MainFrame(this);
 	
 	private MainController() {
-		LoggingController.getInstance().initialize();
+		LoggingController.getInstance();
 		ToolTips.loadSettings();
 	}
 	

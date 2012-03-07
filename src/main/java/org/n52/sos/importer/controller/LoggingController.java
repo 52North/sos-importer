@@ -25,6 +25,12 @@ package org.n52.sos.importer.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.jar.Attributes.Name;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
@@ -61,16 +67,6 @@ public class LoggingController {
 	private static LoggingController instance = null;
 	
 	private LoggingController() {
-	}
-
-	public static LoggingController getInstance() {
-		if (instance == null)
-			instance = new LoggingController();
-		return instance;
-	}
-	
-	
-	public void initialize() {
 		//System.setProperty("log4j.defaultInitOverride", "true");
 		Logger root = Logger.getRootLogger();
 		root.setLevel(LOGGING_LEVEL);
@@ -85,6 +81,39 @@ public class LoggingController {
 			logger.warn("Could not initialize file logging.", e);
 		}
 	}
+
+	public static LoggingController getInstance() {
+		if (instance == null) {
+			instance = new LoggingController();
+			//
+			// we want to log additional meta data when the application is started
+			if(logger.isInfoEnabled()) {
+				InputStream manifestStream;
+				String logMessage;
+				//
+				logMessage = "Application started";
+				manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
+				try {
+					Manifest manifest = new Manifest(manifestStream);
+					Attributes attributes = manifest.getMainAttributes();
+					Set<Object> keys = attributes.keySet();
+					for (Iterator<Object> iterator = keys.iterator(); iterator.hasNext();) {
+						Object object = (Object) iterator.next();
+						if (object instanceof Name) {
+							Name key = (Name) object;
+							logMessage = logMessage + "\n\t\t" + key + ": " + attributes.getValue(key);
+						}
+					}
+				}
+				catch(IOException ex) {
+					logger.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
+				}
+				logger.info(logMessage);
+			}
+		}
+		return instance;
+	}
+	
 	
 	public FileAppender getFileAppender() {
 		return fileAppender;
