@@ -65,4 +65,8 @@ public class MainController {
 	public void pack() {
 		mainFrame.pack();
 	}
+
+	public void updateTitle(String csvFilePath) {
+		this.mainFrame.updateTitle(csvFilePath);
+	}
 }

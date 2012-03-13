@@ -97,13 +97,14 @@ public class Step7Controller extends StepController {
 	    		logger.info("Successfully tested connection to Sensor Observation Service: " + strURL);
 	        	return true;
 	        } else {
+	        	String msg = "Could not connect to Sensor Observation Service: "
+	        		+ strURL + ". HTTP Response Code: " 
+	        		+ urlConn.getResponseCode();
 				JOptionPane.showMessageDialog(null,
-						"Could not connect to Sensor Observation Service: " + strURL +
-	    				". HTTP Response Code: " + urlConn.getResponseCode(),
+						msg,
 					    "Warning",
 					    JOptionPane.WARNING_MESSAGE);
-	    		logger.warn("Could not connect to Sensor Observation Service: " + strURL +
-	    				". HTTP Response Code: " + urlConn.getResponseCode());
+	    		logger.warn(msg);
 	        	return false;
 	        }        	
 	    } catch (IOException e) {

@@ -24,6 +24,7 @@
 package org.n52.sos.importer.view;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -49,10 +50,13 @@ public class MainFrame extends JFrame {
 	private final DescriptionPanel descriptionPanel = DescriptionPanel.getInstance();
 	private final BackNextPanel backNextPanel = BackNextPanel.getInstance();
 	
+	// TODO read this from general configuration file
+	private String frameTitle = "SOS Importer 0.2 RC1";
+	
 	public MainFrame(MainController mainController) {
 		super();
 		this.mainController = mainController;
-		this.setTitle("SOS Importer");
+		this.setTitle(this.frameTitle);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowChanged());
 		
@@ -88,32 +92,24 @@ public class MainFrame extends JFrame {
 	private class WindowChanged implements WindowListener {
 
 		@Override
-		public void windowActivated(WindowEvent arg0) {		
-		}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-		}
-
-		@Override
 		public void windowClosing(WindowEvent arg0) {
 			mainController.exit();		
 		}
 
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-		}
+		public void windowDeactivated(WindowEvent arg0) {}
+		public void windowDeiconified(WindowEvent arg0) {}
+		public void windowIconified(WindowEvent arg0) {}
+		public void windowOpened(WindowEvent arg0) {}
+		public void windowActivated(WindowEvent arg0) {}
+		public void windowClosed(WindowEvent arg0) {}		
+	}
 
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {
-		}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {
-		}		
+	public void updateTitle(String csvFilePath) {
+		int endOfPath = csvFilePath.lastIndexOf(File.separatorChar)+1;
+		String file = csvFilePath.substring(endOfPath);
+		String path = csvFilePath.substring(0,endOfPath);
+		String newTitle = this.frameTitle + 
+			" file:\"" + file + "\" (path: \"" + path + "\")";
+		this.setTitle(newTitle);
 	}
 }

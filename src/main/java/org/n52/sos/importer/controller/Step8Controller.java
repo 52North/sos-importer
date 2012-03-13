@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -70,7 +71,7 @@ import org.n52.sos.importer.view.Step8Panel;
 public class Step8Controller extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step8Controller.class);
-	
+
 	private Step8Panel step8Panel;
 	
 	private Step8Model step8Model;
@@ -85,12 +86,23 @@ public class Step8Controller extends StepController {
 	
 	private RegisterSensors registerSensors;
 	
+	private static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
+
+	private static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
+	
+	private final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
+	
 	private InsertObservations insertObservations;
 	
 	public Step8Controller(Step8Model step8Model) {
 		this.step8Model = step8Model;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.n52.sos.importer.interfaces.StepController#loadSettings()
+	 * In this case, the sensors are registered and the observations are 
+	 * inserted by this method
+	 */
 	@Override
 	public void loadSettings() {		
 		step8Panel = new Step8Panel();
@@ -116,7 +128,8 @@ public class Step8Controller extends StepController {
 		registerSensors.execute();
 	}
 	
-	public void registerSensorsDone() {
+	public void registerSensorsDone(String[] notRegisteredSensors) {
+		insertObservations.setNotRegisteredSensors(notRegisteredSensors);
 		insertObservations.execute();
 	}
 
@@ -216,8 +229,10 @@ public class Step8Controller extends StepController {
 	}
 	
     private class RegisterSensors extends SwingWorker<Void, Void> {
+    	
+    	private String[] failedSensors;
 
-        @Override
+		@Override
         public Void doInBackground() {
         	logger.info("Register Sensors at Sensor Observation Service");
     		String registerSensorTemplate = readTemplate("RegisterSensor_measurement_template");
@@ -228,24 +243,51 @@ public class Step8Controller extends StepController {
     		int errors = 0;
     		int total = ModelStore.getInstance().getSensorsToRegister().size();
     		
+    		ArrayList<String> failed = new ArrayList<String>(total);
+    		
     		step8Panel.setTotalNumberOfSensors(total);
     		Iterator<RegisterSensor> i = ModelStore.getInstance().getSensorsToRegister().iterator();
 
     		while(i.hasNext()) {
     			RegisterSensor rs = i.next();
     			completedTemplate = rs.fillTemplate(registerSensorTemplate);
+    			counter++;
     			
-    			String answer = sendPostMessage(completedTemplate);
+    			String answer = sendPostMessage(completedTemplate,total,counter);
     			if (answer.contains("AssignedSensorId")) {
     				step8Panel.setNumberOfSuccessfulSensors(++successful);
-    			} else if (answer.contains("Exception")) {
-    				logger.error(rs.toString());
-    				logger.error(answer);
+    			//
+    			// check if the sensor is already registered is SOS
+    			} else if(answer.contains(SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
+    					answer.contains(SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START) &&
+    					answer.contains(SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END) &&
+    					answer.contains(rs.getSensorURI())) {
+    				if(logger.isDebugEnabled()) {
+    					logger.debug("Sensor with ID \"" + rs.getSensorURI() + 
+    							"\" is already registered is SOS");
+    				}
+					step8Panel.setNumberOfSuccessfulSensors(++successful);
+				//
+				//
+    			}else if (answer.contains("Exception")) {
+    				String errorMsg = 
+    					"Error while sending request to SOS\nSended request:\n" +
+    					completedTemplate +
+    					"\nResponse:\n" +
+    					answer;
+    				logger.error(errorMsg);
     				step8Panel.setNumberOfErroneousSensors(++errors);
+    				failed.add(rs.getSensorURI());
     			}
-    			counter++;
     			double process = (double) counter / (double) total * 100;
     			step8Panel.setRegisterSensorProgress((int) process);
+    		}
+    		
+    		failed.trimToSize();
+    		if(failed.size() > 0) {
+    			this.failedSensors = failed.toArray(new String[failed.size()]);
+    		} else {
+    			this.failedSensors = null;
     		}
 
             return null;
@@ -253,11 +295,13 @@ public class Step8Controller extends StepController {
 
         @Override
         public void done() {
-            registerSensorsDone();
+            registerSensorsDone(failedSensors);
         }
     }
     
     class InsertObservations extends SwingWorker<Void, Void> {
+    	
+    	private String[] notRegisteredSensors = null;
     	
         @Override
         public Void doInBackground() {
@@ -266,37 +310,67 @@ public class Step8Controller extends StepController {
         	String completedTemplate = "";
         	
     		int counter = 0;
+    		int skipped = 0;
     		int successful = 0;
     		int errors = 0;
     		int total = ModelStore.getInstance().getObservationsToInsert().size();
+    		
+    		boolean anyFailedSensorRegistrations = false;
+    		
+    		if(this.notRegisteredSensors != null && 
+    				this.notRegisteredSensors.length > 0) {
+    			anyFailedSensorRegistrations = true;
+    		}
+    		
     		step8Panel.setTotalNumberOfObservations(total);
     		Iterator<InsertObservation> i = ModelStore.getInstance().getObservationsToInsert().iterator();
     		
     		while (i.hasNext()) {
     			InsertObservation io = i.next();
-    			completedTemplate = io.fillTemplate(insertObservationTemplate);	
-    			
-    			String answer = sendPostMessage(completedTemplate);
-    			if (answer.contains("AssignedObservationId"))
-    				step8Panel.setNumberOfSuccessfulObservations(++successful);	
-    			if (answer.contains("Exception")) {
-    				String errorMsg = 
-    					"Error while sending request to SOS\nSended request:\n" +
-    					completedTemplate +
-    					"\nResponse:\n" +
-    					answer;
-    				logger.error(errorMsg);
-    				step8Panel.setNumberOfErroneousObservations(++errors);
+    			if(anyFailedSensorRegistrations && isThisSensorRegistered(io.getSensorURI())) {
+    				if(logger.isDebugEnabled()) {
+    					logger.debug("skipped insertobservation for sensor " + io.getSensorURI());
+    				}
+    				skipped++;
+    				counter++;
+    			} else {
+    				completedTemplate = io.fillTemplate(insertObservationTemplate);	
+    				counter++;
+    				// TODO before sending request to SOS validate it
+    				String answer = sendPostMessage(completedTemplate,total,counter);
+    				if (answer.contains("AssignedObservationId"))
+    					step8Panel.setNumberOfSuccessfulObservations(++successful);	
+    				if (answer.contains("Exception")) {
+    					String errorMsg = 
+    						"Error while sending request to SOS\nSended request:\n" +
+    						completedTemplate +
+    						"\nResponse:\n" +
+    						answer;
+    					logger.error(errorMsg);
+    					step8Panel.setNumberOfErroneousObservations(++errors);
+    				}
     			}
-    			counter++;
     			double process = (double) counter / (double) total * 100;
     			step8Panel.setInsertObservationProgress((int) process);
     		}
+    		logger.info("Skipped " + skipped + " insert observation requests because of not registered sensors");
 
             return null;
         }
 
-        @Override
+        private boolean isThisSensorRegistered(String sensorURI) {
+        	for (int i = 0; i < this.notRegisteredSensors.length; i++) {
+				if(this.notRegisteredSensors[i].equalsIgnoreCase(sensorURI))
+					return false;
+			}
+			return true;
+		}
+
+		public void setNotRegisteredSensors(String[] notRegisteredSensors) {
+			this.notRegisteredSensors = notRegisteredSensors;
+		}
+        
+		@Override
         public void done() {
         	if (!cancelled) {
     		disconnectFromSOS();
@@ -329,7 +403,7 @@ public class Step8Controller extends StepController {
      * @param request
      * @return
      */
-    public String sendPostMessage(String request) { 
+    public String sendPostMessage(String request, int totalNumOfRequests, int currentNumber) { 
     	String answer = "";
 
         try {

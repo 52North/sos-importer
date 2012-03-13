@@ -55,6 +55,9 @@ public class BackNextController {
 		backNextPanel.setBackButtonVisible(isBackButtonVisible);
 	}
 	
+	/**
+	 * Change label of next button to become a finish button
+	 */
 	public void changeNextToFinish() {
 		backNextPanel.changeNextToFinish();
 	}
@@ -65,6 +68,10 @@ public class BackNextController {
 	
 	public void setFinishButtonEnabled(boolean isFinishButtonEnabled) {
 		backNextPanel.setFinishButtonEnabled(isFinishButtonEnabled);
+	}
+	
+	public void setNextButtonEnabled(boolean isNextButtonEnabled) {
+		backNextPanel.setNextButtonEnabled(isNextButtonEnabled);
 	}
 	
 	public void backButtonPressed() {

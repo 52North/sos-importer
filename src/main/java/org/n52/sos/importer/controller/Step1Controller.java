@@ -70,10 +70,15 @@ public class Step1Controller extends StepController {
 		//disable "back" button
 		BackNextController.getInstance().setBackButtonVisible(false);
 		
-		// TODO Set "Next" button inactive
-		
 		String csvFilePath = step1Model.getCSVFilePath();
 		step1Panel.setCSVFilePath(csvFilePath);
+		
+		if(this.step1Panel.getCSVFilePath() == null ||
+				this.step1Panel.getCSVFilePath().equals("")) {
+			BackNextController.getInstance().setNextButtonEnabled(false);
+		} else {
+			BackNextController.getInstance().setNextButtonEnabled(true);
+		}
 	}
 	
 	@Override
@@ -91,9 +96,10 @@ public class Step1Controller extends StepController {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter()); 
 		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
-			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
+			this.step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
+			BackNextController.getInstance().setNextButtonEnabled(true);
+			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
 		}
-		// TODO update model and tell panel to update (here: enable next button)
 	}
 
 	private class CSVFileFilter extends FileFilter {

@@ -83,6 +83,10 @@ public class BackNextPanel extends JPanel {
 		finish.setEnabled(aFlag);
 	}
 	
+	public void setNextButtonEnabled(boolean isNextEnabled) {
+		next.setEnabled(isNextEnabled);
+	}
+	
 	private class BackButtonClicked implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			BackNextController.getInstance().backButtonPressed();

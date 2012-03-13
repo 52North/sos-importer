@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>sos-importer</artifactId>
 	<groupId>org.n52.sensorweb</groupId>
-	<version>0.1</version>
+	<version>0.2-RC1</version>
 	<name>SOS importer</name>
 	<packaging>jar</packaging>
 	<properties>

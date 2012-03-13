@@ -85,7 +85,7 @@ public class Step7Test {
 		ObservedProperty op = new ObservedProperty();
 		op.setName("Temperature");
 		UnitOfMeasurement uom = new UnitOfMeasurement();
-		uom.setName("°C");
+		uom.setName("degC");
 		FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("Weatherstation Muenster");
 		Sensor sn = new Sensor();
