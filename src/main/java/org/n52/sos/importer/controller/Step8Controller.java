@@ -157,6 +157,10 @@ public class Step8Controller extends StepController {
         }
     }
     
+	/**
+	 * Here, all information collected before is combined and the modelstore is
+	 * filled.
+	 */
 	public void assembleInformation() {
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			Column column = (Column) mv.getTableElement();
