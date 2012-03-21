@@ -21,6 +21,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-resources-plugin</artifactId>
+		    <version>2.4.3</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
@@ -45,6 +50,16 @@
 			<artifactId>opencsv</artifactId>
 			<version>2.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.n52.sensorweb</groupId>
+			<artifactId>sos-importer-xmlbeans</artifactId>
+			<version>0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -63,11 +78,11 @@
 						</manifest>
 						<manifestEntries>
 							<!--  <key>value</key> -->
-							<Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class>
+							<!-- <Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class> -->
 							<build-time>${timestamp}</build-time>
 							<year>${year}</year>
 							<Class-Path>.</Class-Path>
-							<Rsrc-Class-Path>./ commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path>
+							<!-- <Rsrc-Class-Path>./ commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path> -->
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -79,7 +94,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>
+				</configuration>	
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
@@ -96,20 +111,16 @@
 					</properties>
 					<encoding>UTF-8</encoding>
 				</configuration>
+<!--
 				<executions>
 					<execution>
-						<!-- <phase>test</phase> -->
-						<!-- test will fail if license headers are not correct, run license:format 
-							to add the headers. -->
-						<!-- <goals>
-							<goal>check</goal>
-						</goals>-->
 						<phase>generate-sources</phase>
 						<goals>
                             <goal>format</goal>
                         </goals>
 					</execution>
 				</executions>
+-->
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -142,6 +153,17 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xmlbeans-maven-plugin</artifactId>
+				<version>2.3.3</version>
+				<inherited>true</inherited>
+				<configuration>
+					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
+					<!-- TODO: Create own project for xmlbeans generation -->
+					<outputJar>${basedir}/lib-repository/sos-importer-xmlbeans-0.1-xmlbeans.jar</outputJar>
+				</configuration>
 			</plugin>
 <!--
 			<plugin>
@@ -198,4 +220,18 @@
  -->
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+         <!-- Tentative local repo for libs that are not migrated to Maven dependency 
+            mechanism and available in online repositories. -->
+         <id>lib-repository</id>
+         <name>Local Repository</name>
+         <url>file:///${basedir}/lib-repository/</url>
+      </repository>
+	</repositories>
+	<organization>
+		<name>52North</name>
+		<url>http://52north.org/</url>
+	</organization>
+	<inceptionYear>2011</inceptionYear>
 </project>
