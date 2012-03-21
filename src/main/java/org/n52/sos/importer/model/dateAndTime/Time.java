@@ -24,8 +24,8 @@
 package org.n52.sos.importer.model.dateAndTime;
 
 import org.n52.sos.importer.interfaces.Combination;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.model.Component;
+import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 
 /**

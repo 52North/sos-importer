@@ -25,7 +25,6 @@ package org.n52.sos.importer.controller;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.interfaces.StepController;
 
 /**
  * lets the user identify different types of metadata 

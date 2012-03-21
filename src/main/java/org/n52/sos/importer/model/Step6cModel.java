@@ -26,7 +26,6 @@ package org.n52.sos.importer.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.n52.sos.importer.interfaces.Component;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 

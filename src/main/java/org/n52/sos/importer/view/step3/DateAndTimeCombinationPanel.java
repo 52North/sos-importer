@@ -42,7 +42,7 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * selection panel in step 3 for date&time combinations

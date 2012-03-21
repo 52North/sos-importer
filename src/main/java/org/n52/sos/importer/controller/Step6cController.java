@@ -28,13 +28,12 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
-import org.n52.sos.importer.interfaces.StepController;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step6Panel;
 
 /**

@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Height;
@@ -37,6 +36,7 @@ import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 import org.n52.sos.importer.view.position.MissingHeightPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;

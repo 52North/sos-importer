@@ -26,7 +26,6 @@ package org.n52.sos.importer.controller;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;

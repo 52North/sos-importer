@@ -37,7 +37,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * selection panel in step 3 for position combinations

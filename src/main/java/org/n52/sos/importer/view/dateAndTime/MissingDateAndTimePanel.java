@@ -23,8 +23,8 @@
  */
 package org.n52.sos.importer.view.dateAndTime;
 
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
  * takes care of the associated date&time object

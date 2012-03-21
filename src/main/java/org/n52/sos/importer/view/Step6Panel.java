@@ -31,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
 /**
  * consists of a customized instruction panel and 

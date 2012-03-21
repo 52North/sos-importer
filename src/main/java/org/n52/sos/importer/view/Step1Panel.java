@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.controller.Step1Controller;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * chooses a CSV file

@@ -35,7 +35,6 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.tooltips.ToolTips;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
@@ -43,6 +42,7 @@ import org.n52.sos.importer.view.step3.PositionCombinationPanel;
 import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
 import org.n52.sos.importer.view.step3.SelectionPanel;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * consists of the table and a radio button panel for 

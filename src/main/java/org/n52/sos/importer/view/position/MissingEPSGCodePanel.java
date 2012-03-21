@@ -29,11 +29,11 @@ import javax.swing.JOptionPane;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * consists of a combobox for the EPSG code and a combobox for the 

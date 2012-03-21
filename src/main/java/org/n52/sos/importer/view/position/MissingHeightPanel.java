@@ -31,10 +31,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.combobox.ComboBoxItems;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
  * consists of a text field for the height and a combobox for the units

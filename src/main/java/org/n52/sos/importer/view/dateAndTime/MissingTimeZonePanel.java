@@ -29,10 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * consists of a label and a JSpinner for the UTC offset

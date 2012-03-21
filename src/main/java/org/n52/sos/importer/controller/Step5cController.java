@@ -28,11 +28,10 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
-import org.n52.sos.importer.interfaces.StepController;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
 
 /**
@@ -43,8 +42,6 @@ import org.n52.sos.importer.view.Step5Panel;
 public class Step5cController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step5cController.class);
-	
-	private static final long serialVersionUID = 1L;
 	
 	private Step5cModel step5cModel;
 	

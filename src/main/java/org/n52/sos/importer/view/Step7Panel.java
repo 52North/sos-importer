@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * chooses the URL of the Sensor Observation Service

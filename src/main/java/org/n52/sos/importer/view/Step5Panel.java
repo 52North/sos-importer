@@ -30,7 +30,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
 
 /**
  * consists of an instruction panel, the table and 

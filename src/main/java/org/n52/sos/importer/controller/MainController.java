@@ -23,10 +23,9 @@
  */
 package org.n52.sos.importer.controller;
 
-import org.n52.sos.importer.interfaces.StepController;
-import org.n52.sos.importer.tooltips.ToolTips;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * controls the main frame of the application,

@@ -29,8 +29,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
-import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -40,6 +38,7 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
+import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step6Panel;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
 

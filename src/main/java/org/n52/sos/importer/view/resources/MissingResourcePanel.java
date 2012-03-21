@@ -30,11 +30,11 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
-import org.n52.sos.importer.interfaces.Component;
-import org.n52.sos.importer.interfaces.MissingComponentPanel;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.tooltips.ToolTips;
+import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * consists of a combobox for the name and a combobox for the URI;

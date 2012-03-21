@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Component;
+import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 

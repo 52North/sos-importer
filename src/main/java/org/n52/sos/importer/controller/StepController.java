@@ -21,14 +21,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.interfaces;
+package org.n52.sos.importer.controller;
 
 import javax.swing.JPanel;
 
+/**
+ * @author r.schnuerer@uni-muenster.de
+ * A StepController is the controller for a step in the workflow.
+ *
+ */
 public abstract class StepController {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * called when the step controller is newly initialized
 	 * or when the Back button is pressed, loads settings 

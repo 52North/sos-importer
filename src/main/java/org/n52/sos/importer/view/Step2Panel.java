@@ -33,8 +33,8 @@ import javax.swing.JTextField;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
-import org.n52.sos.importer.tooltips.ToolTips;
-import org.n52.sos.importer.utils.JTextFieldFilter;
+import org.n52.sos.importer.view.utils.JTextFieldFilter;
+import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * offers settings for parsing the CSV file and 

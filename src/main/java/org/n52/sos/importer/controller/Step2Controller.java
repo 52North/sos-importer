@@ -31,7 +31,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.StepController;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.view.Step2Panel;
 
@@ -44,8 +43,6 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class Step2Controller extends StepController {
 
-	private static final long serialVersionUID = 1L;
-	
 	private static final Logger logger = Logger.getLogger(Step2Controller.class);
 
 	private Step2Model step2Model;

@@ -21,9 +21,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.interfaces;
+package org.n52.sos.importer.view;
 
 import javax.swing.JPanel;
+
+import org.n52.sos.importer.model.Component;
 
 /**
  * represents the view of a component (e.g. a day) which
