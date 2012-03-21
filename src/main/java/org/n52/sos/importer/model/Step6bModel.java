@@ -26,7 +26,7 @@ package org.n52.sos.importer.model;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.Resource;
 
-public class Step6bModel {
+public class Step6bModel implements StepModel {
 	
 	private final String description = "<html>What is the <u>RESOURCE</u> for " + 
 	"the marked measured value ORIENTATION?</html>";

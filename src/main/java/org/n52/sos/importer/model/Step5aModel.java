@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 
-public class Step5aModel {
+public class Step5aModel implements StepModel {
 
 	private final String description = 
 		"Complete missing information for the marked date and time.";

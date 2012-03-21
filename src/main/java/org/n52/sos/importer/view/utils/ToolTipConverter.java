@@ -40,9 +40,9 @@ import java.net.URL;
  */
 public class ToolTipConverter {
 
-	private static final String TEXT_FILE_PATH = "/org/n52/sos/importer/tooltips/ToolTips";
+	private static final String TEXT_FILE_PATH = "src/main/resources/org/n52/sos/importer/tooltips/ToolTips";
 	
-	private static final String PROPERTIES_FILE_PATH = "/org/n52/sos/importer/tooltips/tooltips.properties";
+	private static final String PROPERTIES_FILE_PATH = "src/main/resources/org/n52/sos/importer/tooltips/tooltips.properties";
 	
 	public static void main(String[] args) {
 		URL textURL = ToolTips.class.getResource(TEXT_FILE_PATH);

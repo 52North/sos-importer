@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3aModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
 
@@ -165,5 +166,10 @@ public class Step3aController extends StepController {
 		//TODO: check whether the CSV file parsing settings have been changed
 		if (step3aModel.getMarkedColumn() == 0) return false;
 		return true;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step3aModel;
 	}
 }

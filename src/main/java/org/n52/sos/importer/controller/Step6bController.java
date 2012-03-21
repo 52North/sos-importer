@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
@@ -203,5 +204,10 @@ public class Step6bController extends StepController {
 	@Override
 	public boolean isFinished() {
 		return missingResourcePanel.checkValues();
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step6bModel;
 	}
 }

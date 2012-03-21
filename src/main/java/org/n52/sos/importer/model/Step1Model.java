@@ -23,7 +23,7 @@
  */
 package org.n52.sos.importer.model;
 
-public class Step1Model {
+public class Step1Model implements StepModel{
 
 	private String csvFilePath = "";
 	

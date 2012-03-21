@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step2Model;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step2Panel;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -70,7 +71,8 @@ public class Step2Controller extends StepController {
 		if (textQualifier == null || textQualifier.equals(""))
 			return false;
 		int firstLineWithData = step2Panel.getFirstLineWithData();
-		if (firstLineWithData < 0)
+		if (firstLineWithData < 0 || 
+				firstLineWithData > (step2Model.getCsvFileRowRount()-1))
 			return false;
 		
 		return true;
@@ -85,15 +87,15 @@ public class Step2Controller extends StepController {
 	
 	@Override
 	public void loadSettings() {
-		step2Panel = new Step2Panel();
+		step2Panel = new Step2Panel(step2Model.getCsvFileRowRount());
 		
-		String columnSeparator = step2Model.getSelectedColumnSeparator();
+		String columnSeparator = step2Model.getColumnSeparator();
 		step2Panel.setSelectedColumnSeparator(columnSeparator);
 		
-		String commentIndicator = step2Model.getSelectedCommentIndicator();
+		String commentIndicator = step2Model.getCommentIndicator();
 		step2Panel.setSelectedCommentIndicator(commentIndicator);
 		
-		String textQualifier = step2Model.getSelectedTextQualifier();
+		String textQualifier = step2Model.getTextQualifier();
 		step2Panel.setSelectedTextQualifier(textQualifier);
 		
 		int firstLineWithData = step2Model.getFirstLineWithData();
@@ -105,19 +107,26 @@ public class Step2Controller extends StepController {
 	}
 	
 	@Override
-	public void saveSettings() {	
+	public void saveSettings() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("saveSettings()");
+		}
 		String columnSeparator = step2Panel.getSelectedColumnSeparator();
-		step2Model.setSelectedColumnSeparator(columnSeparator);
+		step2Model.setColumnSeparator(columnSeparator);
 		
 		String commentIndicator = step2Panel.getSelectedCommentIndicator();
-		step2Model.setSelectedCommentIndicator(commentIndicator);
+		step2Model.setCommentIndicator(commentIndicator);
 		
 		String textQualifier = step2Panel.getSelectedTextQualifier();
-		step2Model.setSelectedTextQualifier(textQualifier);
+		step2Model.setTextQualifier(textQualifier);
 		
 		int firstLineWithData = step2Panel.getFirstLineWithData();
-		step2Model.setFirstLineWithData(firstLineWithData);
-		
+		if(firstLineWithData < 0 || firstLineWithData > (step2Model.getCsvFileRowRount()-1)) {
+			logger.info("FirstLineWithData is to large. Set to 0");
+			step2Model.setFirstLineWithData(0);
+		} else {
+			step2Model.setFirstLineWithData(firstLineWithData);
+		}
 		String csvFileContent = step2Panel.getCSVFileContent();
 		step2Model.setCSVFileContent(csvFileContent);
 		
@@ -127,9 +136,9 @@ public class Step2Controller extends StepController {
 	private Object[][] parseCSVFile() {
 		Object[][] content = null;
 		String csvFileContent = step2Model.getCSVFileContent();
-		String separator = step2Model.getSelectedColumnSeparator();
-		String quoteChar = step2Model.getSelectedCommentIndicator();
-		String escape = step2Model.getSelectedTextQualifier();
+		String separator = step2Model.getColumnSeparator();
+		String quoteChar = step2Model.getCommentIndicator();
+		String escape = step2Model.getTextQualifier();
 		
 		logger.info("Parse CSV file with " +
 				"column separator '" + separator + "', " +
@@ -220,5 +229,10 @@ public class Step2Controller extends StepController {
 	public boolean isStillValid() {
 		//TODO: check whether the CSV file has changed
 		return false;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step2Model;
 	}
 }

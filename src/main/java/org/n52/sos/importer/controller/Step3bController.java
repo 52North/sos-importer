@@ -25,13 +25,17 @@ package org.n52.sos.importer.controller;
 
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.model.StepModel;
+
 
 /**
  * lets the user identify different types of metadata 
  * for each row in the CSV file 
  * (needs apparently to be implemented)
+ * <br />
+ * <b>FIXME</b> Implement
  * @author Raimund
- *
+ * 
  */
 public class Step3bController extends StepController {
 
@@ -79,6 +83,12 @@ public class Step3bController extends StepController {
 	@Override
 	public StepController getNext() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StepModel getModel() {
+		// TODO Auto-generated method stub generated on 21.03.2012 around 16:19:55
 		return null;
 	}
 	

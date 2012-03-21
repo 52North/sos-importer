@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
@@ -172,6 +173,11 @@ public class Step6bSpecialController extends StepController {
 			return new Step6bSpecialController(step6bSpecialModel);
 		
 		return null;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step6bSpecialModel;
 	}
 
 }

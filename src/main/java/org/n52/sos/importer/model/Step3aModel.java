@@ -26,7 +26,7 @@ package org.n52.sos.importer.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Step3aModel {
+public class Step3aModel implements StepModel{
 	
 	private final int markedColumn;
 	

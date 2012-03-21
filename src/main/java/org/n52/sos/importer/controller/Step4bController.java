@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4bModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
@@ -240,5 +241,10 @@ public class Step4bController extends StepController {
 	@Override
 	public boolean isFinished() {
 		return true;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step4bModel;
 	}
 }

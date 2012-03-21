@@ -29,7 +29,7 @@ import java.util.List;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
-public class Step6cModel {
+public class Step6cModel implements StepModel {
 	
 	private final String description = "What is the position of";
 	

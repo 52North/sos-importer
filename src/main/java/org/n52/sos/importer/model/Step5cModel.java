@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.n52.sos.importer.model.position.Position;
 
-public class Step5cModel {
+public class Step5cModel implements StepModel {
 
 	private final String description = 
 		"Complete missing information for the marked position.";

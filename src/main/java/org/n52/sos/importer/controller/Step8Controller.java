@@ -48,6 +48,7 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step8Model;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
@@ -480,5 +481,10 @@ public class Step8Controller extends StepController {
 		insertObservations.cancel(true);
 		ModelStore.getInstance().clearObservationsToInsert();
 		ModelStore.getInstance().clearSensorsToRegister();
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step8Model;
 	}
 }

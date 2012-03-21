@@ -25,9 +25,13 @@ package org.n52.sos.importer.controller;
 
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.model.StepModel;
+
 /**
  * @author r.schnuerer@uni-muenster.de
- * A StepController is the controller for a step in the workflow.
+ * <br />
+ * A StepController is the controller for a step in the workflow. 
+ * It holds a model and a <code>StepPanel</code> for its step.
  *
  */
 public abstract class StepController {
@@ -83,16 +87,19 @@ public abstract class StepController {
 	public abstract StepController getNext();
 	
 	/**
-	 * contains actions when back button was pressed
+	 * contains actions when back button was pressed. Default is do nothing.
 	 */
-	public void back() {	
-	}
+	public void back() {}
 	
 	/**
 	 * checks if all conditions for this step controller 
 	 * which has been already been displayed are up to date
 	 */
-	public boolean isStillValid() {
-		return false;
-	}
+	public boolean isStillValid() {	return false; }
+	
+	/**
+	 * Returns the model of this step
+	 * @return
+	 */
+	public abstract StepModel getModel();
 }

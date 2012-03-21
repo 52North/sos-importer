@@ -25,7 +25,7 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Sensor;
 
-public class Step6bSpecialModel {
+public class Step6bSpecialModel implements StepModel {
 	
 	private final String description = "What is the sensor for";
 	

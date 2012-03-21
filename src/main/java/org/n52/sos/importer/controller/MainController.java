@@ -23,6 +23,10 @@
  */
 package org.n52.sos.importer.controller;
 
+import org.n52.sos.importer.combobox.ComboBoxItems;
+import org.n52.sos.importer.model.BackNextModel;
+import org.n52.sos.importer.model.StepModel;
+import org.n52.sos.importer.model.XMLModel;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 import org.n52.sos.importer.view.utils.ToolTips;
@@ -39,30 +43,63 @@ public class MainController {
 
 	private final MainFrame mainFrame = new MainFrame(this);
 	
+	private XMLModel xmlModel;
+	
 	private MainController() {
 		LoggingController.getInstance();
+		//
+		// Load the tooltips
 		ToolTips.loadSettings();
+		//
+		// load the configuration for the ComboBoxItems at startup 
+		// first call to getInstance() calls ComboBoxItems.load()
+		ComboBoxItems.getInstance();
+		//
+		// init xmlmodel TODO load from configuration
+		this.xmlModel = new XMLModel();
 	}
 	
 	public static MainController getInstance() {
-		if (instance == null)
-			instance = new MainController();
-		return instance;
+		if (MainController.instance == null)
+			MainController.instance = new MainController();
+		return MainController.instance;
 	}
 	
+	/**
+	 * Method is called each time a button ("Next","Back", or "Finish") is clicked
+	 * in the GUI.
+	 * @param stepController
+	 */
 	public void setStepController(StepController stepController) {
-	    DescriptionPanel.getInstance().setText(stepController.getDescription());
+	    DescriptionPanel descP = DescriptionPanel.getInstance();
+	    BackNextModel bNM = BackNextController.getInstance().getModel();
+	    //
+	    descP.setText(stepController.getDescription());
 	    stepController.loadSettings();
-	    mainFrame.setStepPanel(stepController.getStepPanel());
-		BackNextController.getInstance().getModel().setCurrentStepController(stepController);
+	    this.mainFrame.setStepPanel(stepController.getStepPanel());
+	    this.xmlModel.registerProvider(stepController.getModel());
+		bNM.setCurrentStepController(stepController);
+		
+	}
+	
+	protected void updateModel() {
+		this.xmlModel.updateModel();
+	}
+	
+	protected boolean removeProvider(StepModel sm) {
+		return this.xmlModel.removeProvider(sm);
+	}
+	
+	protected boolean registerProvider(StepModel sm) {
+		return this.xmlModel.registerProvider(sm);
 	}
 	
 	public void exit() {
-		mainFrame.showExitDialog();
+		this.mainFrame.showExitDialog();
 	}
 	
 	public void pack() {
-		mainFrame.pack();
+		this.mainFrame.pack();
 	}
 
 	public void updateTitle(String csvFilePath) {

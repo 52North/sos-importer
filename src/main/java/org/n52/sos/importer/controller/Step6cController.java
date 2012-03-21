@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.MissingComponentPanel;
@@ -162,6 +163,11 @@ public class Step6cController extends StepController {
 	@Override
 	public boolean isFinished() {
 		return positionController.checkMissingComponentValues();
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step6cModel;
 	}
 
 }

@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4aModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Column;
@@ -218,5 +219,10 @@ public class Step4aController extends StepController {
 	@Override
 	public boolean isFinished() {
 		return true;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step4aModel;
 	}
 }

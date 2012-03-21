@@ -27,12 +27,15 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
 /**
  * solves ambiguities in case there is more than one position column
  * (needs apparently to be implemented)
+ * <br />
+ * <b>FIXME</b> Implement
  * @author Raimund
  *
  */
@@ -99,6 +102,12 @@ public class Step4cController extends StepController {
 	@Override
 	public StepController getNext() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StepModel getModel() {
+		// FIXME Implement when a model is available
 		return null;
 	}
 

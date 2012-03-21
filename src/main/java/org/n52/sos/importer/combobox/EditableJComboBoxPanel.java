@@ -104,7 +104,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		newItemButton.addActionListener(new NewItem());
 		deleteItemButton.addActionListener(new DeleteItem());
 		selectionChanged = new SelectionChanged();
-		comboBox.getEditor().getEditorComponent().addKeyListener(new EnterPressed());
+		comboBox.getEditor().getEditorComponent().addKeyListener(new EnterOrESCPressed());
 		comboBox.getEditor().getEditorComponent().addFocusListener(new FocusChanged());
 	}	
 	
@@ -166,6 +166,14 @@ public class EditableJComboBoxPanel extends JPanel {
 			JTextComponent editor = (JTextComponent) comboBox.getEditor().getEditorComponent();
 			editor.setCaretPosition(0);
 		}	
+	}
+	
+	protected void escPressed() {
+		comboBox.setEditable(false);
+		comboBox.setSelectedItem(lastSelectedItem);
+		enableButtons();
+		if (getPartnerComboBox() != null)
+			getPartnerComboBox().enableButtons();
 	}
 
 	public void saveNewItem() {
@@ -376,7 +384,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		}
 	}
 	
-	private class EnterPressed implements KeyListener {
+	private class EnterOrESCPressed implements KeyListener {
 
 		@Override
 		public void keyPressed(KeyEvent arg0) {
@@ -384,6 +392,8 @@ public class EditableJComboBoxPanel extends JPanel {
 		    if (key == KeyEvent.VK_ENTER) {
 		    	setEnterPressed(true);
 				saveNewItem();
+		    } else if (key == KeyEvent.VK_ESCAPE) {
+		    	escPressed();
 		    }
 		}
 

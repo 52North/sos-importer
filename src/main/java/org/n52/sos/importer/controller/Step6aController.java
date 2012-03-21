@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.view.MissingComponentPanel;
@@ -141,6 +142,11 @@ public class Step6aController extends StepController {
 	@Override
 	public StepController getNext() {
 		return null;
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step6aModel;
 	}
 
 }

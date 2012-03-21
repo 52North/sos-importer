@@ -22,18 +22,21 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
-import org.n52.sos.importer.view.utils.JTextFieldFilter;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -50,12 +53,13 @@ public class Step2Panel extends JPanel {
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
 	
-	private final JTextArea csvFileTextArea = new JTextArea(7, 30);
+	private final JTextArea csvFileTextArea = new JTextArea(7, 70);
 	
-	private final JTextField firstLineWithDataTF;
-	private final JLabel firstLineWithDataJL;
+	private SpinnerNumberModel lineModel;
+	private JSpinner firstDataJS;
+	private final JLabel firstDataJL;
 	
-	public Step2Panel() {
+	public Step2Panel(final int csvFileRowCount) {
 		super();
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
@@ -63,15 +67,26 @@ public class Step2Panel extends JPanel {
 		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators(), "Comment indicator", ToolTips.get("CommentIndicator"));
 		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers(), "Text qualifier", ToolTips.get("TextQualifier"));
 		
-		firstLineWithDataTF = new JTextField(1);
-		firstLineWithDataTF.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC));
-		firstLineWithDataTF.setText("1");
-		firstLineWithDataJL = new JLabel("First Line with data:");
+		lineModel = new SpinnerNumberModel(0, 0, csvFileRowCount-1, 1);
+		firstDataJS = new JSpinner(lineModel);
+		/*
+		firstDataJS.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				int number = lineModel.getNumber().intValue();
+				if(number < 0) {
+					lineModel.setValue(0);
+				} else if (number > (csvFileRowCount-1)){
+					lineModel.setValue((csvFileRowCount-1));
+				}
+			}
+		});
+		*/
+		firstDataJL = new JLabel("First Line with data:");
 		
 		JPanel firstLineWithDataJPanel = new JPanel();
-		firstLineWithDataJPanel.setLayout(new BoxLayout(firstLineWithDataJPanel, BoxLayout.LINE_AXIS));
-		firstLineWithDataJPanel.add(firstLineWithDataJL);
-		firstLineWithDataJPanel.add(firstLineWithDataTF);
+		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		firstLineWithDataJPanel.add(firstDataJL);
+		firstLineWithDataJPanel.add(firstDataJS);
 		
 		csvFileTextArea.setEditable(false);		
 		
@@ -80,8 +95,7 @@ public class Step2Panel extends JPanel {
 		csvSettingsPanel.add(columnSeparatorCombobox);
 		csvSettingsPanel.add(commentIndicatorCombobox);
 		csvSettingsPanel.add(textQualifierCombobox);
-		// TODO add when it is used
-		//csvSettingsPanel.add(firstLineWithDataJPanel);
+		csvSettingsPanel.add(firstLineWithDataJPanel);
 		this.add(csvSettingsPanel);
 		
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
@@ -92,17 +106,7 @@ public class Step2Panel extends JPanel {
 	 * @return user input or <code>-1</code> if invalid input is defined
 	 */
 	public int getFirstLineWithData() {
-		String text = firstLineWithDataTF.getText();
-		if(text == null || text.equalsIgnoreCase("")) {
-			return -1;
-		} else {
-			try {
-				int line = Integer.parseInt(text);
-				return line;
-			} catch (NumberFormatException nfe) {
-				return -1;
-			}
-		}
+		return lineModel.getNumber().intValue();
 	}
 	
 	public String getSelectedColumnSeparator() {
@@ -118,7 +122,7 @@ public class Step2Panel extends JPanel {
 	}
 	
 	public void setFirstLineWithData(int firstLineWithData) {
-		firstLineWithDataTF.setText("" + firstLineWithData);
+		lineModel.setValue(firstLineWithData);
 	}
 	
 	public void setSelectedColumnSeparator(String columnSeparator) {

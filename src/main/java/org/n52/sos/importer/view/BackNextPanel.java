@@ -48,15 +48,15 @@ public class BackNextPanel extends JPanel {
 	
 	private BackNextPanel() {
 		super();
-		this.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		this.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.add(back);
 		this.add(next);
 		this.add(finish);
-		finish.setVisible(false);
+		this.finish.setVisible(false);
 		
-		back.addActionListener(new BackButtonClicked());
-		next.addActionListener(new NextButtonClicked());
-		finish.addActionListener(new FinishButtonClicked());
+		this.back.addActionListener(new BackButtonClicked());
+		this.next.addActionListener(new NextButtonClicked());
+		this.finish.addActionListener(new FinishButtonClicked());
 	}
 
 	public static BackNextPanel getInstance() {

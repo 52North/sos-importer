@@ -25,72 +25,74 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 
-public class Step2Model {
+public class Step2Model implements StepModel {
 
 	private String csvFileContent;
 	
-	private String selectedColumnSeparator;
+	private String columnSeparator;
 	
-	private String selectedCommentIndicator;
+	private String commentIndicator;
 	
-	private String selectedTextQualifier;
+	private String textQualifier;
 	
 	private int firstLineWithData;
 	
-	public Step2Model(String csvFileContent) {
+	private int csvFileRowRount;
+	
+	private boolean useHeader;
+	
+	/**
+	 * @return the csvFileRowRount
+	 */
+	public int getCsvFileRowRount() {
+		return csvFileRowRount;
+	}
+
+	/**
+	 * @param csvFileRowRount the csvFileRowRount to set
+	 */
+	public void setCsvFileRowRount(int csvFileRowRount) {
+		this.csvFileRowRount = csvFileRowRount;
+	}
+
+	public Step2Model(String csvFileContent, int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 		
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		selectedColumnSeparator = (String) items.getColumnSeparators().getElementAt(0);
-		selectedCommentIndicator = (String) items.getCommentIndicators().getElementAt(0);
-		selectedTextQualifier = (String) items.getTextQualifiers().getElementAt(0);
-		
-		firstLineWithData = 1;
+		columnSeparator = (String) items.getColumnSeparators().getElementAt(0);
+		commentIndicator = (String) items.getCommentIndicators().getElementAt(0);
+		textQualifier = (String) items.getTextQualifiers().getElementAt(0);
+		firstLineWithData = 0;
+		this.csvFileRowRount = csvFileRowCount;
 	}
 
-	public String getSelectedColumnSeparator() {
-		return selectedColumnSeparator;
+	public String getColumnSeparator() { return columnSeparator; }
+	public void setColumnSeparator(String selectedColumnSeparator) {
+		this.columnSeparator = selectedColumnSeparator;
 	}
 
-	public void setSelectedColumnSeparator(String selectedColumnSeparator) {
-		this.selectedColumnSeparator = selectedColumnSeparator;
+	public String getCommentIndicator() { return commentIndicator; }
+	public void setCommentIndicator(String selectedCommentIndicator) {
+		this.commentIndicator = selectedCommentIndicator;
 	}
 
-	public String getSelectedCommentIndicator() {
-		return selectedCommentIndicator;
-	}
-
-	public void setSelectedCommentIndicator(String selectedCommentIndicator) {
-		this.selectedCommentIndicator = selectedCommentIndicator;
-	}
-
-	/**
-	 * @return the firstLineWithData
-	 */
-	public int getFirstLineWithData() {
-		return firstLineWithData;
-	}
-
-	/**
-	 * @param firstLineWithData the firstLineWithData to set
-	 */
+	public int getFirstLineWithData() {	return firstLineWithData; }
 	public void setFirstLineWithData(int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 	}
 
-	public String getSelectedTextQualifier() {
-		return selectedTextQualifier;
+	public String getTextQualifier() { return textQualifier; }
+	public void setTextQualifier(String selectedTextQualifier) {
+		this.textQualifier = selectedTextQualifier;
 	}
 
-	public void setSelectedTextQualifier(String selectedTextQualifier) {
-		this.selectedTextQualifier = selectedTextQualifier;
-	}
-
-	public String getCSVFileContent() {
-		return csvFileContent;
-	}
-
+	public String getCSVFileContent() {	return csvFileContent; }
 	public void setCSVFileContent(String cSVFileContent) {
 		csvFileContent = cSVFileContent;
+	}
+
+	public boolean isUseHeader() { return useHeader; }
+	public void setUseHeader(boolean useHeader) {
+		this.useHeader = useHeader;
 	}
 }

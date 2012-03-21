@@ -25,7 +25,7 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Resource;
 
-public class Step4bModel {
+public class Step4bModel implements StepModel {
 	
 	private final String description = 
 		"Select all measured value ORIENTATIONs " +

@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.Step5aModel;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
@@ -140,5 +141,10 @@ public class Step5aController extends StepController {
 	@Override
 	public StepController getNextStepController() {
 		return new Step5cController();
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step5aModel;
 	}
 }

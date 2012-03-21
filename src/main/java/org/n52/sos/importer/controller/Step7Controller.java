@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step8Model;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
 
 /**
@@ -117,6 +118,11 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public StepController getNext() {
+		return null;
+	}
+
+	@Override
+	public StepModel getModel() {
 		return null;
 	}	
 }

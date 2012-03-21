@@ -25,7 +25,7 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 
-public class Step4aModel {
+public class Step4aModel implements StepModel {
 	
 	private final String description = 
 		"Select all measured value ORIENTATIONs " +

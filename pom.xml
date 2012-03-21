@@ -59,10 +59,12 @@
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>sos-importer-xmlbeans</artifactId>
 			<version>0.1</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
+<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -77,16 +79,15 @@
 							<mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
 						</manifest>
 						<manifestEntries>
-							<!--  <key>value</key> -->
-							<!-- <Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class> -->
 							<build-time>${timestamp}</build-time>
 							<year>${year}</year>
 							<Class-Path>.</Class-Path>
-							<!-- <Rsrc-Class-Path>./ commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path> -->
+							<SOS-importer-xmlbeans-version>0.1</SOS-importer-xmlbeans-version>
 						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
+-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -134,12 +135,14 @@
 						<index>false</index>
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							<!-- <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
 							<addClasspath>false</addClasspath>
 							<mainClass>org.n52.sos.importer.Start</mainClass>
 						</manifest>
 						<manifestEntries>
 							<build-time>${timestamp}</build-time>
+							<!-- TODO get this version from dependency definition -->
+							<SOS-importer-xmlbeans-version>0.1</SOS-importer-xmlbeans-version>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -162,7 +165,7 @@
 				<configuration>
 					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
 					<!-- TODO: Create own project for xmlbeans generation -->
-					<outputJar>${basedir}/lib-repository/sos-importer-xmlbeans-0.1-xmlbeans.jar</outputJar>
+					<outputJar>${basedir}/lib-repository/sos-importer-xmlbeans-0.1.jar</outputJar>
 				</configuration>
 			</plugin>
 <!--

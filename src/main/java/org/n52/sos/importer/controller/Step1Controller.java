@@ -36,6 +36,7 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
+import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step1Panel;
 
 /**
@@ -52,6 +53,8 @@ public class Step1Controller extends StepController {
 	private Step1Model step1Model;
 	
 	private String tmpCSVFileContent;
+	
+	private int csvFileRowCount = -1;
 	
 	public Step1Controller() {
 		step1Model = new Step1Model();
@@ -161,23 +164,36 @@ public class Step1Controller extends StepController {
 			return false;
 		}
 		
-		tmpCSVFileContent = readFile(f);
+		this.tmpCSVFileContent = readFile(f);
 		
 		return true;
 	}
 	
+	/**
+	 * Reads the given file line by line. Returns the content as 
+	 * <code>{@link java.lang.String}</code> and sets the 
+	 * <code>csvFileRowCount</code> variable of this class.
+	 * @param f the <code>{@link java.io.File}</code> to read
+	 * @return a <code>{@link java.lang.String}</code> containing the content 
+	 * 				of the given file
+	 */
 	private String readFile(File f) {
 		logger.info("Read CSV file " + f.getAbsolutePath());
 		StringBuilder sb = new StringBuilder();
 		try {
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
-			
 			String line;
-			while ((line = br.readLine()) != null)
+			this.csvFileRowCount = 0;
+			//
+			while ((line = br.readLine()) != null) {
 				sb.append(line + "\n");
+				csvFileRowCount++;
+			}
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			logger.error("Problem while reading CSV file \"" + 
+					f.getAbsolutePath() + "\"",
+					ioe);
 		}
 		return sb.toString();
 	}
@@ -189,9 +205,14 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {			
-		Step2Model s2m = new Step2Model(tmpCSVFileContent);
-		tmpCSVFileContent = null;
+		Step2Model s2m = new Step2Model(this.tmpCSVFileContent,this.csvFileRowCount);
+		this.tmpCSVFileContent = null;
 		
 		return new Step2Controller(s2m);
+	}
+
+	@Override
+	public StepModel getModel() {
+		return this.step1Model;
 	}
 }

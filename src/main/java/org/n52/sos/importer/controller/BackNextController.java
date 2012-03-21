@@ -51,68 +51,81 @@ public class BackNextController {
 	}
 	
 	public void setBackButtonVisible(boolean isBackButtonVisible) {
-		backNextPanel.setBackButtonVisible(isBackButtonVisible);
+		this.backNextPanel.setBackButtonVisible(isBackButtonVisible);
 	}
 	
 	/**
 	 * Change label of next button to become a finish button
 	 */
 	public void changeNextToFinish() {
-		backNextPanel.changeNextToFinish();
+		this.backNextPanel.changeNextToFinish();
 	}
 	
 	public void changeFinishToNext() {
-		backNextPanel.changeFinishToNext();
+		this.backNextPanel.changeFinishToNext();
 	}
 	
 	public void setFinishButtonEnabled(boolean isFinishButtonEnabled) {
-		backNextPanel.setFinishButtonEnabled(isFinishButtonEnabled);
+		this.backNextPanel.setFinishButtonEnabled(isFinishButtonEnabled);
 	}
 	
 	public void setNextButtonEnabled(boolean isNextButtonEnabled) {
-		backNextPanel.setNextButtonEnabled(isNextButtonEnabled);
+		this.backNextPanel.setNextButtonEnabled(isNextButtonEnabled);
 	}
 	
 	public void backButtonPressed() {
-		StepController currentSC = backNextModel.getCurrentStepController();
+		StepController currentSC = this.backNextModel.getCurrentStepController();
 		currentSC.back();
-		backNextModel.addFollowingStepController(currentSC);
-		StepController previousSC = backNextModel.getPreviousStepController();
-		MainController.getInstance().setStepController(previousSC);
+		this.backNextModel.addFollowingStepController(currentSC);
+		StepController previousSC = this.backNextModel.getPreviousStepController();
+		MainController mC = MainController.getInstance();
+		mC.setStepController(previousSC);
+		mC.removeProvider(currentSC.getModel());
 	}
 	
 	public void nextButtonClicked() {
-		StepController currentSC = backNextModel.getCurrentStepController();
-		if (!currentSC.isFinished()) return;
-		
+		StepController currentSC = this.backNextModel.getCurrentStepController();
+		MainController mC = MainController.getInstance();
+		//
+		if (!currentSC.isFinished()) {
+			return;
+		}
+		//
 		currentSC.saveSettings();
-		backNextModel.addPreviousStepController(currentSC);	//put controller on stack
-		
+		// update the xml model, too
+		mC.updateModel();
+		// put controller on stack
+		this.backNextModel.addPreviousStepController(currentSC);
+		//
 		// when has already been to the next step
-		StepController followingSC = backNextModel.getFollowingStepController();
+		StepController followingSC = this.backNextModel.getFollowingStepController();
 		if (followingSC != null && followingSC.isStillValid()) {
-			MainController.getInstance().setStepController(followingSC);
-			return;
-		}
-		
-		// used to get 4a,b,c,d steps before getting 5a, for example
-		//
-		// next step controller of this type
-		StepController nextSC = currentSC.getNext(); 
-		if (nextSC != null) {
-			MainController.getInstance().setStepController(nextSC);
-			return;
-		}
-		// When is this code called? In which situation?
-		// When step n+1 is called after step n
-		//
-		// next step controller of another type
-		nextSC = currentSC.getNextStepController();		
-		
-		while (!nextSC.isNecessary())
-			nextSC = nextSC.getNextStepController();
+			mC.setStepController(followingSC);
+			mC.removeProvider(currentSC.getModel());
+		} else { 
+			//
+			// used to get 4a,b,c,d steps before getting 5a, for example
+			//
+			// next step controller of this type
+			StepController nextSC = currentSC.getNext(); 
+			if (nextSC != null) {
+				mC.setStepController(nextSC);
+				mC.removeProvider(currentSC.getModel());
+			} else {
+				// When is this code called? In which situation?
+				// When step n+1 is called after step n
+				//
+				// next step controller of another type
+				nextSC = currentSC.getNextStepController();		
 
-		MainController.getInstance().setStepController(nextSC);
+				while (!nextSC.isNecessary()) {
+					nextSC = nextSC.getNextStepController();
+				}
+				//
+				mC.setStepController(nextSC);
+				mC.removeProvider(currentSC.getModel());
+			}
+		}
 	}
 	
 	public void finishButtonClicked() {
@@ -120,6 +133,6 @@ public class BackNextController {
 	}
 	
 	public BackNextModel getModel() {
-		return backNextModel;
+		return this.backNextModel;
 	}
 }
