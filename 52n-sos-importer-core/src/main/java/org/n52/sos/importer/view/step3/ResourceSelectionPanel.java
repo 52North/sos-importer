@@ -66,7 +66,7 @@ public class ResourceSelectionPanel extends SelectionPanel {
 	}
 
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 		Resource resourceToRemove = null;
 		for (Resource r: resource.getList())
 			if (tableElement.equals(r.getTableElement())) {

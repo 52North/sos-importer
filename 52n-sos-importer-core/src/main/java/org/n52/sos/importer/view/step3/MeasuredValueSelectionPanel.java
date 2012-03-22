@@ -45,28 +45,24 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 	
 	private MeasuredValue measuredValue;
 	
-	public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue) {
+	public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue,int firstLineWithData) {
 		super(containerPanel);
 		this.measuredValue = measuredValue;
-		parseTestLabel = new ParseTestLabel(measuredValue);
+		parseTestLabel = new ParseTestLabel(measuredValue,firstLineWithData);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(parseTestLabel);
 	}
 
 	@Override
-	protected void setSelection(String s) {				
-	}
+	protected void setSelection(String s) {	}
 
 	@Override
-	protected String getSelection() {
-		return "0";
-	}
+	protected String getSelection() { return "0"; }
 
 	@Override
-	public void setDefaultSelection() {	
-	}
+	public void setDefaultSelection() {	}
 	
-	protected void reinit() {
+	protected void reInit() {
 		parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 	}		
 	
@@ -77,7 +73,7 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 	}
 	
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 		MeasuredValue measuredValueToRemove = null;
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			if (tableElement.equals(mv.getTableElement())) {

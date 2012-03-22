@@ -82,7 +82,7 @@ public class Step2Controller extends StepController {
 	public StepController getNextStepController() {
 		Object[][] content = parseCSVFile();
 		TableController.getInstance().setContent(content);
-		return new Step3aController();
+		return new Step3aController(this.step2Model.getFirstLineWithData());
 	}
 	
 	@Override
@@ -131,41 +131,6 @@ public class Step2Controller extends StepController {
 		step2Model.setCSVFileContent(csvFileContent);
 		
 		step2Panel = null;
-	}
-	
-	private Object[][] parseCSVFile() {
-		Object[][] content = null;
-		String csvFileContent = step2Model.getCSVFileContent();
-		String separator = step2Model.getColumnSeparator();
-		String quoteChar = step2Model.getCommentIndicator();
-		String escape = step2Model.getTextQualifier();
-		
-		logger.info("Parse CSV file with " +
-				"column separator '" + separator + "', " +
-				"comment indicator '" + quoteChar + "' and " +
-				"text qualifier '" + escape + "'.");
-		
-		try {	
-			if (separator.equals("Tab")) separator = "\t"; 
-			if (separator.equals("Space")) {
-				separator = ";";
-				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
-			}
-			StringReader sr = new StringReader(csvFileContent);
-			CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
-			List<String[]> lines = reader.readAll();
-			int rows = lines.size();
-			String[] firstLine = lines.get(0);
-			int columns = firstLine.length;
-			content = new Object[rows][columns];
-
-			for (int i = 0; i < rows; i++) {
-				content[i] = lines.get(i);
-			}
-		} catch (IOException e) {
-			logger.error("Error while parsing CSV file.", e);
-		}
-		return content;
 	}
 	
 	public String convertSpaceSeparatedText(String text, String separator) {
@@ -234,5 +199,45 @@ public class Step2Controller extends StepController {
 	@Override
 	public StepModel getModel() {
 		return this.step2Model;
+	}
+
+	private Object[][] parseCSVFile() {
+		Object[][] content = null;
+		String csvFileContent = step2Model.getCSVFileContent();
+		String separator = step2Model.getColumnSeparator();
+		String quoteChar = step2Model.getCommentIndicator();
+		String escape = step2Model.getTextQualifier();
+		int firstLineWithData = step2Model.getFirstLineWithData();
+		boolean useHeader = step2Model.getUseHeader();
+		
+		logger.info("Parse CSV file: " +
+				"column separator: '"    + separator         + "', " +
+				"comment indicator: '"   + quoteChar         + "', " +
+				"text qualifier: '"      + escape            + "', " +
+				"first line with data: " + firstLineWithData + "; "  +  
+				"use header? " + useHeader);
+		
+		try {	
+			if (separator.equals("Tab")) {
+				separator = "\t"; 
+			} else if (separator.equals("Space")) {
+				separator = ";";
+				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
+			}
+			StringReader sr = new StringReader(csvFileContent);
+			CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
+			List<String[]> lines = reader.readAll();
+			int rows = lines.size();
+			String[] firstLine = lines.get(0);
+			int columns = firstLine.length;
+			content = new String[rows][columns];
+	
+			for (int i = 0; i < rows; i++) {
+				content[i] = lines.get(i);
+			}
+		} catch (IOException e) {
+			logger.error("Error while parsing CSV file.", e);
+		}
+		return content;
 	}
 }

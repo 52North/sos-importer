@@ -25,17 +25,15 @@ package org.n52.sos.importer.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
-import org.x52North.sensorweb.sos.importer.x02.FirstLineWithDataDocument.FirstLineWithData;
+import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.ParameterDocument.Parameter;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -154,7 +152,7 @@ public class XMLModel {
 						p = cM.getParameter();
 					}
 					cM.setFirstLineWithData(s2M.getFirstLineWithData());
-					cM.setUseHeader(s2M.isUseHeader());
+					cM.setUseHeader(s2M.getUseHeader());
 					p.setCommentIndicator(s2M.getCommentIndicator());
 					p.setElementSeparator(s2M.getColumnSeparator());
 					p.setTextIndicator(s2M.getTextQualifier());
@@ -165,10 +163,10 @@ public class XMLModel {
 					 */
 				} else if (sm instanceof Step3aModel) {
 					Step3aModel s3M = (Step3aModel) sm;
-
+					s3M.getMarkedColumn();
+					// TODO implement (Store results from ..assign(..) in Step3*Model
 				}
 			}
-			this.validate();
 		}
 	}
 	
