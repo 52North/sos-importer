@@ -6,6 +6,7 @@
 		<groupId>org.n52</groupId>
 		<artifactId>52-North</artifactId>
 		<version>5.3</version>
+		<relativePath/>
 	</parent>
 	<artifactId>52n-sos-importer-bindings</artifactId>
 	<description>52North SOS Importer XML Bindings Module</description>
@@ -14,7 +15,7 @@
 		<repository>
 			<id>n52-releases</id>
 			<name>52n Releases</name>
-			<url>https://52north.org/maven/repo/releases/</url>
+			<url>http://52north.org/maven/repo/releases/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -26,7 +27,7 @@
 		<repository>
 			<id>n52-snapshots</id>
 			<name>52n Snapshots</name>
-			<url>https://52north.org/maven/repo/snapshots/</url>
+			<url>http://52north.org/maven/repo/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -49,4 +50,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+	</dependencies>
 </project>
