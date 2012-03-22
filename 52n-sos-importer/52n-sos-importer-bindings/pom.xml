@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.n52.sensorweb</groupId>
+		<artifactId>sos-importer</artifactId>
+		<version>0.2-RC1</version>
+	</parent>
+
+	<artifactId>sos-importer-bindings</artifactId>
+	<description>52North SOS Importer XML Bindings Module</description>
+
+	<repositories>
+		<repository>
+			<id>n52-releases</id>
+			<name>52n Releases</name>
+			<url>https://52north.org/maven/repo/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>n52-snapshots</id>
+			<name>52n Snapshots</name>
+			<url>https://52north.org/maven/repo/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xmlbeans-maven-plugin</artifactId>
+				<version>2.3.3</version>
+				<inherited>true</inherited>
+				<configuration>
+					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
+					<outputJar>${basedir}/../52n-sos-importer-core/lib-repository/org/n52/sensorweb/sos-importer-xmlbeans/0.1/sos-importer-xmlbeans-0.1.jar</outputJar>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
