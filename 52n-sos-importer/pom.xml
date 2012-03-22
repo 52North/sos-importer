@@ -4,7 +4,8 @@
 	<parent>
 		<artifactId>52-North</artifactId>
 		<groupId>org.n52</groupId>
-		<version>5.2</version>
+		<version>5.3</version>
+		<relativePath/>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.n52.sensorweb</groupId>
