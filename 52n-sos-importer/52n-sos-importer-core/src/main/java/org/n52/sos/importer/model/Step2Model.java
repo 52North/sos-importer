@@ -91,7 +91,7 @@ public class Step2Model implements StepModel {
 		csvFileContent = cSVFileContent;
 	}
 
-	public boolean isUseHeader() { return useHeader; }
+	public boolean getUseHeader() { return useHeader; }
 	public void setUseHeader(boolean useHeader) {
 		this.useHeader = useHeader;
 	}

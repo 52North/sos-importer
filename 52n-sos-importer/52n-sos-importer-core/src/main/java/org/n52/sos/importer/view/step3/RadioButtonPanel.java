@@ -123,7 +123,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	}
 	
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 	};
 	
 	/**

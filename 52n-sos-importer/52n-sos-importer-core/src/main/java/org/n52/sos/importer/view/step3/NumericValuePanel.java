@@ -66,11 +66,12 @@ public class NumericValuePanel extends SelectionPanel {
 	private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 	private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparators);
 	
-	private final ParseTestLabel parseTestLabel = new ParseTestLabel(numericValue);
+	private final ParseTestLabel parseTestLabel;
 	private final ExampleFormatLabel exampleNumberLabel = new ExampleFormatLabel(numericValue);
 
-	public NumericValuePanel(JPanel containerPanel) {
+	public NumericValuePanel(JPanel containerPanel, int firstLineWithData) {
 		super(containerPanel);
+		this.parseTestLabel = new ParseTestLabel(numericValue,firstLineWithData);
 		setDefaultSelection();
 		decimalSeparatorCombobox.addActionListener(new DecimalSeparatorChanged());
 		decimalSeparatorCombobox.setToolTipText(ToolTips.get("DecimalSeparator"));
@@ -103,7 +104,9 @@ public class NumericValuePanel extends SelectionPanel {
 	protected String getSelection() {
 		String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 		String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
-		if (thousandsSeparator.equals("Space")) thousandsSeparator = " ";
+		if (thousandsSeparator.equals("Space")) {
+			thousandsSeparator = " ";
+		}
 		return decimalSeparator+":"+thousandsSeparator;
 	}
 
@@ -125,7 +128,7 @@ public class NumericValuePanel extends SelectionPanel {
 	};
 	
 	@Override
-	protected void reinit() {
+	protected void reInit() {
 		parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 		exampleNumberLabel.reformat(exampleValue);
 	}
@@ -142,7 +145,7 @@ public class NumericValuePanel extends SelectionPanel {
 	}
 	
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 		MeasuredValue measuredValueToRemove = null;
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
 			if (tableElement.equals(mv.getTableElement())) {

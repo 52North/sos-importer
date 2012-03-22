@@ -32,15 +32,16 @@ public class Step3aModel implements StepModel{
 	
 	private List<String> selection;
 	
-	public Step3aModel(int markedColumn) {
+	private final int firstLineWithData;
+	
+	public Step3aModel(int markedColumn,int firstLineWithData) {
 		this.markedColumn = markedColumn;
+		this.firstLineWithData = firstLineWithData;
 		selection = new ArrayList<String>();
 		selection.add("Undefined");
 	}
 
-	public int getMarkedColumn() {
-		return markedColumn;
-	}
+	public int getMarkedColumn() { return markedColumn; }
 
 	/**
 	 * saves the current selection of the radio button panel
@@ -52,7 +53,11 @@ public class Step3aModel implements StepModel{
 	/**
 	 * returns the saved selection of the radio button panel
 	 */
-	public List<String> getSelection() {
-		return selection;
-	}
+	public List<String> getSelection() { return selection; }
+
+	/**
+	 * @return the firstLineWithData
+	 */
+	public int getFirstLineWithData() {	return firstLineWithData; }
+	
 }

@@ -34,6 +34,7 @@ import org.n52.sos.importer.model.Step3aModel;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
+import org.n52.sos.importer.view.step3.SelectionPanel;
 
 /**
  * lets the user identify different types of metadata 
@@ -49,7 +50,8 @@ public class Step3aController extends StepController {
 	
 	private TableController tableController = TableController.getInstance();	
 	
-	public Step3aController() {
+	public Step3aController(int firstLineWithData) {
+		this(new Step3aModel(0, firstLineWithData));		
 	}
 	
 	public Step3aController(Step3aModel step3aModel) {
@@ -72,9 +74,9 @@ public class Step3aController extends StepController {
 		Column column = new Column(number);
 		List<String> selection = step3aModel.getSelection();
 
-		step3Panel = new Step3Panel();
+		step3Panel = new Step3Panel(step3aModel.getFirstLineWithData());
 		step3Panel.restore(selection);
-		step3Panel.getLastChildPanel().unassign(column);
+		step3Panel.getLastChildPanel().unAssign(column);
 
 		tableController.mark(column);
 		tableController.setColumnHeading(number, "???");
@@ -89,7 +91,9 @@ public class Step3aController extends StepController {
 		step3aModel.setSelection(selection);
 		
 		int number = step3aModel.getMarkedColumn();
-		step3Panel.getLastChildPanel().assign(new Column(number));
+		SelectionPanel selP = step3Panel.getLastChildPanel();
+		selP.assign(new Column(number));
+		// FIXME store the selection in the XMLModel (add ref to MainController)
 		
 		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
@@ -129,13 +133,13 @@ public class Step3aController extends StepController {
 
 	@Override
 	public boolean isNecessary() {
-		step3aModel = new Step3aModel(0);
 		return true;
 	}
 
 	@Override
 	public boolean isFinished() {
-		
+		// check if the current column is the last in the file
+		// if yes, check for at least one measured value column
 		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {
 			List<String> currentSelection = new ArrayList<String>();
 			step3Panel.store(currentSelection);
@@ -148,17 +152,16 @@ public class Step3aController extends StepController {
 				return false;
 			}
 		}
-		
 		return true;
 	}
 
 	@Override
 	public StepController getNext() {
 		int nextColumn = step3aModel.getMarkedColumn() + 1;
-		if (nextColumn == tableController.getColumnCount())
+		if (nextColumn == tableController.getColumnCount()) {
 			return null;
-		
-		return new Step3aController(new Step3aModel(nextColumn));
+		}
+		return new Step3aController(new Step3aModel(nextColumn, this.step3aModel.getFirstLineWithData()));
 	}	
 	
 	@Override

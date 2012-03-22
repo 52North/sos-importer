@@ -141,6 +141,11 @@ public class DateAndTimeController {
 	}
 	
 	
+	/**
+	 * FIXME add comment to explain this method
+	 * @param pattern
+	 * @param tableElement
+	 */
 	public void assignPattern(String pattern, TableElement tableElement) {		
 		logger.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
 		

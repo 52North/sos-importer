@@ -60,9 +60,9 @@ public class Step3Panel extends JPanel {
 	private TablePanel tablePanel = TablePanel.getInstance();
 	private final SelectionPanel radioButtonPanel;
 	
-	public Step3Panel() {
+	public Step3Panel(int firstLineWithData) {
 		super();
-		radioButtonPanel = new RootPanel();	
+		radioButtonPanel = new RootPanel(firstLineWithData);	
 		radioButtonPanel.getContainerPanel().add(radioButtonPanel);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -81,6 +81,11 @@ public class Step3Panel extends JPanel {
 		additionalPanel2.removeAll();
 	}
 	
+	/**
+	 * Get the last child panel of <b><code>this</code></b> {@link org.n52.sos.importer.view.step3.SelectionPanel}
+	 * The last one should contain the user input.
+	 * @return
+	 */
 	public SelectionPanel getLastChildPanel() {
 		SelectionPanel lastChildPanel = radioButtonPanel;
 		SelectionPanel nextPanel = radioButtonPanel.getSelectedChildPanel();
@@ -91,6 +96,11 @@ public class Step3Panel extends JPanel {
 		return lastChildPanel;
 	}
 	
+	/**
+	 * Stores the current selection in the {@linkplain org.n52.sos.importer.model.ModelStore}
+	 * instance.
+	 * @param selection list of all selected items, e.g. column type and the corresponding meta data
+	 */
 	public void store(List<String> selection) {
 		radioButtonPanel.store(selection);
 	}
@@ -107,12 +117,17 @@ public class Step3Panel extends JPanel {
 		
 		private static final long serialVersionUID = 1L;
 		
-		public RootPanel() {	
+		/**
+		 * First panel presenting a column with radio buttons to define the
+		 * column type
+		 * @param firstLineWithData required for the test parsing results
+		 */
+		public RootPanel(int firstLineWithData) {	
 			super(rootPanel);
 			addRadioButton("Undefined");
-			addRadioButton("Measured Value", ToolTips.get("MeasuredValue"), new MeasuredValuePanel());
-			addRadioButton("Date & Time", ToolTips.get("DateAndTime"), new DateAndTimePanel());
-			addRadioButton("Position", ToolTips.get("Position"), new PositionPanel());
+			addRadioButton("Measured Value", ToolTips.get("MeasuredValue"), new MeasuredValuePanel(firstLineWithData));
+			addRadioButton("Date & Time", ToolTips.get("DateAndTime"), new DateAndTimePanel(firstLineWithData));
+			addRadioButton("Position", ToolTips.get("Position"), new PositionPanel(firstLineWithData));
 			addRadioButton("Feature of Interest", ToolTips.get("FeatureOfInterest"), new ResourceSelectionPanel(additionalPanel1, new FeatureOfInterest()));
 			addRadioButton("Observed Property", ToolTips.get("ObservedProperty"), new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
 			addRadioButton("Unit of Measurement", ToolTips.get("UnitOfMeasurement"), new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
@@ -124,12 +139,16 @@ public class Step3Panel extends JPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public MeasuredValuePanel() {	
+			/**
+			 * JPanel for the definition of the measure value type
+			 * @param firstLineWithData required for the test parsing results
+			 */
+			public MeasuredValuePanel(int firstLineWithData) {	
 				super(additionalPanel1);		
-				addRadioButton("Numeric Value", ToolTips.get("NumericValue"), new NumericValuePanel(additionalPanel2));
-				addRadioButton("Count", ToolTips.get("Count"), new MeasuredValueSelectionPanel(additionalPanel2, new Count()));
-				addRadioButton("Boolean", ToolTips.get("Boolean"), new MeasuredValueSelectionPanel(additionalPanel2, new Boolean()));
-				addRadioButton("Text", ToolTips.get("Text"), new MeasuredValueSelectionPanel(additionalPanel2, new Text()));
+				addRadioButton("Numeric Value", ToolTips.get("NumericValue"), new NumericValuePanel(additionalPanel2, firstLineWithData));
+				addRadioButton("Count", ToolTips.get("Count"), new MeasuredValueSelectionPanel(additionalPanel2, new Count(),firstLineWithData));
+				addRadioButton("Boolean", ToolTips.get("Boolean"), new MeasuredValueSelectionPanel(additionalPanel2, new Boolean(),firstLineWithData));
+				addRadioButton("Text", ToolTips.get("Text"), new MeasuredValueSelectionPanel(additionalPanel2, new Text(),firstLineWithData));
 			}	
 		}
 		
@@ -137,9 +156,13 @@ public class Step3Panel extends JPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public DateAndTimePanel() {
+			/**
+			 * JPanel for the definition of the date time type
+			 * @param firstLineWithData required for the test parsing results
+			 */
+			public DateAndTimePanel(int firstLineWithData) {
 				super(additionalPanel1);
-				addRadioButton("Combination", null, new DateAndTimeCombinationPanel(additionalPanel2));
+				addRadioButton("Combination", null, new DateAndTimeCombinationPanel(additionalPanel2, firstLineWithData));
 				addRadioButton("UNIX time");
 			}	
 		}
@@ -148,9 +171,13 @@ public class Step3Panel extends JPanel {
 
 			private static final long serialVersionUID = 1L;
 			
-			public PositionPanel() {
+			/**
+			 * JPanel for the definition of the position type
+			 * @param firstLineWithData required for the test parsing results
+			 */
+			public PositionPanel(int firstLineWithData) {
 				super(additionalPanel1);	
-				addRadioButton("Combination", null, new PositionCombinationPanel(additionalPanel2));
+				addRadioButton("Combination", null, new PositionCombinationPanel(additionalPanel2, firstLineWithData));
 			}
 		}	
 	}		

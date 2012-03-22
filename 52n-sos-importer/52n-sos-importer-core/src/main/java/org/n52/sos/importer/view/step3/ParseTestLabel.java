@@ -30,6 +30,7 @@ import java.util.Set;
 
 import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Parseable;
 
 /**
@@ -44,25 +45,38 @@ public class ParseTestLabel extends JLabel {
 	
 	private Parseable parser;
 	
-	public ParseTestLabel(Parseable parser) {
+	private int firstLineWithData = 0;
+	
+	private static final Logger logger = Logger.getLogger(ParseTestLabel.class);
+	
+	public ParseTestLabel(Parseable parser, int firstLineWithData) {
 		super();
 		this.parser = parser;
+		this.firstLineWithData = firstLineWithData;
 	}
 	
 	public void parseValues(List<String> values) {
 		int notParseableValues = 0;
+		int currentLine = 0;
 		StringBuilder notParseable = new StringBuilder();
 		Set<String> notParseableStrings = new HashSet<String>();
 		notParseable.append("<html>");
 
 		for (String value: values) {
-			try {
-				parser.parse(value);
-			} catch (Exception e) {
-				if (notParseableStrings.add(value))
-					notParseable.append(value + "<br>");
-				notParseableValues++;
+			if(currentLine >= firstLineWithData) {
+				try {
+					parser.parse(value);
+				} catch (Exception e) {
+					if (notParseableStrings.add(value))
+						notParseable.append(value + "<br>");
+					notParseableValues++;
+				}
+			} else {
+				if (logger.isDebugEnabled()) {
+					logger.debug("skipping line to parse #" + currentLine);
+				}
 			}
+			currentLine++;
 		}
 		
 		String text = "";

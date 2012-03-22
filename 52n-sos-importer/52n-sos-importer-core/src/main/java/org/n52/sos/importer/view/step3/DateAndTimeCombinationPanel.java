@@ -57,8 +57,8 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	
 	private DateAndTime dateAndTime;
 	
-	public DateAndTimeCombinationPanel(JPanel containerPanel) {	
-		super(containerPanel);
+	public DateAndTimeCombinationPanel(JPanel containerPanel, int firstLineWithData) {	
+		super(containerPanel,firstLineWithData);
 	}
 
 	@Override
@@ -101,12 +101,13 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 		DateAndTime dtm = new DateAndTime();
 		dtm.setGroup(group);
 		DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern(pattern, tableElement);			
+		dtc.assignPattern(pattern, tableElement);
+		// FIXME move action to controller (GUI should not manipulate the model)
 		ModelStore.getInstance().add(dtm);
 	}
 
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 		DateAndTime dateAndTimeToRemove = null;
 		for (DateAndTime dtm: ModelStore.getInstance().getDateAndTimes()) {
 			Second second = dtm.getSecond();

@@ -59,12 +59,13 @@ public abstract class CombinationPanel extends SelectionPanel {
     private JLabel exampleLabel = new JLabel("Example: ");
     private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(getCombination());
 	
-    private final ParseTestLabel parseTestLabel = new ParseTestLabel(getCombination());
+    private final ParseTestLabel parseTestLabel;
    
-	public CombinationPanel(JPanel containerPanel) {	
+	public CombinationPanel(JPanel containerPanel,int firstLineWithData) {	
 		super(containerPanel);
-		
 		setDefaultSelection();
+		
+		this.parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
 		patternComboBox.addActionListener(new FormatChanged());
 		groupComboBox.setToolTipText(getGroupToolTip());
 		
@@ -123,6 +124,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	public String getSelection() {
 		String pattern = (String) patternComboBox.getSelectedItem();
 		String group = (String) groupComboBox.getSelectedItem();
+		// FIXME externalise "SEP"
 		return pattern + "SEP" + group;
 	}
     
@@ -134,7 +136,7 @@ public abstract class CombinationPanel extends SelectionPanel {
     }
     
     @Override
-    protected void reinit() {
+    protected void reInit() {
     	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
     	exampleFormatLabel.reformat(getTestValue());
     };

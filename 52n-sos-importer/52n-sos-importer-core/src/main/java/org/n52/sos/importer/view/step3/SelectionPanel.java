@@ -52,6 +52,10 @@ public abstract class SelectionPanel extends JPanel {
 	
 	protected abstract void setSelection(String s);
 	
+	/**
+	 * Returns the current selected options done by the user
+	 * @return a {@linkplain java.lang.String} with the encoded user input
+	 */
 	protected abstract String getSelection();
 	
 	/**
@@ -64,7 +68,7 @@ public abstract class SelectionPanel extends JPanel {
 	/**
 	 * called when a selection has been restored
 	 */
-	protected void reinit() {
+	protected void reInit() {
 	}
 	
 	/**
@@ -78,7 +82,7 @@ public abstract class SelectionPanel extends JPanel {
 		setSelection(s);
 		SelectionPanel childPanel = childPanels.get(s);
 		selections.remove(0);
-		reinit();
+		reInit();
 		setSelectedChildPanel(childPanel);
 		
 		if (childPanel != null) {
@@ -101,12 +105,14 @@ public abstract class SelectionPanel extends JPanel {
 	
 	/**
 	 * stores the current selection for this column
-	 * in step 3
-	 * @param selections
+	 * in step 3 in the {@linkplain org.n52.sos.importer.model.ModelStore}
+	 * @param selections list of all selected items, e.g. column type and the corresponding meta data
 	 */
 	public void store(List<String> selections) {
-		String s = getSelection();
+		// get our own selection and add them to the selections list
+		String s = this.getSelection();
 		selections.add(s);
+		// ask my child panels if one is 
 		SelectionPanel childPanel = childPanels.get(s);
 		if (childPanel != null)
 			childPanel.store(selections);
@@ -152,7 +158,7 @@ public abstract class SelectionPanel extends JPanel {
 	public void addToContainerPanel() {
 		getContainerPanel().add(this);		
 		SelectionPanel childPanel = getSelectedChildPanel();
-		reinit();
+		reInit();
 		
 		if (childPanel != null) {
 			setSelectedChildPanel(childPanel);
@@ -181,5 +187,5 @@ public abstract class SelectionPanel extends JPanel {
 	 * unassigns this selection from a column, row or a cell
 	 * @param tableElement
 	 */
-	public abstract void unassign(TableElement tableElement);
+	public abstract void unAssign(TableElement tableElement);
 }

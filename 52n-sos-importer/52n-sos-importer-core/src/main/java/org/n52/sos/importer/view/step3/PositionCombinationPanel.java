@@ -50,8 +50,8 @@ public class PositionCombinationPanel extends CombinationPanel {
 	
 	private Position position;
 	
-	public PositionCombinationPanel(JPanel containerPanel) {
-		super(containerPanel);
+	public PositionCombinationPanel(JPanel containerPanel, int firstLineWithData) {
+		super(containerPanel, firstLineWithData);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 	}
 
 	@Override
-	public void unassign(TableElement tableElement) {
+	public void unAssign(TableElement tableElement) {
 		Position positionToRemove = null;
 		for (Position p: ModelStore.getInstance().getPositions()) {
 			Latitude lat = p.getLatitude();
