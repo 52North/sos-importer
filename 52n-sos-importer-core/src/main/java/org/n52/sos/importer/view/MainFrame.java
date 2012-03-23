@@ -86,6 +86,7 @@ public class MainFrame extends JFrame {
 
 		this.pack();
 		// this centers the dialog on the current screen of the user
+		this.setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
@@ -120,8 +121,7 @@ public class MainFrame extends JFrame {
 		this.initLookAndFeel();
 		this.stepContainerPanel.add(stepPanel);
 		this.pack();
-		this.setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
-		this.setLocationRelativeTo(null);
+		this.setBounds(this.getBounds().x, this.getBounds().y, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
 	}
 	
 	public void showExitDialog() {

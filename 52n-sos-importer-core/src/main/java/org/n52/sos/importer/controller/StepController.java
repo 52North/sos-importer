@@ -75,14 +75,17 @@ public abstract class StepController {
 	/**
 	 * checks before loading the settings if this 
 	 * step is needed, if not it will be skipped
-	 * @return
+	 * @return <code>true</code>, if this step is required by the current 
+	 * 			set-up, else <code>false</code>.
 	 */
 	public abstract boolean isNecessary();
 	
 	/**
-	 * returns a StepController of the same type
-	 * or null when this step is finished
-	 * @return
+	 * returns a StepController of the same type (n.a &rarr; n.b) or 
+	 * <b><code>null</code></b> when this step is finished and the next step 
+	 * level can be reached (n.a &rarr; (n+1).a).
+	 * @return a {@link org.n52.sos.importer.controller.StepController} or
+	 * 		<b><code>null</code></b>
 	 */
 	public abstract StepController getNext();
 	

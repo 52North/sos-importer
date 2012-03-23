@@ -61,13 +61,13 @@ public class Step2Controller extends StepController {
 	
 	@Override
 	public boolean isFinished() {
-		String columnSeparator = step2Panel.getSelectedColumnSeparator();
+		String columnSeparator = step2Panel.getColumnSeparator();
 		if (columnSeparator == null || columnSeparator.equals(""))
 			return false;
-		String commentIndicator = step2Panel.getSelectedCommentIndicator();
+		String commentIndicator = step2Panel.getCommentIndicator();
 		if (commentIndicator == null || commentIndicator.equals(""))
 			return false;
-		String textQualifier = step2Panel.getSelectedTextQualifier();
+		String textQualifier = step2Panel.getTextQualifier();
 		if (textQualifier == null || textQualifier.equals(""))
 			return false;
 		int firstLineWithData = step2Panel.getFirstLineWithData();
@@ -82,24 +82,30 @@ public class Step2Controller extends StepController {
 	public StepController getNextStepController() {
 		Object[][] content = parseCSVFile();
 		TableController.getInstance().setContent(content);
-		return new Step3aController(this.step2Model.getFirstLineWithData());
+		return new Step3aController(this.step2Model.getFirstLineWithData(),this.step2Model.getUseHeader());
 	}
 	
 	@Override
 	public void loadSettings() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("loadSettings()");
+		}
 		step2Panel = new Step2Panel(step2Model.getCsvFileRowRount());
 		
 		String columnSeparator = step2Model.getColumnSeparator();
-		step2Panel.setSelectedColumnSeparator(columnSeparator);
+		step2Panel.setColumnSeparator(columnSeparator);
 		
 		String commentIndicator = step2Model.getCommentIndicator();
-		step2Panel.setSelectedCommentIndicator(commentIndicator);
+		step2Panel.setCommentIndicator(commentIndicator);
 		
 		String textQualifier = step2Model.getTextQualifier();
-		step2Panel.setSelectedTextQualifier(textQualifier);
+		step2Panel.setTextQualifier(textQualifier);
 		
 		int firstLineWithData = step2Model.getFirstLineWithData();
 		step2Panel.setFirstLineWithData(firstLineWithData);
+		
+		boolean useHeader = step2Model.getUseHeader();
+		step2Panel.setUseHeader(useHeader);
 		
 		String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
@@ -111,13 +117,13 @@ public class Step2Controller extends StepController {
 		if (logger.isTraceEnabled()) {
 			logger.trace("saveSettings()");
 		}
-		String columnSeparator = step2Panel.getSelectedColumnSeparator();
+		String columnSeparator = step2Panel.getColumnSeparator();
 		step2Model.setColumnSeparator(columnSeparator);
 		
-		String commentIndicator = step2Panel.getSelectedCommentIndicator();
+		String commentIndicator = step2Panel.getCommentIndicator();
 		step2Model.setCommentIndicator(commentIndicator);
 		
-		String textQualifier = step2Panel.getSelectedTextQualifier();
+		String textQualifier = step2Panel.getTextQualifier();
 		step2Model.setTextQualifier(textQualifier);
 		
 		int firstLineWithData = step2Panel.getFirstLineWithData();
@@ -127,6 +133,10 @@ public class Step2Controller extends StepController {
 		} else {
 			step2Model.setFirstLineWithData(firstLineWithData);
 		}
+		
+		boolean useHeader = step2Panel.getUseHeader();
+		step2Model.setUseHeader(useHeader);
+		
 		String csvFileContent = step2Panel.getCSVFileContent();
 		step2Model.setCSVFileContent(csvFileContent);
 		
@@ -176,19 +186,17 @@ public class Step2Controller extends StepController {
 	}
 
 	@Override
-	public JPanel getStepPanel() {
-		return step2Panel;
-	}
+	public JPanel getStepPanel() { return step2Panel; }
+
+	/* (non-Javadoc)
+	 * @see org.n52.sos.importer.controller.StepController#isNecessary()
+	 * this step is always required
+	 */
+	@Override
+	public boolean isNecessary() { return true; }
 
 	@Override
-	public boolean isNecessary() {
-		return true;
-	}
-
-	@Override
-	public StepController getNext() {
-		return null;
-	}
+	public StepController getNext() { return null; }
 	
 	@Override
 	public boolean isStillValid() {

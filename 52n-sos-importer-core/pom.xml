@@ -59,35 +59,10 @@
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>sos-importer-xmlbeans</artifactId>
 			<version>0.1</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
-<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<index>false</index>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<addClasspath>false</addClasspath>
-							<mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
-						</manifest>
-						<manifestEntries>
-							<build-time>${timestamp}</build-time>
-							<year>${year}</year>
-							<Class-Path>.</Class-Path>
-							<SOS-importer-xmlbeans-version>0.1</SOS-importer-xmlbeans-version>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
--->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -112,16 +87,6 @@
 					</properties>
 					<encoding>UTF-8</encoding>
 				</configuration>
-<!--
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-                            <goal>format</goal>
-                        </goals>
-					</execution>
-				</executions>
--->
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -135,8 +100,7 @@
 						<index>false</index>
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<!-- <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
-							<addClasspath>false</addClasspath>
+							<addClasspath>true</addClasspath>
 							<mainClass>org.n52.sos.importer.Start</mainClass>
 						</manifest>
 						<manifestEntries>
@@ -157,85 +121,17 @@
 					</execution>
 				</executions>
 			</plugin>
-<!--
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>xmlbeans-maven-plugin</artifactId>
-				<version>2.3.3</version>
-				<inherited>true</inherited>
-				<configuration>
-					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
-					<outputJar>${basedir}/lib-repository/org/n52/sensorweb/sos-importer-xmlbeans/0.1/sos-importer-xmlbeans-0.1.jar</outputJar>
-				</configuration>
-			</plugin>
--->
-<!--
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/assemble.xml</descriptor>
-					</descriptors>
-					<finalName>${project.groupId}.${project.artifactId-${project.version}</finalName>
--->
-					<!--  using default values:  
-						The output directory of the assembled distribution file.
-						Default value is: ${project.build.directory}.
-						Directory to unpack JARs into if needed
-						Default value is: ${project.build.directory}/assembly/work.
-					-->
-					<!-- <outputDirectory>${project.build.directory}/assembled-release</outputDirectory>
-					<workDirectory>${project.build.directory}/assembled-release/work</workDirectory>-->
-<!-- 
-					<archive>
-						<index>false</index>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-							<addClasspath>false</addClasspath>
-							<mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
-						</manifest>
-						<manifestEntries>
- -->
-							<!--  <key>value</key> -->
-<!-- 						<Rsrc-Main-Class>org.n52.sos.importer.Start</Rsrc-Main-Class>
-							<build-time>${timestamp}</build-time>
-							<year>${year}</year>
-							<Class-Path>.</Class-Path>
-							<Rsrc-Class-Path>./ ./lib commons-logging-1.1.1.jar httpclient-4.1.1.jar httpcore-4.1.jar log4j-1.2.16.jar opencsv-2.3.jar</Rsrc-Class-Path>
-						</manifestEntries>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
--->
-						 <!-- assembly is build through package phase: mvn package -->
-<!--
-						<phase>package</phase>
-	 					<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
- -->
 		</plugins>
 	</build>
 	<repositories>
 		<repository>
-         <!-- Tentative local repo for libs that are not migrated to Maven dependency 
-            mechanism and available in online repositories. -->
-         <id>lib-repository</id>
-         <name>Local Repository</name>
-         <url>file:///${basedir}/lib-repository/</url>
-      </repository>
+			<!--
+				Tentative local repo for libs that are not migrated to Maven
+				dependency mechanism and available in online repositories.
+			-->
+			<id>lib-repository</id>
+			<name>Local Repository</name>
+			<url>file:///${basedir}/lib-repository/</url>
+		</repository>
 	</repositories>
-	<organization>
-		<name>52North</name>
-		<url>http://52north.org/</url>
-	</organization>
-	<inceptionYear>2011</inceptionYear>
 </project>

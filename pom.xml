@@ -17,9 +17,65 @@
 		52°North SOS-Importer - for details see 
 		https://wiki.52north.org/bin/view/Sensornet/SosImporter
 	</description>
-	<inceptionYear>2012</inceptionYear>
+	<inceptionYear>2011</inceptionYear>
 	<modules>
 		<module>52n-sos-importer-bindings</module>
 		<module>52n-sos-importer-core</module>
 	</modules>
+	<organization>
+		<name>52°North</name>
+		<url>http://52north.org/</url>	
+	</organization>
+	<developers>
+		<developer>
+			<name>Eike Hinderk Jürrens</name>
+			<organization>52°North</organization>
+			<organizationUrl>http://52north.org/</organizationUrl>
+		</developer>
+		<developer>
+			<name>Raimund Schnürer</name>
+			<organization>IfGI - University of Muenster</organization>
+			<organizationUrl>http://ifgi.uni-muenster.de/</organizationUrl>
+		</developer>
+	</developers>
+	<mailingLists>
+		<mailingList>
+			<name>Sensor Web Mailing List</name>
+			<post>swe@52north.org</post>
+			<subscribe>http://list.52north.org/mailman/listinfo/swe</subscribe>
+			<unsubscribe>http://list.52north.org/mailman/listinfo/swe#subscribers</unsubscribe>
+			<archive>http://list.52north.org/pipermail/swe/</archive>
+		</mailingList>
+	</mailingLists>
+	<issueManagement>
+		<system>Bugzilla</system>
+		<url>https://bugzilla.52north.org/</url>
+	</issueManagement>
+	<contributors>
+		<contributor>
+			<name>Eike Hinderk Jürrens</name>
+			<roles>
+				<role>designer</role>
+			</roles>
+			<organization>52°North</organization>
+			<organizationUrl>http://52north.org/</organizationUrl>
+		</contributor>
+		<contributor>
+			<name>Simon Jirka</name>
+			<roles>
+				<role>manager</role>
+				<role>designer</role>
+			</roles>
+			<organization>52°North</organization>
+			<organizationUrl>http://52north.org/</organizationUrl>
+		</contributor>
+		<contributor>
+			<name>Raimund Schnürer</name>
+			<roles>
+				<role>designer</role>
+			</roles>
+			<organization>IfGI - University of Muenster</organization>
+			<organizationUrl>http://ifgi.uni-muenster.de/</organizationUrl>
+		</contributor>
+	</contributors>
 </project>

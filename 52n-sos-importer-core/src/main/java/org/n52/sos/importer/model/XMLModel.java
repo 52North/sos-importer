@@ -26,6 +26,9 @@ package org.n52.sos.importer.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
@@ -48,7 +51,7 @@ public class XMLModel {
 
 	private SosImportConfiguration sosImpConf;
 	
-	private StepModel[] stepModells = new Step3aModel[1];
+	private StepModel[] stepModells = new Step3Model[1];
 	
 	private static final Logger logger = Logger.getLogger(XMLModel.class);
 
@@ -83,7 +86,7 @@ public class XMLModel {
 		//
 		sMs = createArrayListFromArray(stepModells);
 		boolean result = sMs.add(sm);
-		saveProviders(sMs);
+		saveProvidersInArray(sMs);
 		//
 		return result;
 	}
@@ -93,7 +96,7 @@ public class XMLModel {
 		//
 		provider = createArrayListFromArray(stepModells);
 		boolean result = provider.remove(sm);
-		saveProviders(provider);
+		saveProvidersInArray(provider);
 		//
 		return result;
 	}
@@ -107,69 +110,28 @@ public class XMLModel {
 		}
 		// check each provider and update the internal model
 		if(stepModells != null && stepModells.length > 0) {
+			//
 			for (StepModel sm : this.stepModells) {
-				/*
-				 * 
-				 * get updates from Step1Model
-				 * Provided information: DataFile.LocalFile.Path
-				 *  
-				 */
+				//
 				if (sm instanceof Step1Model) {
 					//
 					Step1Model s1M = (Step1Model) sm;
-					String path = s1M.getCSVFilePath();
-					DataFile dF = this.sosImpConf.getDataFile();
-					LocalFile lF = null;
+					handleStep1Model(s1M);
 					//
-					if(dF == null) {
-						dF = this.sosImpConf.addNewDataFile();
-						lF = dF.addNewLocalFile();
-					} else if(dF.isSetLocalFile()){
-						lF = dF.getLocalFile();
-					}
-					if(path != null && !path.equals("")) {
-						lF.setPath(path);
-					} else {
-						logger.error("empty path to CSV file in Step1Model");
-					}
-					/*
-					 * 
-					 * get updates from Step2Model
-					 * Provided information: CsvMeta.Parameter.*, 
-					 * 					CsvMeta.FirstLineWithData,
-					 * 					CsvMeta.UseHeader
-					 */
 				} else if (sm instanceof Step2Model) {
 					//
 					Step2Model s2M = (Step2Model) sm;
-					CsvMetadata cM = sosImpConf.getCsvMetadata();
-					Parameter p = null;
+					handleStep2Model(s2M);
 					//
-					if(cM == null) {
-						cM = this.sosImpConf.addNewCsvMetadata();
-						p = cM.addNewParameter();
-					} else {
-						p = cM.getParameter();
-					}
-					cM.setFirstLineWithData(s2M.getFirstLineWithData());
-					cM.setUseHeader(s2M.getUseHeader());
-					p.setCommentIndicator(s2M.getCommentIndicator());
-					p.setElementSeparator(s2M.getColumnSeparator());
-					p.setTextIndicator(s2M.getTextQualifier());
-					/*
-					 * 
-					 * get updates from Step3aModel
-					 * Provided information: 
-					 */
-				} else if (sm instanceof Step3aModel) {
-					Step3aModel s3M = (Step3aModel) sm;
-					s3M.getMarkedColumn();
-					// TODO implement (Store results from ..assign(..) in Step3*Model
+				} else if (sm instanceof Step3Model) {
+					//
+					Step3Model s3M = (Step3Model) sm;
+					handleStep3Model(s3M);
+					//
 				}
 			}
 		}
 	}
-	
 	/**
 	 * Should be called after final step to validate the final model.
 	 * @return
@@ -183,7 +145,100 @@ public class XMLModel {
 		}
 		return modelValid;
 	}
-	
+
+	/**
+	 * Get updates from Step1Model
+	 * Provided information: <ul>
+	 * 		<li>DataFile.LocalFile.Path</li></ul>
+	 * @param s1M instance of {@linkplain org.n52.sos.importer.model.Step1Model}
+	 */
+	private void handleStep1Model(Step1Model s1M) {
+		String path = s1M.getCSVFilePath();
+		DataFile dF = this.sosImpConf.getDataFile();
+		LocalFile lF = null;
+		//
+		if(dF == null) {
+			dF = this.sosImpConf.addNewDataFile();
+			lF = dF.addNewLocalFile();
+		} else if(dF.isSetLocalFile()){
+			lF = dF.getLocalFile();
+		}
+		if(path != null && !path.equals("")) {
+			lF.setPath(path);
+		} else {
+			logger.error("empty path to CSV file in Step1Model");
+		}
+	}
+
+	/**
+	 * Get updates from Step2Model
+	 * Provided information: <ul>
+	 * 		<li>CsvMeta.Parameter.*</li>
+	 * 		<li>CsvMeta.FirstLineWithData</li>
+	 * 		<li>CsvMeta.UseHeader</li></ul>
+	 * @param s2M instance of {@linkplain org.n52.sos.importer.model.Step2Model}
+	 */
+	private void handleStep2Model(Step2Model s2M) {
+		CsvMetadata cM = sosImpConf.getCsvMetadata();
+		Parameter p = null;
+		//
+		if(cM == null) {
+			cM = this.sosImpConf.addNewCsvMetadata();
+			p = cM.addNewParameter();
+		} else {
+			p = cM.getParameter();
+		}
+		cM.setFirstLineWithData(s2M.getFirstLineWithData());
+		cM.setUseHeader(s2M.getUseHeader());
+		p.setCommentIndicator(s2M.getCommentIndicator());
+		p.setElementSeparator(s2M.getColumnSeparator());
+		p.setTextIndicator(s2M.getTextQualifier());
+	}
+
+	/**
+	 * Get updates from Step3Model
+	 * Provided information for each column:<ul>
+	 * 		<li>column index</li>
+	 * 		<li>column type</li>
+	 * 		<li>the type depending metadata</li></ul>
+	 * Allowed column types are:<ul>
+	 * 		<li>DO_NOT_EXPORT</li>
+	 * 		<li>MEASURED_VALUE</li>
+	 * 		<li>DATE_TIME</li>
+	 * 		<li>POSITION</li>
+	 * 		<li>FOI</li>
+	 * 		<li>OBSERVED_PROPERTY</li>
+	 * 		<li>UOM</li>
+	 * 		<li>SENSOR</li></ul>
+	 * The metadata consists of key value pairs. The allowed keys are:<ul>
+	 * 		<li>TYPE</li>
+	 * 		<li>GROUP</li>
+	 * 		<li>PARSE_PATTERN</li>
+	 * 		<li>DECIMAL_SEPARATOR</li>
+	 * 		<li>THOUSANDS_SEPARATOR</li>
+	 * 		<li>SOS_FOI</li>
+	 * 		<li>SOS_OBSERVED_PROPERTY</li>
+	 * 		<li>SOS_SENSOR</li>
+	 * 		<li>OTHER</li></ul>
+	 * For the latest configuration set-up and schema check: 
+	 * 	{@link 52n-sos-importer-bindings/src/main/xsd/}
+	 * @param s3M instance of {@linkplain org.n52.sos.importer.model.Step3Model}
+	 */
+	private void handleStep3Model(Step3Model s3M) {
+		HashMap<Integer, List<String>> colAssignments = s3M.getAllSelections();
+		Set<Integer> keySet = colAssignments.keySet();
+		Integer[] keys = keySet.toArray(new Integer[keySet.size()]);
+		for (int i = 0; i < keys.length; i++) {
+			/*
+			 * key = columnIndex
+			 * List<String> contains:
+			 * 			list.get(0) = type
+			 * 			list.get(n) = endcoded meta data
+			 */
+		}
+		// TODO implement (Store results from ..assign(..) in Step3*Model
+	}
+
 	/*
 	 * 
 	 * 	Private Helper methods
@@ -204,7 +259,7 @@ public class XMLModel {
 		return result;
 	}
 
-	private void saveProviders(ArrayList<StepModel> aL) {
+	private void saveProvidersInArray(ArrayList<StepModel> aL) {
 		aL.trimToSize();
 		this.stepModells = aL.toArray(new StepModel[aL.size()]);
 	}
