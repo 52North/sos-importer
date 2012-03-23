@@ -40,6 +40,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -62,7 +63,6 @@ public class Step1Panel extends JPanel {
 	private final JLabel csvFileLabel = new JLabel("CSV File: ");
 	private final JTextField csvFileTextField = new JTextField(25);
 	private final JButton browse = new JButton("Browse");
-	private final JScrollPane welcomePanel;
 	private final Step1Panel _this = this;
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
@@ -72,7 +72,7 @@ public class Step1Panel extends JPanel {
 	public Step1Panel(Step1Controller step1Controller) {
 		super();
 		// init fields
-		this.welcomePanel = this.welcomePanel();
+		JScrollPane welcomePanel = this.welcomePanel();
 		// csv Panel
 		JPanel csvPanel = new JPanel();
 		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -119,8 +119,9 @@ public class Step1Panel extends JPanel {
 		float[] f = Color.RGBtoHSB(238, 238, 238, null);
 		pane.setBackground(Color.getHSBColor(f[0], f[1], f[2]));
 		pane.setDragEnabled(true);
+		//
+		// Add simple hyperlink functionality -> call system Browser with URL
 		pane.addHyperlinkListener(new HyperlinkListener() {
-			
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				      // try to start system browser with link
@@ -137,15 +138,18 @@ public class Step1Panel extends JPanel {
 							JOptionPane.showMessageDialog(_this, error, "Error Opening Browser", JOptionPane.ERROR_MESSAGE);
 						}
 					}
-				    }
+				}
 			}
 		});
+		//
+		//
 		pane.setCaretPosition(0);
 		//Put the editor pane in a scroll pane.
 		scrollPane.setVerticalScrollBarPolicy(
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(MainFrame.DIALOG_WIDTH-20, 400));
 		scrollPane.setAutoscrolls(true);
+		scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setWheelScrollingEnabled(true);
 		return scrollPane;
 	}

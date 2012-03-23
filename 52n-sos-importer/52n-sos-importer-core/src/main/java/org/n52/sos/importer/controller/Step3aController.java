@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.Step3aModel;
+import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
@@ -46,16 +46,16 @@ public class Step3aController extends StepController {
 
 	private Step3Panel step3Panel;
 	
-	private Step3aModel step3aModel;
+	private Step3Model step3Model;
 	
 	private TableController tableController = TableController.getInstance();	
 	
-	public Step3aController(int firstLineWithData) {
-		this(new Step3aModel(0, firstLineWithData));		
+	public Step3aController(int firstLineWithData, boolean useHeader) {
+		this(new Step3Model(0, firstLineWithData, useHeader));		
 	}
 	
-	public Step3aController(Step3aModel step3aModel) {
-		this.step3aModel = step3aModel;
+	public Step3aController(Step3Model step3Model) {
+		this.step3Model = step3Model;
 	}
 	
 	@Override
@@ -70,12 +70,13 @@ public class Step3aController extends StepController {
 	
 	@Override
 	public void loadSettings() {	
-		int number = step3aModel.getMarkedColumn();
+		int number = step3Model.getMarkedColumn();
 		Column column = new Column(number);
-		List<String> selection = step3aModel.getSelection();
-
-		step3Panel = new Step3Panel(step3aModel.getFirstLineWithData());
-		step3Panel.restore(selection);
+		List<String> selection = step3Model.getSelectionForColumn(number);
+		step3Panel = new Step3Panel(step3Model.getFirstLineWithData());
+		if(selection != null) {
+			step3Panel.restore(selection);
+		}
 		step3Panel.getLastChildPanel().unAssign(column);
 
 		tableController.mark(column);
@@ -88,14 +89,14 @@ public class Step3aController extends StepController {
 	public void saveSettings() {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
-		step3aModel.setSelection(selection);
+		step3Model.addSelection(selection);
 		
-		int number = step3aModel.getMarkedColumn();
+		int number = step3Model.getMarkedColumn();
 		SelectionPanel selP = step3Panel.getLastChildPanel();
 		selP.assign(new Column(number));
 		// FIXME store the selection in the XMLModel (add ref to MainController)
 		
-		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
+		if (step3Model.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
 			dtc.mergeDateAndTimes();
 			
@@ -115,8 +116,9 @@ public class Step3aController extends StepController {
 	public void back() {
 		List<String> selection = new ArrayList<String>();
 		step3Panel.store(selection);
-		step3aModel.setSelection(selection);
-		int number = step3aModel.getMarkedColumn();
+		step3Model.addSelection(selection);
+		int number = step3Model.getMarkedColumn()-1;
+		step3Model.setMarkedColumn(number);
 		
 		tableController.setColumnHeading(number, selection.get(0));	
 		tableController.clearMarkedTableElements();
@@ -140,7 +142,7 @@ public class Step3aController extends StepController {
 	public boolean isFinished() {
 		// check if the current column is the last in the file
 		// if yes, check for at least one measured value column
-		if (step3aModel.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {
+		if (step3Model.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {
 			List<String> currentSelection = new ArrayList<String>();
 			step3Panel.store(currentSelection);
 			
@@ -157,22 +159,26 @@ public class Step3aController extends StepController {
 
 	@Override
 	public StepController getNext() {
-		int nextColumn = step3aModel.getMarkedColumn() + 1;
+		// check if we have reached the last column
+		// if not, return a new Step3aController handing over the current 
+		// Step3Model
+		int nextColumn = step3Model.getMarkedColumn() + 1;
 		if (nextColumn == tableController.getColumnCount()) {
 			return null;
 		}
-		return new Step3aController(new Step3aModel(nextColumn, this.step3aModel.getFirstLineWithData()));
+		this.step3Model.setMarkedColumn(nextColumn);
+		return new Step3aController(this.step3Model);
 	}	
 	
 	@Override
 	public boolean isStillValid() {
 		//TODO: check whether the CSV file parsing settings have been changed
-		if (step3aModel.getMarkedColumn() == 0) return false;
+		if (step3Model.getMarkedColumn() == 0) return false;
 		return true;
 	}
 
 	@Override
 	public StepModel getModel() {
-		return this.step3aModel;
+		return this.step3Model;
 	}
 }
