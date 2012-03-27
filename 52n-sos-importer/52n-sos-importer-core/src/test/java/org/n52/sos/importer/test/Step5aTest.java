@@ -37,18 +37,19 @@ public class Step5aTest {
 		MainController f = MainController.getInstance();
 		Object[][] o = {{"bla", "bla2"},{"bla3", "bla4"},{"bla5", "bla6"}};
 		TableController.getInstance().setContent(o);
+		int firstLineWithData = 0;
 		
 		DateAndTime dtm1 = new DateAndTime();
 		DateAndTimeController dtc = new DateAndTimeController(dtm1);
-		dtc.assignPattern("HH-mm-ss", new Column(0));
+		dtc.assignPattern("HH-mm-ss", new Column(0,firstLineWithData));
 		ModelStore.getInstance().add(dtm1);
 		
 		DateAndTime dtm2 = new DateAndTime();
 		dtc = new DateAndTimeController(dtm2);
-		dtc.assignPattern("dd-MM-yyyy", new Column(1));
+		dtc.assignPattern("dd-MM-yyyy", new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(dtm2);
 		
-		Step5aController controller = new Step5aController();
+		Step5aController controller = new Step5aController(firstLineWithData);
 		controller.isNecessary();
 		f.setStepController(controller);
 	}

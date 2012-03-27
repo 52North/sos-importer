@@ -28,10 +28,9 @@ import java.util.List;
 
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6cModel implements StepModel {
-	
-	private final String description = "What is the position of";
 	
 	private FeatureOfInterest featureOfInterest;
 
@@ -80,7 +79,7 @@ public class Step6cModel implements StepModel {
 	}
 
 	public String getDescription() {
-		return description;
+		return Lang.l().step6cModelDescription();
 	}
 
 	/**

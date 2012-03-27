@@ -35,6 +35,8 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * solves ambiguities in case there is more than one feature of interest,
@@ -48,14 +50,19 @@ public class Step4bController extends StepController {
 	
 	private Step4bModel step4bModel;
 	
-	private TableController tableController = TableController.getInstance();;
+	private TableController tableController;
 	
 	private Step4Panel step4Panel;
 	
-	public Step4bController() {
+	private int firstLineWithData = -1;
+	
+	public Step4bController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableController = TableController.getInstance();
 	}
 	
-	public Step4bController(Step4bModel step4bModel) {
+	public Step4bController(Step4bModel step4bModel,int firstLineWithData) {
+		this(firstLineWithData);
 		this.step4bModel = step4bModel;
 	}
 
@@ -63,11 +70,14 @@ public class Step4bController extends StepController {
 	public void loadSettings() {
 		Resource resource = step4bModel.getResource();
 		int[] selectedRowsOrColumns = step4bModel.getSelectedRowsOrColumns();
+		int fLWData = step4bModel.getFirstLineWithData();
 		
 		String text = step4bModel.getDescription();
 		String orientation = tableController.getOrientationString();
-		text = text.replaceAll("ORIENTATION", orientation);
-		text = text.replaceAll("RESOURCE", resource.toString());
+		// see Lang.l().step4bModelDescription()
+		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
+		text = text.replaceFirst(Constants.STRING_REPLACER, resource.toString());
+		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
 		
 		step4Panel = new Step4Panel(text);
 		
@@ -75,7 +85,7 @@ public class Step4bController extends StepController {
 		tableController.addMultipleSelectionListener(new SelectionChanged());
 		
 		for (int number: selectedRowsOrColumns) {
-			Column column = new Column(number);
+			Column column = new Column(number,fLWData);
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 			resource.unassign(mv);
 			tableController.selectColumn(number);
@@ -87,11 +97,12 @@ public class Step4bController extends StepController {
 	@Override
 	public void saveSettings() {
 		Resource resource = step4bModel.getResource();	
-		int[] selectedColumns = tableController.getSelectedColumns();		
+		int[] selectedColumns = tableController.getSelectedColumns();
+		int fLWData = step4bModel.getFirstLineWithData();
 		step4bModel.setSelectedRowsOrColumns(selectedColumns);
 		
 		for (int number: selectedColumns) {
-			Column column = new Column(number);
+			Column column = new Column(number,fLWData);
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 			resource.assign(mv);
 		}
@@ -119,12 +130,13 @@ public class Step4bController extends StepController {
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
 			for (int number: selectedColumns) {
-				Column column = new Column(number);
+				int fLWData = step4bModel.getFirstLineWithData();
+				Column column = new Column(number,fLWData);
 				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 				if (mv == null) {
 					JOptionPane.showMessageDialog(null,
-						    "This is not a measured value.",
-						    "Info",
+						    Lang.l().step4bInfoNotMeasuredValue(),
+						    Lang.l().infoDialogTitle(),
 						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
@@ -133,8 +145,8 @@ public class Step4bController extends StepController {
 				Resource resource = step4bModel.getResource();
 				if (resource.isAssigned(mv)) {
 					JOptionPane.showMessageDialog(null,
-						    resource + " already set for this measured value.",
-						    "Info",
+						    Lang.l().step4bInfoResoureAlreadySet(resource),
+						    Lang.l().infoDialogTitle(),
 						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
@@ -151,7 +163,7 @@ public class Step4bController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 4b: Solve ambiguities";
+		return Lang.l().step4bDescription();
 	}
 
 
@@ -163,7 +175,7 @@ public class Step4bController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step4cController();
+		return new Step4cController(this.firstLineWithData);
 	}
 
 
@@ -195,7 +207,7 @@ public class Step4bController extends StepController {
 			resourceType = resourceType.getNextResourceType();
 		}
 		
-		step4bModel = new Step4bModel(resource);
+		step4bModel = new Step4bModel(resource,this.firstLineWithData);
 		return resource != null;
 	}
 	
@@ -207,7 +219,7 @@ public class Step4bController extends StepController {
 		while (resourceType != null) {
 			nextResource = getNextUnassignedResource(resourceType);
 			if (nextResource != null)
-				return new Step4bController(new Step4bModel(nextResource));
+				return new Step4bController(new Step4bModel(nextResource,this.firstLineWithData),this.firstLineWithData);
 			
 			resourceType = resourceType.getNextResourceType();
 		}

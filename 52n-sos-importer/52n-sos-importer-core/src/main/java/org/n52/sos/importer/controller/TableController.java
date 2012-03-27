@@ -68,15 +68,18 @@ public class TableController {
 	
 	private int orientation = COLUMNS;
 	
+	private static int firstLineWithData = -1;
+	
 	private final Color markingColor = Color.lightGray;
 
-	private TableController() {
-		tableView = TablePanel.getInstance();
-		table = tableView.getTable();
-		tableMarker = new ColoredTableCellRenderer();
+	private TableController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableView = TablePanel.getInstance();
+		this.table = tableView.getTable();
+		this.tableMarker = new ColoredTableCellRenderer();
+		//
 		table.setDefaultRenderer(Object.class, null);
 		table.setDefaultRenderer(Object.class, tableMarker);
-		
 		table.getSelectionModel().addListSelectionListener(new RowSelectionListener());
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(new ColumnSelectionListener());
@@ -85,7 +88,7 @@ public class TableController {
 
 	public static TableController getInstance() {
 		if (instance == null)
-			instance = new TableController();
+			instance = new TableController(-1);
 		return instance;
 	}	
 	
@@ -349,7 +352,7 @@ public class TableController {
 			setEnabled(table == null || table.isEnabled());
 			
 	        if (rows.contains(new Row(row)) || 
-	        	columns.contains(new Column(column)) ||
+	        	columns.contains(new Column(column,firstLineWithData)) ||
 	        	cells.contains(new Cell(row, column))) {
         		setBackground(markingColor);
 	        }
@@ -417,5 +420,19 @@ public class TableController {
 		public void columnSelectionChanged(int[] selectedColumns);
 
 		public void rowSelectionChanged(int[] selectedRows);
+	}
+
+	/**
+	 * @return the firstLineWithData
+	 */
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	/**
+	 * @param firstLineWithData the firstLineWithData to set
+	 */
+	public void setFirstLineWithData(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 }

@@ -38,8 +38,28 @@ public class ToolTips {
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
-	private ToolTips() {
-	}
+	/*
+	 * For the following keys tooltips are available
+	 */
+	public static final String CSV_File = "CSVFile";
+	public static final String COLUMN_SEPARATOR = "ColumnSeparator";
+	public static final String COMMENT_INDICATOR = "CommentIndicator";
+	public static final String TEXT_QUALIFIER = "TextQualifier";
+	public static final String MEASURED_VALUE = "Measured Value";
+	public static final String DATE_AND_TIME = "DateAndTime";
+	public static final String POSITION = "Position";
+	public static final String FEATURE_OF_INTEREST = "FeatureOfInterest";
+	public static final String OBSERVED_PROPERTY = "ObservedProperty";
+	public static final String UNIT_OF_MEASUREMENT = "UnitOfMeasurement";
+	public static final String SENSOR = "Sensor";
+	public static final String TEXT = "Text";
+	public static final String BOOLEAN = "Boolean";
+	public static final String COUNT = "Count";
+	public static final String NUMERIC_VALUE = "NumericValue";
+	public static final String DECIMAL_SEPARATOR = "DecimalSeparator";
+	public static final String THOUSANDS_SEPARATOR = "ThousandsSeparator";
+
+	private ToolTips() {}
 
 	public static String get(String key) {
 		try {

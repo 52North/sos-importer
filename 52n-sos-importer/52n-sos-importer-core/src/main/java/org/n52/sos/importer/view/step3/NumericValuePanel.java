@@ -39,6 +39,8 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -56,8 +58,8 @@ public class NumericValuePanel extends SelectionPanel {
 	private final NumericValue numericValue = new NumericValue();
 	private final double exampleValue = 1234567.89;
 	
-	private final JLabel decimalSeparatorLabel = new JLabel("Decimal separator: ");
-	private final JLabel thousandsSeparatorLabel = new JLabel("Thousands separator: ");
+	private final JLabel decimalSeparatorLabel = new JLabel(Lang.l().numValuePanelDecimalSeparator() + " : ");
+	private final JLabel thousandsSeparatorLabel = new JLabel(Lang.l().numValuePanelThousandsSeparator() + " : ");
 	private final JLabel exampleLabel = new JLabel("Example: ");
 
 	private final String[] decimalSeparators = ComboBoxItems.getInstance().getDecimalSeparators();
@@ -74,9 +76,9 @@ public class NumericValuePanel extends SelectionPanel {
 		this.parseTestLabel = new ParseTestLabel(numericValue,firstLineWithData);
 		setDefaultSelection();
 		decimalSeparatorCombobox.addActionListener(new DecimalSeparatorChanged());
-		decimalSeparatorCombobox.setToolTipText(ToolTips.get("DecimalSeparator"));
+		decimalSeparatorCombobox.setToolTipText(ToolTips.get(ToolTips.DECIMAL_SEPARATOR));
 		thousandsSeparatorCombobox.addActionListener(new ThousandsSeparatorChanged());
-		thousandsSeparatorCombobox.setToolTipText(ToolTips.get("ThousandsSeparator"));
+		thousandsSeparatorCombobox.setToolTipText(ToolTips.get(ToolTips.THOUSANDS_SEPARATOR));
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel separatorPanel = new JPanel();
@@ -93,9 +95,9 @@ public class NumericValuePanel extends SelectionPanel {
 
 	@Override
 	protected void setSelection(String s) {
-		String[] separators = s.split(":");
+		String[] separators = s.split(Constants.SEPARATOR_STRING);
 		decimalSeparatorCombobox.setSelectedItem(separators[0]);
-		if (separators[1].equals(" ")) thousandsSeparatorCombobox.setSelectedItem("Space");
+		if (separators[1].equals(" ")) thousandsSeparatorCombobox.setSelectedItem(Constants.SPACE_STRING);
 		else thousandsSeparatorCombobox.setSelectedItem(separators[1]);
 		patternChanged();
 	}
@@ -104,10 +106,12 @@ public class NumericValuePanel extends SelectionPanel {
 	protected String getSelection() {
 		String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 		String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
-		if (thousandsSeparator.equals("Space")) {
+		if (thousandsSeparator.equals(Constants.SPACE_STRING)) {
 			thousandsSeparator = " ";
 		}
-		return decimalSeparator+":"+thousandsSeparator;
+		return decimalSeparator + 
+				Constants.SEPARATOR_STRING + 
+				thousandsSeparator;
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public class NumericValuePanel extends SelectionPanel {
 	}
 	
 	protected void patternChanged() {	
-		String[] separators = getSelection().split(":");
+		String[] separators = getSelection().split(Constants.SEPARATOR_STRING);
 		numericValue.setDecimalSeparator(separators[0]);
 		numericValue.setThousandsSeparator(separators[1]);
 		List<String> values = TableController.getInstance().getMarkedValues();				

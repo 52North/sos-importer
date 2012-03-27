@@ -34,6 +34,7 @@ import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * lets the user add missing metadata for identified date&times
@@ -50,12 +51,18 @@ public class Step5aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
-	private TableController tableController = TableController.getInstance();
+	private TableController tabController;
+
+	private int firstLineWithData;
+
 	
-	public Step5aController() {	
+	public Step5aController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tabController =  TableController.getInstance();
 	}
 	
-	public Step5aController(Step5aModel step5bModel) {
+	public Step5aController(Step5aModel step5bModel,int firstLineWithData) {
+		this(firstLineWithData);
 		this.step5aModel = step5bModel;
 	}
 	
@@ -71,7 +78,7 @@ public class Step5aController extends StepController {
 		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
 		
-		tableController.turnSelectionOff();
+		tabController.turnSelectionOff();
 		dateAndTimeController.markComponents();	
 	}
 
@@ -87,8 +94,8 @@ public class Step5aController extends StepController {
 		List<Component> components = dateAndTimeController.getMissingComponents();
 		step5aModel.setMissingDateAndTimeComponents(components);
 		
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
+		tabController.clearMarkedTableElements();
+		tabController.turnSelectionOn();
 		
 		dateAndTimeController = null;
 		step5Panel = null;
@@ -96,8 +103,8 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public void back() {
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
+		tabController.clearMarkedTableElements();
+		tabController.turnSelectionOn();
 		
 		dateAndTimeController = null;
 		step5Panel = null;
@@ -105,7 +112,7 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 5a: Complete time data";
+		return Lang.l().step5aDescription();
 	}
 
 	@Override
@@ -132,7 +139,7 @@ public class Step5aController extends StepController {
 	public StepController getNext() {	
 		dateAndTimeController = new DateAndTimeController();
 		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
-		if (dtm != null) return new Step5aController(new Step5aModel(dtm));
+		if (dtm != null) return new Step5aController(new Step5aModel(dtm),this.firstLineWithData);
 		
 		dateAndTimeController = null;
 		return null;	
@@ -140,7 +147,7 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step5cController();
+		return new Step5cController(this.firstLineWithData);
 	}
 
 	@Override

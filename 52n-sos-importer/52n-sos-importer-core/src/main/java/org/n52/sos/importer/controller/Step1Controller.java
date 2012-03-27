@@ -38,6 +38,7 @@ import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step1Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * chooses a CSV file
@@ -62,7 +63,7 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 1: Choose CSV file";
+		return Lang.l().step1Description();
 	}
 	
 	@Override
@@ -171,10 +172,10 @@ public class Step1Controller extends StepController {
 	
 	/**
 	 * Reads the given file line by line. Returns the content as 
-	 * <code>{@link java.lang.String}</code> and sets the 
+	 * <code>{@link java.Lang.l().l().String}</code> and sets the 
 	 * <code>csvFileRowCount</code> variable of this class.
 	 * @param f the <code>{@link java.io.File}</code> to read
-	 * @return a <code>{@link java.lang.String}</code> containing the content 
+	 * @return a <code>{@link java.Lang.l().l().String}</code> containing the content 
 	 * 				of the given file
 	 */
 	private String readFile(File f) {

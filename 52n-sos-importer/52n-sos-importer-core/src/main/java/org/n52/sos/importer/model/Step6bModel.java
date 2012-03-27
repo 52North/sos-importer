@@ -25,11 +25,9 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bModel implements StepModel {
-	
-	private final String description = "<html>What is the <u>RESOURCE</u> for " + 
-	"the marked measured value ORIENTATION?</html>";
 	
 	private MeasuredValue measuredValue;
 	
@@ -56,7 +54,11 @@ public class Step6bModel implements StepModel {
 		return resource;
 	}
 
+	/**
+	 * ... RESOURCE ... ORIENTATION
+	 * @return
+	 */
 	public String getDescription() {
-		return description;
+		return Lang.l().step6bModelDescription();
 	}
 }

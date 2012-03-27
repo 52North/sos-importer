@@ -36,6 +36,7 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step6Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * lets the user choose the position for each feature of interest
@@ -53,11 +54,15 @@ public class Step6cController extends StepController {
 	private PositionController positionController;
 	
 	private Step6Panel step6cPanel;
+
+	private int firstLineWithData;
 	
-	public Step6cController() {
+	public Step6cController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 	
-	public Step6cController(Step6cModel step6cModel) {
+	public Step6cController(Step6cModel step6cModel, int firstLineWithData) {
+		this(firstLineWithData);
 		this.step6cModel = step6cModel;
 	}
 
@@ -104,7 +109,7 @@ public class Step6cController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 6c: Add missing positions";
+		return Lang.l().step6cDescription();
 	}
 
 	@Override
@@ -117,17 +122,17 @@ public class Step6cController extends StepController {
 		Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithoutPosition();
 		if (foiWithoutPosition == null) return null;
 		
-		return new Step6cController(foiWithoutPosition);
+		return new Step6cController(foiWithoutPosition,this.firstLineWithData);
 	}
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step7Controller();
+		return new Step7Controller(this.firstLineWithData);
 	}
 	
 	private Step6cModel getNextFeatureOfInterestWithoutPosition() {
 		List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
-
+		// FIXME check if the current foi is in the no data area of the column
 		for (FeatureOfInterest foi: featureOfInterests) {
 			
 			if (foi.getTableElement() == null) {
@@ -139,8 +144,9 @@ public class Step6cController extends StepController {
 					for (String name: foi.getTableElement().getValues()) {
 						
 						Position p = foi.getPositionFor(name);
-						if (p == null)
-							return new Step6cModel(foi, name); 
+						if (p == null) {
+							return new Step6cModel(foi, name);
+						}
 						//otherwise the feature in this row/column has already a position
 					}
 				}

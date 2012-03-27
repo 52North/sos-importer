@@ -26,6 +26,7 @@ package org.n52.sos.importer.controller;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.StepModel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 
 /**
@@ -53,7 +54,7 @@ public class Step3bController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 3b: Choose metadata for rows";
+		return Lang.l().step3bDescription();
 	}
 
 	@Override

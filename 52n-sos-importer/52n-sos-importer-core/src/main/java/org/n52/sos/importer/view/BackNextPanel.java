@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.controller.BackNextController;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * panel for back and next (and finish) button at the bottom of the main frame
@@ -42,9 +43,9 @@ public class BackNextPanel extends JPanel {
 	
 	private static BackNextPanel instance = null;
 
-	private final JButton back = new JButton("Back");
-	private final JButton next = new JButton("Next");
-	private final JButton finish = new JButton("Finish");
+	private final JButton back = new JButton(Lang.l().backButtonLabel());
+	private final JButton next = new JButton(Lang.l().nextButtonLabel());
+	private final JButton finish = new JButton(Lang.l().finishButtonLabel());
 	
 	private BackNextPanel() {
 		super();

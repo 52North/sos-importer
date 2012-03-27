@@ -24,10 +24,9 @@
 package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bSpecialModel implements StepModel {
-	
-	private final String description = "What is the sensor for";
 	
 	private final String featureOfInterestName;
 	
@@ -58,7 +57,7 @@ public class Step6bSpecialModel implements StepModel {
 	}
 	
 	public String getDescription() {
-		return description;
+		return Lang.l().step6bSpecialModelDescription();
 	}
 
 	@Override

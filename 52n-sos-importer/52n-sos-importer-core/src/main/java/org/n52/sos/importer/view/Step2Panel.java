@@ -38,6 +38,8 @@ import javax.swing.SpinnerNumberModel;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -70,9 +72,18 @@ public class Step2Panel extends JPanel {
 		this.csvFileRowCount = csvFileRowCount;
 		//
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		columnSeparatorCombobox = new EditableJComboBoxPanel(items.getColumnSeparators(), "Column separator", ToolTips.get("ColumnSeparator"));
-		commentIndicatorCombobox = new EditableJComboBoxPanel(items.getCommentIndicators(), "Comment indicator", ToolTips.get("CommentIndicator"));
-		textQualifierCombobox = new EditableJComboBoxPanel(items.getTextQualifiers(), "Text qualifier", ToolTips.get("TextQualifier"));
+		columnSeparatorCombobox = new EditableJComboBoxPanel(
+				items.getColumnSeparators(),
+				Lang.l().step2ColumnSeparator(), 
+				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
+		commentIndicatorCombobox = new EditableJComboBoxPanel(
+				items.getCommentIndicators(),
+				Lang.l().step2CommentIndicator(),
+				ToolTips.get(ToolTips.COMMENT_INDICATOR));
+		textQualifierCombobox = new EditableJComboBoxPanel(
+				items.getTextQualifiers(),
+				Lang.l().step2TextQualifier(),
+				ToolTips.get(ToolTips.TEXT_QUALIFIER));
 		//
 		// FirstLineWithData
 		//
@@ -90,7 +101,7 @@ public class Step2Panel extends JPanel {
 			}
 		});
 		*/
-		firstDataJL = new JLabel("First Line with data:");
+		firstDataJL = new JLabel(Lang.l().step2FirstLineWithData() + " :");
 		JPanel firstLineWithDataJPanel = new JPanel();
 		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		firstLineWithDataJPanel.add(firstDataJL);
@@ -98,7 +109,7 @@ public class Step2Panel extends JPanel {
 		//
 		//	useHeader Checkbox
 		//
-		useHeaderJL = new JLabel("Parse Header?");
+		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
 		useHeaderJCB = new JCheckBox();
 		useHeaderJCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,7 +170,7 @@ public class Step2Panel extends JPanel {
 		String tmp;
 		while(tok.hasMoreTokens()) {
 			tmp = tok.nextToken();
-			tmp = tmp.substring(tmp.indexOf(":")+2) + "\n";
+			tmp = tmp.substring(tmp.indexOf(Constants.RAW_DATA_SEPARATOR)+2) + "\n";
 			buf.append(tmp);
 			tmp = "";
 		}
@@ -179,7 +190,7 @@ public class Step2Panel extends JPanel {
 			for (int i = levelOfCount; i < maxLevel; i++) {
 				tmp = " " + tmp;
 			}
-			tmp = tmp + count + ": " + tok.nextToken() + "\n";
+			tmp = tmp + count + Constants.RAW_DATA_SEPARATOR + " " + tok.nextToken() + "\n";
 			buf.append(tmp);
 			// 
 			//	preparation for next round

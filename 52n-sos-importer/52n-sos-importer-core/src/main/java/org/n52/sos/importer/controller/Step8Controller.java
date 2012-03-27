@@ -60,6 +60,7 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step8Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * assembles all information from previous steps,
@@ -93,9 +94,12 @@ public class Step8Controller extends StepController {
 	private final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
 	
 	private InsertObservations insertObservations;
+
+	private TableController tableController;
 	
-	public Step8Controller(Step8Model step8Model) {
+	public Step8Controller(Step8Model step8Model, int firstLineWithData) {
 		this.step8Model = step8Model;
+		this.tableController = TableController.getInstance();
 	}
 	
 	/* (non-Javadoc)
@@ -166,15 +170,13 @@ public class Step8Controller extends StepController {
 			Column column = (Column) mv.getTableElement();
 			DateAndTimeController dtc = new DateAndTimeController();
 			
-			 // TODO insert firstLineWithData here?
-			
-			for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
+			for (int i = 0; i < this.tableController.getRowCount(); i++) {
 				RegisterSensor rs = new RegisterSensor();
 				InsertObservation io = new InsertObservation();
 				
 				//the cell of the current Measured Value
 				Cell c = new Cell(i, column.getNumber());
-				String value = TableController.getInstance().getValueAt(c);
+				String value = this.tableController.getValueAt(c);
 				try {
 					String parsedValue = mv.parse(value).toString();
 					io.setValue(parsedValue);
@@ -444,7 +446,7 @@ public class Step8Controller extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 8: Register Sensors and Insert Observations into SOS";
+		return Lang.l().step8Description();
 	}
 
 	@Override

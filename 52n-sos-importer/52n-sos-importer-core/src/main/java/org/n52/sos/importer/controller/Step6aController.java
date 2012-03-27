@@ -36,6 +36,7 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * lets the user choose date&time for all measured value columns 
@@ -53,12 +54,17 @@ public class Step6aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
-	private TableController tableController = TableController.getInstance();
+	private TableController tableController;
+
+	private int firstLineWithData;
 	
-	public Step6aController() {
+	public Step6aController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableController = TableController.getInstance();
 	}
 	
-	public Step6aController(Step6aModel step6aModel) {
+	public Step6aController(Step6aModel step6aModel,int firstLineWithData) {
+		this(firstLineWithData);
 		this.step6aModel = step6aModel;
 	}
 
@@ -107,7 +113,7 @@ public class Step6aController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 6a: Add missing dates and times";
+		return Lang.l().step6aDescription();
 	}
 
 	@Override
@@ -117,7 +123,7 @@ public class Step6aController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step6bController();
+		return new Step6bController(this.firstLineWithData);
 	}
 
 	@Override

@@ -24,20 +24,22 @@
 package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step4aModel implements StepModel {
 	
-	private final String description = 
-		"Select all measured value ORIENTATIONs " +
-		"where the marked Date & Time group corresponds to.";
+	private final String description = Lang.l().l().step4aModelDescription();
 	
 	private int[] selectedRowsOrColumns;
 	
+	private int firstLineWithData = -1;
+	
 	private DateAndTime dateAndTimeModel;
 	
-	public Step4aModel(DateAndTime dateAndTimeModel) {
+	public Step4aModel(DateAndTime dateAndTimeModel, int firstLineWithData) {
 		this.dateAndTimeModel = dateAndTimeModel;
 		this.selectedRowsOrColumns = new int[0];
+		this.firstLineWithData = firstLineWithData;
 	}
 
 	public void setDateAndTimeModel(DateAndTime dateAndTimeModel) {
@@ -58,5 +60,19 @@ public class Step4aModel implements StepModel {
 
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * @return the firstLineWithData
+	 */
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	/**
+	 * @param firstLineWithData the firstLineWithData to set
+	 */
+	public void setFirstLineWithData(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 }

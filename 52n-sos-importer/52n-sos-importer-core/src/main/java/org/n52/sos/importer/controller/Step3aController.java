@@ -31,9 +31,11 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.model.Step4aModel;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.step3.SelectionPanel;
 
 /**
@@ -60,7 +62,7 @@ public class Step3aController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 3a: Choose Metadata for the selected column";
+		return Lang.l().step3aDescription();
 	}
 
 	@Override
@@ -71,7 +73,8 @@ public class Step3aController extends StepController {
 	@Override
 	public void loadSettings() {	
 		int number = step3Model.getMarkedColumn();
-		Column column = new Column(number);
+		int fLWData = step3Model.getFirstLineWithData();
+		Column column = new Column(number,fLWData);
 		List<String> selection = step3Model.getSelectionForColumn(number);
 		step3Panel = new Step3Panel(step3Model.getFirstLineWithData());
 		if(selection != null) {
@@ -92,9 +95,9 @@ public class Step3aController extends StepController {
 		step3Model.addSelection(selection);
 		
 		int number = step3Model.getMarkedColumn();
+		int firstLineWithData = step3Model.getFirstLineWithData();
 		SelectionPanel selP = step3Panel.getLastChildPanel();
-		selP.assign(new Column(number));
-		// FIXME store the selection in the XMLModel (add ref to MainController)
+		selP.assign(new Column(number,firstLineWithData));
 		
 		if (step3Model.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {			
 			DateAndTimeController dtc = new DateAndTimeController();
@@ -118,19 +121,19 @@ public class Step3aController extends StepController {
 		step3Panel.store(selection);
 		step3Model.addSelection(selection);
 		int number = step3Model.getMarkedColumn()-1;
-		step3Model.setMarkedColumn(number);
-		
-		tableController.setColumnHeading(number, selection.get(0));	
-		tableController.clearMarkedTableElements();
-		tableController.setTableSelectionMode(TableController.CELLS);
-		tableController.turnSelectionOn();
-		
+		if(number >= 0) {
+			step3Model.setMarkedColumn(number);
+			tableController.setColumnHeading(number, selection.get(0));	
+			tableController.clearMarkedTableElements();
+			tableController.setTableSelectionMode(TableController.CELLS);
+			tableController.turnSelectionOn();
+		}
 		step3Panel = null;
 	}
 
 	@Override
 	public StepController getNextStepController() {		
-		return new Step4aController();	
+		return new Step4aController( new Step4aModel( null, step3Model.getFirstLineWithData() ) );	
 	}
 
 	@Override

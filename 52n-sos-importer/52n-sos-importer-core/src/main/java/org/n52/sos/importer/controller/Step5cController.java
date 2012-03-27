@@ -34,6 +34,7 @@ import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * lets the user add missing metadata for identified positions
@@ -50,12 +51,17 @@ public class Step5cController extends StepController {
 	
 	private PositionController positionController;
 	
-	private TableController tableController = TableController.getInstance();
+	private TableController tableController;
 	
-	public Step5cController() {	
+	private int firstLineWithData;
+	
+	public Step5cController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableController = TableController.getInstance();
 	}
 	
-	public Step5cController(Step5cModel step5cModel) {
+	public Step5cController(Step5cModel step5cModel,int firstLineWithData) {
+		this(firstLineWithData);
 		this.step5cModel = step5cModel;
 	}
 	
@@ -106,7 +112,7 @@ public class Step5cController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 5c: Complete position data";
+		return Lang.l().step5cDescription();
 	}
 
 	@Override
@@ -133,7 +139,7 @@ public class Step5cController extends StepController {
 	public StepController getNext() {
 		positionController = new PositionController();
 		Position p = positionController.getNextPositionWithMissingValues();
-		if (p != null) return new Step5cController(new Step5cModel(p));
+		if (p != null) return new Step5cController(new Step5cModel(p),this.firstLineWithData);
 		
 		positionController = null;
 		return null;	
@@ -141,7 +147,7 @@ public class Step5cController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step6aController();
+		return new Step6aController(this.firstLineWithData);
 	}
 
 	@Override

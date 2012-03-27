@@ -52,17 +52,18 @@ public class Step7Test {
 				{"01/06/2010", "11:45", "12,12", "23,123"},
 				{"01/06/2010", "23:45", "323,123", "432,123"}};
 		TableController.getInstance().setContent(o); 
+		int firstLineWithData = 0;
 		
 		DateAndTime dtm1 = new DateAndTime();
 		dtm1.setGroup("1");
 		DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-		dtc1.assignPattern("dd/MM/yyyy", new Column(0));
+		dtc1.assignPattern("dd/MM/yyyy", new Column(0,firstLineWithData));
 		ModelStore.getInstance().add(dtm1);
 		
 		DateAndTime dtm2 = new DateAndTime();
 		dtm2.setGroup("1");
 		DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
-		dtc2.assignPattern("HH:mm", new Column(1));
+		dtc2.assignPattern("HH:mm", new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(dtm2);
 		
 		dtc2.mergeDateAndTimes();
@@ -102,7 +103,7 @@ public class Step7Test {
 		NumericValue nv1 = new NumericValue();
 		nv1.setDecimalSeparator(",");
 		nv1.setThousandsSeparator(".");
-		nv1.setTableElement(new Column(1));
+		nv1.setTableElement(new Column(1,firstLineWithData));
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
 		nv1.setFeatureOfInterest(foi);
@@ -112,7 +113,7 @@ public class Step7Test {
 		NumericValue nv2 = new NumericValue();
 		nv2.setDecimalSeparator(",");
 		nv2.setThousandsSeparator(".");
-		nv2.setTableElement(new Column(2));
+		nv2.setTableElement(new Column(2,firstLineWithData));
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
@@ -127,6 +128,6 @@ public class Step7Test {
 		
 		MainController f = MainController.getInstance();
 		
-		f.setStepController(new Step7Controller());
+		f.setStepController(new Step7Controller(firstLineWithData));
 	}
 }

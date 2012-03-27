@@ -21,48 +21,36 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.model;
+package org.n52.sos.importer.view.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.i18n.Lang;
 
-public class Step5cModel implements StepModel {
-
-	private Position position;
+/**
+ * @author e.h.juerrens@52north.org
+ *
+ */
+public class Constants {
 	
-	private List<Component> missingPositionComponents;
-	
-	public Step5cModel(Position position) {
-		this.setPosition(position);
-		setMissingPositionComponents(new ArrayList<Component>());
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-
-	public String getDescription() {
-		return Lang.l().step5cModelDescription();
-	}
-
+	public final static String SEPARATOR_STRING = "SEP";
+	public static final String SPACE_STRING = Lang.l().spaceString();
+	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
 	/**
-	 * saves the components which are missing for this step
+	 * Is used to distinguish between line number and content
 	 */
-	public void setMissingPositionComponents(List<Component> missingPositionComponents) {
-		this.missingPositionComponents = missingPositionComponents;
+	public static final String RAW_DATA_SEPARATOR = ":";
+	public static final String UNIX_TIME = "UNIX_TIME";
+	public static final String COMBINATION = "COMBINATION";
+	public static final String NUMERIC = "NUMERIC";
+	public static final String BOOLEAN = "BOOLEAN";
+	public static final String COUNT = "COUNT";
+	public static final String TEXT = "TEXT";
+	public static final String STRING_REPLACER = "-@@@-";
+	/**
+	 * TODO implement loading of language parameter from config file
+	 * @return en
+	 */
+	public static String language() {
+		return "en";
 	}
 
-	/**
-	 * returns the components which were missing for this step
-	 */
-	public List<Component> getMissingPositionComponents() {
-		return missingPositionComponents;
-	}
 }

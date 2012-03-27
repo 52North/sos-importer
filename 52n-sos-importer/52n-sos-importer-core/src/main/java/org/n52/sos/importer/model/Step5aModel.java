@@ -27,11 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step5aModel implements StepModel {
 
-	private final String description = 
-		"Complete missing information for the marked date and time.";
 	
 	private DateAndTime dateAndTime;
 	
@@ -51,7 +50,7 @@ public class Step5aModel implements StepModel {
 	}
 
 	public String getDescription() {
-		return description;
+		return Lang.l().step5aModelDescription();
 	}
 
 	/**

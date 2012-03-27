@@ -37,6 +37,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -91,7 +92,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 	
 	@Override
 	public void assign(TableElement tableElement) {
-    	String[] part = getSelection().split("SEP");
+    	String[] part = getSelection().split(Constants.SEPARATOR_STRING);
 		String pattern = part[0];
 		String group = part[1];
 	
