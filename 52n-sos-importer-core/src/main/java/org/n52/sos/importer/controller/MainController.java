@@ -23,6 +23,9 @@
  */
 package org.n52.sos.importer.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.model.StepModel;
@@ -104,5 +107,9 @@ public class MainController {
 
 	public void updateTitle(String csvFilePath) {
 		this.mainFrame.updateTitle(csvFilePath);
+	}
+
+	public void saveModel(File file) throws IOException {
+		this.xmlModel.save(file);
 	}
 }

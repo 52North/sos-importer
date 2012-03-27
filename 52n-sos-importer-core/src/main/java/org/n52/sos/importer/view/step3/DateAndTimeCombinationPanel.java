@@ -42,6 +42,7 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -94,7 +95,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	
 	@Override
 	public void assign(TableElement tableElement) {
-    	String[] part = getSelection().split("SEP");
+    	String[] part = getSelection().split(Constants.SEPARATOR_STRING);
 		String pattern = part[0];
 		String group = part[1];
 

@@ -45,32 +45,20 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 public abstract class Resource extends Component {
 	
 	private static final Logger logger = Logger.getLogger(Resource.class);
-	
+
 	private TableElement tableElement;
-	
 	private String name;
-	
 	private URI uri;
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setURI(URI uri) {
-		this.uri = uri;
-	}
-
-	public URI getURI() {
-		return uri;
-	}
+	public void setName(String name) { this.name = name; }
+	public String getName() { return name; }
+	public void setURI(URI uri) { this.uri = uri; }
+	public URI getURI() { return uri; }
 	
 	/**
 	 * returns the name or alternatively the URI, when
 	 * the name is null
+	 * @return a String representation of this resource's name
 	 */
 	public String getNameString() {
 		if (name == null || name.equals(""))
@@ -82,6 +70,7 @@ public abstract class Resource extends Component {
 	/**
 	 * returns the URI or alternatively the name, when
 	 * the URI is null
+	 * @return a String representation of this resource's URI
 	 */
 	public String getURIString() {
 		if (uri == null || uri.toString().equals(""))

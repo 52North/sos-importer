@@ -46,20 +46,21 @@ public class Step6cTest2 {
 		Object[][] o = {{"31.12.07", "Klinthal", "PM10", "11.25"},
 				{"01.01.03", "PlauSued", "PM10", "19.91"}};
 		TableController.getInstance().setContent(o); 
+		int firstLineWithData = 0;
 		
 		DateAndTime dtm = new DateAndTime();
 		DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern("dd.MM.yy", new Column(0));
+		dtc.assignPattern("dd.MM.yy", new Column(0,firstLineWithData));
 		dtm.setHour(new Hour(0));
 		dtm.setMinute(new Minute(0));
 		dtm.setSecond(new Second(0));
 		dtm.setTimeZone(new TimeZone(1));
 		
 		FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setTableElement(new Column(1));
+		foi.setTableElement(new Column(1,firstLineWithData));
 		
 		ObservedProperty op = new ObservedProperty();
-		op.setTableElement(new Column(2));
+		op.setTableElement(new Column(2,firstLineWithData));
 
 		UnitOfMeasurement uom = new UnitOfMeasurement();
 		uom.setName("myg/m3");
@@ -67,7 +68,7 @@ public class Step6cTest2 {
 		sn.setName("PM10Sensor");
 		
 		NumericValue nv1 = new NumericValue();
-		nv1.setTableElement(new Column(3));
+		nv1.setTableElement(new Column(3,firstLineWithData));
 		nv1.setDecimalSeparator(".");
 		nv1.setThousandsSeparator(",");
 		nv1.setDateAndTime(dtm);
@@ -81,7 +82,7 @@ public class Step6cTest2 {
 		
 		MainController f = MainController.getInstance();
 
-		Step6cController s6c = new Step6cController();
+		Step6cController s6c = new Step6cController(firstLineWithData);
 		s6c.isNecessary();
 		f.setStepController(s6c);
 	}

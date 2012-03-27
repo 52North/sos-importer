@@ -41,6 +41,7 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step6Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
 
 /**
@@ -60,10 +61,17 @@ public class Step6bSpecialController extends StepController {
 	
 	private MissingResourcePanel missingResourcePanel;
 
-	public Step6bSpecialController() {
+	private TableController tableController;
+
+	private int firstLineWithData;
+	
+	public Step6bSpecialController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableController = TableController.getInstance();
 	}
 	
-	public Step6bSpecialController(Step6bSpecialModel step6bSpecialModel) {
+	public Step6bSpecialController(Step6bSpecialModel step6bSpecialModel, int firstLineWithData) {
+		this(firstLineWithData);
 		this.step6bSpecialModel = step6bSpecialModel;
 	}
 	
@@ -96,7 +104,7 @@ public class Step6bSpecialController extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 6b (Special): Add missing sensors";
+		return Lang.l().step6bSpecialDescription();
 	}
 
 	@Override
@@ -106,7 +114,7 @@ public class Step6bSpecialController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step6cController();
+		return new Step6cController(this.firstLineWithData);
 	}
 
 	@Override
@@ -129,7 +137,7 @@ public class Step6bSpecialController extends StepController {
 	}
 		
 	public Step6bSpecialModel getNextModel() {
-		int rows = TableController.getInstance().getRowCount();
+		int rows = this.tableController.getRowCount();
 
 		//iterate through all measured value columns/rows
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
@@ -142,7 +150,7 @@ public class Step6bSpecialController extends StepController {
 			for (int i = 0; i < rows; i++) {	
 				//test if the measuredValue is parseable
 				Cell cell = new Cell(i, rowOrColumnNumber);
-				String value = TableController.getInstance().getValueAt(cell);
+				String value = this.tableController.getValueAt(cell);
 				try {
 					mv.parse(value);
 				} catch (Exception e) {
@@ -170,7 +178,7 @@ public class Step6bSpecialController extends StepController {
 	public StepController getNext() {
 		Step6bSpecialModel step6bSpecialModel = getNextModel();
 		if (step6bSpecialModel != null)
-			return new Step6bSpecialController(step6bSpecialModel);
+			return new Step6bSpecialController(step6bSpecialModel,this.firstLineWithData);
 		
 		return null;
 	}

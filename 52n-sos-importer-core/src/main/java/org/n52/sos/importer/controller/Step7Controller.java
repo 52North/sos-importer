@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step8Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * lets the user choose a URL of a Sensor Observation Service
@@ -47,7 +48,10 @@ public class Step7Controller extends StepController {
 	
 	private Step7Panel step7Panel;
 	
-	public Step7Controller() {
+	private int firstLineWithData;
+	
+	public Step7Controller(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 	
 	@Override
@@ -61,7 +65,7 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public String getDescription() {
-		return "Step 7: Choose Sensor Observation Service";
+		return Lang.l().step7Description();
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class Step7Controller extends StepController {
 	@Override
 	public StepController getNextStepController() {
 		String url = step7Panel.getSOSURL();
-		return new Step8Controller(new Step8Model(url));
+		return new Step8Controller(new Step8Model(url),this.firstLineWithData);
 	}
 
 	@Override
@@ -97,21 +101,21 @@ public class Step7Controller extends StepController {
 	    		logger.info("Successfully tested connection to Sensor Observation Service: " + strURL);
 	        	return true;
 	        } else {
-	        	String msg = "Could not connect to Sensor Observation Service: "
-	        		+ strURL + ". HTTP Response Code: " 
-	        		+ urlConn.getResponseCode();
+	        	String msg = Lang.l().step7SOSconnectionFailed(strURL,urlConn.getResponseCode());
 				JOptionPane.showMessageDialog(null,
 						msg,
-					    "Warning",
+					    Lang.l().warningDialogTitle(),
 					    JOptionPane.WARNING_MESSAGE);
 	    		logger.warn(msg);
 	        	return false;
 	        }        	
 	    } catch (IOException e) {
+	    	String msg = Lang.l().step7SOSConnectionFailedException(strURL,e.getMessage());
 			JOptionPane.showMessageDialog(null,
-				    "Connection to Sensor Observation Service " + strURL + " failed. " + e.getMessage(),
-				    "Error",
+				    msg,
+				    Lang.l().errorDialogTitle(),
 				    JOptionPane.ERROR_MESSAGE);
+			logger.error(msg,e);
 	    	return false;
 	    }
 	}

@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * shows progress while assembling data, registering sensors
@@ -52,17 +53,17 @@ public class Step8Panel extends JPanel {
 	
 	private JProgressBar sensorProgressBar = new JProgressBar();
 	
-	private JLabel registerSensorLabel = new JLabel("Register 0 Sensors...");
+	private JLabel registerSensorLabel = new JLabel(Lang.l().step8RegisterSensorLabel(0));
 	
-	private JLabel successfulSensorsLabel = new JLabel("Successful: 0");
+	private JLabel successfulSensorsLabel = new JLabel(Lang.l().step8SuccessLabel(0));
 	
-	private JLabel erroneousSensorsLabel = new JLabel("Errors: 0");
+	private JLabel erroneousSensorsLabel = new JLabel(Lang.l().step8ErrorLable(0));
 	
-	private JLabel insertObservationLabel = new JLabel("Insert 0 Observations...");
+	private JLabel insertObservationLabel = new JLabel(Lang.l().step8InsertObservationLabel(0));
 	
 	private JProgressBar observationProgressBar = new JProgressBar();
 	
-	private JLabel successfulObservationsLabel = new JLabel("Successful: 0");
+	private JLabel successfulObservationsLabel = new JLabel(Lang.l().step8SuccessLabel(0));
 	
 	private JLabel erroneousObservationsLabel = new JLabel("Errors: 0");
 	
@@ -101,7 +102,7 @@ public class Step8Panel extends JPanel {
 	}
 	
 	public void setTotalNumberOfSensors(int n) {
-		registerSensorLabel.setText("Register " + n + " sensors...");
+		registerSensorLabel.setText(Lang.l().step8RegisterSensorLabel(n));
 	}
 	
 	public void setRegisterSensorProgress(int n) {
@@ -109,11 +110,11 @@ public class Step8Panel extends JPanel {
 	}
 	
 	public void setNumberOfSuccessfulSensors(int n) {
-		successfulSensorsLabel.setText("Successful: " + n);
+		successfulSensorsLabel.setText(Lang.l().step8SuccessLabel(n));
 	}
 	
 	public void setNumberOfErroneousSensors(int n) {
-		erroneousSensorsLabel.setText("Errors: " + n);
+		erroneousSensorsLabel.setText(Lang.l().step8ErrorLable(n));
 	}
 	
 	public void setInsertObservationProgress(int n) {
@@ -121,20 +122,22 @@ public class Step8Panel extends JPanel {
 	}
 	
 	public void setNumberOfSuccessfulObservations(int n) {
-		successfulObservationsLabel.setText("Successful: " + n );
+		successfulObservationsLabel.setText(Lang.l().step8SuccessLabel(n));
 	}
 	
 	public void setNumberOfErroneousObservations(int n) {
-		erroneousObservationsLabel.setText("Errors: " + n);
+		erroneousObservationsLabel.setText(Lang.l().step8ErrorLable(n));
 	}
 	
 	public void setTotalNumberOfObservations(int n) {
-		insertObservationLabel.setText("Insert " + n + " observations...");
+		insertObservationLabel.setText(Lang.l().step8InsertObservationLabel(n));
 	}
 	
 	public void setLogFileURI(URI uri) {
 		logger.info("Log file is saved at: " + uri);
-		logFileLabel.setText("<html><a href=>Check log file</a></html>");
+		logFileLabel.setText("<html><a href=>" + 
+				Lang.l().step8LogFileLabel() + 
+				"</a></html>");
 		logFileLabel.addMouseListener(new LogFileLinkClicked(uri));
 	}
 	
@@ -147,18 +150,6 @@ public class Step8Panel extends JPanel {
 		}
 		
 		@Override
-		public void mouseClicked(MouseEvent e) {			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {		
-		}
-
-		@Override
 		public void mousePressed(MouseEvent e) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
@@ -167,9 +158,15 @@ public class Step8Panel extends JPanel {
 				logger.error("Unable to open log file: " + ioe.getMessage());
 			}
 		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+		@Override
+		public void mouseExited(MouseEvent e) {}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {	
-		}		
+		public void mouseReleased(MouseEvent e) {}		
 	}
 }

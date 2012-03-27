@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step2Panel;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -56,7 +58,7 @@ public class Step2Controller extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 2: Import CSV file"; 
+		return Lang.l().step2Description(); 
 	}
 	
 	@Override
@@ -82,6 +84,7 @@ public class Step2Controller extends StepController {
 	public StepController getNextStepController() {
 		Object[][] content = parseCSVFile();
 		TableController.getInstance().setContent(content);
+		TableController.getInstance().setFirstLineWithData(this.step2Model.getFirstLineWithData());
 		return new Step3aController(this.step2Model.getFirstLineWithData(),this.step2Model.getUseHeader());
 	}
 	
@@ -228,7 +231,7 @@ public class Step2Controller extends StepController {
 		try {	
 			if (separator.equals("Tab")) {
 				separator = "\t"; 
-			} else if (separator.equals("Space")) {
+			} else if (separator.equals(Constants.SPACE_STRING)) {
 				separator = ";";
 				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
 			}

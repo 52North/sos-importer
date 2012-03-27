@@ -35,6 +35,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * loads and saves all combobox items in the properties file
@@ -46,8 +47,6 @@ public class ComboBoxItems {
 	private static final Logger logger = Logger.getLogger(ComboBoxItems.class);
 
 	private static ComboBoxItems instance = null;
-	
-	private static final String SEPARATOR = "SEP";
 	
 	private static final String EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 	
@@ -168,7 +167,7 @@ public class ComboBoxItems {
 	
 	public String[] parse(String property) {
 		if (property == null) return new String[0];
-		String[] values = property.split(SEPARATOR);
+		String[] values = property.split(Constants.SEPARATOR_STRING);
 		return values;
 	}
 	
@@ -216,7 +215,7 @@ public class ComboBoxItems {
 	public String format(DefaultComboBoxModel dcbm) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dcbm.getSize(); i++) 
-			sb.append(dcbm.getElementAt(i) + SEPARATOR);
+			sb.append(dcbm.getElementAt(i) + Constants.SEPARATOR_STRING);
 		return sb.toString();
 	}
 	

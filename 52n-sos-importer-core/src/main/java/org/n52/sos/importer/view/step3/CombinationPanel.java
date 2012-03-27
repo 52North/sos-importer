@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * selection panel in step 3 for date&time and position combinations,
@@ -60,7 +61,7 @@ public abstract class CombinationPanel extends SelectionPanel {
     private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(getCombination());
 	
     private final ParseTestLabel parseTestLabel;
-   
+
 	public CombinationPanel(JPanel containerPanel,int firstLineWithData) {	
 		super(containerPanel);
 		setDefaultSelection();
@@ -105,7 +106,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
 	public void setSelection(String s) {
-    	String[] part = s.split("SEP");
+    	String[] part = s.split(Constants.SEPARATOR_STRING);
 		patternComboBox.setSelectedItem(part[0]);
 		groupComboBox.setSelectedItem(part[1]);
     	patternChanged();
@@ -124,8 +125,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	public String getSelection() {
 		String pattern = (String) patternComboBox.getSelectedItem();
 		String group = (String) groupComboBox.getSelectedItem();
-		// FIXME externalise "SEP"
-		return pattern + "SEP" + group;
+		return pattern + Constants.SEPARATOR_STRING + group;
 	}
     
     protected void patternChanged() {

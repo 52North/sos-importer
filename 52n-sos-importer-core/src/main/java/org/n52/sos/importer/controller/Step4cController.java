@@ -43,6 +43,15 @@ public class Step4cController extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step4cController.class);
 	
+	private int firstLineWithData;
+	
+	/**
+	 * @param firstLineWithData
+	 */
+	public Step4cController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+	}
+
 	@Override
 	public void loadSettings() {
 		// TODO Auto-generated method stub
@@ -69,7 +78,7 @@ public class Step4cController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step5aController();
+		return new Step5aController(this.firstLineWithData);
 	}
 
 	@Override

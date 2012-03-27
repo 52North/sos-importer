@@ -44,10 +44,10 @@ public class Step6cTest {
 	public static void main(String[] args) {
 		Object[][] o = {{"01/06/2010 00:00", "12.12", "23.123"},{"01/06/2010 01:00", "323.123", "432.123"}};
 		TableController.getInstance().setContent(o); 
-		
+		int firstLineWithData = 0;
 		DateAndTime dtm = new DateAndTime();
 		DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0));
+		dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
 		dtm.setSecond(new Second(0));
 		dtm.setTimeZone(new TimeZone(1));
 
@@ -61,7 +61,7 @@ public class Step6cTest {
 		sn.setName("Thermometer xy");
 		
 		NumericValue nv1 = new NumericValue();
-		nv1.setTableElement(new Column(1));
+		nv1.setTableElement(new Column(1,firstLineWithData));
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
 		nv1.setFeatureOfInterest(foi);
@@ -69,7 +69,7 @@ public class Step6cTest {
 		nv1.setUnitOfMeasurement(uom);
 		
 		NumericValue nv2 = new NumericValue();
-		nv2.setTableElement(new Column(2));
+		nv2.setTableElement(new Column(2,firstLineWithData));
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
@@ -83,7 +83,7 @@ public class Step6cTest {
 		MainController f = MainController.getInstance();
 
 		Step6cModel step7Model = new Step6cModel(foi);
-		f.setStepController(new Step6cController(step7Model));
+		f.setStepController(new Step6cController(step7Model,firstLineWithData));
 	}
 
 }

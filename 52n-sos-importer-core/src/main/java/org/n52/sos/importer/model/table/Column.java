@@ -35,9 +35,11 @@ import org.n52.sos.importer.controller.TableController;
 public class Column extends TableElement {
 	
 	private int number = -1;
+	private int firstLineWithData = -1;
 
-	public Column(int number) {
+	public Column(int number, int firstLineWithData) {
 		this.number = number;
+		this.firstLineWithData = firstLineWithData;
 	}
 
 	public void setNumber(int number) {
@@ -65,7 +67,7 @@ public class Column extends TableElement {
 	@Override
 	public HashSet<String> getValues() {
 		HashSet<String> values = new HashSet<String>();
-		for (int i = 0; i < TableController.getInstance().getRowCount(); i++) {
+		for (int i = this.firstLineWithData; i < TableController.getInstance().getRowCount(); i++) {
 			String value = TableController.getInstance().getValueAt(i, this.getNumber());
 			if (value != null && value != "")
 				values.add(value);
@@ -75,7 +77,7 @@ public class Column extends TableElement {
 	
 	@Override
 	public String toString() {
-		return "column "+number;
+		return "column #" + number + "fLWD: " + firstLineWithData;
 	}
 	
 	@Override
@@ -98,5 +100,19 @@ public class Column extends TableElement {
 		if (number != other.number)
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return firstLineWithData, -1 if not set
+	 */
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	/**
+	 * @param firstLineWithData the firstLineWithData to set
+	 */
+	public void setFirstLineWithData(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 }

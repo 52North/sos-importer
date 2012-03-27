@@ -30,10 +30,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,6 +48,8 @@ import javax.swing.event.HyperlinkListener;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.Step1Controller;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -60,9 +64,9 @@ public class Step1Panel extends JPanel {
 	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
 	
-	private final JLabel csvFileLabel = new JLabel("CSV File: ");
+	private final JLabel csvFileLabel = new JLabel(Lang.l().step1File() + " :");
 	private final JTextField csvFileTextField = new JTextField(25);
-	private final JButton browse = new JButton("Browse");
+	private final JButton browse = new JButton(Lang.l().step1BrowseButton());
 	private final Step1Panel _this = this;
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
@@ -73,6 +77,7 @@ public class Step1Panel extends JPanel {
 		super();
 		// init fields
 		JScrollPane welcomePanel = this.welcomePanel();
+		JPanel languagePanel = this.languagePanel();
 		// csv Panel
 		JPanel csvPanel = new JPanel();
 		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -83,8 +88,9 @@ public class Step1Panel extends JPanel {
 		this.step1Controller = step1Controller;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		this.add(welcomePanel);
+		this.add(languagePanel);
 		this.add(csvPanel);
-		csvFileTextField.setToolTipText(ToolTips.get("CSVFile"));
+		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
 		browse.addActionListener(new BrowseButtonClicked());
 	}
 	
@@ -103,6 +109,31 @@ public class Step1Panel extends JPanel {
 		}
 	}
 	
+	private JPanel languagePanel() {
+		// TODO Auto-generated method stub generated on 27.03.2012 around 15:32:41
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
+		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
+		//
+		jcb.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb = (JComboBox)e.getSource();
+		        Locale selectedLocale = (Locale)cb.getSelectedItem();
+		        Lang.setCurrentLocale(selectedLocale);
+		        getParent().getParent().repaint();
+		        if (logger.isDebugEnabled()) {
+					logger.debug("tried to call repaint()");
+				}
+			}
+		});
+		jcb.setEditable(false);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panel.add(label);
+		panel.add(jcb);
+		return panel;
+	}
+
 	/**
 	 * This method reads the welcome message from a HTML file and presents it 
 	 * using a <code>JEditorPane</code>
@@ -111,10 +142,10 @@ public class Step1Panel extends JPanel {
 	private JScrollPane welcomePanel(){
 		JEditorPane pane  = new JEditorPane();
 		JScrollPane scrollPane = new JScrollPane(pane);
-		String t = welcomeRes.getString("en");
+		String t = welcomeRes.getString(Constants.language());
 		//
 		pane.setEditable(false);
-		pane.setContentType("text/html");
+		pane.setContentType(Constants.WELCOME_RES_CONTENT_TYPE);
 		pane.setText(t);
 		float[] f = Color.RGBtoHSB(238, 238, 238, null);
 		pane.setBackground(Color.getHSBColor(f[0], f[1], f[2]));

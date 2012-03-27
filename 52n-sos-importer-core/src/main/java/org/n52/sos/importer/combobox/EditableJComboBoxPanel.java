@@ -82,6 +82,11 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	private boolean enterPressed = false;
 	
+	/**
+	 * @param model
+	 * @param labelName
+	 * @param toolTip
+	 */
 	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName, String toolTip) {
 		super();
 		this.model = model;

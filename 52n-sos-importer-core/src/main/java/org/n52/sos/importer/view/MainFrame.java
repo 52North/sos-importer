@@ -37,6 +37,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.controller.MainController;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * the actual frame of the application which can swap the 
@@ -58,7 +59,7 @@ public class MainFrame extends JFrame {
 	private final JPanel infoPanel;
 	
 	// TODO read this from general configuration file
-	private String frameTitle = "SOS Importer 0.2 RC1";
+	private String frameTitle = Lang.l().frameTitle();
 	
 	protected final static int DIALOG_WIDTH = 800;
 	
@@ -126,8 +127,8 @@ public class MainFrame extends JFrame {
 	
 	public void showExitDialog() {
 		int n = JOptionPane.showConfirmDialog(
-			    this, "Do you really want to exit?\n",
-			    "Exit", JOptionPane.YES_NO_OPTION,
+			    this, Lang.l().exitDialogQuestion(),
+			    Lang.l().exitDialogTitle(), JOptionPane.YES_NO_OPTION,
 			    JOptionPane.WARNING_MESSAGE);
 
 		if (n == JOptionPane.YES_OPTION) {
@@ -152,8 +153,14 @@ public class MainFrame extends JFrame {
 		int endOfPath = csvFilePath.lastIndexOf(File.separatorChar)+1;
 		String file = csvFilePath.substring(endOfPath);
 		String path = csvFilePath.substring(0,endOfPath);
-		String newTitle = this.frameTitle + 
-			" - file:\"" + file + "\" (path: \"" + path + "\")";
+		String newTitle = this.frameTitle + Lang.l().frameTitleExtension(file,path);
 		this.setTitle(newTitle);
+	}
+	
+	@Override
+	public void repaint() {
+		this.backNextPanel.repaint();
+		super.repaint();
+		getParent().repaint();
 	}
 }

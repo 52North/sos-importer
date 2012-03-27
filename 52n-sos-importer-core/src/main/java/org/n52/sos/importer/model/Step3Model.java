@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class Step3Model implements StepModel{
 	private static final Logger logger = Logger.getLogger(Step3Model.class);
 	
 	private int markedColumn;
-	private List<String> selection;
 	private HashMap<Integer, List<String>> columnAssignments;
 	
 	private final int firstLineWithData;
@@ -51,7 +49,9 @@ public class Step3Model implements StepModel{
 
 	/**
 	 * saves the current selection of the radio button panel for the current
-	 * marked column
+	 * marked column.<br />
+	 * Is called during <code>Step3Model.back()</code> and 
+	 * <code>Step3Controller.saveSettings()</code>.
 	 * @param selection the selection by the user for the current column
 	 */
 	public boolean addSelection(List<String> selection) {

@@ -37,7 +37,7 @@ public class Cell extends TableElement {
 	private int column;
 	
 	private int row;
-
+	
 	public Cell() {
 		column = -1;
 		row = -1;

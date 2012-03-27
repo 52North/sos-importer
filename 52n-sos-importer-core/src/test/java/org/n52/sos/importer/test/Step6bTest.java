@@ -40,12 +40,13 @@ public class Step6bTest {
 		Object[][] o = {{"1", "4"},{"2", "5"},{"3", "6"}};
 		TableController.getInstance().setContent(o);
 		MeasuredValue mv = new NumericValue();
-		mv.setTableElement(new Column(0));
+		int firstLineWithData = 0;
+		mv.setTableElement(new Column(0,firstLineWithData ));
 		MeasuredValue mv2 = new NumericValue();
-		mv2.setTableElement(new Column(1));
+		mv2.setTableElement(new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(mv);
 		ModelStore.getInstance().add(mv2);
 		Step6bModel step6aModel = new Step6bModel(mv, new FeatureOfInterest());
-		f.setStepController(new Step6bController(step6aModel));
+		f.setStepController(new Step6bController(step6aModel,firstLineWithData));
 	}
 }

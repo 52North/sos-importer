@@ -52,7 +52,8 @@ public class Step6bTest2 {
 		DateAndTime dtm1 = new DateAndTime();
 		dtm1.setGroup("1");
 		DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-		dtc1.assignPattern("dd.MM.yy", new Column(0));
+		int firstLineWithData = 0;
+		dtc1.assignPattern("dd.MM.yy", new Column(0,firstLineWithData ));
 		dtm1.setHour(new Hour(0));
 		dtm1.setMinute(new Minute(0));
 		dtm1.setSecond(new Second(0));
@@ -60,7 +61,7 @@ public class Step6bTest2 {
 		ModelStore.getInstance().add(dtm1);
 		
 		FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setTableElement(new Column(1));
+		foi.setTableElement(new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(foi);
 		
 		//ObservedProperty op = new ObservedProperty();
@@ -68,7 +69,7 @@ public class Step6bTest2 {
 		//ModelStore.getInstance().add(op);
 		
 		NumericValue nv = new NumericValue();
-		nv.setTableElement(new Column(3));
+		nv.setTableElement(new Column(3,firstLineWithData));
 		nv.setDecimalSeparator(".");
 		nv.setThousandsSeparator(",");
 		nv.setDateAndTime(dtm1);
@@ -76,7 +77,7 @@ public class Step6bTest2 {
 		//nv.setObservedProperty(op);
 		ModelStore.getInstance().add(nv);
 
-		Step6bController s6c = new Step6bController();
+		Step6bController s6c = new Step6bController(firstLineWithData);
 		s6c.isNecessary(); 
 		f.setStepController(s6c);
 	}

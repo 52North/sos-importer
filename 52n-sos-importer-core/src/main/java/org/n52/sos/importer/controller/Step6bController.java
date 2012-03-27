@@ -40,13 +40,17 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.resources.MissingResourcePanel;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * lets the user choose feature of interest, observed property, 
  * unit of measurement and sensor for each measured value column
  * in case they do not appear in the CSV file
  * @author Raimund
+ * 
+ * TODO remove "ORIENTATION" and "RESOURCE" replacement
  *
  */
 public class Step6bController extends StepController {
@@ -55,16 +59,21 @@ public class Step6bController extends StepController {
 		
 	private Step6bModel step6bModel;
 	
-	private TableController tableController = TableController.getInstance();
-	
 	private Step5Panel step5Panel;
 	
 	private MissingResourcePanel missingResourcePanel;
 	
-	public Step6bController() {	
+	private TableController tableController;
+
+	private int firstLineWithData;
+	
+	public Step6bController(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
+		this.tableController = TableController.getInstance();
 	}
 	
-	public Step6bController(Step6bModel step6bModel) {
+	public Step6bController(Step6bModel step6bModel,int firstLineWithData) {
+		this(firstLineWithData);
 		this.step6bModel = step6bModel;
 	}
 	
@@ -92,8 +101,8 @@ public class Step6bController extends StepController {
 		missingComponentPanels.add(missingResourcePanel);
 		
 		String question = step6bModel.getDescription();
-		question = question.replaceAll("RESOURCE", resource.toString());
-		question = question.replaceAll("ORIENTATION", tableController.getOrientationString());
+		question = question.replaceFirst(Constants.STRING_REPLACER, resource.toString());
+		question = question.replaceFirst(Constants.STRING_REPLACER, tableController.getOrientationString());
 		step5Panel = new Step5Panel(question, missingComponentPanels);
 		
 		tableController.turnSelectionOff();
@@ -135,12 +144,12 @@ public class Step6bController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {		
-		return new Step6bSpecialController();	
+		return new Step6bSpecialController(this.firstLineWithData);	
 	}
 
 	@Override
 	public String getDescription() {
-		return "Step 6b: Add missing metadata";
+		return Lang.l().step6bDescription();
 	}
 
 	@Override
@@ -164,7 +173,7 @@ public class Step6bController extends StepController {
 	@Override
 	public StepController getNext() {
 		Step6bModel model = getMissingResourceForMeasuredValue();	
-		if (model != null) return new Step6bController(model);
+		if (model != null) return new Step6bController(model,this.firstLineWithData);
 			
 		return null;
 	}

@@ -24,19 +24,19 @@
 package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step4bModel implements StepModel {
-	
-	private final String description = 
-		"Select all measured value ORIENTATIONs " +
-		"where the marked RESOURCE ORIENTATION corresponds to.";
 	
 	private Resource resource;
 	
 	private int[] selectedRowsOrColumns;
+	
+	private int firstLineWithData = -1;
 
-	public Step4bModel(Resource resource) {
+	public Step4bModel(Resource resource, int firstLineWithData) {
 		this.resource = resource;
+		this.firstLineWithData = firstLineWithData;
 		this.selectedRowsOrColumns = new int[0];
 	}
 	
@@ -49,7 +49,7 @@ public class Step4bModel implements StepModel {
 	}
 
 	public String getDescription() {
-		return description;
+		return Lang.l().step4bModelDescription();
 	}
 
 	public void setSelectedRowsOrColumns(int[] selectedRowsOrColumns) {
@@ -58,5 +58,19 @@ public class Step4bModel implements StepModel {
 
 	public int[] getSelectedRowsOrColumns() {
 		return selectedRowsOrColumns;
+	}
+
+	/**
+	 * @return the firstLineWithData
+	 */
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	/**
+	 * @param firstLineWithData the firstLineWithData to set
+	 */
+	public void setFirstLineWithData(int firstLineWithData) {
+		this.firstLineWithData = firstLineWithData;
 	}
 }

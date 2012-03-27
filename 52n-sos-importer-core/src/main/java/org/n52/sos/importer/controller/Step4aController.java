@@ -34,6 +34,8 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * solves ambiguities in case there is more than one date&time column
@@ -48,28 +50,27 @@ public class Step4aController extends StepController {
 	
 	private Step4Panel step4Panel;
 	
-	private TableController tableController = TableController.getInstance();
+	private TableController tableController;
 
-	public Step4aController() {
-	}
-	
 	public Step4aController(Step4aModel step4bModel) {
 		this.step4aModel = step4bModel;
+		this.tableController = TableController.getInstance();
 	}
 	
 	@Override
 	public void loadSettings() {
 		String text = step4aModel.getDescription();
 		String orientation = tableController.getOrientationString();
-		text = text.replaceAll("ORIENTATION", orientation);
+		int fLWData = step4aModel.getFirstLineWithData();
+		text = text.replaceAll(Constants.STRING_REPLACER, orientation);
 		step4Panel = new Step4Panel(text);		
 
 		tableController.setTableSelectionMode(TableController.COLUMNS);
-		tableController.addMultipleSelectionListener(new SelectionChanged());
+		tableController.addMultipleSelectionListener(new SelectionChanged(fLWData));
 		
 		int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
 		for (int number: selectedRowsOrColumns) {
-			Column c = new Column(number);
+			Column c = new Column(number,fLWData);
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 			mv.setDateAndTime(null);
 			tableController.selectColumn(number);
@@ -84,9 +85,10 @@ public class Step4aController extends StepController {
 		int[] selectedRowsOrColumns = tableController.getSelectedColumns();
 		DateAndTime dateAndTime = step4aModel.getDateAndTimeModel();
 		step4aModel.setSelectedRowsOrColumns(selectedRowsOrColumns);
+		int fLWData = step4aModel.getFirstLineWithData();
 		
 		for (int number: selectedRowsOrColumns) {
-			Column c = new Column(number);
+			Column c = new Column(number,fLWData);
 			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 			mv.setDateAndTime(dateAndTime);
 		}
@@ -110,7 +112,7 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public String getDescription() {
-		return "Step 4a: Solve Date & Time ambiguities";
+		return Lang.l().step4aDescription();
 	}
 
 	@Override
@@ -137,7 +139,7 @@ public class Step4aController extends StepController {
 		}
 		
 		DateAndTime dtm = getNextUnassignedDateAndTime();
-		step4aModel = new Step4aModel(dtm);
+		step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
 		return true;
 	}
 
@@ -145,7 +147,8 @@ public class Step4aController extends StepController {
 	public StepController getNext() {
 		DateAndTime dtm = getNextUnassignedDateAndTime();
 		if (dtm != null) {
-			Step4aModel step4aModel = new Step4aModel(dtm);
+			// this method is called after a Step4aController has existed before
+			Step4aModel step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
 			return new Step4aController(step4aModel);
 		} 
 	
@@ -154,7 +157,7 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {	
-		return new Step4bController(); 
+		return new Step4bController(this.step4aModel.getFirstLineWithData()); 
 	}
 	
 	private DateAndTime getNextUnassignedDateAndTime() {
@@ -182,16 +185,22 @@ public class Step4aController extends StepController {
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
+		
+		private int firstLineWithData;
+
+		public SelectionChanged(int fLWData) {
+			this.firstLineWithData = fLWData;
+		}
 
 		@Override
 		public void columnSelectionChanged(int[] selectedColumns) {
 			for (int number: selectedColumns) {
-				Column c = new Column(number);
+				Column c = new Column(number,firstLineWithData);
 				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 				if (mv == null) {
 					JOptionPane.showMessageDialog(null,
-						    "This is not a measured value.",
-						    "Info",
+						    Lang.l().step4aInfoMeasuredValue(),
+						    Lang.l().infoDialogTitle(),
 						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
@@ -200,8 +209,8 @@ public class Step4aController extends StepController {
 				//measured value has already assigned a date&time
 				if (mv.getDateAndTime() != null) {
 					JOptionPane.showMessageDialog(null,
-						    "Date and Time are already set for this measured value.",
-						    "Info",
+						    Lang.l().step4aInfoDateAndTime(),
+						    Lang.l().infoDialogTitle(),
 						    JOptionPane.INFORMATION_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
@@ -212,7 +221,6 @@ public class Step4aController extends StepController {
 		@Override
 		public void rowSelectionChanged(int[] selectedRows) {
 			// TODO Auto-generated method stub
-			
 		}	
 	}
 
