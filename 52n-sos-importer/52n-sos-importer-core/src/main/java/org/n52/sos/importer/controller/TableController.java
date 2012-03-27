@@ -73,7 +73,7 @@ public class TableController {
 	private final Color markingColor = Color.lightGray;
 
 	private TableController(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
+		TableController.firstLineWithData = firstLineWithData;
 		this.tableView = TablePanel.getInstance();
 		this.table = tableView.getTable();
 		this.tableMarker = new ColoredTableCellRenderer();
@@ -433,6 +433,6 @@ public class TableController {
 	 * @param firstLineWithData the firstLineWithData to set
 	 */
 	public void setFirstLineWithData(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
+		TableController.firstLineWithData = firstLineWithData;
 	}
 }
