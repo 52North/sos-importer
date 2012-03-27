@@ -28,7 +28,7 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step4aModel implements StepModel {
 	
-	private final String description = Lang.l().l().step4aModelDescription();
+	private final String description = Lang.l().step4aModelDescription();
 	
 	private int[] selectedRowsOrColumns;
 	

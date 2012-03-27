@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.controller;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.view.BackNextPanel;
 
@@ -36,8 +35,6 @@ public class BackNextController {
 	
 	private static BackNextController instance = null;
 	
-	private static final Logger logger = Logger.getLogger(BackNextController.class);
-
 	private BackNextModel backNextModel = null;
 	
 	private BackNextPanel backNextPanel = null;
