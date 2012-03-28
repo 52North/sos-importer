@@ -32,6 +32,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Year;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for single years
@@ -41,7 +42,7 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel yearLabel = new JLabel("Year: ");
+	private JLabel yearLabel;
 	
 	private SpinnerNumberModel yearModel = new SpinnerNumberModel(2011, 1900, 2100, 1);
 	private JSpinner yearSpinner = new JSpinner(yearModel);
@@ -49,6 +50,7 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
 	public MissingYearPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.yearLabel  = new JLabel(Lang.l().year() + ": ");
 		this.add(yearLabel);
 		yearSpinner.setEditor(new JSpinner.NumberEditor(yearSpinner, "#"));
 		this.add(yearSpinner);

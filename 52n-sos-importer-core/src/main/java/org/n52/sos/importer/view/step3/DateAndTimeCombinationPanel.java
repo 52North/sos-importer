@@ -85,12 +85,12 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	
 	@Override
 	public String getPatternToolTip() {
-		return ToolTips.get("DateAndTimePatterns");
+		return ToolTips.get(ToolTips.DATE_AND_TIME_PATTERNS);
 	}
 	
 	@Override
 	public String getGroupToolTip() {
-		return ToolTips.get("DateAndTimeGroups");
+		return ToolTips.get(ToolTips.DATE_AND_TIME_GROUPS);
 	}
 	
 	@Override

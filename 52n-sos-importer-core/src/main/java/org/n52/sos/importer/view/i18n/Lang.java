@@ -163,4 +163,122 @@ public abstract class Lang {
 		Set <Locale> locales = availableLocales.keySet();
 		return locales.toArray(new Locale[locales.size()]);
 	}
+	public abstract String day();
+	/**
+	 * @return Hours
+	 */
+	public abstract String hours();
+	/**
+	 * @return Minutes
+	 */
+	public abstract String minutes();
+	/**
+	 * @return Month
+	 */
+	public abstract String month();
+	/**
+	 * @return Seconds
+	 */
+	public abstract String seconds();
+	/**
+	 * @return Time
+	 */
+	public abstract String time();
+	/**
+	 * @return UTC offset
+	 */
+	public abstract String timeZone();
+	/**
+	 * @return Year
+	 */
+	public abstract String year();
+	/**
+	 * @return EPSG-Code
+	 */
+	public abstract String epsgCode();
+	/**
+	 * @return Reference System
+	 */
+	public abstract String referenceSystem();
+	/**
+	 * @return The EPSG-Code has to be a natural number.
+	 */
+	public abstract String epsgCodeWarningDialogNaturalNumber();
+	/**
+	 * @return The EPSG-Code has to be in the range of 0 and 32767.
+	 */
+	public abstract String epsgCodeWarningDialogOutOfRange();
+	/**
+	 * @return The height has to be a decimal number.
+	 */
+	public abstract String heightWarningDialogDecimalNumber();
+	/**
+	 * @return Altitude / Height
+	 */
+	public abstract String altitude();
+	/**
+	 * @return Unit
+	 */
+	public abstract String unit();
+	/**
+	 * @return The latitude/northing can only be a decimal number so far.
+	 */
+	public abstract String latitudeDialogDecimalValue();
+	/**
+	 * @return Latitude / Northing
+	 */
+	public abstract String latitudeNorthing();
+	/**
+	 * @return Longitude / Easting
+	 */
+	public abstract String longitudeEasting();
+	/**
+	 * @return The longitude/easting can only be a decimal number so far.
+	 */
+	public abstract String longitudeDialogDecimalValue();
+	/**
+	 * @return Group
+	 */
+	public abstract String group();
+	/**
+	 * @return Example
+	 */
+	public abstract String example();
+	/**
+	 * @return Format
+	 */
+	public abstract String format();
+	/**
+	 * @return Error
+	 */
+	public abstract String error();
+	/**
+	 * @return All values parseable.
+	 */
+	public abstract String step3aParseTestAllOk();
+	/**
+	 * @return 1 value not parseable.
+	 */
+	public abstract String step3aParseTest1Failed();
+	/**
+	 * @param n
+	 * @return <code>n</code> values not parseable.
+	 */
+	public abstract String step3aParseTestNFailed(int n);
+	/**
+	 * @return Measured value column missing
+	 */
+	public abstract String step3aMeasureValueColMissingDialogTitle();
+	/**
+	 * @return You have to specify at least one measured value column.
+	 */
+	public abstract String step3aMeasureValueColMissingDialogMessage();
+	/**
+	 * @return and
+	 */
+	public abstract String and();
+	/**
+	 * @return SOS-URL
+	 */
+	public abstract String sosURL();
 }

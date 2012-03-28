@@ -26,11 +26,12 @@ package org.n52.sos.importer.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.jar.Attributes.Name;
+import java.util.jar.Manifest;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
@@ -38,6 +39,7 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.xml.DOMConfigurator;
 
 /**
  * Configures a log4j console logger and a log4j file logger.
@@ -68,18 +70,24 @@ public class LoggingController {
 	private static LoggingController instance = null;
 	
 	private LoggingController() {
-		//System.setProperty("log4j.defaultInitOverride", "true");
-		Logger root = Logger.getRootLogger();
-		root.setLevel(LOGGING_LEVEL);
-		root.addAppender(new ConsoleAppender(CONSOLE_LOGGING_PATTERN));
-		
-		String filename = LOG_FILE_FOLDER + LOG_FILE_NAME;
-		try {
-			fileAppender = new DailyRollingFileAppender(
-					FILE_LOGGING_PATTERN, filename, DATE_LOGGING_PATTERN);
-			root.addAppender(fileAppender);
-		} catch (IOException e) {
-			logger.warn("Could not initialize file logging.", e);
+		// try to load config file from jar else this version
+		URL log4jURL = LoggingController.class.getResource("/org/n52/sos/importer/log4j.xml");
+		DOMConfigurator.configure(log4jURL);
+		if(log4jURL == null) {
+			//System.setProperty("log4j.defaultInitOverride", "true");
+			Logger root = Logger.getRootLogger();
+			root.setLevel(LOGGING_LEVEL);
+			root.addAppender(new ConsoleAppender(CONSOLE_LOGGING_PATTERN));
+
+			String filename = LOG_FILE_FOLDER + LOG_FILE_NAME;
+			try {
+				fileAppender = new DailyRollingFileAppender(
+						FILE_LOGGING_PATTERN, filename, DATE_LOGGING_PATTERN);
+				root.addAppender(fileAppender);
+			} catch (IOException e) {
+				logger.warn("Could not initialize file logging.", e);
+			}
+			logger.error("Could not read log4j config file. Using default logging settings.");
 		}
 	}
 

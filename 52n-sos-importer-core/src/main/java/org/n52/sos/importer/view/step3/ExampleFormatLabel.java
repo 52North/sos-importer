@@ -28,6 +28,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 import org.n52.sos.importer.interfaces.Formatable;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * formats an exemplary String along the selected pattern
@@ -52,7 +53,7 @@ public class ExampleFormatLabel extends JLabel {
 	        this.setText(formattedValue);
 		} catch (Exception e) {
 	    	this.setForeground(Color.red);
-	    	this.setText("Error: " + e.getMessage());
+	    	this.setText(Lang.l().error() + ": " + e.getMessage());
 		}
 	}			
 }

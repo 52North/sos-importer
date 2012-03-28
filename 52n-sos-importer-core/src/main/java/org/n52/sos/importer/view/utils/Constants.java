@@ -23,6 +23,11 @@
  */
 package org.n52.sos.importer.view.utils;
 
+import java.awt.Color;
+
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
@@ -45,6 +50,8 @@ public class Constants {
 	public static final String COUNT = "COUNT";
 	public static final String TEXT = "TEXT";
 	public static final String STRING_REPLACER = "-@@@-";
+	public static final boolean GUI_DEBUG = false;
+	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
 	/**
 	 * TODO implement loading of language parameter from config file
 	 * @return en

@@ -22,15 +22,18 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * panel for back and next (and finish) button at the bottom of the main frame
@@ -43,18 +46,38 @@ public class BackNextPanel extends JPanel {
 	
 	private static BackNextPanel instance = null;
 
-	private final JButton back = new JButton(Lang.l().backButtonLabel());
-	private final JButton next = new JButton(Lang.l().nextButtonLabel());
-	private final JButton finish = new JButton(Lang.l().finishButtonLabel());
+	private JButton back = new JButton(Lang.l().backButtonLabel());
+	private JButton next = new JButton(Lang.l().nextButtonLabel());
+	private JButton finish = new JButton(Lang.l().finishButtonLabel());
 	
 	private BackNextPanel() {
 		super();
-		this.setLayout(new FlowLayout(FlowLayout.CENTER));
-		this.add(back);
-		this.add(next);
-		this.add(finish);
+		if(Constants.GUI_DEBUG) {
+			this.setBorder(Constants.DEBUG_BORDER);
+		}
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		this.setLayout(layout);
 		this.finish.setVisible(false);
-		
+		// back on the left
+		c.anchor = GridBagConstraints.WEST;
+		layout.setConstraints(back, c);
+		this.add(back);
+		// fill label in the middle
+		JLabel fillLabel = new JLabel("   ");
+		c.anchor = GridBagConstraints.CENTER;
+		c.fill = GridBagConstraints.BOTH;
+		layout.setConstraints(fillLabel, c);
+		this.add(fillLabel);
+		// next/finish on the right
+		c.anchor = GridBagConstraints.EAST;
+		c.fill = GridBagConstraints.REMAINDER;
+		layout.setConstraints(next, c);
+		this.add(next);
+		c.fill = GridBagConstraints.REMAINDER;
+		layout.setConstraints(finish, c);
+		this.add(finish);
+		//
 		this.back.addActionListener(new BackButtonClicked());
 		this.next.addActionListener(new NextButtonClicked());
 		this.finish.addActionListener(new FinishButtonClicked());
@@ -63,6 +86,10 @@ public class BackNextPanel extends JPanel {
 	public static BackNextPanel getInstance() {
 		if (instance == null)
 			instance = new BackNextPanel();
+		// workaround for language switch
+		instance.back.setText(Lang.l().backButtonLabel());
+		instance.finish.setText(Lang.l().finishButtonLabel());
+		instance.next.setText(Lang.l().nextButtonLabel());
 		return instance;
 	}
 	

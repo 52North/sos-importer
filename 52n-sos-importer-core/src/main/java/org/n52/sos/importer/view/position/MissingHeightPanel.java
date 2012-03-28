@@ -30,11 +30,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a text field for the height and a combobox for the units
@@ -47,9 +49,11 @@ public class MissingHeightPanel extends MissingComponentPanel {
 
 	private final Position position;
 	
-	private final JLabel heightLabel = new JLabel("   Altitude / Height: ");
+	private static final Logger logger = Logger.getLogger(MissingHeightPanel.class);
+	
+	private JLabel heightLabel;
 	private final JTextField heightTextField = new JTextField(8);
-	private final JLabel heightUnitLabel = new JLabel("   Unit: ");
+	private final JLabel heightUnitLabel;
 	private final JComboBox heightUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getHeightUnits());
 	
 	public MissingHeightPanel(Position position) {
@@ -58,6 +62,10 @@ public class MissingHeightPanel extends MissingComponentPanel {
 		heightTextField.setText("0");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		this.heightLabel = new JLabel("   " + Lang.l().altitude() + ": ");
+		this.heightUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+		
 		this.add(heightLabel);
 		this.add(heightTextField);
 		this.add(heightUnitLabel);
@@ -81,9 +89,10 @@ public class MissingHeightPanel extends MissingComponentPanel {
 			Double.parseDouble(heightTextField.getText());
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,
-				    "The height has to be a decimal number.",
-				    "Warning",
+				    Lang.l().heightWarningDialogDecimalNumber(),
+				    Lang.l().warningDialogTitle(),
 				    JOptionPane.WARNING_MESSAGE);
+			logger.error("The height has to be a decimal number.", e);
 			return false;
 		}
 		

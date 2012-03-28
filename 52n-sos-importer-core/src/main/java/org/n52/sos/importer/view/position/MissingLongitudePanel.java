@@ -35,6 +35,7 @@ import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a text field for the longitude and a combobox for the units
@@ -47,9 +48,9 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 
 	private final Position position;
 	
-	private final JLabel longitudeLabel = new JLabel("   Longitude / Easting: ");
+	private final JLabel longitudeLabel;
 	private final JTextField longitudeTextField = new JTextField(8);
-	private final JLabel longitudeUnitLabel = new JLabel("   Unit: ");
+	private final JLabel longitudeUnitLabel;
 	private final JComboBox longitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
 	
 	public MissingLongitudePanel(Position position) {
@@ -58,8 +59,10 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 		longitudeTextField.setText("0");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.longitudeLabel = new JLabel("   " + Lang.l().longitudeEasting() + ": ");
 		this.add(longitudeLabel);
 		this.add(longitudeTextField);
+		this.longitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
 		this.add(longitudeUnitLabel);
 		this.add(longitudeUnitComboBox);
 	}
@@ -81,8 +84,8 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 			Double.parseDouble(longitudeTextField.getText());
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,
-				    "The longitude/easting can only be a decimal number so far.",
-				    "Warning",
+				    Lang.l().longitudeDialogDecimalValue(),
+				    Lang.l().warningDialogTitle(),
 				    JOptionPane.WARNING_MESSAGE);
 			return false;
 		}

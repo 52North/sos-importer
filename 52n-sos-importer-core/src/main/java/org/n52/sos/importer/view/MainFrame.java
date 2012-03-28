@@ -22,12 +22,12 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -79,11 +79,11 @@ public class MainFrame extends JFrame {
 		
 		Container cp = this.getContentPane();
 			
-		cp.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-		cp.add(descriptionPanel);
-		cp.add(stepContainerPanel);
-		cp.add(infoPanel);
-		cp.add(backNextPanel);
+		cp.setLayout(new BorderLayout(0,5));
+		cp.add(descriptionPanel, BorderLayout.NORTH);
+		cp.add(stepContainerPanel, BorderLayout.CENTER);
+//		cp.add(infoPanel);
+		cp.add(backNextPanel, BorderLayout.SOUTH);
 
 		this.pack();
 		// this centers the dialog on the current screen of the user
@@ -161,6 +161,5 @@ public class MainFrame extends JFrame {
 	public void repaint() {
 		this.backNextPanel.repaint();
 		super.repaint();
-		getParent().repaint();
 	}
 }

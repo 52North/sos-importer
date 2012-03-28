@@ -32,6 +32,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Month;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single month
@@ -41,7 +42,7 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel monthLabel = new JLabel("Month: ");
+	private JLabel monthLabel;
 	
 	private SpinnerNumberModel monthModel = new SpinnerNumberModel(1, 1, 12, 1);
 	private JSpinner monthSpinner = new JSpinner(monthModel);
@@ -49,6 +50,7 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
 	public MissingMonthPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.monthLabel = new JLabel(Lang.l().month() + ": ");
 		this.add(monthLabel);
 		this.add(monthSpinner);
 	}

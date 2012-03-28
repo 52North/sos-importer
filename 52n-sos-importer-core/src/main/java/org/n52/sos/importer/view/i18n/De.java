@@ -524,7 +524,7 @@ public class De extends Lang{
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public String step8RegisterSensorLabel(int i) {
-		return "Registriere " + i + this.sensor() + "en...";
+		return "Registriere " + i + " " + this.sensor() + "(en)...";
 	}
 
 	/**
@@ -562,6 +562,156 @@ public class De extends Lang{
 	@Override
 	public String step1SelectLanguage() {
 		return "Bitte wählen Sie die Sprache aus";
+	}
+
+	@Override
+	public String day() {
+		return "Tag";
+	}
+
+	@Override
+	public String hours() {
+		return "Stunden";
+	}
+
+	@Override
+	public String minutes() {
+		return "Minuten";
+	}
+
+	@Override
+	public String month() {
+		return "Monat";
+	}
+
+	@Override
+	public String seconds() {
+		return "Sekunden";
+	}
+
+	@Override
+	public String time() {
+		return "Zeit";
+	}
+
+	@Override
+	public String timeZone() {
+		return "Zeitzone (UTC-Abstand)";
+	}
+
+	@Override
+	public String year() {
+		return "Jahr";
+	}
+
+	@Override
+	public String epsgCode() {
+		return "EPSG-Kennzahl";
+	}
+
+	@Override
+	public String referenceSystem() {
+		return "Referenzsystem";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogNaturalNumber() {
+		return "Die " + this.epsgCode() + " muss eine natürliche Zahl sein.";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogOutOfRange() {
+		return "Die " + this.epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
+	}
+
+	@Override
+	public String heightWarningDialogDecimalNumber() {
+		return "Die " + this.altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String altitude() {
+		return "Höhe";
+	}
+
+	@Override
+	public String unit() {
+		return "Einheit";
+	}
+
+	@Override
+	public String latitudeDialogDecimalValue() {
+		return "Der " + this.latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String latitudeNorthing() {
+		return "Breitengrad / Hochwert";
+	}
+
+	@Override
+	public String longitudeEasting() {
+		return "Längengrad / Rechtswert";
+	}
+
+	@Override
+	public String longitudeDialogDecimalValue() {
+		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String group() {
+		return "Gruppe";
+	}
+
+	@Override
+	public String example() {
+		return "Beispiel";
+	}
+
+	@Override
+	public String format() {
+		return "Format";
+	}
+
+	@Override
+	public String error() {
+		return "Fehler";
+	}
+
+	@Override
+	public String step3aParseTestAllOk() {
+		return "Alle Werte einlesbar.";
+	}
+
+	@Override
+	public String step3aParseTest1Failed() {
+		return "1 Wert nicht einlesbar.";
+	}
+
+	@Override
+	public String step3aParseTestNFailed(int n) {
+		return n + " Werte nicht einlesbar.";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogTitle() {
+		return this.measuredValue() + "-Spalte fehlt!";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogMessage() {
+		return "Es muss mindestens 1 " + this.measuredValue() + "-Spalte definiert werden!";
+	}
+
+	@Override
+	public String and() {
+		return "und";
+	}
+
+	@Override
+	public String sosURL() {
+		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
 	}
 
 }
