@@ -35,6 +35,7 @@ import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a text field for the latitude and a combobox for the units
@@ -47,9 +48,9 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 
 	private final Position position;
 	
-	private final JLabel latitudeLabel = new JLabel("   Latitude / Northing: ");
+	private JLabel latitudeLabel;
 	private final JTextField latitudeTextField = new JTextField(8);
-	private final JLabel latitudeUnitLabel = new JLabel("   Unit: ");
+	private JLabel latitudeUnitLabel;
 	private final JComboBox latitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
 	
 	public MissingLatitudePanel(Position position) {
@@ -58,8 +59,10 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		latitudeTextField.setText("0");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
 		this.add(latitudeLabel);
 		this.add(latitudeTextField);
+		this.latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
 		this.add(latitudeUnitLabel);
 		this.add(latitudeUnitComboBox);
 	}
@@ -81,8 +84,8 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 			Double.parseDouble(latitudeTextField.getText());
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,
-				    "The latitude/northing can only be a decimal number so far.",
-				    "Warning",
+				    Lang.l().latitudeDialogDecimalValue(),
+				    Lang.l().warningDialogTitle(),
 				    JOptionPane.WARNING_MESSAGE);
 			return false;
 		}

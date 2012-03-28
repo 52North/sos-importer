@@ -33,6 +33,7 @@ import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single day
@@ -42,7 +43,7 @@ public class MissingDayPanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel dayLabel = new JLabel("Day: ");
+	private JLabel dayLabel;
 	private DateAndTime dateAndTime;
 	
 	private SpinnerNumberModel dayModel = new SpinnerNumberModel(1, 1, 31, 1);
@@ -52,6 +53,7 @@ public class MissingDayPanel extends MissingComponentPanel {
 		super();
 		this.dateAndTime = dateAndTime;
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.dayLabel = new JLabel(Lang.l().day() + ": ");
 		this.add(dayLabel);
 		this.add(daySpinner);
 	}

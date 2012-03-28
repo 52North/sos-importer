@@ -32,6 +32,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Hour;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single hour
@@ -41,7 +42,7 @@ public class MissingHourPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel hourLabel = new JLabel("Hours: ");
+	private JLabel hourLabel;
 	
 	private SpinnerNumberModel hourModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner hourSpinner = new JSpinner(hourModel);
@@ -49,6 +50,7 @@ public class MissingHourPanel extends MissingDateAndTimePanel {
 	public MissingHourPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.hourLabel =  new JLabel(Lang.l().hours() + ": ");
 		this.add(hourLabel);
 		this.add(hourSpinner);
 	}	

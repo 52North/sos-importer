@@ -58,6 +58,14 @@ public class ToolTips {
 	public static final String NUMERIC_VALUE = "NumericValue";
 	public static final String DECIMAL_SEPARATOR = "DecimalSeparator";
 	public static final String THOUSANDS_SEPARATOR = "ThousandsSeparator";
+	public static final String TIME_ZONE = "UTCOffset";
+	public static final String EPSG = "EPSG";
+	public static final String REFERENCE_SYSTEMS = "ReferenceSystem";
+	public static final String DATE_AND_TIME_PATTERNS = "DateAndTimePatterns";
+	public static final String DATE_AND_TIME_GROUPS = "DateAndTimeGroups";
+	public static final String POSITION_PATTERNS = "PositionPatterns";
+	public static final String POSITION_GROUPS = "PositionGroups";
+	public static final String SOS = "SOS";
 
 	private ToolTips() {}
 

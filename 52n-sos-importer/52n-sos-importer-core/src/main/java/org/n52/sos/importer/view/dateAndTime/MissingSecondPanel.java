@@ -32,6 +32,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Second;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single second
@@ -41,7 +42,7 @@ public class MissingSecondPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel secondLabel = new JLabel("Seconds: ");
+	private JLabel secondLabel;
 
 	private SpinnerNumberModel secondModel = new SpinnerNumberModel(0, 0, 59, 1);
 	private JSpinner secondSpinner = new JSpinner(secondModel);
@@ -49,6 +50,7 @@ public class MissingSecondPanel extends MissingDateAndTimePanel {
 	public MissingSecondPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.secondLabel = new JLabel(Lang.l().seconds() + ": ");
 		this.add(secondLabel);
 		this.add(secondSpinner);
 	}

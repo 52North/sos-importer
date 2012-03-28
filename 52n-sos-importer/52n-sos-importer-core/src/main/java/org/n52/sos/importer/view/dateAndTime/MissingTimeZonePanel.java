@@ -32,6 +32,7 @@ import javax.swing.SpinnerNumberModel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -42,15 +43,16 @@ public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel timeZoneLabel = new JLabel("UTC offset: ");
+	private JLabel timeZoneLabel;
 	
 	private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
 	private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
 	
 	public MissingTimeZonePanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
-		timeZoneSpinner.setToolTipText(ToolTips.get("UTCOffset"));
+		timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
 		this.add(timeZoneLabel);
 		this.add(timeZoneSpinner);
 	}

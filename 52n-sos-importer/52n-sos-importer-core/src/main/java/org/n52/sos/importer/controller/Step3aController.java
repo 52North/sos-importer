@@ -149,10 +149,10 @@ public class Step3aController extends StepController {
 			List<String> currentSelection = new ArrayList<String>();
 			step3Panel.store(currentSelection);
 			
-			if (ModelStore.getInstance().getMeasuredValues().size() == 0 && currentSelection.get(0) != "Measured Value") {
+			if (ModelStore.getInstance().getMeasuredValues().size() == 0 && currentSelection.get(0) != Lang.l().measuredValue()) {
 				JOptionPane.showMessageDialog(null,
-					    "You have to specify at least one measured value column.",
-					    "Measured value column missing",
+					    Lang.l().step3aMeasureValueColMissingDialogMessage(),
+					    Lang.l().step3aMeasureValueColMissingDialogTitle(),
 					    JOptionPane.WARNING_MESSAGE);
 				return false;
 			}

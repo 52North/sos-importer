@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Parseable;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * label which shows the success of parsing a marked column 
@@ -81,13 +82,13 @@ public class ParseTestLabel extends JLabel {
 		
 		String text = "";
 		if (notParseableValues == 0) {
-			text = "All values parseable.";
+			text = Lang.l().step3aParseTestAllOk();
 			this.setForeground(Color.blue);
 		} else if (notParseableValues == 1) {
-			text = "1 value not parseable.";
+			text = Lang.l().step3aParseTest1Failed();
 			this.setForeground(Color.red);
 		} else {
-			text = notParseableValues + " values not parseable.";
+			text = Lang.l().step3aParseTestNFailed(notParseableValues);
 			this.setForeground(Color.red);
 		}
 		

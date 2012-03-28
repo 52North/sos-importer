@@ -26,12 +26,13 @@ package org.n52.sos.importer.view;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -67,7 +68,7 @@ public class Step8Panel extends JPanel {
 	
 	private JLabel erroneousObservationsLabel = new JLabel("Errors: 0");
 	
-	private JLabel logFileLabel = new JLabel();
+	private JButton logFileButton = new JButton();
 	
 	public Step8Panel() {
 		sensorProgressBar.setStringPainted(true);
@@ -93,8 +94,9 @@ public class Step8Panel extends JPanel {
 		
 		progressPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.add(progressPanel);
-		logFileLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		this.add(logFileLabel);
+		logFileButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		logFileButton.setText(Lang.l().step8LogFileLabel());
+		this.add(logFileButton);
 	}
 	
 	public void setIndeterminate(boolean aFlag) {
@@ -133,40 +135,20 @@ public class Step8Panel extends JPanel {
 		insertObservationLabel.setText(Lang.l().step8InsertObservationLabel(n));
 	}
 	
-	public void setLogFileURI(URI uri) {
+	public void setLogFileURI(final URI uri) {
 		logger.info("Log file is saved at: " + uri);
-		logFileLabel.setText("<html><a href=>" + 
-				Lang.l().step8LogFileLabel() + 
-				"</a></html>");
-		logFileLabel.addMouseListener(new LogFileLinkClicked(uri));
+		logFileButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Desktop desktop = Desktop.getDesktop();
+				try {
+		            desktop.browse(uri);
+				} catch (IOException ioe) {
+					logger.error("Unable to open log file: " + ioe.getMessage());
+				}
+			}
+		});
 	}
 	
-	private class LogFileLinkClicked implements MouseListener {
-
-		private URI logFileURI;
-		
-		public LogFileLinkClicked(URI logFileURI) {
-			this.logFileURI = logFileURI;
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-	            desktop.browse(logFileURI);
-			} catch (IOException ioe) {
-				logger.error("Unable to open log file: " + ioe.getMessage());
-			}
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {}
-		@Override
-		public void mouseEntered(MouseEvent e) {}
-		@Override
-		public void mouseExited(MouseEvent e) {}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}		
-	}
 }

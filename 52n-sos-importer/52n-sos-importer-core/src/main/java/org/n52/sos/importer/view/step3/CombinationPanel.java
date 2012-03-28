@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
 
 /**
@@ -52,23 +53,24 @@ public abstract class CombinationPanel extends SelectionPanel {
 	// 			ComboBoxDemo2.java
 	private static final long serialVersionUID = 1L;
 
-	private JLabel groupLabel = new JLabel("Group: ");
+	private JLabel groupLabel;
 	private JComboBox groupComboBox = new JComboBox(getGroupItems());
 	
-	private EditableJComboBoxPanel patternComboBox = new EditableJComboBoxPanel(getPatterns(), "Format", getPatternToolTip());
+	private EditableJComboBoxPanel patternComboBox;
 	
-    private JLabel exampleLabel = new JLabel("Example: ");
+    private JLabel exampleLabel;
     private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(getCombination());
 	
-    private final ParseTestLabel parseTestLabel;
+    private ParseTestLabel parseTestLabel;
 
 	public CombinationPanel(JPanel containerPanel,int firstLineWithData) {	
 		super(containerPanel);
-		setDefaultSelection();
 		
 		this.parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
+		this.patternComboBox= new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
 		patternComboBox.addActionListener(new FormatChanged());
 		groupComboBox.setToolTipText(getGroupToolTip());
+		setDefaultSelection();
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -76,10 +78,12 @@ public abstract class CombinationPanel extends SelectionPanel {
 		formatPanel.add(patternComboBox);
 							
 		JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		this.groupLabel = new JLabel(Lang.l().group() + ": ");
 		groupPanel.add(groupLabel);
 		groupPanel.add(groupComboBox);
 		
 		JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		this.exampleLabel = new JLabel(Lang.l().example() + ": ");
 		examplePanel.add(exampleLabel);
 		examplePanel.add(exampleFormatLabel);
 		

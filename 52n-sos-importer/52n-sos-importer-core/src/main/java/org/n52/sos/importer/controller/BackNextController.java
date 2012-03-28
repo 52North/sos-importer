@@ -85,6 +85,10 @@ public class BackNextController {
 	
 	public void nextButtonClicked() {
 		StepController currentSC = this.backNextModel.getCurrentStepController();
+		// handle potential language switch
+		if(currentSC instanceof Step1Controller) {
+			this.backNextPanel = BackNextPanel.getInstance();
+		}
 		MainController mC = MainController.getInstance();
 		//
 		if (!currentSC.isFinished()) {

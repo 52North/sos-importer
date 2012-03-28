@@ -528,7 +528,7 @@ public class En extends Lang{
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public String step8RegisterSensorLabel(int i) {
-		return "Register " + i + this.sensor() + "s...";
+		return "Register " + i + " " + this.sensor() + "(s)...";
 	}
 
 	/**
@@ -563,6 +563,159 @@ public class En extends Lang{
 	 */
 	public String step1SelectLanguage() {
 		return "Please select the language";
+	}
+
+	/**
+	 * @return Day
+	 */
+	@Override
+	public String day() {
+		return "Day";
+	}
+
+	@Override
+	public String hours() {
+		return "Hours";
+	}
+
+	@Override
+	public String minutes() {
+		return "Minutes";
+	}
+
+	@Override
+	public String month() {
+		return "Month";
+	}
+
+	@Override
+	public String seconds() {
+		return "Seconds";
+	}
+
+	@Override
+	public String time() {
+		return "Time";
+	}
+
+	@Override
+	public String timeZone() {
+		return "UTC offset";
+	}
+
+	@Override
+	public String year() {
+		return "Year";
+	}
+
+	@Override
+	public String epsgCode() {
+		return "EPSG-Code";
+	}
+
+	@Override
+	public String referenceSystem() {
+		return "Reference System";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogNaturalNumber() {
+		return "The " + Lang.l().epsgCode() + " has to be a natural number.";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogOutOfRange() {
+		return null;
+	}
+
+	@Override
+	public String heightWarningDialogDecimalNumber() {
+		return "The " + this.altitude() + " has to be a decimal number.";
+	}
+
+	@Override
+	public String altitude() {
+		return "Altitude / Height";
+	}
+
+	@Override
+	public String unit() {
+		return "Unit";
+	}
+
+	@Override
+	public String latitudeDialogDecimalValue() {
+		return "The " + this.latitudeNorthing() + " can only be a decimal number so far.";
+	}
+
+	@Override
+	public String latitudeNorthing() {
+		return "Latitude / Northing";
+	}
+
+	@Override
+	public String longitudeEasting() {
+		return "Longitude / Easting";
+	}
+
+	@Override
+	public String longitudeDialogDecimalValue() {
+		return "The " + this.longitudeEasting() + " can only be a decimal number so far.";
+	}
+
+	@Override
+	public String group() {
+		return "Group";
+	}
+
+	@Override
+	public String example() {
+		return "Example";
+	}
+
+	@Override
+	public String format() {
+		return "Format";
+	}
+
+	@Override
+	public String error() {
+		return "Error";
+	}
+
+	@Override
+	public String step3aParseTestAllOk() {
+		return "All values parseable";
+	}
+
+	@Override
+	public String step3aParseTest1Failed() {
+		return "1 value not parseable";
+	}
+
+	@Override
+	public String step3aParseTestNFailed(int n) {
+		return n + " values not parseable";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogTitle() {
+		return this.measuredValue() + " column missing";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogMessage() {
+		return "You have to specify at least one " + this.measuredValue() + " column!";
+	}
+
+	@Override
+	public String and() {
+		return "and";
+	}
+
+	@Override
+	public String sosURL() {
+		return "SOS-URL (incl. endpoint, e.g. ../sos)";
 	}
 
 }

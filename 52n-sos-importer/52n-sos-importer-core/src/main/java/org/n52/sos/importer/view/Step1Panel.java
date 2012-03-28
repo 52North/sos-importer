@@ -116,17 +116,13 @@ public class Step1Panel extends JPanel {
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
 		//
 		jcb.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox)e.getSource();
 		        Locale selectedLocale = (Locale)cb.getSelectedItem();
 		        Lang.setCurrentLocale(selectedLocale);
-		        getParent().getParent().repaint();
-		        if (logger.isDebugEnabled()) {
-					logger.debug("tried to call repaint()");
-				}
 			}
 		});
+		jcb.setSelectedItem(Lang.getCurrentLocale());
 		jcb.setEditable(false);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panel.add(label);
@@ -182,6 +178,9 @@ public class Step1Panel extends JPanel {
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setWheelScrollingEnabled(true);
+		if(Constants.GUI_DEBUG) {
+			scrollPane.setBorder(Constants.DEBUG_BORDER);
+		}
 		return scrollPane;
 	}
 		

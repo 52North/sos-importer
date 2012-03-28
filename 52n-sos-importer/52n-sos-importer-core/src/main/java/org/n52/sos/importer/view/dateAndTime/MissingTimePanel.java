@@ -37,6 +37,7 @@ import org.n52.sos.importer.model.dateAndTime.Hour;
 import org.n52.sos.importer.model.dateAndTime.Minute;
 import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.Time;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for hour, minute and second
@@ -46,7 +47,7 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel timeLabel = new JLabel("Time: ");
+	private JLabel timeLabel;
 
 	private SpinnerDateModel timeModel;
 	private JSpinner timeSpinner;
@@ -61,6 +62,9 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 		timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm:ss"));
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		this.timeLabel = new JLabel(Lang.l().time() + ": ");
+		
 		this.add(timeLabel);
 		this.add(timeSpinner);
 	}	

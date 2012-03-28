@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
@@ -42,7 +43,7 @@ public class Step7Panel extends JPanel {
 	
 	public Step7Panel() {
 		sosComboBox = new EditableJComboBoxPanel(
-				EditableComboBoxItems.getInstance().getSosURLs(), "SOS-URL", ToolTips.get("SOS"));
+				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().sosURL(), ToolTips.get(ToolTips.SOS));
 		this.add(sosComboBox);
 	}
 	

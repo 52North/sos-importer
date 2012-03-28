@@ -31,6 +31,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.n52.sos.importer.view.i18n.Lang;
+
 
 /**
  * consists of a customized instruction panel and 
@@ -54,12 +56,12 @@ public class Step6Panel extends JPanel {
 	public Step6Panel(String description, String featureOfInterestName, 
 			String observedPropertyName, List<MissingComponentPanel> missingComponentPanels) {
 		super();
-		descriptionLabel1.setText(description + " feature of interest ");
+		descriptionLabel1.setText(description + " " + Lang.l().featureOfInterest() + " ");
 		featureOfInterestTextField.setText(" " + featureOfInterestName + " ");
 		featureOfInterestTextField.setEditable(false);
 		
 		if (observedPropertyName != null) {
-			descriptionLabel2.setText(" and observed property ");
+			descriptionLabel2.setText(" " + Lang.l().and() + " " + Lang.l().observedProperty() + " ");
 			observedPropertyTextField.setText(" " + observedPropertyName + " ");
 			observedPropertyTextField.setEditable(false);
 		}

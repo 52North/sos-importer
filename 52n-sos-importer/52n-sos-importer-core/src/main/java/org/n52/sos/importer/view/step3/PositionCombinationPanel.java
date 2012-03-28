@@ -82,12 +82,12 @@ public class PositionCombinationPanel extends CombinationPanel {
 	
 	@Override
 	public String getPatternToolTip() {
-		return ToolTips.get("PositionPatterns");
+		return ToolTips.get(ToolTips.POSITION_PATTERNS);
 	}
 	
 	@Override
 	public String getGroupToolTip() {
-		return ToolTips.get("PositionGroups");
+		return ToolTips.get(ToolTips.POSITION_GROUPS);
 	}
 	
 	@Override
