@@ -159,7 +159,7 @@ public class Step3aController extends StepController {
 		if ( (step3Model.getMarkedColumn() + 1) == 
 				TableController.getInstance().getColumnCount() &&
 				ModelStore.getInstance().getMeasuredValues().size() == 0 && 
-				currentSelection.get(0) != Lang.l().measuredValue()) {
+				!currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
 			JOptionPane.showMessageDialog(null,
 					Lang.l().step3aMeasureValueColMissingDialogMessage(),
 					Lang.l().step3aMeasureValueColMissingDialogTitle(),

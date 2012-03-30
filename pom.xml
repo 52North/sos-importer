@@ -9,7 +9,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.n52.sensorweb</groupId>
-	<artifactId>sos-importer</artifactId>
+	<artifactId>52n-sos-importer</artifactId>
 	<packaging>pom</packaging>
 	<version>0.2-RC1</version>
 	<name>52°North SOS-Importer</name>

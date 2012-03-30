@@ -3,10 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.n52</groupId>
-		<artifactId>52-North</artifactId>
-		<version>5.3</version>
-		<relativePath/>
+		<groupId>org.n52.sensorweb</groupId>
+		<artifactId>52n-sos-importer</artifactId>
+		<version>0.2-RC1</version>
 	</parent>
 	<artifactId>52n-sos-importer-bindings</artifactId>
 	<description>52North SOS Importer XML Bindings Module</description>

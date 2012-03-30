@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -56,7 +57,7 @@ public class Step2Panel extends JPanel {
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
 	
-	private final JTextArea csvFileTextArea = new JTextArea(20, 70);
+	private final JTextArea csvFileTextArea;
 	private int csvFileRowCount = 0;
 	
 	private SpinnerNumberModel lineModel;
@@ -137,13 +138,19 @@ public class Step2Panel extends JPanel {
 		//
 		//	CSV text area
 		//
-		csvFileTextArea.setEditable(false);	
+		this.csvFileTextArea = new JTextArea(20, 70);
+		this.csvFileTextArea.setEditable(false);	
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
+		JPanel csvDataPanel = new JPanel();
+		csvDataPanel.setLayout(new BoxLayout(csvDataPanel, BoxLayout.Y_AXIS));
+		csvDataPanel.add(new JLabel(Lang.l().step2DataPreviewLabel()));
+		csvDataPanel.add(scrollPane);
 		//
 		//	Final add
 		//
 		this.add(csvSettingsPanel);
-		this.add(scrollPane);
+		this.add(csvDataPanel);
+//		this.add(scrollPane);
 	}
 	
 	public String getCommentIndicator() {
