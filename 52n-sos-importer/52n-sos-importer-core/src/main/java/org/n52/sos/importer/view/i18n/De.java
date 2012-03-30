@@ -730,4 +730,9 @@ public class De extends Lang{
 				"\"";
 	}
 
+	@Override
+	public String step2DataPreviewLabel() {
+		return "Datendatei-Vorschau";
+	}
+
 }

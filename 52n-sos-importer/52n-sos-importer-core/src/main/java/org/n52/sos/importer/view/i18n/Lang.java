@@ -289,4 +289,8 @@ public abstract class Lang {
 	 * @return Column Type is "undefined"
 	 */
 	public abstract String step3aSelectedColTypeUndefinedTitle();
+	/**
+	 * @return CSV-Data-Preview
+	 */
+	public abstract String step2DataPreviewLabel();
 }

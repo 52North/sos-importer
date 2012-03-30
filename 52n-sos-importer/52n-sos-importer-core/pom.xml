@@ -3,13 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.n52</groupId>
-		<artifactId>52-North</artifactId>
-		<version>5.3</version>
-		<relativePath/>
+		<groupId>org.n52.sensorweb</groupId>
+		<artifactId>52n-sos-importer</artifactId>
+		<version>0.2-RC1</version>
 	</parent>
 	<artifactId>52n-sos-importer-core</artifactId>
-	<groupId>org.n52.sensorweb</groupId>
 	<name>SOS importer</name>
 	<packaging>jar</packaging>
 	<properties>
@@ -95,7 +93,7 @@
 	  				<descriptorRefs>
 	    				<descriptorRef>jar-with-dependencies</descriptorRef>
 	  				</descriptorRefs>
-	  				<finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
+	  				<finalName>${project.artifactId}-${project.version}</finalName>
 	  				<archive>
 						<index>false</index>
 						<manifest>
