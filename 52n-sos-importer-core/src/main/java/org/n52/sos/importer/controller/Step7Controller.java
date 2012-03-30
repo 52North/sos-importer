@@ -56,7 +56,8 @@ public class Step7Controller extends StepController {
 	
 	@Override
 	public void loadSettings() {
-		step7Panel = new Step7Panel();	
+		step7Panel = new Step7Panel();
+		BackNextController.getInstance().changeFinishToNext();
 	}
 
 	@Override
