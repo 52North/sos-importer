@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -110,13 +111,20 @@ public class Step8Controller extends StepController {
 	@Override
 	public void loadSettings() {		
 		step8Panel = new Step8Panel();
-		BackNextController.getInstance().setFinishButtonEnabled(false);
 		BackNextController.getInstance().changeNextToFinish();
+		File f = null;
 		
-		FileAppender a = LoggingController.getInstance().getFileAppender();
-		File f = new File(a.getFile());
-		step8Panel.setLogFileURI(f.toURI());
-		logger.info("Log file is stored at: " + f.toString());
+		Logger rL = Logger.getRootLogger();
+		Enumeration appender = rL.getAllAppenders();
+		while(appender.hasMoreElements()) {
+			Object o = appender.nextElement();
+			if(o instanceof FileAppender) {
+				FileAppender fA = (FileAppender) o;
+				f = new File(fA.getFile());
+				step8Panel.setLogFileURI(f.toURI());
+				logger.info("Log file is stored at: " + f.toString());
+			}
+		}
 
 		assembleInformation = new AssembleInformation();
 		registerSensors = new RegisterSensors();
