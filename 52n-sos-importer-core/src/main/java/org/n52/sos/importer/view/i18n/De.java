@@ -164,7 +164,7 @@ public class De extends Lang{
 	 * @return Browse
 	 */
 	public String step1BrowseButton() {
-		return "Wähle";
+		return "Datendatei auswählen";
 	}
 
 	/**
@@ -712,6 +712,22 @@ public class De extends Lang{
 	@Override
 	public String sosURL() {
 		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedMsg() {
+		return "Der Typ für die Spalte ist \"" + 
+				this.step3ColTypeUndefined() + 
+				"\".\nBitte einen anderen wählen.\n\"" +
+				this.step3ColTypeDoNotExport() + 
+				"\" um die Spalte zu überspringen.";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedTitle() {
+		return "Spalten-Typ ist \"" + 
+				this.step3ColTypeUndefined() + 
+				"\"";
 	}
 
 }

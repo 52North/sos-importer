@@ -143,19 +143,28 @@ public class Step3aController extends StepController {
 
 	@Override
 	public boolean isFinished() {
+		List<String> currentSelection = new ArrayList<String>();
+		step3Panel.store(currentSelection);
+		// check if still type undefined is selected
+		// if yes, display error message and return false
+		if (currentSelection.get(0) == Lang.l().step3ColTypeUndefined()) {
+			JOptionPane.showMessageDialog(null,
+					Lang.l().step3aSelectedColTypeUndefinedMsg(),
+					Lang.l().step3aSelectedColTypeUndefinedTitle(), 
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 		// check if the current column is the last in the file
 		// if yes, check for at least one measured value column
-		if (step3Model.getMarkedColumn() + 1 == TableController.getInstance().getColumnCount()) {
-			List<String> currentSelection = new ArrayList<String>();
-			step3Panel.store(currentSelection);
-			
-			if (ModelStore.getInstance().getMeasuredValues().size() == 0 && currentSelection.get(0) != Lang.l().measuredValue()) {
-				JOptionPane.showMessageDialog(null,
-					    Lang.l().step3aMeasureValueColMissingDialogMessage(),
-					    Lang.l().step3aMeasureValueColMissingDialogTitle(),
-					    JOptionPane.WARNING_MESSAGE);
-				return false;
-			}
+		if ( (step3Model.getMarkedColumn() + 1) == 
+				TableController.getInstance().getColumnCount() &&
+				ModelStore.getInstance().getMeasuredValues().size() == 0 && 
+				currentSelection.get(0) != Lang.l().measuredValue()) {
+			JOptionPane.showMessageDialog(null,
+					Lang.l().step3aMeasureValueColMissingDialogMessage(),
+					Lang.l().step3aMeasureValueColMissingDialogTitle(),
+					JOptionPane.WARNING_MESSAGE);
+			return false;
 		}
 		return true;
 	}

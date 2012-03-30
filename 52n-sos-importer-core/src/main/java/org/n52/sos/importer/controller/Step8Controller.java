@@ -146,12 +146,92 @@ public class Step8Controller extends StepController {
 			logger.info("Assemble information from table and previous steps");
 			assembleInformation();
 			
-			for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister())
-				logger.debug(rs);
-			for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert())
-				logger.debug(io);	
+			if(logger.isDebugEnabled()) {
+				for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister()) {
+					logger.debug(rs);
+				}
+				for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert()) {
+					logger.debug(io);	
+				}
+			}
 			
 			return null;
+		}
+		
+		/**
+		 * Here, all information collected before is combined and the modelstore is
+		 * filled.
+		 */
+		public void assembleInformation() {
+			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+				Column column = (Column) mv.getTableElement();
+				DateAndTimeController dtc = new DateAndTimeController();
+				
+				for (int i = 0; i < tableController.getRowCount(); i++) {
+					RegisterSensor rs = new RegisterSensor();
+					InsertObservation io = new InsertObservation();
+					
+					//the cell of the current Measured Value
+					Cell c = new Cell(i, column.getNumber());
+					String value = tableController.getValueAt(c);
+					try {
+						String parsedValue = mv.parse(value).toString();
+						io.setValue(parsedValue);
+					} catch (Exception e) {
+						continue;
+					}
+					
+					// when was the current Measured Value measured
+					dtc.setDateAndTime(mv.getDateAndTime());
+					String timeStamp = dtc.forThis(c);	
+					io.setTimeStamp(timeStamp);
+					
+					// which is the observed feature of interest
+					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(c);
+					io.setFeatureOfInterestName(foi.getNameString());
+					io.setFeatureOfInterestURI(foi.getURIString());
+					
+					// where was the current Measured Value measured
+					Position p = foi.getPosition();
+					io.setLatitudeValue(p.getLatitude().getValue() + "");
+					io.setLongitudeValue(p.getLongitude().getValue() + "");
+					io.setEpsgCode(p.getEPSGCode().getValue() + "");
+					rs.setFoiName(foi.getNameString());
+					rs.setLatitudeValue(p.getLatitude().getValue() + "");
+					rs.setLatitudeUnit(p.getLatitude().getUnit());
+					rs.setLongitudeValue(p.getLongitude().getValue() + "");
+					rs.setLongitudeUnit(p.getLongitude().getUnit());
+					rs.setHeightValue(p.getHeight().getValue() + "");
+					rs.setHeightUnit(p.getHeight().getUnit());
+					rs.setEpsgCode(p.getEPSGCode().getValue() + "");
+					
+					// what property is observed at this foi
+					ObservedProperty op = mv.getObservedProperty().forThis(c);
+					io.setObservedPropertyURI(op.getURIString());
+					rs.setObservedPropertyName(op.getNameString());
+					rs.setObservedPropertyURI(op.getURIString());
+					
+					// what is the UOM for the observed/measured value
+					UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(c);
+					io.setUnitOfMeasurementCode(uom.getNameString());
+					rs.setUnitOfMeasurementCode(uom.getNameString());
+					
+					Sensor sensor = mv.getSensor();
+					if (sensor != null) {
+						 sensor = mv.getSensor().forThis(c);
+					} else { //Step6bSpecialController
+						sensor = mv.getSensorFor(foi.getNameString(), op.getNameString());
+					}
+					
+					io.setSensorName(sensor.getNameString());
+					io.setSensorURI(sensor.getURIString());
+					rs.setSensorName(sensor.getNameString());
+					rs.setSensorURI(sensor.getURIString());
+						
+					ModelStore.getInstance().addObservationToInsert(io);
+					ModelStore.getInstance().addSensorToRegister(rs);
+				}
+			}
 		}
     	
         @Override
@@ -161,79 +241,6 @@ public class Step8Controller extends StepController {
         }
     }
     
-	/**
-	 * Here, all information collected before is combined and the modelstore is
-	 * filled.
-	 */
-	public void assembleInformation() {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			Column column = (Column) mv.getTableElement();
-			DateAndTimeController dtc = new DateAndTimeController();
-			
-			for (int i = 0; i < this.tableController.getRowCount(); i++) {
-				RegisterSensor rs = new RegisterSensor();
-				InsertObservation io = new InsertObservation();
-				
-				//the cell of the current Measured Value
-				Cell c = new Cell(i, column.getNumber());
-				String value = this.tableController.getValueAt(c);
-				try {
-					String parsedValue = mv.parse(value).toString();
-					io.setValue(parsedValue);
-				} catch (Exception e) {
-					continue;
-				}
-				
-				//when was the current Measured Value measured
-				dtc.setDateAndTime(mv.getDateAndTime());
-				String timeStamp = dtc.forThis(c);	
-				io.setTimeStamp(timeStamp);
-				
-				FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(c);
-				io.setFeatureOfInterestName(foi.getNameString());
-				io.setFeatureOfInterestURI(foi.getURIString());
-				
-				//where was the current Measured Value measured
-				Position p = foi.getPosition();
-				io.setLatitudeValue(p.getLatitude().getValue() + "");
-				io.setLongitudeValue(p.getLongitude().getValue() + "");
-				io.setEpsgCode(p.getEPSGCode().getValue() + "");
-				rs.setFoiName(foi.getNameString());
-				rs.setLatitudeValue(p.getLatitude().getValue() + "");
-				rs.setLatitudeUnit(p.getLatitude().getUnit());
-				rs.setLongitudeValue(p.getLongitude().getValue() + "");
-				rs.setLongitudeUnit(p.getLongitude().getUnit());
-				rs.setHeightValue(p.getHeight().getValue() + "");
-				rs.setHeightUnit(p.getHeight().getUnit());
-				rs.setEpsgCode(p.getEPSGCode().getValue() + "");
-				
-				ObservedProperty op = mv.getObservedProperty().forThis(c);
-				io.setObservedPropertyURI(op.getURIString());
-				rs.setObservedPropertyName(op.getNameString());
-				rs.setObservedPropertyURI(op.getURIString());
-				
-				UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(c);
-				io.setUnitOfMeasurementCode(uom.getNameString());
-				rs.setUnitOfMeasurementCode(uom.getNameString());
-				
-				Sensor sensor = mv.getSensor();
-				if (sensor != null) {
-					 sensor = mv.getSensor().forThis(c);
-				} else { //Step6bSpecialController
-					sensor = mv.getSensorFor(foi.getNameString(), op.getNameString());
-				}
-				
-				io.setSensorName(sensor.getNameString());
-				io.setSensorURI(sensor.getURIString());
-				rs.setSensorName(sensor.getNameString());
-				rs.setSensorURI(sensor.getURIString());
-					
-				ModelStore.getInstance().addObservationToInsert(io);
-				ModelStore.getInstance().addSensorToRegister(rs);
-			}
-		}
-	}
-	
     private class RegisterSensors extends SwingWorker<Void, Void> {
     	
     	private String[] failedSensors;

@@ -110,7 +110,6 @@ public class Step1Panel extends JPanel {
 	}
 	
 	private JPanel languagePanel() {
-		// TODO Auto-generated method stub generated on 27.03.2012 around 15:32:41
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());

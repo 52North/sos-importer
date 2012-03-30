@@ -162,7 +162,7 @@ public class En extends Lang{
 	 * @return Browse
 	 */
 	public String step1BrowseButton() {
-		return "Browse";
+		return "Select data file";
 	}
 
 	/**
@@ -716,6 +716,22 @@ public class En extends Lang{
 	@Override
 	public String sosURL() {
 		return "SOS-URL (incl. endpoint, e.g. ../sos)";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedMsg() {
+		return "The type for this column is \"" + 
+				this.step3ColTypeUndefined() + 
+				"\".\nPlease select one.nChose \"" +
+				this.step3ColTypeDoNotExport() + 
+				"\" for skipping it.";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedTitle() {
+		return "Column Type is \"" + 
+				this.step3ColTypeUndefined() + 
+				"\"";
 	}
 
 }
