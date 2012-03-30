@@ -281,4 +281,12 @@ public abstract class Lang {
 	 * @return SOS-URL
 	 */
 	public abstract String sosURL();
+	/**
+	 * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
+	 */
+	public abstract String step3aSelectedColTypeUndefinedMsg();
+	/**
+	 * @return Column Type is "undefined"
+	 */
+	public abstract String step3aSelectedColTypeUndefinedTitle();
 }

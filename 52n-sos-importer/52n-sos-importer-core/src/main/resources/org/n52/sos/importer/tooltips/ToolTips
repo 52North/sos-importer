@@ -55,7 +55,7 @@ separator for the numeric value 1234,52133.
 ---
 ThousandsSeparator=
 For a better overview, numeric values are structured
-with a thousands mark. For example '.'would be the 
+with a thousands mark. For example '.' would be the 
 thousands separator of the number 1.254.623.129 
 meaning 1254623129.
 ---
