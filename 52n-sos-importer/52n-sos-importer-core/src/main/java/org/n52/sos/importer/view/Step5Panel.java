@@ -57,9 +57,9 @@ public class Step5Panel extends JPanel {
 		JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
 		
-		for (MissingComponentPanel mcp: missingComponentPanels)
+		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
-		
+		}
 		this.add(containerPanel);
 	}
 }

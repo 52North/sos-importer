@@ -33,7 +33,7 @@ import java.util.HashSet;
 public abstract class TableElement {
 
 	/**
-	 * colors this table element in the table
+	 * Colours this table element in the table
 	 */
 	public abstract void mark();
 	

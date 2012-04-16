@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.utils.Constants;
 
 public abstract class DateAndTimeComponent extends Component {
 
@@ -41,7 +42,7 @@ public abstract class DateAndTimeComponent extends Component {
 	
 	private String pattern;
 	
-	private int value = -1;
+	private int value = Constants.NO_INPUT_INT;
 
 	public DateAndTimeComponent(TableElement tableElement, String pattern) {
 		this.tableElement = tableElement;
@@ -57,6 +58,9 @@ public abstract class DateAndTimeComponent extends Component {
 		this.value = value;
 	}
 
+	/**
+	 * @return the value of this DateAndTimeComponent, or Integer.MIN_VALUE
+	 */
 	public int getValue() {
 		return value;
 	}
