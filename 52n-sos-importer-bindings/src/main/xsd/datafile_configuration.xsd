@@ -9,13 +9,91 @@
 	<xs:annotation>
 		<xs:documentation>Namespace ../0.2/ is chosen to match the application version.</xs:documentation>
 	</xs:annotation>
-	<xs:element name="UserName">
+	<xs:element name="CommentIndicator">
 		<xs:annotation>
-			<xs:documentation>Username for the remote data file. Length restriction of 256 characters.</xs:documentation>
+			<xs:documentation>Character for marking non content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:length value="256"/>
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Code" type="xs:string" nillable="false">
+		<xs:annotation>
+			<xs:documentation>The UCUM code used to observed property.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ElementSeparator">
+		<xs:annotation>
+			<xs:documentation>Character for separating element in content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="EPSGCode">
+		<xs:annotation>
+			<xs:documentation>Integer identifying the used EPSG (between 0...</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0"/>
+				<xs:maxInclusive value="32767"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="FirstLineWithData" default="0">
+		<xs:annotation>
+			<xs:documentation>Defining the first line with data. Line counting starts with 0.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Key">
+		<xs:annotation>
+			<xs:documentation>The key of a key-value-pair.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="DECIMAL_SEPARATOR"/>
+				<xs:enumeration value="GROUP"/>
+				<xs:enumeration value="THOUSANDS_SEPARATOR"/>
+				<xs:enumeration value="TIME"/>
+				<xs:enumeration value="TIME_DAY"/>
+				<xs:enumeration value="TIME_HOUR"/>
+				<xs:enumeration value="TIME_MINUTE"/>
+				<xs:enumeration value="TIME_MONTH"/>
+				<xs:enumeration value="TIME_SECOND"/>
+				<xs:enumeration value="TIME_YEAR"/>
+				<xs:enumeration value="TIME_ZONE"/>
+				<xs:enumeration value="TYPE"/>
+				<xs:enumeration value="OTHER"/>
+				<xs:enumeration value="PARSE_PATTERN"/>
+				<xs:enumeration value="POSITION_ALTITUDE"/>
+				<xs:enumeration value="POSITION_EPSG_CODE"/>
+				<xs:enumeration value="POSITION_LATITUDE"/>
+				<xs:enumeration value="POSITION_LONGITUDE"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Name" type="xs:string" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Human readable name of a resource like FOI, Sensor,...</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Number">
+		<xs:annotation>
+			<xs:documentation>Reference the columns in the data file. Column counting starts with 0.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="0"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -37,34 +115,6 @@
 			<xs:restriction base="xs:string"/>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="URL">
-		<xs:annotation>
-			<xs:documentation>Any URL compliant with RFC 3986 "URI" (https://tools.ietf.org/html/rfc3986) or better RFC 1738 "URL" (https://tools.ietf.org/html/rfc1738)</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:anyURI"/>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="CommentIndicator">
-		<xs:annotation>
-			<xs:documentation>Character for marking non content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:length value="1"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="ElementSeparator">
-		<xs:annotation>
-			<xs:documentation>Character for separating element in content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:length value="1"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
 	<xs:element name="TextIndicator">
 		<xs:annotation>
 			<xs:documentation>Character for indicating text in elements in CSV files. Length restriction set to 1 character.</xs:documentation>
@@ -72,31 +122,6 @@
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:length value="1"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="FirstLineWithData" default="0">
-		<xs:annotation>
-			<xs:documentation>Defining the first line with data. Line counting starts with 0.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:int">
-				<xs:minInclusive value="0"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="UseHeader" type="xs:boolean" default="false">
-		<xs:annotation>
-			<xs:documentation>Define to use (case "true") or not to use (case "false") the potential header information to search for metadata in the data file.</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="Number">
-		<xs:annotation>
-			<xs:documentation>Reference the columns in the data file. Column counting starts with 0.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:int">
-				<xs:minInclusive value="0"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -149,24 +174,6 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="Key">
-		<xs:annotation>
-			<xs:documentation>The key of a key-value-pair.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="TYPE"/>
-				<xs:enumeration value="GROUP"/>
-				<xs:enumeration value="PARSE_PATTERN"/>
-				<xs:enumeration value="DECIMAL_SEPARATOR"/>
-				<xs:enumeration value="THOUSANDS_SEPARATOR"/>
-				<xs:enumeration value="SOS_FOI"/>
-				<xs:enumeration value="SOS_OBSERVED_PROPERTY"/>
-				<xs:enumeration value="SOS_SENSOR"/>
-				<xs:enumeration value="OTHER"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
 	<xs:element name="Value">
 		<xs:annotation>
 			<xs:documentation>The value of a key-value-pair</xs:documentation>
@@ -175,101 +182,62 @@
 			<xs:restriction base="xs:string"/>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="URI" type="xs:anyURI" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Any URL compliant with RFC 3986 "URI" (https://tools.ietf.org/html/rfc3986)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="URL">
+		<xs:annotation>
+			<xs:documentation>Any URL compliant with RFC 3986 "URI" (https://tools.ietf.org/html/rfc3986) or better RFC 1738 "URL" (https://tools.ietf.org/html/rfc1738)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:anyURI"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UseHeader" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Define to use (case "true") or not to use (case "false") the potential header information to search for metadata in the data file.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="UserName">
+		<xs:annotation>
+			<xs:documentation>Username for the remote data file. Length restriction of 256 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="256"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<!--
 		 
 			COMPLEX TYPES
 			
 	 -->
-	<xs:element name="Credentials">
+	<xs:element name="Alt">
 		<xs:annotation>
-			<xs:documentation>Optional credentials for the remote data file.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="UserName"/>
-				<xs:element ref="Password"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="LocalFile">
-		<xs:annotation>
-			<xs:documentation>A data file located on the same machine.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="Path"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="RemoteFile">
-		<xs:annotation>
-			<xs:documentation>A data file located on a remote server which might required credentials to be accessed.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="URL"/>
-				<xs:element ref="Credentials" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="DataFile">
-		<xs:annotation>
-			<xs:documentation>The file holding the observations in CSV format.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:choice>
-				<xs:element ref="LocalFile"/>
-				<xs:element ref="RemoteFile"/>
-			</xs:choice>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="Offering">
-		<xs:annotation>
-			<xs:documentation>Offering in the SOS which is used for the import. Might be autogenerated from sensor id.</xs:documentation>
+			<xs:documentation>Altitude element of a position</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:simpleContent>
-				<xs:extension base="xs:string">
-					<xs:attribute name="autogenerate" type="xs:boolean" default="true">
-						<xs:annotation>
-							<xs:documentation>If set to "true", the offering should be generated from the sensor id. If set to "false", the xs:string content of element "Offering" should be used as offering for inserting the data.</xs:documentation>
-						</xs:annotation>
-					</xs:attribute>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
 				</xs:extension>
 			</xs:simpleContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="SosMetadata">
+	<xs:element name="AdditionalMetadata">
 		<xs:annotation>
-			<xs:documentation>Metadata regarding the SOS limited to URL and offering.</xs:documentation>
+			<xs:documentation>Additional metadata not contained in any column.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="URL"/>
-				<xs:element ref="Offering"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="Parameter">
-		<xs:annotation>
-			<xs:documentation>Basic CSV file parameters.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="CommentIndicator"/>
-				<xs:element ref="ElementSeparator"/>
-				<xs:element ref="TextIndicator"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="Metadata">
-		<xs:annotation>
-			<xs:documentation>A key-value-pair holding some additional metadata.</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="Key"/>
-				<xs:element ref="Value"/>
+				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Sensor" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="ObservedProperty" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="FeatureOfInterest" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="UnitOfMeasure" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -282,6 +250,32 @@
 				<xs:element ref="Number"/>
 				<xs:element ref="Type"/>
 				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Position" minOccurs="0"/>
+				<xs:element name="RelatedFOI" type="xs:string" nillable="false" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The feature of interest of THIS measured value column. The content of this element MUST match a name element of a FeatureOfInterest from AdditionalMetadata.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedSensor" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The sensor of THIS measured value column. The content of this element MUST match a name element of a Sensor from AdditionalMetadata.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedObservedProperty" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The observed property of THIS measured value column. The content of this element MUST match a name element of a ObservedProperty from AdditionalMetadata.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Column number of the measured value column this column is related to.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:minInclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -308,16 +302,187 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="AdditionalMetadata">
+	<xs:element name="Credentials">
 		<xs:annotation>
-			<xs:documentation>Additional metadata not contained in any column.</xs:documentation>
+			<xs:documentation>Optional credentials for the remote data file.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="UserName"/>
+				<xs:element ref="Password"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="DataFile">
+		<xs:annotation>
+			<xs:documentation>The file holding the observations in CSV format.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="LocalFile"/>
+				<xs:element ref="RemoteFile"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FeatureOfInterest">
+		<xs:annotation>
+			<xs:documentation>A feature of interest (linked to a column by name element and relatedFOI element in column metadata)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Position"/>
+				<xs:element ref="Name"/>
+				<xs:element ref="URI"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Lat">
+		<xs:annotation>
+			<xs:documentation>Latitude element of a position</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LocalFile">
+		<xs:annotation>
+			<xs:documentation>A data file located on the same machine.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Path"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Long">
+		<xs:annotation>
+			<xs:documentation>Longitude element of a position</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Metadata">
+		<xs:annotation>
+			<xs:documentation>A key-value-pair holding some additional metadata.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Key"/>
+				<xs:element ref="Value"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ObservedProperty">
+		<xs:annotation>
+			<xs:documentation>A observed property (linked to a column by name element and relatedObservedProperty element in column metadata)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Name"/>
+				<xs:element ref="URI"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Offering">
+		<xs:annotation>
+			<xs:documentation>Offering in the SOS which is used for the import. Might be autogenerated from sensor id.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="autogenerate" type="xs:boolean" use="optional" default="true">
+						<xs:annotation>
+							<xs:documentation>If set to "true", the offering should be generated from the sensor id. If set to "false", the xs:string content of element "Offering" should be used as offering for inserting the data.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Parameter">
+		<xs:annotation>
+			<xs:documentation>Basic CSV file parameters.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CommentIndicator"/>
+				<xs:element ref="ElementSeparator"/>
+				<xs:element ref="TextIndicator"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Position">
+		<xs:annotation>
+			<xs:documentation>A position using x,y,z, unit for each, epsg-code</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Lat"/>
+				<xs:element ref="Long"/>
+				<xs:element ref="Alt"/>
+				<xs:element ref="EPSGCode"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RemoteFile">
+		<xs:annotation>
+			<xs:documentation>A data file located on a remote server which might required credentials to be accessed.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="URL"/>
+				<xs:element ref="Credentials" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Sensor">
+		<xs:annotation>
+			<xs:documentation>A sensor (linked to a column by name element and relatedSensor)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Name"/>
+				<xs:element ref="URI"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SosMetadata">
+		<xs:annotation>
+			<xs:documentation>Metadata regarding the SOS limited to URL and offering.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="URL"/>
+				<xs:element ref="Offering"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UnitOfMeasure">
+		<xs:annotation>
+			<xs:documentation>A unit of measure related to a measured value column (linked by name element and relatedUOM in column metadata in measured value column)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Name"/>
+				<xs:element ref="URI"/>
+				<xs:element ref="Code"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--
+		 
+			ROOT ELEMENT
+			
+	 -->
 	<xs:element name="SosImportConfiguration">
 		<xs:annotation>
 			<xs:documentation>Configuration for a data file containing observation. These observation should be imported to a running SOS instance using the transactional interface. It is used by the 52n-sensorweb-importer to store the metadata and re-use it.</xs:documentation>
