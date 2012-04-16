@@ -61,9 +61,9 @@ public class Step5aController extends StepController {
 		this.tabController =  TableController.getInstance();
 	}
 	
-	public Step5aController(Step5aModel step5bModel,int firstLineWithData) {
+	public Step5aController(Step5aModel step5aModel,int firstLineWithData) {
 		this(firstLineWithData);
-		this.step5aModel = step5bModel;
+		this.step5aModel = step5aModel;
 	}
 	
 	@Override

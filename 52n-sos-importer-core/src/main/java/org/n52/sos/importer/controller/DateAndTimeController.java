@@ -74,36 +74,58 @@ public class DateAndTimeController {
 	}
 	
 	public List<MissingComponentPanel> getMissingComponentPanels() {	
-		if (!missingComponentPanels.isEmpty()) return missingComponentPanels;
-	
-		if (dateAndTime.getDay() == null && 
-			dateAndTime.getMonth() == null && 
-			dateAndTime.getYear() == null)
-			missingComponentPanels.add(new MissingDatePanel(dateAndTime));
-		else {
-			if (dateAndTime.getDay() == null)
-				missingComponentPanels.add(new MissingDayPanel(dateAndTime));
-			if (dateAndTime.getMonth() == null) 
-				missingComponentPanels.add(new MissingMonthPanel(dateAndTime));
-			if (dateAndTime.getYear() == null)
-				missingComponentPanels.add(new MissingYearPanel(dateAndTime));
+		if (!missingComponentPanels.isEmpty()) {
+			return missingComponentPanels;
 		}
-		if (dateAndTime.getHour() == null && 
-			dateAndTime.getMinute() == null && 
-			dateAndTime.getSecond() == null)
-				missingComponentPanels.add(new MissingTimePanel(dateAndTime));
-			else {
-				if (dateAndTime.getHour() == null)
-					missingComponentPanels.add(new MissingHourPanel(dateAndTime));
-				if (dateAndTime.getMinute() == null) 
-					missingComponentPanels.add(new MissingMinutePanel(dateAndTime));
-				if (dateAndTime.getSecond() == null)
-					missingComponentPanels.add(new MissingSecondPanel(dateAndTime));
+		/*
+		 * 	DATE SECTION
+		 *
+		 * whole date component is missing
+		 */
+		if (dateAndTime.getDay() == null && 
+				dateAndTime.getMonth() == null && 
+				dateAndTime.getYear() == null) {
+			missingComponentPanels.add(new MissingDatePanel(dateAndTime));
+		} else {
+			// not all elements of date are missing
+			if (dateAndTime.getDay() == null) {
+				missingComponentPanels.add(new MissingDayPanel(dateAndTime));
 			}
-		
-		if (dateAndTime.getTimeZone() == null)
+			if (dateAndTime.getMonth() == null) {
+				missingComponentPanels.add(new MissingMonthPanel(dateAndTime));
+			}
+			if (dateAndTime.getYear() == null) {
+				missingComponentPanels.add(new MissingYearPanel(dateAndTime));
+			}
+		}
+		/*
+		 * 	TIME SECTION
+		 * 
+		 * whole time is missing
+		 */
+		if (dateAndTime.getHour() == null && 
+				dateAndTime.getMinute() == null && 
+				dateAndTime.getSeconds() == null) {
+			missingComponentPanels.add(new MissingTimePanel(dateAndTime));
+		}else {
+			// not all elements of time are missing
+			if (dateAndTime.getHour() == null) {
+				missingComponentPanels.add(new MissingHourPanel(dateAndTime));
+			}
+			if (dateAndTime.getMinute() == null) {
+				missingComponentPanels.add(new MissingMinutePanel(dateAndTime));
+			}
+			if (dateAndTime.getSeconds() == null) {
+				missingComponentPanels.add(new MissingSecondPanel(dateAndTime));
+			}
+		}
+		/*
+		 * 	TIME_ZONE SECTION
+		 */
+		if (dateAndTime.getTimeZone() == null) {
 			missingComponentPanels.add(new MissingTimeZonePanel(dateAndTime));
-		
+		}
+		//
 		return missingComponentPanels;
 	}	
 	
@@ -130,9 +152,13 @@ public class DateAndTimeController {
 		this.dateAndTime = dateAndTime;
 	}
 	
+	/**
+	 * Assigns for each MissingComponentPanel the values
+	 */
 	public void assignMissingComponentValues() {
-		for (MissingComponentPanel mcp: missingComponentPanels) 
+		for (MissingComponentPanel mcp: missingComponentPanels) {
 			mcp.assignValues();
+		}
 	}
 	
 	public void unassignMissingComponentValues() {
@@ -178,8 +204,8 @@ public class DateAndTimeController {
 	}
 	
 	public void markComponents() {
-		if (dateAndTime.getSecond() != null)
-			dateAndTime.getSecond().mark();
+		if (dateAndTime.getSeconds() != null)
+			dateAndTime.getSeconds().mark();
 		if (dateAndTime.getMinute() != null) 
 			dateAndTime.getMinute().mark();
 		if (dateAndTime.getHour() != null)
@@ -195,7 +221,7 @@ public class DateAndTimeController {
 	}
 	
 	public String forThis(Cell measuredValuePosition) {
-		int second = dateAndTime.getSecond().getParsedValue(measuredValuePosition);
+		int second = dateAndTime.getSeconds().getParsedValue(measuredValuePosition);
 		int minute = dateAndTime.getMinute().getParsedValue(measuredValuePosition);
 		int hour = dateAndTime.getHour().getParsedValue(measuredValuePosition);
 		int day = dateAndTime.getDay().getParsedValue(measuredValuePosition);
@@ -240,8 +266,8 @@ public class DateAndTimeController {
 	}
 	
 	private void merge(DateAndTime dateAndTime1, DateAndTime dateAndTime2) {
-		if (dateAndTime1.getSecond() == null && dateAndTime2.getSecond() != null)
-			dateAndTime1.setSecond(dateAndTime2.getSecond());
+		if (dateAndTime1.getSeconds() == null && dateAndTime2.getSeconds() != null)
+			dateAndTime1.setSecond(dateAndTime2.getSeconds());
 		if (dateAndTime1.getMinute() == null && dateAndTime2.getMinute() != null) 
 			dateAndTime1.setMinute(dateAndTime2.getMinute());
 		if (dateAndTime1.getHour() == null && dateAndTime2.getHour() != null)

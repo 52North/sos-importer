@@ -111,7 +111,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	public void unAssign(TableElement tableElement) {
 		DateAndTime dateAndTimeToRemove = null;
 		for (DateAndTime dtm: ModelStore.getInstance().getDateAndTimes()) {
-			Second second = dtm.getSecond();
+			Second second = dtm.getSeconds();
 			Minute minute = dtm.getMinute();
 			Hour hour = dtm.getHour();
 			Day day = dtm.getDay();

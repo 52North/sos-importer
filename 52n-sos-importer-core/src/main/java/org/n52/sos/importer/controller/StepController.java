@@ -50,9 +50,10 @@ public abstract class StepController {
 	public abstract boolean isFinished();
 	
 	/**
-	 * called when the Next button is pressed and the step is 
+	 * Sets the missing values in the step model using a method of GUI elements.
+	 * <br />Called when the Next button is pressed and the step is 
 	 * finished, saves all settings of this step in the model
-	 * and releases all views
+	 * and releases all views.
 	 */
 	public abstract void saveSettings();
 	

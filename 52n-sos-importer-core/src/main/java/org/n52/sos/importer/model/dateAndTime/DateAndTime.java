@@ -97,7 +97,7 @@ public class DateAndTime extends Combination {
 				logger.info("Remove " + this.minute + " from " + this);
 		this.minute = minute;
 	}
-	public Second getSecond() {
+	public Second getSeconds() {
 		return second;
 	}
 	public void setSecond(Second second) {

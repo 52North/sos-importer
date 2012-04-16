@@ -52,6 +52,7 @@ public class Constants {
 	public static final String STRING_REPLACER = "-@@@-";
 	public static final boolean GUI_DEBUG = false;
 	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
+	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
 	/**
 	 * TODO implement loading of language parameter from config file
 	 * @return en
