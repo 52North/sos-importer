@@ -45,6 +45,7 @@ import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
+import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
@@ -253,140 +254,6 @@ public class XMLModel {
 		}
 	}
 
-	private void handleStep6cModel(Step6cModel s6cM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:27 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6cModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep6bSpeicalModel(Step6bSpecialModel s6bSM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:24 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6bSpeicalModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep6bModel(Step6bModel s6bM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:20 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6bModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep6aModel(Step6aModel s6aM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:00:36 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6aModel()");
-		}
-		// we have a date time object and need to save it in a Metadata element
-		// with key Key.TIME
-		GregorianCalendar cal;
-		int year = 1970, 
-				month = 0, 
-				dayOfMonth = 1, 
-				hourOfDay = 0, 
-				minute = 0, 
-				seconds = 0,
-				timezone = 0;
-		String timeStamp = "";
-		DateAndTime dAT = s6aM.getDateAndTime();
-		/* 
-		 * check for each date element and create final string for the time stamp
-		 * if null -> add default value to Calendar object
-		 * else -> add value to Calendar object
-		 */
-		/*
-		 * 	YEAR
-		 */
-		if(dAT.getYear() != null) {
-			if(dAT.getYear().getValue() != Integer.MIN_VALUE) {
-				year = dAT.getYear().getValue();
-			}
-		}
-		/*
-		 * 	MONTH
-		 */
-		if(dAT.getMonth() != null) {
-			if(dAT.getMonth().getValue() != Integer.MIN_VALUE) {
-				month = dAT.getMonth().getValue();
-			}
-		}
-		/*
-		 * DAY OF MONTH
-		 */
-		if(dAT.getDay() != null) {
-			if(dAT.getDay().getValue() != Integer.MIN_VALUE) {
-				dayOfMonth = dAT.getDay().getValue();
-			}
-		}
-		/*
-		 * HOUR OF DAY
-		 */
-		if(dAT.getHour() != null) {
-			if(dAT.getHour().getValue() != Integer.MIN_VALUE) {
-				hourOfDay = dAT.getHour().getValue();
-			}
-		}
-		/*
-		 * 	MINUTE
-		 */
-		if(dAT.getMinute() != null) {
-			if(dAT.getMinute().getValue() != Integer.MIN_VALUE) {
-				minute = dAT.getMinute().getValue();
-			}
-		}
-		/*
-		 * SECONDS
-		 */
-		if(dAT.getSeconds() != null) {
-			if(dAT.getSeconds().getValue() != Integer.MIN_VALUE) {
-				seconds = dAT.getSeconds().getValue();
-			}
-		}
-		/*
-		 * 	TIMEZONE
-		 */
-		if(dAT.getTimeZone() != null) {
-			if(dAT.getTimeZone().getValue() != Integer.MIN_VALUE) {
-				timezone = dAT.getTimeZone().getValue();
-			}
-		}
-		// TODO get right timezone
-		TimeZone tz = TimeZone.getDefault();
-		tz.setRawOffset((timezone * 1000 * 60 * 60));
-		cal = new GregorianCalendar(tz);
-		cal.set(GregorianCalendar.YEAR, year);
-		cal.set(GregorianCalendar.MONTH, month);
-		cal.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth);
-		cal.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay);
-		cal.set(GregorianCalendar.MINUTE, minute);
-		cal.set(GregorianCalendar.SECOND, seconds);
-		// cal = new GregorianCalendar(year, month, dayOfMonth, hourOfDay, minute, seconds);
-		// cal.set(GregorianCalendar.ZONE_OFFSET, (timezone * 1000 * 60 * 60));
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		timeStamp = format.format(cal.getTime());
-		// FIX colon bug
-		timeStamp = timeStamp.substring(0, timeStamp.length()-2) + ":" + timeStamp.substring(timeStamp.length()-2);
-		/*
-		 * check if metadata with Key.TIME already exists
-		 * if yes -> update
-		 * else -> create new element
-		 */
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep4bModel(Step4bModel s4bM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 13:58:48 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep4bModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
 	/**
 	 * Should be called after final step to validate the final model.
 	 * 
@@ -405,6 +272,14 @@ public class XMLModel {
 			logger.error("The model is not valid. Please update your values.");
 		}
 		return modelValid;
+	}
+
+	private void handleStep4bModel(Step4bModel s4bM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 13:58:48 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep4bModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
 	}
 
 	/**
@@ -780,6 +655,217 @@ public class XMLModel {
 				this.addOrUpdateColumnMetadata(key,value,col);
 			}
 		}
+	}
+
+	private void handleStep6aModel(Step6aModel s6aM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:00:36 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6aModel()");
+		}
+		/*
+		 *  we have a date time object and need to save it in a Metadata element
+		 *  with key Key.TIME
+		 *  
+		 *  LOCAL FIELDS
+		 */
+		DateAndTime dAT;
+		String timeStamp;
+		Enum key = Key.TIME;
+		//
+		dAT = s6aM.getDateAndTime();
+		timeStamp = this.getTimeStampFromDateAndTime(dAT);
+		/*
+		 * check if metadata with Key.TIME already exists
+		 * if yes -> update
+		 * else -> create new element
+		 */
+		AdditionalMetadata addiMeta = this.sosImpConf.getAdditionalMetadata();
+		if(addiMeta == null) {
+			addiMeta = this.sosImpConf.addNewAdditionalMetadata();
+		}
+		// get metadata array and check for Key.TIME
+		if(this.addOrUpdateMetadata(key, timeStamp, addiMeta)) {
+			if (logger.isInfoEnabled()) {
+				logger.info("Timestamp in additional metadata updated/added: "
+						+ timeStamp);
+			} else {
+				// TODO when can this happen and what should we do?
+				logger.error("Timestamp element could not be updated");
+			}
+		}
+	}
+
+	private boolean addOrUpdateMetadata(Enum key, 
+			String value,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("addOrUpdateMetadata()");
+		}
+		Metadata[] metaElems = addiMeta.getMetadataArray();
+		Metadata meta = null;
+		String addedOrUpdated = "Updated";
+		// check if there is already a element with the given key
+		for (Metadata metadata : metaElems) {
+			if (metadata.getKey().equals(key) ) {
+				meta = metadata;
+				break;
+			}
+		}
+		if(meta == null) {
+			meta = addiMeta.addNewMetadata();
+			meta.setKey(key);
+			addedOrUpdated = "Added";
+		}
+		meta.setValue(value);
+		if (logger.isDebugEnabled()) {
+			logger.debug(addedOrUpdated + " additional metadata. Key: " + key + "; Value: " + 
+					value);
+		}
+		return (meta.getValue().equalsIgnoreCase(value));
+	}
+
+	/**
+	 * Check for each date element is the given <code>DateAndTime</code> object
+	 * and create final string for the time stamp using this rule:<br/>
+	 * IF
+	 * <ul><li><b>null</b> -> add default value to String</li>
+	 * <li><b>else</b> -> add value to String</li></ul>
+	 * Used format: <code>"yyyy-MM-dd'T'HH:mm:ssZ"</code><br/>
+	 * The colon bug is fixed, so the time zone looks like "<code>+02:00</code>" for example.<br/>
+	 * Default value is: "<code>1970-01-01T00:00:00:+00:00</code>"
+	 * @param dAT
+	 * @return a String or null, if dAT is null.
+	 */
+	private String getTimeStampFromDateAndTime(DateAndTime dAT) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getTimeStampFromDateAndTime()");
+		}
+		if(dAT == null) {
+			return null;
+		}
+		/*
+		 * 	LOCAL FIELDS
+		 */
+		GregorianCalendar cal;
+		int year = 1970, 
+				month = 0, 
+				dayOfMonth = 1, 
+				hourOfDay = 0, 
+				minute = 0, 
+				seconds = 0,
+				timezone = 0;
+		String timeStamp, timeZoneString, sign;
+		SimpleDateFormat format;
+		TimeZone tz;
+		/*
+		 * 	YEAR
+		 */
+		if(dAT.getYear() != null) {
+			if(dAT.getYear().getValue() != Integer.MIN_VALUE) {
+				year = dAT.getYear().getValue();
+			}
+		}
+		/*
+		 * 	MONTH
+		 */
+		if(dAT.getMonth() != null) {
+			if(dAT.getMonth().getValue() != Integer.MIN_VALUE) {
+				month = dAT.getMonth().getValue();
+			}
+		}
+		/*
+		 * DAY OF MONTH
+		 */
+		if(dAT.getDay() != null) {
+			if(dAT.getDay().getValue() != Integer.MIN_VALUE) {
+				dayOfMonth = dAT.getDay().getValue();
+			}
+		}
+		/*
+		 * HOUR OF DAY
+		 */
+		if(dAT.getHour() != null) {
+			if(dAT.getHour().getValue() != Integer.MIN_VALUE) {
+				hourOfDay = dAT.getHour().getValue();
+			}
+		}
+		/*
+		 * 	MINUTE
+		 */
+		if(dAT.getMinute() != null) {
+			if(dAT.getMinute().getValue() != Integer.MIN_VALUE) {
+				minute = dAT.getMinute().getValue();
+			}
+		}
+		/*
+		 * SECONDS
+		 */
+		if(dAT.getSeconds() != null) {
+			if(dAT.getSeconds().getValue() != Integer.MIN_VALUE) {
+				seconds = dAT.getSeconds().getValue();
+			}
+		}
+		/*
+		 * 	TIMEZONE
+		 */
+		if(dAT.getTimeZone() != null) {
+			if(dAT.getTimeZone().getValue() != Integer.MIN_VALUE) {
+				timezone = dAT.getTimeZone().getValue();
+			}
+		}
+		// Get right timezone
+		timeZoneString = "GMT";
+		sign = "+";
+		if(timezone <= 0) {
+			sign = "";
+		}
+		timeZoneString = timeZoneString + sign + timezone;
+		if (logger.isDebugEnabled()) {
+			logger.debug("timeZoneString: " + timeZoneString);
+		}
+		tz = TimeZone.getTimeZone(timeZoneString);
+		if (logger.isDebugEnabled()) {
+			logger.debug("TimeZone: " + tz);
+		}
+		cal = new GregorianCalendar(tz);
+		cal.set(GregorianCalendar.YEAR, year);
+		cal.set(GregorianCalendar.MONTH, month);
+		cal.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth);
+		cal.set(GregorianCalendar.HOUR_OF_DAY, hourOfDay);
+		cal.set(GregorianCalendar.MINUTE, minute);
+		cal.set(GregorianCalendar.SECOND, seconds);
+		format = new SimpleDateFormat(Constants.DATE_FORMAT_STRING);
+		format.setTimeZone(tz);
+		timeStamp = format.format(cal.getTime());
+		/*
+		 * 	FIX colon bug
+		 */
+		timeStamp = timeStamp.substring(0, timeStamp.length()-2) + ":" + timeStamp.substring(timeStamp.length()-2);
+		return timeStamp;
+	}
+
+	private void handleStep6bModel(Step6bModel s6bM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:20 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6bModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+	}
+
+	private void handleStep6bSpeicalModel(Step6bSpecialModel s6bSM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:24 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6bSpeicalModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+	}
+
+	private void handleStep6cModel(Step6cModel s6cM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:27 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6cModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
 	}
 
 	/**

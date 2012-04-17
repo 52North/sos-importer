@@ -53,6 +53,7 @@ public class Constants {
 	public static final boolean GUI_DEBUG = false;
 	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
 	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
+	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	/**
 	 * TODO implement loading of language parameter from config file
 	 * @return en
