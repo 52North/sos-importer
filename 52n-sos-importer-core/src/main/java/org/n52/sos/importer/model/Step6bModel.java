@@ -42,6 +42,9 @@ public class Step6bModel implements StepModel {
 		this.measuredValue = measuredValue;
 	}
 
+	/**
+	 * @return the related measure value object
+	 */
 	public MeasuredValue getMeasuredValue() {
 		return measuredValue;
 	}
