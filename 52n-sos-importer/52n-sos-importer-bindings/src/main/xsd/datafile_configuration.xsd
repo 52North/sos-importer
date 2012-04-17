@@ -461,6 +461,16 @@
 			<xs:sequence>
 				<xs:element ref="Name"/>
 				<xs:element ref="URI"/>
+				<xs:element name="RelatedFOI" type="xs:anyURI" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The related FOI (linked by FOI.URI). This element MUST be defined if the relation FOI to Sensor is not clear.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedObservedProperty" type="xs:anyURI" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The related Observed Property (linked by ObservedProperty.URI). This element MUST be defined if the relation ObservedProperty to Sensor is not clear.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
