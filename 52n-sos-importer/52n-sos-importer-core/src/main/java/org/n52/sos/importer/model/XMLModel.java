@@ -248,7 +248,7 @@ public class XMLModel {
 					Step6bModel s6bM = (Step6bModel) sm;
 					handleStep6bModel(s6bM);
 					//
-				} else if (sm instanceof Step6bModel) {
+				} else if (sm instanceof Step6bSpecialModel) {
 					//
 					Step6bSpecialModel s6bSM = (Step6bSpecialModel) sm;
 					handleStep6bSpecialModel(s6bSM);
@@ -1066,6 +1066,7 @@ public class XMLModel {
 				logger.debug("One position is null: skip filling: pos? " + pos
 						+ "; posXB? " + posXB);
 			}
+			return;
 		}
 		/*
 		 * 	EPSG_CODE
