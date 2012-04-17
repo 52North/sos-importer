@@ -237,7 +237,11 @@
 				<xs:element ref="Sensor" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="ObservedProperty" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="FeatureOfInterest" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="UnitOfMeasure" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="UnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>A unit of measurement related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -251,19 +255,24 @@
 				<xs:element ref="Type"/>
 				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="Position" minOccurs="0"/>
-				<xs:element name="RelatedFOI" type="xs:string" nillable="false" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedFOI" type="xs:anyURI" nillable="false" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
-						<xs:documentation>The feature of interest of THIS measured value column. The content of this element MUST match a name element of a FeatureOfInterest from AdditionalMetadata.</xs:documentation>
+						<xs:documentation>The feature of interest of THIS measured value column. The content of this element MUST match a URI element of a FeatureOfInterest from AdditionalMetadata.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="RelatedSensor" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedSensor" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
-						<xs:documentation>The sensor of THIS measured value column. The content of this element MUST match a name element of a Sensor from AdditionalMetadata.</xs:documentation>
+						<xs:documentation>The sensor of THIS measured value column. The content of this element MUST match a URI element of a Sensor from AdditionalMetadata.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="RelatedObservedProperty" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedObservedProperty" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
-						<xs:documentation>The observed property of THIS measured value column. The content of this element MUST match a name element of a ObservedProperty from AdditionalMetadata.</xs:documentation>
+						<xs:documentation>The observed property of THIS measured value column. The content of this element MUST match a URI element of a ObservedProperty from AdditionalMetadata.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedUnitOfMeasurement" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The unit of measure of THIS measured value column. The content of this element MUST match a URI element of a UnitOfMeasurement from AdditionalMetadata</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
@@ -326,7 +335,7 @@
 	</xs:element>
 	<xs:element name="FeatureOfInterest">
 		<xs:annotation>
-			<xs:documentation>A feature of interest (linked to a column by name element and relatedFOI element in column metadata)</xs:documentation>
+			<xs:documentation>A feature of interest (linked to a column by URI element and relatedFOI element in column metadata)</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
@@ -383,7 +392,7 @@
 	</xs:element>
 	<xs:element name="ObservedProperty">
 		<xs:annotation>
-			<xs:documentation>A observed property (linked to a column by name element and relatedObservedProperty element in column metadata)</xs:documentation>
+			<xs:documentation>A observed property (linked to a column by URI element and relatedObservedProperty element in column metadata)</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
@@ -446,7 +455,7 @@
 	</xs:element>
 	<xs:element name="Sensor">
 		<xs:annotation>
-			<xs:documentation>A sensor (linked to a column by name element and relatedSensor)</xs:documentation>
+			<xs:documentation>A sensor (linked to a column by URI element and relatedSensor)</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
@@ -466,9 +475,9 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="UnitOfMeasure">
+	<xs:element name="UnitOfMeasurement">
 		<xs:annotation>
-			<xs:documentation>A unit of measure related to a measured value column (linked by name element and relatedUOM in column metadata in measured value column)</xs:documentation>
+			<xs:documentation>A unit of measure related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>

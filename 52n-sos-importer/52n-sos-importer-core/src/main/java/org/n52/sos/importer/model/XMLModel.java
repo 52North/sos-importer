@@ -39,25 +39,34 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
-import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
+import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
+import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestDocument.FeatureOfInterest;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x02.LatDocument.Lat;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
+import org.x52North.sensorweb.sos.importer.x02.LongDocument.Long;
 import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x02.ObservedPropertyDocument.ObservedProperty;
 import org.x52North.sensorweb.sos.importer.x02.ParameterDocument.Parameter;
+import org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position;
+import org.x52North.sensorweb.sos.importer.x02.SensorDocument.Sensor;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 import org.x52North.sensorweb.sos.importer.x02.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementDocument.UnitOfMeasurement;
 
 /**
  * In this class the XML model for an CSV file is stored for later re-use by
@@ -242,7 +251,7 @@ public class XMLModel {
 				} else if (sm instanceof Step6bModel) {
 					//
 					Step6bSpecialModel s6bSM = (Step6bSpecialModel) sm;
-					handleStep6bSpeicalModel(s6bSM);
+					handleStep6bSpecialModel(s6bSM);
 					//
 				} else if (sm instanceof Step6cModel) {
 					//
@@ -272,14 +281,6 @@ public class XMLModel {
 			logger.error("The model is not valid. Please update your values.");
 		}
 		return modelValid;
-	}
-
-	private void handleStep4bModel(Step4bModel s4bM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 13:58:48 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep4bModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
 	}
 
 	/**
@@ -478,6 +479,14 @@ public class XMLModel {
 		}
 	}
 
+	private void handleStep4bModel(Step4bModel s4bM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 13:58:48 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep4bModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+	}
+
 	/**
 	 * Updates the metadata of the according time&date column.
 	 * @param s5aM
@@ -595,7 +604,7 @@ public class XMLModel {
 		}
 		Enum key = null;
 		String value = null;
-		Position pos = null;
+		org.n52.sos.importer.model.position.Position pos = null;
 		TableElement tabElem = null;
 		Column col = null;
 		int columnId;
@@ -657,8 +666,11 @@ public class XMLModel {
 		}
 	}
 
+	/**
+	 * Called in the case of not having any date information in the file
+	 * @param s6aM
+	 */
 	private void handleStep6aModel(Step6aModel s6aM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:00:36 by eike
 		if (logger.isTraceEnabled()) {
 			logger.trace("\thandleStep6aModel()");
 		}
@@ -688,11 +700,111 @@ public class XMLModel {
 			if (logger.isInfoEnabled()) {
 				logger.info("Timestamp in additional metadata updated/added: "
 						+ timeStamp);
-			} else {
-				// TODO when can this happen and what should we do?
-				logger.error("Timestamp element could not be updated");
+			}
+		}else {
+			logger.fatal("Timestamp element could not be updated");
+		}
+	}
+
+	/**
+	 * Called in the case of having missing foi, observed property, unit of 
+	 * measurement, or sensor for any measured value column.
+	 * @param s6bM
+	 */
+	private void handleStep6bModel(Step6bModel s6bM) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6bModel()");
+		}
+		/*
+		 *	LOCAL FIELDS
+		 */
+		MeasuredValue mV;
+		Resource res;
+		int mVColumnID = -1;
+		AdditionalMetadata addiMeta;
+		Column mVColumn;
+		/*
+		 * Get column reference from measured value object
+		 * Get Resource
+		 * Check Type
+		 * AddOrUpdate Element in additional metadata and in column meta data
+		 */
+		mV = s6bM.getMeasuredValue();
+		res = s6bM.getResource();
+		if (logger.isDebugEnabled()) {
+			logger.debug("Found measured value \"" + 
+					mV + "\" and a resource \"" +
+					res + "\"");
+		}
+		if (mV != null && mV.getTableElement() != null) {
+			mVColumnID = this.getColumnIdFromTableElement(mV.getTableElement());
+			if (logger.isDebugEnabled()) {
+				logger.debug("Column ID of measured value: " + mVColumnID);
 			}
 		}
+		addiMeta = this.sosImpConf.getAdditionalMetadata();
+		if(addiMeta == null) {
+			addiMeta = this.sosImpConf.addNewAdditionalMetadata();
+		}
+		mVColumn = this.getColumnById(mVColumnID);
+		if(this.addRelatedResource(res,mVColumn,addiMeta)) {
+			if (logger.isInfoEnabled()) {
+				logger.info("Related resource updated/added: "
+						+ res);
+			}
+		}
+	}
+
+	private void handleStep6bSpecialModel(Step6bSpecialModel s6bSM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:24 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6bSpeicalModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+	}
+
+	private void handleStep6cModel(Step6cModel s6cM) {
+		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:27 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep6cModel()");
+		}
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+	}
+
+	/**
+	 * Checks, if a Metadata element with the given <b>key</b> exists,<br />
+	 * 		if <b>yes</b>, update this one, <br />
+	 * 		<b>else</b> add a new metadata element.
+	 * @param key
+	 * @param value
+	 * @param col
+	 * @return
+	 */
+	private boolean addOrUpdateColumnMetadata(Enum key, String value, Column col) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\taddOrUpdateColumnMetadata()");
+		}
+		Metadata[] metaElems = col.getMetadataArray();
+		Metadata meta = null;
+		String addedOrUpdated = "Updated";
+		// check if there is already a element with the given key
+		for (Metadata metadata : metaElems) {
+			if (metadata.getKey().equals(key) ) {
+				meta = metadata;
+				break;
+			}
+		}
+		if(meta == null) {
+			meta = col.addNewMetadata();
+			meta.setKey(key);
+			addedOrUpdated = "Added";
+		}
+		meta.setValue(value);
+		if (logger.isDebugEnabled()) {
+			logger.debug(addedOrUpdated + " column metadata. Key: " + key + "; Value: " + 
+					value + " in column " + col.getNumber());
+		}
+		return (meta.getValue().equalsIgnoreCase(value));
 	}
 
 	private boolean addOrUpdateMetadata(Enum key, 
@@ -722,6 +834,415 @@ public class XMLModel {
 					value);
 		}
 		return (meta.getValue().equalsIgnoreCase(value));
+	}
+
+	private boolean addRelatedFOI(
+			org.n52.sos.importer.model.resources.FeatureOfInterest foi, 
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\taddRelatedFOI()");
+		}
+		//
+		FeatureOfInterest foiXB = null;
+		FeatureOfInterest[] foisXB = addiMeta.getFeatureOfInterestArray();
+		String[] relatedFOIs;
+		boolean addNew;
+		org.n52.sos.importer.model.position.Position pos;
+		Position posXB = null;
+		//
+		if(foisXB != null && foisXB.length > 0) {
+						
+			findFOI : 
+			for (FeatureOfInterest aFOI : foisXB) {
+				if ( aFOI.getURI().equalsIgnoreCase(foi.getURIString()) ) {
+					foiXB = aFOI;
+					break findFOI;
+				}
+			}
+		
+		}
+		if(foiXB == null) {
+			foiXB = addiMeta.addNewFeatureOfInterest();
+		}
+		foiXB.setName(foi.getName());
+		foiXB.setURI(foi.getURIString());
+		// add position to FOI
+		pos = foi.getPosition();
+		posXB = foiXB.getPosition();
+		if(posXB == null) {
+			foiXB.addNewPosition();
+		}
+		this.fillXBPosition(posXB,pos);
+		/*
+		 * the FOI is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		relatedFOIs = mVColumn.getRelatedFOIArray();
+		addNew = !this.isStringInArray(relatedFOIs,foi.getURIString());
+		if(addNew) {
+			mVColumn.addRelatedFOI(foi.getURIString());
+		}
+		relatedFOIs = mVColumn.getRelatedFOIArray();
+		return this.isStringInArray(relatedFOIs, foi.getURIString());
+	}
+
+	private boolean addRelatedObservedProperty(
+			org.n52.sos.importer.model.resources.ObservedProperty obsProp,
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\taddRelatedObservedProperty()");
+		}
+		//
+		ObservedProperty obsPropXB = null;
+		ObservedProperty[] obsPropsXB = addiMeta.getObservedPropertyArray();
+		//
+		if(obsPropsXB != null && obsPropsXB.length > 0) {
+						
+			findObservedProperty : 
+			for (ObservedProperty obsPropy : obsPropsXB) {
+				if (obsPropy.getURI().equalsIgnoreCase(obsProp.getURIString())) {
+					obsPropXB = obsPropy;
+					break findObservedProperty;
+				}
+			}
+		
+		}
+		if(obsPropXB == null) {
+			obsPropXB = addiMeta.addNewObservedProperty();
+		}
+		obsPropXB.setName(obsProp.getName());
+		obsPropXB.setURI(obsProp.getURIString());
+		/*
+		 * the ObservedProperty is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		String[] relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
+		boolean addNew = !this.isStringInArray(relatedObsProps,obsProp.getURIString());
+		if(addNew) {
+			mVColumn.addRelatedObservedProperty(obsProp.getURIString());
+		}
+		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
+		return this.isStringInArray(relatedObsProps, obsProp.getURIString());
+	}
+
+	/**
+	 * Check and add/update additional metadata element and ColumnMetadata 
+	 * measure value column having id <code>mVColumnID</code>.
+	 * @param res the related <code>Resource</code>
+	 * @param mVColumnID
+	 * @return
+	 */
+	private boolean addRelatedResource(Resource res, Column mVColumn, AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\taddRelatedResource()");
+		}
+		/*
+		 * 	ADD FEATURE_OF_INTEREST
+		 */
+		if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
+			org.n52.sos.importer.model.resources.FeatureOfInterest foi = 
+					(org.n52.sos.importer.model.resources.FeatureOfInterest) res;
+			return this.addRelatedFOI(foi,mVColumn,addiMeta);
+		}
+		/*
+		 * 	ADD OBSERVED_PROPERTY
+		 */
+		else if (res instanceof org.n52.sos.importer.model.resources.ObservedProperty) {
+			org.n52.sos.importer.model.resources.ObservedProperty obsProp = 
+					(org.n52.sos.importer.model.resources.ObservedProperty) res;
+			return this.addRelatedObservedProperty(obsProp,mVColumn,addiMeta);
+		}
+		/*
+		 * 	ADD SENSOR
+		 */
+		else if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
+			org.n52.sos.importer.model.resources.Sensor sensor = 
+					(org.n52.sos.importer.model.resources.Sensor) res;
+			return this.addRelatedSensor(sensor,mVColumn,addiMeta);
+		}
+		/*
+		 * 	ADD UNIT_OF_MEASUREMENT
+		 */
+		else if (res instanceof org.n52.sos.importer.model.resources.UnitOfMeasurement) {
+			org.n52.sos.importer.model.resources.UnitOfMeasurement uOM = 
+					(org.n52.sos.importer.model.resources.UnitOfMeasurement) res;
+			return this.addRelatedUOM(uOM,mVColumn,addiMeta);
+		}
+		return false;
+	}
+
+	private boolean addRelatedSensor(
+			org.n52.sos.importer.model.resources.Sensor sensor,
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\taddRelatedSensor()");
+		}
+		//
+		Sensor sensorXB = null;
+		Sensor[] sensorsXB = addiMeta.getSensorArray();
+		String[] relatedSensors;
+		boolean addNew;
+		//
+		if(sensorsXB != null && sensorsXB.length > 0) {
+						
+			findSensor : 
+			for (Sensor aSensor : sensorsXB) {
+				if (aSensor.getURI().equalsIgnoreCase(sensor.getURIString())) {
+					sensorXB = aSensor;
+					break findSensor;
+				}
+			}
+		
+		}
+		if(sensorXB == null) {
+			sensorXB = addiMeta.addNewSensor();
+		}
+		sensorXB.setName(sensor.getName());
+		sensorXB.setURI(sensor.getURIString());
+		/*
+		 * the Sensor is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		relatedSensors = mVColumn.getRelatedSensorArray();
+		addNew = !this.isStringInArray(relatedSensors,sensor.getURIString());
+		if(addNew) {
+			mVColumn.addRelatedSensor(sensor.getURIString());
+		}
+		relatedSensors = mVColumn.getRelatedSensorArray();
+		return this.isStringInArray(relatedSensors, sensor.getURIString());
+	}
+
+	private boolean addRelatedUOM(
+			org.n52.sos.importer.model.resources.UnitOfMeasurement uOM,
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\taddRelatedUOM()");
+		}
+		//
+		UnitOfMeasurement uOMXB = null;
+		UnitOfMeasurement[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
+		//
+		if(uOMsXB != null && uOMsXB.length > 0) {
+						
+			findUOM : 
+			for (UnitOfMeasurement uom : uOMsXB) {
+				if (uom.getURI().equalsIgnoreCase(uOM.getURIString())) {
+					uOMXB = uom;
+					break findUOM;
+				}
+			}
+		
+		}
+		if(uOMXB == null) {
+			uOMXB = addiMeta.addNewUnitOfMeasurement();
+		}
+		uOMXB.setName(uOM.getName());
+		uOMXB.setURI(uOM.getURIString());
+		uOMXB.setCode(uOM.getName());
+		/*
+		 * the UOM is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		String[] relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
+		boolean addNew = !this.isStringInArray(relatedUOMs,uOM.getURIString());
+		if(addNew) {
+			mVColumn.addRelatedUnitOfMeasurement(uOM.getURIString());
+		}
+		relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
+		return this.isStringInArray(relatedUOMs, uOM.getURIString());
+	}
+
+	private void fillXBPosition(Position posXB,
+			org.n52.sos.importer.model.position.Position pos) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\taddOrUpdatePosition()");
+		}
+		if (pos == null || posXB == null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("One position is null: skip filling: pos? " + pos
+						+ "; posXB? " + posXB);
+			}
+		}
+		/*
+		 * 	EPSG_CODE
+		 */
+		posXB.setEPSGCode(pos.getEPSGCode().getValue());
+		if (logger.isDebugEnabled()) {
+			logger.debug("posXB.epsg: " + posXB.getEPSGCode() + 
+					" - pos.epsg: " + pos.getEPSGCode().getValue());
+		}
+		/*
+		 * 	ALTITUDE
+		 */
+		Alt alt = posXB.getAlt();
+		if (alt == null) {
+			alt = posXB.addNewAlt();
+		}
+		alt.setFloatValue( new Double(pos.getHeight().getValue()).floatValue() );
+		if (logger.isDebugEnabled()) {
+			logger.debug("posXB.alt: " + posXB.getAlt() + 
+					" - pos.alt: " + pos.getHeight().getValue());
+		}
+		/*
+		 * 	LATITUDE
+		 */
+		Lat lat = posXB.getLat();
+		if (lat == null) {
+			lat = posXB.addNewLat();
+		}
+		lat.setFloatValue( new Double(pos.getLatitude().getValue()).floatValue() );
+		if (logger.isDebugEnabled()) {
+			logger.debug("posXB.lat: " + posXB.getLat() + 
+					" - pos.lat: " + pos.getLatitude().getValue());
+		}
+		/*
+		 *	LONGITUDE
+		 */
+		Long lon = posXB.getLong();
+		if (lon == null) {
+			lon = posXB.addNewLong();
+		}
+		lon.setFloatValue( new Double(pos.getLongitude().getValue()).floatValue() );
+		if (logger.isDebugEnabled()) {
+			logger.debug("posXB.lon: " + posXB.getLong() + 
+					" - pos.lon: " + pos.getLongitude().getValue());
+		}
+	}
+
+	private boolean isStringInArray(String[] stringArray, String string) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\tisStringInArray()");
+		}
+		for (String stringFromArray : stringArray) {
+			if(stringFromArray.equalsIgnoreCase(string)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param columnId
+	 * @return the Column from the configuration having id columnId
+	 */
+	private Column getColumnById(int columnId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getColumnById()");
+		}
+		CsvMetadata csvMeta = this.sosImpConf.getCsvMetadata();
+		if (csvMeta != null) {
+			ColumnAssignments colAssignMnts = csvMeta.getColumnAssignments();
+			if (colAssignMnts != null) {
+				Column[] cols = colAssignMnts.getColumnArray();
+				if (cols != null && cols.length > 0) {
+					// now we have the columns, iterate and check the id
+					// return the one with the required one
+					for (Column col : cols) {
+						if (col.getNumber() == columnId) {
+							return col;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param tabElem
+	 * @return the id of the column of this TableElement or -1
+	 */
+	private int getColumnIdFromTableElement(TableElement tabElem) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getColumnIdFromTableElement()");
+		}
+		if (tabElem == null) {
+			return -1;
+		}
+		if (tabElem instanceof Cell) {
+			Cell c = (Cell) tabElem;
+			return c.getColumn();
+		} else if (tabElem instanceof org.n52.sos.importer.model.table.Column) {
+			org.n52.sos.importer.model.table.Column c = (org.n52.sos.importer.model.table.Column) tabElem;
+			return c.getNumber();
+			// TODO What is the reason for having it in rows?
+		} else if (tabElem instanceof Row) {
+			logger.error("Element is stored in rows. NOT YET IMPLEMENTED");
+			return -1;
+		}
+		return -1;
+	}
+
+	private TableElement getTableElementFromDateTime(DateAndTime dat) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getTableElementFromDateTime()");
+		}
+		TableElement tabElem = null;
+		if (dat.getDay() != null && dat.getDay().getTableElement() != null) {
+	
+			tabElem = dat.getDay().getTableElement();
+	
+		} else if (dat.getHour() != null
+				&& dat.getHour().getTableElement() != null) {
+			tabElem = dat.getHour().getTableElement();
+	
+		} else if (dat.getMinute() != null
+				&& dat.getMinute().getTableElement() != null) {
+	
+			tabElem = dat.getMinute().getTableElement();
+	
+		} else if (dat.getMonth() != null
+				&& dat.getMonth().getTableElement() != null) {
+	
+			tabElem = dat.getMonth().getTableElement();
+	
+		} else if (dat.getSeconds() != null
+				&& dat.getSeconds().getTableElement() != null) {
+	
+			tabElem = dat.getSeconds().getTableElement();
+	
+		} else if (dat.getTimeZone() != null
+				&& dat.getTimeZone().getTableElement() != null) {
+	
+			tabElem = dat.getTimeZone().getTableElement();
+	
+		} else if (dat.getYear() != null
+				&& dat.getYear().getTableElement() != null) {
+	
+			tabElem = dat.getYear().getTableElement();
+	
+		}
+		return tabElem;
+	}
+
+	private TableElement getTableElementFromPosition(
+			org.n52.sos.importer.model.position.Position pos) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getTableElementFromPosition()");
+		}
+		TableElement tabElem = null;
+		if (pos.getEPSGCode() != null && pos.getEPSGCode().getTableElement() != null) {
+			
+			tabElem = pos.getEPSGCode().getTableElement();
+			
+		} else if (pos.getLongitude() != null && pos.getLongitude().getTableElement() != null) {
+			
+			tabElem = pos.getLongitude().getTableElement();
+			
+		} else if (pos.getLatitude() != null && pos.getLatitude().getTableElement() != null) {
+			
+			tabElem = pos.getLatitude().getTableElement();
+			
+		} else if (pos.getHeight() != null && pos.getHeight().getTableElement() != null) {
+			
+			tabElem = pos.getHeight().getTableElement();
+			
+		}
+		return tabElem;
 	}
 
 	/**
@@ -842,185 +1363,6 @@ public class XMLModel {
 		 */
 		timeStamp = timeStamp.substring(0, timeStamp.length()-2) + ":" + timeStamp.substring(timeStamp.length()-2);
 		return timeStamp;
-	}
-
-	private void handleStep6bModel(Step6bModel s6bM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:20 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6bModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep6bSpeicalModel(Step6bSpecialModel s6bSM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:24 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6bSpeicalModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	private void handleStep6cModel(Step6cModel s6cM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:27 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep6cModel()");
-		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-	}
-
-	/**
-	 * Checks, if a Metadata element with the given <b>key</b> exists,<br />
-	 * 		if <b>yes</b>, update this one, <br />
-	 * 		<b>else</b> add a new metadata element.
-	 * @param key
-	 * @param value
-	 * @param col
-	 * @return
-	 */
-	private boolean addOrUpdateColumnMetadata(Enum key, String value, Column col) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("addOrUpdateColumnMetadata()");
-		}
-		Metadata[] metaElems = col.getMetadataArray();
-		Metadata meta = null;
-		String addedOrUpdated = "Updated";
-		// check if there is already a element with the given key
-		for (Metadata metadata : metaElems) {
-			if (metadata.getKey().equals(key) ) {
-				meta = metadata;
-				break;
-			}
-		}
-		if(meta == null) {
-			meta = col.addNewMetadata();
-			meta.setKey(key);
-			addedOrUpdated = "Added";
-		}
-		meta.setValue(value);
-		if (logger.isDebugEnabled()) {
-			logger.debug(addedOrUpdated + " column metadata. Key: " + key + "; Value: " + 
-					value + " in column " + col.getNumber());
-		}
-		return (meta.getValue().equalsIgnoreCase(value));
-	}
-
-	/**
-	 * @param columnId
-	 * @return the Column from the configuration having id columnId
-	 */
-	private Column getColumnById(int columnId) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getColumnById()");
-		}
-		CsvMetadata csvMeta = this.sosImpConf.getCsvMetadata();
-		if (csvMeta != null) {
-			ColumnAssignments colAssignMnts = csvMeta.getColumnAssignments();
-			if (colAssignMnts != null) {
-				Column[] cols = colAssignMnts.getColumnArray();
-				if (cols != null && cols.length > 0) {
-					// now we have the columns, iterate and check the id
-					// return the one with the required one
-					for (Column col : cols) {
-						if (col.getNumber() == columnId) {
-							return col;
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @param tabElem
-	 * @return the id of the column of this TableElement or -1
-	 */
-	private int getColumnIdFromTableElement(TableElement tabElem) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getColumnIdFromTableElement()");
-		}
-		if (tabElem == null) {
-			return -1;
-		}
-		if (tabElem instanceof Cell) {
-			Cell c = (Cell) tabElem;
-			return c.getColumn();
-		} else if (tabElem instanceof org.n52.sos.importer.model.table.Column) {
-			org.n52.sos.importer.model.table.Column c = (org.n52.sos.importer.model.table.Column) tabElem;
-			return c.getNumber();
-			// TODO What is the reason for having it in rows?
-		} else if (tabElem instanceof Row) {
-			logger.error("Element is stored in rows. NOT YET IMPLEMENTED");
-			return -1;
-		}
-		return -1;
-	}
-
-	private TableElement getTableElementFromDateTime(DateAndTime dat) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getTableElementFromDateTime()");
-		}
-		TableElement tabElem = null;
-		if (dat.getDay() != null && dat.getDay().getTableElement() != null) {
-	
-			tabElem = dat.getDay().getTableElement();
-	
-		} else if (dat.getHour() != null
-				&& dat.getHour().getTableElement() != null) {
-			tabElem = dat.getHour().getTableElement();
-	
-		} else if (dat.getMinute() != null
-				&& dat.getMinute().getTableElement() != null) {
-	
-			tabElem = dat.getMinute().getTableElement();
-	
-		} else if (dat.getMonth() != null
-				&& dat.getMonth().getTableElement() != null) {
-	
-			tabElem = dat.getMonth().getTableElement();
-	
-		} else if (dat.getSeconds() != null
-				&& dat.getSeconds().getTableElement() != null) {
-	
-			tabElem = dat.getSeconds().getTableElement();
-	
-		} else if (dat.getTimeZone() != null
-				&& dat.getTimeZone().getTableElement() != null) {
-	
-			tabElem = dat.getTimeZone().getTableElement();
-	
-		} else if (dat.getYear() != null
-				&& dat.getYear().getTableElement() != null) {
-	
-			tabElem = dat.getYear().getTableElement();
-	
-		}
-		return tabElem;
-	}
-
-	private TableElement getTableElementFromPosition(Position pos) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getTableElementFromPosition()");
-		}
-		TableElement tabElem = null;
-		if (pos.getEPSGCode() != null && pos.getEPSGCode().getTableElement() != null) {
-			
-			tabElem = pos.getEPSGCode().getTableElement();
-			
-		} else if (pos.getLongitude() != null && pos.getLongitude().getTableElement() != null) {
-			
-			tabElem = pos.getLongitude().getTableElement();
-			
-		} else if (pos.getLatitude() != null && pos.getLatitude().getTableElement() != null) {
-			
-			tabElem = pos.getLatitude().getTableElement();
-			
-		} else if (pos.getHeight() != null && pos.getHeight().getTableElement() != null) {
-			
-			tabElem = pos.getHeight().getTableElement();
-			
-		}
-		return tabElem;
 	}
 
 	/**
