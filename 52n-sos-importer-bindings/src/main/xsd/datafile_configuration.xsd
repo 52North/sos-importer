@@ -242,6 +242,17 @@
 						<xs:documentation>A unit of measurement related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element name="FOIPositions" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>In the case of having a column of FOIs, the related position information is stored here.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="URI"/>
+							<xs:element ref="Position"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
