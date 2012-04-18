@@ -98,7 +98,7 @@ public class XMLModel {
 	 * @param xmlFileWithModel
 	 *            the file containing the <code>XMLModel</code>
 	 * @throws XmlException
-	 *             thrown while parsing the file &rarr; <code>XMLModel</code> is
+	 *             thrown while parsing the file &rarr; <code>XMLModel</code>
 	 *             file is <b>not</b> valid.
 	 * @throws IOException
 	 *             having any problems while reading file
@@ -755,12 +755,70 @@ public class XMLModel {
 		}
 	}
 
+	/**
+	 * In the case of having no sensor. This sensor must be related to:
+	 * <ol><li>a measured value column</li>
+	 * <li>a feature of interest</li>
+	 * <li>an observed property</li></ol>
+	 * @param s6bSM
+	 */
 	private void handleStep6bSpecialModel(Step6bSpecialModel s6bSM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:24 by eike
 		if (logger.isTraceEnabled()) {
 			logger.trace("\thandleStep6bSpeicalModel()");
 		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
+		String foiName = s6bSM.getFeatureOfInterestName(), 
+				foiURI = foiName,
+				obsPropName = s6bSM.getObservedPropertyName(),
+				obsPropURI = obsPropName,
+				sensorName, 
+				sensorURI;
+		org.n52.sos.importer.model.resources.Sensor sensor = s6bSM.getSensor();
+		/*
+		 * TODO get FOI and obsProp URI
+		 */
+		/*
+		 * add sensor to model
+		 */
+		sensorName = sensor.getName();
+		sensorURI = sensor.getURIString();
+		Sensor sensorXB = null;
+		Sensor[] sensorsXB;
+		AdditionalMetadata addiMeta = this.sosImpConf.getAdditionalMetadata();
+		if (addiMeta == null) {
+			addiMeta = this.sosImpConf.addNewAdditionalMetadata();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new AdditionalMetadata element");
+			}
+		} else {
+			 sensorsXB = addiMeta.getSensorArray();
+			 
+			 findSensor: 
+			 for (Sensor aSensor : sensorsXB) {
+				if (aSensor.getURI().equalsIgnoreCase(sensorURI)) {
+					sensorXB = aSensor;
+					if (logger.isDebugEnabled()) {
+						logger.debug("Found Sensor element");
+					}
+					break findSensor;
+				}
+			}
+		}
+		// sensor found or add new one?
+		if (sensorXB == null) {
+			sensorXB = addiMeta.addNewSensor();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new Sensor element");
+			}
+		}
+		sensorXB.setName(sensorName);
+		sensorXB.setURI(sensorURI);
+		/*
+		 * add relations
+		 */
+		sensorXB.setRelatedFOI(foiURI);
+		sensorXB.setRelatedObservedProperty(obsPropURI);
+		// TODO identify related measured value column and update relation
+		
 	}
 
 	private void handleStep6cModel(Step6cModel s6cM) {
