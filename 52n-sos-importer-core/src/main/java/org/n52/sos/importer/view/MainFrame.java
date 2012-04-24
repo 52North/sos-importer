@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
 	private final JPanel stepContainerPanel;
 	private final DescriptionPanel descriptionPanel;
 	private final BackNextPanel backNextPanel;
-	private final JPanel infoPanel;
+//	private final JPanel infoPanel;
 	
 	// TODO read this from general configuration file
 	private String frameTitle = Lang.l().frameTitle();
@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
 		this.backNextPanel = BackNextPanel.getInstance();
 		this.descriptionPanel = DescriptionPanel.getInstance();
 		this.stepContainerPanel = new JPanel();
-		this.infoPanel = new JPanel();
+//		this.infoPanel = new JPanel();
 		this.setTitle(this.frameTitle);
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowChanged());

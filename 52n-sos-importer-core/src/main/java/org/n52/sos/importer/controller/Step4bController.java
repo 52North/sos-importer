@@ -69,7 +69,7 @@ public class Step4bController extends StepController {
 	@Override
 	public void loadSettings() {
 		Resource resource = step4bModel.getResource();
-		int[] selectedRowsOrColumns = step4bModel.getSelectedRowsOrColumns();
+		int[] selectedRowsOrColumns = step4bModel.getSelectedColumns();
 		int fLWData = step4bModel.getFirstLineWithData();
 		
 		String text = step4bModel.getDescription();
@@ -99,7 +99,7 @@ public class Step4bController extends StepController {
 		Resource resource = step4bModel.getResource();	
 		int[] selectedColumns = tableController.getSelectedColumns();
 		int fLWData = step4bModel.getFirstLineWithData();
-		step4bModel.setSelectedRowsOrColumns(selectedColumns);
+		step4bModel.setSelectedColumns(selectedColumns);
 		
 		for (int number: selectedColumns) {
 			Column column = new Column(number,fLWData);

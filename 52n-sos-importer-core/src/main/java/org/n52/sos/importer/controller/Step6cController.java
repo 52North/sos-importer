@@ -97,11 +97,11 @@ public class Step6cController extends StepController {
 		
 		String name = step6cModel.getFeatureOfInterestName();
 		Position position = step6cModel.getPosition();
-		if (name == null) //when this feature is not contained in the table
+		if (name == null) {//when this feature is not contained in the table
 			step6cModel.getFeatureOfInterest().assignPosition(position);
-		else 
+		} else {
 			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
-		
+		}
 		step6cPanel = null;
 		positionController = null;
 	}

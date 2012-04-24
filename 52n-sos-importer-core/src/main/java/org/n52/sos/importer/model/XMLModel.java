@@ -50,6 +50,10 @@ import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.Additi
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedUnitOfMeasurement;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestDocument.FeatureOfInterest;
@@ -480,11 +484,212 @@ public class XMLModel {
 	}
 
 	private void handleStep4bModel(Step4bModel s4bM) {
-		// TODO Auto-generated method stub generated on 03.04.2012 around 13:58:48 by eike
 		if (logger.isTraceEnabled()) {
-			logger.trace("\thandleStep4bModel()");
+			logger.trace("\t\thandleStep4bModel()");
 		}
-		throw new RuntimeException("NOT YET IMPLEMENTED");
+		/*
+		 * 	LOCALE FIELDS
+		 */
+		int[] relatedColumnsIds;
+		CsvMetadata csvMeta;
+		ColumnAssignments colAssignmts;
+		Column[] availableCols, relatedCols;
+		ArrayList<Column> relCol;
+		Resource res;
+		// get related columns
+		relatedColumnsIds = s4bM.getSelectedColumns();
+		csvMeta = this.sosImpConf.getCsvMetadata();
+		if (csvMeta == null) {
+			logger.fatal("CsvMetadata element not set in step 4; should not " +
+					"happen. Please check the log file!");
+			return;
+		}
+		colAssignmts = csvMeta.getColumnAssignments();
+		if (colAssignmts == null) {
+			logger.fatal("CsvMetadata.ColumnAssignments element not set in " +
+					"step 4; should not happen. Please check the log file!");
+			return;
+		}
+		availableCols = colAssignmts.getColumnArray();
+		if (availableCols == null) {
+			logger.fatal("CsvMetadata.ColumnAssignments.Column elements not set in " +
+					"step 4; should not happen. Please check the log file!");
+			return;
+		}
+		relCol = new ArrayList<Column>(availableCols.length);
+		for (Column column : availableCols) {
+			// check for correct column id
+			if(this.isIntInArray(relatedColumnsIds, column.getNumber()) ) {
+				// add column to result set	
+				relCol.add(column);
+			}
+		}
+		relCol.trimToSize();
+		relatedCols = relCol.toArray(new Column[relCol.size()]);
+		
+		// identify type of resource that is linked to the given row and or columns
+		res = s4bM.getResource();
+		
+		// add relation to the related column
+		this.addRelatedResourceColumn(res, relatedCols);
+	}
+
+	/**
+	 * For each <code>Column</code> in the array <code>relatedCols</code> add
+	 * a related resource 
+	 * @param res the resource to add
+	 * @param relatedCols the column where to add the resource
+	 */
+	private boolean addRelatedResourceColumn(Resource res, Column[] relatedCols) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\taddRelatedResourceColumn()");
+		}
+		/*
+		 * 	LOCALE FIELDS
+		 */
+		TableElement tabE = res.getTableElement();
+		int colId;
+		boolean result = true;
+		// get resource column
+		if (tabE instanceof org.n52.sos.importer.model.table.Column) {
+			org.n52.sos.importer.model.table.Column col = (org.n52.sos.importer.model.table.Column) tabE;
+			colId = col.getNumber();
+		} else {
+			logger.fatal("Type org.n52.sos.importer.model.table.Column expected. Type is:" + tabE.getClass());
+			return false;
+		}
+		/*
+		 * add colId of related resource to Columns in relatedCols
+		 */
+		for (Column column : relatedCols) {
+			boolean addNew;
+			/*
+			 * 	FEATURE_OF_INTEREST
+			 */
+			if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
+				RelatedFOI[] relFois = column.getRelatedFOIArray();
+				addNew = !this.isFoiColIdInArray(relFois, colId);
+				if (addNew) {
+					column.addNewRelatedFOI().setNumber(colId);
+					if (logger.isDebugEnabled()) {
+						logger.debug("Added new related foi by column");
+					}
+				} else if (logger.isDebugEnabled()) {
+					logger.debug("Related foi was already there");
+				}
+				result = result && this.isFoiColIdInArray(relFois, colId);
+			} else
+			/*
+			 * 	SENSOR
+			 */
+			if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
+				RelatedSensor[] relSensors = column.getRelatedSensorArray();
+				addNew = !this.isSensorInArray(relSensors, colId);
+				if (addNew) {
+					column.addNewRelatedSensor().setNumber(colId);
+					if (logger.isDebugEnabled()) {
+						logger.debug("Added new related sensor by column");
+					}
+				} else if (logger.isDebugEnabled()) {
+					logger.debug("Related sensor was already there");
+				}
+				result = result && this.isSensorInArray(relSensors, colId);
+			} else
+			/*
+			 * 	UNIT_OF_MEASUREMENT
+			 */
+			if (res instanceof 
+					org.n52.sos.importer.model.resources.UnitOfMeasurement) {
+				RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
+				addNew = !this.isUOMInArray(relUOMs, colId);
+				if (addNew) {
+					column.addNewRelatedUnitOfMeasurement().setNumber(colId);
+					if (logger.isDebugEnabled()) {
+						logger.debug("Added new related UOM by column");
+					}
+				} else if (logger.isDebugEnabled()) {
+					logger.debug("Related UOM was already there");
+				}
+				result = result && this.isUOMInArray(relUOMs, colId);
+			} else
+			/*
+			 * 	OBSERVED_PROPERTY
+			 */
+			if (res instanceof 
+					org.n52.sos.importer.model.resources.ObservedProperty) {
+				RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
+				addNew = !this.isObsPropInArray(relObsProps, colId);
+				if (addNew) {
+					column.addNewRelatedObservedProperty().setNumber(colId);
+					if (logger.isDebugEnabled()) {
+						logger.debug("Added new related observed property by column");
+					}
+				} else if (logger.isDebugEnabled()) {
+					logger.debug("Related observed property was already there");
+				}
+				result = result && this.isObsPropInArray(relObsProps, colId);
+			}
+		}
+		return result;
+	}
+
+	private boolean isObsPropInArray(RelatedObservedProperty[] relObsProps,
+			int colId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isObsPropInArray()");
+		}
+		for (RelatedObservedProperty relatedObsProp : relObsProps) {
+			if (relatedObsProp.isSetNumber() && 
+					relatedObsProp.getNumber() == colId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isUOMInArray(RelatedUnitOfMeasurement[] relUOMs, int colId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isUOMInArray()");
+		}
+		for (RelatedUnitOfMeasurement relatedUOM : relUOMs) {
+			if (relatedUOM.isSetNumber() && 
+					relatedUOM.getNumber() == colId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isSensorInArray(RelatedSensor[] relSensors, int colId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isSensorInArray()");
+		}
+		for (RelatedSensor relatedSensor : relSensors) {
+			if (relatedSensor.isSetNumber() && 
+					relatedSensor.getNumber() == colId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the column is already referenced.
+	 * @param relFois
+	 * @param colId
+	 * @return
+	 */
+	private boolean isFoiColIdInArray(RelatedFOI[] relFois, int colId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isFoiInArray()");
+		}
+		for (RelatedFOI relatedFOI : relFois) {
+			if (relatedFOI.isSetNumber() && 
+					relatedFOI.getNumber() == colId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -774,7 +979,7 @@ public class XMLModel {
 				sensorURI;
 		org.n52.sos.importer.model.resources.Sensor sensor = s6bSM.getSensor();
 		/*
-		 * TODO get FOI and obsProp URI
+		 * TODO get FOI and obsProp URI. Requires update of GUI.
 		 */
 		/*
 		 * add sensor to model
@@ -821,11 +1026,39 @@ public class XMLModel {
 		
 	}
 
+	/**
+	 * Store the position for each feature of interest
+	 * (either stored in a column or manually selected) 
+	 * in case there are not any positions given in the CSV file. Add each to
+	 * <code>FOIPositions</code> element.
+	 * @param s6cM
+	 */
 	private void handleStep6cModel(Step6cModel s6cM) {
 		// TODO Auto-generated method stub generated on 03.04.2012 around 14:02:27 by eike
 		if (logger.isTraceEnabled()) {
 			logger.trace("\thandleStep6cModel()");
 		}
+		/*
+		 * 	LOCALE FIELDS
+		 */
+		String name;
+		org.n52.sos.importer.model.resources.FeatureOfInterest foi;
+		int colId;
+		TableElement tabE;
+		logger.fatal("CONTINUE DEVELOPMENT HERE");
+		/*
+		 * check if FOI is already there
+		 */
+		foi = s6cM.getFeatureOfInterest();
+		foi.getTableElement();
+		name = s6cM.getFeatureOfInterestName();
+		if (name == null) {
+			name = foi.getURIString();
+		}
+
+			// if not check if the foi has a table element if not add reference by URI, else number
+			// create position
+			// add position and use ref from previous step
 		throw new RuntimeException("NOT YET IMPLEMENTED");
 	}
 
@@ -904,7 +1137,7 @@ public class XMLModel {
 		//
 		FeatureOfInterest foiXB = null;
 		FeatureOfInterest[] foisXB = addiMeta.getFeatureOfInterestArray();
-		String[] relatedFOIs;
+		RelatedFOI[] relatedFOIs;
 		boolean addNew;
 		org.n52.sos.importer.model.position.Position pos;
 		Position posXB = null;
@@ -937,12 +1170,15 @@ public class XMLModel {
 		 * Next is to link measure value column to this entity by its URI
 		 */
 		relatedFOIs = mVColumn.getRelatedFOIArray();
-		addNew = !this.isStringInArray(relatedFOIs,foi.getURIString());
+		addNew = !this.isFoiInArray(relatedFOIs,foi.getURIString());
 		if(addNew) {
-			mVColumn.addRelatedFOI(foi.getURIString());
+			mVColumn.addNewRelatedFOI().setURI(foi.getURIString());
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new related FOI element");
+			}
 		}
 		relatedFOIs = mVColumn.getRelatedFOIArray();
-		return this.isStringInArray(relatedFOIs, foi.getURIString());
+		return this.isFoiInArray(relatedFOIs, foi.getURIString());
 	}
 
 	private boolean addRelatedObservedProperty(
@@ -955,6 +1191,9 @@ public class XMLModel {
 		//
 		ObservedProperty obsPropXB = null;
 		ObservedProperty[] obsPropsXB = addiMeta.getObservedPropertyArray();
+		RelatedObservedProperty[] relatedObsProps;
+		RelatedObservedProperty relObs;
+		boolean addNew;
 		//
 		if(obsPropsXB != null && obsPropsXB.length > 0) {
 						
@@ -976,13 +1215,13 @@ public class XMLModel {
 		 * the ObservedProperty is in the model.
 		 * Next is to link measure value column to this entity by its URI
 		 */
-		String[] relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-		boolean addNew = !this.isStringInArray(relatedObsProps,obsProp.getURIString());
+		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
+		addNew = !this.isObsPropInArray(relatedObsProps,obsProp.getURIString());
 		if(addNew) {
-			mVColumn.addRelatedObservedProperty(obsProp.getURIString());
+			mVColumn.addNewRelatedObservedProperty().setURI(obsProp.getURIString());
 		}
 		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-		return this.isStringInArray(relatedObsProps, obsProp.getURIString());
+		return this.isObsPropInArray(relatedObsProps, obsProp.getURIString());
 	}
 
 	/**
@@ -1041,7 +1280,7 @@ public class XMLModel {
 		//
 		Sensor sensorXB = null;
 		Sensor[] sensorsXB = addiMeta.getSensorArray();
-		String[] relatedSensors;
+		RelatedSensor[] relatedSensors;
 		boolean addNew;
 		//
 		if(sensorsXB != null && sensorsXB.length > 0) {
@@ -1065,12 +1304,12 @@ public class XMLModel {
 		 * Next is to link measure value column to this entity by its URI
 		 */
 		relatedSensors = mVColumn.getRelatedSensorArray();
-		addNew = !this.isStringInArray(relatedSensors,sensor.getURIString());
+		addNew = !this.isSensorInArray(relatedSensors,sensor.getURIString());
 		if(addNew) {
-			mVColumn.addRelatedSensor(sensor.getURIString());
+			mVColumn.addNewRelatedSensor().setURI(sensor.getURIString());
 		}
 		relatedSensors = mVColumn.getRelatedSensorArray();
-		return this.isStringInArray(relatedSensors, sensor.getURIString());
+		return this.isSensorInArray(relatedSensors, sensor.getURIString());
 	}
 
 	private boolean addRelatedUOM(
@@ -1083,6 +1322,8 @@ public class XMLModel {
 		//
 		UnitOfMeasurement uOMXB = null;
 		UnitOfMeasurement[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
+		RelatedUnitOfMeasurement[] relatedUOMs;
+		boolean addNew;
 		//
 		if(uOMsXB != null && uOMsXB.length > 0) {
 						
@@ -1105,13 +1346,13 @@ public class XMLModel {
 		 * the UOM is in the model.
 		 * Next is to link measure value column to this entity by its URI
 		 */
-		String[] relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
-		boolean addNew = !this.isStringInArray(relatedUOMs,uOM.getURIString());
+		relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
+		addNew = !this.isUOMInArray(relatedUOMs,uOM.getURIString());
 		if(addNew) {
-			mVColumn.addRelatedUnitOfMeasurement(uOM.getURIString());
+			mVColumn.addNewRelatedUnitOfMeasurement().setURI(uOM.getURIString());
 		}
 		relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
-		return this.isStringInArray(relatedUOMs, uOM.getURIString());
+		return this.isUOMInArray(relatedUOMs, uOM.getURIString());
 	}
 
 	private void fillXBPosition(Position posXB,
@@ -1172,12 +1413,67 @@ public class XMLModel {
 		}
 	}
 
-	private boolean isStringInArray(String[] stringArray, String string) {
+	private boolean isFoiInArray(RelatedFOI[] relatedFOIs, String foiURI) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\t\tisStringInArray()");
+			logger.trace("\t\t\t\tisFoiInArray()");
 		}
-		for (String stringFromArray : stringArray) {
-			if(stringFromArray.equalsIgnoreCase(string)) {
+		for (RelatedFOI relatedFoiFromArray : relatedFOIs) {
+			if (relatedFoiFromArray.isSetURI() && 
+					relatedFoiFromArray.getURI().equalsIgnoreCase(foiURI) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isObsPropInArray(RelatedObservedProperty[] relatedObsProps,
+			String obsPropURI) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\tisObsPropInArray()");
+		}
+		for (RelatedObservedProperty relatedObsPropFromArray : relatedObsProps) {
+			if (relatedObsPropFromArray.isSetURI() && 
+					relatedObsPropFromArray.getURI().equalsIgnoreCase(obsPropURI) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isSensorInArray(RelatedSensor[] relatedSensors,
+			String sensorURIString) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\tisSensorInArray()");
+		}
+		for (RelatedSensor relatedSensorFromArray : relatedSensors) {
+			if (relatedSensorFromArray.isSetURI() && 
+					relatedSensorFromArray.getURI().equalsIgnoreCase(sensorURIString) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isUOMInArray(RelatedUnitOfMeasurement[] relatedUOMs,
+			String uomUriString) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isUOMInArray()");
+		}
+		for (RelatedUnitOfMeasurement relatedUOMFromArray : relatedUOMs) {
+			if (relatedUOMFromArray.isSetURI() && 
+					relatedUOMFromArray.getURI().equalsIgnoreCase(uomUriString) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isIntInArray(int[] array, int i) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\tisIntInArray()");
+		}
+		for (int intFromArray : array) {
+			if (intFromArray == i) {
 				return true;
 			}
 		}

@@ -30,14 +30,14 @@ public class Step4bModel implements StepModel {
 	
 	private Resource resource;
 	
-	private int[] selectedRowsOrColumns;
+	private int[] selectedColumns;
 	
 	private int firstLineWithData = -1;
 
 	public Step4bModel(Resource resource, int firstLineWithData) {
 		this.resource = resource;
 		this.firstLineWithData = firstLineWithData;
-		this.selectedRowsOrColumns = new int[0];
+		this.selectedColumns = new int[0];
 	}
 	
 	public void setResource(Resource resource) {
@@ -52,12 +52,12 @@ public class Step4bModel implements StepModel {
 		return Lang.l().step4bModelDescription();
 	}
 
-	public void setSelectedRowsOrColumns(int[] selectedRowsOrColumns) {
-		this.selectedRowsOrColumns = selectedRowsOrColumns;
+	public void setSelectedColumns(int[] selectedColumns) {
+		this.selectedColumns = selectedColumns;
 	}
 
-	public int[] getSelectedRowsOrColumns() {
-		return selectedRowsOrColumns;
+	public int[] getSelectedColumns() {
+		return selectedColumns;
 	}
 
 	/**
