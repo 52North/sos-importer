@@ -242,7 +242,7 @@
 						<xs:documentation>A unit of measurement related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="FOIPositions" minOccurs="0">
+				<xs:element name="FOIPositions" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>In the case of having a column of FOIs, the related position information is stored here.</xs:documentation>
 					</xs:annotation>
@@ -266,25 +266,49 @@
 				<xs:element ref="Type"/>
 				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="Position" minOccurs="0"/>
-				<xs:element name="RelatedFOI" type="xs:anyURI" nillable="false" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedFOI" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>The feature of interest of THIS measured value column. The content of this element MUST match a URI element of a FeatureOfInterest from AdditionalMetadata.</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element ref="URI"/>
+							<xs:element ref="Number"/>
+						</xs:choice>
+					</xs:complexType>
 				</xs:element>
-				<xs:element name="RelatedSensor" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>The sensor of THIS measured value column. The content of this element MUST match a URI element of a Sensor from AdditionalMetadata.</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element ref="URI"/>
+							<xs:element ref="Number"/>
+						</xs:choice>
+					</xs:complexType>
 				</xs:element>
-				<xs:element name="RelatedObservedProperty" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>The observed property of THIS measured value column. The content of this element MUST match a URI element of a ObservedProperty from AdditionalMetadata.</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element ref="URI"/>
+							<xs:element ref="Number"/>
+						</xs:choice>
+					</xs:complexType>
 				</xs:element>
-				<xs:element name="RelatedUnitOfMeasurement" type="xs:anyURI" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>The unit of measure of THIS measured value column. The content of this element MUST match a URI element of a UnitOfMeasurement from AdditionalMetadata</xs:documentation>
 					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element ref="URI"/>
+							<xs:element ref="Number"/>
+						</xs:choice>
+					</xs:complexType>
 				</xs:element>
 				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
 					<xs:annotation>
