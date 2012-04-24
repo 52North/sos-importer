@@ -115,6 +115,7 @@ public class Step8Controller extends StepController {
 		File f = null;
 		
 		Logger rL = Logger.getRootLogger();
+		@SuppressWarnings("rawtypes")
 		Enumeration appender = rL.getAllAppenders();
 		while(appender.hasMoreElements()) {
 			Object o = appender.nextElement();
