@@ -120,6 +120,7 @@ public class Position extends Combination {
 	public String format(Object o) {
 		Position p = (Position) o;
 		String positionString = getPattern();
+		// TODO remove explicit string from here
 		positionString = positionString.replaceAll("LAT", p.getLatitude().getValue() + p.getLatitude().getUnit());
 		positionString = positionString.replaceAll("LON", p.getLongitude().getValue() + p.getLongitude().getUnit());
 		positionString = positionString.replaceAll("ALT", p.getHeight().getValue() + p.getHeight().getUnit());
