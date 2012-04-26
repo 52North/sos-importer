@@ -297,7 +297,7 @@ public class En extends Lang{
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "The type for this column is \"" + 
 				this.step3ColTypeUndefined() + 
-				"\".\nPlease select one.nChose \"" +
+				"\".\nPlease select one.\nChoose \"" +
 				this.step3ColTypeDoNotExport() + 
 				"\" for skipping it.";
 	}
