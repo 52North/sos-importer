@@ -40,6 +40,7 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.TablePanel;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * provides all necessary functions for modifying the table
@@ -83,7 +84,7 @@ public class TableController {
 		table.getSelectionModel().addListSelectionListener(new RowSelectionListener());
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(new ColumnSelectionListener());
-		allowMultipleSelection();
+		this.allowMultipleSelection();
 	}
 
 	public static TableController getInstance() {
@@ -295,9 +296,9 @@ public class TableController {
 	
 	public String getOrientationString() {
 		switch(orientation) {
-			case COLUMNS: return "column";
-			case ROWS: return "row";
-			default: return "";
+			case COLUMNS: return Lang.l().column(); //"column";
+			case ROWS: return Lang.l().row(); //"row";
+			default: return Lang.l().column(); // is default mode
 		}
 	}
 

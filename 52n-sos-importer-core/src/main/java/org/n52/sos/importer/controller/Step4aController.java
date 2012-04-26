@@ -200,8 +200,8 @@ public class Step4aController extends StepController {
 				if (mv == null) {
 					JOptionPane.showMessageDialog(null,
 						    Lang.l().step4aInfoMeasuredValue(),
-						    Lang.l().infoDialogTitle(),
-						    JOptionPane.INFORMATION_MESSAGE);
+						    Lang.l().errorDialogTitle(),
+						    JOptionPane.ERROR_MESSAGE);
 					tableController.deselectColumn(number);
 					return;
 				}

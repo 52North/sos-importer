@@ -62,8 +62,6 @@ public class Step7Panel extends JPanel {
 	
 	private Step7Panel _this;
 	
-	private final Step7Controller s7C;
-	
 	private JLabel saveConfigJL;
 	private JCheckBox saveConfigJCB;
 	
@@ -79,7 +77,6 @@ public class Step7Panel extends JPanel {
 	private String configFilePath = "";
 	
 	public Step7Panel(Step7Controller s7C) {
-		this.s7C = s7C;
 		this._this = this;
 		Step7Model s7M = (Step7Model) s7C.getModel();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

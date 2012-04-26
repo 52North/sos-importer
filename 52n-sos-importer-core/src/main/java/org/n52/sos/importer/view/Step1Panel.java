@@ -22,7 +22,6 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
-import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -142,8 +141,7 @@ public class Step1Panel extends JPanel {
 		pane.setEditable(false);
 		pane.setContentType(Constants.WELCOME_RES_CONTENT_TYPE);
 		pane.setText(t);
-		float[] f = Color.RGBtoHSB(238, 238, 238, null);
-		pane.setBackground(Color.getHSBColor(f[0], f[1], f[2]));
+		pane.setBackground(Constants.DEFAULT_BACKGROUND_COLOUR);
 		pane.setDragEnabled(true);
 		//
 		// Add simple hyperlink functionality -> call system Browser with URL

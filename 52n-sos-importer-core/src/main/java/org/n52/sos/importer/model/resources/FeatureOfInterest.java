@@ -36,6 +36,7 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class FeatureOfInterest extends Resource {
 	
@@ -157,5 +158,10 @@ public class FeatureOfInterest extends Resource {
 	@Override
 	public String toString() {
 		return "Feature Of Interest" + super.toString();
+	}
+
+	@Override
+	public String getTypeName() {
+		return Lang.l().featureOfInterest();
 	}
 }

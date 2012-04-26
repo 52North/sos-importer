@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration xmlns="http://52north.org/sensorweb/sos/importer/0.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://52north.org/sensorweb/sos/importer/0.2/ https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd">
+    <DataFile>
+        <LocalFile>
+            <Path>D:\Dateien\Dokumente\Feucht_TMW_small.csv</Path>
+        </LocalFile>
+    </DataFile>
+    <SosMetadata>
+        <URL>http://192.168.1.113:8080/ImportTestSOS/sos</URL>
+        <Offering autogenerate="true"/>
+    </SosMetadata>
+    <CsvMetadata>
+        <Parameter>
+            <CommentIndicator>#</CommentIndicator>
+            <ElementSeparator>Space</ElementSeparator>
+            <TextIndicator>"</TextIndicator>
+        </Parameter>
+        <FirstLineWithData>1</FirstLineWithData>
+        <UseHeader>false</UseHeader>
+        <ColumnAssignments>
+            <Column>
+                <Number>0</Number>
+                <Type>DATE_TIME</Type>
+                <Metadata>
+                    <Key>GROUP</Key>
+                    <Value>1</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>PARSE_PATTERN</Key>
+                    <Value>dd.MM.yy</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>COMBINATION</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TIME_ZONE</Key>
+                    <Value>0</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TIME_HOUR</Key>
+                    <Value>0</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TIME_MINUTE</Key>
+                    <Value>0</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TIME_SECOND</Key>
+                    <Value>0</Value>
+                </Metadata>
+            </Column>
+            <Column>
+                <Number>1</Number>
+                <Type>FOI</Type>
+            </Column>
+            <Column>
+                <Number>2</Number>
+                <Type>OBSERVED_PROPERTY</Type>
+            </Column>
+            <Column>
+                <Number>3</Number>
+                <Type>MEASURED_VALUE</Type>
+                <Metadata>
+                    <Key>DECIMAL_SEPARATOR</Key>
+                    <Value>.</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>THOUSANDS_SEPARATOR</Key>
+                    <Value>,</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>NUMERIC</Value>
+                </Metadata>
+                <RelatedUnitOfMeasurement>
+                    <URI>http://example.com/percent</URI>
+                </RelatedUnitOfMeasurement>
+            </Column>
+        </ColumnAssignments>
+    </CsvMetadata>
+    <AdditionalMetadata>
+        <Sensor>
+            <Name>Klinthal_Hygrometer</Name>
+            <URI>http://weather.com/de/saxonia/klinthal/hygrometer/001</URI>
+            <RelatedFOI>Schwarbg</RelatedFOI>
+            <RelatedObservedProperty>FEUCHT</RelatedObservedProperty>
+        </Sensor>
+        <UnitOfMeasurement>
+            <Name>%</Name>
+            <URI>http://example.com/percent</URI>
+            <Code>%</Code>
+        </UnitOfMeasurement>
+        <FOIPositions>
+            <URI>Schwarbg</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+        <FOIPositions>
+            <URI>PlauSued</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+        <FOIPositions>
+            <URI>Klinthal</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+        <FOIPositions>
+            <URI>Glauchau</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+        <FOIPositions>
+            <URI>Glauchau</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+        <FOIPositions>
+            <URI>Glauchau</URI>
+            <Position>
+                <Lat unit="deg">0.0</Lat>
+                <Long unit="deg">0.0</Long>
+                <Alt unit="meters">0.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+            </Position>
+        </FOIPositions>
+    </AdditionalMetadata>
+</SosImportConfiguration>
