@@ -37,34 +37,42 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Constants {
 	
-	public final static String SEPARATOR_STRING = "SEP";
-	public static final String SPACE_STRING = Lang.l().spaceString();
-	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
+	public static final String BOOLEAN = "BOOLEAN";
+	public static final String COMBINATION = "COMBINATION";
+	public static final String COUNT = "COUNT";
+	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
+	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE = 238;
+	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN = 238;
+	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_RED = 238;
+	public static final Color DEFAULT_COLOR_BACKGROUND = Color.getHSBColor(
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[0],
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[1],
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[2]);
+	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
+	public static final Font DEFAULT_STEP_TITLE_FONT = new Font("SansSerif", Font.BOLD, 14);
+	public static final boolean GUI_DEBUG = false;
+	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
+	public static final String NUMERIC = "NUMERIC";
 	/**
 	 * Is used to distinguish between line number and content
 	 */
 	public static final String RAW_DATA_SEPARATOR = ":";
-	public static final String UNIX_TIME = "UNIX_TIME";
-	public static final String COMBINATION = "COMBINATION";
-	public static final String NUMERIC = "NUMERIC";
-	public static final String BOOLEAN = "BOOLEAN";
-	public static final String COUNT = "COUNT";
-	public static final String TEXT = "TEXT";
+	public final static String SEPARATOR_STRING = "SEP";
+	public static final String SPACE_STRING = Lang.l().spaceString();
 	public static final String STRING_REPLACER = "-@@@-";
-	public static final boolean GUI_DEBUG = false;
-	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
-	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
-	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
-	public static final String XML_CONFIG_DEFAULT_FILE_NAME = "sos-importer-csv-file-configuration.xml";
-	private static final int DEFAULT_RED = 238;
-	private static final int DEFAULT_GREEN = 238;
-	private static final int DEFAULT_BLUE = 238;
-	public static final Color DEFAULT_BACKGROUND_COLOUR = Color.getHSBColor(
-			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[0],
-			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[1],
-			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[2]);
-	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
+	public static final String TEXT = "TEXT";
+	public static final String UNIX_TIME = "UNIX_TIME";
 	public static final String VERSION = "0.2 RC1";
+	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
+	public static final String XML_CONFIG_DEFAULT_FILE_NAME = "sos-importer-csv-file-configuration.xml";
+	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);;
 	
 	/**
 	 * TODO implement loading of language parameter from config file

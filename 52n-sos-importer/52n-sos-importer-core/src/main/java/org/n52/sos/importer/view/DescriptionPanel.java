@@ -27,6 +27,8 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.view.utils.Constants;
+
 /**
  * description label at the top of the main frame
  * @author Raimund
@@ -42,7 +44,8 @@ public class DescriptionPanel extends JPanel {
 
 	private DescriptionPanel() {
 		super();
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setLayout(new FlowLayout(FlowLayout.CENTER));
+		descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
 		this.add(descriptionLabel);
 	}
 

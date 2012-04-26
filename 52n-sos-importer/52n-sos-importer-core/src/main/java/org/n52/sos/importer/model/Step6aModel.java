@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6aModel implements StepModel {
 	
-	private final String description = "<html>What is the <u>Date & Time</u> for " + 
-	"all measured values?</html>";
+	private final String description = Lang.l().step6aModelDescription();
 	
 	private DateAndTime dateAndTime;
 

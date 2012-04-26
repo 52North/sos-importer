@@ -37,6 +37,7 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
 import org.n52.sos.importer.model.dateAndTime.Month;
 import org.n52.sos.importer.model.dateAndTime.Year;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for year, month and day
@@ -46,7 +47,7 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel dateLabel = new JLabel("Date: ");
+	private final JLabel dateLabel = new JLabel(Lang.l().date() + ": ");
 	
 	private SpinnerDateModel dateModel;
 	private JSpinner dateSpinner;

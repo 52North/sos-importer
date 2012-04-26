@@ -40,6 +40,7 @@ import javax.swing.JProgressBar;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * shows progress while assembling data, registering sensors
@@ -80,7 +81,10 @@ public class Step8Panel extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		// import if required
 		if (s7M.isDirectImport()) { 
-			JPanel progressPanel = new JPanel(new GridLayout(2, 1));
+			JPanel progressPanel = new JPanel(new GridLayout(3, 1));
+			JLabel directImportLabel = new JLabel(Lang.l().step8DirectImportLabel());
+			directImportLabel.setFont(Constants.DEFAULT_LABEL_FONT);
+			progressPanel.add(directImportLabel);
 			JPanel sensorPanel = new JPanel(new GridLayout(5, 1));
 			sensorPanel.add(registerSensorLabel);
 			sensorPanel.add(sensorProgressBar);

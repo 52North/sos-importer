@@ -86,8 +86,8 @@ public class Step1Panel extends JPanel {
 		// create gui
 		this.step1Controller = step1Controller;
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		this.add(welcomePanel);
 		this.add(languagePanel);
+		this.add(welcomePanel);
 		this.add(csvPanel);
 		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
 		browse.addActionListener(new BrowseButtonClicked());
@@ -111,6 +111,7 @@ public class Step1Panel extends JPanel {
 	private JPanel languagePanel() {
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
+		label.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
 		//
 		jcb.addActionListener(new ActionListener() {
@@ -122,7 +123,7 @@ public class Step1Panel extends JPanel {
 		});
 		jcb.setSelectedItem(Lang.getCurrentLocale());
 		jcb.setEditable(false);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panel.add(label);
 		panel.add(jcb);
 		return panel;
@@ -141,7 +142,7 @@ public class Step1Panel extends JPanel {
 		pane.setEditable(false);
 		pane.setContentType(Constants.WELCOME_RES_CONTENT_TYPE);
 		pane.setText(t);
-		pane.setBackground(Constants.DEFAULT_BACKGROUND_COLOUR);
+		pane.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
 		pane.setDragEnabled(true);
 		//
 		// Add simple hyperlink functionality -> call system Browser with URL

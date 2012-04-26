@@ -50,7 +50,7 @@ public class Step4Panel extends JPanel {
 		instructionsJTA.setFont(Constants.DEFAULT_LABEL_FONT);
 		instructionsJTA.setFocusable(false);
 		instructionsJTA.setEditable(false);
-		instructionsJTA.setBackground(Constants.DEFAULT_BACKGROUND_COLOUR);
+		instructionsJTA.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
 		instructionsJTA.setLineWrap(true);
 		this.add(instructionsJTA);
 		this.add(tablePanel);
