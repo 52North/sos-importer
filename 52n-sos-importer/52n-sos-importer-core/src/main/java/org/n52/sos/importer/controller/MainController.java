@@ -82,7 +82,6 @@ public class MainController {
 	    this.mainFrame.setStepPanel(stepController.getStepPanel());
 	    this.xmlModel.registerProvider(stepController.getModel());
 		bNM.setCurrentStepController(stepController);
-		
 	}
 	
 	protected void updateModel() {

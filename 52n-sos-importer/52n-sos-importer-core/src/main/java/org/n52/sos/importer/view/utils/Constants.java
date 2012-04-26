@@ -76,10 +76,10 @@ public class Constants {
 	
 	/**
 	 * TODO implement loading of language parameter from config file
-	 * @return en
+	 * @return {@linkplain org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
 	 */
 	public static String language() {
-		return "en";
+		return Lang.l().getClass().getSimpleName();
 	}
 
 }
