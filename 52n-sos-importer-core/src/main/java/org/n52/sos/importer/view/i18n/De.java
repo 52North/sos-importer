@@ -390,9 +390,11 @@ public class De extends Lang{
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "Der Typ für die Spalte ist \"" + 
 				this.step3ColTypeUndefined() + 
-				"\".\nBitte wählen Sie einen anderen Typ. Sollten Sie diese" +
-				"Spalte überspringen (= nicht exportieren) wollen, dann " +
-				"wählen Sie bitte als Type \n\"" +
+				"\".\n" +
+				"Bitte wählen Sie einen anderen Typ.\n" +
+				"Sollten Sie diese Spalte überspringen\n" +
+				"(= nicht exportieren) wollen, dann " +
+				"wählen Sie bitte als Typ \n\"" +
 				this.step3ColTypeDoNotExport() + 
 				"\".";
 	}
@@ -526,7 +528,7 @@ public class De extends Lang{
 	 * @return Step 4b: Solve ambiguities
 	 */
 	public String step4bDescription() {
-		return this.step() + " 4b: Käre Unklarheiten";
+		return this.step() + " 4b: Kläre Unklarheiten";
 	}
 
 	/**
