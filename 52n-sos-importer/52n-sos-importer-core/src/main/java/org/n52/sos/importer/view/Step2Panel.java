@@ -37,6 +37,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -50,6 +51,8 @@ import org.n52.sos.importer.view.utils.ToolTips;
  *
  */
 public class Step2Panel extends JPanel {
+	
+	private static final Logger logger = Logger.getLogger(Step2Panel.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -114,8 +117,12 @@ public class Step2Panel extends JPanel {
 		useHeaderJCB = new JCheckBox();
 		useHeaderJCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub generated on 23.03.2012 around 10:51:36
-				
+				// do nothing, state of check box will be saved during step 
+				// controller switch
+				if (logger.isDebugEnabled()) {
+					logger.debug("useHeader state changed. is selected?" + 
+							useHeaderJCB.isSelected());
+				}
 			}
 		});
 		useHeaderJCB.setSelected(false);

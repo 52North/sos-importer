@@ -38,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
@@ -70,33 +71,57 @@ public class Step8Panel extends JPanel {
 	
 	private JButton logFileButton = new JButton();
 	
-	public Step8Panel() {
+	private JButton configFileButton = new JButton();
+	
+	public Step8Panel(final Step7Model s7M) {
 		sensorProgressBar.setStringPainted(true);
 		observationProgressBar.setStringPainted(true);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		JPanel progressPanel = new JPanel(new GridLayout(2, 1));
-		JPanel sensorPanel = new JPanel(new GridLayout(5, 1));
-		sensorPanel.add(registerSensorLabel);
-		sensorPanel.add(sensorProgressBar);
-		sensorPanel.add(successfulSensorsLabel);
-		sensorPanel.add(erroneousSensorsLabel);
-		sensorPanel.add(new JLabel(""));
-		progressPanel.add(sensorPanel);
+		// import if required
+		if (s7M.isDirectImport()) { 
+			JPanel progressPanel = new JPanel(new GridLayout(2, 1));
+			JPanel sensorPanel = new JPanel(new GridLayout(5, 1));
+			sensorPanel.add(registerSensorLabel);
+			sensorPanel.add(sensorProgressBar);
+			sensorPanel.add(successfulSensorsLabel);
+			sensorPanel.add(erroneousSensorsLabel);
+			sensorPanel.add(new JLabel(""));
+			progressPanel.add(sensorPanel);
 
-		JPanel observationPanel = new JPanel(new GridLayout(5, 1));
-		observationPanel.add(insertObservationLabel);
-		observationPanel.add(observationProgressBar);
-		observationPanel.add(successfulObservationsLabel);
-		observationPanel.add(erroneousObservationsLabel);
-		observationPanel.add(new JLabel(""));
-		progressPanel.add(observationPanel);
-		
-		progressPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		this.add(progressPanel);
+			JPanel observationPanel = new JPanel(new GridLayout(5, 1));
+			observationPanel.add(insertObservationLabel);
+			observationPanel.add(observationProgressBar);
+			observationPanel.add(successfulObservationsLabel);
+			observationPanel.add(erroneousObservationsLabel);
+			observationPanel.add(new JLabel(""));
+			progressPanel.add(observationPanel);
+
+			progressPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+			this.add(progressPanel);
+		}
 		logFileButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-		logFileButton.setText(Lang.l().step8LogFileLabel());
+		logFileButton.setText(Lang.l().step8LogFileButton());
 		this.add(logFileButton);
+		
+		if (s7M.isSaveConfig()) {
+			configFileButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+			configFileButton.setText(Lang.l().step8ConfigFileButton());
+			configFileButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Desktop desktop = Desktop.getDesktop();
+					try {
+			            desktop.browse(s7M.getConfigFile().toURI());
+					} catch (IOException ioe) {
+						logger.error("Unable to open log file: " + ioe.getMessage());
+					}
+				}
+			});
+			configFileButton.setEnabled(true);
+			configFileButton.setVisible(true);
+			this.add(configFileButton);
+		}
 	}
 	
 	public void setIndeterminate(boolean aFlag) {
@@ -136,7 +161,9 @@ public class Step8Panel extends JPanel {
 	}
 	
 	public void setLogFileURI(final URI uri) {
-		logger.info("Log file is saved at: " + uri);
+		if (logger.isTraceEnabled()) {
+			logger.trace("setLogFileURI(" + uri + ")");
+		}
 		logFileButton.addActionListener(new ActionListener() {
 			
 			@Override

@@ -23,13 +23,10 @@
  */
 package org.n52.sos.importer.view.i18n;
 
+import java.io.File;
 import java.util.Locale;
 
 import org.n52.sos.importer.view.utils.Constants;
-
-
-
-
 
 /**
  * @author e.h.juerrens@52north.org
@@ -39,18 +36,58 @@ public class De extends Lang{
 	
 	private final static Locale locale = Locale.GERMAN;
 	
+	@Override
+	public String altitude() {
+		return "Höhe";
+	}
+	
+	@Override
+	public String and() {
+		return "und";
+	}
+
 	/**
 	 * @return Back
 	 */
 	public String backButtonLabel() {
 		return "Zurück";
 	}
-	
+
+	@Override
+	public String day() {
+		return "Tag";
+	}
+
+	@Override
+	public String epsgCode() {
+		return "EPSG-Kennzahl";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogNaturalNumber() {
+		return "Die " + this.epsgCode() + " muss eine natürliche Zahl sein.";
+	}
+
+	@Override
+	public String epsgCodeWarningDialogOutOfRange() {
+		return "Die " + this.epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
+	}
+
+	@Override
+	public String error() {
+		return "Fehler";
+	}
+
 	/**
 	 * @return Error
 	 */
 	public String errorDialogTitle() {
 		return "Fehler";
+	}
+
+	@Override
+	public String example() {
+		return "Beispiel";
 	}
 
 	/**
@@ -86,6 +123,31 @@ public class De extends Lang{
 		return "Beenden";
 	}
 
+	@Override
+	public String format() {
+		return "Format";
+	}
+
+	@Override
+	public Locale getLocale() {
+		return De.locale;
+	}
+	
+	@Override
+	public String group() {
+		return "Gruppe";
+	}
+
+	@Override
+	public String heightWarningDialogDecimalNumber() {
+		return "Die " + this.altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String hours() {
+		return "Stunden";
+	}
+
 	/**
 	 * @return Info
 	 */
@@ -93,11 +155,41 @@ public class De extends Lang{
 		return "Information";
 	}
 
+	@Override
+	public String latitudeDialogDecimalValue() {
+		return "Der " + this.latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String latitudeNorthing() {
+		return "Breitengrad / Hochwert";
+	}
+
+	@Override
+	public String longitudeDialogDecimalValue() {
+		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+	}
+
+	@Override
+	public String longitudeEasting() {
+		return "Längengrad / Rechtswert";
+	}
+
 	/**
 	 * @return measured value
 	 */
 	public String measuredValue() {
 		return "Messwert";
+	}
+
+	@Override
+	public String minutes() {
+		return "Minuten";
+	}
+
+	@Override
+	public String month() {
+		return "Monat";
 	}
 
 	/**
@@ -121,6 +213,10 @@ public class De extends Lang{
 		return "Tausender-Trennzeichen";
 	}
 
+	public String observation() {
+		return "Beobachtung";
+	}
+
 	/**
 	 * @return Observed Property
 	 */
@@ -141,6 +237,16 @@ public class De extends Lang{
 	public String position() {
 		return "Position";
 	}
+	
+	@Override
+	public String referenceSystem() {
+		return "Referenzsystem";
+	}
+
+	@Override
+	public String seconds() {
+		return "Sekunden";
+	}
 
 	/**
 	 * @return Sensor
@@ -149,13 +255,18 @@ public class De extends Lang{
 		return "Sensor";
 	}
 
+	@Override
+	public String sosURL() {
+		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
+	}
+
 	/**
 	 * @return Space
 	 */
 	public String spaceString() {
 		return "Leerzeichen";
 	}
-	
+
 	public String step() {
 		return "Schritt";
 	}
@@ -181,18 +292,28 @@ public class De extends Lang{
 		return "CSV-Datei";
 	}
 
+	@Override
+	public String step1SelectLanguage() {
+		return "Bitte wählen Sie die Sprache aus";
+	}
+
 	/**
 	 * @return Column separator
 	 */
 	public String step2ColumnSeparator() {
 		return "Spalten-Trenner";
 	}
-
+	
 	/**
 	 * @return Comment indicator
 	 */
 	public String step2CommentIndicator() {
 		return "Kommentar-Indikator";
+	}
+
+	@Override
+	public String step2DataPreviewLabel() {
+		return "Datendatei-Vorschau";
 	}
 
 	/**
@@ -228,6 +349,47 @@ public class De extends Lang{
 	 */
 	public String step3aDescription() {
 		return this.step() + " 3a: Wählen Sie die Metainformationen für die aktuelle Spalte";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogMessage() {
+		return "Es muss mindestens 1 " + this.measuredValue() + "-Spalte definiert werden!";
+	}
+
+	@Override
+	public String step3aMeasureValueColMissingDialogTitle() {
+		return this.measuredValue() + "-Spalte fehlt!";
+	}
+
+	@Override
+	public String step3aParseTest1Failed() {
+		return "1 Wert nicht einlesbar.";
+	}
+
+	@Override
+	public String step3aParseTestAllOk() {
+		return "Alle Werte einlesbar.";
+	}
+
+	@Override
+	public String step3aParseTestNFailed(int n) {
+		return n + " Werte nicht einlesbar.";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedMsg() {
+		return "Der Typ für die Spalte ist \"" + 
+				this.step3ColTypeUndefined() + 
+				"\".\nBitte einen anderen wählen.\n\"" +
+				this.step3ColTypeDoNotExport() + 
+				"\" um die Spalte zu überspringen.";
+	}
+
+	@Override
+	public String step3aSelectedColTypeUndefinedTitle() {
+		return "Spalten-Typ ist \"" + 
+				this.step3ColTypeUndefined() + 
+				"\"";
 	}
 
 	/**
@@ -278,7 +440,7 @@ public class De extends Lang{
 	public String step3DateAndTimeUnixTime() {
 		return "UNIX-Zeit";
 	}
-	
+
 	/**
 	 * @return Boolean
 	 */
@@ -364,7 +526,12 @@ public class De extends Lang{
 	public String step4bInfoNotMeasuredValue() {
 		return this.step4aInfoMeasuredValue();
 	}
-	
+
+	@Override
+	protected String step4bInfoResourceAlreadSetText() {
+		return " schon gesetzt für ";
+	}
+
 	/**
 	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> corresponds to.
 	 */
@@ -462,6 +629,16 @@ public class De extends Lang{
 		return this.step() + " 7: Geben Sie den " + this.sos() + " an";
 	}
 
+	@Override
+	public String step7DirectImport() {
+		return "Im nächsten Schritt die Daten in den SOS importieren";
+	}
+
+	@Override
+	public String step7SaveConfig() {
+		return "Konfiguration in XML-Datei speichern";
+	}
+
 	/**
 	 * @param strURL
 	 * @param responseCode
@@ -492,10 +669,6 @@ public class De extends Lang{
 		return this.step() + " 8: Registriere " + this.sensor() + "en und lade " + this.observation() + "en in den " + this.sos();
 	}
 
-	public String observation() {
-		return "Beobachtung";
-	}
-
 	/**
 	 * @param i
 	 * @return Errors: <code>i</code>
@@ -515,7 +688,7 @@ public class De extends Lang{
 	/**
 	 * @return Check log file
 	 */
-	public String step8LogFileLabel() {
+	public String step8LogFileButton() {
 		return "Prüfen Sie die Logdatei";
 	}
 
@@ -535,6 +708,21 @@ public class De extends Lang{
 		return "Erfolgreich: " + i;
 	}
 
+	@Override
+	public String time() {
+		return "Zeit";
+	}
+
+	@Override
+	public String timeZone() {
+		return "Zeitzone (UTC-Abstand)";
+	}
+
+	@Override
+	public String unit() {
+		return "Einheit";
+	}
+
 	/**
 	 * @return Unit of Measurement
 	 */
@@ -550,189 +738,43 @@ public class De extends Lang{
 	}
 
 	@Override
-	public Locale getLocale() {
-		return De.locale;
-	}
-
-	@Override
-	protected String step4bInfoResourceAlreadSetText() {
-		return " schon gesetzt für ";
-	}
-
-	@Override
-	public String step1SelectLanguage() {
-		return "Bitte wählen Sie die Sprache aus";
-	}
-
-	@Override
-	public String day() {
-		return "Tag";
-	}
-
-	@Override
-	public String hours() {
-		return "Stunden";
-	}
-
-	@Override
-	public String minutes() {
-		return "Minuten";
-	}
-
-	@Override
-	public String month() {
-		return "Monat";
-	}
-
-	@Override
-	public String seconds() {
-		return "Sekunden";
-	}
-
-	@Override
-	public String time() {
-		return "Zeit";
-	}
-
-	@Override
-	public String timeZone() {
-		return "Zeitzone (UTC-Abstand)";
-	}
-
-	@Override
 	public String year() {
 		return "Jahr";
 	}
 
 	@Override
-	public String epsgCode() {
-		return "EPSG-Kennzahl";
+	public String step7ConfigFileButton() {
+		return "Verzeichnis wählen";
 	}
 
 	@Override
-	public String referenceSystem() {
-		return "Referenzsystem";
+	public String step7ConfigFileDialogTitel() {
+		return "Bitte das Verzeichnis für die Konfigurations-Datei wählen";
 	}
 
 	@Override
-	public String epsgCodeWarningDialogNaturalNumber() {
-		return "Die " + this.epsgCode() + " muss eine natürliche Zahl sein.";
+	public String step7ConfigDirNotDirOrWriteable(String folder) {
+		return "Auf das Verzeichnis \n\"" + 
+				folder + "\"\n kann nicht zugegriffen werden";
 	}
 
 	@Override
-	public String epsgCodeWarningDialogOutOfRange() {
-		return "Die " + this.epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
+	public String step7ConfigFileLabel() {
+		return "Konfigurations-Dateiname und -verzeichnis";
+	}
+	
+	@Override
+	public String step8SaveModelFailed(File f, String exceptionText) {
+		return "Die Konfiguration konnte nicht in der Datei\n\"" +
+				f.getAbsolutePath() +
+				"\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
+				exceptionText +
+				"Für weitere Informationen bitte die Logdatei konsultieren.";
 	}
 
 	@Override
-	public String heightWarningDialogDecimalNumber() {
-		return "Die " + this.altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
-	}
-
-	@Override
-	public String altitude() {
-		return "Höhe";
-	}
-
-	@Override
-	public String unit() {
-		return "Einheit";
-	}
-
-	@Override
-	public String latitudeDialogDecimalValue() {
-		return "Der " + this.latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
-	}
-
-	@Override
-	public String latitudeNorthing() {
-		return "Breitengrad / Hochwert";
-	}
-
-	@Override
-	public String longitudeEasting() {
-		return "Längengrad / Rechtswert";
-	}
-
-	@Override
-	public String longitudeDialogDecimalValue() {
-		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
-	}
-
-	@Override
-	public String group() {
-		return "Gruppe";
-	}
-
-	@Override
-	public String example() {
-		return "Beispiel";
-	}
-
-	@Override
-	public String format() {
-		return "Format";
-	}
-
-	@Override
-	public String error() {
-		return "Fehler";
-	}
-
-	@Override
-	public String step3aParseTestAllOk() {
-		return "Alle Werte einlesbar.";
-	}
-
-	@Override
-	public String step3aParseTest1Failed() {
-		return "1 Wert nicht einlesbar.";
-	}
-
-	@Override
-	public String step3aParseTestNFailed(int n) {
-		return n + " Werte nicht einlesbar.";
-	}
-
-	@Override
-	public String step3aMeasureValueColMissingDialogTitle() {
-		return this.measuredValue() + "-Spalte fehlt!";
-	}
-
-	@Override
-	public String step3aMeasureValueColMissingDialogMessage() {
-		return "Es muss mindestens 1 " + this.measuredValue() + "-Spalte definiert werden!";
-	}
-
-	@Override
-	public String and() {
-		return "und";
-	}
-
-	@Override
-	public String sosURL() {
-		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
-	}
-
-	@Override
-	public String step3aSelectedColTypeUndefinedMsg() {
-		return "Der Typ für die Spalte ist \"" + 
-				this.step3ColTypeUndefined() + 
-				"\".\nBitte einen anderen wählen.\n\"" +
-				this.step3ColTypeDoNotExport() + 
-				"\" um die Spalte zu überspringen.";
-	}
-
-	@Override
-	public String step3aSelectedColTypeUndefinedTitle() {
-		return "Spalten-Typ ist \"" + 
-				this.step3ColTypeUndefined() + 
-				"\"";
-	}
-
-	@Override
-	public String step2DataPreviewLabel() {
-		return "Datendatei-Vorschau";
+	public String step8ConfigFileButton() {
+		return "Konfigurationsdatei öffnen";
 	}
 
 }

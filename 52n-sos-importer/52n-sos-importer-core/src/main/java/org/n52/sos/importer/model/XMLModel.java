@@ -23,9 +23,7 @@
  */
 package org.n52.sos.importer.model;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,11 +63,13 @@ import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.LongDocument.Long;
 import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x02.ObservedPropertyDocument.ObservedProperty;
+import org.x52North.sensorweb.sos.importer.x02.OfferingDocument.Offering;
 import org.x52North.sensorweb.sos.importer.x02.ParameterDocument.Parameter;
 import org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position;
 import org.x52North.sensorweb.sos.importer.x02.SensorDocument.Sensor;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x02.SosMetadataDocument.SosMetadata;
 import org.x52North.sensorweb.sos.importer.x02.TypeDocument.Type;
 import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementDocument.UnitOfMeasurement;
 
@@ -125,7 +125,11 @@ public class XMLModel {
 
 	public boolean registerProvider(StepModel sm) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("registerProvider()");
+			logger.trace("registerProvider(" + 
+					(sm.getClass().getSimpleName()==null?
+							sm.getClass():
+								sm.getClass().getSimpleName()) +
+					")");
 		}
 		//
 		ArrayList<StepModel> sMs;
@@ -139,7 +143,11 @@ public class XMLModel {
 
 	public boolean removeProvider(StepModel sm) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("removeProvider()");
+			logger.trace("removeProvider(" +  
+					(sm.getClass().getSimpleName()==null? 
+							sm.getClass(): 
+								sm.getClass().getSimpleName()) + 
+								")");
 		}
 		//
 		ArrayList<StepModel> provider;
@@ -153,7 +161,7 @@ public class XMLModel {
 
 	public boolean save(File file) throws IOException {
 		if (logger.isTraceEnabled()) {
-			logger.trace("save()");
+			logger.trace("save(" + file!=null?file.getName():file + ")");
 		}
 		//
 		// we save only valid configurations
@@ -163,7 +171,7 @@ public class XMLModel {
 		if (file != null) {
 			if (!file.exists()) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("file " + file
+					logger.debug("File " + file
 							+ " does not exist. Try to create it.");
 				}
 				if (!file.createNewFile()) {
@@ -176,16 +184,15 @@ public class XMLModel {
 			}
 			if (file.isFile()) {
 				if (file.canWrite()) {
-					FileWriter fw = new FileWriter(file);
-					BufferedWriter bw = new BufferedWriter(fw);
-					SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory
-							.newInstance();
+					SosImportConfigurationDocument doc = 
+						SosImportConfigurationDocument.Factory.newInstance();
+					XmlOptions xmlOpts = new XmlOptions()
+						.setSavePrettyPrint()
+						.setSavePrettyPrintIndent(4)
+						.setUseDefaultNamespace();
 					doc.setSosImportConfiguration(sosImpConf);
-					bw.write(doc.xmlText(new XmlOptions().setSavePrettyPrint()
-							.setSavePrettyPrintIndent(4)));
-					bw.flush();
-					bw.close();
-					fw.close();
+					doc.save(file, xmlOpts);
+					return true;
 				} else {
 					logger.error("model not saved: could not write to file: "
 							+ file);
@@ -263,6 +270,10 @@ public class XMLModel {
 					Step6cModel s6cM = (Step6cModel) sm;
 					handleStep6cModel(s6cM);
 					//
+				} else if (sm instanceof Step7Model) {
+					//
+					Step7Model s7M = (Step7Model) sm;
+					handleStep7Model(s7M);
 				}
 			}
 		}
@@ -936,6 +947,37 @@ public class XMLModel {
 			if (logger.isDebugEnabled()) {
 				logger.debug("foi pos updated: " + foiPos.xmlText());
 			}
+		}
+	}
+
+	/**
+	 * Just save the SOS URL
+	 * @param s7m
+	 */
+	private void handleStep7Model(Step7Model s7M) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\thandleStep7Model()");
+		}
+		SosMetadata sosMeta;
+		Offering off;
+		sosMeta = this.sosImpConf.getSosMetadata();
+		if (sosMeta == null) {
+			sosMeta = this.sosImpConf.addNewSosMetadata();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new SosMetadata element.");
+			}
+		}
+		sosMeta.setURL(s7M.getSosURL());
+		off = sosMeta.getOffering();
+		if (off == null) {
+			off = sosMeta.addNewOffering();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new Offering element");
+			}
+		}
+		// TODO change if is contained in model in future
+		if (!off.isSetAutogenerate() || (off.isSetAutogenerate() && !off.getAutogenerate()) ) {
+			off.setAutogenerate(true);
 		}
 	}
 

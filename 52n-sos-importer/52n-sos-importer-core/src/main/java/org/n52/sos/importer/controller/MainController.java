@@ -109,7 +109,7 @@ public class MainController {
 		this.mainFrame.updateTitle(csvFilePath);
 	}
 
-	public void saveModel(File file) throws IOException {
-		this.xmlModel.save(file);
+	public boolean saveModel(File file) throws IOException {
+		return this.xmlModel.save(file);
 	}
 }

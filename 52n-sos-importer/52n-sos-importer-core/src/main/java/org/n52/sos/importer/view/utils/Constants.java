@@ -54,6 +54,7 @@ public class Constants {
 	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
 	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
 	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String XML_CONFIG_DEFAULT_FILE_NAME = "sos-importer-csv-file-configuration.xml";
 	/**
 	 * TODO implement loading of language parameter from config file
 	 * @return en
