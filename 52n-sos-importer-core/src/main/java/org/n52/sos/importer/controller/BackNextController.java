@@ -24,6 +24,7 @@
 package org.n52.sos.importer.controller;
 
 import org.n52.sos.importer.model.BackNextModel;
+import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.BackNextPanel;
 
 /**
@@ -35,12 +36,12 @@ public class BackNextController {
 	
 	private static BackNextController instance = null;
 	
-	private BackNextModel backNextModel = null;
+	private BackNextModel bNModel = null;
 	
 	private BackNextPanel backNextPanel = null;
 	
 	private BackNextController() {
-		this.backNextModel = new BackNextModel();
+		this.bNModel = new BackNextModel();
 		this.backNextPanel = BackNextPanel.getInstance();
 	}
 
@@ -74,17 +75,17 @@ public class BackNextController {
 	}
 	
 	public void backButtonPressed() {
-		StepController currentSC = this.backNextModel.getCurrentStepController();
+		StepController currentSC = this.bNModel.getCurrentStepController();
 		currentSC.back();
-		this.backNextModel.addFollowingStepController(currentSC);
-		StepController previousSC = this.backNextModel.getPreviousStepController();
+		this.bNModel.addFollowingStepController(currentSC);
+		StepController previousSC = this.bNModel.getPreviousStepController();
 		MainController mC = MainController.getInstance();
 		mC.setStepController(previousSC);
 		mC.removeProvider(currentSC.getModel());
 	}
 	
 	public void nextButtonClicked() {
-		StepController currentSC = this.backNextModel.getCurrentStepController();
+		StepController currentSC = this.bNModel.getCurrentStepController();
 		// handle potential language switch
 		if(currentSC instanceof Step1Controller) {
 			this.backNextPanel = BackNextPanel.getInstance();
@@ -99,10 +100,10 @@ public class BackNextController {
 		// update the xml model, too
 		mC.updateModel();
 		// put controller on stack
-		this.backNextModel.addPreviousStepController(currentSC);
+		this.bNModel.addPreviousStepController(currentSC);
 		//
 		// when has already been to the next step
-		StepController followingSC = this.backNextModel.getFollowingStepController();
+		StepController followingSC = this.bNModel.getFollowingStepController();
 		if (followingSC != null && followingSC.isStillValid()) {
 			mC.setStepController(followingSC);
 			mC.removeProvider(currentSC.getModel());
@@ -137,6 +138,25 @@ public class BackNextController {
 	}
 	
 	public BackNextModel getModel() {
-		return this.backNextModel;
+		return this.bNModel;
+	}
+
+	/**
+	 * At least only required by Step 1 during the language switch.
+	 * 
+	 */
+	public void restartCurrentStep() {
+		StepController currentSC = this.bNModel.getCurrentStepController();
+		MainController mc = MainController.getInstance();
+		mc.setStepController(currentSC);
+		// Update Frame-Title if possible
+		if (currentSC instanceof Step1Controller) {
+			Step1Controller s1C = (Step1Controller) currentSC;
+			Step1Model s1M = (Step1Model) s1C.getModel();
+			mc.updateTitle(s1M.getCSVFilePath());
+			// Update Back-Next-Buttons
+			this.backNextPanel = BackNextPanel.getInstance();
+		}
+
 	}
 }

@@ -46,6 +46,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.controller.Step1Controller;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
@@ -113,16 +114,19 @@ public class Step1Panel extends JPanel {
 		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
 		label.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
+		jcb.setSelectedItem(Lang.getCurrentLocale());
+		jcb.setEditable(false);
 		//
 		jcb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb = (JComboBox)e.getSource();
 		        Locale selectedLocale = (Locale)cb.getSelectedItem();
 		        Lang.setCurrentLocale(selectedLocale);
+		        // restart application drawing -> BUG 619 
+		        BackNextController.getInstance().restartCurrentStep();
 			}
 		});
-		jcb.setSelectedItem(Lang.getCurrentLocale());
-		jcb.setEditable(false);
+		//
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panel.add(label);
 		panel.add(jcb);
