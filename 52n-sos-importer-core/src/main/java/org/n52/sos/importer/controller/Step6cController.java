@@ -86,6 +86,7 @@ public class Step6cController extends StepController {
 		String description = step6cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
 		step6cPanel = new Step6Panel(description, name, null, missingComponentPanels);	
+		BackNextController.getInstance().setNextButtonEnabled(isFinished());
 	}
 
 	@Override

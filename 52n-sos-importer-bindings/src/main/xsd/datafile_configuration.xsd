@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) by Cornelia Müller (52°North GmbH) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.2/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.2/" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!-- 
 			
@@ -84,7 +83,7 @@
 	</xs:element>
 	<xs:element name="Name" type="xs:string" nillable="false">
 		<xs:annotation>
-			<xs:documentation>Human readable name of a resource like FOI, Sensor,...</xs:documentation>
+			<xs:documentation>Human readable name of a resource like FOI, Sensor, Observed Property,...</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="Number">
@@ -242,7 +241,7 @@
 						<xs:documentation>A unit of measurement related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="FOIPositions" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="FOIPosition" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>In the case of having a column of FOIs, the related position information is stored here.</xs:documentation>
 					</xs:annotation>

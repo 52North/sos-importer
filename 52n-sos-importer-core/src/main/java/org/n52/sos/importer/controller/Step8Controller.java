@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -48,7 +49,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.Step8Model;
+import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
@@ -76,7 +77,7 @@ public class Step8Controller extends StepController {
 
 	private Step8Panel step8Panel;
 	
-	private Step8Model step8Model;
+	private Step7Model step7Model;
 	
 	private HttpClient httpClient;
 	
@@ -98,8 +99,8 @@ public class Step8Controller extends StepController {
 
 	private TableController tableController;
 	
-	public Step8Controller(Step8Model step8Model, int firstLineWithData) {
-		this.step8Model = step8Model;
+	public Step8Controller(Step7Model step7Model, int firstLineWithData) {
+		this.step7Model = step7Model;
 		this.tableController = TableController.getInstance();
 	}
 	
@@ -110,7 +111,7 @@ public class Step8Controller extends StepController {
 	 */
 	@Override
 	public void loadSettings() {		
-		step8Panel = new Step8Panel();
+		step8Panel = new Step8Panel(step7Model);
 		BackNextController.getInstance().changeNextToFinish();
 		File f = null;
 		
@@ -123,19 +124,37 @@ public class Step8Controller extends StepController {
 				FileAppender fA = (FileAppender) o;
 				f = new File(fA.getFile());
 				step8Panel.setLogFileURI(f.toURI());
-				logger.info("Log file is stored at: " + f.toString());
+				logger.info("Log saved to file: " + f.getAbsolutePath());
 			}
 		}
-
-		assembleInformation = new AssembleInformation();
-		registerSensors = new RegisterSensors();
-		insertObservations = new InsertObservations();
-		cancelled = false;
-		assembleInformation.execute();
+		// Import only, if required
+		if (step7Model.isDirectImport()) {
+			assembleInformation = new AssembleInformation();
+			registerSensors = new RegisterSensors();
+			insertObservations = new InsertObservations();
+			cancelled = false;
+			assembleInformation.execute();
+		}
+		// save model, if required
+		if (step7Model.isSaveConfig()) {
+			try {
+				if (MainController.getInstance().saveModel(step7Model.getConfigFile())) {
+					if (logger.isInfoEnabled()) {
+						logger.info("Configuration saved to file: " + step7Model.getConfigFile().getAbsolutePath());
+					}
+				}
+			} catch (IOException e) {
+				logger.error("Exception thrown: " + e.getMessage(), e);
+				JOptionPane.showMessageDialog(step8Panel, 
+						Lang.l().step8SaveModelFailed(f,e.getLocalizedMessage()), 
+						Lang.l().errorDialogTitle(), 
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
 	public void assembleInformationDone() {
-		String sosURL = step8Model.getSosURL();
+		String sosURL = step7Model.getSosURL();
 		connectToSOS(sosURL);
 
 		registerSensors.execute();
@@ -394,11 +413,11 @@ public class Step8Controller extends StepController {
         
 		@Override
         public void done() {
-        	if (!cancelled) {
-    		disconnectFromSOS();
-    		Toolkit.getDefaultToolkit().beep();
-    		BackNextController.getInstance().setFinishButtonEnabled(true);
-        	}
+			if (!cancelled) {
+				disconnectFromSOS();
+				Toolkit.getDefaultToolkit().beep();
+				BackNextController.getInstance().setFinishButtonEnabled(true);
+			}
         }
     }
     
@@ -494,15 +513,21 @@ public class Step8Controller extends StepController {
 	public void back() {
 		BackNextController.getInstance().changeFinishToNext();
 		cancelled = true;
-		assembleInformation.cancel(true);
-		registerSensors.cancel(true);
-		insertObservations.cancel(true);
+		if (assembleInformation != null) {
+			assembleInformation.cancel(true);
+		}
+		if (registerSensors != null) {
+			registerSensors.cancel(true);
+		}
+		if (insertObservations != null) {
+			insertObservations.cancel(true);
+		}
 		ModelStore.getInstance().clearObservationsToInsert();
 		ModelStore.getInstance().clearSensorsToRegister();
 	}
 
 	@Override
 	public StepModel getModel() {
-		return this.step8Model;
+		return this.step7Model;
 	}
 }

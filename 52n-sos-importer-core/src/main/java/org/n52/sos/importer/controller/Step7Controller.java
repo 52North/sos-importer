@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -31,7 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.model.Step8Model;
+import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -46,22 +47,47 @@ public class Step7Controller extends StepController {
 
 	private static final Logger logger = Logger.getLogger(Step7Controller.class);
 	
-	private Step7Panel step7Panel;
+	private Step7Panel s7P;
+	
+	private Step7Model s7M;
 	
 	private int firstLineWithData;
 	
 	public Step7Controller(int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
+		this.s7M = new Step7Model();
 	}
 	
 	@Override
 	public void loadSettings() {
-		step7Panel = new Step7Panel();
+		s7P = new Step7Panel(this);
+		if (this.s7M != null) {
+			s7P.setSaveConfig(s7M.isSaveConfig());
+			s7P.setDirectImport(s7M.isDirectImport());
+			if (s7M.getSosURL() != null) {
+				s7P.setSOSURL(s7M.getSosURL());
+			}
+			if (s7M.getConfigFile() != null) {
+				s7P.setConfigFile(s7M.getConfigFile().getAbsolutePath());
+			}
+		}
 		BackNextController.getInstance().changeFinishToNext();
 	}
 
 	@Override
-	public void saveSettings() {		
+	public void saveSettings() {
+		String sosURL = s7P.getSOSURL();
+		boolean directImport = s7P.isDirectImport(),
+				saveConfig = s7P.isSaveConfig();
+		File configFile = new File(s7P.getConfigFile());
+		if (this.s7M == null) {
+			this.s7M = new Step7Model(sosURL, directImport, saveConfig, configFile);
+		} else {
+			s7M.setSosURL(sosURL);
+			s7M.setConfigFile(configFile);
+			s7M.setDirectImport(directImport);
+			s7M.setSaveConfig(saveConfig);
+		}
 	}
 
 	@Override
@@ -71,13 +97,12 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public JPanel getStepPanel() {
-		return step7Panel;
+		return s7P;
 	}
 
 	@Override
 	public StepController getNextStepController() {
-		String url = step7Panel.getSOSURL();
-		return new Step8Controller(new Step8Model(url),this.firstLineWithData);
+		return new Step8Controller(s7M,this.firstLineWithData);
 	}
 
 	@Override
@@ -88,13 +113,24 @@ public class Step7Controller extends StepController {
 	@Override
 	public boolean isFinished() {
 		//get and check URI
-		String url = step7Panel.getSOSURL();
-		return testConnection(url);
+		boolean result = true;
+		// check inputs 
+		if (s7P.isDirectImport()) {
+			String url = s7P.getSOSURL();
+			result = result && testConnection(url);
+		}
+		if (s7P.isSaveConfig()) {
+			// show dialog about successful save and the location of the file
+		}
+		return result;
 	}
 	
 	public boolean testConnection(String strURL) {
 	    try {
+	    	// TODO Expand -> Send get capabilities request
 	        URL url = new URL(strURL);
+	        // FIXME long timeout if service is not available
+	        // TODO add proxy handling: http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
 	        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 	        urlConn.connect();
 
@@ -128,6 +164,7 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public StepModel getModel() {
-		return null;
-	}	
+		return this.s7M;
+	}
+
 }
