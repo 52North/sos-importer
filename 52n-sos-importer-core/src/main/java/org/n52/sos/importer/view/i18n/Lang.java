@@ -87,6 +87,10 @@ public abstract class Lang {
 	 */
 	public abstract String column();
 	/**
+	 * @return Date
+	 */
+	public abstract String date();
+	/**
 	 * @return Day
 	 */
 	public abstract String day();
@@ -477,6 +481,10 @@ public abstract class Lang {
 	 */
 	public abstract String step6aDescription();
 	/**
+	 * @return <html>What is the <u>Date & Time</u> for all measured values?</html>
+	 */
+	public abstract String step6aModelDescription();
+	/**
 	 * @return Step 6b: Add missing metadata
 	 */
 	public abstract String step6bDescription();
@@ -542,14 +550,19 @@ public abstract class Lang {
 	 * @return Connection to Sensor Observation Service <code>strURL</code> failed. Reason: <code>message</code>
 	 */
 	public abstract String step7SOSConnectionFailedException(String strURL,String message);
+	
 	/**
 	 * @return Open Configuration File
 	 */
 	public abstract String step8ConfigFileButton();
 	/**
-	 * @return Step 8: Register Sensors and Insert Observations into Sensor Observation Service
+	 * @return Step 8: Final Step - Summary of the Results
 	 */
 	public abstract String step8Description();
+	/**
+	 * @return Register Sensors and Insert Observations into Sensor Observation Service
+	 */
+	public abstract String step8DirectImportLabel();
 	/**
 	 * @param i
 	 * @return Errors: <code>i</code>
@@ -601,10 +614,12 @@ public abstract class Lang {
 	 * @return Unit of Measurement
 	 */
 	public abstract String unitOfMeasurement();
+
 	/**
 	 * @return Warning
 	 */
 	public abstract String warningDialogTitle();
+
 	/**
 	 * @return Year
 	 */

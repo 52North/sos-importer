@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.view.i18n;
 
+
 import java.io.File;
 import java.util.Locale;
 
@@ -48,6 +49,16 @@ public class En extends Lang{
 
 	public String backButtonLabel() {
 		return "Back";
+	}
+
+	@Override
+	public String column() {
+		return "column";
+	}
+
+	@Override
+	public String date() {
+		return "Date";
 	}
 
 	@Override
@@ -106,7 +117,7 @@ public class En extends Lang{
 	public String format() {
 		return "Format";
 	}
-
+	
 	@Override
 	public Locale getLocale() {
 		return En.locale;
@@ -116,7 +127,7 @@ public class En extends Lang{
 	public String group() {
 		return "Group";
 	}
-	
+
 	@Override
 	public String heightWarningDialogDecimalNumber() {
 		return "The " + this.altitude() + " has to be a decimal number.";
@@ -184,7 +195,7 @@ public class En extends Lang{
 	public String observedProperty() {
 		return "Observed Property";
 	}
-
+	
 	public String path() {
 		return "path";
 	}
@@ -192,10 +203,15 @@ public class En extends Lang{
 	public String position() {
 		return "Position";
 	}
-	
+
 	@Override
 	public String referenceSystem() {
 		return "Reference System";
+	}
+
+	@Override
+	public String row() {
+		return "row";
 	}
 
 	@Override
@@ -230,6 +246,7 @@ public class En extends Lang{
 		return "CSV File";
 	}
 
+
 	public String step1SelectLanguage() {
 		return "Please select the language";
 	}
@@ -241,7 +258,6 @@ public class En extends Lang{
 	public String step2CommentIndicator() {
 		return "Comment indicator";
 	}
-
 
 	@Override
 	public String step2DataPreviewLabel() {
@@ -308,7 +324,7 @@ public class En extends Lang{
 				this.step3ColTypeUndefined() + 
 				"\"";
 	}
-
+	
 	public String step3bDescription() {
 		return this.step() + " 3b: Choose metadata for rows";
 	}
@@ -320,7 +336,7 @@ public class En extends Lang{
 	public String step3ColTypeDoNotExport() {
 		return "Do not export";
 	}
-	
+
 	public String step3ColTypeMeasuredValue() {
 		return "Measured Value";
 	}
@@ -425,6 +441,11 @@ public class En extends Lang{
 		return this.step() + " 6a: Add missing dates and times";
 	}
 
+	@Override
+	public String step6aModelDescription() {
+		return "<html>What is the <u>Date & Time</u> for all measured values?</html>";
+	}
+
 	public String step6bDescription() {
 		return this.step() + " 6b: Add missing metadata";
 	}
@@ -451,6 +472,28 @@ public class En extends Lang{
 
 	public String step6cModelDescription() {
 		return "What is the " + this.position().toLowerCase(En.locale) + " of";
+	}
+
+	@Override
+	public String step7ConfigDirNotDirOrWriteable(String folder) {
+		return "The selected config file folder \n\"" + 
+				folder + 
+				"\"\nis not accessible for the application.";
+	}
+
+	@Override
+	public String step7ConfigFileButton() {
+		return "Choose folder";
+	}
+
+	@Override
+	public String step7ConfigFileDialogTitel() {
+		return "Select Configuration file folder";
+	}
+
+	@Override
+	public String step7ConfigFileLabel() {
+		return "Configuration file folder and name";
 	}
 
 	public String step7Description() {
@@ -480,8 +523,18 @@ public class En extends Lang{
 		return "Connection to " + this.sos() + " " + strURL + " failed. Reason: " + message;
 	}
 
+	@Override
+	public String step8ConfigFileButton() {
+		return "Open Configuration File";
+	}
+
 	public String step8Description() {
-		return this.step() + " 8: Register " + this.sensor() + "s and Insert " + this.observation() + "s into " + this.sos();
+		return this.step() + " 8: Final Step - Summary of the Results";
+	}
+
+	@Override
+	public String step8DirectImportLabel() {
+		return "Register Sensors and Insert Observations into Sensor Observation Service";
 	}
 
 	public String step8ErrorLable(int i) {
@@ -498,6 +551,15 @@ public class En extends Lang{
 
 	public String step8RegisterSensorLabel(int i) {
 		return "Register " + i + " " + this.sensor() + "(s)...";
+	}
+
+	@Override
+	public String step8SaveModelFailed(File f, String exceptionText) {
+		return "The configuration could not be saved to file\n\"" +
+				f.getAbsolutePath() +
+				"\".\nAn Exception occurred:\n" +
+				exceptionText +
+				"Please check the log file for more details.";
 	}
 
 	public String step8SuccessLabel(int i) {
@@ -530,52 +592,6 @@ public class En extends Lang{
 	@Override
 	public String year() {
 		return "Year";
-	}
-
-	@Override
-	public String step7ConfigFileButton() {
-		return "Choose folder";
-	}
-
-	@Override
-	public String step7ConfigFileDialogTitel() {
-		return "Select Configuration file folder";
-	}
-
-	@Override
-	public String step7ConfigDirNotDirOrWriteable(String folder) {
-		return "The selected config file folder \n\"" + 
-				folder + 
-				"\"\nis not accessible for the application.";
-	}
-
-	@Override
-	public String step7ConfigFileLabel() {
-		return "Configuration file folder and name";
-	}
-
-	@Override
-	public String step8SaveModelFailed(File f, String exceptionText) {
-		return "The configuration could not be saved to file\n\"" +
-				f.getAbsolutePath() +
-				"\".\nAn Exception occurred:\n" +
-				exceptionText +
-				"Please check the log file for more details.";
-	}
-
-	@Override
-	public String step8ConfigFileButton() {
-		return "Open Configuration File";
-	}
-
-	@Override
-	public String column() {
-		return "column";
-	}
-
-	@Override
-	public String row() {
-		return "row";
 	}
 
 }
