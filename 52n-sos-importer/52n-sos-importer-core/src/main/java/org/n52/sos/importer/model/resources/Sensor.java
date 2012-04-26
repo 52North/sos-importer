@@ -32,6 +32,7 @@ import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.view.i18n.Lang;
 
 public class Sensor extends Resource {
 
@@ -94,5 +95,10 @@ public class Sensor extends Resource {
 	@Override
 	public String toString() {
 		return "Sensor" + super.toString();
+	}
+
+	@Override
+	public String getTypeName() {
+		return Lang.l().sensor();
 	}
 }

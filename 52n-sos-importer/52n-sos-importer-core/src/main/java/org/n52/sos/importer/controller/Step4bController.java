@@ -66,6 +66,9 @@ public class Step4bController extends StepController {
 		this.step4bModel = step4bModel;
 	}
 
+	/*
+	 * {@link org.n52.sos.importer.view.i18n.Lang#step4bModelDescription()}
+	 */
 	@Override
 	public void loadSettings() {
 		Resource resource = step4bModel.getResource();
@@ -74,9 +77,24 @@ public class Step4bController extends StepController {
 		
 		String text = step4bModel.getDescription();
 		String orientation = tableController.getOrientationString();
-		// see Lang.l().step4bModelDescription()
+		
+		/*
+		 * List how to replace the org.n52.sos.importer.view.utils.Constants.STRING_REPLACER in the correct order: 
+		 * 	1 The table element type of the measured values, maybe "column"
+		 * 	2 The resource type, that is linked to the measured value table element
+		 * 	3 Table element of element to be selected
+		 * 	4 Table element of element to be selected
+		 * 	5 The resource type, that is linked to the measured value table element
+		 * 	6 Table element of element to be selected 
+		 */
+		if (logger.isDebugEnabled()) {
+			logger.debug("Text: " + text);
+		}
 		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
-		text = text.replaceFirst(Constants.STRING_REPLACER, resource.toString());
+		text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
+		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
+		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
+		text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
 		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
 		
 		step4Panel = new Step4Panel(text);

@@ -55,6 +55,8 @@ public abstract class Resource extends Component {
 	public void setURI(URI uri) { this.uri = uri; }
 	public URI getURI() { return uri; }
 	
+	public abstract String getTypeName();
+	
 	/**
 	 * returns the name or alternatively the URI, when
 	 * the name is null

@@ -54,6 +54,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String column() {
+		return "Spalte";
+	}
+
+	@Override
 	public String day() {
 		return "Tag";
 	}
@@ -127,12 +132,12 @@ public class De extends Lang{
 	public String format() {
 		return "Format";
 	}
-
+	
 	@Override
 	public Locale getLocale() {
 		return De.locale;
 	}
-	
+
 	@Override
 	public String group() {
 		return "Gruppe";
@@ -230,17 +235,22 @@ public class De extends Lang{
 	public String path() {
 		return "Pfad";
 	}
-
+	
 	/**
 	 * @return Position
 	 */
 	public String position() {
 		return "Position";
 	}
-	
+
 	@Override
 	public String referenceSystem() {
 		return "Referenzsystem";
+	}
+
+	@Override
+	public String row() {
+		return "Zeile";
 	}
 
 	@Override
@@ -291,7 +301,7 @@ public class De extends Lang{
 	public String step1File() {
 		return "CSV-Datei";
 	}
-
+	
 	@Override
 	public String step1SelectLanguage() {
 		return "Bitte wählen Sie die Sprache aus";
@@ -303,7 +313,7 @@ public class De extends Lang{
 	public String step2ColumnSeparator() {
 		return "Spalten-Trenner";
 	}
-	
+
 	/**
 	 * @return Comment indicator
 	 */
@@ -380,9 +390,11 @@ public class De extends Lang{
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "Der Typ für die Spalte ist \"" + 
 				this.step3ColTypeUndefined() + 
-				"\".\nBitte einen anderen wählen.\n\"" +
+				"\".\nBitte wählen Sie einen anderen Typ. Sollten Sie diese" +
+				"Spalte überspringen (= nicht exportieren) wollen, dann " +
+				"wählen Sie bitte als Type \n\"" +
 				this.step3ColTypeDoNotExport() + 
-				"\" um die Spalte zu überspringen.";
+				"\".";
 	}
 
 	@Override
@@ -528,16 +540,22 @@ public class De extends Lang{
 	}
 
 	@Override
-	protected String step4bInfoResourceAlreadSetText() {
+	protected String step4bInfoResourceAlreadySetText() {
 		return " schon gesetzt für ";
 	}
 
-	/**
-	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> corresponds to.
-	 */
+	@Override
 	public String step4bModelDescription() {
-		return "Wähle alle " + this.measuredValue() + " " + Constants.STRING_REPLACER + "n " +
-				", die zur markierten " + Constants.STRING_REPLACER + " " + Constants.STRING_REPLACER + " gehören.";
+		return "Bitte klicken Sie in die " + 
+				Constants.STRING_REPLACER + 
+			" (nicht auf die Titel), die die Messwerte enthält, die zu der " +
+			"hervorgehobenen " + 
+			Constants.STRING_REPLACER +
+			"-" +
+			Constants.STRING_REPLACER + 
+			" gehört. Wenn mehrere Messwert-" +
+			Constants.STRING_REPLACER + 
+			"n dazugehören, wählen Sie sie mit gedrückter Strg-Taste aus.";
 	}
 
 	/**
@@ -622,6 +640,27 @@ public class De extends Lang{
 		return "Wie ist die " + this.position() + "s-Angabe von";
 	}
 
+	@Override
+	public String step7ConfigDirNotDirOrWriteable(String folder) {
+		return "Auf das Verzeichnis \n\"" + 
+				folder + "\"\n kann nicht zugegriffen werden";
+	}
+
+	@Override
+	public String step7ConfigFileButton() {
+		return "Verzeichnis wählen";
+	}
+
+	@Override
+	public String step7ConfigFileDialogTitel() {
+		return "Bitte das Verzeichnis für die Konfigurations-Datei wählen";
+	}
+
+	@Override
+	public String step7ConfigFileLabel() {
+		return "Konfigurations-Dateiname und -verzeichnis";
+	}
+
 	/**
 	 * @return Step 7: Choose Sensor Observation Service
 	 */
@@ -662,6 +701,11 @@ public class De extends Lang{
 		return "Connection to " + this.sos() + " " + strURL + " failed. Reason: " + message;
 	}
 
+	@Override
+	public String step8ConfigFileButton() {
+		return "Konfigurationsdatei öffnen";
+	}
+
 	/**
 	 * @return Step 8: Register Sensors and Insert Observations into Sensor Observation Service
 	 */
@@ -700,6 +744,15 @@ public class De extends Lang{
 		return "Registriere " + i + " " + this.sensor() + "(en)...";
 	}
 
+	@Override
+	public String step8SaveModelFailed(File f, String exceptionText) {
+		return "Die Konfiguration konnte nicht in der Datei\n\"" +
+				f.getAbsolutePath() +
+				"\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
+				exceptionText +
+				"Für weitere Informationen bitte die Logdatei konsultieren.";
+	}
+
 	/**
 	 * @param i
 	 * @return Successful: <code>i</code>
@@ -712,7 +765,7 @@ public class De extends Lang{
 	public String time() {
 		return "Zeit";
 	}
-
+	
 	@Override
 	public String timeZone() {
 		return "Zeitzone (UTC-Abstand)";
@@ -740,41 +793,6 @@ public class De extends Lang{
 	@Override
 	public String year() {
 		return "Jahr";
-	}
-
-	@Override
-	public String step7ConfigFileButton() {
-		return "Verzeichnis wählen";
-	}
-
-	@Override
-	public String step7ConfigFileDialogTitel() {
-		return "Bitte das Verzeichnis für die Konfigurations-Datei wählen";
-	}
-
-	@Override
-	public String step7ConfigDirNotDirOrWriteable(String folder) {
-		return "Auf das Verzeichnis \n\"" + 
-				folder + "\"\n kann nicht zugegriffen werden";
-	}
-
-	@Override
-	public String step7ConfigFileLabel() {
-		return "Konfigurations-Dateiname und -verzeichnis";
-	}
-	
-	@Override
-	public String step8SaveModelFailed(File f, String exceptionText) {
-		return "Die Konfiguration konnte nicht in der Datei\n\"" +
-				f.getAbsolutePath() +
-				"\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
-				exceptionText +
-				"Für weitere Informationen bitte die Logdatei konsultieren.";
-	}
-
-	@Override
-	public String step8ConfigFileButton() {
-		return "Konfigurationsdatei öffnen";
 	}
 
 }

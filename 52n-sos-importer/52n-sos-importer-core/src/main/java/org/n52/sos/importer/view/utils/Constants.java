@@ -24,6 +24,7 @@
 package org.n52.sos.importer.view.utils;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -55,6 +56,16 @@ public class Constants {
 	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
 	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME = "sos-importer-csv-file-configuration.xml";
+	private static final int DEFAULT_RED = 238;
+	private static final int DEFAULT_GREEN = 238;
+	private static final int DEFAULT_BLUE = 238;
+	public static final Color DEFAULT_BACKGROUND_COLOUR = Color.getHSBColor(
+			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[0],
+			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[1],
+			Color.RGBtoHSB(DEFAULT_RED, DEFAULT_GREEN, DEFAULT_BLUE, null)[2]);
+	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
+	public static final String VERSION = "0.2 RC1";
+	
 	/**
 	 * TODO implement loading of language parameter from config file
 	 * @return en

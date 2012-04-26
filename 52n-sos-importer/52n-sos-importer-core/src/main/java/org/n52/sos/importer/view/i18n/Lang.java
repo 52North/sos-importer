@@ -11,7 +11,13 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.n52.sos.importer.view.utils.Constants;
 
+/**
+ * 
+ * @author e.h.juerrens@52north.org
+ *
+ */
 public abstract class Lang {
 	
 	private static HashMap<Locale,Lang> availableLocales = new HashMap<Locale, Lang>();
@@ -22,6 +28,7 @@ public abstract class Lang {
 
 	private static final Logger logger = Logger.getLogger(Lang.class);
 	
+	// Add default locale En
 	static {
 		Lang.availableLocales.put(Locale.ENGLISH, new En());
 		En.setCurrentLocale(Locale.ENGLISH);
@@ -39,6 +46,11 @@ public abstract class Lang {
 	public static Locale getCurrentLocale() {
 		return currentLocale;
 	}
+	
+	/**
+	 * @return An instance of the subclass of Lang implementing the defined
+	 * Locate.
+	 */
 	public static Lang l() {
 		if(instance == null) {
 			instance = availableLocales.get(currentLocale);
@@ -66,7 +78,17 @@ public abstract class Lang {
 	 * @return and
 	 */
 	public abstract String and();
+	/**
+	 * @return Back
+	 */
 	public abstract String backButtonLabel();
+	/**
+	 * @return column
+	 */
+	public abstract String column();
+	/**
+	 * @return Day
+	 */
 	public abstract String day();
 	/**
 	 * @return EPSG-Code
@@ -92,16 +114,34 @@ public abstract class Lang {
 	 * @return Example
 	 */
 	public abstract String example();
+	/**
+	 * @return Do you really want to exit?\n
+	 */
 	public abstract String exitDialogQuestion();
+	/**
+	 * @return Exit
+	 */
 	public abstract String exitDialogTitle();
+	/**
+	 * @return Feature of Interest
+	 */
 	public abstract String featureOfInterest();
+	/**
+	 * @return file
+	 */
 	public abstract String file();
+	/**
+	 * @return Finish
+	 */
 	public abstract String finishButtonLabel();
 	/**
 	 * @return Format
 	 */
 	public abstract String format();
-	public String frameTitle(){	return "SOS Importer 0.2 RC1"; }
+	/**
+	 * @return SOS Importer {@link org.n52.sos.importer.view.utils.Constants#VERSION}
+	 */
+	public String frameTitle(){	return "SOS Importer " + Constants.VERSION; }
 	/**
 	 * @param file
 	 * @param path
@@ -123,6 +163,9 @@ public abstract class Lang {
 	 * @return Hours
 	 */
 	public abstract String hours();
+	/**
+	 * @return Info
+	 */
 	public abstract String infoDialogTitle();
 	/**
 	 * @return The latitude/northing can only be a decimal number so far.
@@ -140,6 +183,9 @@ public abstract class Lang {
 	 * @return Longitude / Easting
 	 */
 	public abstract String longitudeEasting();
+	/**
+	 * @return measured value
+	 */
 	public abstract String measuredValue();
 	/**
 	 * @return Minutes
@@ -149,21 +195,49 @@ public abstract class Lang {
 	 * @return Month
 	 */
 	public abstract String month();
+	/**
+	 * @return Next
+	 */
 	public abstract String nextButtonLabel();
+	/**
+	 * @return Decimal separator
+	 */
 	public abstract String numValuePanelDecimalSeparator();
+	/**
+	 * @return	Thousands separator
+	 */
 	public abstract String numValuePanelThousandsSeparator();
+	/**
+	 * @return Observation
+	 */
 	public abstract String observation();
+	/**
+	 * @return Observed Property
+	 */
 	public abstract String observedProperty();
+	/**
+	 * @return path
+	 */
 	public abstract String path();
+	/**
+	 * @return Position
+	 */
 	public abstract String position();
 	/**
 	 * @return Reference System
 	 */
 	public abstract String referenceSystem();
 	/**
+	 * @return row
+	 */
+	public abstract String row();
+	/**
 	 * @return Seconds
 	 */
 	public abstract String seconds();
+	/**
+	 * @return Sensor
+	 */
 	public abstract String sensor();
 	/**
 	 * @return Sensor Observation Service
@@ -172,25 +246,64 @@ public abstract class Lang {
 		return "Sensor Observation Service";
 	}
 	/**
-	 * @return SOS-URL
+	 * @return SOS-URL (incl. endpoint, e.g. http://[...]/sos)
 	 */
 	public abstract String sosURL();
+	/**
+	 * @return Space
+	 */
 	public abstract String spaceString();
+	/**
+	 * @return Step
+	 */
 	public abstract String step();
+	/**
+	 * @return Browse
+	 */
 	public abstract String step1BrowseButton();
+	/**
+	 * @return Step 1: Choose CSV file
+	 */
 	public abstract String step1Description();
+	/**
+	 * @return CSV File
+	 */
 	public abstract String step1File();
+	/**
+	 * @return Please select the language
+	 */
 	public abstract String step1SelectLanguage();
+	/**
+	 * @return Column separator
+	 */
 	public abstract String step2ColumnSeparator();
+	/**
+	 * @return Comment indicator
+	 */
 	public abstract String step2CommentIndicator();
 	/**
 	 * @return CSV-Data-Preview
 	 */
 	public abstract String step2DataPreviewLabel();
+	/**
+	 * @return Step 2: Import CSV file
+	 */
 	public abstract String step2Description();
+	/**
+	 * @return First Line with data
+	 */
 	public abstract String step2FirstLineWithData();
+	/**
+	 * @return Interpret Header
+	 */
 	public abstract String step2ParseHeader();
+	/**
+	 * @return Text qualifier
+	 */
 	public abstract String step2TextQualifier();
+	/**
+	 * @return Step 3a: Choose Metadata for the selected column
+	 */
 	public abstract String step3aDescription();
 	/**
 	 * @return You have to specify at least one measured value column.
@@ -221,26 +334,87 @@ public abstract class Lang {
 	 * @return Column Type is "undefined"
 	 */
 	public abstract String step3aSelectedColTypeUndefinedTitle();
+	/**
+	 * @return Step 3b: Choose metadata for rows
+	 */
 	public abstract String step3bDescription();
+	/**
+	 * @return Date & Time
+	 */
 	public abstract String step3ColTypeDateTime();
+	/**
+	 * @return Do not export
+	 */
 	public abstract String step3ColTypeDoNotExport();
+	/**
+	 * @return Measured Value
+	 */
 	public abstract String step3ColTypeMeasuredValue();
+	/**
+	 * @return Undefined
+	 */
 	public abstract String step3ColTypeUndefined();
+	/**
+	 * @return Combination
+	 */
 	public abstract String step3DateAndTimeCombination();
+	/**
+	 * @return UNIX time
+	 */
 	public abstract String step3DateAndTimeUnixTime();
+	/**
+	 * @return Boolean
+	 */
 	public abstract String step3MeasuredValBoolean();
+	/**
+	 * @return Count
+	 */
 	public abstract String step3MeasuredValCount();
+	/**
+	 * @return Numeric Value
+	 */
 	public abstract String step3MeasuredValNumericValue();
+	/**
+	 * @return Text
+	 */
 	public abstract String step3MeasuredValText();
+	/**
+	 * @return {@linkplain org.n52.sos.importer.view.i18n.En.step3DateAndTimeCombination()}
+	 * 	<br />:= Combination
+	 */
 	public abstract String step3PositionCombination();
+	/**
+	 * @return Step 4a: Solve Date & Time ambiguities
+	 */
 	public abstract String step4aDescription();
-	
+	/**
+	 * @return Date and Time are already set for this <code>En.measuredValue()</code>.
+	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
+	 */
 	public abstract String step4aInfoDateAndTime();
+	/**
+	 * @param element 
+	 * @return This is not a <code>En.measuredValue()</code>.
+	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
+	 */
 	public abstract String step4aInfoMeasuredValue();
+	/**
+	 * @param stringReplacer
+	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked Date & Time group corresponds to.
+	 */
 	public abstract String step4aModelDescription();
+	/**
+	 * @return Step 4b: Solve ambiguities
+	 */
 	public abstract String step4bDescription();
+	/**
+	 * @return This is not a <code>En.measuredValue()</code>.
+	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
+	 * @see {@link org.n52.sos.importer.view.i18n.En.step4aInfoMeasuredValue()}
+	 * 
+	 */
 	public abstract String step4bInfoNotMeasuredValue();
-	protected abstract String step4bInfoResourceAlreadSetText();
+	protected abstract String step4bInfoResourceAlreadySetText();
 	/**
 	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
 	 * @return
@@ -256,19 +430,76 @@ public abstract class Lang {
 		} else if (resource instanceof UnitOfMeasurement) {
 			res = this.unitOfMeasurement();
 		}
-		return res + this.step4bInfoResourceAlreadSetText() + this.measuredValue();
+		return res + this.step4bInfoResourceAlreadySetText() + this.measuredValue();
 	}
+	/**
+	 * 
+	 * List how to replace the 
+	 * {@link org.n52.sos.importer.view.utils.Constants#STRING_REPLACER} 
+	 * in the correct order:
+	 * <ol>
+	 * 	<li>The table element type of the measured values, maybe "column"</li>
+	 * 	<li>The resource type, that is linked to the measured value table element</li>
+	 *  <li>Table element of element to be selected</li>
+	 *  <li>Table element of element to be selected</li>
+	 *  <li>The resource type, that is linked to the measured value table element</li>
+	 *  <li>Table element of element to be selected</li>
+	 * </ol>
+	 * @param tableElementType
+	 * @param tableElementType2
+	 * @param resourceType
+	 * @return Please click the <code>Constants.STRING_REPLACER</code> (not the title) 
+	 * containing the measured values for the marked 
+	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> that is 
+	 * marked. If several <code>Constants.STRING_REPLACER</code>s correspond to this 
+	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code>, click 
+	 * all of them with pressed CTRL key.
+	 */
 	public abstract String step4bModelDescription();
+	/**
+	 * @return Step 5a: Complete time data
+	 */
 	public abstract String step5aDescription();
+	/**
+	 * @return Complete missing information for the marked date and time.
+	 */
 	public abstract String step5aModelDescription();
+	/**
+	 * @return Step 5c: Complete position data
+	 */
 	public abstract String step5cDescription();
+	/**
+	 * @return Complete missing information for the marked position.
+	 */
 	public abstract String step5cModelDescription();
+	/**
+	 * @return Step 6a: Add missing dates and times
+	 */
 	public abstract String step6aDescription();
+	/**
+	 * @return Step 6b: Add missing metadata
+	 */
 	public abstract String step6bDescription();
+	/**
+	 * Replacements: Resource &rarr; Orientation
+	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
+	 */
 	public abstract String step6bModelDescription();
+	/**
+	 * @return Step 6b (Special): Add missing sensors
+	 */
 	public abstract String step6bSpecialDescription();
+	/**
+	 * @return What is the sensor for
+	 */
 	public abstract String step6bSpecialModelDescription();
+	/**
+	 * @return Step 6c: Add missing positions
+	 */
 	public abstract String step6cDescription();
+	/**
+	 * @return What is the position of
+	 */
 	public abstract String step6cModelDescription();
 	/**
 	 * @return The selected config file folder <code>folder</code> is not
@@ -287,6 +518,9 @@ public abstract class Lang {
 	 * @return Configuration file folder and name
 	 */
 	public abstract String step7ConfigFileLabel();
+	/**
+	 * @return Step 7: Choose Sensor Observation Service
+	 */
 	public abstract String step7Description();
 	/**
 	 * @return Directly import data during next step
@@ -296,16 +530,44 @@ public abstract class Lang {
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
+	/**
+	 * @param strURL
+	 * @param responseCode
+	 * @return Could not connect to Sensor Observation Service: <code>strURL</code> . HTTP Response Code: <code>responseCode</code>
+	 */
 	public abstract String step7SOSconnectionFailed(String strURL,int responseCode);
+	/**
+	 * @param strURL
+	 * @param message
+	 * @return Connection to Sensor Observation Service <code>strURL</code> failed. Reason: <code>message</code>
+	 */
 	public abstract String step7SOSConnectionFailedException(String strURL,String message);
 	/**
 	 * @return Open Configuration File
 	 */
 	public abstract String step8ConfigFileButton();
+	/**
+	 * @return Step 8: Register Sensors and Insert Observations into Sensor Observation Service
+	 */
 	public abstract String step8Description();
+	/**
+	 * @param i
+	 * @return Errors: <code>i</code>
+	 */
 	public abstract String step8ErrorLable(int i);
+	/**
+	 * @param i
+	 * @return Insert <code>i</code> Observations...
+	 */
 	public abstract String step8InsertObservationLabel(int i);
+	/**
+	 * @return Check log file
+	 */
 	public abstract String step8LogFileButton();
+	/**
+	 * @param i
+	 * @return Register <code>i</code> Sensors...
+	 */
 	public abstract String step8RegisterSensorLabel(int i);
 	/**
 	 * @param f The file which was used to save the XML model
@@ -318,27 +580,31 @@ public abstract class Lang {
 	 * 						<br />Please check the log file for more details.
 	 */
 	public abstract String step8SaveModelFailed(File f, String exceptionText);
+	/**
+	 * @param i
+	 * @return Successful: <code>i</code>
+	 */
 	public abstract String step8SuccessLabel(int i);
-
 	/**
 	 * @return Time
 	 */
 	public abstract String time();
-
 	/**
 	 * @return UTC offset
 	 */
 	public abstract String timeZone();
-
 	/**
 	 * @return Unit
 	 */
 	public abstract String unit();
-
+	/**
+	 * @return Unit of Measurement
+	 */
 	public abstract String unitOfMeasurement();
-
+	/**
+	 * @return Warning
+	 */
 	public abstract String warningDialogTitle();
-
 	/**
 	 * @return Year
 	 */
