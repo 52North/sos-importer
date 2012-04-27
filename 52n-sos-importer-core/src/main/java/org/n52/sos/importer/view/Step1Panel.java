@@ -122,6 +122,7 @@ public class Step1Panel extends JPanel {
 				JComboBox cb = (JComboBox)e.getSource();
 		        Locale selectedLocale = (Locale)cb.getSelectedItem();
 		        Lang.setCurrentLocale(selectedLocale);
+		        ToolTips.loadSettings();
 		        // restart application drawing -> BUG 619 
 		        BackNextController.getInstance().restartCurrentStep();
 			}

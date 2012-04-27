@@ -113,6 +113,8 @@ public class Step2Controller extends StepController {
 		String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
 		
+		step2Panel.setCSVFileHighlight(firstLineWithData);
+		
 	}
 	
 	@Override
