@@ -60,7 +60,7 @@ public class NumericValuePanel extends SelectionPanel {
 	
 	private final JLabel decimalSeparatorLabel = new JLabel(Lang.l().numValuePanelDecimalSeparator() + " : ");
 	private final JLabel thousandsSeparatorLabel = new JLabel(Lang.l().numValuePanelThousandsSeparator() + " : ");
-	private final JLabel exampleLabel = new JLabel("Example: ");
+	private final JLabel exampleLabel = new JLabel(Lang.l().example() + ": ");
 
 	private final String[] decimalSeparators = ComboBoxItems.getInstance().getDecimalSeparators();
 	private final String[] thousandsSeparators = ComboBoxItems.getInstance().getThousandsSeparators();

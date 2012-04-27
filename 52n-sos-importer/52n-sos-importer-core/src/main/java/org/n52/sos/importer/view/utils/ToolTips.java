@@ -28,15 +28,21 @@ import java.util.ResourceBundle;
 
 import javax.swing.ToolTipManager;
 
+import org.apache.log4j.Logger;
+import org.n52.sos.importer.view.i18n.Lang;
+
 /**
  * loads tooltips from the properties file
  * @author Raimund
  *
  */
 public class ToolTips {
+	
+	private static final Logger logger = Logger.getLogger(ToolTips.class);
+	
 	private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips"; //$NON-NLS-1$
-
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	
+	private static ResourceBundle res;
 
 	/*
 	 * For the following keys tooltips are available
@@ -45,7 +51,7 @@ public class ToolTips {
 	public static final String COLUMN_SEPARATOR = "ColumnSeparator";
 	public static final String COMMENT_INDICATOR = "CommentIndicator";
 	public static final String TEXT_QUALIFIER = "TextQualifier";
-	public static final String MEASURED_VALUE = "Measured Value";
+	public static final String MEASURED_VALUE = "MeasuredValue";
 	public static final String DATE_AND_TIME = "DateAndTime";
 	public static final String POSITION = "Position";
 	public static final String FEATURE_OF_INTEREST = "FeatureOfInterest";
@@ -71,8 +77,18 @@ public class ToolTips {
 
 	public static String get(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			if (res == null) {
+				res = ResourceBundle.getBundle(BUNDLE_NAME, Lang.getCurrentLocale());
+			}
+			return res.getString(key);
 		} catch (MissingResourceException e) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Value for key: \"" + 
+						key + 
+						"\" not found in resource bundle \"" 
+						+ res
+						+ "\".");
+			}
 			return '!' + key + '!';
 		}
 	}
@@ -81,5 +97,6 @@ public class ToolTips {
 		ToolTipManager.sharedInstance().setInitialDelay(500);
 		ToolTipManager.sharedInstance().setDismissDelay(50000);
 		ToolTipManager.sharedInstance().setReshowDelay(500);
+		res = ResourceBundle.getBundle(BUNDLE_NAME, Lang.getCurrentLocale());
 	}
 }

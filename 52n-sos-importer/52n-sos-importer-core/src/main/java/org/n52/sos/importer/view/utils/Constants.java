@@ -72,7 +72,8 @@ public class Constants {
 	public static final String VERSION = "0.2 RC1";
 	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME = "sos-importer-csv-file-configuration.xml";
-	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);;
+	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);
+	public static final Color DEFAULT_HIGHLIGHT_COLOR = Color.RED;
 	
 	/**
 	 * TODO implement loading of language parameter from config file

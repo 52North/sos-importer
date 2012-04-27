@@ -101,7 +101,7 @@ public class De extends Lang{
 	public String exitDialogTitle() { return "Beenden"; }
 
 	public String featureOfInterest() {
-		return "Feature of Interest";
+		return "Geoobjekt";
 	}
 
 	public String file() {
@@ -192,7 +192,7 @@ public class De extends Lang{
 	}
 
 	public String observedProperty() {
-		return "Observed Property";
+		return "Phänomen";
 	}
 	
 	public String path() {
@@ -266,7 +266,7 @@ public class De extends Lang{
 	}
 
 	public String step2Description() {
-		return this.step() + " 2: CSV-Datei importieren";
+		return this.step() + " 2: Definieren Sie die Metadaten zum Einlesen der CSV-Datei";
 	}
 
 	public String step2FirstLineWithData() {
@@ -359,15 +359,15 @@ public class De extends Lang{
 	}
 
 	public String step3MeasuredValBoolean() {
-		return "Boolean";
+		return "Wahrheitswert";
 	}
 
 	public String step3MeasuredValCount() {
-		return "Count";
+		return "Zählwert";
 	}
 
 	public String step3MeasuredValNumericValue() {
-		return "Numeric Value";
+		return "Numerischer Wert";
 	}
 
 	public String step3MeasuredValText() {
@@ -584,7 +584,7 @@ public class De extends Lang{
 	}
 
 	public String unitOfMeasurement() {
-		return "Unit of Measurement";
+		return "Maßeinheit";
 	}
 
 	public String warningDialogTitle() {

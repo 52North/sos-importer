@@ -265,7 +265,7 @@ public class En extends Lang{
 	}
 
 	public String step2Description() {
-		return this.step() + " 2: Import CSV file";
+		return this.step() + " 2: Define CSV File Metadata";
 	}
 
 	public String step2FirstLineWithData() {

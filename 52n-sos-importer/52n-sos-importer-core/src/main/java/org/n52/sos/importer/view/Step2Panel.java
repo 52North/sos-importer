@@ -36,6 +36,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
@@ -93,7 +98,7 @@ public class Step2Panel extends JPanel {
 		//
 		lineModel = new SpinnerNumberModel(0, 0, this.csvFileRowCount-1, 1);
 		firstDataJS = new JSpinner(lineModel);
-		/*
+		// Highlight the current selected line in the file preview
 		firstDataJS.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				int number = lineModel.getNumber().intValue();
@@ -101,10 +106,12 @@ public class Step2Panel extends JPanel {
 					lineModel.setValue(0);
 				} else if (number > (csvFileRowCount-1)){
 					lineModel.setValue((csvFileRowCount-1));
+					setFirstLineWithData(number);
+				} else {
+					setCSVFileHighlight(number);
 				}
 			}
 		});
-		*/
 		firstDataJL = new JLabel(Lang.l().step2FirstLineWithData() + " :");
 		JPanel firstLineWithDataJPanel = new JPanel();
 		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -157,7 +164,6 @@ public class Step2Panel extends JPanel {
 		//
 		this.add(csvSettingsPanel);
 		this.add(csvDataPanel);
-//		this.add(scrollPane);
 	}
 	
 	public String getCommentIndicator() {
@@ -217,6 +223,25 @@ public class Step2Panel extends JPanel {
 		csvFileTextArea.setText(contentWithNumbers);
 		csvFileTextArea.setCaretPosition(0);
 	}
+	
+	public void setCSVFileHighlight(int number) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("setCSVFileHighlight()");
+		}
+		try {
+			csvFileTextArea.getHighlighter().removeAllHighlights();
+			if (number > 0) {
+				int lineStart = csvFileTextArea.getLineStartOffset(0);
+				int lineEnd = csvFileTextArea.getLineEndOffset(number-1);
+				HighlightPainter painter = new DefaultHighlighter.
+						DefaultHighlightPainter(
+								Constants.DEFAULT_HIGHLIGHT_COLOR);
+				csvFileTextArea.getHighlighter().addHighlight(lineStart, lineEnd, painter);
+			}
+		} catch (BadLocationException e1) {
+			logger.error("Exception thrown: " + e1.getMessage(), e1);
+		}
+	}
 
 	/**
 	 * @return user input or <code>-1</code> if invalid input is defined
@@ -227,6 +252,7 @@ public class Step2Panel extends JPanel {
 
 	public void setFirstLineWithData(int firstLineWithData) {
 		lineModel.setValue(firstLineWithData);
+		this.setCSVFileHighlight(firstLineWithData);
 	}
 	
 	public String getTextQualifier() {
