@@ -23,9 +23,6 @@
  */
 package org.n52.sos.importer.test;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step4bController;
@@ -33,11 +30,6 @@ import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
-import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
-import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -60,31 +52,8 @@ public class Step4Test {
 		MainController f = MainController.getInstance();
 		//Lang.setCurrentLocale(Locale.GERMAN);
 		int firstLineWithData = 1;
-		FeatureOfInterest foi = new FeatureOfInterest();
-		
-		foi.setName("FOI_TEST_1");
-		foi.setPosition(new Position(
-				new Latitude(52.0, "deg"),
-				new Longitude(7.0, "deg"),
-				new Height(42.0, "m"),
-				new EPSGCode(4979)));
-		try {
-			foi.setURI(new URI("http://example.com/spatial/fois/test/1"));
-		} catch (URISyntaxException e) {
-			logger.error("Exception thrown: " + e.getMessage(), e);
-		}
-		foi.setTableElement(new Column(3, firstLineWithData));
-		Object[][] o = {
-				//         0				1			2				3		4		5		6			7		8
-				{"Timestamp",			"Sensor",	   "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value"},
-				{"2012-04-23 11:52:23", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5"},
-				{"2012-04-23 11:52:33", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5"},
-				{"2012-04-23 11:52:43", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5"},
-				{"2012-04-23 11:52:53", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5"},
-				{"2012-04-23 11:53:03", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7"},
-				{"2012-04-23 11:53:13", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8"},
-				{"2012-04-23 11:53:23", "Thermometer", "Temperature", "Münster", "degC", "12.1", "Berlin", "degC", "12.1"},
-				};
+		FeatureOfInterest foi = TestData.EXAMPLE_FOI;
+		Object[][] o = TestData.EXAMPLE_TABLE;
 		TableController tc = TableController.getInstance();
 		tc.setContent(o); 
 		tc.setColumnHeading(0, Lang.l().step3ColTypeDateTime());
