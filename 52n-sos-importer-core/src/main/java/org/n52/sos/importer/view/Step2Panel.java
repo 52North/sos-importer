@@ -110,6 +110,13 @@ public class Step2Panel extends JPanel {
 					setCSVFileHighlight(number);
 				} else {
 					setCSVFileHighlight(number);
+					if (number > 0) {
+						useHeaderJCB.setEnabled(true);
+						useHeaderJL.setVisible(true);
+					} else {
+						useHeaderJCB.setEnabled(false);
+						useHeaderJCB.setSelected(false);
+					}
 				}
 			}
 		});
@@ -123,18 +130,17 @@ public class Step2Panel extends JPanel {
 		//
 		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
 		useHeaderJCB = new JCheckBox();
-		useHeaderJCB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// do nothing, state of check box will be saved during step 
-				// controller switch
-				if (logger.isDebugEnabled()) {
-					logger.debug("useHeader state changed. is selected?" + 
+		if (logger.isTraceEnabled()) {
+			useHeaderJCB.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					logger.trace("useHeader state changed. is selected?" + 
 							useHeaderJCB.isSelected());
 				}
-			}
-		});
+			});
+		}
 		useHeaderJCB.setSelected(false);
-		useHeaderJCB.setEnabled(true);
+		// will be enabled if firstLineWithdata is set to > 0
+		useHeaderJCB.setEnabled(false);
 		JPanel useHeaderPanel = new JPanel();
 		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		useHeaderPanel.add(useHeaderJL);
