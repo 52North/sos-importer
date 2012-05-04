@@ -36,4 +36,9 @@ public class Text extends MeasuredValue implements Parseable {
 	public Object parse(String s) {
 		return s.trim();
 	}
+
+	@Override
+	public void setPattern(String parsePattern) {
+		// do nothing, it's Java base type wrapper		
+	}
 }

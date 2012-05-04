@@ -34,8 +34,20 @@ public class Boolean extends MeasuredValue {
 	@Override
 	public Object parse(String s) {
 		s = s.trim();
-		if (s.equals("0") || s.equalsIgnoreCase("false")) return false;
-		else if (s.equals("1") || s.equalsIgnoreCase("true")) return true;
-		else throw new NumberFormatException();
+		if (s.equals("0") || s.equalsIgnoreCase("false")) {
+			return false;
+		} else
+		if (s.equals("1") || s.equalsIgnoreCase("true")) {
+			return true;
+		}
+		else throw new NumberFormatException(
+				"value of String should be: 0,1,true,false. " +
+				"Regarding the last two case is ignored. " +
+				"Given value is: " + s);
+	}
+
+	@Override
+	public void setPattern(String parsePattern) {
+		// do nothing, it's Java base type wrapper
 	}
 }

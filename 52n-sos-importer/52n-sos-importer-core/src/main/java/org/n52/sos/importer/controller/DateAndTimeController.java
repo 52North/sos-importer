@@ -24,6 +24,7 @@
 package org.n52.sos.importer.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -247,21 +248,30 @@ public class DateAndTimeController {
 	
 	
 	public void mergeDateAndTimes() {
-		logger.info("Merge Date & Times");
+		if (logger.isTraceEnabled()) {
+			logger.trace("mergeDateAndTimes()");
+		}
+		if (logger.isInfoEnabled()) {
+			logger.info("Merge Date & Times");
+		}
 		List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
-		List<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>();
-		for (int i = 0; i < dateAndTimes.size(); i++) {
-			DateAndTime dt1 = dateAndTimes.get(i);
+		ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>(dateAndTimes.size());
+		while (!dateAndTimes.isEmpty()) {
+			DateAndTime dt1 = dateAndTimes.get(0);
 			dateAndTimes.remove(dt1);
-			for (int j = 0; j < dateAndTimes.size(); j++) {
-				DateAndTime dt2 = dateAndTimes.get(j);
+			// create tmp list from left over dts
+			List<DateAndTime> list2 = new ArrayList<DateAndTime>(dateAndTimes);
+			Iterator<DateAndTime> dATIter = list2.iterator();
+			while (dATIter.hasNext()) {
+				DateAndTime dt2 = (DateAndTime) dATIter.next();
 				if (dt1.getGroup().equals(dt2.getGroup())) {
-					merge(dt1, dt2);
+					this.merge(dt1, dt2);
 					dateAndTimes.remove(dt2);
 				}
 			}
 			mergedDateAndTimes.add(dt1);
 		}
+		mergedDateAndTimes.trimToSize();
 		ModelStore.getInstance().setDateAndTimes(mergedDateAndTimes);
 	}
 	

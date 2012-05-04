@@ -65,6 +65,9 @@ public class NumericValuePanel extends SelectionPanel {
 	private final String[] decimalSeparators = ComboBoxItems.getInstance().getDecimalSeparators();
 	private final String[] thousandsSeparators = ComboBoxItems.getInstance().getThousandsSeparators();
 	
+	private String selectedDecimalSeparator;
+	private String selectedThousandsSeparator;
+	
 	private final JComboBox decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 	private final JComboBox thousandsSeparatorCombobox = new JComboBox(thousandsSeparators);
 	
@@ -91,15 +94,22 @@ public class NumericValuePanel extends SelectionPanel {
 		separatorPanel.add(exampleNumberLabel);
 		this.add(separatorPanel);
 		this.add(parseTestLabel);
+		
+		this.selectedDecimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+		this.selectedThousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
 	}
 
 	@Override
 	protected void setSelection(String s) {
 		String[] separators = s.split(Constants.SEPARATOR_STRING);
 		decimalSeparatorCombobox.setSelectedItem(separators[0]);
-		if (separators[1].equals(" ")) thousandsSeparatorCombobox.setSelectedItem(Constants.SPACE_STRING);
-		else thousandsSeparatorCombobox.setSelectedItem(separators[1]);
-		patternChanged();
+		if (separators[1].equals(" ")) {
+			thousandsSeparatorCombobox.setSelectedItem(Constants.SPACE_STRING);
+		}
+		else {
+			thousandsSeparatorCombobox.setSelectedItem(separators[1]);
+		}
+		//patternChanged();
 	}
 
 	@Override
@@ -129,7 +139,7 @@ public class NumericValuePanel extends SelectionPanel {
 		List<String> values = TableController.getInstance().getMarkedValues();				
 		parseTestLabel.parseValues(values);
 		exampleNumberLabel.reformat(exampleValue);
-	};
+	}
 	
 	@Override
 	protected void reInit() {
@@ -167,12 +177,21 @@ public class NumericValuePanel extends SelectionPanel {
 			String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 			String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
 			
-			if (thousandsSeparator.equals(",") && decimalSeparator.equals(","))
-				thousandsSeparatorCombobox.setSelectedItem(".");			
-			else if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
+			if (thousandsSeparator.equals(",") && decimalSeparator.equals(",")) {
+				thousandsSeparatorCombobox.setSelectedItem(".");
+				thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+			}
+			else if (thousandsSeparator.equals(".") && decimalSeparator.equals(".")) {
 				thousandsSeparatorCombobox.setSelectedItem(",");
-			else 
+				thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
+			}
+			// test, if something changed in between
+			if(!selectedDecimalSeparator.equalsIgnoreCase(decimalSeparator) || 
+					!selectedThousandsSeparator.equalsIgnoreCase(thousandsSeparator)) {
 				patternChanged();
+				selectedDecimalSeparator = decimalSeparator;
+				selectedThousandsSeparator = thousandsSeparator;
+			}
 		}		
 	}
 	
@@ -183,12 +202,21 @@ public class NumericValuePanel extends SelectionPanel {
 			String decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
 			String thousandsSeparator = (String) thousandsSeparatorCombobox.getSelectedItem();
 			
-			if (thousandsSeparator.equals(",") && decimalSeparator.equals(","))
-				decimalSeparatorCombobox.setSelectedItem(".");			
-			else if (thousandsSeparator.equals(".") && decimalSeparator.equals("."))
+			if (thousandsSeparator.equals(",") && decimalSeparator.equals(",")) {
+				decimalSeparatorCombobox.setSelectedItem(".");		
+				decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+			}
+			else if (thousandsSeparator.equals(".") && decimalSeparator.equals(".")) {
 				decimalSeparatorCombobox.setSelectedItem(",");
-			else				
+				decimalSeparator = (String) decimalSeparatorCombobox.getSelectedItem();
+			}
+			// test, if something changed in between
+			if(!selectedDecimalSeparator.equalsIgnoreCase(decimalSeparator) || 
+					!selectedThousandsSeparator.equalsIgnoreCase(thousandsSeparator)) {
 				patternChanged();
+				selectedDecimalSeparator = decimalSeparator;
+				selectedThousandsSeparator = thousandsSeparator;
+			}
 		}		
 	}
 	

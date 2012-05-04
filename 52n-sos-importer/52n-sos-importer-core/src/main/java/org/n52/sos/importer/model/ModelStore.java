@@ -95,6 +95,7 @@ public class ModelStore {
 	}
 	
 	public List<MeasuredValue> getMeasuredValues() {
+		((ArrayList<MeasuredValue>) measuredValues).trimToSize();
 		return measuredValues;
 	}
 	
@@ -115,6 +116,7 @@ public class ModelStore {
 	}
 	
 	public List<DateAndTime> getDateAndTimes() {
+		((ArrayList<DateAndTime>) dateAndTimes).trimToSize();
 		return dateAndTimes;
 	}
 	
@@ -157,6 +159,7 @@ public class ModelStore {
 	}
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
+		((ArrayList<FeatureOfInterest>) featureOfInterests).trimToSize();
 		return featureOfInterests;
 	}
 	
@@ -169,6 +172,7 @@ public class ModelStore {
 	}
 	
 	public List<ObservedProperty> getObservedProperties() {
+		((ArrayList<ObservedProperty>) observedProperties).trimToSize();
 		return observedProperties;
 	}
 		
@@ -181,6 +185,7 @@ public class ModelStore {
 	}
 
 	public List<UnitOfMeasurement> getUnitOfMeasurements() {
+		((ArrayList<UnitOfMeasurement>) unitOfMeasurements).trimToSize();
 		return unitOfMeasurements;
 	}
 	
@@ -193,6 +198,7 @@ public class ModelStore {
 	}
 
 	public List<Sensor> getSensors() {
+		((ArrayList<Sensor>) sensors).trimToSize();
 		return sensors;
 	}
 	
@@ -201,6 +207,7 @@ public class ModelStore {
 	}
 
 	public List<Position> getPositions() {
+		((ArrayList<Position>) positions).trimToSize();
 		return positions;
 	}
 	
@@ -242,6 +249,7 @@ public class ModelStore {
 			if (foi.getTableElement() != null) 
 				foisInTable.add(foi);
 		}
+		foisInTable.trimToSize();
 		return foisInTable;
 	}
 	
@@ -251,6 +259,7 @@ public class ModelStore {
 			if (s.getTableElement() != null) 
 				sensorsInTable.add(s);
 		}
+		sensorsInTable.trimToSize();
 		return sensorsInTable;
 	}
 
@@ -260,6 +269,7 @@ public class ModelStore {
 			if (op.getTableElement() != null) 
 				opsInTable.add(op);
 		}
+		opsInTable.trimToSize();
 		return opsInTable;
 	}
 

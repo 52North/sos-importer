@@ -71,12 +71,15 @@ public class PositionCombinationPanel extends CombinationPanel {
 		Longitude longitude = new Longitude(7.52, "°");
 		Height height = new Height(126.2, "m");
 		EPSGCode epsgCode = new EPSGCode(4236);
-		return new Position(latitude, longitude, height, epsgCode);
+		Position p = new Position(latitude, longitude, height, epsgCode);
+		return p;
 	}
 
 	@Override
 	public Combination getCombination() {
-		if (position == null) position = new Position();
+		if (position == null) {
+			position = new Position();
+		}
 		return position;
 	}
 	

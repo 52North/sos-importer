@@ -36,7 +36,15 @@ public class Count extends MeasuredValue implements Parseable {
 	public Object parse(String s) {
 		s = s.trim();
 		int i = Integer.parseInt(s);
-		if (i < 0) throw new NumberFormatException();
+		if (i < 0) {
+			throw new NumberFormatException(
+					"value for type count should be > 0. Given value is: " + i);
+		}
 		return i;
+	}
+
+	@Override
+	public void setPattern(String parsePattern) {
+		// do nothing, it's Java base type wrapper
 	}
 }

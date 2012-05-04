@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.interfaces.Parseable;
 import org.n52.sos.importer.view.i18n.Lang;
 
@@ -50,51 +52,85 @@ public class ParseTestLabel extends JLabel {
 	
 	private static final Logger logger = Logger.getLogger(ParseTestLabel.class);
 	
+	private ParseTestLabel _this;
+	
+	private List<String> values;
+	
+	private Runnable parserThread;
+	
 	public ParseTestLabel(Parseable parser, int firstLineWithData) {
 		super();
+		if (logger.isTraceEnabled()) {
+			logger.trace("ParseTestLabel()[" + this.hashCode() + "]");
+		}
 		this.parser = parser;
 		this.firstLineWithData = firstLineWithData;
+		this._this = this;
+		this.parserThread = new ParserThread();
 	}
 	
 	public void parseValues(List<String> values) {
-		int notParseableValues = 0;
-		int currentLine = 0;
-		StringBuilder notParseable = new StringBuilder();
-		Set<String> notParseableStrings = new HashSet<String>();
-		notParseable.append("<html>");
-
-		for (String value: values) {
-			if(currentLine >= firstLineWithData) {
-				try {
-					parser.parse(value);
-				} catch (Exception e) {
-					if (notParseableStrings.add(value))
-						notParseable.append(value + "<br>");
-					notParseableValues++;
-				}
-			} else {
-				if (logger.isDebugEnabled()) {
-					logger.debug("skipping line to parse #" + currentLine);
-				}
+		if (logger.isTraceEnabled()) {
+			logger.trace("[" + this.hashCode() + "]." +
+					"parseValues()");
+		}
+		this.setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
+				"</u></html>");
+		this.values = values;
+		BackNextController.getInstance().setNextButtonEnabled(false);
+		// call invokeLater()
+		SwingUtilities.invokeLater(this.parserThread);
+	}	
+	
+	private class ParserThread implements Runnable{
+		@Override
+		public void run() {
+			if (logger.isTraceEnabled()) {
+				logger.trace("[" + this.hashCode() + "]." +
+						"run() <- parsing values ###########################################################");
 			}
-			currentLine++;
+			int notParseableValues = 0;
+			int currentLine = 0;
+			StringBuilder notParseable = new StringBuilder();
+			String text = "";
+			Set<String> notParseableStrings = new HashSet<String>();
+			//
+			notParseable.append("<html>");
+			// do the test parsing
+			for (String value: values) {
+				if(currentLine >= firstLineWithData) {
+					try {
+						parser.parse(value);
+					} catch (Exception e) {
+						if (notParseableStrings.add(value))
+							notParseable.append(value + "<br>");
+						notParseableValues++;
+					}
+				} else {
+					if (logger.isDebugEnabled()) {
+						logger.debug("skipping line to parse #" + currentLine);
+					}
+				}
+				currentLine++;
+			}
+			// handle the results of the test parsing
+			if (notParseableValues == 0) {
+				text = Lang.l().step3aParseTestAllOk();
+				_this.setForeground(Color.blue);
+			} else if (notParseableValues == 1) {
+				text = Lang.l().step3aParseTest1Failed();
+				_this.setForeground(Color.red);
+			} else {
+				text = Lang.l().step3aParseTestNFailed(notParseableValues);
+				_this.setForeground(Color.red);
+			}
+			_this.setText("<html><u>" + text+ "</u></html>");
+			notParseable.append("</html>");
+			_this.setToolTipText(notParseable.toString());
+			// enabled next button after parsing
+			// TODO maybe add check if no value could be parsed -> dialog and not enabling next
+			BackNextController.getInstance().setNextButtonEnabled(true);
 		}
-		
-		String text = "";
-		if (notParseableValues == 0) {
-			text = Lang.l().step3aParseTestAllOk();
-			this.setForeground(Color.blue);
-		} else if (notParseableValues == 1) {
-			text = Lang.l().step3aParseTest1Failed();
-			this.setForeground(Color.red);
-		} else {
-			text = Lang.l().step3aParseTestNFailed(notParseableValues);
-			this.setForeground(Color.red);
-		}
-		
-		this.setText("<html><u>" + text+ "</u></html>");
-		
-		notParseable.append("</html>");
-		this.setToolTipText(notParseable.toString());
-	}			
+	}
+	
 }

@@ -27,15 +27,21 @@ package org.n52.sos.importer.interfaces;
  * interface for objects which can be formatted along a 
  * certain pattern into a String
  * (e.g. Java-Date + pattern "yyyy-MM-dd" --> "2011-08-04")
- * @author Raimund
+ * @author Raimund, e.h.juerrens@52north.org
  *
  */
 public interface Formatable {
 
 	/**
 	 * formats an object along a certain pattern into a String
-	 * @param o
+	 * @param o the object to format
 	 * @return
 	 */
-	public abstract String format(Object o);
+	public String format(Object o);
+	
+	/**
+	 * set the pattern to be used by format(String s);
+	 * @param parsePattern
+	 */
+	public void setPattern(String formatPattern);
 }

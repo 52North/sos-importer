@@ -587,6 +587,11 @@ public class De extends Lang{
 		return "Maßeinheit";
 	}
 
+	@Override
+	public String waitForParseResultsLabel() {
+		return "Teste Einlesen der Spalte...";
+	}
+
 	public String warningDialogTitle() {
 		return "Warnung";
 	}

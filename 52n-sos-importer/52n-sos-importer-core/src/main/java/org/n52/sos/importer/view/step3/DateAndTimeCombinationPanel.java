@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.DateAndTimeController;
-import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
@@ -58,13 +57,17 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	
 	private DateAndTime dateAndTime;
 	
-	public DateAndTimeCombinationPanel(JPanel containerPanel, int firstLineWithData) {	
+	public DateAndTimeCombinationPanel(JPanel containerPanel, 
+			int firstLineWithData) {	
 		super(containerPanel,firstLineWithData);
+		this.dateAndTime = new DateAndTime();
 	}
 
 	@Override
-	public Combination getCombination() {
-		if (dateAndTime == null) dateAndTime = new DateAndTime();
+	public DateAndTime getCombination() {
+		if (dateAndTime == null) {
+			dateAndTime = new DateAndTime();
+		}
 		return dateAndTime;
 	}
 

@@ -53,7 +53,7 @@ public class ConfigurationTest {
 		// init looger
 		Logger root = Logger.getRootLogger();
 		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-1p (%c{1}.java:%L) - %m %n")));
+		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
 		//
 		if (logger.isDebugEnabled()) {
 			logger.debug("Starting configuration test.");
