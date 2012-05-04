@@ -296,17 +296,17 @@ public class En extends Lang{
 
 	@Override
 	public String step3aParseTest1Failed() {
-		return "1 value not parseable";
+		return "1 value could not be interpreted.";
 	}
 
 	@Override
 	public String step3aParseTestAllOk() {
-		return "All values parseable";
+		return "All values could be interpreted.";
 	}
 
 	@Override
 	public String step3aParseTestNFailed(int n) {
-		return n + " values not parseable";
+		return n + " values could not be interpreted.";
 	}
 
 	@Override
@@ -583,6 +583,11 @@ public class En extends Lang{
 
 	public String unitOfMeasurement() {
 		return "Unit of Measurement";
+	}
+
+	@Override
+	public String waitForParseResultsLabel() {
+		return "Testing evaluation pattern for column...";
 	}
 
 	public String warningDialogTitle() {

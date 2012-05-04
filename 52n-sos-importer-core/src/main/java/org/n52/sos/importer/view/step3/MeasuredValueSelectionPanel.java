@@ -27,7 +27,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.TableElement;
@@ -63,7 +62,7 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 	public void setDefaultSelection() {	}
 	
 	protected void reInit() {
-		parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
+		//parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
 	}		
 	
 	@Override

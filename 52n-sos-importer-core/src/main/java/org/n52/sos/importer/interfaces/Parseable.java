@@ -27,10 +27,10 @@ package org.n52.sos.importer.interfaces;
  * interface for objects which can convert Strings with the help 
  * of a certain pattern into this object
  * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --> DateAndTime object)
- * @author Raimund
+ * @author Raimund, e.h.juerrens@52north.org
  *
  */
-public abstract interface Parseable {
+public interface Parseable {
 
 	/**
 	 * converts a String with the help of a certain pattern 
@@ -38,5 +38,11 @@ public abstract interface Parseable {
 	 * @param s
 	 * @return
 	 */
-	public abstract Object parse(String s);
+	public Object parse(String s);
+	
+	/**
+	 * set the pattern to be used by parse(String s);
+	 * @param parsePattern
+	 */
+	public void setPattern(String parsePattern); 
 }

@@ -50,6 +50,10 @@ public abstract class SelectionPanel extends JPanel {
 		this.containerPanel = containerPanel;
 	}
 	
+	/**
+	 * This method is called when the settings for the step controller are loaded
+	 * @param s
+	 */
 	protected abstract void setSelection(String s);
 	
 	/**
@@ -66,7 +70,7 @@ public abstract class SelectionPanel extends JPanel {
 	}
 	
 	/**
-	 * called when a selection has been restored
+	 * called when a selection has been restored and the panel is added to view
 	 */
 	protected void reInit() {
 	}

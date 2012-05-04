@@ -87,4 +87,9 @@ public class NumericValue extends MeasuredValue implements Formatable {
 	public String toString() {
 		return "Numeric Value" + super.toString();
 	}
+
+	@Override
+	public void setPattern(String formatPattern) {
+		// do nothing, it's Java base type wrapper
+	}
 }

@@ -24,6 +24,7 @@
 package org.n52.sos.importer.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -175,19 +176,23 @@ public class PositionController {
 	public void mergePositions() {
 		logger.info("Merge Positions");
 		List<Position> positions = ModelStore.getInstance().getPositions();
-		List<Position> mergedPositions = new ArrayList<Position>();
-		for (int i = 0; i < positions.size(); i++) {
-			Position p1 = positions.get(i);
+		ArrayList<Position> mergedPositions = new ArrayList<Position>();
+		while (!positions.isEmpty()) {
+			Position p1 = positions.get(0);
 			positions.remove(p1);
-			for (int j = 0; j < positions.size(); j++) {
-				Position p2 = positions.get(j);
+			// create tmp list from left over ps
+			List<Position> list2 = new ArrayList<Position>(positions);
+			Iterator<Position> pIter = list2.iterator();
+			while (pIter.hasNext()) {
+				Position p2 = (Position) pIter.next();
 				if (p1.getGroup().equals(p2.getGroup())) {
-					merge(p1, p2);
+					this.merge(p1, p2);
 					positions.remove(p2);
 				}
 			}
 			mergedPositions.add(p1);
 		}
+		mergedPositions.trimToSize();
 		ModelStore.getInstance().setPositions(mergedPositions);
 	}
 	

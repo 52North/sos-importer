@@ -3,7 +3,7 @@
 <log4j:configuration>
 	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-1p (%c{1}.java:%L) - %m %n"/>
+			<param name="ConversionPattern" value="%-6r %-1p (%c{1}.java:%L) - %m %n"/>
 		</layout>
 	</appender>
 	<appender name="RoFi" class="org.apache.log4j.DailyRollingFileAppender">
@@ -18,10 +18,25 @@
 	<!--
 	FILTER
 	Level: OFF, ERROR, WARN, INFO, DEBUG
-	 -->
-	<!-- <logger name="org.n52.sos.importer">
+	For example: 
+	<logger name="org.n52.sos.importer">
 		<level value="INFO" />
-	</logger>-->
+	</logger>
+	-->
+
+	<logger name="org.n52.sos.importer.model.XMLModel">
+		<level value="DEBUG"></level>
+	</logger>
+	<logger name="org.n52.sos.importer.model.BackNextModel">
+		<level value="TRACE"></level>
+	</logger>
+	<logger name="org.n52.sos.importer.controller.BackNextController">
+		<level value="TRACE"></level>
+	</logger>
+
+	<logger name="org.n52.sos.importer.view.step3.ParseTestLabel">
+		<level value="DEBUG"></level>
+	</logger>
 	<!-- 
 	EXTERNAL - LIBS
 	 -->

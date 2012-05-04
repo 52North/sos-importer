@@ -34,6 +34,7 @@ import javax.swing.ButtonModel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.model.table.TableElement;
 
@@ -48,6 +49,8 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	protected ButtonGroup group = new ButtonGroup();
 	
+	private static final Logger logger = Logger.getLogger(RadioButtonPanel.class);
+	
 	public RadioButtonPanel(JPanel containerPanel) {
 		super(containerPanel);
         this.setLayout(new GridLayout(0, 1));
@@ -60,8 +63,9 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	protected void addRadioButton(String name) {
 		JRadioButton radioButton = new JRadioButton(name);
 		radioButton.addActionListener(new RemoveChildPanel());
-		if (group.getButtonCount() == 0) 
+		if (group.getButtonCount() == 0) {
 			radioButton.setSelected(true);
+		}
 		group.add(radioButton);
 		this.add(radioButton);
 	}
@@ -139,9 +143,12 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getSelectedChildPanel() != null) 
+			if (logger.isTraceEnabled()) {
+				logger.trace("actionPerformed(cmd: " + arg0.getActionCommand() + ")");
+			}
+			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
-			
+			}
 			setSelectedChildPanel(childPanel);
 			childPanel.addToContainerPanel();		
 			

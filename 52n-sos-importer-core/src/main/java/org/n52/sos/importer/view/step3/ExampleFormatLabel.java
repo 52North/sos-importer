@@ -27,6 +27,7 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.interfaces.Formatable;
 import org.n52.sos.importer.view.i18n.Lang;
 
@@ -39,13 +40,27 @@ public class ExampleFormatLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final Logger logger = Logger.getLogger(ExampleFormatLabel.class);
+	
 	private Formatable formatter;
 	
 	public ExampleFormatLabel(Formatable formatter) {
 		super();
+		if (logger.isTraceEnabled()) {
+			logger.trace("ExampleFormatLabel(formatter: " + 
+					(formatter!=null?
+							formatter.getClass().getSimpleName():
+								formatter)
+					+ ")");
+		}
 		this.formatter = formatter;
 	}
 	
+	/**
+	 * This method formats the given object and sets the result as text for the
+	 * example label.
+	 * @param o
+	 */
 	public void reformat(Object o) {
 		try {
 			String formattedValue = formatter.format(o);
@@ -53,7 +68,22 @@ public class ExampleFormatLabel extends JLabel {
 	        this.setText(formattedValue);
 		} catch (Exception e) {
 	    	this.setForeground(Color.red);
-	    	this.setText(Lang.l().error() + ": " + e.getMessage());
+	    	this.setText(Lang.l().error() + ": " + e.getLocalizedMessage());
 		}
-	}			
+	}
+
+	/**
+	 * @return the formatter
+	 */
+	public Formatable getFormatter() {
+		return formatter;
+	}
+
+	/**
+	 * @param formatter the formatter to set
+	 */
+	public void setFormatter(Formatable formatter) {
+		this.formatter = formatter;
+	}
+		
 }

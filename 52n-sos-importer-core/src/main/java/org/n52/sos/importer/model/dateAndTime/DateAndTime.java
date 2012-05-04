@@ -123,13 +123,13 @@ public class DateAndTime extends Combination {
 	@Override
 	public Object parse(String s) {
 		Date dateTime = null;
-		String currentPattern = getPattern();
+		String currentPattern = this.getPattern();
 		SimpleDateFormat formatter =
 	           new SimpleDateFormat(currentPattern);      	
         try {
         	dateTime = formatter.parse(s);
 		} catch (ParseException e) {
-			throw new NumberFormatException();
+			throw new NumberFormatException(e.getLocalizedMessage());
 		}
 		return dateTime;
 	}
@@ -138,7 +138,7 @@ public class DateAndTime extends Combination {
 	public String format(Object o) {
         Date date = (Date)o;		        
     	SimpleDateFormat formatter =
-	           new SimpleDateFormat(getPattern());      	
+	           new SimpleDateFormat(this.getPattern());      	
         String dateString = formatter.format(date);
 
 		return dateString;

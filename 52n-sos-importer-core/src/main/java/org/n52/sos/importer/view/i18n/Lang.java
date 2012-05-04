@@ -616,6 +616,11 @@ public abstract class Lang {
 	public abstract String unitOfMeasurement();
 
 	/**
+	 * @return Testing evaluation pattern for column
+	 */
+	public abstract String waitForParseResultsLabel();
+
+	/**
 	 * @return Warning
 	 */
 	public abstract String warningDialogTitle();

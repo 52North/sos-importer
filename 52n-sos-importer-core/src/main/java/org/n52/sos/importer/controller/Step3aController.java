@@ -139,7 +139,6 @@ public class Step3aController extends StepController {
 		// when having reached the last column, merge positions and date&time
 		if (this.step3Model.getMarkedColumn() + 1 == 
 				tabCtrlr.getColumnCount()) {	
-			
 			DateAndTimeController dtc = new DateAndTimeController();
 			dtc.mergeDateAndTimes();
 			//

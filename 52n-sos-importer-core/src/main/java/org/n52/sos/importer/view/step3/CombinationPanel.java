@@ -26,6 +26,7 @@ package org.n52.sos.importer.view.step3;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -33,6 +34,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
@@ -45,6 +47,8 @@ import org.n52.sos.importer.view.utils.Constants;
  * example for the pattern, to test parsing the marked values in the 
  * table and to choose a group for the combination
  * @author Raimund
+ * 
+ * TODO document the methods
  *
  */
 public abstract class CombinationPanel extends SelectionPanel {
@@ -52,6 +56,8 @@ public abstract class CombinationPanel extends SelectionPanel {
 	// 			examples/components/ComboBoxDemo2Project/src/components/
 	// 			ComboBoxDemo2.java
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(CombinationPanel.class);
 
 	private JLabel groupLabel;
 	private JComboBox groupComboBox = new JComboBox(getGroupItems());
@@ -59,7 +65,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	private EditableJComboBoxPanel patternComboBox;
 	
     private JLabel exampleLabel;
-    private final ExampleFormatLabel exampleFormatLabel = new ExampleFormatLabel(getCombination());
+    private ExampleFormatLabel exampleFormatLabel;
 	
     private ParseTestLabel parseTestLabel;
 
@@ -68,9 +74,10 @@ public abstract class CombinationPanel extends SelectionPanel {
 		
 		this.parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
 		this.patternComboBox= new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
+		this.exampleFormatLabel =  new ExampleFormatLabel(getCombination());
 		patternComboBox.addActionListener(new FormatChanged());
 		groupComboBox.setToolTipText(getGroupToolTip());
-		setDefaultSelection();
+		//setDefaultSelection();
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -110,18 +117,25 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
 	public void setSelection(String s) {
+    	if (logger.isTraceEnabled()) {
+			logger.trace("setSelection()");
+		}
     	String[] part = s.split(Constants.SEPARATOR_STRING);
 		patternComboBox.setSelectedItem(part[0]);
 		groupComboBox.setSelectedItem(part[1]);
-    	patternChanged();
+		// FIXME is this call really required?
+		// patternChanged();
 	}
 	
 	@Override
 	public void setDefaultSelection() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("setDefaultSelection()");
+		}
 		String pattern = (String) getPatterns().getElementAt(0);
 		String group = (String) getGroupItems()[0];
 		patternComboBox.setSelectedItem(pattern);
-		getCombination().setPattern(pattern);
+		this.getCombination().setPattern(pattern);
 		groupComboBox.setSelectedItem(group);
 	}
 	
@@ -134,16 +148,27 @@ public abstract class CombinationPanel extends SelectionPanel {
     
     protected void patternChanged() {
     	String pattern = (String) patternComboBox.getSelectedItem();
-    	getCombination().setPattern(pattern);
-    	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
-    	exampleFormatLabel.reformat(getTestValue());
+    	if (logger.isTraceEnabled()) {
+			logger.trace("patternChanged(" + pattern + ")");
+		}
+    	List<String> values = TableController.getInstance().getMarkedValues();
+    	Object tester = getTestValue();
+    	//
+    	this.getCombination().setPattern(pattern);
+    	this.exampleFormatLabel.getFormatter().setPattern(pattern);
+    	// test if the current selected pattern is applicable 
+    	parseTestLabel.parseValues(values);
+    	// display example using the current defined pattern
+    	exampleFormatLabel.reformat(tester);
     }
     
     @Override
     protected void reInit() {
-    	parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
-    	exampleFormatLabel.reformat(getTestValue());
-    };
+    	if (logger.isTraceEnabled()) {
+			logger.trace("reInit()");
+		}
+    	this.patternChanged();
+    }
   	    
 	private class FormatChanged implements ActionListener {
 		
