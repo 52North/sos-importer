@@ -43,8 +43,6 @@ public class Step3Model implements StepModel{
 		this.firstLineWithData = firstLineWithData;
 		this.useHeader = useHeader;
 		this.columnAssignments = new HashMap<Integer, List<String>>();
-//		selection = new ArrayList<String>();
-//		selection.add("Undefined");
 	}
 
 	/**
@@ -61,11 +59,11 @@ public class Step3Model implements StepModel{
 		this.columnAssignments.put(this.markedColumn, selection);
 		List<String> addedValue = this.columnAssignments.get(this.markedColumn);
 		if (logger.isDebugEnabled()) {
-			logger.debug("Next two values should be equal: ");
-			logger.debug("addedValue: " + addedValue);
-			logger.debug("selection : " + selection);
-			logger.debug("==? " + (addedValue==selection));
-			logger.debug("equals? " + addedValue.equals(selection));
+			logger.debug("Next two values should be equal: " + 
+					"addedValue: \"" + addedValue + "\"; " +
+					"selection : \"" + selection + "\"; " +
+					"aV==sel? " + (addedValue==selection) +
+					"; aV.equals(sel)? " + addedValue.equals(selection));
 		}
 		if(addedValue == selection && addedValue.equals(selection)) {
 			return true;
@@ -98,18 +96,6 @@ public class Step3Model implements StepModel{
 		}
 		return this.columnAssignments;
 	}
-/*
-	public void setSelection(List<String> selection) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("setSelection(): " + selection);
-		}
-		this.selection = selection;
-	}
-*/
-	/**
-	 * returns the saved selection of the radio button panel
-	 */
-//	public List<String> getSelection() { return selection; }
 	/*
 	 * 	simple getter and setter
 	 */
@@ -117,4 +103,15 @@ public class Step3Model implements StepModel{
 	public int getMarkedColumn() { return markedColumn; }
 	public void setMarkedColumn(int colIndex) { this.markedColumn = colIndex; }
 	public boolean getUseHeader() { return useHeader; }
+	
+	public String toString() {
+		String s = "Step3Model" + 
+				"[" + hashCode() + "]: " +
+				"fLWD: " + firstLineWithData + ", " + 
+				"uH: " + useHeader + ", " + 
+				"mC: " + markedColumn + ", " +
+				"cA: " + columnAssignments;
+		return s;
+	}
+	
 }

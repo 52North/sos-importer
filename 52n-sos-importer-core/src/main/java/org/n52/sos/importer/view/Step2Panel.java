@@ -107,6 +107,7 @@ public class Step2Panel extends JPanel {
 				} else if (number > (csvFileRowCount-1)){
 					lineModel.setValue((csvFileRowCount-1));
 					setFirstLineWithData(number);
+					setCSVFileHighlight(number);
 				} else {
 					setCSVFileHighlight(number);
 				}
@@ -252,7 +253,6 @@ public class Step2Panel extends JPanel {
 
 	public void setFirstLineWithData(int firstLineWithData) {
 		lineModel.setValue(firstLineWithData);
-		this.setCSVFileHighlight(firstLineWithData);
 	}
 	
 	public String getTextQualifier() {

@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.controller;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.BackNextPanel;
@@ -35,6 +36,8 @@ import org.n52.sos.importer.view.BackNextPanel;
 public class BackNextController {
 	
 	private static BackNextController instance = null;
+	
+	private static final Logger logger = Logger.getLogger(BackNextController.class);
 	
 	private BackNextModel bNModel = null;
 	
@@ -74,7 +77,10 @@ public class BackNextController {
 		this.backNextPanel.setNextButtonEnabled(isNextButtonEnabled);
 	}
 	
-	public void backButtonPressed() {
+	public void backButtonClicked() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("backButtonClicked()\n\n");
+		}
 		StepController currentSC = this.bNModel.getCurrentStepController();
 		currentSC.back();
 		this.bNModel.addFollowingStepController(currentSC);
@@ -85,6 +91,9 @@ public class BackNextController {
 	}
 	
 	public void nextButtonClicked() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("nextButtonClicked()\n\n");
+		}
 		StepController currentSC = this.bNModel.getCurrentStepController();
 		// handle potential language switch
 		if(currentSC instanceof Step1Controller) {
@@ -97,7 +106,7 @@ public class BackNextController {
 		}
 		//
 		currentSC.saveSettings();
-		// update the xml model, too
+		// update the XML model, too
 		mC.updateModel();
 		// put controller on stack
 		this.bNModel.addPreviousStepController(currentSC);
@@ -106,7 +115,6 @@ public class BackNextController {
 		StepController followingSC = this.bNModel.getFollowingStepController();
 		if (followingSC != null && followingSC.isStillValid()) {
 			mC.setStepController(followingSC);
-			mC.removeProvider(currentSC.getModel());
 		} else { 
 			//
 			// used to get 4a,b,c,d steps before getting 5a, for example
@@ -115,7 +123,6 @@ public class BackNextController {
 			StepController nextSC = currentSC.getNext(); 
 			if (nextSC != null) {
 				mC.setStepController(nextSC);
-				mC.removeProvider(currentSC.getModel());
 			} else {
 				// When is this code called? In which situation?
 				// When step n+1 is called after step n
@@ -128,12 +135,15 @@ public class BackNextController {
 				}
 				//
 				mC.setStepController(nextSC);
-				mC.removeProvider(currentSC.getModel());
 			}
 		}
+		mC.removeProvider(currentSC.getModel());
 	}
 	
 	public void finishButtonClicked() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("finishButtonClicked()\n\n");
+		}
 		MainController.getInstance().exit();
 	}
 	

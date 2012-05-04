@@ -55,31 +55,35 @@ public class Step3Panel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel rootPanel = new JPanel();
-	private JPanel additionalPanel1 = new JPanel();
-	private JPanel additionalPanel2 = new JPanel();
+	/**
+	 * This panel holds the first column with radion buttons for each column
+	 * type, or Do-not-export
+	 */
+	private JPanel columnTypeJP = new JPanel();
+	private JPanel columnSubTypeJP = new JPanel();
+	private JPanel columnSubTypeMetadataJP = new JPanel();
 	private TablePanel tablePanel = TablePanel.getInstance();
-	private final SelectionPanel radioButtonPanel;
+	private final SelectionPanel columnTypeRadioButtonPanel;
 	
 	public Step3Panel(int firstLineWithData) {
 		super();
-		radioButtonPanel = new RootPanel(firstLineWithData);	
-		radioButtonPanel.getContainerPanel().add(radioButtonPanel);
+		columnTypeRadioButtonPanel = new ColumnTypePanel(firstLineWithData);	
+		columnTypeRadioButtonPanel.getContainerPanel().add(columnTypeRadioButtonPanel);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 	    this.add(tablePanel);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		buttonPanel.add(rootPanel);
-		buttonPanel.add(additionalPanel1);
-		buttonPanel.add(additionalPanel2);
+		buttonPanel.add(columnTypeJP);
+		buttonPanel.add(columnSubTypeJP);
+		buttonPanel.add(columnSubTypeMetadataJP);
 		this.add(buttonPanel);
 	}
 	
 	public void clearAdditionalPanels() {
-		additionalPanel1.removeAll();
-		additionalPanel2.removeAll();
+		columnSubTypeJP.removeAll();
+		columnSubTypeMetadataJP.removeAll();
 	}
 	
 	/**
@@ -88,8 +92,8 @@ public class Step3Panel extends JPanel {
 	 * @return
 	 */
 	public SelectionPanel getLastChildPanel() {
-		SelectionPanel lastChildPanel = radioButtonPanel;
-		SelectionPanel nextPanel = radioButtonPanel.getSelectedChildPanel();
+		SelectionPanel lastChildPanel = columnTypeRadioButtonPanel;
+		SelectionPanel nextPanel = columnTypeRadioButtonPanel.getSelectedChildPanel();
 		while (nextPanel != null) {
 			lastChildPanel = nextPanel;
 			nextPanel = nextPanel.getSelectedChildPanel();
@@ -103,18 +107,18 @@ public class Step3Panel extends JPanel {
 	 * @param selection list of all selected items, e.g. column type and the corresponding meta data
 	 */
 	public void store(List<String> selection) {
-		radioButtonPanel.store(selection);
+		columnTypeRadioButtonPanel.store(selection);
 	}
 	
 	public void restore(List<String> selection) {
-		radioButtonPanel.restore(selection);
+		columnTypeRadioButtonPanel.restore(selection);
 	}
 	
 	public void restoreDefault() {
-		radioButtonPanel.restoreDefault();
+		columnTypeRadioButtonPanel.restoreDefault();
 	}
 	
-	private class RootPanel extends RadioButtonPanel {
+	private class ColumnTypePanel extends RadioButtonPanel {
 		
 		private static final long serialVersionUID = 1L;
 		
@@ -123,17 +127,16 @@ public class Step3Panel extends JPanel {
 		 * column type
 		 * @param firstLineWithData required for the test parsing results
 		 */
-		public RootPanel(int firstLineWithData) {	
-			super(rootPanel);
-			addRadioButton(Lang.l().step3ColTypeUndefined());
+		public ColumnTypePanel(int firstLineWithData) {	
+			super(columnTypeJP);
+			addRadioButton(Lang.l().step3ColTypeDoNotExport());	
 			addRadioButton(Lang.l().step3ColTypeMeasuredValue(), ToolTips.get(ToolTips.MEASURED_VALUE), new MeasuredValuePanel(firstLineWithData));
 			addRadioButton(Lang.l().step3ColTypeDateTime(), ToolTips.get(ToolTips.DATE_AND_TIME), new DateAndTimePanel(firstLineWithData));
 			addRadioButton(Lang.l().position(), ToolTips.get(ToolTips.POSITION), new PositionPanel(firstLineWithData));
-			addRadioButton(Lang.l().featureOfInterest(), ToolTips.get(ToolTips.FEATURE_OF_INTEREST), new ResourceSelectionPanel(additionalPanel1, new FeatureOfInterest()));
-			addRadioButton(Lang.l().observedProperty(), ToolTips.get(ToolTips.OBSERVED_PROPERTY), new ResourceSelectionPanel(additionalPanel1, new ObservedProperty()));
-			addRadioButton(Lang.l().unitOfMeasurement(), ToolTips.get(ToolTips.UNIT_OF_MEASUREMENT), new ResourceSelectionPanel(additionalPanel1, new UnitOfMeasurement()));
-			addRadioButton(Lang.l().sensor(), ToolTips.get(ToolTips.SENSOR), new ResourceSelectionPanel(additionalPanel1, new Sensor()));
-			addRadioButton(Lang.l().step3ColTypeDoNotExport());				
+			addRadioButton(Lang.l().featureOfInterest(), ToolTips.get(ToolTips.FEATURE_OF_INTEREST), new ResourceSelectionPanel(columnSubTypeJP, new FeatureOfInterest()));
+			addRadioButton(Lang.l().observedProperty(), ToolTips.get(ToolTips.OBSERVED_PROPERTY), new ResourceSelectionPanel(columnSubTypeJP, new ObservedProperty()));
+			addRadioButton(Lang.l().unitOfMeasurement(), ToolTips.get(ToolTips.UNIT_OF_MEASUREMENT), new ResourceSelectionPanel(columnSubTypeJP, new UnitOfMeasurement()));
+			addRadioButton(Lang.l().sensor(), ToolTips.get(ToolTips.SENSOR), new ResourceSelectionPanel(columnSubTypeJP, new Sensor()));			
 		}
 
 		private class MeasuredValuePanel extends RadioButtonPanel {
@@ -145,11 +148,11 @@ public class Step3Panel extends JPanel {
 			 * @param firstLineWithData required for the test parsing results
 			 */
 			public MeasuredValuePanel(int firstLineWithData) {	
-				super(additionalPanel1);		
-				addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new NumericValuePanel(additionalPanel2, firstLineWithData));
-				addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(additionalPanel2, new Count(),firstLineWithData));
-				addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(additionalPanel2, new Boolean(),firstLineWithData));
-				addRadioButton(Lang.l().step3MeasuredValText(), ToolTips.get(ToolTips.TEXT), new MeasuredValueSelectionPanel(additionalPanel2, new Text(),firstLineWithData));
+				super(columnSubTypeJP);		
+				addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new NumericValuePanel(columnSubTypeMetadataJP, firstLineWithData));
+				addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(),firstLineWithData));
+				addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(),firstLineWithData));
+				addRadioButton(Lang.l().step3MeasuredValText(), ToolTips.get(ToolTips.TEXT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Text(),firstLineWithData));
 			}	
 		}
 		
@@ -162,8 +165,14 @@ public class Step3Panel extends JPanel {
 			 * @param firstLineWithData required for the test parsing results
 			 */
 			public DateAndTimePanel(int firstLineWithData) {
-				super(additionalPanel1);
-				addRadioButton(Lang.l().step3DateAndTimeCombination(), null, new DateAndTimeCombinationPanel(additionalPanel2, firstLineWithData));
+				super(columnSubTypeJP);
+				addRadioButton(
+						Lang.l().step3DateAndTimeCombination(), 
+						null, 
+						new DateAndTimeCombinationPanel(
+								columnSubTypeMetadataJP,
+								firstLineWithData)
+				);
 				addRadioButton(Lang.l().step3DateAndTimeUnixTime());
 			}	
 		}
@@ -177,9 +186,15 @@ public class Step3Panel extends JPanel {
 			 * @param firstLineWithData required for the test parsing results
 			 */
 			public PositionPanel(int firstLineWithData) {
-				super(additionalPanel1);	
-				addRadioButton(Lang.l().step3PositionCombination(), null, new PositionCombinationPanel(additionalPanel2, firstLineWithData));
+				super(columnSubTypeJP);	
+				addRadioButton(
+						Lang.l().step3PositionCombination(),
+						null,
+						new PositionCombinationPanel(
+								columnSubTypeMetadataJP,
+								firstLineWithData));
 			}
 		}	
 	}		
+	
 }
