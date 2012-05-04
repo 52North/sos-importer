@@ -84,8 +84,11 @@ public class Step2Controller extends StepController {
 	public StepController getNextStepController() {
 		Object[][] content = parseCSVFile();
 		TableController.getInstance().setContent(content);
-		TableController.getInstance().setFirstLineWithData(this.step2Model.getFirstLineWithData());
-		return new Step3aController(this.step2Model.getFirstLineWithData(),this.step2Model.getUseHeader());
+		TableController.getInstance().setFirstLineWithData(
+				this.step2Model.getFirstLineWithData());
+		return new Step3aController(0,
+				this.step2Model.getFirstLineWithData(),
+				this.step2Model.getUseHeader());
 	}
 	
 	@Override

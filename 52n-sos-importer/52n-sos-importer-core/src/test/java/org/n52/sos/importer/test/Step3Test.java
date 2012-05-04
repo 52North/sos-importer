@@ -26,10 +26,9 @@ package org.n52.sos.importer.test;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step3aController;
 import org.n52.sos.importer.controller.TableController;
-import org.n52.sos.importer.model.Step3Model;
 
 public class Step3Test {
-	
+
 	public static void main(String[] args) {
 		MainController f = MainController.getInstance();
 		Object[][] o = TestData.EXAMPLE_TABLE;
@@ -38,12 +37,10 @@ public class Step3Test {
 		int markedColumn = 0;
 		int firstLineWithData = 1;
 		boolean useHeader = false;
-
-		f.setStepController(
-				new Step3aController(
-						new Step3Model(
-								markedColumn,
-								firstLineWithData,
-								useHeader)));
+		Step3aController s3C = new Step3aController(markedColumn,
+				firstLineWithData,
+				useHeader);
+		//
+		f.setStepController(s3C);
 	}
 }

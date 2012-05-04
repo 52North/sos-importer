@@ -117,7 +117,7 @@ public class BackNextPanel extends JPanel {
 	
 	private class BackButtonClicked implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			BackNextController.getInstance().backButtonPressed();
+			BackNextController.getInstance().backButtonClicked();
 		}
 	}
 	

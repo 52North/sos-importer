@@ -25,6 +25,7 @@ package org.n52.sos.importer.model;
 
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.StepController;
 
 /**
@@ -36,6 +37,8 @@ public class BackNextModel {
 
 	private Stack<StepController> previousStepControllers;
 	
+	private static final Logger logger = Logger.getLogger(BackNextModel.class);
+	
 	private Stack<StepController> followingStepControllers;
 	
 	private StepController currentStepController;
@@ -46,27 +49,68 @@ public class BackNextModel {
 	}
 	
 	public StepController getPreviousStepController() {
-		return previousStepControllers.pop();
+		if (logger.isTraceEnabled()) {
+			logger.trace("getPreviousStepController()");
+		}
+		StepController sc = previousStepControllers.pop();
+		if (logger.isTraceEnabled()) {
+			logger.trace("result: " + 
+					(sc!=null?sc.getClass().getSimpleName():sc) + 
+					"[" + (sc!=null?sc.hashCode():sc) + "])");
+		}
+		return sc;
 	}
 	
 	public void addPreviousStepController(StepController sc) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("addPreviousStepController(" + 
+					(sc!=null?sc.getClass().getSimpleName():sc) + 
+					"[" + (sc!=null?sc.hashCode():sc) + "])");
+		}
 		previousStepControllers.push(sc);
 	}
 
-	public void setCurrentStepController(StepController currentStepController) {
-		this.currentStepController = currentStepController;
+	public void setCurrentStepController(StepController currentSC) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("setCurrentStepController(" + 
+					currentSC.getClass().getSimpleName() + 
+					"[" + currentSC.hashCode() + "])");
+		}
+		this.currentStepController = currentSC;
 	}
 
 	public StepController getCurrentStepController() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getCurrentStepController()" +
+					(this.currentStepController != null? ": result:" +
+					this.currentStepController.getClass().getSimpleName() + 
+					"[" + this.currentStepController.hashCode() + "]":""));
+		}
 		return currentStepController;
 	}
 	
 	public StepController getFollowingStepController() {
-		if (followingStepControllers.size() == 0) return null;
-		return followingStepControllers.pop();
+		if (logger.isTraceEnabled()) {
+			logger.trace("getFollowingStepController()");
+		}
+		StepController sc = null;
+		if (followingStepControllers.size() > 0) {
+			sc = followingStepControllers.pop(); 
+		}
+		if (logger.isTraceEnabled()) {
+			logger.trace("result: " + 
+					(sc!=null?sc.getClass().getSimpleName():sc) + 
+					"[" + (sc!=null?sc.hashCode():sc) + "]");
+		}
+		return sc;
 	}
 	
 	public void addFollowingStepController(StepController sc) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("addFollowingStepController(" + 
+					(sc!=null?sc.getClass().getSimpleName():sc) + 
+					"[" + (sc!=null?sc.hashCode():sc) + "])");
+		}
 		followingStepControllers.push(sc);
 	}
 }

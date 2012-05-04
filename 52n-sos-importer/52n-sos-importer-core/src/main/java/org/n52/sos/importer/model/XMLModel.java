@@ -445,9 +445,9 @@ public class XMLModel {
 				col.setNumber(key);
 			}
 			/*
-			 * SIMPLE TYPES (incl. UnixTime <- requires no metadata)
+			 * SIMPLE TYPES (incl. UnixTime, Do-Not-Export require no metadata)
 			 */
-			if (value.size() == 2) {
+			if (value.size() < 3) {
 				type = value.get(0);
 				this.setSimpleColumnType(col, type);
 				/*
