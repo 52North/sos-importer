@@ -65,11 +65,7 @@ public class Step3Model implements StepModel{
 					"aV==sel? " + (addedValue==selection) +
 					"; aV.equals(sel)? " + addedValue.equals(selection));
 		}
-		if(addedValue == selection && addedValue.equals(selection)) {
-			return true;
-		} else {
-			return false;
-		}
+		return (addedValue == selection && addedValue.equals(selection));
 	}
 	/**
 	 * Returns the stored selection (column assignment) for the given column
@@ -90,7 +86,7 @@ public class Step3Model implements StepModel{
 	 * Returns all selections (column assignments) stored in this model
 	 * @return a <code>HashMap&lt;Integer,List&lt;String&gt;&gt;</code>
 	 */
-	protected HashMap<Integer,List<String>> getAllSelections(){
+	public HashMap<Integer,List<String>> getAllSelections(){
 		if (logger.isTraceEnabled()) {
 			logger.trace("getAllSelections()");
 		}

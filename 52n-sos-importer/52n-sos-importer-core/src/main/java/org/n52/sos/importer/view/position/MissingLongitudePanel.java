@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Longitude;
@@ -45,6 +46,8 @@ import org.n52.sos.importer.view.i18n.Lang;
 public class MissingLongitudePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(MissingLongitudePanel.class);
 
 	private final Position position;
 	
@@ -80,9 +83,12 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 
 	@Override
 	public boolean checkValues() {
+		String longVal = null;
 		try {
-			Double.parseDouble(longitudeTextField.getText());
+			longVal = longitudeTextField.getText();
+			Double.parseDouble(longVal);
 		} catch (NumberFormatException e) {
+			logger.error("Given Longitude value could not be parsed: " + longVal, e);
 			JOptionPane.showMessageDialog(null,
 				    Lang.l().longitudeDialogDecimalValue(),
 				    Lang.l().warningDialogTitle(),

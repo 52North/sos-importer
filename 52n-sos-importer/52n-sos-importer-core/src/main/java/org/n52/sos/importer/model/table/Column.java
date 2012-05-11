@@ -69,15 +69,16 @@ public class Column extends TableElement {
 		HashSet<String> values = new HashSet<String>();
 		for (int i = this.firstLineWithData; i < TableController.getInstance().getRowCount(); i++) {
 			String value = TableController.getInstance().getValueAt(i, this.getNumber());
-			if (value != null && value != "")
+			if (value != null && !value.equalsIgnoreCase("")) {
 				values.add(value);
+			}
 		}
 		return values;
 	}
 	
 	@Override
 	public String toString() {
-		return "column #" + number + "fLWD: " + firstLineWithData;
+		return "column[#:" + number + "; fLWD:" + firstLineWithData + "]";
 	}
 	
 	@Override
@@ -94,7 +95,7 @@ public class Column extends TableElement {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Column))
 			return false;
 		Column other = (Column) obj;
 		if (number != other.number)

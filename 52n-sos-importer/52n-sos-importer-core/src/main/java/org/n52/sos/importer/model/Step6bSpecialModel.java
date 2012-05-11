@@ -81,7 +81,7 @@ public class Step6bSpecialModel implements StepModel {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Step6bSpecialModel))
 			return false;
 		Step6bSpecialModel other = (Step6bSpecialModel) obj;
 		if (featureOfInterestName == null) {

@@ -83,6 +83,10 @@ public abstract class Lang {
 	 */
 	public abstract String backButtonLabel();
 	/**
+	 * @return Code
+	 */
+	public abstract String code();
+	/**
 	 * @return column
 	 */
 	public abstract String column();
@@ -168,7 +172,7 @@ public abstract class Lang {
 	 */
 	public abstract String hours();
 	/**
-	 * @return Info
+	 * @return Information
 	 */
 	public abstract String infoDialogTitle();
 	/**
@@ -199,6 +203,10 @@ public abstract class Lang {
 	 * @return Month
 	 */
 	public abstract String month();
+	/**
+	 * @return Name
+	 */
+	public abstract String name();
 	/**
 	 * @return Next
 	 */
@@ -485,6 +493,14 @@ public abstract class Lang {
 	 */
 	public abstract String step6aModelDescription();
 	/**
+	 * @return Automatic Generation
+	 */
+	public abstract String step6AutomaticGeneration();
+	/**
+	 * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
+	 */
+	public abstract String step6bDefineConcatString();
+	/**
 	 * @return Step 6b: Add missing metadata
 	 */
 	public abstract String step6bDescription();
@@ -494,6 +510,11 @@ public abstract class Lang {
 	 */
 	public abstract String step6bModelDescription();
 	/**
+	 * @return Please select the columns to generate the name.<br />
+	 * 			\nMultiple columns could be selected.
+	 */
+	public abstract String step6bSelectColumnsLabel();
+	/**
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
@@ -502,6 +523,14 @@ public abstract class Lang {
 	 */
 	public abstract String step6bSpecialModelDescription();
 	/**
+	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
+	 */
+	public abstract String step6bURIInstructions();
+	/**
+	 * @return Use Name after prefix?
+	 */
+	public abstract String step6bUseNameAfterPrefix();
+	/**
 	 * @return Step 6c: Add missing positions
 	 */
 	public abstract String step6cDescription();
@@ -509,6 +538,15 @@ public abstract class Lang {
 	 * @return What is the position of
 	 */
 	public abstract String step6cModelDescription();
+	/**
+	 * @return Manual Input
+	 */
+	public abstract String step6ManualInput();
+	/**
+	 * @return No user input at all. Please fill in the required information.
+	 */
+	public abstract String step6MissingUserInput();
+	
 	/**
 	 * @return The selected config file folder <code>folder</code> is not
 	 * 			accessible for the application. 
@@ -535,9 +573,26 @@ public abstract class Lang {
 	 */
 	public abstract String step7DirectImport();
 	/**
+	 * @return Generate Offering from Sensor name?
+	 */
+	public abstract String step7OfferingCheckBoxLabel();
+	/**
+	 * @return Please specify the offering name:
+	 */
+	public abstract String step7OfferingInputTextfieldLabel();
+	/**
+	 * @return Please specify the offering name or select to generate it.
+	 */
+	public abstract String step7OfferingNameNotGiven();
+	/**
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
+	/**
+	 * @param strURL
+	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
+	 */
+	public abstract String step7SOSConncetionStart(String strURL);
 	/**
 	 * @param strURL
 	 * @param responseCode
@@ -547,41 +602,57 @@ public abstract class Lang {
 	/**
 	 * @param strURL
 	 * @param message
-	 * @return Connection to Sensor Observation Service <code>strURL</code> failed. Reason: <code>message</code>
+	 * @param readTimeoutSeconds 
+	 * @param connectTimeoutSeconds 
+	 * @return Connection to Sensor Observation Service
+	 * 			\n<code>strURL</code>\n
+	 * 			failed after <code>connectTimeoutSeconds</code> seconds connect
+	 * 			and <code>readTimeoutSeconds</code> seconds read timeout.\n
+	 * 			Reason: <code>message</code>
 	 */
-	public abstract String step7SOSConnectionFailedException(String strURL,String message);
-	
+	public abstract String step7SOSConnectionFailedException(String strURL,
+			String message, 
+			int readTimeoutSeconds,
+			int connectTimeoutSeconds);
+
 	/**
 	 * @return Open Configuration File
 	 */
 	public abstract String step8ConfigFileButton();
+
 	/**
 	 * @return Step 8: Final Step - Summary of the Results
 	 */
 	public abstract String step8Description();
+
 	/**
 	 * @return Register Sensors and Insert Observations into Sensor Observation Service
 	 */
 	public abstract String step8DirectImportLabel();
+
 	/**
 	 * @param i
 	 * @return Errors: <code>i</code>
 	 */
 	public abstract String step8ErrorLable(int i);
+
 	/**
 	 * @param i
 	 * @return Insert <code>i</code> Observations...
 	 */
 	public abstract String step8InsertObservationLabel(int i);
+
 	/**
 	 * @return Check log file
 	 */
 	public abstract String step8LogFileButton();
+
 	/**
 	 * @param i
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public abstract String step8RegisterSensorLabel(int i);
+	
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @param excpetionText A short String describing the exception cause 
@@ -593,27 +664,43 @@ public abstract class Lang {
 	 * 						<br />Please check the log file for more details.
 	 */
 	public abstract String step8SaveModelFailed(File f, String exceptionText);
+
 	/**
 	 * @param i
 	 * @return Successful: <code>i</code>
 	 */
 	public abstract String step8SuccessLabel(int i);
+
 	/**
 	 * @return Time
 	 */
 	public abstract String time();
+
 	/**
 	 * @return UTC offset
 	 */
 	public abstract String timeZone();
+
 	/**
 	 * @return Unit
 	 */
 	public abstract String unit();
+
 	/**
 	 * @return Unit of Measurement
 	 */
 	public abstract String unitOfMeasurement();
+
+	/**
+	 * @return URI
+	 */
+	public abstract String uri();
+
+	/**
+	 * @param uri The String with the wrong syntax entered by the user
+	 * @return The entered URI "<code>uri</code>" is syntactically not correct.
+	 */
+	public abstract String uriSyntaxNotValidDialogMessage(String uri);
 
 	/**
 	 * @return Testing evaluation pattern for column

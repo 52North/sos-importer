@@ -39,28 +39,30 @@ public abstract class MissingComponentPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * allocate values of the missing component
+	 * Allocate values of the missing component
 	 */
 	public abstract void assignValues();
 	
 	/**
-	 * release values of the missing component
+	 * Release values of the missing component
 	 */
 	public abstract void unassignValues();
 	
 	/**
-	 * checks if all values are in the defined range 
+	 * Checks if all values are in the defined range 
 	 * of this component; returns false, if not
+	 * @return <b>true</b>, if all given values are in allowed ranges.<br />
+	 * 			<b>false</b>, if not.
 	 */
 	public abstract boolean checkValues();
 	
 	/**
-	 * returns the missing component
+	 * Returns the missing component
 	 */
 	public abstract Component getMissingComponent();
 	
 	/**
-	 * initializes the missing component
+	 * Initialises the missing component
 	 */
 	public abstract void setMissingComponent(Component c);
 }

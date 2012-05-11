@@ -141,7 +141,7 @@ public class DateAndTimeController {
 	public List<Component> getMissingComponents() {
 		List<Component> components = new ArrayList<Component>();
 		for (MissingComponentPanel mcp: missingComponentPanels) 
-			components.add((Component)mcp.getMissingComponent());
+			components.add(mcp.getMissingComponent());
 		return components;
 	}
 	
@@ -263,7 +263,7 @@ public class DateAndTimeController {
 			List<DateAndTime> list2 = new ArrayList<DateAndTime>(dateAndTimes);
 			Iterator<DateAndTime> dATIter = list2.iterator();
 			while (dATIter.hasNext()) {
-				DateAndTime dt2 = (DateAndTime) dATIter.next();
+				DateAndTime dt2 = dATIter.next();
 				if (dt1.getGroup().equals(dt2.getGroup())) {
 					this.merge(dt1, dt2);
 					dateAndTimes.remove(dt2);

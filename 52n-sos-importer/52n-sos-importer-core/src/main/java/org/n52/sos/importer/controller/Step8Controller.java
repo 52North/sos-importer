@@ -206,6 +206,9 @@ public class Step8Controller extends StepController {
 						String parsedValue = mv.parse(value).toString();
 						io.setValue(parsedValue);
 					} catch (Exception e) {
+						if (logger.isTraceEnabled()) {
+							logger.trace("Value could not be parsed: " + value, e);
+						}
 						continue;
 					}
 					

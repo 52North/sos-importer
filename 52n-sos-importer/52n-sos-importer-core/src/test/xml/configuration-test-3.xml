@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration xmlns="http://52north.org/sensorweb/sos/importer/0.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://52north.org/sensorweb/sos/importer/0.2/ ../../../../52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd">
+	<DataFile>
+		<LocalFile>
+			<Path/>
+		</LocalFile>
+	</DataFile>
+	<SosMetadata>
+		<URL/>
+		<Offering/>
+	</SosMetadata>
+	<CsvMetadata>
+		<Parameter>
+			<CommentIndicator>#</CommentIndicator>
+			<ElementSeparator>;</ElementSeparator>
+			<TextIndicator>"</TextIndicator>
+		</Parameter>
+		<FirstLineWithData/>
+		<UseHeader/>
+		<ColumnAssignments>
+			<Column>
+				<Number>0</Number>
+				<Type>MEASURED_VALUE</Type>
+				<RelatedFOI>foi_2345</RelatedFOI>
+				<RelatedSensor>sensor_0815</RelatedSensor>
+				<RelatedUnitOfMeasurement>uom_1</RelatedUnitOfMeasurement>
+			</Column>
+			<Column>
+				<Number>1</Number>
+				<Type>DO_NOT_EXPORT</Type>
+			</Column>
+			<Column>
+				<Number>2</Number>
+				<Type>DO_NOT_EXPORT</Type>
+				<Metadata>
+					<Key>OTHER</Key>
+					<Value>52n:stationName</Value>
+				</Metadata>
+			</Column>
+		</ColumnAssignments>
+	</CsvMetadata>
+	<AdditionalMetadata><Sensor>
+		<SensorResource>
+			<ID>sensor_0815</ID>
+			<URI>http://example.com/sensor_0815</URI>
+			<Name>Sensor 0815</Name>
+			<RelatedFOI>foi_2345</RelatedFOI>
+		</SensorResource>
+	</Sensor>
+	<FeatureOfInterest>
+		<GeneratedResource>
+			<ID>foi_2345</ID>
+			<Column>
+				<Number>0</Number>
+				<Number>2</Number>
+			</Column>
+		<URI useAsPrefix="true">http://example.com/foi/</URI>
+		<ConcatString>/</ConcatString>
+		</GeneratedResource>
+	</FeatureOfInterest>
+	<FeatureOfInterest>
+		<SpatialResource>
+			<ID>foi_2346</ID>
+			<URI>http://example.com/foi/2346</URI>
+			<Name>Weather Station 2346</Name>
+			<Position>
+				<Lat unit="deg">52.0</Lat>
+				<Long unit="deg">7.0</Long>
+				<Alt unit="m">42</Alt>
+				<EPSGCode>4979</EPSGCode>
+			</Position>
+		</SpatialResource>
+	</FeatureOfInterest>
+	<UnitOfMeasurement>
+		<ManualResource>
+			<ID>uom_1</ID>
+			<URI>http://example.com/percent</URI>
+			<Name>%</Name>
+		</ManualResource>
+	</UnitOfMeasurement>
+	</AdditionalMetadata>
+</SosImportConfiguration>

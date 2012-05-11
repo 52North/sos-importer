@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
@@ -435,5 +436,48 @@ public class TableController {
 	 */
 	public void setFirstLineWithData(int firstLineWithData) {
 		TableController.firstLineWithData = firstLineWithData;
+	}
+	
+	public String[] getAllColumnHeadings(){
+		return this.getColumnHeadingsFiltered(null,false);
+	}
+	
+	public String[] getUsedColumnHeadings() {
+		return this.getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),false);
+	}
+	
+	public String[] getColumnHeadingsFiltered(String typeToLeaveOut, boolean withColId) {
+		int colCount = this.table.getColumnCount();
+		TableColumnModel tcm = this.table.getColumnModel();
+		// Check for null and empty strings 
+		boolean filter = (typeToLeaveOut == null? false:
+				typeToLeaveOut.equalsIgnoreCase("")? false : true
+				);
+		ArrayList<String> headings = new ArrayList<String>(colCount);
+		if (!filter) {
+			for (int i = 0; i < colCount; i++) {
+				String tmp = tcm.getColumn(i).getHeaderValue().toString();
+				if (withColId) {
+					tmp = i + ": " + tmp;
+				}
+				headings.add(tmp);
+			}
+		} else {
+			for (int i = 0; i < colCount; i++) {
+				String tmp = tcm.getColumn(i).getHeaderValue().toString();
+				if (!tmp.equalsIgnoreCase(typeToLeaveOut)) {
+					if (withColId) {
+						tmp = i + ": " + tmp;
+					}
+					headings.add(tmp);
+				}
+			}
+		}
+		headings.trimToSize();		
+		return headings.toArray(new String[headings.size()]);
+	}
+
+	public String[] getUsedColumnHeadingsWithId() {
+		return this.getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),true);
 	}
 }

@@ -88,7 +88,7 @@ public class Cell extends TableElement {
 	
 	@Override
 	public String toString() {
-		return "cell "+row+"|"+column;
+		return "cell[" + row + "|" + column + "];
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class Cell extends TableElement {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Cell))
 			return false;
 		Cell other = (Cell) obj;
 		if (column != other.column)

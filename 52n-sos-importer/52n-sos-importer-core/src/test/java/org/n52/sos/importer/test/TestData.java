@@ -44,7 +44,7 @@ public class TestData {
 	private static final Logger logger = Logger.getLogger(TestData.class);
 
 	/**
-	 * Example Dataset with 8 columns
+	 * Example data set with 8 columns
 	 */
 	public static final Object[][] EXAMPLE_TABLE = {
 				//         0				1			2				3		4		5		6			7		8
@@ -60,6 +60,25 @@ public class TestData {
 				{"2012-04-23 11:53:43", "Thermometer", "Temperature", "Münster", "degC", "12.3", "Berlin", "degC", "12.5"},
 				{"2012-04-23 11:53:53", "Thermometer", "Temperature", "Münster", "degC", "12.4", "Berlin", "degC", "12.6"},
 				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.7"},
+				};
+	
+	/**
+	 * Example data set without feature of interest
+	 */
+	public static final Object[][] EXAMPLE_TABLE_NO_FOI = {
+				//         0				1			2				3		4	
+				{"Timestamp",			"Sensor",	   "Phenomenon",  "UOM",  "Value"},
+				{"2012-04-23 11:52:23", "Thermometer", "Temperature", "degC", "14.5"},
+				{"2012-04-23 11:52:33", "Thermometer", "Temperature", "degC", "15.5"},
+				{"2012-04-23 11:52:43", "Thermometer", "Temperature", "degC", "13.5"},
+				{"2012-04-23 11:52:53", "Thermometer", "Temperature", "degC", "12.5"},
+				{"2012-04-23 11:53:03", "Thermometer", "Temperature", "degC", "12.7"},
+				{"2012-04-23 11:53:13", "Thermometer", "Temperature", "degC", "12.8"},
+				{"2012-04-23 11:53:23", "Thermometer", "Temperature", "degC", "12.1"},
+				{"2012-04-23 11:53:33", "Thermometer", "Temperature", "degC", "12.2"},
+				{"2012-04-23 11:53:43", "Thermometer", "Temperature", "degC", "12.3"},
+				{"2012-04-23 11:53:53", "Thermometer", "Temperature", "degC", "12.4"},
+				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "degC", "12.5"},
 				};
 	/**
 	 * Example feature of interest with position: lat: 52, long: 7, alt: 42, 

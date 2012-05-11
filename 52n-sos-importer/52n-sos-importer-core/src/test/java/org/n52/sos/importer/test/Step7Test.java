@@ -26,6 +26,10 @@ package org.n52.sos.importer.test;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step7Controller;
@@ -48,6 +52,11 @@ import org.n52.sos.importer.model.table.Column;
 
 public class Step7Test {
 	public static void main(String[] args) {
+		// init logger
+				Logger root = Logger.getRootLogger();
+				root.setLevel(Level.DEBUG);
+				root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
+		//
 		Object[][] o = {
 				{"01/06/2010", "11:45", "12,12", "23,123"},
 				{"01/06/2010", "23:45", "323,123", "432,123"}};

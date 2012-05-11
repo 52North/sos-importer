@@ -39,18 +39,26 @@ public class Step7Model implements StepModel {
 	
 	private File configFile;
 
+	private boolean generateOfferingFromSensorName;
+
+	private String offering;
+
 	public Step7Model(String sosURL, 
 			boolean directImport, 
 			boolean saveConfig,
-			File configFile) {
+			File configFile,
+			boolean generateOfferingFromSensorName,
+			String offering) {
 		this.sosURL = sosURL;
 		this.directImport = directImport;
 		this.saveConfig = saveConfig;
 		this.configFile = configFile;
+		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
+		this.offering = offering;
 	}
 	
 	public Step7Model() {
-		this(null,false,false,null);
+		this(null,false,false,null,true,null);
 	}
 
 	public String getSosURL() {
@@ -83,5 +91,34 @@ public class Step7Model implements StepModel {
 
 	public void setDirectImport(boolean isDirectImport) {
 		this.directImport = isDirectImport;
+	}
+
+	/**
+	 * @return the generateOfferingFromSensorName
+	 */
+	public boolean isGenerateOfferingFromSensorName() {
+		return generateOfferingFromSensorName;
+	}
+
+	/**
+	 * @param generateOfferingFromSensorName the generateOfferingFromSensorName to set
+	 */
+	public void setGenerateOfferingFromSensorName(
+			boolean generateOfferingFromSensorName) {
+		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
+	}
+
+	/**
+	 * @return the offering
+	 */
+	public String getOffering() {
+		return offering;
+	}
+
+	/**
+	 * @param offering the offering to set
+	 */
+	public void setOffering(String offering) {
+		this.offering = offering;
 	}
 }

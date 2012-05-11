@@ -128,7 +128,7 @@ public class PositionController {
 	public List<Component> getMissingComponents() {
 		List<Component> components = new ArrayList<Component>();
 		for (MissingComponentPanel mcp: missingComponentPanels) 
-			components.add((Component)mcp.getMissingComponent());
+			components.add(mcp.getMissingComponent());
 		return components;
 	}
 	
@@ -184,7 +184,7 @@ public class PositionController {
 			List<Position> list2 = new ArrayList<Position>(positions);
 			Iterator<Position> pIter = list2.iterator();
 			while (pIter.hasNext()) {
-				Position p2 = (Position) pIter.next();
+				Position p2 = pIter.next();
 				if (p1.getGroup().equals(p2.getGroup())) {
 					this.merge(p1, p2);
 					positions.remove(p2);

@@ -32,7 +32,7 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
 /**
- * solves ambiguities in case there is more than one position column
+ * Solves ambiguities in case there is more than one position column
  * (needs apparently to be implemented)
  * <br />
  * <b>FIXME</b> Implement

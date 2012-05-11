@@ -107,7 +107,7 @@ public class LoggingController {
 					Attributes attributes = manifest.getMainAttributes();
 					Set<Object> keys = attributes.keySet();
 					for (Iterator<Object> iterator = keys.iterator(); iterator.hasNext();) {
-						Object object = (Object) iterator.next();
+						Object object = iterator.next();
 						if (object instanceof Name) {
 							Name key = (Name) object;
 							logMessage = logMessage + "\n\t\t" + key + ": " + attributes.getValue(key);

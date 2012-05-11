@@ -30,7 +30,7 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 
 /**
- * lets the user identify different types of metadata 
+ * Lets the user identify different types of metadata 
  * for each row in the CSV file 
  * (needs apparently to be implemented)
  * <br />
@@ -93,25 +93,4 @@ public class Step3bController extends StepController {
 		return null;
 	}
 	
-	/*
-	private class RowSelectionChanged {
-		@Override
-		public void rowSelectionChanged(int newRow) {
-			int oldRow = step3Model.getSelectedRow();
-			List<String> selection = new ArrayList<String>();
-			step3Panel.store(selection);
-			step3Model.putRowIntoStore(oldRow, selection);
-			
-			selection = step3Model.getRowFromStore(newRow);
-			step3Panel.clearAdditionalPanels();
-			
-			if (selection == null) step3Panel.restoreDefault();
-			else step3Panel.restore(selection);
-			
-			MainController.getInstance().pack();
-			step3Model.setSelectedRow(newRow);
-		}
-	}
-	 */
-
 }
