@@ -32,21 +32,35 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.view.i18n.Lang;
+import org.n52.sos.importer.view.utils.Constants;
 
 public class Step6bTest {
 
 	public static void main(String[] args) {
-		MainController f = MainController.getInstance();
-		Object[][] o = {{"1", "4"},{"2", "5"},{"3", "6"}};
-		TableController.getInstance().setContent(o);
-		MeasuredValue mv = new NumericValue();
-		int firstLineWithData = 0;
-		mv.setTableElement(new Column(0,firstLineWithData ));
-		MeasuredValue mv2 = new NumericValue();
-		mv2.setTableElement(new Column(1,firstLineWithData));
-		ModelStore.getInstance().add(mv);
-		ModelStore.getInstance().add(mv2);
-		Step6bModel step6aModel = new Step6bModel(mv, new FeatureOfInterest());
-		f.setStepController(new Step6bController(step6aModel,firstLineWithData));
+		MainController mC = MainController.getInstance();
+		TableController tc = TableController.getInstance();
+		ModelStore ms = ModelStore.getInstance(); 
+		Object[][] o = TestData.EXAMPLE_TABLE_NO_FOI;
+		int firstLineWithData = 0, i = 0;
+		Step6bModel s6bM;
+		MeasuredValue mv;
+		Column markedColumn;
+		Constants.GUI_DEBUG = false;
+		//
+		markedColumn = new Column(4,firstLineWithData );
+		tc.setContent(o);
+		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
+		tc.setColumnHeading(++i, Lang.l().sensor());
+		tc.setColumnHeading(++i, Lang.l().observedProperty());
+		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+		tc.mark(markedColumn);
+		mv = new NumericValue();
+		mv.setTableElement(markedColumn);
+		ms.add(mv);
+		s6bM = new Step6bModel(mv, new FeatureOfInterest());
+		//
+		mC.setStepController(new Step6bController(s6bM,firstLineWithData));
 	}
 }

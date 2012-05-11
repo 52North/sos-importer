@@ -111,4 +111,8 @@ public class MainController {
 	public boolean saveModel(File file) throws IOException {
 		return this.xmlModel.save(file);
 	}
+
+	public String getFilename() {
+		return this.xmlModel.getFileName();
+	}
 }

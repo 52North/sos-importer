@@ -154,6 +154,9 @@ public class Step6bSpecialController extends StepController {
 				try {
 					mv.parse(value);
 				} catch (Exception e) {
+					if (logger.isTraceEnabled()) {
+						logger.trace("Value could not be parsed: " + value, e);
+					}
 					continue;
 				}	
 				

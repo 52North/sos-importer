@@ -51,6 +51,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String code() {
+		return "Code";
+	}
+
+	@Override
 	public String column() {
 		return "Spalte";
 	}
@@ -107,11 +112,11 @@ public class De extends Lang{
 	public String file() {
 		return "Datei";
 	}
-
+	
 	public String finishButtonLabel() {
 		return "Beenden";
 	}
-	
+
 	@Override
 	public String format() {
 		return "Format";
@@ -169,10 +174,15 @@ public class De extends Lang{
 	public String minutes() {
 		return "Minuten";
 	}
-
+	
 	@Override
 	public String month() {
 		return "Monat";
+	}
+
+	@Override
+	public String name() {
+		return "Name";
 	}
 
 	public String nextButtonLabel() {
@@ -190,11 +200,11 @@ public class De extends Lang{
 	public String observation() {
 		return "Beobachtung";
 	}
-
+	
 	public String observedProperty() {
 		return "Phänomen";
 	}
-	
+
 	public String path() {
 		return "Pfad";
 	}
@@ -238,11 +248,11 @@ public class De extends Lang{
 	public String step1BrowseButton() {
 		return "Datendatei auswählen";
 	}
-
+	
 	public String step1Description() {
 		return "Schritt 1: Wählen Sie die CSV-Datei aus";
 	}
-	
+
 	public String step1File() {
 		return "CSV-Datei";
 	}
@@ -447,6 +457,16 @@ public class De extends Lang{
 		return "<html>Bitte geben Sie <u>Datum und Uhrzeit</u> für alle Messwerte an!</html>";
 	}
 
+	@Override
+	public String step6AutomaticGeneration() {
+		return "Automatisch Erzeugung";
+	}
+
+	@Override
+	public String step6bDefineConcatString() {
+		return "Bitte geben Sie eine Zeichenkette zur Verknüpfung der Spalten an (Optional).";
+	}
+
 	public String step6bDescription() {
 		return this.step() + " 6b: Fehlende Metainformationen hinzufügen";
 	}
@@ -459,6 +479,11 @@ public class De extends Lang{
 				"?</html>";
 	}
 
+	@Override
+	public String step6bSelectColumnsLabel() {
+		return "Bitte wählen Sie die Spalte(n) zum Generieren des Namens aus.";
+	}
+
 	public String step6bSpecialDescription() {
 		return this.step() + " 6b (Spezial): Fehlende " + this.sensor() + "en hinzufügen";
 	}
@@ -467,12 +492,32 @@ public class De extends Lang{
 		return "Welches ist der " + this.sensor() + " für";
 	}
 
+	@Override
+	public String step6bURIInstructions() {
+		return "Bitte geben Sie einen URI oder einen Prefix für den URI, falls Sie den Namen im URI nutzen wollen, an.";
+	}
+
+	@Override
+	public String step6bUseNameAfterPrefix() {
+		return "Namen an prefix anhängen als URI?";
+	}
+
 	public String step6cDescription() {
 		return this.step() + " 6c: Fehlende " + this.position() + "s-Angaben hinzufügen";
 	}
 
 	public String step6cModelDescription() {
 		return "Wie ist die " + this.position() + "s-Angabe von";
+	}
+
+	@Override
+	public String step6ManualInput() {
+		return "Manuelle Eingabe";
+	}
+
+	@Override
+	public String step6MissingUserInput() {
+		return "Keine Nutzereingaben gefunden. Bitte geben Sie die notwendigen Informationen an.";
 	}
 
 	@Override
@@ -506,8 +551,31 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step7OfferingCheckBoxLabel() {
+		return "Offering-Bezeichner aus Sensor-Namen generieren?";
+	}
+
+	@Override
+	public String step7OfferingInputTextfieldLabel() {
+		return "Bitte geben Sie den Offering-Namen an:";
+	}
+	
+	@Override
+	public String step7OfferingNameNotGiven() {
+		return "Bitte geben Sie den Offering-Namen an, oder wählen die Generierung aus";
+	}
+
+	@Override
 	public String step7SaveConfig() {
 		return "Konfiguration in XML-Datei speichern";
+	}
+
+	@Override
+	public String step7SOSConncetionStart(String strURL) {
+		return "Um mit dem Verbindungstest zu dem " + this.sos() + 
+				"\n\"" + strURL + "\"\n" +
+				"klicken Sie bitte auf JA.\n" +
+				"Falls Sie Einstellungen ändern möchten, dann klicken Sie bitte auf NEIN.";
 	}
 
 	public String step7SOSconnectionFailed(String strURL,
@@ -519,8 +587,14 @@ public class De extends Lang{
 	}
 
 	public String step7SOSConnectionFailedException(String strURL,
-			String message) {
-		return "Connection to " + this.sos() + " " + strURL + " failed. Reason: " + message;
+			String message, 
+			int readTimeoutSeconds,
+			int connectTimeoutSeconds) {
+		return "Verbindung zu " + this.sos() + 
+				"\n\"" + strURL + "\"\n" +
+				"fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " + 
+				readTimeoutSeconds + " Sekunden Lese-Timeout.\n" +
+				"Grund: " + message;
 	}
 
 	@Override
@@ -554,7 +628,7 @@ public class De extends Lang{
 	public String step8RegisterSensorLabel(int i) {
 		return "Registriere " + i + " " + this.sensor() + "(en)...";
 	}
-	
+
 	@Override
 	public String step8SaveModelFailed(File f, String exceptionText) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +
@@ -585,6 +659,16 @@ public class De extends Lang{
 
 	public String unitOfMeasurement() {
 		return "Maßeinheit";
+	}
+
+	@Override
+	public String uri() {
+		return "URI";
+	}
+
+	@Override
+	public String uriSyntaxNotValidDialogMessage(String uri) {
+		return "Der eingegebene URI \"" + uri + "\" ist syntaktisch nicht korrekt.";
 	}
 
 	@Override

@@ -105,6 +105,7 @@ public abstract class DateAndTimeComponent extends Component {
         try {
         	date = formatter.parse(s);
 		} catch (ParseException e) {
+			logger.error("Value could not be parsed: " + value, e);
 			return -1;
 			//TODO throw new NumberFormatException();
 		}

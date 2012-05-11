@@ -240,7 +240,7 @@ public class RegisterSensor {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof RegisterSensor))
 			return false;
 		RegisterSensor other = (RegisterSensor) obj;
 		if (epsgCode == null) {

@@ -52,6 +52,11 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String code() {
+		return "Code";
+	}
+
+	@Override
 	public String column() {
 		return "column";
 	}
@@ -112,12 +117,12 @@ public class En extends Lang{
 	public String finishButtonLabel() {
 		return "Finish";
 	}
-
+	
 	@Override
 	public String format() {
 		return "Format";
 	}
-	
+
 	@Override
 	public Locale getLocale() {
 		return En.locale;
@@ -139,7 +144,7 @@ public class En extends Lang{
 	}
 
 	public String infoDialogTitle() {
-		return "Info";
+		return "Information";
 	}
 
 	@Override
@@ -170,10 +175,15 @@ public class En extends Lang{
 	public String minutes() {
 		return "Minutes";
 	}
-
+	
 	@Override
 	public String month() {
 		return "Month";
+	}
+
+	@Override
+	public String name() {
+		return "Name";
 	}
 
 	public String nextButtonLabel() {
@@ -191,11 +201,11 @@ public class En extends Lang{
 	public String observation() {
 		return "Observation";
 	}
-
+	
 	public String observedProperty() {
 		return "Observed Property";
 	}
-	
+
 	public String path() {
 		return "path";
 	}
@@ -242,10 +252,10 @@ public class En extends Lang{
 		return this.step() + " 1: Choose CSV file";
 	}
 
+
 	public String step1File() {
 		return "CSV File";
 	}
-
 
 	public String step1SelectLanguage() {
 		return "Please select the language";
@@ -317,14 +327,14 @@ public class En extends Lang{
 				this.step3ColTypeDoNotExport() + 
 				"\" for skipping it.";
 	}
-
+	
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
 		return "Column Type is \"" + 
 				this.step3ColTypeUndefined() + 
 				"\"";
 	}
-	
+
 	public String step3bDescription() {
 		return this.step() + " 3b: Choose metadata for rows";
 	}
@@ -446,6 +456,17 @@ public class En extends Lang{
 		return "<html>What is the <u>Date & Time</u> for all measured values?</html>";
 	}
 
+	@Override
+	public String step6AutomaticGeneration() {
+		return "Automatic Generation";
+	}
+
+	@Override
+	public String step6bDefineConcatString() {
+		return "Please provide a String for linking the values from the" +
+				"columns (OPTIONAL).";
+	}
+
 	public String step6bDescription() {
 		return this.step() + " 6b: Add missing metadata";
 	}
@@ -458,6 +479,11 @@ public class En extends Lang{
 				"?</html>";
 	}
 
+	@Override
+	public String step6bSelectColumnsLabel() {
+		return "Please select the column(s) to generate the name.";
+	}
+
 	public String step6bSpecialDescription() {
 		return this.step() + " 6b (Special): Add missing " + this.sensor() + "s";
 	}
@@ -466,12 +492,32 @@ public class En extends Lang{
 		return "What is the " + this.sensor().toLowerCase(En.locale) + " for";
 	}
 
+	@Override
+	public String step6bURIInstructions() {
+		return "Please provide a URI or a prefix if using the name as part of the URI.";
+	}
+
+	@Override
+	public String step6bUseNameAfterPrefix() {
+		return "Use Name after prefix?";
+	}
+
 	public String step6cDescription() {
 		return this.step() + " 6c: Add missing " + this.position().toLowerCase(En.locale) + "s";
 	}
 
 	public String step6cModelDescription() {
 		return "What is the " + this.position().toLowerCase(En.locale) + " of";
+	}
+
+	@Override
+	public String step6ManualInput() {
+		return "Manual Input";
+	}
+
+	@Override
+	public String step6MissingUserInput() {
+		return "No user input at all. Please fill in the required information.";
 	}
 
 	@Override
@@ -506,8 +552,30 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step7OfferingCheckBoxLabel() {
+		return "Generate Offering from Sensor name?";
+	}
+
+	@Override
+	public String step7OfferingInputTextfieldLabel() {
+		return "Please specify the offering name:";
+	}
+
+	@Override
+	public String step7OfferingNameNotGiven() {
+		return "Please specify the offering name or select to generate it.";
+	}
+
+	@Override
 	public String step7SaveConfig() {
 		return "Save configuration to XML file";
+	}
+
+	@Override
+	public String step7SOSConncetionStart(String strURL) {
+		return "To start connection testing to URL" +
+				"\n\"" + strURL + "\"\n" +
+				"select YES. For changing values select NO.";
 	}
 
 	public String step7SOSconnectionFailed(String strURL,
@@ -519,8 +587,14 @@ public class En extends Lang{
 	}
 
 	public String step7SOSConnectionFailedException(String strURL,
-			String message) {
-		return "Connection to " + this.sos() + " " + strURL + " failed. Reason: " + message;
+			String message,
+			int readTimeoutSeconds,
+			int connectTimeoutSeconds) {
+		return "Connection to " + this.sos() + 
+				"\n\"" + strURL + "\"\n" +
+				"failed after " + connectTimeoutSeconds + " seconds connect and " + 
+				readTimeoutSeconds + " seconds read timeout.\n" +
+				"Reason: " + message;
 	}
 
 	@Override
@@ -583,6 +657,16 @@ public class En extends Lang{
 
 	public String unitOfMeasurement() {
 		return "Unit of Measurement";
+	}
+
+	@Override
+	public String uri() {
+		return "URI";
+	}
+
+	@Override
+	public String uriSyntaxNotValidDialogMessage(String uri) {
+		return "The entered URI \"" + uri + "\" is syntactically not correct.";
 	}
 
 	@Override

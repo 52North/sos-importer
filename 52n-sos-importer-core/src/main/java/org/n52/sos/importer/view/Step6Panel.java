@@ -75,14 +75,13 @@ public class Step6Panel extends JPanel {
 			descriptionPanel.add(observedPropertyTextField);
 		}
 		descriptionPanel.add(questionMarkLabel);
-		this.add(descriptionPanel);
+		add(descriptionPanel);
 		
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
-		this.add(containerPanel);
+		add(containerPanel);
 		
 		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
 		}
 	}
-	
 }

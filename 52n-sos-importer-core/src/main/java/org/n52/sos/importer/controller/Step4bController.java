@@ -39,7 +39,7 @@ import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
 
 /**
- * solves ambiguities in case there is more than one feature of interest,
+ * Solves ambiguities in case there is more than one feature of interest,
  * observed property, unit of measurement or sensor column
  * @author Raimund
  *

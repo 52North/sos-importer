@@ -50,8 +50,6 @@ import org.n52.sos.importer.view.utils.Constants;
  * in case they do not appear in the CSV file
  * @author Raimund
  * 
- * TODO remove "ORIENTATION" and "RESOURCE" replacement
- *
  */
 public class Step6bController extends StepController {
 	
@@ -85,11 +83,14 @@ public class Step6bController extends StepController {
 		//when this resource is still assigned with measured values,
 		//do not remove it from the ModelStore
 		int count = 0;
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
-			if (resource.isAssignedTo(mv))
+		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			if (resource.isAssignedTo(mv)) {
 				count++;
-		if (count == 1)
+			}
+		}
+		if (count == 1) {
 			ModelStore.getInstance().remove(resource);
+		}
 		
 		resource.unassign(measuredValue);
 		

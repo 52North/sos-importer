@@ -72,6 +72,10 @@ public class ToolTips {
 	public static final String POSITION_PATTERNS = "PositionPatterns";
 	public static final String POSITION_GROUPS = "PositionGroups";
 	public static final String SOS = "SOS";
+	public static final String NAME = "Name";
+	public static final String URI = "URI";
+	public static final String STEP6_AUTOMATIC_GENERATION_COLUMN_TOOLTIPS = "Step6AutogenerationColumn";
+	public static final String OFFERING = "Offering";
 
 	private ToolTips() {}
 
@@ -82,13 +86,11 @@ public class ToolTips {
 			}
 			return res.getString(key);
 		} catch (MissingResourceException e) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Value for key: \"" + 
+			logger.error("Value for key: \"" + 
 						key + 
 						"\" not found in resource bundle \"" 
 						+ res
-						+ "\".");
-			}
+						+ "\".",e);
 			return '!' + key + '!';
 		}
 	}

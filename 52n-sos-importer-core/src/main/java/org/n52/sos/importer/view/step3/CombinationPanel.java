@@ -133,7 +133,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 			logger.trace("setDefaultSelection()");
 		}
 		String pattern = (String) getPatterns().getElementAt(0);
-		String group = (String) getGroupItems()[0];
+		String group = getGroupItems()[0];
 		patternComboBox.setSelectedItem(pattern);
 		this.getCombination().setPattern(pattern);
 		groupComboBox.setSelectedItem(group);

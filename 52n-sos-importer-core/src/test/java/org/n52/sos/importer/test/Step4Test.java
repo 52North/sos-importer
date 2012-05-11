@@ -51,20 +51,20 @@ public class Step4Test {
 		}
 		MainController f = MainController.getInstance();
 		//Lang.setCurrentLocale(Locale.GERMAN);
-		int firstLineWithData = 1;
+		int firstLineWithData = 1, i = 0;
 		FeatureOfInterest foi = TestData.EXAMPLE_FOI;
 		Object[][] o = TestData.EXAMPLE_TABLE;
 		TableController tc = TableController.getInstance();
 		tc.setContent(o); 
-		tc.setColumnHeading(0, Lang.l().step3ColTypeDateTime());
-		tc.setColumnHeading(1, Lang.l().sensor());
-		tc.setColumnHeading(2, Lang.l().observedProperty());
-		tc.setColumnHeading(3, Lang.l().featureOfInterest());
-		tc.setColumnHeading(4, Lang.l().unitOfMeasurement());
-		tc.setColumnHeading(5, Lang.l().step3ColTypeMeasuredValue());
-		tc.setColumnHeading(6, Lang.l().featureOfInterest());
-		tc.setColumnHeading(7, Lang.l().unitOfMeasurement());
-		tc.setColumnHeading(8, Lang.l().step3ColTypeMeasuredValue());
+		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
+		tc.setColumnHeading(++i, Lang.l().sensor());
+		tc.setColumnHeading(++i, Lang.l().observedProperty());
+		tc.setColumnHeading(++i, Lang.l().featureOfInterest());
+		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+		tc.setColumnHeading(++i, Lang.l().featureOfInterest());
+		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
 		
 		ModelStore ms = ModelStore.getInstance();
 		NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();

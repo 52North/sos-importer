@@ -74,7 +74,7 @@ public class Row extends TableElement {
 	
 	@Override
 	public String toString() {
-		return "row "+number;
+		return "row[" + number + "];
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public class Row extends TableElement {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Row))
 			return false;
 		Row other = (Row) obj;
 		if (number != other.number)
