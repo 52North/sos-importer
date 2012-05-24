@@ -118,9 +118,19 @@ public class EditableJComboBoxPanel extends JPanel {
 	}
 	
 	public void setSelectedIndex(int i) {
+		int max = comboBox.getModel().getSize();
+		// fixing bug when having selected element nr 2 and deleting element nr 1
+		if (i > max) {
+			i = max;
+		}
 		comboBox.setSelectedIndex(i);
 	}
 	
+	
+	/**
+	 * Set the value of the selected item. The selected item may be null. 
+	 * @param item The combo box value or null for no selection.
+	 */
 	public void setSelectedItem(Object item) {
 		model.setSelectedItem(item);
 	}
@@ -320,6 +330,9 @@ public class EditableJComboBoxPanel extends JPanel {
 				getPartnerComboBox().deleteSelectedItem();				
 			}
 		}
+		// set selectedItem to null to prevent NPE if current selected 
+		// itemIndex > combox.getModel().getSize()
+		setSelectedItem(null);
 	}
 	
 	public void selectionChanged() {
