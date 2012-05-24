@@ -313,20 +313,38 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		 * 	ALTITUDE
 		 */
 		Alt alt = posXB.getAlt();
+		if (alt == null) {
+			alt = posXB.addNewAlt();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new Alt element to Position element");
+			}
+		}
 		alt.setFloatValue(new Double(pos.getHeight().getValue()).floatValue());
 		alt.setUnit(pos.getHeight().getUnit());
 		/*
 		 * 	LATITUDE
 		 */
 		Lat lat = posXB.getLat();
+		if (lat == null) {
+			lat = posXB.addNewLat();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new Lat element to Position element");
+			}
+		}
 		lat.setFloatValue(new Double(pos.getLatitude().getValue()).floatValue());
 		lat.setUnit(pos.getLatitude().getUnit());
 		/*
 		 * 	LONGITUDE
 		 */
-		Long longi = posXB.getLong();
-		longi.setFloatValue(new Double(pos.getLongitude().getValue()).floatValue());
-		longi.setUnit(pos.getLongitude().getUnit());
+		Long loong = posXB.getLong();
+		if (loong == null) {
+			loong = posXB.addNewLong();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new Long element to Position element");
+			}
+		}
+		loong.setFloatValue(new Double(pos.getLongitude().getValue()).floatValue());
+		loong.setUnit(pos.getLongitude().getUnit());
 		if (logger.isDebugEnabled()) {
 			logger.debug("XB pos updated from model pos. Model Pos: " + 
 					pos.toString() + "; XB pos: " + posXB.xmlText());
