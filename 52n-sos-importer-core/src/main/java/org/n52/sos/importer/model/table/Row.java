@@ -74,7 +74,7 @@ public class Row extends TableElement {
 	
 	@Override
 	public String toString() {
-		return "row[" + number + "];
+		return "row[" + number + "]";
 	}
 	
 	@Override

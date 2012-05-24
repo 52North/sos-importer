@@ -28,34 +28,15 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.n52.sos.importer.interfaces.Formatable;
+import org.n52.sos.importer.view.utils.Constants;
 
 public class NumericValue extends MeasuredValue implements Formatable {
 
-	private String decimalSeparator;
-	
-	private String thousandsSeparator;
-
-	public void setDecimalSeparator(String selectedDecimalSeparator) {
-		this.decimalSeparator = selectedDecimalSeparator;
-	}
-
-	public String getDecimalSeparator() {
-		return decimalSeparator;
-	}
-
-	public void setThousandsSeparator(String selectedThousandsSeparator) {
-		this.thousandsSeparator = selectedThousandsSeparator;
-	}
-
-	public String getThousandsSeparator() {
-		return thousandsSeparator;
-	}
-	
 	@Override
 	public Double parse(String s) {
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-		symbols.setDecimalSeparator(decimalSeparator.charAt(0));
-		symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+		symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
+		symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
 		
 		Number n;
 		try {
@@ -74,8 +55,8 @@ public class NumericValue extends MeasuredValue implements Formatable {
 		double number = (Double)o;
 		
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-		symbols.setDecimalSeparator(decimalSeparator.charAt(0));
-		symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+		symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
+		symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
 		
 		DecimalFormat formatter = new DecimalFormat();
 		formatter.setDecimalFormatSymbols(symbols);

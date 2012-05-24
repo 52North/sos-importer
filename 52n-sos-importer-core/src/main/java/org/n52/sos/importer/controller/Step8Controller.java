@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -214,7 +215,15 @@ public class Step8Controller extends StepController {
 					
 					// when was the current Measured Value measured
 					dtc.setDateAndTime(mv.getDateAndTime());
-					String timeStamp = dtc.forThis(c);	
+					String timeStamp;
+					try {
+						timeStamp = dtc.forThis(c);
+					} catch (ParseException e) {
+						logger.error("Timestamp of " + c + 
+								" could not be parsed. Skipping it. " +
+								"Error Message: " + e.getMessage(), e);
+						continue;
+					}	
 					io.setTimeStamp(timeStamp);
 					
 					// which is the observed feature of interest

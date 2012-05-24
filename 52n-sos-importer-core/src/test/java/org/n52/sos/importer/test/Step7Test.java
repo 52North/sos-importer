@@ -53,9 +53,9 @@ import org.n52.sos.importer.model.table.Column;
 public class Step7Test {
 	public static void main(String[] args) {
 		// init logger
-				Logger root = Logger.getRootLogger();
-				root.setLevel(Level.DEBUG);
-				root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
+		Logger root = Logger.getRootLogger();
+		root.setLevel(Level.DEBUG);
+		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
 		//
 		Object[][] o = {
 				{"01/06/2010", "11:45", "12,12", "23,123"},
@@ -110,8 +110,6 @@ public class Step7Test {
 		}
 		
 		NumericValue nv1 = new NumericValue();
-		nv1.setDecimalSeparator(",");
-		nv1.setThousandsSeparator(".");
 		nv1.setTableElement(new Column(1,firstLineWithData));
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
@@ -120,8 +118,6 @@ public class Step7Test {
 		nv1.setUnitOfMeasurement(uom);
 		
 		NumericValue nv2 = new NumericValue();
-		nv2.setDecimalSeparator(",");
-		nv2.setThousandsSeparator(".");
 		nv2.setTableElement(new Column(2,firstLineWithData));
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);

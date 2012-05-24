@@ -107,11 +107,11 @@ public class XMLModel {
 			if (df.isSetLocalFile()) {
 				LocalFile lf = df.getLocalFile();
 				result = lf.getPath();
-				result = result.substring(result.lastIndexOf(File.separatorChar));
+				result = result.substring(result.lastIndexOf(File.separatorChar)+1);
 			} else if (df.isSetRemoteFile()) {
 				RemoteFile rf = df.getRemoteFile();
 				result = rf.getURL();
-				result = result.substring(result.lastIndexOf("/"));
+				result = result.substring(result.lastIndexOf("/")+1);
 			}
 		}
 		return result;

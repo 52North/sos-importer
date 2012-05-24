@@ -84,15 +84,15 @@ public class MainController {
 		bNM.setCurrentStepController(stepController);
 	}
 	
-	protected void updateModel() {
+	public void updateModel() {
 		this.xmlModel.updateModel();
 	}
 	
-	protected boolean removeProvider(StepModel sm) {
+	public boolean removeProvider(StepModel sm) {
 		return this.xmlModel.removeProvider(sm);
 	}
 	
-	protected boolean registerProvider(StepModel sm) {
+	public boolean registerProvider(StepModel sm) {
 		return this.xmlModel.registerProvider(sm);
 	}
 	

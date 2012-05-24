@@ -122,7 +122,7 @@ public abstract class MeasuredValue implements Parseable {
 	}
 	
 	/**
-	 * returns a sensor for the given feature of interest name and observed property
+	 * Returns a sensor for the given feature of interest name and observed property
 	 * name; this method is called when a sensor has been assigned to them in
 	 * step 6b (special)
 	 */
@@ -133,8 +133,8 @@ public abstract class MeasuredValue implements Parseable {
 		Step6bSpecialModel step6bSpecialModel;
 		while (iterator.hasNext()) {
 			step6bSpecialModel = iterator.next();
-			if (step6bSpecialModel.getFeatureOfInterestName().equals(featureOfInterestName) &&
-				step6bSpecialModel.getObservedPropertyName().equals(observedPropertyName))
+			if (step6bSpecialModel.getFeatureOfInterest().getName().equals(featureOfInterestName) &&
+				step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName))
 				return step6bSpecialModel.getSensor();
 		}
 		

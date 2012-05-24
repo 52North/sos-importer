@@ -88,7 +88,7 @@ public class Cell extends TableElement {
 	
 	@Override
 	public String toString() {
-		return "cell[" + row + "|" + column + "];
+		return "cell[" + row + "|" + column + "]";
 	}
 
 	@Override

@@ -100,4 +100,9 @@ public class ObservedProperty extends Resource {
 	public String getTypeName() {
 		return Lang.l().observedProperty();
 	}
+
+	@Override
+	public String XML_PREFIX() {
+		return "obsprop";
+	}
 }

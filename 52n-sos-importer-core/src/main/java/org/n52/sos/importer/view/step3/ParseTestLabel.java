@@ -101,7 +101,7 @@ public class ParseTestLabel extends JLabel {
 				if(currentLine >= firstLineWithData) {
 					try {
 						parser.parse(value);
-					} catch (Exception e) {
+					} catch (Exception e) { // $codepro.audit.disable
 						if (notParseableStrings.add(value))
 							notParseable.append(value + "<br>");
 						notParseableValues++;

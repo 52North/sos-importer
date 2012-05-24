@@ -23,29 +23,23 @@
  */
 package org.n52.sos.importer.model;
 
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bSpecialModel implements StepModel {
 	
-	private final String featureOfInterestName;
+	private final FeatureOfInterest foi;
 	
-	private final String observedPropertyName;
+	private final ObservedProperty obsProp;
 	
 	private Sensor sensor;
 
-	public Step6bSpecialModel(String featureOfInterestName, String observedPropertyName) {
-		this.featureOfInterestName = featureOfInterestName;
-		this.observedPropertyName = observedPropertyName;
+	public Step6bSpecialModel(FeatureOfInterest foi, ObservedProperty obsProp) {
+		this.foi = foi;
+		this.obsProp = obsProp;
 		sensor = new Sensor();
-	}
-
-	public String getFeatureOfInterestName() {
-		return featureOfInterestName;
-	}
-
-	public String getObservedPropertyName() {
-		return observedPropertyName;
 	}
 
 	public void setSensor(Sensor sensor) {
@@ -66,11 +60,11 @@ public class Step6bSpecialModel implements StepModel {
 		int result = 1;
 		result = prime
 				* result
-				+ ((featureOfInterestName == null) ? 0 : featureOfInterestName
+				+ ((foi == null) ? 0 : foi
 						.hashCode());
 		result = prime
 				* result
-				+ ((observedPropertyName == null) ? 0 : observedPropertyName
+				+ ((obsProp == null) ? 0 : obsProp
 						.hashCode());
 		return result;
 	}
@@ -84,17 +78,31 @@ public class Step6bSpecialModel implements StepModel {
 		if (!(obj instanceof Step6bSpecialModel))
 			return false;
 		Step6bSpecialModel other = (Step6bSpecialModel) obj;
-		if (featureOfInterestName == null) {
-			if (other.featureOfInterestName != null)
+		if (foi == null) {
+			if (other.foi != null)
 				return false;
-		} else if (!featureOfInterestName.equals(other.featureOfInterestName))
+		} else if (!foi.equals(other.foi))
 			return false;
-		if (observedPropertyName == null) {
-			if (other.observedPropertyName != null)
+		if (obsProp == null) {
+			if (other.obsProp != null)
 				return false;
-		} else if (!observedPropertyName.equals(other.observedPropertyName))
+		} else if (!obsProp.equals(other.obsProp))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the foi
+	 */
+	public FeatureOfInterest getFeatureOfInterest() {
+		return foi;
+	}
+
+	/**
+	 * @return the obsProp
+	 */
+	public ObservedProperty getObservedProperty() {
+		return obsProp;
 	}
 
 }

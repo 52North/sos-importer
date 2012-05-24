@@ -23,10 +23,14 @@
  */
 package org.n52.sos.importer.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6bController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
@@ -35,7 +39,7 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
 
-public class Step6bTest {
+public class Step6bTestFOI {
 
 	public static void main(String[] args) {
 		MainController mC = MainController.getInstance();
@@ -60,6 +64,18 @@ public class Step6bTest {
 		mv.setTableElement(markedColumn);
 		ms.add(mv);
 		s6bM = new Step6bModel(mv, new FeatureOfInterest());
+		/*
+		 * Set-Up Column metadata 
+		 */
+		Step3Model s3M = new Step3Model(4, firstLineWithData, false);
+		List<String> selection = new ArrayList<String>(1);
+		selection.add(Lang.l().step3ColTypeMeasuredValue());
+		selection.add(Lang.l().step3MeasuredValNumericValue());
+		selection.add(".SEP,");
+		s3M.addSelection(selection);
+		mC.registerProvider(s3M);
+		mC.updateModel();
+		mC.removeProvider(s3M);
 		//
 		mC.setStepController(new Step6bController(s6bM,firstLineWithData));
 	}

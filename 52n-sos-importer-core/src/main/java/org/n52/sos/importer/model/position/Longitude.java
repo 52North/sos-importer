@@ -53,6 +53,7 @@ public class Longitude extends PositionComponent {
 	/**
 	 * tries to convert a given String into a valid Longitude object
 	 */
+	// TODO units and Strings -> Constants
 	public static Longitude parse(String s) {
 		double value = 0;
 		String unit = "";
@@ -70,11 +71,6 @@ public class Longitude extends PositionComponent {
 			number = s;
 		
 		NumericValue nv = new NumericValue();
-		if (number.contains(","))
-			nv.setDecimalSeparator(",");
-		else if (number.contains("."))
-			nv.setDecimalSeparator(".");
-		nv.setThousandsSeparator(" ");
 		
 		value = nv.parse(number);			
 

@@ -58,8 +58,6 @@ public class ComboBoxItems {
 	
 	private String[] decimalSeparators;
 	
-	private String[] thousandsSeparators;
-	
 	private String[] latLonUnits;
 	
 	private String[] heightUnits;
@@ -139,10 +137,8 @@ public class ComboBoxItems {
 		}
 
 		this.decimalSeparators = parse(props.getProperty("decimalSeparators"));	
-		this.thousandsSeparators = parse(props.getProperty("thousandsSeparators"));	
 		this.latLonUnits = parse(props.getProperty("latLonUnits"));	
 		this.heightUnits = parse(props.getProperty("heightUnits"));	
-		this.thousandsSeparators = parse(props.getProperty("thousandsSeparators"));	
 		this.dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
 		this.positionGroups = parse(props.getProperty("positionGroups"));
 		
@@ -289,14 +285,6 @@ public class ComboBoxItems {
 
 	public void setDecimalSeparators(String[] decimalSeparators) {
 		this.decimalSeparators = decimalSeparators;
-	}
-
-	public String[] getThousandsSeparators() {
-		return thousandsSeparators;
-	}
-
-	public void setThousandsSeparators(String[] thousandsSeparators) {
-		this.thousandsSeparators = thousandsSeparators;
 	}
 
 	public String[] getLatLonUnits() {

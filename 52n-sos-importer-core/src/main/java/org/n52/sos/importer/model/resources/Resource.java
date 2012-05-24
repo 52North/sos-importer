@@ -55,12 +55,19 @@ public abstract class Resource extends Component {
 	private String uriPrefix;
 	private TableElement[] relatedCols;
 	private String concatString;
-
+	private boolean useNameAfterPrefixAsURI;
+	private boolean generated;
 	
 	public void setName(String name) { this.name = name; }
 	public String getName() { return name; }
 	public void setURI(URI uri) { this.uri = uri; }
 	public URI getURI() { return uri; }
+	
+	/**
+	 * XML prefix for resources.
+	 * @return should be xml:ID valid
+	 */
+	public abstract String XML_PREFIX();
 	
 	/**
 	 * @return A String representing this type
@@ -73,10 +80,10 @@ public abstract class Resource extends Component {
 	 * @return a String representation of this resource's name
 	 */
 	public String getNameString() {
-		if (name == null || name.equals(""))
+		if (getName() == null || getName().equals(""))
 			return uri.toString();
 		else 
-			return name;
+			return getName();
 	}
 	
 	/**
@@ -150,6 +157,13 @@ public abstract class Resource extends Component {
 	 * returns the corresponding resource for a measured value cell
 	 */
 	public abstract Resource forThis(Cell measuredValuePosition);
+	
+	/**
+	 * @return {@link Resource#XML_PREFIX} + {@link Resource#hashcode()}
+	 */
+	public String getXMLId() {
+		return XML_PREFIX() + hashCode();
+	}
 	
 	@Override 
 	public String toString() {
@@ -237,6 +251,32 @@ public abstract class Resource extends Component {
 	 */
 	public void setConcatString(String concatString) {
 		this.concatString = concatString;
+	}
+	/**
+	 * @return the useNameAfterPrefixAsURI
+	 */
+	public boolean isUseNameAfterPrefixAsURI() {
+		return useNameAfterPrefixAsURI;
+	}
+	/**
+	 * @param useNameAfterPrefixAsURI the useNameAfterPrefixAsURI to set
+	 */
+	public void setUseNameAfterPrefixAsURI(boolean useNameAfterPrefixAsURI) {
+		this.useNameAfterPrefixAsURI = useNameAfterPrefixAsURI;
+	}
+	/**
+	 * If <code>true</code> this Resource is generated from other elements
+	 * contained in the data file.
+	 * @return the generated
+	 */
+	public boolean isGenerated() {
+		return generated;
+	}
+	/**
+	 * @param generated the generated to set
+	 */
+	public void setGenerated(boolean generated) {
+		this.generated = generated;
 	}
 	
 	

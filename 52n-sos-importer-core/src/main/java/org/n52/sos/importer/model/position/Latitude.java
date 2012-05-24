@@ -51,8 +51,9 @@ public class Latitude extends PositionComponent {
 	}
 	
 	/**
-	 * tries to convert a given String into a valid Latitude object
+	 * Tries to convert a given String into a valid Latitude object
 	 */
+	// TODO units and Strings -> Constants
 	public static Latitude parse(String s) {
 		double value = 0;
 		String unit = "";
@@ -70,13 +71,6 @@ public class Latitude extends PositionComponent {
 			number = s;
 		
 		NumericValue nv = new NumericValue();
-		if (number.contains(","))
-			nv.setDecimalSeparator(",");
-		else if (number.contains("."))
-			nv.setDecimalSeparator(".");
-		else 
-			nv.setDecimalSeparator(" ");
-		nv.setThousandsSeparator(" ");
 		
 		value = nv.parse(number);			
 

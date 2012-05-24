@@ -123,6 +123,14 @@ public class En extends Lang{
 		return "Format";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.n52.sos.importer.view.i18n.Lang#generated()
+	 */
+	@Override
+	public String generated() {
+		return "generated";
+	}
+
 	@Override
 	public Locale getLocale() {
 		return En.locale;
@@ -170,12 +178,12 @@ public class En extends Lang{
 	public String measuredValue() {
 		return "measured value";
 	}
-
+	
 	@Override
 	public String minutes() {
 		return "Minutes";
 	}
-	
+
 	@Override
 	public String month() {
 		return "Month";
@@ -188,10 +196,6 @@ public class En extends Lang{
 
 	public String nextButtonLabel() {
 		return "Next";
-	}
-
-	public String numValuePanelDecimalSeparator() {
-		return "Decimal separator";
 	}
 
 	public String numValuePanelThousandsSeparator() {
@@ -274,6 +278,10 @@ public class En extends Lang{
 		return "CSV-Data-Preview";
 	}
 
+	public String step2DecimalSeparator() {
+		return "Decimal separator";
+	}
+
 	public String step2Description() {
 		return this.step() + " 2: Define CSV File Metadata";
 	}
@@ -318,7 +326,7 @@ public class En extends Lang{
 	public String step3aParseTestNFailed(int n) {
 		return n + " values could not be interpreted.";
 	}
-
+	
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "The type for this column is \"" + 
@@ -327,7 +335,7 @@ public class En extends Lang{
 				this.step3ColTypeDoNotExport() + 
 				"\" for skipping it.";
 	}
-	
+
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
 		return "Column Type is \"" + 

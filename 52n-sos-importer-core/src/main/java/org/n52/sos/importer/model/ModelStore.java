@@ -24,6 +24,7 @@
 package org.n52.sos.importer.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -160,6 +161,12 @@ public class ModelStore {
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
 		((ArrayList<FeatureOfInterest>) featureOfInterests).trimToSize();
+		Object[] a = featureOfInterests.toArray(); 
+		Arrays.sort(a);
+		featureOfInterests = new ArrayList<FeatureOfInterest>(a.length);
+		for (int i = 0; i < a.length; i++) {
+			featureOfInterests.add((FeatureOfInterest) a[i]);
+		}
 		return featureOfInterests;
 	}
 	
@@ -275,8 +282,8 @@ public class ModelStore {
 
 	public void add(Step6bSpecialModel step6bSpecialModel) {
 		logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
-				step6bSpecialModel.getFeatureOfInterestName() + "\" and Observed Property \"" +
-				step6bSpecialModel.getObservedPropertyName() + "\"");
+				step6bSpecialModel.getFeatureOfInterest().getName() + "\" and Observed Property \"" +
+				step6bSpecialModel.getObservedProperty().getName() + "\"");
 		step6bSpecialModels.add(step6bSpecialModel);
 	} 
 	
@@ -284,8 +291,8 @@ public class ModelStore {
 		if (step6bSpecialModel.getSensor().getName() != null ||
 				step6bSpecialModel.getSensor().getURI() != null)
 			logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
-				step6bSpecialModel.getFeatureOfInterestName() + " and Observed Property \"" +
-				step6bSpecialModel.getObservedPropertyName()+ "\"");
+				step6bSpecialModel.getFeatureOfInterest().getName() + " and Observed Property \"" +
+				step6bSpecialModel.getObservedProperty().getName()+ "\"");
 		step6bSpecialModels.remove(step6bSpecialModel);
 	}
 

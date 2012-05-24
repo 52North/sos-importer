@@ -38,7 +38,9 @@ public class Step3Model implements StepModel{
 	private final int firstLineWithData;
 	private final boolean useHeader;
 	
-	public Step3Model(int markedColumn,int firstLineWithData, boolean useHeader) {
+	public Step3Model(int markedColumn,
+			int firstLineWithData,
+			boolean useHeader) {
 		this.markedColumn = markedColumn;
 		this.firstLineWithData = firstLineWithData;
 		this.useHeader = useHeader;
@@ -46,7 +48,7 @@ public class Step3Model implements StepModel{
 	}
 
 	/**
-	 * saves the current selection of the radio button panel for the current
+	 * Saves the current selection of the radio button panel for the current
 	 * marked column.<br />
 	 * Is called during <code>Step3Model.back()</code> and 
 	 * <code>Step3Controller.saveSettings()</code>.
@@ -56,8 +58,8 @@ public class Step3Model implements StepModel{
 		if (logger.isTraceEnabled()) {
 			logger.trace("addSelection()");
 		}
-		this.columnAssignments.put(this.markedColumn, selection);
-		List<String> addedValue = this.columnAssignments.get(this.markedColumn);
+		columnAssignments.put(markedColumn, selection);
+		List<String> addedValue = this.columnAssignments.get(markedColumn);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Next two values should be equal: " + 
 					"addedValue: \"" + addedValue + "\"; " +
@@ -76,7 +78,7 @@ public class Step3Model implements StepModel{
 		if (logger.isTraceEnabled()) {
 			logger.trace("getSelectionForColumn(colIndex:=" + colIndex +")");
 		}
-		List<String> value = this.columnAssignments.get(colIndex);
+		List<String> value = columnAssignments.get(colIndex);
 		if (logger.isDebugEnabled()) {
 			logger.debug("found selection: " + value);
 		}
@@ -90,7 +92,7 @@ public class Step3Model implements StepModel{
 		if (logger.isTraceEnabled()) {
 			logger.trace("getAllSelections()");
 		}
-		return this.columnAssignments;
+		return columnAssignments;
 	}
 	/*
 	 * 	simple getter and setter

@@ -38,7 +38,7 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.view.i18n.Lang;
 
-public class FeatureOfInterest extends Resource {
+public class FeatureOfInterest extends Resource implements Comparable<FeatureOfInterest>{
 	
 	private static final Logger logger = Logger.getLogger(FeatureOfInterest.class);
 	
@@ -67,6 +67,7 @@ public class FeatureOfInterest extends Resource {
 	public void unassign(MeasuredValue mv) {
 		mv.setFeatureOfInterest(null);		
 	}
+	
 	
 	@Override
 	public FeatureOfInterest forThis(Cell measuredValuePosition) {
@@ -164,4 +165,32 @@ public class FeatureOfInterest extends Resource {
 	public String getTypeName() {
 		return Lang.l().featureOfInterest();
 	}
+
+	@Override
+	public String XML_PREFIX() {
+		return "foi";
+	}
+
+	@Override
+	public int compareTo(FeatureOfInterest o) {
+		// try to compare by name
+		if (this.getName() != null && o.getName() != null) {
+			return this.getName().compareTo(o.getName());
+		}
+		// compare by xmlId
+		return this.getXMLId().compareTo(o.getXMLId());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.n52.sos.importer.model.resources.Resource#getName()
+	 */
+	@Override
+	public String getName() {
+		if (isGenerated()) {
+			return getXMLId();
+		} else {
+			return super.getName();
+		}
+	}
+
 }

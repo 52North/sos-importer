@@ -69,8 +69,6 @@ public class Step6cTest2 {
 		
 		NumericValue nv1 = new NumericValue();
 		nv1.setTableElement(new Column(3,firstLineWithData));
-		nv1.setDecimalSeparator(".");
-		nv1.setThousandsSeparator(",");
 		nv1.setDateAndTime(dtm);
 		nv1.setFeatureOfInterest(foi);
 		nv1.setObservedProperty(op);

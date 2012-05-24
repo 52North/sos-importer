@@ -100,4 +100,9 @@ public class UnitOfMeasurement extends Resource {
 	public String getTypeName() {
 		return Lang.l().unitOfMeasurement();
 	}
+
+	@Override
+	public String XML_PREFIX() {
+		return "uom";
+	}
 }
