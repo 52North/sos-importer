@@ -158,6 +158,10 @@ public abstract class Lang {
 	public String frameTitleExtension(String file, String path) {
 		return " - " + this.file() + ":\"" + file + "\" (" + this.path() + ": \"" + path + "\")";
 	}
+	/**
+	 * @return generated
+	 */
+	public abstract String generated();
 	public abstract Locale getLocale();
 	/**
 	 * @return Group
@@ -211,10 +215,6 @@ public abstract class Lang {
 	 * @return Next
 	 */
 	public abstract String nextButtonLabel();
-	/**
-	 * @return Decimal separator
-	 */
-	public abstract String numValuePanelDecimalSeparator();
 	/**
 	 * @return	Thousands separator
 	 */
@@ -297,6 +297,10 @@ public abstract class Lang {
 	 * @return CSV-Data-Preview
 	 */
 	public abstract String step2DataPreviewLabel();
+	/**
+	 * @return Decimal separator
+	 */
+	public abstract String step2DecimalSeparator();
 	/**
 	 * @return Step 2: Import CSV file
 	 */
@@ -542,11 +546,11 @@ public abstract class Lang {
 	 * @return Manual Input
 	 */
 	public abstract String step6ManualInput();
+	
 	/**
 	 * @return No user input at all. Please fill in the required information.
 	 */
 	public abstract String step6MissingUserInput();
-	
 	/**
 	 * @return The selected config file folder <code>folder</code> is not
 	 * 			accessible for the application. 
@@ -599,6 +603,7 @@ public abstract class Lang {
 	 * @return Could not connect to Sensor Observation Service: <code>strURL</code> . HTTP Response Code: <code>responseCode</code>
 	 */
 	public abstract String step7SOSconnectionFailed(String strURL,int responseCode);
+
 	/**
 	 * @param strURL
 	 * @param message
@@ -646,13 +651,13 @@ public abstract class Lang {
 	 * @return Check log file
 	 */
 	public abstract String step8LogFileButton();
-
+	
 	/**
 	 * @param i
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public abstract String step8RegisterSensorLabel(int i);
-	
+
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @param excpetionText A short String describing the exception cause 

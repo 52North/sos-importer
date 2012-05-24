@@ -28,14 +28,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
 
-import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
@@ -65,6 +69,8 @@ public class Step2Panel extends JPanel {
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
 	
+	private JComboBox decimalSeparatorCombobox;
+	
 	private final JTextArea csvFileTextArea;
 	private int csvFileRowCount = 0;
 	
@@ -74,6 +80,7 @@ public class Step2Panel extends JPanel {
 	
 	private JLabel useHeaderJL;
 	private JCheckBox useHeaderJCB;
+	private JPanel panel;
 	
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -145,32 +152,82 @@ public class Step2Panel extends JPanel {
 		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		useHeaderPanel.add(useHeaderJL);
 		useHeaderPanel.add(useHeaderJCB);
+		/*
+		 * Decimal Separator
+		 */
+		JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
+		String[] decimalSeparators = Constants.DECIMAL_SEPARATORS;
+		decimalSeparatorCombobox = new JComboBox(decimalSeparators);
+		decimalSeparatorCombobox.setSelectedIndex(0);
+		JPanel decimalSeparatorPanel = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) decimalSeparatorPanel.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.RIGHT);
+		decimalSeparatorPanel.add(decimalSeparatorLabel);
+		decimalSeparatorPanel.add(decimalSeparatorCombobox);
 		//
 		//		
 		//	CSV-setting panel
 		//
 		JPanel csvSettingsPanel = new JPanel();
-		csvSettingsPanel.setLayout(new GridLayout(5,1));
+		csvSettingsPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
+		csvSettingsPanel.setLayout(new GridLayout(6,1));
 		csvSettingsPanel.add(columnSeparatorCombobox);
 		csvSettingsPanel.add(commentIndicatorCombobox);
 		csvSettingsPanel.add(textQualifierCombobox);
 		csvSettingsPanel.add(firstLineWithDataJPanel);
 		csvSettingsPanel.add(useHeaderPanel);
+		csvSettingsPanel.add(decimalSeparatorPanel);
 		//
 		//	CSV text area
 		//
-		this.csvFileTextArea = new JTextArea(20, 70);
-		this.csvFileTextArea.setEditable(false);	
+		csvFileTextArea = new JTextArea(20, 70);
+		csvFileTextArea.setEditable(false);	
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
 		JPanel csvDataPanel = new JPanel();
-		csvDataPanel.setLayout(new BoxLayout(csvDataPanel, BoxLayout.Y_AXIS));
-		csvDataPanel.add(new JLabel(Lang.l().step2DataPreviewLabel()));
-		csvDataPanel.add(scrollPane);
-		//
-		//	Final add
-		//
-		this.add(csvSettingsPanel);
-		this.add(csvDataPanel);
+		
+		panel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEADING);
+		JLabel label = new JLabel(Lang.l().step2DataPreviewLabel());
+		label.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
+		panel.add(label);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(csvSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(csvDataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(csvSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(csvDataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
+		GroupLayout gl_csvDataPanel = new GroupLayout(csvDataPanel);
+		gl_csvDataPanel.setHorizontalGroup(
+			gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_csvDataPanel.createSequentialGroup()
+					.addGroup(gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		gl_csvDataPanel.setVerticalGroup(
+			gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_csvDataPanel.createSequentialGroup()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
+		csvDataPanel.setLayout(gl_csvDataPanel);
+		setLayout(groupLayout);
 	}
 	
 	public String getCommentIndicator() {
@@ -179,6 +236,14 @@ public class Step2Panel extends JPanel {
 	
 	public void setCommentIndicator(String commentIndicator) {
 		commentIndicatorCombobox.setSelectedItem(commentIndicator);
+	}
+	
+	public String getDecimalSeparator() {
+		return decimalSeparatorCombobox.getSelectedItem().toString();
+	}
+	
+	public void setDecimalSeparator(String decimalSeparator) {
+		decimalSeparatorCombobox.setSelectedItem(decimalSeparator);
 	}
 
 	public String getColumnSeparator() {

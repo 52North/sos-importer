@@ -35,6 +35,8 @@ public class Step2Model implements StepModel {
 	
 	private String textQualifier;
 	
+	private char decimalSeparator;
+	
 	private int firstLineWithData;
 	
 	private int csvFileRowRount;
@@ -94,5 +96,19 @@ public class Step2Model implements StepModel {
 	public boolean getUseHeader() { return useHeader; }
 	public void setUseHeader(boolean useHeader) {
 		this.useHeader = useHeader;
+	}
+
+	/**
+	 * @return the decimalSeparator
+	 */
+	public char getDecimalSeparator() {
+		return decimalSeparator;
+	}
+
+	/**
+	 * @param decimalSeparator the decimalSeparator to set
+	 */
+	public void setDecimalSeparator(char decimalSeparator) {
+		this.decimalSeparator = decimalSeparator;
 	}
 }

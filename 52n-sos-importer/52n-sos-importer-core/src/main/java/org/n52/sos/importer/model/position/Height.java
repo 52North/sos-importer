@@ -53,6 +53,7 @@ public class Height extends PositionComponent {
 	/**
 	 * tries to convert a given String into a valid Height object
 	 */
+	// TODO units and Strings -> Constants
 	public static Height parse(String s) {
 		double value = 0;
 		String unit = "m";
@@ -74,13 +75,6 @@ public class Height extends PositionComponent {
 			number = s;
 		
 		NumericValue nv = new NumericValue();
-		if (number.contains(","))
-			nv.setDecimalSeparator(",");
-		else if (number.contains("."))
-			nv.setDecimalSeparator(".");
-		else 
-			nv.setDecimalSeparator(" ");
-		nv.setThousandsSeparator(" ");
 		
 		value = nv.parse(number);			
 		

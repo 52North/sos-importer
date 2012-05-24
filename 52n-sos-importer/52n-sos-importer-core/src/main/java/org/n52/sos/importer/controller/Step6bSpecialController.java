@@ -78,8 +78,8 @@ public class Step6bSpecialController extends StepController {
 	@Override
 	public void loadSettings() {
 		String description = step6bSpecialModel.getDescription();
-		String foiName = step6bSpecialModel.getFeatureOfInterestName();
-		String opName = step6bSpecialModel.getObservedPropertyName();
+		String foiName = step6bSpecialModel.getFeatureOfInterest().getName();
+		String opName = step6bSpecialModel.getObservedProperty().getName();
 		
 		Sensor sensor = step6bSpecialModel.getSensor();
 		missingResourcePanel = new MissingResourcePanel(sensor);
@@ -148,25 +148,26 @@ public class Step6bSpecialController extends StepController {
 				rowOrColumnNumber = ((Row)mv.getTableElement()).getNumber();
 				
 			for (int i = 0; i < rows; i++) {	
-				//test if the measuredValue is parseable
+				//test if the measuredValue can be parsed
 				Cell cell = new Cell(i, rowOrColumnNumber);
 				String value = this.tableController.getValueAt(cell);
-				try {
-					mv.parse(value);
-				} catch (Exception e) {
-					if (logger.isTraceEnabled()) {
-						logger.trace("Value could not be parsed: " + value, e);
+				if (i >= firstLineWithData) {
+					try {
+						mv.parse(value);
+					} catch (Exception e) {
+						if (logger.isTraceEnabled()) {
+							logger.trace("Value could not be parsed: " + value, e);
+						}
+						continue;
+					}	
+
+					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
+					ObservedProperty op = mv.getObservedProperty().forThis(cell);
+					Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
+					if (!ModelStore.getInstance().getStep6bSpecialModels().contains(model)) {
+						return model;
 					}
-					continue;
-				}	
-				
-				FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
-				String featureOfInterestName = foi.getNameString();
-				ObservedProperty op = mv.getObservedProperty().forThis(cell);
-				String observedPropertyName = op.getNameString();
-				Step6bSpecialModel model = new Step6bSpecialModel(featureOfInterestName, observedPropertyName);
-				if (!ModelStore.getInstance().getStep6bSpecialModels().contains(model))
-					return model;
+				}
 			}
 		}
 		return null;

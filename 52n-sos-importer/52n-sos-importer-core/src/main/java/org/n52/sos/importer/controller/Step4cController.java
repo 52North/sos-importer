@@ -35,7 +35,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
  * Solves ambiguities in case there is more than one position column
  * (needs apparently to be implemented)
  * <br />
- * <b>FIXME</b> Implement
+ * TODO Implement
  * @author Raimund
  *
  */
@@ -51,31 +51,20 @@ public class Step4cController extends StepController {
 	public Step4cController(int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 	}
-
 	@Override
 	public void loadSettings() {
-		// TODO Auto-generated method stub
-		
 	}
-
 	@Override
 	public void saveSettings() {
-		// TODO Auto-generated method stub
-		
 	}
-
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public JPanel getStepPanel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public StepController getNextStepController() {
 		return new Step5aController(this.firstLineWithData);
@@ -97,27 +86,19 @@ public class Step4cController extends StepController {
 				foi.setPosition(position);
 			return false;
 		}
-		
 		//TODO more than one position group
 		return false;
 	}
-
 	@Override
 	public boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
-
 	@Override
 	public StepController getNext() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public StepModel getModel() {
-		// FIXME Implement when a model is available
 		return null;
 	}
-
 }

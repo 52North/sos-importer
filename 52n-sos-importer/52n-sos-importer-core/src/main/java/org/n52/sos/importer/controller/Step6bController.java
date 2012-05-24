@@ -45,9 +45,9 @@ import org.n52.sos.importer.view.resources.MissingResourcePanel;
 import org.n52.sos.importer.view.utils.Constants;
 
 /**
- * lets the user choose feature of interest, observed property, 
+ * Lets the user choose feature of interest, observed property, 
  * unit of measurement and sensor for each measured value column
- * in case they do not appear in the CSV file
+ * in case they do not appear in the CSV file.
  * @author Raimund
  * 
  */

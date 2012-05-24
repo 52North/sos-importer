@@ -114,8 +114,8 @@ public class ConfigurationTest {
 			Offering sosOff = sosMeta.getOffering();
 			String offeringInfo = sosOff.getStringValue();
 			//
-			if(sosOff.isSetAutogenerate()) {
-				offeringAutogenerate = sosOff.getAutogenerate();
+			if(sosOff.isSetGenerate()) {
+				offeringAutogenerate = sosOff.getGenerate();
 			}
 			//
 			logger.debug("sosURL: " + sosUrl);

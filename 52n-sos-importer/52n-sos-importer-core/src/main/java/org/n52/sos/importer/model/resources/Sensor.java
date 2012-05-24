@@ -101,4 +101,9 @@ public class Sensor extends Resource {
 	public String getTypeName() {
 		return Lang.l().sensor();
 	}
+
+	@Override
+	public String XML_PREFIX() {
+		return "sensor";
+	}
 }

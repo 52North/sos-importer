@@ -75,7 +75,7 @@ public abstract class DateAndTimeComponent extends Component {
 	}
 
 	/**
-	 * colors the particular date&time component
+	 * Colours the particular date&time component
 	 */
 	public void mark() {
 		if (tableElement != null)
@@ -83,10 +83,11 @@ public abstract class DateAndTimeComponent extends Component {
 	}
 	
 	/**
-	 * returns either the manually set value or 
+	 * Returns either the manually set value or 
 	 * the value of this component in the table
+	 * @throws ParseException 
 	 */
-	public int getParsedValue(Cell measuredValuePosition) {
+	public int getParsedValue(Cell measuredValuePosition) throws ParseException {
 		if (tableElement == null)
 			return getValue();
 		else 
@@ -94,20 +95,20 @@ public abstract class DateAndTimeComponent extends Component {
 	}
 	
 	/**
-	 * converts a String along a given pattern into the value of this component
+	 * Converts a String along a given pattern into the value of this component
 	 * @param s
 	 * @return
+	 * @throws ParseException 
 	 */
-	public int parse(String s) {
+	public int parse(String s) throws ParseException {
 		Date date = null;
 		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
 		
         try {
         	date = formatter.parse(s);
 		} catch (ParseException e) {
-			logger.error("Value could not be parsed: " + value, e);
-			return -1;
-			//TODO throw new NumberFormatException();
+			logger.error("Given String could not be parsed: " + s, e);
+			throw e;
 		}
 		
 		GregorianCalendar gc = new GregorianCalendar();
@@ -118,7 +119,7 @@ public abstract class DateAndTimeComponent extends Component {
 	}
 	
 	/**
-	 * returns the corresponding Gregorian calendar field 
+	 * Returns the corresponding Gregorian calendar field 
 	 * for this component
 	 * @return
 	 */

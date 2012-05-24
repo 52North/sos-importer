@@ -106,7 +106,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 		dtm.setGroup(group);
 		DateAndTimeController dtc = new DateAndTimeController(dtm);
 		dtc.assignPattern(pattern, tableElement);
-		// FIXME move action to controller (GUI should not manipulate the model)
+		// TODO move action to controller (GUI should not manipulate the model)
 		ModelStore.getInstance().add(dtm);
 	}
 

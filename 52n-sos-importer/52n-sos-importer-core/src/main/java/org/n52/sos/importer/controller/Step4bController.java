@@ -174,8 +174,7 @@ public class Step4bController extends StepController {
 
 		@Override
 		public void rowSelectionChanged(int[] selectedRows) {
-			// TODO Auto-generated method stub
-			
+			// Do nothing -> only columns are used.
 		}	
 	}
 

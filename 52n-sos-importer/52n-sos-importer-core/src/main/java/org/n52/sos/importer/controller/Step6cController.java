@@ -85,7 +85,11 @@ public class Step6cController extends StepController {
 		
 		String description = step6cModel.getDescription();
 		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
-		step6cPanel = new Step6Panel(description, name, null, missingComponentPanels);	
+		step6cPanel = new Step6Panel(description,
+				// to indicate to the user, that this resource is generated
+				(foi.isGenerated()?Lang.l().generated() + ": " + name:name),
+				null,
+				missingComponentPanels);	
 		BackNextController.getInstance().setNextButtonEnabled(isFinished());
 	}
 
@@ -133,7 +137,7 @@ public class Step6cController extends StepController {
 	
 	private Step6cModel getNextFeatureOfInterestWithoutPosition() {
 		List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
-		// FIXME check if the current foi is in the no data area of the column
+		// TODO check if the current foi is in the no data area of the column
 		for (FeatureOfInterest foi: featureOfInterests) {
 			
 			if (foi.getTableElement() == null) {

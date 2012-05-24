@@ -65,8 +65,6 @@ public class Step6Panel extends JPanel {
 			observedPropertyTextField.setText(" " + observedPropertyName + " ");
 			observedPropertyTextField.setEditable(false);
 		}
-		
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		descriptionPanel.add(descriptionLabel1);
 		descriptionPanel.add(featureOfInterestTextField);
@@ -74,6 +72,7 @@ public class Step6Panel extends JPanel {
 			descriptionPanel.add(descriptionLabel2);
 			descriptionPanel.add(observedPropertyTextField);
 		}
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		descriptionPanel.add(questionMarkLabel);
 		add(descriptionPanel);
 		

@@ -220,7 +220,7 @@ public class Step4aController extends StepController {
 
 		@Override
 		public void rowSelectionChanged(int[] selectedRows) {
-			// TODO Auto-generated method stub
+			// Do nothing here!
 		}	
 	}
 

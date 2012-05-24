@@ -123,8 +123,6 @@ public abstract class CombinationPanel extends SelectionPanel {
     	String[] part = s.split(Constants.SEPARATOR_STRING);
 		patternComboBox.setSelectedItem(part[0]);
 		groupComboBox.setSelectedItem(part[1]);
-		// FIXME is this call really required?
-		// patternChanged();
 	}
 	
 	@Override

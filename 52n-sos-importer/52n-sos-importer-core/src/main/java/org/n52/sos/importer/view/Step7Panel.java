@@ -90,7 +90,7 @@ public class Step7Panel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		sosComboBox = new EditableJComboBoxPanel(
 				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().sosURL(), ToolTips.get(ToolTips.SOS));
-		this.add(sosComboBox);
+		add(sosComboBox);
 		/*
 		 * 	directImport Checkbox
 		 */
@@ -160,7 +160,7 @@ public class Step7Panel extends JPanel {
 		directImportPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		directImportPanel.add(directImportJL);
 		directImportPanel.add(directImportJCB);
-		this.add(directImportPanel);
+		add(directImportPanel);
 		/*
 		 *	saveConfig Checkbox
 		 */
@@ -203,7 +203,7 @@ public class Step7Panel extends JPanel {
 		saveConfigPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		saveConfigPanel.add(saveConfigJL);
 		saveConfigPanel.add(saveConfigJCB);
-		this.add(saveConfigPanel);
+		add(saveConfigPanel);
 		/*
 		 * configFileChooser
 		 */
@@ -242,26 +242,26 @@ public class Step7Panel extends JPanel {
 		configFilePanel.add(configFileJL);
 		configFilePanel.add(configFileDirSelectorJB);
 		configFilePanel.add(configFileNameJT);
-		this.add(configFilePanel);
+		add(configFilePanel);
 		// enable next button only if something is checked!
 		BackNextController.getInstance().setNextButtonEnabled(
 				saveConfigJCB.isSelected() || directImportJCB.isSelected() );
 	}
 	
 	public String getSOSURL() {
-		return (String) this.sosComboBox.getSelectedItem();
+		return (String) sosComboBox.getSelectedItem();
 	}
 	
 	public void setSOSURL(String sosURL) {
-		this.sosComboBox.setSelectedItem(sosURL);
+		sosComboBox.setSelectedItem(sosURL);
 	}
 	
 	public boolean isDirectImport() {
-		return this.directImportJCB.isSelected();
+		return directImportJCB.isSelected();
 	}
 	
 	public void setDirectImport(boolean isDirectImport) {
-		this.directImportJCB.setSelected(isDirectImport);
+		directImportJCB.setSelected(isDirectImport);
 	}
 	
 	public boolean isSaveConfig() {
@@ -269,17 +269,17 @@ public class Step7Panel extends JPanel {
 	}
 	
 	public void setSaveConfig(boolean isSaveConfig) {
-		this.saveConfigJCB.setSelected(isSaveConfig);
+		saveConfigJCB.setSelected(isSaveConfig);
 	}
 	
 	public String getConfigFile() {
-		return this.configFilePath + File.separatorChar + this.configFileName;
+		return configFilePath + File.separatorChar + configFileNameJT.getText();
 	}
 	
 	public void setConfigFile(String configFile) {
 		// split String by last index of File.separatorChar and save to fields
-		this.configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar));
-		this.configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar)+1);
+		configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar)+1);
+		configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar)+1);
 	}
 
 	public boolean isGenerateOfferingFromSensorName() {

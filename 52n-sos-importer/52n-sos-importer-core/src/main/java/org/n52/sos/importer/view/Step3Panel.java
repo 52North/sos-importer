@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import org.n52.sos.importer.model.measuredValue.Boolean;
 import org.n52.sos.importer.model.measuredValue.Count;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.measuredValue.Text;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
@@ -38,7 +39,6 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
-import org.n52.sos.importer.view.step3.NumericValuePanel;
 import org.n52.sos.importer.view.step3.PositionCombinationPanel;
 import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
@@ -149,7 +149,7 @@ public class Step3Panel extends JPanel {
 			 */
 			public MeasuredValuePanel(int firstLineWithData) {	
 				super(columnSubTypeJP);		
-				addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new NumericValuePanel(columnSubTypeMetadataJP, firstLineWithData));
+				addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new NumericValue(), firstLineWithData));
 				addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(),firstLineWithData));
 				addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(),firstLineWithData));
 				addRadioButton(Lang.l().step3MeasuredValText(), ToolTips.get(ToolTips.TEXT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Text(),firstLineWithData));

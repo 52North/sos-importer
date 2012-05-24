@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -169,7 +170,8 @@ public class DateAndTimeController {
 	
 	
 	/**
-	 * FIXME add comment to explain this method
+	 * Method checks the <code>pattern</code> and sets the members of the 
+	 * controlled <code>DateAndTime</code> instance.
 	 * @param pattern
 	 * @param tableElement
 	 */
@@ -221,7 +223,7 @@ public class DateAndTimeController {
 			dateAndTime.getTimeZone().mark();
 	}
 	
-	public String forThis(Cell measuredValuePosition) {
+	public String forThis(Cell measuredValuePosition) throws ParseException {
 		int second = dateAndTime.getSeconds().getParsedValue(measuredValuePosition);
 		int minute = dateAndTime.getMinute().getParsedValue(measuredValuePosition);
 		int hour = dateAndTime.getHour().getParsedValue(measuredValuePosition);

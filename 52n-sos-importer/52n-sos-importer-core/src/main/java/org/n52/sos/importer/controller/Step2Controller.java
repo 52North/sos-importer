@@ -110,14 +110,15 @@ public class Step2Controller extends StepController {
 		int firstLineWithData = step2Model.getFirstLineWithData();
 		step2Panel.setFirstLineWithData(firstLineWithData);
 		
-		boolean useHeader = step2Model.getUseHeader();
-		step2Panel.setUseHeader(useHeader);
-		
 		String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
 		
+		boolean useHeader = step2Model.getUseHeader();
+		step2Panel.setUseHeader(useHeader);
 		step2Panel.setCSVFileHighlight(firstLineWithData);
 		
+		char decimalSeparator = step2Model.getDecimalSeparator();
+		step2Panel.setDecimalSeparator(decimalSeparator+"");
 	}
 	
 	@Override
@@ -147,6 +148,16 @@ public class Step2Controller extends StepController {
 		
 		String csvFileContent = step2Panel.getCSVFileContent();
 		step2Model.setCSVFileContent(csvFileContent);
+		
+		String decimalSeparator = step2Panel.getDecimalSeparator();
+		step2Model.setDecimalSeparator(decimalSeparator.charAt(0));
+		// Update global decimal separator
+		Constants.DECIMAL_SEPARATOR = decimalSeparator.charAt(0);
+		if (Constants.DECIMAL_SEPARATOR == '.') {
+			Constants.THOUSANDS_SEPARATOR = ',';
+		} else {
+			Constants.THOUSANDS_SEPARATOR = '.';
+		}
 		
 		step2Panel = null;
 	}

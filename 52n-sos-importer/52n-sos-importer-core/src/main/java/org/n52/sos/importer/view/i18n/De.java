@@ -123,6 +123,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String generated() {
+		return "generiert";
+	}
+
+	@Override
 	public Locale getLocale() {
 		return De.locale;
 	}
@@ -169,12 +174,12 @@ public class De extends Lang{
 	public String measuredValue() {
 		return "Messwert";
 	}
-
+	
 	@Override
 	public String minutes() {
 		return "Minuten";
 	}
-	
+
 	@Override
 	public String month() {
 		return "Monat";
@@ -187,10 +192,6 @@ public class De extends Lang{
 
 	public String nextButtonLabel() {
 		return "Weiter";
-	}
-
-	public String numValuePanelDecimalSeparator() {
-		return "Dezimal-Separator";
 	}
 
 	public String numValuePanelThousandsSeparator() {
@@ -273,6 +274,10 @@ public class De extends Lang{
 	@Override
 	public String step2DataPreviewLabel() {
 		return "Datendatei-Vorschau";
+	}
+
+	public String step2DecimalSeparator() {
+		return "Dezimal-Separator";
 	}
 
 	public String step2Description() {
@@ -554,12 +559,12 @@ public class De extends Lang{
 	public String step7OfferingCheckBoxLabel() {
 		return "Offering-Bezeichner aus Sensor-Namen generieren?";
 	}
-
+	
 	@Override
 	public String step7OfferingInputTextfieldLabel() {
 		return "Bitte geben Sie den Offering-Namen an:";
 	}
-	
+
 	@Override
 	public String step7OfferingNameNotGiven() {
 		return "Bitte geben Sie den Offering-Namen an, oder wählen die Generierung aus";

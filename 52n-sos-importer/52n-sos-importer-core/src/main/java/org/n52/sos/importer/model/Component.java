@@ -27,7 +27,7 @@ import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
- * represents a component (e.g. a day) of a combined element
+ * Represents a component (e.g. a day) of a combined element.
  * (e.g. DateAndTime)
  * @author Raimund
  *

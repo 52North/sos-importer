@@ -34,7 +34,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  * for each row in the CSV file 
  * (needs apparently to be implemented)
  * <br />
- * <b>FIXME</b> Implement
+ * TODO Implement
  * @author Raimund
  * 
  */
@@ -42,55 +42,36 @@ public class Step3bController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		// TODO Auto-generated method stub
-		
 	}
-
 	@Override
 	public void saveSettings() {
-		// TODO Auto-generated method stub
-		
 	}
-
 	@Override
 	public String getDescription() {
 		return Lang.l().step3bDescription();
 	}
-
 	@Override
 	public JPanel getStepPanel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public StepController getNextStepController() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public boolean isNecessary() {
-		// TODO Auto-generated method stub
 		return false;
 	}
-
 	@Override
 	public boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
-
 	@Override
 	public StepController getNext() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
 	public StepModel getModel() {
-		// TODO Auto-generated method stub generated on 21.03.2012 around 16:19:55
 		return null;
 	}
-	
 }

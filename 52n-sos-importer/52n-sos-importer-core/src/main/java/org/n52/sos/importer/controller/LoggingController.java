@@ -49,7 +49,7 @@ public class LoggingController {
 
 	private static final Logger logger = Logger.getLogger(LoggingController.class);
 	
-	// FIXME read value from pom or properties file
+	// TODO read value from pom or properties file
 	private static final Level LOGGING_LEVEL = Level.TRACE;
 	
 	private static final PatternLayout CONSOLE_LOGGING_PATTERN = 
