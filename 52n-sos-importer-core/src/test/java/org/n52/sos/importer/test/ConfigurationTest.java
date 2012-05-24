@@ -75,7 +75,7 @@ public class ConfigurationTest {
 			boolean useHeader = csvMeta.getUseHeader();
 			int firstLineWithData = csvMeta.getFirstLineWithData();
 			String commentIndicator = csvMeta.getParameter().getCommentIndicator();
-			String elemSep = csvMeta.getParameter().getElementSeparator();
+			String elemSep = csvMeta.getParameter().getColumnSeparator();
 			String txtIndi = csvMeta.getParameter().getTextIndicator();
 			Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
 			Metadata[] colMetadata;
