@@ -25,13 +25,19 @@ package org.n52.sos.importer.model.xml;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step6cModel;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.table.TableElement;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPositions;
+import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
+import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x02.GeneratedSpatialResourceType;
 import org.x52North.sensorweb.sos.importer.x02.LatDocument.Lat;
 import org.x52North.sensorweb.sos.importer.x02.LongDocument.Long;
 import org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position;
+import org.x52North.sensorweb.sos.importer.x02.ResourceType;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x02.SpatialResourceType;
 
 /**
  * Store the position for each feature of interest
@@ -39,7 +45,18 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  * in case there are not any positions given in the CSV file. Add each to
  * <code>FOIPositions</code> element.
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
+ */
+/*
+ * How to identify in the current foi is not from file but from manual input or generated
+ * 
+ * foi.getTableElement() != null                               
+ * 		-> FOI is in a colum -> add position to foi positions
+ * 
+ * foi.getTableElement() == null && foi.isGenerated() == false
+ * 		-> FOI is from manual input -> add position to FeatureOfInterest element
+ * 
+ * foi.getTableElement() == null && foi.isGenerated() == true
+ * 		-> FOI is generated -> add position to FeatureOfInterest element
  */
 public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 
@@ -51,20 +68,151 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
+		FeatureOfInterest foi;
+		TableElement tabE = null;
+		org.n52.sos.importer.model.position.Position pos;
 		/*
-		 * 	LOCALE FIELDS
+		 * Identify type of foi: from file, or not
 		 */
-		String name;
-		org.n52.sos.importer.model.resources.FeatureOfInterest foi;
-		FOIPositions[] foiPositions;
-		FOIPositions foiPos = null;
-		AdditionalMetadata addiMeta;
-		boolean addNewFoi = true, addNewMeta = false;
-		/*
-		 * check if FOI is already there
-		 */
+		pos = stepModel.getPosition();
 		foi = stepModel.getFeatureOfInterest();
-		name = stepModel.getFeatureOfInterestName();
+		tabE = foi.getTableElement();
+		if (tabE != null) {
+			// Feature of Interest is from file
+			addToFoiPositionsElement(foi,pos,sosImportConf);
+		} else {
+			// Feature of Interest is created from user input 
+			addToFeatureOfInterestElement(foi,pos,sosImportConf);
+		}
+	}
+
+	private void addToFeatureOfInterestElement(
+			FeatureOfInterest foi, 
+			org.n52.sos.importer.model.position.Position pos, 
+			SosImportConfiguration sosImportConf) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("addToFeatureOfInterestElement()");
+		}
+		// Get Foi by foi.getXMLId()
+		String xmlId = foi.getXMLId();
+		FeatureOfInterestType foiXB;
+		foiXB = getFoiByXmlId(xmlId,sosImportConf);
+		Position posXB;
+		// is foi generated or manual input
+		if (foi.isGenerated()) {
+			GeneratedSpatialResourceType foiGSRT = null;
+			if (foiXB.getResource() != null && 
+					foiXB.getResource() instanceof GeneratedSpatialResourceType) {
+				foiGSRT = (GeneratedSpatialResourceType) foiXB.getResource();
+			} else {
+				logger.error("FeatureOfInterest element not defined correct: " +
+						foiXB.xmlText());
+				// TODO how to handle this case?
+				return;
+			}
+			posXB = foiGSRT.getPosition();
+			// Check, if position is already there
+			if (posXB == null) {
+				// if not, add a new position
+				foiGSRT.setPosition(getXBPosition(pos));
+			} else {
+				// if yes, update
+				updateXBPosition(posXB, pos);
+			}
+		} else {
+			SpatialResourceType foiSRT = null;
+			if (foiXB.getResource() != null && 
+					foiXB.getResource() instanceof SpatialResourceType) {
+				foiSRT = (SpatialResourceType) foiXB.getResource();
+			} else {
+				logger.error("FeatureOfInterest element not defined correct: " +
+						foiXB.xmlText());
+				// TODO how to handle this case?
+				return;
+			}
+			posXB = foiSRT.getPosition();
+			// Check, if position is already there
+			if (posXB == null) {
+				// if not, add a new position
+				foiSRT.setPosition(getXBPosition(pos));
+			} else {
+				// if yes, update
+				updateXBPosition(posXB, pos);
+			}
+		}
+	}
+
+	/**
+	 * Returns the FeatureOfInterest element identified by the given 
+	 * <code>xmlId</code> or <code>null</code> if the element is not found.
+	 * @param xmlId
+	 * @param sosImportConf
+	 * @return the FeatureOfInterest element identified by the given 
+	 * 			<code>xmlId</code> or<br>
+	 * 			<code>null</code> if the element is not found.
+	 */
+	private FeatureOfInterestType getFoiByXmlId(String xmlId,
+			SosImportConfiguration sosImportConf) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getFoiByXmlId(" + xmlId + ",...)");
+		}
+		// get all feature of interests from additional metadata element
+		AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
+		if (addiMeta != null) {
+			FeatureOfInterestType[] fois = addiMeta.getFeatureOfInterestArray();
+			if (fois != null && fois.length > 0) {
+				// iterate of fois
+				for (FeatureOfInterestType foi : fois) {
+					// compare ids
+					if (!foi.isNil() && foi.getResource() != null) {
+						ResourceType foiRes = foi.getResource();
+						if (foiRes.getID()!= null &&
+								!foiRes.getID().equalsIgnoreCase("") &&
+								foiRes.getID().equalsIgnoreCase(xmlId)) {
+							if (logger.isDebugEnabled()) {
+								logger.debug("foi found");
+							}
+							// return if found	
+							return foi;
+						} else if (logger.isDebugEnabled()) {
+							logger.debug("foiRes has wrong id");
+						}
+					} else if (logger.isDebugEnabled()) {
+						logger.debug("foi has no resource defined");
+					}
+				}
+			} else if (logger.isDebugEnabled()) {
+				logger.debug("no fois found in AdditionalMetadata element");
+			}
+		} else if (logger.isDebugEnabled()) {
+			logger.debug("no AdditionalMetadata element found");
+		}
+		return null;
+	}
+
+	/**
+	 * Adds a new FOIPosition element to AdditionalMetadata in 
+	 * <code>sosImportConf</code> or updates an existing one for the given 
+	 * <code>foi</code> with values from the <code>pos</code>.
+	 * @param foi
+	 * @param pos the {@link org.n52.sos.importer.model.position.Position}
+	 * @param sosImportConf 
+	 */
+	private void addToFoiPositionsElement(FeatureOfInterest foi,
+			org.n52.sos.importer.model.position.Position pos,
+			SosImportConfiguration sosImportConf) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("addToFoiPositionsElement()");
+		}
+		FOIPosition[] foiPositions;
+		FOIPosition foiPos = null;
+		AdditionalMetadata addiMeta;
+		boolean addNewFoi = true,
+				addNewMeta = false;
+		String name;
+		//
+		// Check, if position for foi is already contained in additional metadata
+		name = foi.getName();
 		if (name == null) {
 			name = foi.getURIString();
 		}
@@ -78,11 +226,11 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 			}
 		}
 		if (!addNewMeta) {
-			foiPositions = addiMeta.getFOIPositionsArray();
+			foiPositions = addiMeta.getFOIPositionArray();
 			if (foiPositions != null && foiPositions.length == 0) {
 				// check for foi uri in FOIPosition.relatedFOI
-				for (FOIPositions foiPosition : foiPositions) {
-					if (foiPosition.getURI().equalsIgnoreCase(name)) {
+				for (FOIPosition foiPosition : foiPositions) {
+					if (foiPosition.getURI().getStringValue().equalsIgnoreCase(name)) {
 						addNewFoi = false;
 						foiPos = foiPosition;
 						if (logger.isDebugEnabled()) {
@@ -94,22 +242,23 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		}
 		// END: check for foi
 		if (addNewFoi) {
-			foiPos = addiMeta.addNewFOIPositions();
-			foiPos.setURI(name);
-			foiPos.setPosition(getXBPosition(stepModel.getPosition()));
+			// new foi -> new position
+			foiPos = addiMeta.addNewFOIPosition();
+			foiPos.addNewURI().setStringValue(name);
+			foiPos.setPosition(getXBPosition(pos));
 			if (logger.isDebugEnabled()) {
 				logger.debug("New foi pos added: " + foiPos.xmlText());
 			}
 		} 
 		// foi is there, update position
 		else {
-			updateXBPosition(foiPos.getPosition(), stepModel.getPosition());
+			updateXBPosition(foiPos.getPosition(), pos);
 			if (logger.isDebugEnabled()) {
 				logger.debug("foi pos updated: " + foiPos.xmlText());
 			}
 		}
 	}
-	
+
 	private Position getXBPosition(
 			org.n52.sos.importer.model.position.Position position) {
 		if (logger.isTraceEnabled()) {
@@ -144,8 +293,6 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		}
 		return pos;
 	}
-
-	
 
 	private void updateXBPosition(Position posXB,
 			org.n52.sos.importer.model.position.Position pos) {
@@ -185,6 +332,4 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 					pos.toString() + "; XB pos: " + posXB.xmlText());
 		}
 	}
-
-
 }

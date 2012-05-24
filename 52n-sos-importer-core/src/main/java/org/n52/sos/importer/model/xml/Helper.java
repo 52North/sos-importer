@@ -32,6 +32,7 @@ import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
 import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -134,6 +135,29 @@ public class Helper {
 		}
 		return null;
 	}
+	
+	/**
+	 * @param relatedSensors
+	 * @param sensorXmlId
+	 * @return <b>true</b>, if the <code>sensorXmlId</code> is contained in the 
+	 * 		given <code>RelatedSensors[]</code> , <br />
+	 * 		else <b>false</b>
+	 */
+	protected static boolean isSensorInArray(RelatedSensor[] relatedSensors,
+			String sensorXmlId) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isSensorInArray()");
+		}
+		for (RelatedSensor relatedSensorFromArray : relatedSensors) {
+			if (relatedSensorFromArray.isSetIdRef() && 
+					relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 
 
 }

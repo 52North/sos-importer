@@ -23,10 +23,27 @@
  */
 package org.n52.sos.importer.model.xml;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlOptions;
+import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Sensor;
+import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x02.SensorDocument.Sensor;
+import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
+import org.x52North.sensorweb.sos.importer.x02.ManualResourceType;
+import org.x52North.sensorweb.sos.importer.x02.NumberDocument.Number;
+import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x02.SensorType;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -47,23 +64,14 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
-		String foiName = stepModel.getFeatureOfInterestName(), 
-				foiURI = foiName,
-				obsPropName = stepModel.getObservedPropertyName(),
-				obsPropURI = obsPropName,
-				sensorName, 
-				sensorURI;
-		org.n52.sos.importer.model.resources.Sensor sensor = stepModel.getSensor();
-		/*
-		 * TODO get FOI and obsProp URI. Requires update of GUI.
-		 */
 		/*
 		 * add sensor to model
 		 */
-		sensorName = sensor.getName();
-		sensorURI = sensor.getURIString();
-		Sensor sensorXB = null;
-		Sensor[] sensorsXB;
+		Sensor sensor = stepModel.getSensor();
+		FeatureOfInterest foi = stepModel.getFeatureOfInterest();
+		ObservedProperty obsProp = stepModel.getObservedProperty();
+		SensorType sensorXB = null;
+		SensorType[] sensorsXB;
 		AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
 		if (addiMeta == null) {
 			addiMeta = sosImportConf.addNewAdditionalMetadata();
@@ -74,8 +82,8 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 			 sensorsXB = addiMeta.getSensorArray();
 			 
 			 findSensor: 
-			 for (Sensor aSensor : sensorsXB) {
-				if (aSensor.getURI().equalsIgnoreCase(sensorURI)) {
+			 for (SensorType aSensor : sensorsXB) {
+				if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
 					sensorXB = aSensor;
 					if (logger.isDebugEnabled()) {
 						logger.debug("Found Sensor element");
@@ -91,13 +99,116 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 				logger.debug("Added new Sensor element");
 			}
 		}
-		sensorXB.setName(sensorName);
-		sensorXB.setURI(sensorURI);
+		if (sensor.isGenerated()) {
+			/*
+			 * GENERATED
+			 */
+			GeneratedResourceType sensorGRT = null;
+			if (sensorXB.getResource() instanceof GeneratedResourceType) {
+				sensorGRT = (GeneratedResourceType) sensorXB.getResource();
+			}
+			if (sensorGRT == null) {
+				sensorGRT = (GeneratedResourceType) sensorXB.addNewResource().
+						substitute(Constants.QNAME_GENERATED_RESOURCE,
+								GeneratedResourceType.type);
+			}
+			sensorGRT.setID(sensor.getXMLId());
+			/*
+			 * Add generation parameter
+			 */
+			String concat = sensor.getConcatString();
+			if (concat != null && !concat.equalsIgnoreCase("")) {
+				sensorGRT.setConcatString(concat);
+			}
+			URI uri = sensor.getURI();
+			String uriPrefix = sensor.getUriPrefix();
+			boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
+			org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
+			uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
+			if (uri != null) {
+				uriXB.setStringValue(uri.toString());
+			} else if (uriPrefix != null && 
+					!uriPrefix.equalsIgnoreCase("") &&
+					useNameAfterPrefixAsUri) {
+				uriXB.setStringValue(uriPrefix);
+			}
+			Column[] relCols = (Column[]) sensor.getRelatedCols();
+			for (int i = 0; i < relCols.length; i++) {
+				Number num = sensorGRT.addNewNumber();
+				Column c = relCols[i];
+				num.setIntValue(c.getNumber());
+				if (logger.isDebugEnabled()) {
+					logger.debug("Added new number element: " + num.xmlText(new XmlOptions().setSaveOuter()));
+				}
+			}
+		} else {
+			/*
+			 * MANUAL
+			 */
+			ManualResourceType sensorRT = null;
+			if (sensorXB.getResource() instanceof ManualResourceType) {
+				sensorRT = (ManualResourceType) sensorXB.getResource();
+			}
+			if (sensorRT == null) {
+				sensorRT = (ManualResourceType) sensorXB.addNewResource().
+						substitute(Constants.QNAME_MANUAL_RESOURCE,
+								ManualResourceType.type);
+			}
+			sensorRT.setID(sensor.getXMLId());
+			sensorRT.setName(sensor.getName());
+			sensorRT.addNewURI().setStringValue(sensor.getURI()+"");
+		}
 		/*
-		 * add relations
+		 * identify related measured value columns and update relation
 		 */
-		sensorXB.setRelatedFOI(foiURI);
-		sensorXB.setRelatedObservedProperty(obsPropURI);
-		// TODO identify related measured value column and update relation
+		ModelStore ms = ModelStore.getInstance();
+		ArrayList<MeasuredValue> mVs = (ArrayList<MeasuredValue>) ms.getMeasuredValues();
+		ArrayList<MeasuredValue> relatedMVs = new ArrayList<MeasuredValue>(mVs.size());
+		for (Iterator<MeasuredValue> iterator = mVs.iterator(); iterator.hasNext();) {
+			MeasuredValue measuredValue = iterator.next();
+			if (foi.isAssignedTo(measuredValue) && obsProp.isAssigned(measuredValue)) {
+				relatedMVs.add(measuredValue);
+				if (logger.isDebugEnabled()) {
+					logger.debug("Found related MeasureValue" +
+							"[" + measuredValue.hashCode() + "]" +
+							" for foi" +
+							"[" + foi.getXMLId() + "]" +
+							" and obsProp" +
+							"[" + obsProp.getXMLId() + "]");
+				}
+			}
+		}
+		relatedMVs.trimToSize();
+		if (relatedMVs.size() < 1) {
+			logger.error("No related MeasuredValues found for foi" +
+					"[" + foi.getXMLId() + "]" +
+					" and obsProp" +
+					"[" + obsProp.getXMLId() + "]");
+		}
+		/*
+		 * Add relation to all found measured value column using the xmlId
+		 */
+		for (MeasuredValue mV : relatedMVs) {
+			TableElement tabE = mV.getTableElement();
+			int mvColId = Helper.getColumnIdFromTableElement(tabE);
+			org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column 
+						mvColumn = Helper.getColumnById(mvColId, sosImportConf);
+			RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
+			if (!Helper.isSensorInArray(relSensors,sensor.getXMLId())) {
+				RelatedSensor relSensor = mvColumn.addNewRelatedSensor();
+				relSensor.setIdRef(sensor.getXMLId());
+				if (logger.isDebugEnabled()) {
+					logger.debug("Added new related sensor" +
+							"[" + sensor.getXMLId() + "]" +
+							" to MeasuredValue Column #" + mvColId);
+				}
+			} else if (logger.isDebugEnabled()) {
+				logger.debug("Sensor [" + sensor.getXMLId() + "] is already " +
+						"related to MeasuredValue column #" + mvColId);
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("handling of Step6bSpecialModel finished.");
+		}
 	}
 }

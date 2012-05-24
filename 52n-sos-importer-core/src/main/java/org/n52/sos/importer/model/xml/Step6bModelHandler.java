@@ -26,26 +26,36 @@ package org.n52.sos.importer.model.xml;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedObservedProperty;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedUnitOfMeasurement;
-import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestDocument.FeatureOfInterest;
+import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
+import org.x52North.sensorweb.sos.importer.x02.GeneratedSpatialResourceType;
 import org.x52North.sensorweb.sos.importer.x02.LatDocument.Lat;
 import org.x52North.sensorweb.sos.importer.x02.LongDocument.Long;
-import org.x52North.sensorweb.sos.importer.x02.ObservedPropertyDocument.ObservedProperty;
+import org.x52North.sensorweb.sos.importer.x02.ManualResourceType;
+import org.x52North.sensorweb.sos.importer.x02.ObservedPropertyType;
 import org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position;
-import org.x52North.sensorweb.sos.importer.x02.SensorDocument.Sensor;
+import org.x52North.sensorweb.sos.importer.x02.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x02.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x02.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
+import org.x52North.sensorweb.sos.importer.x02.SensorType;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementDocument.UnitOfMeasurement;
+import org.x52North.sensorweb.sos.importer.x02.SpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x02.URIDocument.URI;
+import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
 
 /**
  * Called in the case of having missing foi, observed property, unit of 
- * measurement, or sensor for any measured value column.
+ * measurement, or sensor for any measured value column.<br />
+ * This handler deals with two cases: <ul>
+ * 	<li>Manual Resources</li>
+ *  <li>Generated Resources</li></ul>
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
@@ -76,8 +86,8 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		mV = stepModel.getMeasuredValue();
 		res = stepModel.getResource();
 		if (logger.isDebugEnabled()) {
-			logger.debug("Found measured value \"" + 
-					mV + "\" and a resource \"" +
+			logger.debug("Measured value: \"" + 
+					mV + "\"; Resource: \"" +
 					res + "\"");
 		}
 		if (mV != null && mV.getTableElement() != null) {
@@ -89,110 +99,17 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		addiMeta = sosImportConf.getAdditionalMetadata();
 		if(addiMeta == null) {
 			addiMeta = sosImportConf.addNewAdditionalMetadata();
+			if (logger.isDebugEnabled()) {
+				logger.debug("added new AddtionalMetadata element");
+			}
 		}
 		mVColumn = Helper.getColumnById(mVColumnID, sosImportConf);
 		if(addRelatedResource(res,mVColumn,addiMeta)) {
 			if (logger.isInfoEnabled()) {
 				logger.info("Related resource updated/added: "
-						+ res);
+						+ res + "[" + res.getXMLId() + "]");
 			}
 		}
-	}
-
-	private boolean addRelatedFOI(
-			org.n52.sos.importer.model.resources.FeatureOfInterest foi, 
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\taddRelatedFOI()");
-		}
-		//
-		FeatureOfInterest foiXB = null;
-		FeatureOfInterest[] foisXB = addiMeta.getFeatureOfInterestArray();
-		RelatedFOI[] relatedFOIs;
-		boolean addNew;
-		org.n52.sos.importer.model.position.Position pos;
-		Position posXB = null;
-		//
-		if(foisXB != null && foisXB.length > 0) {
-						
-			findFOI : 
-			for (FeatureOfInterest aFOI : foisXB) {
-				if ( aFOI.getURI().equalsIgnoreCase(foi.getURIString()) ) {
-					foiXB = aFOI;
-					break findFOI;
-				}
-			}
-		
-		}
-		if(foiXB == null) {
-			foiXB = addiMeta.addNewFeatureOfInterest();
-		}
-		foiXB.setName(foi.getName());
-		foiXB.setURI(foi.getURIString());
-		// add position to FOI
-		pos = foi.getPosition();
-		posXB = foiXB.getPosition();
-		if(posXB == null) {
-			foiXB.addNewPosition();
-		}
-		fillXBPosition(posXB,pos);
-		/*
-		 * the FOI is in the model.
-		 * Next is to link measure value column to this entity by its URI
-		 */
-		relatedFOIs = mVColumn.getRelatedFOIArray();
-		addNew = !isFoiInArray(relatedFOIs,foi.getURIString());
-		if(addNew) {
-			mVColumn.addNewRelatedFOI().setURI(foi.getURIString());
-			if (logger.isDebugEnabled()) {
-				logger.debug("Added new related FOI element");
-			}
-		}
-		relatedFOIs = mVColumn.getRelatedFOIArray();
-		return isFoiInArray(relatedFOIs, foi.getURIString());
-	}
-
-	private boolean addRelatedObservedProperty(
-			org.n52.sos.importer.model.resources.ObservedProperty obsProp,
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\taddRelatedObservedProperty()");
-		}
-		//
-		ObservedProperty obsPropXB = null;
-		ObservedProperty[] obsPropsXB = addiMeta.getObservedPropertyArray();
-		RelatedObservedProperty[] relatedObsProps;
-		boolean addNew;
-		//
-		if(obsPropsXB != null && obsPropsXB.length > 0) {
-						
-			findObservedProperty : 
-			for (ObservedProperty obsPropy : obsPropsXB) {
-				if (obsPropy.getURI().equalsIgnoreCase(obsProp.getURIString())) {
-					obsPropXB = obsPropy;
-					break findObservedProperty;
-				}
-			}
-		
-		}
-		if(obsPropXB == null) {
-			obsPropXB = addiMeta.addNewObservedProperty();
-		}
-		obsPropXB.setName(obsProp.getName());
-		obsPropXB.setURI(obsProp.getURIString());
-		/*
-		 * the ObservedProperty is in the model.
-		 * Next is to link measure value column to this entity by its URI
-		 */
-		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-		addNew = !isObsPropInArray(relatedObsProps,obsProp.getURIString());
-		if(addNew) {
-			mVColumn.addNewRelatedObservedProperty().setURI(obsProp.getURIString());
-		}
-		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-		return isObsPropInArray(relatedObsProps, obsProp.getURIString());
 	}
 
 	/**
@@ -240,7 +157,202 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		}
 		return false;
 	}
-	
+
+	private boolean addRelatedFOI(FeatureOfInterest foi, 
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\taddRelatedFOI()");
+		}
+		//
+		FeatureOfInterestType foiXB = null;
+		FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
+		RelatedFOI[] relatedFOIs;
+		boolean addNew;
+		org.n52.sos.importer.model.position.Position pos;
+		Position posXB = null;
+		//
+		if(foisXB != null && foisXB.length > 0) {
+						
+			findFOI : 
+			for (FeatureOfInterestType aFOI : foisXB) {
+				if ( aFOI.getResource().getID().equalsIgnoreCase(foi.getXMLId()) ) {
+					foiXB = aFOI;
+					break findFOI;
+				}
+			}
+		
+		}
+		if(foiXB == null) {
+			foiXB = addiMeta.addNewFeatureOfInterest();
+		}
+		if (foi.isGenerated()) {
+			/*
+			 * GENERATED
+			 */
+			GeneratedSpatialResourceType foiGRT = null;
+			if (foiXB.getResource() instanceof GeneratedResourceType) {
+				foiGRT = (GeneratedSpatialResourceType) foiXB.getResource();
+			}
+			if (foiGRT == null) {
+				foiGRT = (GeneratedSpatialResourceType) foiXB.addNewResource().
+						substitute(Constants.QNAME_GENERATED_SPATIAL_RESOURCE,
+								GeneratedSpatialResourceType.type);
+			}
+			foiGRT.setID(foi.getXMLId());
+			URI uri = foiGRT.getURI();
+			if (uri == null) {
+				uri = foiGRT.addNewURI();
+			}
+			uri.setUseAsPrefix(foi.isUseNameAfterPrefixAsURI());
+			if (foi.isUseNameAfterPrefixAsURI()) {
+				uri.setStringValue(foi.getUriPrefix());
+			}
+			foiGRT.setConcatString(foi.getConcatString());
+			org.n52.sos.importer.model.table.Column[] relCols = (org.n52.sos.importer.model.table.Column[]) foi.getRelatedCols();
+			int[] numbers = new int[relCols.length];
+			for (int i = 0; i < relCols.length; i++) {
+				org.n52.sos.importer.model.table.Column c = relCols[i];
+				numbers[i] = c.getNumber();
+			}
+			foiGRT.setNumberArray(numbers);
+		} else {
+			/*
+			 * MANUAL
+			 */
+			SpatialResourceType foiSRT = null;
+			if (foiXB.getResource() instanceof SpatialResourceType) {
+				foiSRT = (SpatialResourceType) foiXB.getResource(); 
+			}
+			if (foiSRT == null) {
+				foiSRT = (SpatialResourceType) foiXB.addNewResource().
+						substitute(Constants.QNAME_MANUAL_SPATIAL_RESOURCE,
+								SpatialResourceType.type);
+			}
+			foiSRT.setName(foi.getName());
+			foiSRT.setID(foi.getXMLId());
+			URI uri = foiSRT.getURI();
+			if (uri == null) {
+				uri = foiSRT.addNewURI();
+			}
+			uri.setStringValue(foi.getURIString());
+			// add position to FOI
+			pos = foi.getPosition();
+			posXB = foiSRT.getPosition();
+			if(posXB == null) {
+				foiSRT.addNewPosition();
+			}
+			fillXBPosition(posXB,pos);
+		}
+		/*
+		 * the FOI is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		relatedFOIs = mVColumn.getRelatedFOIArray();
+		addNew = !isFoiInArray(relatedFOIs,foi.getXMLId());
+		if(addNew) {
+			mVColumn.addNewRelatedFOI().setIdRef(foi.getXMLId());
+			if (logger.isDebugEnabled()) {
+				logger.debug("Added new related FOI element");
+			}
+		}
+		relatedFOIs = mVColumn.getRelatedFOIArray();
+		return isFoiInArray(relatedFOIs, foi.getXMLId());
+	}
+
+	private boolean addRelatedObservedProperty(
+			org.n52.sos.importer.model.resources.ObservedProperty obsProp,
+			Column mVColumn,
+			AdditionalMetadata addiMeta) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\taddRelatedObservedProperty()");
+		}
+		//
+		ObservedPropertyType obsPropXB = null;
+		ObservedPropertyType[] obsPropsXB = addiMeta.getObservedPropertyArray();
+		RelatedObservedProperty[] relatedObsProps;
+		boolean addNew;
+		//
+		if(obsPropsXB != null && obsPropsXB.length > 0) {
+						
+			findObservedProperty : 
+			for (ObservedPropertyType obsPropy : obsPropsXB) {
+				if (obsPropy.getResource().getID().equalsIgnoreCase(obsProp.getXMLId())) {
+					obsPropXB = obsPropy;
+					break findObservedProperty;
+				}
+			}
+		
+		}
+		if(obsPropXB == null) {
+			obsPropXB = addiMeta.addNewObservedProperty();
+		}
+		if (obsProp.isGenerated()) {
+			/*
+			 * GENERATED
+			 */
+			GeneratedResourceType obsPropGRT = null;
+			if (obsPropXB.getResource() instanceof GeneratedResourceType) {
+				obsPropGRT = (GeneratedResourceType) obsPropXB.getResource();
+			}
+			if (obsPropGRT == null) {
+				obsPropGRT = (GeneratedResourceType) obsPropXB.addNewResource().
+						substitute(Constants.QNAME_GENERATED_RESOURCE,
+								GeneratedResourceType.type);
+			}
+			obsPropGRT.setID(obsProp.getXMLId());
+			URI uri = obsPropGRT.getURI();
+			if (uri == null) {
+				uri = obsPropGRT.addNewURI();
+			}
+			uri.setUseAsPrefix(obsProp.isUseNameAfterPrefixAsURI());
+			if (obsProp.isUseNameAfterPrefixAsURI()) {
+				uri.setStringValue(obsProp.getUriPrefix());
+			}
+			obsPropGRT.setConcatString(obsProp.getConcatString());
+			org.n52.sos.importer.model.table.Column[] relCols = 
+					(org.n52.sos.importer.model.table.Column[])
+					obsProp.getRelatedCols();
+			int[] numbers = new int[relCols.length];
+			for (int i = 0; i < relCols.length; i++) {
+				org.n52.sos.importer.model.table.Column c = relCols[i];
+				numbers[i] = c.getNumber();
+			}
+			obsPropGRT.setNumberArray(numbers);
+		} else {
+			/*
+			 * MANUAL
+			 */
+			ManualResourceType obsPropMRT = null;
+			if (obsPropXB.getResource() instanceof ManualResourceType) {
+				obsPropMRT = (ManualResourceType) obsPropXB.getResource();
+			}
+			if (obsPropMRT == null) {
+				obsPropMRT = (ManualResourceType) obsPropXB.addNewResource().
+						substitute(Constants.QNAME_MANUAL_RESOURCE,
+								ManualResourceType.type);
+			}
+			obsPropMRT.setName(obsProp.getName());
+			obsPropMRT.setID(obsProp.getXMLId());
+			URI uri = obsPropMRT.getURI();
+			if (uri == null) {
+				uri = obsPropMRT.addNewURI();
+			}
+			uri.setStringValue(obsProp.getURIString());
+		}
+		/*
+		 * the ObservedProperty is in the model.
+		 * Next is to link measure value column to this entity by its URI
+		 */
+		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
+		addNew = !isObsPropInArray(relatedObsProps,obsProp.getXMLId());
+		if(addNew) {
+			mVColumn.addNewRelatedObservedProperty().setIdRef(obsProp.getXMLId());
+		}
+		relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
+		return isObsPropInArray(relatedObsProps, obsProp.getXMLId());
+	}
+
 	private boolean addRelatedSensor(
 			org.n52.sos.importer.model.resources.Sensor sensor,
 			Column mVColumn,
@@ -249,16 +361,16 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 			logger.trace("\t\t\taddRelatedSensor()");
 		}
 		//
-		Sensor sensorXB = null;
-		Sensor[] sensorsXB = addiMeta.getSensorArray();
+		SensorType sensorXB = null;
+		SensorType[] sensorsXB = addiMeta.getSensorArray();
 		RelatedSensor[] relatedSensors;
 		boolean addNew;
 		//
 		if(sensorsXB != null && sensorsXB.length > 0) {
 						
 			findSensor : 
-			for (Sensor aSensor : sensorsXB) {
-				if (aSensor.getURI().equalsIgnoreCase(sensor.getURIString())) {
+			for (SensorType aSensor : sensorsXB) {
+				if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
 					sensorXB = aSensor;
 					break findSensor;
 				}
@@ -268,19 +380,71 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		if(sensorXB == null) {
 			sensorXB = addiMeta.addNewSensor();
 		}
-		sensorXB.setName(sensor.getName());
-		sensorXB.setURI(sensor.getURIString());
+		if (sensor.isGenerated()) {
+			/*
+			 * GENERATED
+			 */
+			GeneratedResourceType sensorGRT = null;
+			if (sensorXB.getResource() instanceof GeneratedResourceType) {
+				sensorGRT = (GeneratedResourceType) sensorXB.getResource();
+			}
+			if (sensorGRT == null) {
+				sensorGRT = (GeneratedResourceType) sensorXB.addNewResource().
+						substitute(Constants.QNAME_GENERATED_RESOURCE,
+								GeneratedResourceType.type);
+			}
+			sensorGRT.setID(sensor.getXMLId());
+			URI uri = sensorGRT.getURI();
+			if (uri == null) {
+				uri = sensorGRT.addNewURI();
+			}
+			uri.setUseAsPrefix(sensor.isUseNameAfterPrefixAsURI());
+			if (sensor.isUseNameAfterPrefixAsURI()) {
+				uri.setStringValue(sensor.getUriPrefix());
+			}
+			sensorGRT.setConcatString(sensor.getConcatString());
+			org.n52.sos.importer.model.table.Column[] relCols = 
+					(org.n52.sos.importer.model.table.Column[])
+					sensor.getRelatedCols();
+			int[] numbers = new int[relCols.length];
+			for (int i = 0; i < relCols.length; i++) {
+				org.n52.sos.importer.model.table.Column c = relCols[i];
+				numbers[i] = c.getNumber();
+			}
+			sensorGRT.setNumberArray(numbers);
+			sensorXB.setResource(sensorGRT);
+		} else {
+			/*
+			 * MANUAL
+			 */
+			ManualResourceType sensorRT = null; 
+			if (sensorXB.getResource() instanceof ManualResourceType) {
+				sensorRT = (ManualResourceType) sensorXB.getResource();
+			}
+			if (sensorRT == null) {
+				sensorRT = (ManualResourceType) sensorXB.addNewResource().
+						substitute(Constants.QNAME_MANUAL_RESOURCE,
+								ManualResourceType.type);
+			}
+			sensorRT.setName(sensor.getName());
+			URI uri = sensorRT.getURI();
+			if (uri == null) {
+				uri = sensorRT.addNewURI();
+			}
+			uri.setStringValue(sensor.getURIString());
+			sensorRT.setID(sensor.getXMLId());
+		}
 		/*
 		 * the Sensor is in the model.
 		 * Next is to link measure value column to this entity by its URI
 		 */
 		relatedSensors = mVColumn.getRelatedSensorArray();
-		addNew = !isSensorInArray(relatedSensors,sensor.getURIString());
+		addNew = !Helper.isSensorInArray(relatedSensors,sensor.getXMLId());
 		if(addNew) {
-			mVColumn.addNewRelatedSensor().setURI(sensor.getURIString());
+			mVColumn.addNewRelatedSensor().setIdRef(sensor.getXMLId());
 		}
 		relatedSensors = mVColumn.getRelatedSensorArray();
-		return isSensorInArray(relatedSensors, sensor.getURIString());
+		return Helper.isSensorInArray(relatedSensors, sensor.getXMLId());
 	}
 	
 	private boolean addRelatedUOM(
@@ -291,16 +455,16 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 			logger.trace("\t\t\taddRelatedUOM()");
 		}
 		//
-		UnitOfMeasurement uOMXB = null;
-		UnitOfMeasurement[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
+		UnitOfMeasurementType uOMXB = null;
+		UnitOfMeasurementType[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
 		RelatedUnitOfMeasurement[] relatedUOMs;
 		boolean addNew;
 		//
 		if(uOMsXB != null && uOMsXB.length > 0) {
 						
 			findUOM : 
-			for (UnitOfMeasurement uom : uOMsXB) {
-				if (uom.getURI().equalsIgnoreCase(uOM.getURIString())) {
+			for (UnitOfMeasurementType uom : uOMsXB) {
+				if (uom.getResource().getID().equalsIgnoreCase(uOM.getXMLId())) {
 					uOMXB = uom;
 					break findUOM;
 				}
@@ -310,17 +474,67 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		if(uOMXB == null) {
 			uOMXB = addiMeta.addNewUnitOfMeasurement();
 		}
-		uOMXB.setName(uOM.getName());
-		uOMXB.setURI(uOM.getURIString());
-		uOMXB.setCode(uOM.getName());
+		if (uOM.isGenerated()) {
+			/*
+			 * GENERATED
+			 */
+			GeneratedResourceType uOMGRT = null;
+			if (uOMXB.getResource() instanceof GeneratedResourceType) {
+				uOMGRT = (GeneratedResourceType) uOMXB.getResource();
+			}
+			if (uOMGRT == null) {
+				uOMGRT = (GeneratedResourceType) uOMXB.addNewResource().
+						substitute(Constants.QNAME_GENERATED_RESOURCE, 
+								GeneratedResourceType.type);
+			}
+			uOMGRT.setID(uOM.getXMLId());
+			URI uri = uOMGRT.getURI();
+			if (uri == null) {
+				uri = uOMGRT.addNewURI();
+			}
+			uri.setUseAsPrefix(uOM.isUseNameAfterPrefixAsURI());
+			if (uOM.isUseNameAfterPrefixAsURI()) {
+				uri.setStringValue(uOM.getUriPrefix());
+			}
+			uOMGRT.setConcatString(uOM.getConcatString());
+			org.n52.sos.importer.model.table.Column[] relCols = 
+					(org.n52.sos.importer.model.table.Column[]) 
+														uOM.getRelatedCols();
+			int[] numbers = new int[relCols.length];
+			for (int i = 0; i < relCols.length; i++) {
+				org.n52.sos.importer.model.table.Column c = relCols[i];
+				numbers[i] = c.getNumber();
+			}
+			uOMGRT.setNumberArray(numbers);
+		} else {
+			/*
+			 * MANUAL
+			 */
+			ManualResourceType uOMMRT = null;
+			if (uOMXB.getResource() instanceof ManualResourceType) {
+				uOMMRT = (ManualResourceType) uOMXB.getResource();
+			}
+			if (uOMMRT == null) {
+				uOMMRT = (ManualResourceType) uOMXB.addNewResource().
+						substitute(Constants.QNAME_MANUAL_RESOURCE,
+								ManualResourceType.type);
+			}
+			uOMMRT.setName(uOM.getName());
+			uOMMRT.setID(uOM.getXMLId());
+			URI uri = uOMMRT.getURI();
+			if (uri == null) {
+				uri = uOMMRT.addNewURI();
+			}
+			uri.setStringValue(uOM.getURIString());
+		}
 		/*
 		 * the UOM is in the model.
 		 * Next is to link measure value column to this entity by its URI
 		 */
 		relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
-		addNew = !isUOMInArray(relatedUOMs,uOM.getURIString());
+		addNew = !isUOMInArray(relatedUOMs,uOM.getXMLId());
 		if(addNew) {
-			mVColumn.addNewRelatedUnitOfMeasurement().setURI(uOM.getURIString());
+			mVColumn.addNewRelatedUnitOfMeasurement().setIdRef(uOM.getXMLId());
 		}
 		relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
 		return isUOMInArray(relatedUOMs, uOM.getURIString());
@@ -384,13 +598,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		}
 	}
 
-	private boolean isFoiInArray(RelatedFOI[] relatedFOIs, String foiURI) {
+	private boolean isFoiInArray(RelatedFOI[] relatedFOIs, String foiXmlId) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\t\tisFoiInArray()");
+			logger.trace("\t\tisFoiInArray()");
 		}
 		for (RelatedFOI relatedFoiFromArray : relatedFOIs) {
-			if (relatedFoiFromArray.isSetURI() && 
-					relatedFoiFromArray.getURI().equalsIgnoreCase(foiURI) ) {
+			if (relatedFoiFromArray.isSetIdRef()  && 
+					relatedFoiFromArray.getIdRef().equalsIgnoreCase(foiXmlId) ) {
 				return true;
 			}
 		}
@@ -398,27 +612,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	}
 	
 	private boolean isObsPropInArray(RelatedObservedProperty[] relatedObsProps,
-			String obsPropURI) {
+			String obsPropXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\t\tisObsPropInArray()");
 		}
 		for (RelatedObservedProperty relatedObsPropFromArray : relatedObsProps) {
-			if (relatedObsPropFromArray.isSetURI() && 
-					relatedObsPropFromArray.getURI().equalsIgnoreCase(obsPropURI) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean isSensorInArray(RelatedSensor[] relatedSensors,
-			String sensorURIString) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\t\tisSensorInArray()");
-		}
-		for (RelatedSensor relatedSensorFromArray : relatedSensors) {
-			if (relatedSensorFromArray.isSetURI() && 
-					relatedSensorFromArray.getURI().equalsIgnoreCase(sensorURIString) ) {
+			if (relatedObsPropFromArray.isSetIdRef() && 
+					relatedObsPropFromArray.getIdRef().equalsIgnoreCase(obsPropXmlId) ) {
 				return true;
 			}
 		}
@@ -426,13 +626,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	}
 	
 	private boolean isUOMInArray(RelatedUnitOfMeasurement[] relatedUOMs,
-			String uomUriString) {
+			String uomUriXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isUOMInArray()");
 		}
 		for (RelatedUnitOfMeasurement relatedUOMFromArray : relatedUOMs) {
-			if (relatedUOMFromArray.isSetURI() && 
-					relatedUOMFromArray.getURI().equalsIgnoreCase(uomUriString) ) {
+			if (relatedUOMFromArray.isSetIdRef() && 
+					relatedUOMFromArray.getIdRef().equalsIgnoreCase(uomUriXmlId) ) {
 				return true;
 			}
 		}
