@@ -232,8 +232,12 @@ public class DateAndTimeController {
 		int year = dateAndTime.getYear().getParsedValue(measuredValuePosition);
 		int timezone = dateAndTime.getTimeZone().getParsedValue(measuredValuePosition);
 		
-		String timeStamp = year + "-" + month + "-" + day + "T" +
-			hour + ":" + minute + ":" + second + convertTimeZone(timezone);	
+		String timeStamp = year + "-" +
+				(month<10?"0"+month:month) + "-" + 
+				(day<10?"0"+day:day) + "T" +
+				(hour<10?"0"+hour:hour) + ":" + 
+				(minute<10?"0"+minute:minute) + ":" + 
+				(second<10?"0"+second:second) + convertTimeZone(timezone);	
 		
 		return timeStamp;
 	}

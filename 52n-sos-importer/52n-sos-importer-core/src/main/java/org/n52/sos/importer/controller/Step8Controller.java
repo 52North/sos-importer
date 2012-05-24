@@ -58,6 +58,7 @@ import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Cell;
@@ -195,13 +196,13 @@ public class Step8Controller extends StepController {
 			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 				Column column = (Column) mv.getTableElement();
 				DateAndTimeController dtc = new DateAndTimeController();
-				
-				for (int i = 0; i < tableController.getRowCount(); i++) {
+
+				for (int row = tableController.getFirstLineWithData(); row < tableController.getRowCount(); row++) {
 					RegisterSensor rs = new RegisterSensor();
 					InsertObservation io = new InsertObservation();
 					
 					//the cell of the current Measured Value
-					Cell c = new Cell(i, column.getNumber());
+					Cell c = new Cell(row, column.getNumber());
 					String value = tableController.getValueAt(c);
 					try {
 						String parsedValue = mv.parse(value).toString();
@@ -228,8 +229,18 @@ public class Step8Controller extends StepController {
 					
 					// which is the observed feature of interest
 					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(c);
-					io.setFeatureOfInterestName(foi.getNameString());
-					io.setFeatureOfInterestURI(foi.getURIString());
+					String foiName = "";
+					String foiURI = "";
+					if (foi.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(foi,row);
+						foiName = resValues[0];
+						foiURI = resValues[1];
+					} else {
+						foiName = foi.getNameString();
+						foiURI = foi.getURIString();
+					}
+					io.setFeatureOfInterestName(foiName);
+					io.setFeatureOfInterestURI(foiURI);
 					
 					// where was the current Measured Value measured
 					Position p = foi.getPosition();
@@ -247,14 +258,31 @@ public class Step8Controller extends StepController {
 					
 					// what property is observed at this foi
 					ObservedProperty op = mv.getObservedProperty().forThis(c);
-					io.setObservedPropertyURI(op.getURIString());
-					rs.setObservedPropertyName(op.getNameString());
-					rs.setObservedPropertyURI(op.getURIString());
+					String obsPropName = "";
+					String obsPropURI = "";
+					if (foi.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(foi,row);
+						obsPropName = resValues[0];
+						obsPropURI = resValues[1];
+					} else {
+						obsPropName = op.getNameString();
+						obsPropURI = op.getURIString();
+					}
+					io.setObservedPropertyURI(obsPropURI);
+					rs.setObservedPropertyName(obsPropName);
+					rs.setObservedPropertyURI(obsPropURI);
 					
 					// what is the UOM for the observed/measured value
 					UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(c);
-					io.setUnitOfMeasurementCode(uom.getNameString());
-					rs.setUnitOfMeasurementCode(uom.getNameString());
+					String uomName = "";
+					if (foi.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(foi,row);
+						uomName = resValues[0];
+					} else {
+						uomName = uom.getNameString();
+					}
+					io.setUnitOfMeasurementCode(uomName);
+					rs.setUnitOfMeasurementCode(uomName);
 					
 					Sensor sensor = mv.getSensor();
 					if (sensor != null) {
@@ -262,11 +290,20 @@ public class Step8Controller extends StepController {
 					} else { //Step6bSpecialController
 						sensor = mv.getSensorFor(foi.getNameString(), op.getNameString());
 					}
-					
-					io.setSensorName(sensor.getNameString());
-					io.setSensorURI(sensor.getURIString());
-					rs.setSensorName(sensor.getNameString());
-					rs.setSensorURI(sensor.getURIString());
+					String sensorName = "";
+					String sensorURI = "";
+					if (foi.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(foi,row);
+						sensorName = resValues[0];
+						sensorURI = resValues[1];
+					} else {
+						sensorName = sensor.getNameString();
+						sensorURI = sensor.getURIString();
+					}
+					io.setSensorName(sensorName);
+					io.setSensorURI(sensorURI);
+					rs.setSensorName(sensorName);
+					rs.setSensorURI(sensorURI);
 						
 					ModelStore.getInstance().addObservationToInsert(io);
 					ModelStore.getInstance().addSensorToRegister(rs);
@@ -274,7 +311,39 @@ public class Step8Controller extends StepController {
 			}
 		}
     	
-        @Override
+        /**
+		 * Build the name and uri from the related columns.
+		 * @param res
+		 * @return <code>String[]</code> with two values:<ul>
+		 * 	<li><code>[0]</code>: resourceName</li>
+		 *  <li><code>[1]</code>: resourceURI</li></ul>
+		 */
+		private String[] getValuesForGeneratedResource(Resource res, int row) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("getValuesForGeneratedResource()");
+			}
+			String concatString = res.getConcatString(),
+					uriOrUriPrefix = res.getUriPrefix();
+			boolean useNameAfterPrefix = res.isUseNameAfterPrefixAsURI();
+			Column[] relatedCols = (Column[]) res.getRelatedCols();
+			String[] result = new String[2];
+			if (concatString == null) {
+				concatString = "";
+			}
+			// get values from related cols and use concatString
+			for (Column col : relatedCols) {
+				String tmp = tableController.getValueAt(row, col.getNumber());
+				result[0] = result[0] + concatString + tmp;
+			}
+			if (useNameAfterPrefix) {
+				result[1] = uriOrUriPrefix + result[0];
+			} else {
+				result[1] = uriOrUriPrefix;
+			}
+			return result;
+		}
+
+		@Override
         public void done() {
         	step8Panel.setIndeterminate(false);
             assembleInformationDone();

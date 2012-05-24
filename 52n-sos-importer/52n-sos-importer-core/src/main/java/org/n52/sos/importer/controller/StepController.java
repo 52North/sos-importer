@@ -70,7 +70,9 @@ public abstract class StepController {
 	public abstract JPanel getStepPanel();
 	
 	/**
-	 * returns the controller for the next step
+	 * Returns the controller for the next step:<br />
+	 * n.? &rarr; (n+1).a
+	 * @return a {@link org.n52.sos.importer.controller.StepController}
 	 */
 	public abstract StepController getNextStepController();
 	
