@@ -258,18 +258,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 		String value = null;
 		//
 		if (type.equalsIgnoreCase(Lang.l().step3MeasuredValNumericValue())) {
-			String[] splittedEncodedMetadata = encodedMetadata
-					.split(Constants.SEPARATOR_STRING);
-			// order of the next two params is defined in
-			// org.n52.sos.importer.view.step3.NumericValuePanel
-			String decimalSepartor = splittedEncodedMetadata[0], thousandsSeparator = splittedEncodedMetadata[1];
-			//
 			value = Constants.NUMERIC;
-			//
-			Helper.addOrUpdateColumnMetadata(Key.DECIMAL_SEPARATOR, decimalSepartor, col);
-			//
-			Helper.addOrUpdateColumnMetadata(Key.THOUSANDS_SEPARATOR, thousandsSeparator, col);
-			//
 		} else if (type.equalsIgnoreCase(Lang.l().step3MeasuredValBoolean())) {
 			value = Constants.BOOLEAN;
 		} else if (type.equalsIgnoreCase(Lang.l().step3MeasuredValCount())) {

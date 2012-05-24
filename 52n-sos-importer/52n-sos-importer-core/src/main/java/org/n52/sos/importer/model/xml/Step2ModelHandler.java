@@ -57,8 +57,12 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 		} else {
 			p = cM.getParameter();
 		}
+		if (p == null) {
+			p = cM.addNewParameter();
+		}
 		cM.setFirstLineWithData(stepModel.getFirstLineWithData());
 		cM.setUseHeader(stepModel.getUseHeader());
+		cM.setDecimalSeparator(stepModel.getDecimalSeparator()+"");
 		p.setCommentIndicator(stepModel.getCommentIndicator());
 		p.setElementSeparator(stepModel.getColumnSeparator());
 		p.setTextIndicator(stepModel.getTextQualifier());

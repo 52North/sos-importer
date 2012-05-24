@@ -69,7 +69,7 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
 				logger.debug("Added new Offering element");
 			}
 		}
-		off.setAutogenerate(generateOffering);
+		off.setGenerate(generateOffering);
 		if (!generateOffering) {
 			off.setStringValue(offering);
 		}

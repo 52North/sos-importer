@@ -31,15 +31,20 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedObservedProperty;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column.RelatedUnitOfMeasurement;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x02.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x02.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x02.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
+ * During this step, the relations between resource columns and the measured
+ * value column are saved.
+ * 
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * 
+ * TODO check functionality
  *
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
