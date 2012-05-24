@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -98,65 +97,75 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 			if (logger.isDebugEnabled()) {
 				logger.debug("Added new Sensor element");
 			}
-		}
-		if (sensor.isGenerated()) {
-			/*
-			 * GENERATED
-			 */
-			GeneratedResourceType sensorGRT = null;
-			if (sensorXB.getResource() instanceof GeneratedResourceType) {
-				sensorGRT = (GeneratedResourceType) sensorXB.getResource();
-			}
-			if (sensorGRT == null) {
-				sensorGRT = (GeneratedResourceType) sensorXB.addNewResource().
-						substitute(Constants.QNAME_GENERATED_RESOURCE,
-								GeneratedResourceType.type);
-			}
-			sensorGRT.setID(sensor.getXMLId());
-			/*
-			 * Add generation parameter
-			 */
-			String concat = sensor.getConcatString();
-			if (concat != null && !concat.equalsIgnoreCase("")) {
-				sensorGRT.setConcatString(concat);
-			}
-			URI uri = sensor.getURI();
-			String uriPrefix = sensor.getUriPrefix();
-			boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
-			org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
-			uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
-			if (uri != null) {
-				uriXB.setStringValue(uri.toString());
-			} else if (uriPrefix != null && 
-					!uriPrefix.equalsIgnoreCase("") &&
-					useNameAfterPrefixAsUri) {
-				uriXB.setStringValue(uriPrefix);
-			}
-			Column[] relCols = (Column[]) sensor.getRelatedCols();
-			for (int i = 0; i < relCols.length; i++) {
-				Number num = sensorGRT.addNewNumber();
-				Column c = relCols[i];
-				num.setIntValue(c.getNumber());
+			if (sensor.isGenerated()) {
+				/*
+				 * GENERATED
+				 */
+				GeneratedResourceType sensorGRT = null;
+				if (sensorXB.getResource() instanceof GeneratedResourceType) {
+					sensorGRT = (GeneratedResourceType) sensorXB.getResource();
+				}
+				if (sensorGRT == null) {
+					sensorGRT = (GeneratedResourceType) sensorXB.addNewResource().
+							substitute(Constants.QNAME_GENERATED_RESOURCE,
+									GeneratedResourceType.type);
+				}
+				sensorGRT.setID(sensor.getXMLId());
+				/*
+				 * Add generation parameter
+				 */
+				String concat = sensor.getConcatString();
+				if (concat != null && !concat.equalsIgnoreCase("")) {
+					sensorGRT.setConcatString(concat);
+				}
+				java.net.URI uri = sensor.getURI();
+				String uriPrefix = sensor.getUriPrefix();
+				boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
+				org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
+				uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
+				if (uri != null) {
+					uriXB.setStringValue(uri.toString());
+				} else if (uriPrefix != null && 
+						!uriPrefix.equalsIgnoreCase("") &&
+						useNameAfterPrefixAsUri) {
+					uriXB.setStringValue(uriPrefix);
+				}
+				Column[] relCols = (Column[]) sensor.getRelatedCols();
+				for (int i = 0; i < relCols.length; i++) {
+					Number num = sensorGRT.addNewNumber();
+					Column c = relCols[i];
+					num.setIntValue(c.getNumber());
+					if (logger.isDebugEnabled()) {
+						logger.debug("Added new number element: " + num.xmlText(new XmlOptions().setSaveOuter()));
+					}
+				}
 				if (logger.isDebugEnabled()) {
-					logger.debug("Added new number element: " + num.xmlText(new XmlOptions().setSaveOuter()));
+					logger.debug("Added new generated sensor");
+				}
+			} else {
+				/*
+				 * MANUAL
+				 */
+				ManualResourceType sensorRT = null;
+				if (sensorXB.getResource() instanceof ManualResourceType) {
+					sensorRT = (ManualResourceType) sensorXB.getResource();
+				}
+				if (sensorRT == null) {
+					sensorRT = (ManualResourceType) sensorXB.addNewResource().
+							substitute(Constants.QNAME_MANUAL_RESOURCE,
+									ManualResourceType.type);
+				}
+				sensorRT.setID(sensor.getXMLId());
+				sensorRT.setName(sensor.getName());
+				sensorRT.addNewURI().setStringValue(sensor.getURI()+"");
+				if (logger.isDebugEnabled()) {
+					logger.debug("Added new manual sensor");
 				}
 			}
 		} else {
-			/*
-			 * MANUAL
-			 */
-			ManualResourceType sensorRT = null;
-			if (sensorXB.getResource() instanceof ManualResourceType) {
-				sensorRT = (ManualResourceType) sensorXB.getResource();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Sensor is already  contained in AdditionalMetadata element");
 			}
-			if (sensorRT == null) {
-				sensorRT = (ManualResourceType) sensorXB.addNewResource().
-						substitute(Constants.QNAME_MANUAL_RESOURCE,
-								ManualResourceType.type);
-			}
-			sensorRT.setID(sensor.getXMLId());
-			sensorRT.setName(sensor.getName());
-			sensorRT.addNewURI().setStringValue(sensor.getURI()+"");
 		}
 		/*
 		 * identify related measured value columns and update relation

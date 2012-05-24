@@ -64,7 +64,7 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 		cM.setUseHeader(stepModel.getUseHeader());
 		cM.setDecimalSeparator(stepModel.getDecimalSeparator()+"");
 		p.setCommentIndicator(stepModel.getCommentIndicator());
-		p.setElementSeparator(stepModel.getColumnSeparator());
+		p.setColumnSeparator(stepModel.getColumnSeparator());
 		p.setTextIndicator(stepModel.getTextQualifier());
 	}
 
