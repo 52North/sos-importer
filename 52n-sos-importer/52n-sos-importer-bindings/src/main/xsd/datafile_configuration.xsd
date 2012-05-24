@@ -496,6 +496,16 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
+	<xs:element name="Group" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Reference to a position group defined in the CsvMetadata.ColumnAssignments</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
 	<xs:element name="Lat">
 		<xs:annotation>
 			<xs:documentation>Latitude element of a position</xs:documentation>
@@ -574,12 +584,19 @@
 			<xs:documentation>A position using x,y,z, unit for each, epsg-code</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="Lat"/>
-				<xs:element ref="Long"/>
-				<xs:element ref="Alt"/>
-				<xs:element ref="EPSGCode"/>
-			</xs:sequence>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="Alt"/>
+					<xs:element ref="EPSGCode"/>
+					<xs:element ref="Lat"/>
+					<xs:element ref="Long"/>
+				</xs:sequence>
+				<xs:element ref="Group">
+					<xs:annotation>
+						<xs:documentation>Links to a position group defined in the CsvMetadata.ColumnAssignments.Column.Metadata.Key::Group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="RemoteFile">
