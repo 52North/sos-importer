@@ -315,7 +315,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				showNoInputAtAllDialog();
 				return false;
 			} else {
-				// TODO check if empty prefix is caught now, user dialog required?
 				if (uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) {
 					showMissingInputDialog();
 					return false;
