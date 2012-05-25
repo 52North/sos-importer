@@ -48,10 +48,8 @@ public class Step6cModel implements StepModel {
 	}
 	
 	public Step6cModel(FeatureOfInterest featureOfInterest, String featureOfInterestName) {
-		this.featureOfInterest = featureOfInterest;
+		this(featureOfInterest);
 		this.featureOfInterestName = featureOfInterestName;
-		position = new Position();
-		missingPositionComponents = new ArrayList<Component>();
 	}
 	
 	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
@@ -97,4 +95,5 @@ public class Step6cModel implements StepModel {
 	public List<Component> getMissingPositionComponents() {
 		return missingPositionComponents;
 	}
+
 }
