@@ -302,8 +302,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			 * GENERATED
 			 * 
 			 * Check:
-			 * - column selection
-			 * - URI
+			 * - Name -> column selection
+			 * - URI -> uriOrPrefix
 			 */
 			Object[] selectedColumns = columnList.getSelectedValues();
 			String uriOrPrefix = uriOrPrefixTextField.getText();
@@ -315,11 +315,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				showNoInputAtAllDialog();
 				return false;
 			} else {
+				// TODO check if empty prefix is caught now, user dialog required?
+				if (uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) {
+					showMissingInputDialog();
+					return false;
+				}
 				// check URI validity at least for the prefix
 				if(!isUriValid(uriOrPrefix)) {
 					return false;
 				}
-				return true;
+			return true;
 			}
 		} else if (manualResInputJRB.isSelected()) {
 			/*
@@ -366,6 +371,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private void showNoInputAtAllDialog() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("showNoInputAtAllDialog()");
+		}
+		JOptionPane.showMessageDialog(null,
+				Lang.l().step6NoUserInput(),
+				Lang.l().infoDialogTitle(),
+				JOptionPane.INFORMATION_MESSAGE);		
+	}
+	
+	private void showMissingInputDialog() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("showMissingInputDialog()");
 		}
 		JOptionPane.showMessageDialog(null,
 				Lang.l().step6MissingUserInput(),

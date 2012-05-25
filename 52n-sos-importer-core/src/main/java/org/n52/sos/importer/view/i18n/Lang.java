@@ -548,9 +548,13 @@ public abstract class Lang {
 	public abstract String step6ManualInput();
 	
 	/**
-	 * @return No user input at all. Please fill in the required information.
+	 * @return Some User Input is missing. Please enter the required information.
 	 */
 	public abstract String step6MissingUserInput();
+	/**
+	 * @return No user input at all. Please fill in the required information.
+	 */
+	public abstract String step6NoUserInput();
 	/**
 	 * @return The selected config file folder <code>folder</code> is not
 	 * 			accessible for the application. 
@@ -597,6 +601,7 @@ public abstract class Lang {
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
 	 */
 	public abstract String step7SOSConncetionStart(String strURL);
+
 	/**
 	 * @param strURL
 	 * @param responseCode
@@ -646,12 +651,12 @@ public abstract class Lang {
 	 * @return Insert <code>i</code> Observations...
 	 */
 	public abstract String step8InsertObservationLabel(int i);
-
+	
 	/**
 	 * @return Check log file
 	 */
 	public abstract String step8LogFileButton();
-	
+
 	/**
 	 * @param i
 	 * @return Register <code>i</code> Sensors...

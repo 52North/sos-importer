@@ -525,6 +525,11 @@ public class En extends Lang{
 
 	@Override
 	public String step6MissingUserInput() {
+		return "Some User Input is missing. Please enter the required information.";
+	}
+
+	@Override
+	public String step6NoUserInput() {
 		return "No user input at all. Please fill in the required information.";
 	}
 

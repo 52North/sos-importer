@@ -522,6 +522,11 @@ public class De extends Lang{
 
 	@Override
 	public String step6MissingUserInput() {
+		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
+	}
+
+	@Override
+	public String step6NoUserInput() {
 		return "Keine Nutzereingaben gefunden. Bitte geben Sie die notwendigen Informationen an.";
 	}
 
@@ -554,12 +559,12 @@ public class De extends Lang{
 	public String step7DirectImport() {
 		return "Im nächsten Schritt die Daten in den SOS importieren";
 	}
-
+	
 	@Override
 	public String step7OfferingCheckBoxLabel() {
 		return "Offering-Bezeichner aus Sensor-Namen generieren?";
 	}
-	
+
 	@Override
 	public String step7OfferingInputTextfieldLabel() {
 		return "Bitte geben Sie den Offering-Namen an:";
