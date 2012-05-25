@@ -39,7 +39,7 @@ import org.n52.sos.importer.view.Step5Panel;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
- * lets the user choose date&time for all measured value columns 
+ * Lets the user choose date&time for all measured value columns 
  * in case there are not any date&times given in the CSV file
  * @author Raimund
  *

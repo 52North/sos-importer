@@ -39,10 +39,10 @@ import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.Constants;
 
 /**
- * lets the user choose a URL of a Sensor Observation Service
- * and test the connection
+ * Lets the user choose a URL of a Sensor Observation Service (and test the 
+ * connection), define the offering, and save the configuration.
  * @author Raimund
- *
+ * TODO implement offering input field
  */
 public class Step7Controller extends StepController {
 

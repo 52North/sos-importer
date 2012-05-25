@@ -67,10 +67,14 @@ import org.n52.sos.importer.view.Step8Panel;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
- * assembles all information from previous steps,
+ * Assembles all information from previous steps, 
  * fills XML template files with it and uploads
- * them to the Sensor Observation Service
+ * them to the Sensor Observation Service,
+ * displays the configuration,
+ * and the log file 
+ * depending on the options from step 7.
  * @author Raimund
+ * @author e.h.juerrens@52north.org
  *
  */
 public class Step8Controller extends StepController {

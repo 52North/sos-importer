@@ -32,7 +32,7 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 
 /**
- * Solves ambiguities in case there is more than one position column
+ * Solves ambiguities in case there is more than one position group
  * (needs apparently to be implemented)
  * <br />
  * TODO Implement
@@ -86,8 +86,9 @@ public class Step4cController extends StepController {
 				foi.setPosition(position);
 			return false;
 		}
-		//TODO more than one position group
-		return false;
+		//TODO implement handling of more than one position group
+		throw new RuntimeException("NOT YET IMPLEMENTED");
+//		return true;
 	}
 	@Override
 	public boolean isFinished() {
