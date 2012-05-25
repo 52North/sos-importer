@@ -104,6 +104,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 			}
 		}
 		mVColumn = Helper.getColumnById(mVColumnID, sosImportConf);
+		// add resource to model
 		if(addRelatedResource(res,mVColumn,addiMeta)) {
 			if (logger.isInfoEnabled()) {
 				logger.info("Related resource updated/added: "

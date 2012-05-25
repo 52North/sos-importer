@@ -113,20 +113,28 @@ public class Step6bController extends StepController {
 	@Override
 	public void saveSettings() {
 		missingResourcePanel.assignValues();
-		
+		ModelStore ms = ModelStore.getInstance(); 
 		Resource resource = step6bModel.getResource();
 		MeasuredValue measuredValue = step6bModel.getMeasuredValue();
 		
 		//check if there is already such a resource
 		List<Resource> resources = resource.getList();
 		int index = resources.indexOf(resource);
-		if (index == -1)
-			ModelStore.getInstance().add(resource);
-		else 
+		if (index == -1) {
+			ms.add(resource);
+		} else { 
 			resource = resources.get(index);
-		
+		}
 		resource.assign(measuredValue);
-		
+		// TODO handle the case one manual/generated foi and one position in file
+		if (resource instanceof FeatureOfInterest) {
+			if (ms.getFeatureOfInterests() != null &&
+					ms.getFeatureOfInterests().size() == 1 &&
+					ms.getPositions() != null &&
+					ms.getPositions().size() == 1) {
+				((FeatureOfInterest) resource).setPosition(ms.getPositions().get(0));
+			}
+		}
 		tableController.clearMarkedTableElements();
 		tableController.turnSelectionOn();
 		

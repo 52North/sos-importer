@@ -75,6 +75,7 @@ import org.apache.log4j.Logger;
  * {@link http://www.java2s.com/Code/Java/Swing-JFC/DragListDemo.htm}
  *
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ArrayListTransferHandler extends TransferHandler {
 
 	private static final long serialVersionUID = 1L;
