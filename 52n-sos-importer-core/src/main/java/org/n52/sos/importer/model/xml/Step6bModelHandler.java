@@ -217,6 +217,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 				numbers[i] = c.getNumber();
 			}
 			foiGRT.setNumberArray(numbers);
+			// add position to FOI
+			pos = foi.getPosition();
+			posXB = foiGRT.getPosition();
+			if(posXB == null) {
+				posXB = foiGRT.addNewPosition();
+			}
+			fillXBPosition(posXB,pos);
 		} else {
 			/*
 			 * MANUAL
@@ -241,7 +248,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 			pos = foi.getPosition();
 			posXB = foiSRT.getPosition();
 			if(posXB == null) {
-				foiSRT.addNewPosition();
+				posXB = foiSRT.addNewPosition();
 			}
 			fillXBPosition(posXB,pos);
 		}
@@ -259,6 +266,74 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		}
 		relatedFOIs = mVColumn.getRelatedFOIArray();
 		return isFoiInArray(relatedFOIs, foi.getXMLId());
+	}
+
+	// TODO add link to position groups <- if position is from file and not from user
+	private void fillXBPosition(Position posXB,
+			org.n52.sos.importer.model.position.Position pos) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("\t\t\t\taddOrUpdatePosition()");
+		}
+		if (pos == null || posXB == null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("One position is null: skip filling: pos? " + pos
+						+ "; posXB? " + posXB);
+			}
+			return;
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("BEFORE: pos: " + pos + "; posXB: " + posXB);
+		}
+		if (pos.getGroup() != null && !pos.getGroup().equalsIgnoreCase("")) {
+			/*
+			 * The position is contained in the file, so just add the link to 
+			 * the group and finish
+			 */
+			String groupId = pos.getGroup();
+			// check for old artifacts like alt/lat/long/epsg
+			if (posXB.isSetAlt()) 		{ posXB.unsetAlt(); } 
+			if (posXB.isSetEPSGCode()) 	{ posXB.unsetEPSGCode(); }
+			if (posXB.isSetLat())		{ posXB.unsetLat(); }
+			if (posXB.isSetLong())		{ posXB.unsetLong(); }
+			//
+			posXB.setGroup(groupId);
+		} else {
+			// the position is defined manually, so add the elements
+			// clean group before if set
+			if (posXB.isSetGroup()) { posXB.unsetGroup(); }
+			/*
+			 * 	EPSG_CODE
+			 */
+			posXB.setEPSGCode(pos.getEPSGCode().getValue());
+			/*
+			 * 	ALTITUDE
+			 */
+			Alt alt = posXB.getAlt();
+			if (alt == null) {
+				alt = posXB.addNewAlt();
+			}
+			alt.setFloatValue( new Double(pos.getHeight().getValue()).floatValue() );
+			/*
+			 * 	LATITUDE
+			 */
+			Lat lat = posXB.getLat();
+			if (lat == null) {
+				lat = posXB.addNewLat();
+			}
+			lat.setFloatValue( new Double(pos.getLatitude().getValue()).floatValue() );
+			/*
+			 *	LONGITUDE
+			 */
+			Long lon = posXB.getLong();
+			if (lon == null) {
+				lon = posXB.addNewLong();
+			}
+			lon.setFloatValue( new Double(pos.getLongitude().getValue()).floatValue() );
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("AFTER: posXB: " + posXB);
+		}
+		
 	}
 
 	private boolean addRelatedObservedProperty(
@@ -541,64 +616,6 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return isUOMInArray(relatedUOMs, uOM.getURIString());
 	}
 	
-	private void fillXBPosition(Position posXB,
-			org.n52.sos.importer.model.position.Position pos) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("\t\t\t\taddOrUpdatePosition()");
-		}
-		if (pos == null || posXB == null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("One position is null: skip filling: pos? " + pos
-						+ "; posXB? " + posXB);
-			}
-			return;
-		}
-		/*
-		 * 	EPSG_CODE
-		 */
-		posXB.setEPSGCode(pos.getEPSGCode().getValue());
-		if (logger.isDebugEnabled()) {
-			logger.debug("posXB.epsg: " + posXB.getEPSGCode() + 
-					" - pos.epsg: " + pos.getEPSGCode().getValue());
-		}
-		/*
-		 * 	ALTITUDE
-		 */
-		Alt alt = posXB.getAlt();
-		if (alt == null) {
-			alt = posXB.addNewAlt();
-		}
-		alt.setFloatValue( new Double(pos.getHeight().getValue()).floatValue() );
-		if (logger.isDebugEnabled()) {
-			logger.debug("posXB.alt: " + posXB.getAlt() + 
-					" - pos.alt: " + pos.getHeight().getValue());
-		}
-		/*
-		 * 	LATITUDE
-		 */
-		Lat lat = posXB.getLat();
-		if (lat == null) {
-			lat = posXB.addNewLat();
-		}
-		lat.setFloatValue( new Double(pos.getLatitude().getValue()).floatValue() );
-		if (logger.isDebugEnabled()) {
-			logger.debug("posXB.lat: " + posXB.getLat() + 
-					" - pos.lat: " + pos.getLatitude().getValue());
-		}
-		/*
-		 *	LONGITUDE
-		 */
-		Long lon = posXB.getLong();
-		if (lon == null) {
-			lon = posXB.addNewLong();
-		}
-		lon.setFloatValue( new Double(pos.getLongitude().getValue()).floatValue() );
-		if (logger.isDebugEnabled()) {
-			logger.debug("posXB.lon: " + posXB.getLong() + 
-					" - pos.lon: " + pos.getLongitude().getValue());
-		}
-	}
-
 	private boolean isFoiInArray(RelatedFOI[] relatedFOIs, String foiXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\tisFoiInArray()");

@@ -98,9 +98,12 @@ public class BackNextModel {
 			sc = followingStepControllers.pop(); 
 		}
 		if (logger.isTraceEnabled()) {
-			logger.trace("result: " + 
-					(sc!=null?sc.getClass().getSimpleName():sc) + 
-					"[" + (sc!=null?sc.hashCode():sc) + "]");
+			logger.trace("followingSC: " + 
+					(sc!=null?
+							sc.getClass().getSimpleName() + 
+							"[" + sc.hashCode() + "]"
+							:sc)
+					);
 		}
 		return sc;
 	}
