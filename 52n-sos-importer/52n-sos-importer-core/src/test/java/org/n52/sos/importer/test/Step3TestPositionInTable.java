@@ -28,13 +28,13 @@ import org.n52.sos.importer.controller.Step3aController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.view.utils.Constants;
 
-public class Step3Test {
+public class Step3TestPositionInTable {
 
 	public static void main(String[] args) {
 		MainController f = MainController.getInstance();
-		Object[][] o = TestData.EXAMPLE_TABLE;
-		Constants.DECIMAL_SEPARATOR = '.';
-		Constants.THOUSANDS_SEPARATOR = ',';
+		Object[][] o = TestData.EXMAPLE_TABLE_GLDAS;
+		Constants.DECIMAL_SEPARATOR = ',';
+		Constants.THOUSANDS_SEPARATOR = '.';
 		TableController tc = TableController.getInstance();
 		tc.setContent(o); 
 		int markedColumn = 0;
