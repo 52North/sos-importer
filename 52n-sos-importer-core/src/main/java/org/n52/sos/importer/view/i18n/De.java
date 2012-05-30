@@ -584,8 +584,8 @@ public class De extends Lang{
 	public String step7SOSConncetionStart(String strURL) {
 		return "Um mit dem Verbindungstest zu dem " + this.sos() + 
 				"\n\"" + strURL + "\"\n" +
-				"klicken Sie bitte auf JA.\n" +
-				"Falls Sie Einstellungen ändern möchten, dann klicken Sie bitte auf NEIN.";
+				"zu starten, wählen Sie JA.\n" +
+				"Falls Sie Einstellungen ändern möchten, dann wählen Sie NEIN.";
 	}
 
 	public String step7SOSconnectionFailed(String strURL,
