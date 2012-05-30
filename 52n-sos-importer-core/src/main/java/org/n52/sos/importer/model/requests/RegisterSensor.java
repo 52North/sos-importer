@@ -24,7 +24,7 @@
 package org.n52.sos.importer.model.requests;
 
 /**
- * collects all information for the RegisterSensor request
+ * Collects all information for the RegisterSensor request
  * @author Raimund
  */
 public class RegisterSensor {
@@ -38,6 +38,8 @@ public class RegisterSensor {
 	private String observedPropertyName;
 	
 	private String observedPropertyURI;
+	
+	private String offeringName;
 
 	private String unitOfMeasurementCode;
 	
@@ -57,11 +59,13 @@ public class RegisterSensor {
 	
 	public String fillTemplate(String template) {
 		String filledTemplate = template;
+		// TODO move tags into config
 		filledTemplate = filledTemplate.replaceAll("THISsensorName", sensorName);
 		filledTemplate = filledTemplate.replaceAll("THISsensorURI", sensorURI);
 		filledTemplate = filledTemplate.replaceAll("THISfoi", foiName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyName", observedPropertyName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyURI", observedPropertyURI);
+		filledTemplate = filledTemplate.replaceAll("THISofferingName", offeringName);
 		filledTemplate = filledTemplate.replaceAll("THISunitOfMeasurementCode", unitOfMeasurementCode);
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeValue", latitudeValue);
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeUnit", latitudeUnit);
@@ -74,112 +78,56 @@ public class RegisterSensor {
 	}
 	
 	
-	public String getSensorName() {
-		return sensorName;
-	}
-
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
-	}
-
-	public String getSensorURI() {
-		return sensorURI;
 	}
 
 	public void setSensorURI(String sensorURI) {
 		this.sensorURI = sensorURI;
 	}
 
-	/**
-     * @return the foiName
-     */
-    public String getFoiName() {
-        return foiName;
-    }
-
-
-    /**
-     * @param foiName the foiName to set
-     */
     public void setFoiName(String foiName) {
         this.foiName = foiName;
     }
 
-
-    public String getObservedPropertyName() {
-		return observedPropertyName;
-	}
-
 	public void setObservedPropertyName(String observedPropertyName) {
 		this.observedPropertyName = observedPropertyName;
-	}
-
-	public String getObservedPropertyURI() {
-		return observedPropertyURI;
 	}
 
 	public void setObservedPropertyURI(String observedPropertyURI) {
 		this.observedPropertyURI = observedPropertyURI;
 	}
 
-	public String getUnitOfMeasurementCode() {
-		return unitOfMeasurementCode;
+	public void setOfferingName(String offeringName) {
+		this.offeringName = offeringName;
 	}
 
 	public void setUnitOfMeasurementCode(String unitOfMeasurementCode) {
 		this.unitOfMeasurementCode = unitOfMeasurementCode;
 	}
 
-	public String getEpsgCode() {
-		return epsgCode;
-	}
-
 	public void setEpsgCode(String epsgCode) {
 		this.epsgCode = epsgCode;
-	}
-
-	public String getLatitudeValue() {
-		return latitudeValue;
 	}
 
 	public void setLatitudeValue(String latitudeValue) {
 		this.latitudeValue = latitudeValue;
 	}
 
-	public String getLatitudeUnit() {
-		return latitudeUnit;
-	}
-
 	public void setLatitudeUnit(String latitudeUnit) {
 		this.latitudeUnit = latitudeUnit;
-	}
-
-	public String getLongitudeValue() {
-		return longitudeValue;
 	}
 
 	public void setLongitudeValue(String longitudeValue) {
 		this.longitudeValue = longitudeValue;
 	}
 
-	public String getLongitudeUnit() {
-		return longitudeUnit;
-	}
-
 	public void setLongitudeUnit(String longitudeUnit) {
 		this.longitudeUnit = longitudeUnit;
 	}
 
-	public String getHeightValue() {
-		return heightValue;
-	}
-
 	public void setHeightValue(String heightValue) {
 		this.heightValue = heightValue;
-	}
-
-	public String getHeightUnit() {
-		return heightUnit;
 	}
 
 	public void setHeightUnit(String heightUnit) {
@@ -188,14 +136,21 @@ public class RegisterSensor {
 
 	@Override
 	public String toString() {
-		return "RegisterSensor [sensorName=" + sensorName + ", sensorURI="
-				+ sensorURI + ", observedPropertyName=" + observedPropertyName
-				+ ", observedPropertyURI=" + observedPropertyURI
-				+ ", unitOfMeasurementCode=" + unitOfMeasurementCode
-				+ ", epsgCode=" + epsgCode + ", latitudeValue=" + latitudeValue
-				+ ", latitudeUnit=" + latitudeUnit + ", longitudeValue=" + longitudeValue
-				+ ", longitudeUnit=" + longitudeUnit + ", heightValue=" + heightValue
-				+ ", heightUnit=" + heightUnit + "]";
+		return "RegisterSensor [" +
+					"sensorName=" + 	sensorName + ", " +
+					"sensorURI=" + 					sensorURI + ", " +
+					"observedPropertyName=" + 		observedPropertyName + ", " +
+					"observedPropertyURI=" + 		observedPropertyURI + ", " +
+					"unitOfMeasurementCode=" + 		unitOfMeasurementCode + ", " +
+					"epsgCode=" + 					epsgCode + ", " +
+					"latitudeValue=" + 				latitudeValue + ", " +
+					"latitudeUnit=" + 				latitudeUnit + ", " +
+					"longitudeValue=" + 			longitudeValue + ", " +
+					"longitudeUnit=" + 				longitudeUnit + ", " +
+					"heightValue=" + 				heightValue + ", " +
+					"heightUnit=" + 				heightUnit + ", " +
+					"offering=" + 					offeringName + 
+				"]";
 	}
 
 	@Override
@@ -231,6 +186,9 @@ public class RegisterSensor {
 				* result
 				+ ((unitOfMeasurementCode == null) ? 0 : unitOfMeasurementCode
 						.hashCode());
+		result = prime
+				* result
+				+ ((offeringName == null) ? 0 : offeringName.hashCode());
 		return result;
 	}
 
@@ -302,6 +260,11 @@ public class RegisterSensor {
 			if (other.unitOfMeasurementCode != null)
 				return false;
 		} else if (!unitOfMeasurementCode.equals(other.unitOfMeasurementCode))
+			return false;
+		if (offeringName == null) {
+			if (other.offeringName != null)
+				return false;
+		} else if (!offeringName.equals(other.offeringName))
 			return false;
 		return true;
 	}	

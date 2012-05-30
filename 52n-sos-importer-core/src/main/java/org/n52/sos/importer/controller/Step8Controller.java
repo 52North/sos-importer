@@ -321,7 +321,16 @@ public class Step8Controller extends StepController {
 					io.setSensorURI(sensorURI);
 					rs.setSensorName(sensorName);
 					rs.setSensorURI(sensorURI);
-						
+					
+					// offering handling
+					String offering = "";
+					if (step7Model.isGenerateOfferingFromSensorName()) {
+						offering = sensorName;
+					} else {
+						offering = step7Model.getOffering();
+					}						
+					rs.setOfferingName(offering);
+					
 					ModelStore.getInstance().addObservationToInsert(io);
 					ModelStore.getInstance().addSensorToRegister(rs);
 				}
