@@ -14,7 +14,6 @@
 			<param name="ConversionPattern" value="%d %-1p (%c{1}.java:%L) - %m %n"/>
 		</layout>
 	</appender>
-
 	<!--
 	FILTER
 	Level: OFF, ERROR, WARN, INFO, DEBUG
@@ -23,17 +22,9 @@
 		<level value="INFO" />
 	</logger>
 	-->
-
 	<logger name="org.n52.sos.importer.model.XMLModel">
 		<level value="DEBUG"></level>
 	</logger>
-	<logger name="org.n52.sos.importer.model.BackNextModel">
-		<level value="TRACE"></level>
-	</logger>
-	<logger name="org.n52.sos.importer.controller.BackNextController">
-		<level value="TRACE"></level>
-	</logger>
-
 	<logger name="org.n52.sos.importer.view.step3.ParseTestLabel">
 		<level value="DEBUG"></level>
 	</logger>
@@ -41,15 +32,6 @@
 	EXTERNAL - LIBS
 	 -->
 	<logger name="org.apache.commons.httpclient">
-		<level value="ERROR" />
-	</logger>
-	<logger name="org.n52.oxf.util.IOHelper">
-		<level value="INFO" />
-	</logger>
-	<logger name="org.n52.oxf.serviceAdapters.sos.SOSAdapter">
-		<level value="ERROR" />
-	</logger>
-	<logger name="com.sun.xml">
 		<level value="ERROR" />
 	</logger>
 	<root>
