@@ -68,35 +68,40 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 		mv.setFeatureOfInterest(null);		
 	}
 	
-	
 	@Override
 	public FeatureOfInterest forThis(Cell measuredValuePosition) {
-		FeatureOfInterest foi = new FeatureOfInterest();
-		//case: this is not a feature of interest row or column
+		/*
+		 * case A: this is not a feature of interest row or column; 
+		 * 			it is a global foi or a generated one
+		 */
 		if (getTableElement() == null) {
-			foi.setName(getName());
-			foi.setURI(getURI());		
-			foi.setPosition(position);
+			return this;
 		} else {
+			// TODO check position handling here!
+			// each row/column has its own foi, so return new instances
+			FeatureOfInterest foi = new FeatureOfInterest();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			foi.setName(name);
 			
-			//case: this feature of interest row or column is
-			//associated with a position row or column in the table
+			/* 
+			 * case B: this is a feature of interest row or column
+			 * 
+			 * case B1: associated with a position row or column in the table
+			 */
 			if (position != null) {
 				PositionController pc = new PositionController(position);
 				Cell c = getTableElement().getCellFor(measuredValuePosition);
 				Position p = pc.forThis(c); 
 				foi.setPosition(p);
-			//case: this feature of interest row or column is not
-			//associated with a position row or column in the table
+			/*
+			 * case B2: not associated with a position row or column in the table
+			 */
 			} else {
 				Position p = getPositionFor(name);
 				foi.setPosition(p);
 			}
+			return foi;
 		}
-		
-		return foi;
 	}
 
 	@Override
@@ -192,5 +197,4 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 			return super.getName();
 		}
 	}
-
 }

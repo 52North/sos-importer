@@ -58,15 +58,14 @@ public class UnitOfMeasurement extends Resource {
 	
 	@Override
 	public UnitOfMeasurement forThis(Cell measuredValuePosition) {
-		UnitOfMeasurement uom = new UnitOfMeasurement();
 		if (getTableElement() == null) {
-			uom.setName(getName());
-			uom.setURI(getURI());
+			return this;
 		} else {
+			UnitOfMeasurement uom = new UnitOfMeasurement();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			uom.setName(name);
-		}
-		return uom;
+			return uom;
+		}	
 	}
 
 	@Override
