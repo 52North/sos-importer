@@ -138,6 +138,7 @@ public class Step6bSpecialController extends StepController {
 		
 	public Step6bSpecialModel getNextModel() {
 		int rows = this.tableController.getRowCount();
+		int flwd = this.tableController.getFirstLineWithData();
 
 		//iterate through all measured value columns/rows
 		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
@@ -147,7 +148,7 @@ public class Step6bSpecialController extends StepController {
 			else 
 				rowOrColumnNumber = ((Row)mv.getTableElement()).getNumber();
 				
-			for (int i = 0; i < rows; i++) {	
+			for (int i = flwd; i < rows; i++) {	
 				//test if the measuredValue can be parsed
 				Cell cell = new Cell(i, rowOrColumnNumber);
 				String value = this.tableController.getValueAt(cell);
@@ -159,6 +160,7 @@ public class Step6bSpecialController extends StepController {
 							logger.trace("Value could not be parsed: " + value, e);
 						}
 						continue;
+						// TODO implement better exception handling here. Do not just skip!
 					}	
 
 					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
