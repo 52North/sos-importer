@@ -67,88 +67,44 @@ public class InsertObservation {
 		return filledTemplate;
 	}
 	
-	public String getSensorName() {
-		return sensorName;
-	}
-
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
-	}
-
-	public String getSensorURI() {
-		return sensorURI;
 	}
 
 	public void setSensorURI(String sensorURI) {
 		this.sensorURI = sensorURI;
 	}
 
-	public String getFeatureOfInterestName() {
-		return featureOfInterestName;
-	}
-
 	public void setFeatureOfInterestName(String featureOfInterestName) {
 		this.featureOfInterestName = featureOfInterestName;
-	}
-
-	public String getFeatureOfInterestURI() {
-		return featureOfInterestURI;
 	}
 
 	public void setFeatureOfInterestURI(String featureOfInterestURI) {
 		this.featureOfInterestURI = featureOfInterestURI;
 	}
 
-	public String getObservedPropertyURI() {
-		return observedPropertyURI;
-	}
-
 	public void setObservedPropertyURI(String observedPropertyURI) {
 		this.observedPropertyURI = observedPropertyURI;
-	}
-
-	public String getUnitOfMeasurementCode() {
-		return unitOfMeasurementCode;
 	}
 
 	public void setUnitOfMeasurementCode(String unitOfMeasurementCode) {
 		this.unitOfMeasurementCode = unitOfMeasurementCode;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public String getTimeStamp() {
-		return timeStamp;
 	}
 
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
-	public String getEpsgCode() {
-		return epsgCode;
-	}
-
 	public void setEpsgCode(String epsgCode) {
 		this.epsgCode = epsgCode;
 	}
 
-	public String getLatitudeValue() {
-		return latitudeValue;
-	}
-
 	public void setLatitudeValue(String latitudeValue) {
 		this.latitudeValue = latitudeValue;
-	}
-
-	public String getLongitudeValue() {
-		return longitudeValue;
 	}
 
 	public void setLongitudeValue(String longitudeValue) {

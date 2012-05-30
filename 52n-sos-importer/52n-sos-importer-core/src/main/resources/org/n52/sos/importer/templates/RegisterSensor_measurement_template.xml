@@ -101,7 +101,7 @@
 	                                <gml:metaDataProperty>
 											<offering>
 												<id>THISsensorURI</id>
-												<name>THISsensorName</name>
+												<name>THISofferingName</name>
 											</offering>
 									</gml:metaDataProperty>
 	                              <swe:uom code="THISunitOfMeasurementCode"/>
