@@ -58,15 +58,14 @@ public class ObservedProperty extends Resource {
 	
 	@Override
 	public ObservedProperty forThis(Cell measuredValuePosition) {
-		ObservedProperty op = new ObservedProperty();
 		if (getTableElement() == null) {
-			op.setName(getName());
-			op.setURI(getURI());
+			return this;
 		} else {
+			ObservedProperty op = new ObservedProperty();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			op.setName(name);
+			return op;
 		}
-		return op;
 	}
 
 	@Override

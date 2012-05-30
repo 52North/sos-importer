@@ -58,15 +58,14 @@ public class Sensor extends Resource {
 	
 	@Override
 	public Sensor forThis(Cell measuredValuePosition) {
-		Sensor s = new Sensor();
 		if (getTableElement() == null) {
-			s.setName(getName());
-			s.setURI(getURI());
+			return this;
 		} else {
+			Sensor s = new Sensor();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			s.setName(name);
+			return s;
 		}
-		return s;
 	}
 
 	@Override
