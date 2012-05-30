@@ -159,6 +159,9 @@ public class Step8Controller extends StepController {
 		}
 	}
 	
+	/**
+	 * When information assembling is done, the sensors are registered
+	 */
 	public void assembleInformationDone() {
 		String sosURL = step7Model.getSosURL();
 		connectToSOS(sosURL);
@@ -166,6 +169,10 @@ public class Step8Controller extends StepController {
 		registerSensors.execute();
 	}
 	
+	/**
+	 * When sensor registering is done, the data is submitted
+	 * @param notRegisteredSensors
+	 */
 	public void registerSensorsDone(String[] notRegisteredSensors) {
 		insertObservations.setNotRegisteredSensors(notRegisteredSensors);
 		insertObservations.execute();
@@ -182,12 +189,18 @@ public class Step8Controller extends StepController {
 			
 			if(logger.isDebugEnabled()) {
 				for (RegisterSensor rs: ModelStore.getInstance().getSensorsToRegister()) {
-					logger.debug(rs);
+					if (logger.isDebugEnabled()) {
+						logger.debug(rs);
+					}
 				}
 				for (InsertObservation io: ModelStore.getInstance().getObservationsToInsert()) {
-					logger.debug(io);	
+					if (logger.isDebugEnabled()) {
+						logger.debug(io);	
+					}
 				}
 			}
+			
+			logger.info("Assembling information finished");
 			
 			return null;
 		}
@@ -330,7 +343,7 @@ public class Step8Controller extends StepController {
 					uriOrUriPrefix = res.getUriPrefix();
 			boolean useNameAfterPrefix = res.isUseNameAfterPrefixAsURI();
 			Column[] relatedCols = (Column[]) res.getRelatedCols();
-			String[] result = new String[2];
+			String[] result = {"",""};
 			if (concatString == null) {
 				concatString = "";
 			}
