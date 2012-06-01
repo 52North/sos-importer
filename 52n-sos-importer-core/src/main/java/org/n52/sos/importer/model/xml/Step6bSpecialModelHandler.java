@@ -28,6 +28,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlOptions;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -36,7 +37,6 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
 import org.x52North.sensorweb.sos.importer.x02.ManualResourceType;

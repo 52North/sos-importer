@@ -38,9 +38,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * shows progress while assembling data, registering sensors
@@ -128,6 +128,10 @@ public class Step8Panel extends JPanel {
 		}
 	}
 	
+	/**
+	 * {@linkplain javax.swing.JProgressBar#setIndeterminate(boolean newValue)}
+	 * @param aFlag
+	 */
 	public void setIndeterminate(boolean aFlag) {
 		sensorProgressBar.setIndeterminate(aFlag);
 	}
@@ -136,6 +140,10 @@ public class Step8Panel extends JPanel {
 		registerSensorLabel.setText(Lang.l().step8RegisterSensorLabel(n));
 	}
 	
+	/**
+	 * {@linkplain javax.swing.JProgressBar#setValue(int n)}
+	 * @param n
+	 */
 	public void setRegisterSensorProgress(int n) {
 		sensorProgressBar.setValue(n);
 	}

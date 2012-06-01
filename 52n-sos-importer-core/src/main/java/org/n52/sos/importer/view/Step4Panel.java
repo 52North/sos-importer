@@ -28,7 +28,7 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import org.n52.sos.importer.view.utils.Constants;
+import org.n52.sos.importer.Constants;
 
 /**
  * consists of a short instruction label and the table

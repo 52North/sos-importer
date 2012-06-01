@@ -26,6 +26,7 @@ package org.n52.sos.importer.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6bController;
 import org.n52.sos.importer.controller.TableController;
@@ -37,7 +38,6 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 public class Step6bTestUOM {
 

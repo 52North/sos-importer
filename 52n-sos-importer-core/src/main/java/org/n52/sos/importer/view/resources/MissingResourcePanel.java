@@ -49,6 +49,7 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Component;
@@ -58,7 +59,6 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
-import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**

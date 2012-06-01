@@ -35,7 +35,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.view.utils.Constants;
+import org.n52.sos.importer.Constants;
 
 /**
  * loads and saves all combobox items in the properties file

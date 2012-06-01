@@ -24,11 +24,11 @@
 package org.n52.sos.importer.model.xml;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
-import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
@@ -268,7 +268,6 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return isFoiInArray(relatedFOIs, foi.getXMLId());
 	}
 
-	// TODO add link to position groups <- if position is from file and not from user
 	private void fillXBPosition(Position posXB,
 			org.n52.sos.importer.model.position.Position pos) {
 		if (logger.isTraceEnabled()) {

@@ -21,26 +21,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.model;
+package org.n52.sos.importer.model.xml;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.n52.sos.importer.model.xml.Step1ModelHandler;
-import org.n52.sos.importer.model.xml.Step2ModelHandler;
-import org.n52.sos.importer.model.xml.Step3ModelHandler;
-import org.n52.sos.importer.model.xml.Step4bModelHandler;
-import org.n52.sos.importer.model.xml.Step5aModelHandler;
-import org.n52.sos.importer.model.xml.Step5cModelHandler;
-import org.n52.sos.importer.model.xml.Step6aModelHandler;
-import org.n52.sos.importer.model.xml.Step6bModelHandler;
-import org.n52.sos.importer.model.xml.Step6bSpecialModelHandler;
-import org.n52.sos.importer.model.xml.Step6cModelHandler;
-import org.n52.sos.importer.model.xml.Step7ModelHandler;
+import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.model.Step1Model;
+import org.n52.sos.importer.model.Step2Model;
+import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.model.Step4bModel;
+import org.n52.sos.importer.model.Step5aModel;
+import org.n52.sos.importer.model.Step5cModel;
+import org.n52.sos.importer.model.Step6aModel;
+import org.n52.sos.importer.model.Step6bModel;
+import org.n52.sos.importer.model.Step6bSpecialModel;
+import org.n52.sos.importer.model.Step6cModel;
+import org.n52.sos.importer.model.Step7Model;
+import org.n52.sos.importer.model.StepModel;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.RemoteFileDocument.RemoteFile;
@@ -56,9 +59,9 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  * @version
  * 
  */
-public class XMLModel {
+public class Model {
 
-	private static final Logger logger = Logger.getLogger(XMLModel.class);
+	private static final Logger logger = Logger.getLogger(Model.class);
 
 	private SosImportConfiguration sosImpConf;
 
@@ -67,7 +70,7 @@ public class XMLModel {
 	/**
 	 * Create a new and empty model
 	 */
-	public XMLModel() {
+	public Model() {
 		this.sosImpConf = SosImportConfiguration.Factory.newInstance();
 	}
 
@@ -75,14 +78,14 @@ public class XMLModel {
 	 * Create model based on xml file
 	 * 
 	 * @param xmlFileWithModel
-	 *            the file containing the <code>XMLModel</code>
+	 *            the file containing the <code>Model</code>
 	 * @throws XmlException
-	 *             thrown while parsing the file &rarr; <code>XMLModel</code>
+	 *             thrown while parsing the file &rarr; <code>Model</code>
 	 *             file is <b>not</b> valid.
 	 * @throws IOException
 	 *             having any problems while reading file
 	 */
-	public XMLModel(File xmlFileWithModel) throws XmlException, IOException {
+	public Model(File xmlFileWithModel) throws XmlException, IOException {
 		SosImportConfigurationDocument sosImpConfDoc = SosImportConfigurationDocument.Factory
 				.parse(xmlFileWithModel);
 		this.sosImpConf = sosImpConfDoc.getSosImportConfiguration();
@@ -93,7 +96,7 @@ public class XMLModel {
 	 * 
 	 * @param sosImpConf
 	 */
-	public XMLModel(SosImportConfiguration sosImpConf) {
+	public Model(SosImportConfiguration sosImpConf) {
 		this.sosImpConf = sosImpConf;
 	}
 
@@ -180,6 +183,13 @@ public class XMLModel {
 				if (file.canWrite()) {
 					SosImportConfigurationDocument doc = 
 						SosImportConfigurationDocument.Factory.newInstance();
+					// insert schema location
+					XmlCursor c = sosImpConf.newCursor();
+					c.toFirstChild();
+					c.insertNamespace(Constants.XML_SCHEMA_PREFIX,
+							Constants.XML_SCHEMA_NAMESPACE);
+					c.insertAttributeWithValue(Constants.XML_SCHEMALOCATION_QNAME,
+							Constants.XML_SOS_IMPORTER_SCHEMA_LOCATION);
 					XmlOptions xmlOpts = new XmlOptions()
 						.setSavePrettyPrint()
 						.setSavePrettyPrintIndent(4)

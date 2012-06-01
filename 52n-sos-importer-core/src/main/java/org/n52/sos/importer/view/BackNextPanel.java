@@ -30,9 +30,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 
 /**

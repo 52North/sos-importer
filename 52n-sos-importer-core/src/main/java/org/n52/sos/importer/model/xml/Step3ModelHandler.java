@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
