@@ -80,7 +80,7 @@ public class Step4cController extends StepController {
 		}
 		if (positions == 1) {
 			Position position = ModelStore.getInstance().getPositions().get(0);
-			logger.info("Skip Step 4c since there is just " + position);
+			logger.info("Skip Step 4c since there is just one " + position);
 			
 			for (FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests())
 				foi.setPosition(position);

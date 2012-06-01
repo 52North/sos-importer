@@ -145,6 +145,7 @@ public class Step3aController extends StepController {
 			PositionController pc = new PositionController();
 			pc.mergePositions();
 		} 
+		// TODO if being date&time or position column: add group to table heading
 		tabCtrlr.setColumnHeading(number, selection.get(0));
 		tabCtrlr.clearMarkedTableElements();
 		tabCtrlr.setTableSelectionMode(TableController.CELLS);
@@ -168,6 +169,7 @@ public class Step3aController extends StepController {
 		step3Model.addSelection(selection);
 		int number = step3Model.getMarkedColumn()-1;
 		if(number >= 0) {
+			// TODO if being date&time or position column: add group to table heading
 			tabCtrlr.setColumnHeading(number, selection.get(0));	
 			tabCtrlr.clearMarkedTableElements();
 			tabCtrlr.setTableSelectionMode(TableController.CELLS);
