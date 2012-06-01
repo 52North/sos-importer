@@ -35,6 +35,8 @@ public class RegisterSensor {
 	
 	private String foiName;
 	
+	private String featureOfInterestURI;
+	
 	private String observedPropertyName;
 	
 	private String observedPropertyURI;
@@ -53,16 +55,19 @@ public class RegisterSensor {
 	
 	private String longitudeUnit;
 	
-	private String heightValue;
+	private String altitudeValue;
 	
-	private String heightUnit;
+	private String altitudeUnit;
+
+	private String defaultValue;
 	
 	public String fillTemplate(String template) {
 		String filledTemplate = template;
 		// TODO move tags into config
 		filledTemplate = filledTemplate.replaceAll("THISsensorName", sensorName);
 		filledTemplate = filledTemplate.replaceAll("THISsensorURI", sensorURI);
-		filledTemplate = filledTemplate.replaceAll("THISfoi", foiName);
+		filledTemplate = filledTemplate.replaceAll("THISfoiName", foiName);
+		filledTemplate = filledTemplate.replaceAll("THISfoiURI", featureOfInterestURI);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyName", observedPropertyName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyURI", observedPropertyURI);
 		filledTemplate = filledTemplate.replaceAll("THISofferingName", offeringName);
@@ -71,9 +76,10 @@ public class RegisterSensor {
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeUnit", latitudeUnit);
 		filledTemplate = filledTemplate.replaceAll("THISlongitudeValue", longitudeValue);
 		filledTemplate = filledTemplate.replaceAll("THISlongitudeUnit", longitudeUnit);
-		filledTemplate = filledTemplate.replaceAll("THISheightValue", heightValue);
-		filledTemplate = filledTemplate.replaceAll("THISheightUnit", heightUnit);
+		filledTemplate = filledTemplate.replaceAll("THISheightValue", altitudeValue);
+		filledTemplate = filledTemplate.replaceAll("THISheightUnit", altitudeUnit);
 		filledTemplate = filledTemplate.replaceAll("THISepsgCode", epsgCode);
+		filledTemplate = filledTemplate.replaceAll("THISdefaultValue", getDefaultValue());
 		return filledTemplate; 
 	}
 	
@@ -86,7 +92,7 @@ public class RegisterSensor {
 		this.sensorURI = sensorURI;
 	}
 
-    public void setFoiName(String foiName) {
+    public void setFeatureOfInterstName(String foiName) {
         this.foiName = foiName;
     }
 
@@ -126,50 +132,61 @@ public class RegisterSensor {
 		this.longitudeUnit = longitudeUnit;
 	}
 
-	public void setHeightValue(String heightValue) {
-		this.heightValue = heightValue;
+	public void setAltitudeValue(String heightValue) {
+		this.altitudeValue = heightValue;
 	}
 
-	public void setHeightUnit(String heightUnit) {
-		this.heightUnit = heightUnit;
+	public void setAltitudeUnit(String heightUnit) {
+		this.altitudeUnit = heightUnit;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "RegisterSensor [" +
-					"sensorName=" + 	sensorName + ", " +
-					"sensorURI=" + 					sensorURI + ", " +
-					"observedPropertyName=" + 		observedPropertyName + ", " +
-					"observedPropertyURI=" + 		observedPropertyURI + ", " +
-					"unitOfMeasurementCode=" + 		unitOfMeasurementCode + ", " +
-					"epsgCode=" + 					epsgCode + ", " +
-					"latitudeValue=" + 				latitudeValue + ", " +
-					"latitudeUnit=" + 				latitudeUnit + ", " +
-					"longitudeValue=" + 			longitudeValue + ", " +
-					"longitudeUnit=" + 				longitudeUnit + ", " +
-					"heightValue=" + 				heightValue + ", " +
-					"heightUnit=" + 				heightUnit + ", " +
-					"offering=" + 					offeringName + 
-				"]";
+		return "RegisterSensor [sensorName=" + sensorName + ", sensorURI="
+				+ sensorURI + ", foiName=" + foiName
+				+ ", featureOfInterestURI=" + featureOfInterestURI
+				+ ", observedPropertyName=" + observedPropertyName
+				+ ", observedPropertyURI=" + observedPropertyURI
+				+ ", offeringName=" + offeringName + ", unitOfMeasurementCode="
+				+ unitOfMeasurementCode + ", epsgCode=" + epsgCode
+				+ ", latitudeValue=" + latitudeValue + ", latitudeUnit="
+				+ latitudeUnit + ", longitudeValue=" + longitudeValue
+				+ ", longitudeUnit=" + longitudeUnit + ", altitudeValue="
+				+ altitudeValue + ", altitudeUnit=" + altitudeUnit
+				+ ", defaultValue=" + defaultValue + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((altitudeUnit == null) ? 0 : altitudeUnit.hashCode());
+		result = prime * result
+				+ ((altitudeValue == null) ? 0 : altitudeValue.hashCode());
+		result = prime * result
+				+ ((defaultValue == null) ? 0 : defaultValue.hashCode());
+		result = prime * result
 				+ ((epsgCode == null) ? 0 : epsgCode.hashCode());
-		result = prime * result + ((heightValue == null) ? 0 : heightValue.hashCode());
-		result = prime * result
-				+ ((heightUnit == null) ? 0 : heightUnit.hashCode());
-		result = prime * result
-				+ ((latitudeValue == null) ? 0 : latitudeValue.hashCode());
+		result = prime
+				* result
+				+ ((featureOfInterestURI == null) ? 0 : featureOfInterestURI
+						.hashCode());
+		result = prime * result + ((foiName == null) ? 0 : foiName.hashCode());
 		result = prime * result
 				+ ((latitudeUnit == null) ? 0 : latitudeUnit.hashCode());
 		result = prime * result
-				+ ((longitudeValue == null) ? 0 : longitudeValue.hashCode());
+				+ ((latitudeValue == null) ? 0 : latitudeValue.hashCode());
 		result = prime * result
 				+ ((longitudeUnit == null) ? 0 : longitudeUnit.hashCode());
+		result = prime * result
+				+ ((longitudeValue == null) ? 0 : longitudeValue.hashCode());
 		result = prime
 				* result
 				+ ((observedPropertyName == null) ? 0 : observedPropertyName
@@ -179,6 +196,8 @@ public class RegisterSensor {
 				+ ((observedPropertyURI == null) ? 0 : observedPropertyURI
 						.hashCode());
 		result = prime * result
+				+ ((offeringName == null) ? 0 : offeringName.hashCode());
+		result = prime * result
 				+ ((sensorName == null) ? 0 : sensorName.hashCode());
 		result = prime * result
 				+ ((sensorURI == null) ? 0 : sensorURI.hashCode());
@@ -186,86 +205,266 @@ public class RegisterSensor {
 				* result
 				+ ((unitOfMeasurementCode == null) ? 0 : unitOfMeasurementCode
 						.hashCode());
-		result = prime
-				* result
-				+ ((offeringName == null) ? 0 : offeringName.hashCode());
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof RegisterSensor))
+		}
+		if (!(obj instanceof RegisterSensor)) {
 			return false;
+		}
 		RegisterSensor other = (RegisterSensor) obj;
+		if (altitudeUnit == null) {
+			if (other.altitudeUnit != null) {
+				return false;
+			}
+		} else if (!altitudeUnit.equals(other.altitudeUnit)) {
+			return false;
+		}
+		if (altitudeValue == null) {
+			if (other.altitudeValue != null) {
+				return false;
+			}
+		} else if (!altitudeValue.equals(other.altitudeValue)) {
+			return false;
+		}
+		if (defaultValue == null) {
+			if (other.defaultValue != null) {
+				return false;
+			}
+		} else if (!defaultValue.equals(other.defaultValue)) {
+			return false;
+		}
 		if (epsgCode == null) {
-			if (other.epsgCode != null)
+			if (other.epsgCode != null) {
 				return false;
-		} else if (!epsgCode.equals(other.epsgCode))
+			}
+		} else if (!epsgCode.equals(other.epsgCode)) {
 			return false;
-		if (heightValue == null) {
-			if (other.heightValue != null)
+		}
+		if (featureOfInterestURI == null) {
+			if (other.featureOfInterestURI != null) {
 				return false;
-		} else if (!heightValue.equals(other.heightValue))
+			}
+		} else if (!featureOfInterestURI.equals(other.featureOfInterestURI)) {
 			return false;
-		if (heightUnit == null) {
-			if (other.heightUnit != null)
+		}
+		if (foiName == null) {
+			if (other.foiName != null) {
 				return false;
-		} else if (!heightUnit.equals(other.heightUnit))
+			}
+		} else if (!foiName.equals(other.foiName)) {
 			return false;
-		if (latitudeValue == null) {
-			if (other.latitudeValue != null)
-				return false;
-		} else if (!latitudeValue.equals(other.latitudeValue))
-			return false;
+		}
 		if (latitudeUnit == null) {
-			if (other.latitudeUnit != null)
+			if (other.latitudeUnit != null) {
 				return false;
-		} else if (!latitudeUnit.equals(other.latitudeUnit))
+			}
+		} else if (!latitudeUnit.equals(other.latitudeUnit)) {
 			return false;
-		if (longitudeValue == null) {
-			if (other.longitudeValue != null)
+		}
+		if (latitudeValue == null) {
+			if (other.latitudeValue != null) {
 				return false;
-		} else if (!longitudeValue.equals(other.longitudeValue))
+			}
+		} else if (!latitudeValue.equals(other.latitudeValue)) {
 			return false;
+		}
 		if (longitudeUnit == null) {
-			if (other.longitudeUnit != null)
+			if (other.longitudeUnit != null) {
 				return false;
-		} else if (!longitudeUnit.equals(other.longitudeUnit))
+			}
+		} else if (!longitudeUnit.equals(other.longitudeUnit)) {
 			return false;
+		}
+		if (longitudeValue == null) {
+			if (other.longitudeValue != null) {
+				return false;
+			}
+		} else if (!longitudeValue.equals(other.longitudeValue)) {
+			return false;
+		}
 		if (observedPropertyName == null) {
-			if (other.observedPropertyName != null)
+			if (other.observedPropertyName != null) {
 				return false;
-		} else if (!observedPropertyName.equals(other.observedPropertyName))
+			}
+		} else if (!observedPropertyName.equals(other.observedPropertyName)) {
 			return false;
+		}
 		if (observedPropertyURI == null) {
-			if (other.observedPropertyURI != null)
+			if (other.observedPropertyURI != null) {
 				return false;
-		} else if (!observedPropertyURI.equals(other.observedPropertyURI))
+			}
+		} else if (!observedPropertyURI.equals(other.observedPropertyURI)) {
 			return false;
-		if (sensorName == null) {
-			if (other.sensorName != null)
-				return false;
-		} else if (!sensorName.equals(other.sensorName))
-			return false;
-		if (sensorURI == null) {
-			if (other.sensorURI != null)
-				return false;
-		} else if (!sensorURI.equals(other.sensorURI))
-			return false;
-		if (unitOfMeasurementCode == null) {
-			if (other.unitOfMeasurementCode != null)
-				return false;
-		} else if (!unitOfMeasurementCode.equals(other.unitOfMeasurementCode))
-			return false;
+		}
 		if (offeringName == null) {
-			if (other.offeringName != null)
+			if (other.offeringName != null) {
 				return false;
-		} else if (!offeringName.equals(other.offeringName))
+			}
+		} else if (!offeringName.equals(other.offeringName)) {
 			return false;
+		}
+		if (sensorName == null) {
+			if (other.sensorName != null) {
+				return false;
+			}
+		} else if (!sensorName.equals(other.sensorName)) {
+			return false;
+		}
+		if (sensorURI == null) {
+			if (other.sensorURI != null) {
+				return false;
+			}
+		} else if (!sensorURI.equals(other.sensorURI)) {
+			return false;
+		}
+		if (unitOfMeasurementCode == null) {
+			if (other.unitOfMeasurementCode != null) {
+				return false;
+			}
+		} else if (!unitOfMeasurementCode.equals(other.unitOfMeasurementCode)) {
+			return false;
+		}
 		return true;
-	}	
+	}
+
+	/**
+	 * @return the sensorName
+	 */
+	public String getSensorName() {
+		return sensorName;
+	}
+
+	/**
+	 * @return the sensorURI
+	 */
+	public String getSensorURI() {
+		return sensorURI;
+	}
+
+	/**
+	 * @return the foiName
+	 */
+	public String getFeatureOfInterestName() {
+		return foiName;
+	}
+
+	/**
+	 * @return the observedPropertyName
+	 */
+	public String getObservedPropertyName() {
+		return observedPropertyName;
+	}
+
+	/**
+	 * @return the observedPropertyURI
+	 */
+	public String getObservedPropertyURI() {
+		return observedPropertyURI;
+	}
+
+	/**
+	 * @return the offeringName
+	 */
+	public String getOfferingName() {
+		return offeringName;
+	}
+
+	/**
+	 * @return the unitOfMeasurementCode
+	 */
+	public String getUnitOfMeasurementCode() {
+		return unitOfMeasurementCode;
+	}
+
+	/**
+	 * @return the epsgCode
+	 */
+	public String getEpsgCode() {
+		return epsgCode;
+	}
+
+	/**
+	 * @return the latitudeValue
+	 */
+	public String getLatitudeValue() {
+		return latitudeValue;
+	}
+
+	/**
+	 * @return the latitudeUnit
+	 */
+	public String getLatitudeUnit() {
+		return latitudeUnit;
+	}
+
+	/**
+	 * @return the longitudeValue
+	 */
+	public String getLongitudeValue() {
+		return longitudeValue;
+	}
+
+	/**
+	 * @return the longitudeUnit
+	 */
+	public String getLongitudeUnit() {
+		return longitudeUnit;
+	}
+
+	/**
+	 * @return the altitudeValue
+	 */
+	public String getAltitudeValue() {
+		return altitudeValue;
+	}
+
+	/**
+	 * @return the altitudeUnit
+	 */
+	public String getAltitudeUnit() {
+		return altitudeUnit;
+	}
+
+
+	/**
+	 * @return the featureOfInterestURI
+	 */
+	public String getFeatureOfInterestURI() {
+		return featureOfInterestURI;
+	}
+
+
+	/**
+	 * @param featureOfInterestURI the featureOfInterestURI to set
+	 */
+	public void setFeatureOfInterestURI(String featureOfInterestURI) {
+		this.featureOfInterestURI = featureOfInterestURI;
+	}
+
+
+	/**
+	 * @return the defaultValue
+	 */
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 }
