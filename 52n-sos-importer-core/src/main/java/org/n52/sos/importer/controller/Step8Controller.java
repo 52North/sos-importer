@@ -33,7 +33,9 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.regex.Matcher;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,10 +51,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.controller.utils.XMLTools;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
+import org.n52.sos.importer.model.measuredValue.Boolean;
+import org.n52.sos.importer.model.measuredValue.Count;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.measuredValue.Text;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
@@ -95,15 +103,16 @@ public class Step8Controller extends StepController {
 	
 	private RegisterSensors registerSensors;
 	
-	private static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
-
-	private static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
-	
-	private final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
-	
 	private InsertObservations insertObservations;
 
 	private TableController tableController;
+	
+	/**
+	 * List of changed foi names in <code>String[]</code>.<br />
+	 * <code>[0]</code> is the <b>old</b> and<br />
+	 * <code>[1]</code> is the <b>new</b> name
+	 */
+	private ArrayList<String[]> changedFoiNames = new ArrayList<String[]>();
 	
 	public Step8Controller(Step7Model step7Model, int firstLineWithData) {
 		this.step7Model = step7Model;
@@ -217,10 +226,11 @@ public class Step8Controller extends StepController {
 				for (int row = tableController.getFirstLineWithData(); row < tableController.getRowCount(); row++) {
 					RegisterSensor rs = new RegisterSensor();
 					InsertObservation io = new InsertObservation();
+					NumericValue nv = new NumericValue();
 					
 					//the cell of the current Measured Value
-					Cell c = new Cell(row, column.getNumber());
-					String value = tableController.getValueAt(c);
+					Cell cell = new Cell(row, column.getNumber());
+					String value = tableController.getValueAt(cell);
 					try {
 						String parsedValue = mv.parse(value).toString();
 						io.setValue(parsedValue);
@@ -231,13 +241,26 @@ public class Step8Controller extends StepController {
 						continue;
 					}
 					
+					// set default value for register sensor observation template
+					String defaultValue = "";
+					if (mv instanceof NumericValue) {
+						defaultValue = "0.0";
+					} else if (mv instanceof Text) {
+						defaultValue = "default";
+					} else if (mv instanceof Boolean) {
+						defaultValue = "false";
+					} else if (mv instanceof Count) {
+						defaultValue = "0";
+					}
+					rs.setDefaultValue(defaultValue);
+					
 					// when was the current Measured Value measured
 					dtc.setDateAndTime(mv.getDateAndTime());
 					String timeStamp;
 					try {
-						timeStamp = dtc.forThis(c);
+						timeStamp = dtc.forThis(cell);
 					} catch (ParseException e) {
-						logger.error("Timestamp of " + c + 
+						logger.error("Timestamp of " + cell + 
 								" could not be parsed. Skipping it. " +
 								"Error Message: " + e.getMessage(), e);
 						continue;
@@ -245,9 +268,9 @@ public class Step8Controller extends StepController {
 					io.setTimeStamp(timeStamp);
 					
 					// which is the observed feature of interest
-					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(c);
-					String foiName = "";
-					String foiURI = "";
+					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
+					String foiName = "", foiURI = "", origFoiName = "";
+					boolean foiNameAdjusted = false;
 					if (foi.isGenerated()) {
 						String[] resValues = getValuesForGeneratedResource(foi,row);
 						foiName = resValues[0];
@@ -256,29 +279,133 @@ public class Step8Controller extends StepController {
 						foiName = foi.getNameString();
 						foiURI = foi.getURIString();
 					}
+					// FIXME implement check for NCName compliance and remove bad values
+					origFoiName = new String(foiName);
+					// check first character
+					if (foiName.charAt(0) != '_' || !XMLTools.isLetter(foiName.charAt(0))) {
+						// if failed -> add "_"
+						foiName = Constants.UNICODE_FOI_PREFIX + foiName;
+						foiNameAdjusted = true;
+					}
+					// clean rest of string using Constants.UNICODE_REPLACER
+					char[] foiNameChars = foiName.toCharArray();
+					for (int i = 1; i < foiNameChars.length; i++) {
+						char c = foiNameChars[i];
+						if (!XMLTools.isNCNameChar(c)) {
+							foiNameChars[i] = Constants.UNICODE_REPLACER;
+						}
+					}
+					foiName = String.valueOf(foiNameChars);
+					// check if name is only containing "_"
+					Matcher matcher = Constants.
+							UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(foiName);
+					if (matcher.matches()) {
+						// if yes -> change to "_foi-" + foiURI.hashCode()
+						foiName = Constants.UNICODE_FOI_PREFIX + foiURI.hashCode();
+					}
+					// check NCName compliance only for debugging
+					if (logger.isDebugEnabled()) {
+						boolean shouldBeTrue = XMLTools.isNCName(foiName);
+						logger.debug("Is generated foi name valid?: " + shouldBeTrue);
+					}
+					// if failed -> log and skip
+					// else continue
+					if (foiNameAdjusted) {
+						String[] a = {origFoiName,foiName};
+						setChangedFoiNames(a);
+						logger.info("The name of the feature of interest \"" + 
+								origFoiName + "\" is changed to \"" + foiName + 
+								"\" due to XML compliance reasons. " +
+								"Check documentation for further information.");
+					}
+					rs.setFeatureOfInterestURI(foiURI);
+					rs.setFeatureOfInterstName(foiName);
 					io.setFeatureOfInterestName(foiName);
 					io.setFeatureOfInterestURI(foiURI);
 					
-					// where was the current Measured Value measured
-					Position p = foi.getPosition();
-					io.setLatitudeValue(p.getLatitude().getValue() + "");
-					io.setLongitudeValue(p.getLongitude().getValue() + "");
-					io.setEpsgCode(p.getEPSGCode().getValue() + "");
-					rs.setFoiName(foi.getNameString());
-					rs.setLatitudeValue(p.getLatitude().getValue() + "");
-					rs.setLatitudeUnit(p.getLatitude().getUnit());
-					rs.setLongitudeValue(p.getLongitude().getValue() + "");
-					rs.setLongitudeUnit(p.getLongitude().getUnit());
-					rs.setHeightValue(p.getHeight().getValue() + "");
-					rs.setHeightUnit(p.getHeight().getUnit());
-					rs.setEpsgCode(p.getEPSGCode().getValue() + "");
+					
+					{ // Position
+						// where was the current Measured Value measured
+						Position p = foi.getPosition();
+						// FIXME implement handling of positions from table
+						String latitude = "";
+						if (p.getLatitude() != null && p.getLatitude().getTableElement() != null) {
+							latitude = tableController.getValueAt(row,
+									((Column) p.getLatitude().getTableElement())
+									.getNumber());
+							latitude = nv.parse(latitude) + "";
+						} else {
+							latitude = p.getLatitude().getValue() + "";
+						}
+						String latUnit = "";
+						if (p.getLatitude() != null
+								&& p.getLatitude().getUnit() != null) {
+							latUnit = p.getLatitude().getUnit();
+						} else {
+							latUnit = Constants.DEFAULT_LATITUDE_UNIT;
+						}
+
+						String longitude = "";
+						if (p.getLongitude() != null && p.getLongitude().getTableElement() != null) {
+							longitude = tableController.getValueAt(row,
+									((Column) p.getLongitude().getTableElement())
+									.getNumber());
+							longitude = nv.parse(longitude) + "";
+						} else {
+							longitude = p.getLongitude().getValue() + "";
+						}
+						String longUnit = "";
+						if (p.getLongitude() != null
+								&& p.getLongitude().getUnit() != null) {
+							longUnit = p.getLongitude().getUnit();
+						} else {
+							longUnit = Constants.DEFAULT_LONGITUDE_UNIT;
+						}
+
+						String epsgCode = "";
+						if (p.getEPSGCode() != null && p.getEPSGCode().getTableElement() != null) {
+							epsgCode = tableController.getValueAt(row,
+									((Column) p.getEPSGCode().getTableElement())
+									.getNumber());
+						} else {
+							epsgCode = p.getEPSGCode().getValue() + "";
+						}
+
+						String altitude = "";
+						if (p.getEPSGCode() != null && p.getHeight().getTableElement() != null) {
+							altitude = tableController.getValueAt(row,
+									((Column) p.getHeight().getTableElement())
+									.getNumber());
+							altitude = nv.parse(altitude) + "";
+						} else {
+							altitude = p.getHeight().getValue() + "";
+						}
+						String altitudeUnit = "";
+						if (p.getLatitude() != null
+								&& p.getLatitude().getUnit() != null) {
+							altitudeUnit = p.getLatitude().getUnit();
+						} else {
+							altitudeUnit = Constants.DEFAULT_ALTITUDE_UNIT;
+						}
+
+						io.setLatitudeValue(latitude);
+						io.setLongitudeValue(longitude);
+						io.setEpsgCode(epsgCode);
+						rs.setLatitudeValue(latitude);
+						rs.setLatitudeUnit(latUnit);
+						rs.setLongitudeValue(longitude);
+						rs.setLongitudeUnit(longUnit);
+						rs.setAltitudeValue(altitude);
+						rs.setAltitudeUnit(altitudeUnit);
+						rs.setEpsgCode(epsgCode);
+					} // EO: position
 					
 					// what property is observed at this foi
-					ObservedProperty op = mv.getObservedProperty().forThis(c);
+					ObservedProperty op = mv.getObservedProperty().forThis(cell);
 					String obsPropName = "";
 					String obsPropURI = "";
-					if (foi.isGenerated()) {
-						String[] resValues = getValuesForGeneratedResource(foi,row);
+					if (op.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(op,row);
 						obsPropName = resValues[0];
 						obsPropURI = resValues[1];
 					} else {
@@ -290,10 +417,10 @@ public class Step8Controller extends StepController {
 					rs.setObservedPropertyURI(obsPropURI);
 					
 					// what is the UOM for the observed/measured value
-					UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(c);
+					UnitOfMeasurement uom = mv.getUnitOfMeasurement().forThis(cell);
 					String uomName = "";
-					if (foi.isGenerated()) {
-						String[] resValues = getValuesForGeneratedResource(foi,row);
+					if (uom.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(uom,row);
 						uomName = resValues[0];
 					} else {
 						uomName = uom.getNameString();
@@ -303,14 +430,14 @@ public class Step8Controller extends StepController {
 					
 					Sensor sensor = mv.getSensor();
 					if (sensor != null) {
-						 sensor = mv.getSensor().forThis(c);
+						 sensor = mv.getSensor().forThis(cell);
 					} else { //Step6bSpecialController
 						sensor = mv.getSensorFor(foi.getNameString(), op.getNameString());
 					}
 					String sensorName = "";
 					String sensorURI = "";
-					if (foi.isGenerated()) {
-						String[] resValues = getValuesForGeneratedResource(foi,row);
+					if (sensor.isGenerated()) {
+						String[] resValues = getValuesForGeneratedResource(sensor,row);
 						sensorName = resValues[0];
 						sensorURI = resValues[1];
 					} else {
@@ -332,12 +459,38 @@ public class Step8Controller extends StepController {
 					rs.setOfferingName(offering);
 					
 					ModelStore.getInstance().addObservationToInsert(io);
-					ModelStore.getInstance().addSensorToRegister(rs);
+					// To ban double entries, check for already contained sensors by id
+					if (!isAlreadyInList(ModelStore.getInstance().getSensorsToRegister(),rs)) {
+						ModelStore.getInstance().addSensorToRegister(rs);
+					}
 				}
 			}
 		}
     	
-        /**
+		/**
+		 * Iterates over the HashSet and compare the sensor ID with each element
+		 * @param sensorsToRegister
+		 * @param rs
+		 * @return
+		 */
+		private boolean isAlreadyInList(
+				HashSet<RegisterSensor> sensorsToRegister, RegisterSensor rs) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("isAlreadyInList()");
+			}
+			for (Iterator<RegisterSensor> iter = sensorsToRegister.iterator();
+					iter.hasNext();) {
+				RegisterSensor rsFromList = iter.next();
+				if (rsFromList.getSensorURI() != null && 
+						rs.getSensorURI() != null && 
+						rsFromList.getSensorURI().equalsIgnoreCase( rs.getSensorURI() ) ){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
 		 * Build the name and uri from the related columns.
 		 * @param res
 		 * @return <code>String[]</code> with two values:<ul>
@@ -357,9 +510,13 @@ public class Step8Controller extends StepController {
 				concatString = "";
 			}
 			// get values from related cols and use concatString
-			for (Column col : relatedCols) {
-				String tmp = tableController.getValueAt(row, col.getNumber());
-				result[0] = result[0] + concatString + tmp;
+			if (relatedCols.length >= 1) {
+				result[0] = tableController.getValueAt(row, 
+						relatedCols[0].getNumber());
+				for (int i = 1; i < relatedCols.length; i++) {
+					String tmp = tableController.getValueAt(row, relatedCols[i].getNumber());
+					result[0] = result[0] + concatString + tmp;
+				}
 			}
 			if (useNameAfterPrefix) {
 				result[1] = uriOrUriPrefix + result[0];
@@ -404,16 +561,19 @@ public class Step8Controller extends StepController {
     			String answer = sendPostMessage(completedTemplate,total,counter);
     			if (answer.contains("AssignedSensorId")) {
     				step8Panel.setNumberOfSuccessfulSensors(++successful);
+    				logger.info("Sensor \"" + 
+    						rs.getSensorURI() + 
+    						"\" registered successfully at \"" + 
+    						step7Model.getSosURL() +
+    						"\".");
     			//
     			// check if the sensor is already registered is SOS
-    			} else if(answer.contains(SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
-    					answer.contains(SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START) &&
-    					answer.contains(SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END) &&
+    			} else if(answer.contains(Constants.SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
+    					answer.contains(Constants.SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START) &&
+    					answer.contains(Constants.SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END) &&
     					answer.contains(rs.getSensorURI())) {
-    				if(logger.isDebugEnabled()) {
-    					logger.debug("Sensor with ID \"" + rs.getSensorURI() + 
+    				logger.info("Sensor with ID \"" + rs.getSensorURI() + 
     							"\" is already registered is SOS");
-    				}
 					step8Panel.setNumberOfSuccessfulSensors(++successful);
 				//
 				//
@@ -447,7 +607,7 @@ public class Step8Controller extends StepController {
         }
     }
     
-    class InsertObservations extends SwingWorker<Void, Void> {
+    private class InsertObservations extends SwingWorker<Void, Void> {
     	
     	private String[] notRegisteredSensors = null;
     	
@@ -465,8 +625,8 @@ public class Step8Controller extends StepController {
     		
     		boolean anyFailedSensorRegistrations = false;
     		
-    		if(this.notRegisteredSensors != null && 
-    				this.notRegisteredSensors.length > 0) {
+    		if(notRegisteredSensors != null && 
+    				notRegisteredSensors.length > 0) {
     			anyFailedSensorRegistrations = true;
     		}
     		
@@ -501,8 +661,12 @@ public class Step8Controller extends StepController {
     			double process = (double) counter / (double) total * 100;
     			step8Panel.setInsertObservationProgress((int) process);
     		}
-    		logger.info("Skipped " + skipped + " insert observation requests because of not registered sensors");
-
+    		logger.info("Sending observations finished, " +
+    				"successful: " + successful + "; " +
+    				"failed: " + errors);
+    		if (skipped > 0) {
+    			logger.info("Skipped " + skipped + " insert observation requests because of not registered sensors");
+    		}
             return null;
         }
 
@@ -636,5 +800,24 @@ public class Step8Controller extends StepController {
 	@Override
 	public StepModel getModel() {
 		return this.step7Model;
+	}
+
+	/**
+	 * @return the changedFoiNames
+	 */
+	public String[][] getChangedFoiNames() {
+		changedFoiNames.trimToSize();
+		String[][] res = new String[changedFoiNames.size()][2];
+		res = changedFoiNames.toArray(res);
+		return res;
+	}
+
+	/**
+	 * @param changedFoiName to add to the changedFoiNames<br />
+	 * <code>[0]</code> is the <b>old</b> and<br />
+	 * <code>[1]</code> is the <b>new</b> name
+	 */
+	public void setChangedFoiNames(String[] changedFoiName) {
+		this.changedFoiNames.add(changedFoiName);
 	}
 }

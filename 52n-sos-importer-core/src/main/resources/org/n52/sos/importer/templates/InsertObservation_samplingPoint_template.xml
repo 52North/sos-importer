@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <InsertObservation xmlns="http://www.opengis.net/sos/1.0"
 	xmlns:ows="http://www.opengis.net/ows/1.1"
 	xmlns:ogc="http://www.opengis.net/ogc"
@@ -13,25 +14,20 @@
 	http://www.opengis.net/sampling/1.0
 	http://schemas.opengis.net/sampling/1.0.0/sampling.xsd
 	http://www.opengis.net/om/1.0
-	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_override.xsd"
+	http://schemas.opengis.net/om/1.0.0/extensions/observationSpecialization_constraint.xsd"
 	service="SOS" version="1.0.0">
-	
 	<AssignedSensorId>THISsensorURI</AssignedSensorId>
-	
 	<om:Measurement>
-	     
 	     <om:samplingTime>
 	          <gml:TimeInstant>
 	               <gml:timePosition>THIStimeStamp</gml:timePosition>
 	          </gml:TimeInstant>
 	     </om:samplingTime>
-	     
 	     <om:procedure xlink:href="THISsensorURI"/>
 	     <om:observedProperty xlink:href="THISobservedPropertyURI"/>
-	     
 	     <om:featureOfInterest>
-	          <sa:SamplingPoint gml:id="THISfeatureOfInterestURI">
-	              <gml:name>THISfeatureOfInterestName</gml:name>
+	          <sa:SamplingPoint gml:id="THISfeatureOfInterestName">
+	              <gml:name>THISfeatureOfInterestURI</gml:name>
 	              <sa:sampledFeature xlink:href=""/>
 	              <sa:position>
 	                <gml:Point>
@@ -40,8 +36,6 @@
 	              </sa:position>
 	            </sa:SamplingPoint>
 	     </om:featureOfInterest>
-	     
 	     <om:result uom="THISunitOfMeasurementCode">THISvalue</om:result>
 	</om:Measurement>
-	
 </InsertObservation>

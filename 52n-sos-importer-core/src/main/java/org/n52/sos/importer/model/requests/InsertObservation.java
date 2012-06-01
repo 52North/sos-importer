@@ -123,5 +123,82 @@ public class InsertObservation {
 				+ timeStamp + ", epsgCode=" + epsgCode + ", latitudeValue="
 				+ latitudeValue + ", longitudeValue=" + longitudeValue + "]";
 	}
+
+	/**
+	 * @return the sensorName
+	 */
+	public String getSensorName() {
+		return sensorName;
+	}
+
+	/**
+	 * @return the sensorURI
+	 */
+	public String getSensorURI() {
+		return sensorURI;
+	}
+
+	/**
+	 * @return the featureOfInterestName
+	 */
+	public String getFeatureOfInterestName() {
+		return featureOfInterestName;
+	}
+
+	/**
+	 * @return the featureOfInterestURI
+	 */
+	public String getFeatureOfInterestURI() {
+		return featureOfInterestURI;
+	}
+
+	/**
+	 * @return the observedPropertyURI
+	 */
+	public String getObservedPropertyURI() {
+		return observedPropertyURI;
+	}
+
+	/**
+	 * @return the unitOfMeasurementCode
+	 */
+	public String getUnitOfMeasurementCode() {
+		return unitOfMeasurementCode;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @return the timeStamp
+	 */
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+
+	/**
+	 * @return the epsgCode
+	 */
+	public String getEpsgCode() {
+		return epsgCode;
+	}
+
+	/**
+	 * @return the latitudeValue
+	 */
+	public String getLatitudeValue() {
+		return latitudeValue;
+	}
+
+	/**
+	 * @return the longitudeValue
+	 */
+	public String getLongitudeValue() {
+		return longitudeValue;
+	}
 	
 }
