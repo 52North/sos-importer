@@ -35,11 +35,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * selection panel in step 3 for date&time and position combinations,

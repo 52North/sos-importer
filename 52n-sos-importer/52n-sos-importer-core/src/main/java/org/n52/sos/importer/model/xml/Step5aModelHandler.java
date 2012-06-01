@@ -24,10 +24,10 @@
 package org.n52.sos.importer.model.xml;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.view.utils.Constants;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;

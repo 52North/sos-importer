@@ -27,7 +27,7 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.n52.sos.importer.view.utils.Constants;
+import org.n52.sos.importer.Constants;
 
 /**
  * description label at the top of the main frame

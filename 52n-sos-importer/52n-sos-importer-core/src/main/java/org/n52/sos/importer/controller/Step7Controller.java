@@ -32,11 +32,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * Lets the user choose a URL of a Sensor Observation Service (and test the 
@@ -165,6 +165,8 @@ public class Step7Controller extends StepController {
 				JOptionPane.INFORMATION_MESSAGE);
 		if (userChoice == JOptionPane.YES_OPTION) {
 			try {
+				// send GetCapabilities via GET-Method
+				strURL = strURL + Constants.SOS_GET_GET_CAPABILITIES_REQUEST;
 				URL url = new URL(strURL);
 				HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(Constants.URL_CONNECT_TIMEOUT_SECONDS*1000);

@@ -6,12 +6,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
-import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * 
@@ -147,7 +147,7 @@ public abstract class Lang {
 	 */
 	public abstract String format();
 	/**
-	 * @return SOS Importer {@link org.n52.sos.importer.view.utils.Constants#VERSION}
+	 * @return SOS Importer {@link org.n52.sos.importer.Constants#VERSION}
 	 */
 	public String frameTitle(){	return "SOS Importer " + Constants.VERSION; }
 	/**
@@ -451,7 +451,7 @@ public abstract class Lang {
 	/**
 	 * 
 	 * List how to replace the 
-	 * {@link org.n52.sos.importer.view.utils.Constants#STRING_REPLACER} 
+	 * {@link org.n52.sos.importer.Constants#STRING_REPLACER} 
 	 * in the correct order:
 	 * <ol>
 	 * 	<li>The table element type of the measured values, maybe "column"</li>

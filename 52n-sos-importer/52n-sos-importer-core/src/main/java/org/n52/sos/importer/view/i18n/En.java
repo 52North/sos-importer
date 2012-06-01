@@ -27,7 +27,7 @@ package org.n52.sos.importer.view.i18n;
 import java.io.File;
 import java.util.Locale;
 
-import org.n52.sos.importer.view.utils.Constants;
+import org.n52.sos.importer.Constants;
 
 /**
  * @author e.h.juerrens@52north.org

@@ -29,7 +29,7 @@ import java.io.IOException;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.model.StepModel;
-import org.n52.sos.importer.model.XMLModel;
+import org.n52.sos.importer.model.xml.Model;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 import org.n52.sos.importer.view.utils.ToolTips;
@@ -46,7 +46,7 @@ public class MainController {
 
 	private final MainFrame mainFrame = new MainFrame(this);
 	
-	private XMLModel xmlModel;
+	private Model xmlModel;
 	
 	private MainController() {
 		LoggingController.getInstance();
@@ -59,7 +59,7 @@ public class MainController {
 		ComboBoxItems.getInstance();
 		//
 		// init xmlmodel TODO load from configuration
-		this.xmlModel = new XMLModel();
+		this.xmlModel = new Model();
 	}
 	
 	public static MainController getInstance() {

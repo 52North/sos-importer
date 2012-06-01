@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4aModel;
 import org.n52.sos.importer.model.StepModel;
@@ -35,7 +36,6 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 /**
  * solves ambiguities in case there is more than one date&time column

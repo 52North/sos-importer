@@ -26,6 +26,7 @@ package org.n52.sos.importer.view.step3;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.PositionController;
@@ -37,7 +38,6 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.TableElement;
-import org.n52.sos.importer.view.utils.Constants;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**

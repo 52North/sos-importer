@@ -21,10 +21,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.view.utils;
+package org.n52.sos.importer;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.regex.Pattern;
 
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -33,7 +34,7 @@ import javax.xml.namespace.QName;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
- * @author e.h.juerrens@52north.org
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public class Constants {
@@ -82,12 +83,29 @@ public class Constants {
 	public static final QName QNAME_MANUAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE,"ManualResource");
 	public static final QName QNAME_MANUAL_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE,"SpatialResource");
 	public static final String[] DECIMAL_SEPARATORS = {".",","};
+	public static final String DEFAULT_LATITUDE_UNIT = "deg";
+	public static final String DEFAULT_LONGITUDE_UNIT = "deg";
+	public static final String DEFAULT_ALTITUDE_UNIT = "m";
+	// TODO read from file!
+	public static final char UNICODE_REPLACER = '_';
+	public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
+	public static final String UNICODE_FOI_PREFIX = "_foi-";
+	public static final String SOS_GET_GET_CAPABILITIES_REQUEST = "?service=SOS&REQUEST=GetCapabilities&AcceptVersions=1.0.0";
 	/*
 	 * CHANGEABLE VALUES
 	 */
 	public static boolean GUI_DEBUG = false;
 	public static char DECIMAL_SEPARATOR = '.';
 	public static char THOUSANDS_SEPARATOR = ',';
+	
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
+	public static final String XML_SCHEMA_PREFIX = "xsi";
+	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
+	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
+	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd";
+	
 	
 	/**
 	 * TODO implement loading of language parameter from config file

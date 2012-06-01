@@ -31,6 +31,7 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6bSpecialController;
 import org.n52.sos.importer.controller.TableController;
@@ -43,7 +44,6 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.Constants;
 
 public class Step6bSpecialTest {
 	
