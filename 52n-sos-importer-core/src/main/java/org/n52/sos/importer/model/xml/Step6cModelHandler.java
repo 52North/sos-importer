@@ -79,6 +79,10 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		tabE = foi.getTableElement();
 		if (tabE != null) {
 			// Feature of Interest is from file
+			// set name for foi, if from file to get the relation between the foi and its position
+			if (stepModel.getFeatureOfInterestName() != null && !stepModel.getFeatureOfInterestName().equalsIgnoreCase("")) {
+				foi.setName(stepModel.getFeatureOfInterestName());
+			}
 			addToFoiPositionsElement(foi,pos,sosImportConf);
 		} else {
 			// Feature of Interest is created from user input 
