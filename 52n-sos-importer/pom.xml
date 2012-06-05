@@ -21,6 +21,7 @@
 	<modules>
 		<module>52n-sos-importer-bindings</module>
 		<module>52n-sos-importer-core</module>
+		<module>52n-sos-importer-feeder</module>
 	</modules>
 	<organization>
 		<name>52°North</name>
