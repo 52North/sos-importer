@@ -104,7 +104,7 @@
 						<manifestEntries>
 							<build-time>${timestamp}</build-time>
 							<!-- TODO get this version from dependency definition -->
-							<SOS-importer-xmlbeans-version>0.1</SOS-importer-xmlbeans-version>
+							<SOS-importer-xmlbeans-version>0.2</SOS-importer-xmlbeans-version>
 						</manifestEntries>
 					</archive>
 				</configuration>
@@ -129,7 +129,7 @@
 			-->
 			<id>lib-repository</id>
 			<name>Local Repository</name>
-			<url>file:///${basedir}/lib-repository/</url>
+			<url>file:///${basedir}/../lib-repository/</url>
 		</repository>
 	</repositories>
 </project>
