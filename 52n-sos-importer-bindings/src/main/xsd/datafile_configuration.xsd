@@ -392,7 +392,11 @@
 						<xs:documentation>A sensor (linked to a column by ID element and relatedSensor element in column metadata)</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element ref="ObservedProperty" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="ObservedProperty" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>An observed property (linked to a column by URI element and relatedObservedProperty element in column metadata)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element ref="FeatureOfInterest" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="UnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
@@ -422,11 +426,31 @@
 				<xs:element ref="Number"/>
 				<xs:element ref="Type"/>
 				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="Position" minOccurs="0"/>
-				<xs:element ref="RelatedFOI" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Position" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>A position using x,y,z (unit for each), epsg-code or the group this position is build from</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedFOI" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The feature of interest related to THIS measured value column. The content of this element MUST match a ID element of a FeatureOfInterest from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The sensor related to THIS measured value column. The content of this element MUST match a ID element of a Sensor from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The observed property related to THIS measured value column. The content of this element MUST match a ID element of a ObservedProperty from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The unit of measurement related to THIS measured value column. The content of this element MUST match a ID element of a UnitOfMeasurement from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>Column number of the measured value column this column is related to.</xs:documentation>
@@ -457,7 +481,11 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="ColumnAssignments"/>
-				<xs:element ref="DecimalSeparator"/>
+				<xs:element ref="DecimalSeparator">
+					<xs:annotation>
+						<xs:documentation>The global decimal mark. It delimits the decimal places of a numeric value. For example, '.' would be the decimal separator for the numeric value "1234.56".</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element ref="FirstLineWithData"/>
 				<xs:element ref="Parameter"/>
 				<xs:element ref="UseHeader"/>
@@ -617,7 +645,11 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="URL"/>
-				<xs:element ref="Offering"/>
+				<xs:element ref="Offering">
+					<xs:annotation>
+						<xs:documentation>Offering in the SOS which is used for the import. Might be generated from sensor id.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
