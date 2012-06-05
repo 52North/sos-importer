@@ -44,7 +44,7 @@
 				<inherited>true</inherited>
 				<configuration>
 					<schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
-					<outputJar>${basedir}/../52n-sos-importer-core/lib-repository/org/n52/sensorweb/52n-sos-importer-bindings/0.2/52n-sos-importer-bindings-0.2.jar</outputJar>
+					<outputJar>${basedir}/../lib-repository/org/n52/sensorweb/52n-sos-importer-bindings/${project.version}/52n-sos-importer-bindings-${project.version}.jar</outputJar>
 				</configuration>
 			</plugin>
 		</plugins>
