@@ -22,7 +22,7 @@
 		<level value="INFO" />
 	</logger>
 	-->
-	<logger name="org.n52.sos.importer.model.XMLModel">
+	<logger name="org.n52.sos.importer.model.xml.Model">
 		<level value="DEBUG"></level>
 	</logger>
 	<logger name="org.n52.sos.importer.view.step3.ParseTestLabel">
