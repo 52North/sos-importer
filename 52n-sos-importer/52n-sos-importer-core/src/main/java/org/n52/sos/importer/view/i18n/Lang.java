@@ -593,9 +593,16 @@ public abstract class Lang {
 	 */
 	public abstract String step7OfferingNameNotGiven();
 	/**
+	 * The given offering "offeringName" is not valid. It should match XML-NCName specification.
+	 * @param offeringName
+	 * @return
+	 */
+	public abstract String step7OfferingNameNotValid(String offeringName);
+	/**
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
+
 	/**
 	 * @param strURL
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
@@ -645,13 +652,13 @@ public abstract class Lang {
 	 * @return Errors: <code>i</code>
 	 */
 	public abstract String step8ErrorLable(int i);
-
+	
 	/**
 	 * @param i
 	 * @return Insert <code>i</code> Observations...
 	 */
 	public abstract String step8InsertObservationLabel(int i);
-	
+
 	/**
 	 * @return Check log file
 	 */

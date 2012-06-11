@@ -61,6 +61,8 @@ public class RegisterSensor {
 
 	private String defaultValue;
 	
+	private String offeringId;
+	
 	public String fillTemplate(String template) {
 		String filledTemplate = template;
 		// TODO move tags into config
@@ -71,6 +73,7 @@ public class RegisterSensor {
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyName", observedPropertyName);
 		filledTemplate = filledTemplate.replaceAll("THISobservedPropertyURI", observedPropertyURI);
 		filledTemplate = filledTemplate.replaceAll("THISofferingName", offeringName);
+		filledTemplate = filledTemplate.replaceAll("THISofferingId", offeringId);
 		filledTemplate = filledTemplate.replaceAll("THISunitOfMeasurementCode", unitOfMeasurementCode);
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeValue", latitudeValue);
 		filledTemplate = filledTemplate.replaceAll("THISlatitudeUnit", latitudeUnit);
@@ -466,5 +469,21 @@ public class RegisterSensor {
 	 */
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+
+	/**
+	 * @return the offeringId
+	 */
+	public String getOfferingId() {
+		return offeringId;
+	}
+
+
+	/**
+	 * @param offeringId the offeringId to set
+	 */
+	public void setOfferingId(String offeringId) {
+		this.offeringId = offeringId;
 	}
 }

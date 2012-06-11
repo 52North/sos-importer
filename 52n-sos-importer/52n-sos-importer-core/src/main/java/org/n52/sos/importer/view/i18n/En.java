@@ -580,6 +580,11 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step7OfferingNameNotValid(String offeringName) {
+		return String.format("The given offering \"%s\" is not valid. It should match XML-NCName specification.", offeringName);
+	}
+
+	@Override
 	public String step7SaveConfig() {
 		return "Save configuration to XML file";
 	}

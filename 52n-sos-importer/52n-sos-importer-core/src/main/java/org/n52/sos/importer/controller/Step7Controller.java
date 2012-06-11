@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.controller.utils.XMLTools;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
@@ -127,10 +128,6 @@ public class Step7Controller extends StepController {
 		//get and check URI
 		boolean result = true;
 		// check inputs 
-		if (s7P.isDirectImport()) {
-			String url = s7P.getSOSURL();
-			result = result && testConnection(url);
-		}
 		if (!s7P.isGenerateOfferingFromSensorName() && 
 				(s7P.getOfferingName() == null || 
 				s7P.getOfferingName().equalsIgnoreCase(""))
@@ -142,7 +139,21 @@ public class Step7Controller extends StepController {
 					Lang.l().errorDialogTitle(),
 					JOptionPane.ERROR_MESSAGE);
 			logger.error(msg);	
-			result = result && false; // shortcut return false; ???
+			result = result & false; // shortcut return false; ???
+		} else if (!s7P.isGenerateOfferingFromSensorName() &&
+				!XMLTools.isNCName(s7P.getOfferingName()) ){
+			// user gave input but it is not valid
+			String msg = Lang.l().step7OfferingNameNotValid(s7P.getOfferingName());
+			JOptionPane.showMessageDialog(null,
+					msg,
+					Lang.l().errorDialogTitle(),
+					JOptionPane.ERROR_MESSAGE);
+			logger.error(msg);
+			result = result & false;
+		}
+		if (s7P.isDirectImport()) {
+			String url = s7P.getSOSURL();
+			result = result && testConnection(url);
 		}
 		return result;
 	}
