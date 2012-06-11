@@ -576,6 +576,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step7OfferingNameNotValid(String offeringName) {
+		return String.format("Der Name \"%s\" für das Offering ist nicht erlaubt. Er muss der Spezifikation für XML-NCName entsprechen.", offeringName);
+	}
+
+	@Override
 	public String step7SaveConfig() {
 		return "Konfiguration in XML-Datei speichern";
 	}

@@ -105,6 +105,7 @@ public class Constants {
 	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
 	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
 	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd";
+	public static final String UNICODE_OFFERING_PREFIX = "_offering-";
 	
 	
 	/**

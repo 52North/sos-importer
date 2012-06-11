@@ -84,7 +84,7 @@
 	                         <swe:Quantity definition="THISobservedPropertyURI">
 	                                <gml:metaDataProperty>
 											<offering>
-												<id>THISsensorURI</id>
+												<id>THISofferingId</id>
 												<name>THISofferingName</name>
 											</offering>
 									</gml:metaDataProperty>

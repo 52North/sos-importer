@@ -112,7 +112,7 @@ public class Step8Controller extends StepController {
 	 * <code>[0]</code> is the <b>old</b> and<br />
 	 * <code>[1]</code> is the <b>new</b> name
 	 */
-	private ArrayList<String[]> changedFoiNames = new ArrayList<String[]>();
+	private ArrayList<String[]> changedResourceNames = new ArrayList<String[]>();
 	
 	public Step8Controller(Step7Model step7Model, int firstLineWithData) {
 		this.step7Model = step7Model;
@@ -279,7 +279,7 @@ public class Step8Controller extends StepController {
 						foiName = foi.getNameString();
 						foiURI = foi.getURIString();
 					}
-					// FIXME implement check for NCName compliance and remove bad values
+					// implement check for NCName compliance and remove bad values
 					origFoiName = new String(foiName);
 					// check first character
 					if (foiName.charAt(0) != '_' || !XMLTools.isLetter(foiName.charAt(0))) {
@@ -312,7 +312,7 @@ public class Step8Controller extends StepController {
 					// else continue
 					if (foiNameAdjusted) {
 						String[] a = {origFoiName,foiName};
-						setChangedFoiNames(a);
+						setChangedResourceNames(a);
 						logger.info("The name of the feature of interest \"" + 
 								origFoiName + "\" is changed to \"" + foiName + 
 								"\" due to XML compliance reasons. " +
@@ -322,7 +322,6 @@ public class Step8Controller extends StepController {
 					rs.setFeatureOfInterstName(foiName);
 					io.setFeatureOfInterestName(foiName);
 					io.setFeatureOfInterestURI(foiURI);
-					
 					
 					{ // Position
 						// where was the current Measured Value measured
@@ -451,12 +450,60 @@ public class Step8Controller extends StepController {
 					
 					// offering handling
 					String offering = "";
+					String offeringId = "";
 					if (step7Model.isGenerateOfferingFromSensorName()) {
-						offering = sensorName;
+						offering = sensorURI;
+						offeringId = sensorName;
 					} else {
 						offering = step7Model.getOffering();
-					}						
+						offeringId = offering;
+					}		
+					if (!XMLTools.isNCName(offeringId)) {
+						// implement check for NCName compliance and remove bad values
+						String origOfferingId = new String(offeringId);
+						boolean offeringIdAdjusted = false;
+						// check first character
+						if (offeringId.charAt(0) != '_' || !XMLTools.isLetter(offeringId.charAt(0))) {
+							// if failed -> add "_"
+							offeringId = Constants.UNICODE_FOI_PREFIX + offeringId;
+							offeringIdAdjusted = true;
+						}
+						// clean rest of string using Constants.UNICODE_REPLACER
+						char[] offeringIdChars = offeringId.toCharArray();
+						for (int i = 1; i < offeringIdChars.length; i++) {
+							char c = offeringIdChars[i];
+							if (!XMLTools.isNCNameChar(c)) {
+								offeringIdChars[i] = Constants.UNICODE_REPLACER;
+							}
+						}
+						offeringId = String.valueOf(offeringIdChars);
+						// check if name is only containing "_"
+						Matcher matcher2 = Constants.
+								UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(offeringId);
+						if (matcher2.matches()) {
+							// if yes -> change to "_offering-" + offeringURI.hashCode()
+							offeringId = Constants.UNICODE_OFFERING_PREFIX + offeringId.hashCode();
+						}
+						// check NCName compliance only for debugging
+						if (logger.isDebugEnabled()) {
+							boolean shouldBeTrue = XMLTools.isNCName(offeringId);
+							logger.debug("Is generated offering name valid?: " + shouldBeTrue);
+						}
+						// if failed -> log and skip
+						// else continue
+						if (offeringIdAdjusted) {
+							String[] a = {origOfferingId,offeringId};
+							setChangedResourceNames(a);
+							logger.info(
+									String.format("The id of the offering \"%s\" is changed from \"%s\" to \"%s\" due to XML compliance reasons. " +
+									"Check the documentation for further information.", 
+									offering,
+									origOfferingId,
+									offeringId));
+						}
+					}
 					rs.setOfferingName(offering);
+					rs.setOfferingId(offeringId);
 					
 					ModelStore.getInstance().addObservationToInsert(io);
 					// To ban double entries, check for already contained sensors by id
@@ -803,21 +850,21 @@ public class Step8Controller extends StepController {
 	}
 
 	/**
-	 * @return the changedFoiNames
+	 * @return the changedResourceNames
 	 */
-	public String[][] getChangedFoiNames() {
-		changedFoiNames.trimToSize();
-		String[][] res = new String[changedFoiNames.size()][2];
-		res = changedFoiNames.toArray(res);
+	public String[][] getChangedResourceNames() {
+		changedResourceNames.trimToSize();
+		String[][] res = new String[changedResourceNames.size()][2];
+		res = changedResourceNames.toArray(res);
 		return res;
 	}
 
 	/**
-	 * @param changedFoiName to add to the changedFoiNames<br />
+	 * @param changedResourceName to add to the changedResourceNames<br />
 	 * <code>[0]</code> is the <b>old</b> and<br />
 	 * <code>[1]</code> is the <b>new</b> name
 	 */
-	public void setChangedFoiNames(String[] changedFoiName) {
-		this.changedFoiNames.add(changedFoiName);
+	public void setChangedResourceNames(String[] changedResourceName) {
+		this.changedResourceNames.add(changedResourceName);
 	}
 }
