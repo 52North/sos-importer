@@ -52,7 +52,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 	private static final Logger logger = Logger.getLogger(Step4bModelHandler.class);
 	
 	@Override
-	public void handleModel(Step4bModel stepModel,
+	public void handleModel(Step4bModel s4M,
 			SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
@@ -67,7 +67,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		ArrayList<Column> relCol;
 		Resource res;
 		// get related columns
-		relatedColumnsIds = stepModel.getSelectedColumns();
+		relatedColumnsIds = s4M.getSelectedColumns();
 		csvMeta = sosImportConf.getCsvMetadata();
 		if (csvMeta == null) {
 			logger.fatal("CsvMetadata element not set in step 4; should not " +
@@ -98,7 +98,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		relatedCols = relCol.toArray(new Column[relCol.size()]);
 		
 		// identify type of resource that is linked to the given row and or columns
-		res = stepModel.getResource();
+		res = s4M.getResource();
 		
 		// add relation to the related column
 		addRelatedResourceColumn(res, relatedCols);

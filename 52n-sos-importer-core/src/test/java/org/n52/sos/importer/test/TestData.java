@@ -114,6 +114,31 @@ public class TestData {
 				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.7"},
 				};
 	
+	/**
+	 * Example data set with 9 columns<br />
+	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Timestamp Feature UOM Value</code><br />
+	 * <code>2012-04-23 11:52:23 Thermometer Temperature Münster degC 14.5 2012-04-23 10:52:23 London degC 14.5</code>
+	 */
+	public static final Object[][] EXAMPLE_TABLE_MULTIPLE_DATE_TIME = {
+		//         0				1			2				3		4		5		6						7			8		9
+		{"Timestamp",			"Sensor",	   "Phenomenon",  "Feature", "UOM",  "Value", "Timestamp", 			"Feature","UOM",  "Value"},
+		{"2012-04-23 11:52:23", "Thermometer", "Temperature", "Münster", "degC", "14.5", "2012-04-23 10:52:23", "London", "degC", "14.5"},
+		{"2012-04-23 11:52:33", "Thermometer", "Temperature", "Münster", "degC", "15.5", "2012-04-23 10:52:33", "London", "degC", "15.5"},
+		{"2012-04-23 11:52:43", "Thermometer", "Temperature", "Münster", "degC", "13.5", "2012-04-23 10:52:43", "London", "degC", "13.5"},
+		{"2012-04-23 11:52:53", "Thermometer", "Temperature", "Münster", "degC", "12.5", "2012-04-23 10:52:53", "London", "degC", "12.5"},
+		{"2012-04-23 11:53:03", "Thermometer", "Temperature", "Münster", "degC", "12.7", "2012-04-23 10:53:03", "London", "degC", "12.7"},
+		{"2012-04-23 11:53:13", "Thermometer", "Temperature", "Münster", "degC", "12.8", "2012-04-23 10:53:13", "London", "degC", "12.8"},
+		{"2012-04-23 11:53:23", "Thermometer", "Temperature", "Münster", "degC", "12.1", "2012-04-23 10:53:23", "London", "degC", "12.1"},
+		{"2012-04-23 11:53:33", "Thermometer", "Temperature", "Münster", "degC", "12.2", "2012-04-23 10:53:33", "London", "degC", "12.4"},
+		{"2012-04-23 11:53:43", "Thermometer", "Temperature", "Münster", "degC", "12.3", "2012-04-23 10:53:43", "London", "degC", "12.5"},
+		{"2012-04-23 11:53:53", "Thermometer", "Temperature", "Münster", "degC", "12.4", "2012-04-23 10:53:53", "London", "degC", "12.6"},
+		{"2012-04-23 11:54:13", "Thermometer", "Temperature", "Münster", "degC", "12.5", "2012-04-23 10:54:13", "London", "degC", "12.7"},
+		};
+	
+	/**
+	 * <code>"Timestamp","Sensor","Phenomenon","Feature","Value"</code><br />
+	 * <code>"2012-04-23 11:52:23", "Thermometer", "Temperature", "Münster", "14.5"</code>
+	 */
 	public static final Object[][] EXAMPLE_TABLE_NO_UOM =  {
 		//         0				1			2				3			4
 		{"Timestamp",			"Sensor",	   "Phenomenon",  "Feature", "Value"},

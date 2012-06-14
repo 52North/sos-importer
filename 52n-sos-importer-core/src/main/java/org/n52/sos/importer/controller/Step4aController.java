@@ -38,7 +38,7 @@ import org.n52.sos.importer.view.Step4Panel;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
- * solves ambiguities in case there is more than one date&time column
+ * Solves ambiguities in case there is more than one date&time column.
  * @author Raimund
  *
  */
