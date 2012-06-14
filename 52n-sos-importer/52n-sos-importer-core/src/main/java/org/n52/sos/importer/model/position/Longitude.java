@@ -55,7 +55,7 @@ public class Longitude extends PositionComponent {
 	 */
 	// TODO units and Strings -> Constants
 	public static Longitude parse(String s) {
-		double value = 0;
+		double value = 0.0;
 		String unit = "";
 		
 		String number;
@@ -75,7 +75,7 @@ public class Longitude extends PositionComponent {
 		value = nv.parse(number);			
 
 		if (unit.equals(""))
-			if (value <= 180)
+			if (value <= 180.0 && value >= -180.0)
 				unit = "°";
 			else 
 				unit = "m";
