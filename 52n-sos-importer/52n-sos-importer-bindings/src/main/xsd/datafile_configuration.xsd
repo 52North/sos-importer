@@ -56,7 +56,11 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:enumeration value="GROUP"/>
+				<xs:enumeration value="GROUP">
+					<xs:annotation>
+						<xs:documentation>Indicates the membership of this column in a POSITION or DATE_TIME group.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="TIME"/>
 				<xs:enumeration value="TIME_DAY"/>
 				<xs:enumeration value="TIME_HOUR"/>
@@ -431,24 +435,14 @@
 						<xs:documentation>A position using x,y,z (unit for each), epsg-code or the group this position is build from</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element name="RelatedDateTimeGroup" type="xs:string" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>This optional element links THIS measured value column to a DateTimke group in the model by its group ID. It is defined in a Metadata element with the Key.GROUP. When this element is not defined, all measured value columns share the same date time group.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element ref="RelatedFOI" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>The feature of interest related to THIS measured value column. The content of this element MUST match a ID element of a FeatureOfInterest from AdditionalMetadata OR a column Number.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation>The sensor related to THIS measured value column. The content of this element MUST match a ID element of a Sensor from AdditionalMetadata OR a column Number.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation>The observed property related to THIS measured value column. The content of this element MUST match a ID element of a ObservedProperty from AdditionalMetadata OR a column Number.</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
-					<xs:annotation>
-						<xs:documentation>The unit of measurement related to THIS measured value column. The content of this element MUST match a ID element of a UnitOfMeasurement from AdditionalMetadata OR a column Number.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
@@ -460,6 +454,21 @@
 							<xs:minInclusive value="0"/>
 						</xs:restriction>
 					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The observed property related to THIS measured value column. The content of this element MUST match a ID element of a ObservedProperty from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>WHY NOT LIMITED TO 1? The sensor related to THIS measured value column. The content of this element MUST match a ID element of a Sensor from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The unit of measurement related to THIS measured value column. The content of this element MUST match a ID element of a UnitOfMeasurement from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
