@@ -35,6 +35,7 @@ import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.model.Step4aModel;
 import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.Step5cModel;
@@ -242,6 +243,11 @@ public class Model {
 					//
 					Step3Model s3M = (Step3Model) sm;
 					new Step3ModelHandler().handleModel(s3M, sosImpConf);
+					//
+				} else if (sm instanceof Step4aModel) {
+					//
+					Step4aModel s4aM = (Step4aModel) sm;
+					new Step4aModelHandler().handleModel(s4aM, sosImpConf);
 					//
 				} else if (sm instanceof Step4bModel) {
 					//
