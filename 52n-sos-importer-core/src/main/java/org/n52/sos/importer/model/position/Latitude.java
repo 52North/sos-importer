@@ -55,7 +55,7 @@ public class Latitude extends PositionComponent {
 	 */
 	// TODO units and Strings -> Constants
 	public static Latitude parse(String s) {
-		double value = 0;
+		double value = 0.0;
 		String unit = "";
 		
 		String number;
@@ -75,7 +75,7 @@ public class Latitude extends PositionComponent {
 		value = nv.parse(number);			
 
 		if (unit.equals(""))
-			if (value <= 90)
+			if (value <= 90.0 && value >= -90.0)
 				unit = "°";
 			else 
 				unit = "m";
