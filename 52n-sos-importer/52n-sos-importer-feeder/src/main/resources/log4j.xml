@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration>
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-6r %-1p (%C{1}.java:%L) - %m %n"/>
+		</layout>
+	</appender>
+	<appender name="RoFi" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="./logs/52n-sensorweb-sos-importer-feeder.log" />
+		<param name="datePattern" value="'.'yyyy-MM-dd" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-1p (%C{1}.java:%L) - %m %n"/>
+		</layout>
+	</appender>
+	<!--
+	FILTER
+	Level: OFF, ERROR, WARN, INFO, DEBUG
+	For example: 
+	<logger name="org.n52.sos.importer">
+		<level value="INFO" />
+	</logger>
+	-->
+	<logger name="org.n52.sos">
+		<level value="TRACE"></level>
+	</logger>
+	<logger name="org.n52.oxf.serviceAdapters.sos.SOSAdapter">
+		<level value="INFO" />
+	</logger>
+<!-- 
+	<logger name="org.n52.sos.importer.feeder.ExampleClass">
+		<level value="INFO"></level>
+	</logger>
+-->
+	<!-- 
+	EXTERNAL - LIBS
+	 -->
+	<logger name="org.apache">
+		<level value="OFF" />
+	</logger>
+	<!--  Root logger definition -->
+	<root>
+		<level value="WARN" />
+		<appender-ref ref="RoFi" />
+		<appender-ref ref="STDOUT" />
+	</root>
+</log4j:configuration>
