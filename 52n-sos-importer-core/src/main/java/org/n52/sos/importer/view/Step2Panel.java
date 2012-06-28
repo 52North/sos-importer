@@ -59,6 +59,9 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * @author Raimund, Eike
  *
  */
+/*
+ * To enable useHeader, search for USE_HEADER
+ */
 public class Step2Panel extends JPanel {
 	
 	private static final Logger logger = Logger.getLogger(Step2Panel.class);
@@ -117,13 +120,14 @@ public class Step2Panel extends JPanel {
 					setCSVFileHighlight(number);
 				} else {
 					setCSVFileHighlight(number);
-					if (number > 0) {
+					// USE_HEADER
+					/*if (number > 0) {
 						useHeaderJCB.setEnabled(true);
 						useHeaderJL.setVisible(true);
 					} else {
 						useHeaderJCB.setEnabled(false);
 						useHeaderJCB.setSelected(false);
-					}
+					}*/
 				}
 			}
 		});
@@ -175,7 +179,8 @@ public class Step2Panel extends JPanel {
 		csvSettingsPanel.add(commentIndicatorCombobox);
 		csvSettingsPanel.add(textQualifierCombobox);
 		csvSettingsPanel.add(firstLineWithDataJPanel);
-		csvSettingsPanel.add(useHeaderPanel);
+		// USE_HEADER uncomment next line to enable again
+		// csvSettingsPanel.add(useHeaderPanel);
 		csvSettingsPanel.add(decimalSeparatorPanel);
 		//
 		//	CSV text area
