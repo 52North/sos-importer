@@ -444,7 +444,7 @@ public class En extends Lang{
 	}
 
 	public String step5aModelDescription() {
-		return "Complete missing information for the marked date and time.";
+		return "Please define the timezone for the marked date and time.";
 	}
 
 	public String step5cDescription() {
@@ -465,13 +465,13 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step6AutomaticGeneration() {
-		return "Automatic Generation";
+	public String step6Generation() {
+		return "Generation";
 	}
 
 	@Override
 	public String step6bDefineConcatString() {
-		return "Please provide a String for linking the values from the" +
+		return "Please provide a String for linking the values from the " +
 				"columns (OPTIONAL).";
 	}
 
