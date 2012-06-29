@@ -37,7 +37,7 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 
-public class Step6bTest2 {
+public class Step6bTestObservedProperty {
 
 	public static void main(String[] args) {		
 		MainController f = MainController.getInstance();
