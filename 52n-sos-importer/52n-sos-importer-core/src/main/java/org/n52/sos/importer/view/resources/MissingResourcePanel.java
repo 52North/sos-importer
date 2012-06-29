@@ -217,7 +217,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 		bGroup.add(manualResInputJRB);
 
-		generatedResJRB = new JRadioButton(Lang.l().step6AutomaticGeneration());
+		generatedResJRB = new JRadioButton(Lang.l().step6Generation());
 		radioButtonPanel.add(generatedResJRB);
 		generatedResJRB.addActionListener(this.radioButtionActionListener());
 		bGroup.add(generatedResJRB);
