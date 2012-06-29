@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 
@@ -43,6 +44,7 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.requests.Offering;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
@@ -74,8 +76,6 @@ public final class Configuration {
 	private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
 	private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
 	private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
-	private static final String COLUMN_TYPE_UOM = "UOM";
-	private static final String COLUMN_TYPE_OBSERVED_PROPERTY = "OBSERVED_PROPERTY";
 	// TODO read from configuration file
 	public static final String EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
 	public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
@@ -89,6 +89,11 @@ public final class Configuration {
 	public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName("http://www.opengis.net/swe/1.0.1","SimpleDataRecord");
 	public static final String SML_ATTRIBUTE_VERSION = "version";
 	public static final String SML_VERSION = "1.0.1";
+	public static final char UNICODE_REPLACER = '_';
+	public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
+	private static final String COLUMN_SEPARATOR_SPACE = "Space";
+	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
+	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END = "is already registered at this SOS";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
@@ -129,6 +134,8 @@ public final class Configuration {
 								);
 				logger.fatal(xmlErrorMessage);
 			}
+			String msg = "Configuration is not valid and could not be parsed.";
+			throw new XmlException(msg, null, errorList);
 		} else {
 			this.importConf = sosImportDoc.getSosImportConfiguration();
 		}
@@ -184,23 +191,19 @@ public final class Configuration {
 	}
 
 	public char getCsvSeparator() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getCsvSeparator()");
+		String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
+		if (sep.equals(Configuration.COLUMN_SEPARATOR_SPACE)) {
+			return ' ';
+		} else {
+			return sep.charAt(0);
 		}
-		return importConf.getCsvMetadata().getParameter().getColumnSeparator().charAt(0);
 	}
 
 	public char getCsvQuoteChar() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getCsvQuoteChar()");
-		}
 		return importConf.getCsvMetadata().getParameter().getTextIndicator().charAt(0);
 	}
 
 	public char getCsvEscape() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getCsvEscape()");
-		}
 		return importConf.getCsvMetadata().getParameter().getCommentIndicator().charAt(0);
 	}
 
@@ -278,10 +281,6 @@ public final class Configuration {
 				return column.getNumber();
 			}
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("No sensor column id found for measured value column %d.",
-					mvColumnId));
-		}
 		return -1;
 	}
 
@@ -323,6 +322,7 @@ public final class Configuration {
 		}
 		Column c = getColumnById(mvColumnId);
 		if (c.getRelatedSensorArray() != null &&
+				c.getRelatedSensorArray().length > 0 &&
 				c.getRelatedSensorArray(0) != null &&
 				c.getRelatedSensorArray(0).isSetIdRef()) {
 			String sensorXmlId = c.getRelatedSensorArray(0).getIdRef();
@@ -396,10 +396,6 @@ public final class Configuration {
 				}
 				return column.getNumber();
 			}
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("No feature of interest column id found for measured value column %d.",
-					mvColumnId));
 		}
 		return -1;
 	}
@@ -505,13 +501,7 @@ public final class Configuration {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param group
-	 * @param values
-	 * @return
-	 */
-	public Position getPosition(String group, String[] values) {
+	public Position getPosition(String group, String[] values) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getPosition(group:%s,%s)",
 					group,
@@ -598,7 +588,7 @@ public final class Configuration {
 		return new Position(posValues, units, epsgCode);
 	}
 
-	private Object[] parseAlt(String alt) {
+	private Object[] parseAlt(String alt) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("parseAlt(%s)",
 					alt));
@@ -628,7 +618,7 @@ public final class Configuration {
 		return result;
 	}
 
-	private Object[] parseLon(String lon) {
+	private Object[] parseLon(String lon) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("parseLon(%s)",
 					lon));
@@ -663,7 +653,7 @@ public final class Configuration {
 		return result;
 	}
 
-	private Object[] parseLat(String lat) {
+	private Object[] parseLat(String lat) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("parseLat(%s)",
 					lat));
@@ -698,7 +688,7 @@ public final class Configuration {
 		return result;
 	}
 
-	public double parseToDouble(String number) {
+	public double parseToDouble(String number) throws ParseException{
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("parseToDouble(%s)",
 					number));
@@ -709,13 +699,9 @@ public final class Configuration {
 		symbols.setGroupingSeparator(getThousandsSeparator(dSep));
 		
 		Number n;
-		try {
-			DecimalFormat formatter = new DecimalFormat();
-			formatter.setDecimalFormatSymbols(symbols);
-			n = formatter.parse(number);
-        } catch (ParseException e) {
-	        throw new NumberFormatException();
-		}					
+		DecimalFormat formatter = new DecimalFormat();
+		formatter.setDecimalFormatSymbols(symbols);
+		n = formatter.parse(number);
 		
 		return n.doubleValue();
 	}
@@ -834,7 +820,7 @@ public final class Configuration {
 		Column[] cols = importConf.getCsvMetadata().
 				getColumnAssignments().getColumnArray();
 		for (Column col : cols) {
-			if (col.getType().equals(Configuration.COLUMN_TYPE_UOM)) {
+			if (col.getType().equals(Type.UOM)) {
 				return col.getNumber();
 			}
 		}
@@ -875,8 +861,7 @@ public final class Configuration {
 		Column[] cols = importConf.getCsvMetadata().
 									getColumnAssignments().getColumnArray();
 		for (Column col : cols) {
-			if (col.getType().equals(
-					Configuration.COLUMN_TYPE_OBSERVED_PROPERTY)) {
+			if (col.getType().equals(Type.OBSERVED_PROPERTY)) {
 				return col.getNumber();
 			}
 		}
@@ -905,6 +890,54 @@ public final class Configuration {
 	
 	public String toString() {
 		return String.format("Configuration [file=%s]", configFile);
+	}
+
+	/**
+	 * Checks for <code>Column.Metadata[]</code> and updates and returns the given {@link Timestamp}. Allowed keys are:
+	 * <ul><li>TIME_DAY</li>
+	 * <li>TIME_HOUR</li>
+	 * <li>TIME_MINUTE</li>
+	 * <li>TIME_MONTH</li>
+	 * <li>TIME_SECOND</li>
+	 * <li>TIME_YEAR</li>
+	 * <li>TIME_ZONE</li></ul>
+	 */
+	public Timestamp getAddtionalTimestampValuesFromColumn(Timestamp ts,
+			Column col) {
+		if (col.getMetadataArray() != null) {
+			for (Metadata m : col.getMetadataArray()) {
+				if (m.getKey().equals(Key.TIME_ZONE)) {
+					ts.setTimezone( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_YEAR)) {
+					ts.setYear( Short.parseShort( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_MONTH)) {
+					ts.setMonth( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_DAY)) {
+					ts.setDay( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_HOUR)) {
+					ts.setHour( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_MINUTE)) {
+					ts.setMinute( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_SECOND)) {
+					ts.setSeconds( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				
+			}
+		}
+		return ts;
 	}
 	
 }

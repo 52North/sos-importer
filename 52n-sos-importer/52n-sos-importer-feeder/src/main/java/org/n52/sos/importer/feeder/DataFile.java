@@ -33,11 +33,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
+import org.n52.oxf.xml.XMLTools;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Position;
+import org.n52.sos.importer.feeder.model.Resource;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
@@ -152,7 +155,7 @@ public class DataFile {
 					Arrays.toString(values)));
 		}
 		// check for sensor column and return new sensor
-		Sensor s = getSensorColumn(mvColumnId,values);
+		Sensor s = getSensorFromColumn(mvColumnId,values);
 		if (s == null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("Could not find sensor column for column id %d",
@@ -190,8 +193,9 @@ public class DataFile {
 	 * @param mvColumnId
 	 * @param values
 	 * @return
+	 * @throws ParseException 
 	 */
-	public FeatureOfInterest getFoiForColumn(int mvColumnId, String[] values) {
+	public FeatureOfInterest getFoiForColumn(int mvColumnId, String[] values) throws ParseException {
 		// TODO Auto-generated method stub generated on 13.06.2012 around 11:03:25 by eike
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getFoiForColumn(%d,%s)",
@@ -233,7 +237,42 @@ public class DataFile {
 						p);
 			}
 		}
+		if (!XMLTools.isNCName(foi.getName())){
+			String[] a = createCleanNCName(foi); 
+			foi.setName(a[0]);
+			if (logger.isInfoEnabled()) {
+				logger.info(String.format("Feature Of Interest name changed to match NCName production: \"%s\" to \"%s\"", 
+						a[1],
+						a[0]));
+			}
+		}
 		return foi; 
+	}
+
+	/**
+	 * @return result[0] := newName<br /> result[1] := originaleName
+	 */
+	private String[] createCleanNCName(Resource res) {
+		// implement check for NCName compliance and remove bad values
+		String name = res.getName();
+		String origName = new String(name);
+		// clean rest of string using Constants.UNICODE_REPLACER
+		char[] foiNameChars = name.toCharArray();
+		for (int i = 0; i < foiNameChars.length; i++) {
+			char c = foiNameChars[i];
+			if (!XMLTools.isNCNameChar(c)) {
+				foiNameChars[i] = Configuration.UNICODE_REPLACER;
+			}
+		}
+		name = String.valueOf(foiNameChars);
+		// check if name is only containing "_"
+		Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
+		if (matcher.matches()) {
+			// if yes -> change to "className" + res.getUri().hashCode()
+			name = res.getClass().getSimpleName().toLowerCase() + res.getUri().hashCode();
+		}
+		String[] result = { name, origName };
+		return result;
 	}
 
 	/**
@@ -242,7 +281,7 @@ public class DataFile {
 	 * @param values
 	 * @return
 	 */
-	public Object getValue(int mVColumn, String[] values) {
+	public Object getValue(int mVColumn, String[] values) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getValue(%s,%s)",
 					mVColumn,
@@ -345,6 +384,7 @@ public class DataFile {
 						break;
 					}
 				}
+				ts = c.getAddtionalTimestampValuesFromColumn(ts,column);
 			}
 			// create timestamp string via toString()
 			return ts;
@@ -518,7 +558,17 @@ public class DataFile {
 	}
 
 	public Offering getOffering(Sensor s) {
-		return c.getOffering(s);
+		Offering off = c.getOffering(s);
+		if (!XMLTools.isNCName(off.getName())) {
+			String[] a = createCleanNCName(off); 
+			off.setName(a[0]);
+			if (logger.isInfoEnabled()) {
+				logger.info(String.format("Offering name changed to match NCName production: \"%s\" to \"%s\"", 
+						a[1],
+						a[0]));
+			}
+		}
+		return off;
 	}
 
 	/**
@@ -583,7 +633,7 @@ public class DataFile {
 		return result;
 	}
 
-	private Sensor getSensorColumn(int mvColumnId, String[] values) {
+	private Sensor getSensorFromColumn(int mvColumnId, String[] values) {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getSensorColumn(%d,%s)",
 			mvColumnId,
@@ -626,7 +676,7 @@ public class DataFile {
 
 	private Position getPosition(
 			org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p,
-			String[] values) {
+			String[] values) throws ParseException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getPosition(%s,%s)",
 					p.xmlText(),
