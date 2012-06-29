@@ -75,6 +75,12 @@ public class Step7Controller extends StepController {
 		}
 		BackNextController.getInstance().changeFinishToNext();
 	}
+	
+	public void back() {
+		BackNextController bnc = BackNextController.getInstance();
+		bnc.setNextButtonEnabled(true);
+		bnc.changeFinishToNext();
+	}
 
 	@Override
 	public void saveSettings() {
