@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration
+	xmlns="http://52north.org/sensorweb/sos/importer/0.2/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://52north.org/sensorweb/sos/importer/0.2/ ../../../../52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd">
+	<DataFile>
+		<LocalFile>
+			<Path>D:\MyData.csv</Path>
+		</LocalFile>
+	</DataFile>
+	<SosMetadata>
+		<URL>http://localhost:8080/ImportTestSOS/sos</URL>
+		<Offering autogenerate="true" />
+	</SosMetadata>
+	<CsvMetadata>
+		<Parameter>
+			<CommentIndicator>;</CommentIndicator>
+			<ElementSeparator>,</ElementSeparator>
+			<TextIndicator>"</TextIndicator>
+		</Parameter>
+		<FirstLineWithData>3</FirstLineWithData>
+		<UseHeader>false</UseHeader>
+		<ColumnAssignments>
+			<Column>
+				<Number>0</Number>
+				<Type>DATE_TIME</Type>
+				<Metadata>
+					<Key>TYPE</Key>
+					<Value>COMBINATION</Value>
+				</Metadata>
+				<Metadata>
+					<Key>GROUP</Key>
+					<Value>1</Value>
+				</Metadata>
+				<Metadata>
+					<Key>PARSE_PATTERN</Key>
+					<Value>dd.MM.yy</Value>
+				</Metadata>
+			</Column>
+			<Column>
+				<Number>1</Number>
+				<Type>FOI</Type>
+			</Column>
+			<Column>
+				<Number>2</Number>
+				<Type>OBSERVED_PROPERTY</Type>
+			</Column>
+			<Column>
+				<Number>3</Number>
+				<Type>MEASURED_VALUE</Type>
+				<Metadata>
+					<Key>TYPE</Key>
+					<Value>NUMERIC</Value>
+				</Metadata>
+				<Metadata>
+					<Key>DECIMAL_SEPARATOR</Key>
+					<Value>.</Value>
+				</Metadata>
+				<Metadata>
+					<Key>THOUSANDS_SEPARATOR</Key>
+					<Value>,</Value>
+				</Metadata>
+			</Column>
+		</ColumnAssignments>
+	</CsvMetadata>
+	<AdditionalMetadata />
+</SosImportConfiguration>

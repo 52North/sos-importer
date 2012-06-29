@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -36,6 +37,7 @@ import java.util.jar.Manifest;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
+import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 
 /**
  * TODO check System.exit(-1)
@@ -73,10 +75,6 @@ public final class Feeder {
 					}
 					// check SOS
 					URL sosURL = c.getSosUrl();
-					if (logger.isDebugEnabled()) {
-						logger.debug(String.format("SOS URL: \"%s\"", 
-								sosURL.toExternalForm()));
-					}
 					SensorObservationService sos = new SensorObservationService(sosURL);
 					if (!sos.isAvailable()) {
 						logger.fatal(String.format("SOS \"%s\" is not available. Please check the configuration!", sosURL));
@@ -86,13 +84,8 @@ public final class Feeder {
 						// SOS is available and transactional
 						// start reading data file line by line starting from flwd
 						// TODO if failed observations-> store in file
-						sos.importData(dataFile);
-					}
-
-					// TODO remove next four lines before release!
-					boolean justImplementing = true;
-					if(logger.isInfoEnabled()){
-						logger.info(String.format("Are you just implementing? %s",(justImplementing?"yes":"no")));
+						ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
+						saveFailedInsertObservations(failedInserts);
 					}
 				} 
 			} catch (XmlException e) {
@@ -101,23 +94,45 @@ public final class Feeder {
 								"parsed. Exception thrown: %s",
 								configFile,
 								e.getMessage());
-				logger.error(errorMsg, e);
+				logger.error(errorMsg);
+				if (logger.isDebugEnabled()) {
+					logger.debug("", e);
+				}
 			} catch (MalformedURLException mue) {
 				String errorMsg = 
 						String.format("SOS URL syntax not correct in configuration file %s. Exception thrown: %s", 
 								configFile,
 								mue.getMessage());
-				logger.error(errorMsg, mue);
+				logger.error(errorMsg);
+				if (logger.isDebugEnabled()) {
+					logger.debug("", mue);
+				}
 			} catch (IOException e) {
-				logger.error(String.format("Exception thrown: %s", e.getMessage()), e);
+				logger.error(String.format("Exception thrown: %s", e.getMessage()));
+				if (logger.isDebugEnabled()) {
+					logger.debug("", e);
+				}
 			} catch (OXFException e) {
 				// TODO Auto-generated catch block generated on 21.06.2012 around 15:26:34
 				logger.error(String.format("Exception thrown: %s",
-						e.getMessage()),
-						e);
+						e.getMessage()));
+				if (logger.isDebugEnabled()) {
+					logger.debug("", e);
+				}
 			}
 		} else {
 			showUsage();
+		}
+	}
+
+	/*
+	 * Method should store failed insertObservations in a defined directory and created configuration for this.
+	 */
+	private static void saveFailedInsertObservations(
+			ArrayList<InsertObservation> failedInserts) {
+		// TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
+		if (logger.isTraceEnabled()) {
+			logger.trace("saveFailedInsertObservations()");
 		}
 	}
 
@@ -183,14 +198,30 @@ public final class Feeder {
 				Object object = iterator.next();
 				if (object instanceof Name) {
 					Name key = (Name) object;
-					logMessage = logMessage + "\n\t\t" + key + ": " + attributes.getValue(key);
+					logMessage += String.format("\n\t\t%s: %s",key,attributes.getValue(key));
 				}
 			}
+			// add heap information
+			logMessage += "\n\t\t" + heapSizeInformation();
 		}
 		catch(IOException ex) {
 			logger.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
 		}
 		logger.info(logMessage);
+	}
+
+	protected static String heapSizeInformation() {
+		long mb = 1024 * 1024;
+		Runtime rt = Runtime.getRuntime();
+		long maxMemoryMB = rt.maxMemory() / mb;
+		long totalMemoryMB = rt.totalMemory() / mb;
+		long freeMemoryMB = rt.freeMemory() / mb;
+		long usedMemoryMB = (rt.totalMemory() - rt.freeMemory()) / mb;
+		return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
+				maxMemoryMB,
+				totalMemoryMB,
+				freeMemoryMB,
+				usedMemoryMB);
 	}
 
 }

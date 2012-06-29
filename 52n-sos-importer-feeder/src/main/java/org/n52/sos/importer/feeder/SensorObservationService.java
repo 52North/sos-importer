@@ -28,6 +28,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import net.opengis.gml.MetaDataPropertyType;
 import net.opengis.sensorML.x101.CapabilitiesDocument.Capabilities;
@@ -55,6 +56,8 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.owsCommon.ExceptionReport;
+import org.n52.oxf.owsCommon.OWSException;
+import org.n52.oxf.owsCommon.OwsExceptionReport.ExceptionCode;
 import org.n52.oxf.owsCommon.ServiceDescriptor;
 import org.n52.oxf.owsCommon.capabilities.Operation;
 import org.n52.oxf.owsCommon.capabilities.OperationsMetadata;
@@ -193,12 +196,11 @@ public final class SensorObservationService {
 		// for each line
 		while ((values = cr.readNext()) != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Handling CSV line #%5d",lineCounter));
+				logger.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
 			}
 			// A: collect all information
-			InsertObservation[] ios = new InsertObservation[0];
 			try {
-				ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+				InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 				insertObservationsForOneLine(ios,values);
 			} catch (ParseException e) {
 				logger.error(String.format("Could not parse values from data file \"%s\" with configuration \"%s\".\n" +
@@ -211,6 +213,9 @@ public final class SensorObservationService {
 						e);
 			}
 			lineCounter++;
+			if (logger.isDebugEnabled()) {
+				logger.debug(Feeder.heapSizeInformation());
+			}
 		}
 		return failedInsertObservations;
 	}
@@ -243,7 +248,7 @@ public final class SensorObservationService {
 
 	private InsertObservation getInsertObservationForColumnIdFromValues(int mVColumnId,
 			String[] values,
-			DataFile df) throws ParseException {
+			DataFile df) throws ParseException{
 		if (logger.isTraceEnabled()) {
 			logger.trace("getInsertObservationForColumnIdFromValues()");
 		}
@@ -308,10 +313,10 @@ public final class SensorObservationService {
 				// sensor is registered -> insert the data
 				String observationId = insertObservation(io);
 				if (observationId == null || observationId.equalsIgnoreCase("")) {
-					logger.error(String.format("Insert observation \"%s\" failed for sensor \"%s\"[%s]. Store it.",
-							io,
+					logger.error(String.format("Insert observation failed for sensor \"%s\"[%s]. Store: %s",
 							io.getSensorName(),
-							io.getSensorURI()));
+							io.getSensorURI(),
+							io));
 					failedInsertObservations.add(io);
 				}
 			}
@@ -321,21 +326,30 @@ public final class SensorObservationService {
 		if (logger.isTraceEnabled()) {
 			logger.trace("insertObservation()");
 		}
+		ParameterContainer paramCon = null;
+		OperationResult opResult = null;
+		InsertObservationResponseDocument response = null;
+		
 		try {
-			ParameterContainer paramCon = createParameterContainterFromIO(io);
+			paramCon = createParameterContainterFromIO(io);
 			if (logger.isDebugEnabled()) {
 				logger.debug(
 						String.format("InsertObservation request:\n%s\n",
 									SOSRequestBuilderFactory.generateRequestBuilder(sosVersion).buildInsertObservation(paramCon)));
 			}
 			try {
-				OperationResult opResult = sosAdapter.doOperation(
+				if (logger.isDebugEnabled()) {
+					logger.debug("\n\nBEFORE OXF\n\n");
+				}
+				opResult = sosAdapter.doOperation(
 						new Operation(SOSAdapter.INSERT_OBSERVATION,
 								sosUrl.toExternalForm()+"?",
 								sosUrl.toExternalForm()),
 								paramCon);
+				if (logger.isDebugEnabled()) {
+					logger.debug("\n\nAFTER OXF\n\n");
+				}
 				if (sosVersion.equals("1.0.0")) {
-					InsertObservationResponseDocument response;
 					try {
 						response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 						if (logger.isDebugEnabled()) {
@@ -353,7 +367,18 @@ public final class SensorObservationService {
 				}
 			} catch (ExceptionReport e) {
 				// TODO Auto-generated catch block generated on 20.06.2012 around 10:40:38
-				logger.error(String.format("Exception thrown: %s",e.getMessage()),e);
+				Iterator<OWSException> iter = e.getExceptionsIterator();
+				StringBuffer buf = new StringBuffer();
+				while (iter.hasNext()) {
+					OWSException owsEx = iter.next();
+					buf = buf.append(String.format("ExceptionCode: \"%s\" because of \"%s\"\n",
+							owsEx.getExceptionCode(),
+							Arrays.toString(owsEx.getExceptionTexts())));
+				}
+				logger.error(String.format("Exception thrown: %s\n%s",e.getMessage(),buf.toString()));
+				if (logger.isDebugEnabled()) {
+					logger.debug(e.getMessage(),e);
+				}
 			}
 			
 		} catch (OXFException e) {
@@ -448,7 +473,9 @@ public final class SensorObservationService {
 		try {
 
 			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("RegisterSensorRequest:\n%s",sosAdapter.getRequestBuilder().buildRegisterSensor(paramCon)));
+				logger.debug(String.format("This RegisterSensor Request will be send to the SOS running at \"%s\":\n%s",
+						sosUrl.toExternalForm(),
+						sosAdapter.getRequestBuilder().buildRegisterSensor(paramCon)));
 			}
 			OperationResult opResult = sosAdapter.doOperation(
 					new Operation(SOSAdapter.REGISTER_SENSOR,
@@ -463,6 +490,22 @@ public final class SensorObservationService {
 			}
 		} catch (ExceptionReport e) {
 			// TODO Auto-generated catch block generated on 21.06.2012 around 14:53:40
+			// Handle already registered sensor case here (happens when the sensor is registered but not listed in the capabilities):
+			Iterator<OWSException> iter = e.getExceptionsIterator();
+			while(iter.hasNext()) {
+				OWSException owsEx = iter.next();
+				if (owsEx.getExceptionCode().equals(ExceptionCode.NoApplicableCode) && 
+						owsEx.getExceptionTexts() != null &&
+						owsEx.getExceptionTexts().length > 0) {
+					for (String string : owsEx.getExceptionTexts()) {
+						if (string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START) > -1 &&
+								string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END) > -1) {
+							return rs.getSensorURI();
+						}
+					}
+				}
+						
+			}
 			logger.error(String.format("Exception thrown: %s",
 					e.getMessage()),
 					e);

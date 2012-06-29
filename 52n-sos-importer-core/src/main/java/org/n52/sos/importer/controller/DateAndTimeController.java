@@ -245,7 +245,7 @@ public class DateAndTimeController {
 			ts.append(day<10?"0"+day:day);
 		}
 		if ( (year != Integer.MIN_VALUE || month != Integer.MIN_VALUE || day != Integer.MIN_VALUE )
-				&& (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) || timezone != Integer.MIN_VALUE ) {
+				&& (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) ) {
 			ts.append("T");
 		}
 		if (hour != Integer.MIN_VALUE) {
@@ -263,7 +263,8 @@ public class DateAndTimeController {
 		if (second != Integer.MIN_VALUE) {
 			ts.append(second<10?"0"+second:second);
 		}
-		if (timezone != Integer.MIN_VALUE) {
+		if (timezone != Integer.MIN_VALUE && 
+				(hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) ) {
 			ts.append(convertTimeZone(timezone));
 		}
 		
