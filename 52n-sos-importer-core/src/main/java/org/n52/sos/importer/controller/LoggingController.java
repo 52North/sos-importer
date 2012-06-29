@@ -50,7 +50,7 @@ public class LoggingController {
 	private static final Logger logger = Logger.getLogger(LoggingController.class);
 	
 	// TODO read value from pom or properties file
-	private static final Level LOGGING_LEVEL = Level.TRACE;
+	private static final Level LOGGING_LEVEL = Level.INFO;
 	
 	private static final PatternLayout CONSOLE_LOGGING_PATTERN = 
 			new PatternLayout("%-1p (%c{1}.java:%L) - %m %n");

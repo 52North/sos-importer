@@ -23,10 +23,6 @@
  */
 package org.n52.sos.importer.controller.utils;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * {@link http://www.java2s.com/Code/Java/XML/CheckswhetherthesuppliedStringisanNCNameNamespaceClassifiedName.htm}
  * {@link http://www.openrdf.org/doc/sesame2/api/index.html?info/aduna/xml/XMLUtil.html}
@@ -38,68 +34,10 @@ import java.util.regex.Pattern;
  * Licensed under the Aduna BSD-style license.
  * 
  * Author not defined!
+ * 
+ * TODO replace by org.n52.oxf.xml.XMLTools when OXF is used by this implementation
  */
 public class XMLTools {
-
-	/*
-	 * USES System.out.print*!
-	 */
-	public static void main(String[] args) throws IOException {
-		
-		String regEx = "_+";
-		String tester = "_a__";
-		Pattern pattern = 
-				Pattern.compile(regEx);
-
-		Matcher matcher = 
-				pattern.matcher(tester);
-
-		boolean found = false;
-		if (matcher.matches()) {
-			System.out.println(String.format("The text" +
-					" \"%s\" is matched by pattern \"%s\"",
-					tester,regEx));
-			found = true;
-		}
-		if(!found){
-			System.out.println(String.format("No match found.%n"));
-		}
-		/*
-		String[] hex = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"};
-		int counter = 0, failed = 0;
-		FileWriter fw = new FileWriter(new File ("./unicode.txt"));
-		BufferedWriter bw = new BufferedWriter(fw);
-		// four for
-		for (int i = 0; i < hex.length; i++) {
-			for (int j = 0; j < hex.length; j++) {
-				for (int k = 0; k < hex.length; k++) {
-					for (int l = 0; l < hex.length; l++) {
-						counter++;
-						String test = hex[i]+hex[j]+hex[k]+hex[l];
-						int code = Integer.parseInt(test, 16);
-						String unicodeChar = String.valueOf((char)code);
-						String testString = "a" + unicodeChar;
-						if (!XMLTools.isNCName(testString)) {
-							String s = code + ":\"" + unicodeChar + "\", ";
-							bw.write(s + "\n");
-							System.out.print(s);
-							if (counter % 10 == 0) {
-								System.out.println("");
-								bw.flush();
-							}
-							failed++;
-						}
-					}
-				}
-			}
-		}
-		String s2 = "\n\nRESULT: " + counter + " chars reviewed and " + failed + " are not allowed";
-		bw.write(s2);
-		bw.flush();
-		bw.close();
-		System.out.println(s2);
-		*/
-	}
 
 	/**
 	 * Checks whether the supplied String is an NCName (Namespace Classified
