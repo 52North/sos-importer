@@ -499,7 +499,7 @@ public abstract class Lang {
 	/**
 	 * @return Automatic Generation
 	 */
-	public abstract String step6AutomaticGeneration();
+	public abstract String step6Generation();
 	/**
 	 * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
 	 */

@@ -442,7 +442,7 @@ public class De extends Lang{
 	}
 
 	public String step5aModelDescription() {
-		return "Vervollständige die fehlenden Zeit-Datum-Informationen für die markierten Elemente.";
+		return "Bitte geben Sie die Zeitzone für die markierte Spalte an.";
 	}
 
 	public String step5cDescription() {
@@ -450,7 +450,7 @@ public class De extends Lang{
 	}
 
 	public String step5cModelDescription() {
-		return "Vervollständige die fehlenden Positions-Informationen für die markierten Elemente.";
+		return "Vervollständigen Sie die fehlenden Positions-Informationen für die markierte Spalte.";
 	}
 
 	public String step6aDescription() {
@@ -463,8 +463,8 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step6AutomaticGeneration() {
-		return "Automatisch Erzeugung";
+	public String step6Generation() {
+		return "Automatische Erzeugung";
 	}
 
 	@Override
