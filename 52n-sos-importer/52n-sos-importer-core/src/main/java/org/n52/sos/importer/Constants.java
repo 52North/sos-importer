@@ -35,7 +35,7 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
+ * TODO move to shared module all constants that need to be shared!
  */
 public class Constants {
 	
@@ -65,6 +65,14 @@ public class Constants {
 	 * Is used to distinguish between line number and content
 	 */
 	public static final String RAW_DATA_SEPARATOR = ":";
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
+	public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
+	public static final String XML_SCHEMA_PREFIX = "xsi";
+	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
+	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
+	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd";
+	public static final String UNICODE_OFFERING_PREFIX = "_offering-";
 	public final static String SEPARATOR_STRING = "SEP";
 	public static final String SPACE_STRING = Lang.l().spaceString();
 	public static final String STRING_REPLACER = "-@@@-";
@@ -98,18 +106,8 @@ public class Constants {
 	public static char DECIMAL_SEPARATOR = '.';
 	public static char THOUSANDS_SEPARATOR = ',';
 	
-	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
-	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
-	public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
-	public static final String XML_SCHEMA_PREFIX = "xsi";
-	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
-	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
-	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd";
-	public static final String UNICODE_OFFERING_PREFIX = "_offering-";
-	
-	
 	/**
-	 * TODO implement loading of language parameter from config file
+	 * TODO implement loading of language parameter from configuration file
 	 * @return {@linkplain org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
 	 */
 	public static String language() {

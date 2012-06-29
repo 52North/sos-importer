@@ -186,7 +186,7 @@ public class PositionController {
 			while (pIter.hasNext()) {
 				Position p2 = pIter.next();
 				if (p1.getGroup().equals(p2.getGroup())) {
-					this.merge(p1, p2);
+					merge(p1, p2);
 					positions.remove(p2);
 				}
 			}

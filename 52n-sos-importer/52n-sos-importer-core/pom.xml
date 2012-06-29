@@ -129,7 +129,7 @@
 			-->
 			<id>lib-repository</id>
 			<name>Local Repository</name>
-			<url>file:///${basedir}/../lib-repository/</url>
+			<url>file:///${project.basedir}/../lib-repository/</url>
 		</repository>
 	</repositories>
 </project>
