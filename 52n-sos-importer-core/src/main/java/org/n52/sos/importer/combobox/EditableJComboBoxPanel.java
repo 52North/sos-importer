@@ -307,11 +307,14 @@ public class EditableJComboBoxPanel extends JPanel {
 	}
 	
 	public void deleteSelectedItem() {
-		if (getPartnerComboBox() != null) 
+		if (getPartnerComboBox() != null) {
 			this.removeSelectionChangeListener();
+		}
 		
 		int index = comboBox.getSelectedIndex();
-		model.removeElementAt(index);
+		if (index > -1) {
+			model.removeElementAt(index);
+		}
 		
 		//no shrinking in case of no elements
 		if (model.getSize() == 0) {
