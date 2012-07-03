@@ -40,9 +40,10 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 
-public class Step6cTest2 {
+public class Step6cTestFoiColumn {
 	
 	public static void main(String[] args) {
+		MainController f = MainController.getInstance();
 		Object[][] o = {{"31.12.07", "Klinthal", "PM10", "11.25"},
 				{"01.01.03", "PlauSued", "PM10", "19.91"}};
 		TableController.getInstance().setContent(o); 
@@ -78,8 +79,6 @@ public class Step6cTest2 {
 		ModelStore.getInstance().add(nv1);
 		ModelStore.getInstance().add(foi);
 		
-		MainController f = MainController.getInstance();
-
 		Step6cController s6c = new Step6cController(firstLineWithData);
 		s6c.isNecessary();
 		f.setStepController(s6c);
