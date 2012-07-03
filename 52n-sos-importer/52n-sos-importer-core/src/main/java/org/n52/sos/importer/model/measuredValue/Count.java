@@ -23,7 +23,7 @@
  */
 package org.n52.sos.importer.model.measuredValue;
 
-import org.n52.sos.importer.interfaces.Parseable;
+import org.n52.sos.importer.model.Parseable;
 
 public class Count extends MeasuredValue implements Parseable {
 

@@ -28,10 +28,10 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
-import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class UnitOfMeasurement extends Resource {

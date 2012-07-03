@@ -36,9 +36,9 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
-import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
-import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.model.Combination;
+import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**

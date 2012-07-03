@@ -28,12 +28,12 @@ import java.awt.FlowLayout;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.combobox.EditableComboBoxItems;
-import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
+import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ToolTips;
 

@@ -35,8 +35,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.combobox.ComboBoxItems;
 import org.n52.sos.importer.controller.MainController;
+import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**

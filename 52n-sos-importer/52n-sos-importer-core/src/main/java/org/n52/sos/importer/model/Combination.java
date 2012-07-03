@@ -21,27 +21,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.interfaces;
+package org.n52.sos.importer.model;
 
 /**
- * interface for objects which can be formatted along a 
- * certain pattern into a String
- * (e.g. Java-Date + pattern "yyyy-MM-dd" --> "2011-08-04")
- * @author Raimund, e.h.juerrens@52north.org
+ * represents composed objects (e.g. position) which consist
+ * of individual parts (e.g. latitude and longitude)
+ * @author Raimund
  *
  */
-public interface Formatable {
+public abstract class Combination implements Formatable, Parseable {
 
-	/**
-	 * formats an object along a certain pattern into a String
-	 * @param o the object to format
-	 * @return
-	 */
-	public String format(Object o);
+	/** for parsing */
+	private String pattern;
 	
-	/**
-	 * set the pattern to be used by format(String s);
-	 * @param parsePattern
-	 */
-	public void setPattern(String formatPattern);
+	/** for merging */
+	private String group;
+	
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
+	
+	public String getPattern() {
+		return pattern;
+	}
+	
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	
+	public String getGroup() {
+		return group;
+	}
 }

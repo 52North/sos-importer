@@ -23,7 +23,7 @@
  */
 package org.n52.sos.importer.model;
 
-import org.n52.sos.importer.combobox.EditableComboBoxItems;
+import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 
 public class Step2Model implements StepModel {
 
