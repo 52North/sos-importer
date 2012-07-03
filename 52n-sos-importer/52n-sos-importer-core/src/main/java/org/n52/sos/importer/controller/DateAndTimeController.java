@@ -119,8 +119,12 @@ public class DateAndTimeController {
 		*/
 		/*
 		 * 	TIME_ZONE SECTION
+		 *  Only add if at least one time element is already set
 		 */
-		if (dateAndTime.getTimeZone() == null) {
+		if (dateAndTime.getTimeZone() == null && ( 
+				(dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null) || 
+				(dateAndTime.getMinute() != null && dateAndTime.getMinute().getTableElement() != null) ||
+				(dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null)) ) {
 			missingComponentPanels.add(new MissingTimeZonePanel(dateAndTime));
 		}
 		//
