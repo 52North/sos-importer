@@ -201,7 +201,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 					.addContainerGap(157, Short.MAX_VALUE))
 		);
 		generatedResURIPanel.setLayout(generatedURIPanelGroup);
-		generatedResPanel.setVisible(false);
 		if (logger.isDebugEnabled() && Constants.GUI_DEBUG) {
 			this.setBorder(Constants.DEBUG_BORDER);
 			manualResPanel.setBorder(Constants.DEBUG_BORDER);
@@ -211,13 +210,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		JPanel radioButtonPanel = new JPanel();
 		radioButtonPanel.setLayout(new BoxLayout(radioButtonPanel, BoxLayout.PAGE_AXIS));
 
-		manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
-		radioButtonPanel.add(manualResInputJRB);
-		manualResInputJRB.addActionListener(this.radioButtionActionListener());
-
-		bGroup.add(manualResInputJRB);
-
 		generatedResJRB = new JRadioButton(Lang.l().step6Generation());
+		generatedResJRB.setSelected(true);
 		radioButtonPanel.add(generatedResJRB);
 		generatedResJRB.addActionListener(this.radioButtionActionListener());
 		bGroup.add(generatedResJRB);
@@ -239,7 +233,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		manualResPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		manualResPanel.add(manualResNameComboBox);
 		manualResPanel.add(manualResUriComboBox);
-		manualResPanel.setVisible(false);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -264,7 +257,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 						.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(48))
 		);
+		
+				manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
+				radioButtonPanel.add(manualResInputJRB);
+				manualResInputJRB.addActionListener(this.radioButtionActionListener());
+				
+						bGroup.add(manualResInputJRB);
 		setLayout(groupLayout);
+		
+		manualResPanel.setVisible(false);
+		generatedResPanel.setVisible(true);
 	}
 
 	private ListModel toListModel(String[] columnHeadingsWithId) {
