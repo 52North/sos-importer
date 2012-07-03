@@ -53,6 +53,10 @@ import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Component;
+import org.n52.sos.importer.model.ModelStore;
+import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
@@ -62,7 +66,7 @@ import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
- * consists of a combobox for the name and a combobox for the URI;
+ * Consists of a combobox for the name and a combobox for the URI;
  * both are linked with each other
  * @author Raimund
  *
@@ -91,8 +95,18 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		this.resource = resource;
 		ButtonGroup bGroup = new ButtonGroup();
 		String name = Lang.l().name();
+		boolean disableManualInput = false, 
+				disableGeneratedInput = false,
+				manualDefault = false;
 		if (resource instanceof UnitOfMeasurement) {
 			name = Lang.l().code();
+		} else if (resource instanceof FeatureOfInterest) {
+			ArrayList<Position> positions = new ArrayList<Position>(ModelStore.getInstance().getPositions());
+			if (positions != null && positions.size() > 0) {
+				disableManualInput = true;
+			}
+		} else if (resource instanceof ObservedProperty) {
+//			ArrayList<E>
 		}
 		TableController tc = TableController.getInstance();
 		JLabel nameJL = new JLabel(Lang.l().name() + ":");
@@ -107,7 +121,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		columnList.setTransferHandler(aLTH);
 		//
 		listView = new JScrollPane(columnList);
-		
+
 		JTextArea nameInstructions = new JTextArea(Lang.l().step6bSelectColumnsLabel());
 		nameInstructions.setEditable(false);
 		nameInstructions.setFocusable(false);
@@ -115,12 +129,12 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		nameInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
 		nameInstructions.setLineWrap(true);
 		nameInstructions.setWrapStyleWord(true);
-		
+
 		// build components
 		JLabel uriJL = new JLabel(Lang.l().uri() + ":");
 		// build panel
 		JPanel generatedResURIPanel = new JPanel();
-		
+
 		JTextArea uriInstructions = new JTextArea(Lang.l().step6bURIInstructions());
 		uriInstructions.setEditable(false);
 		uriInstructions.setFocusable(false);
@@ -133,7 +147,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		generatedResPanel = new JPanel();
 		generatedResPanel.setLayout(new BoxLayout(generatedResPanel, BoxLayout.LINE_AXIS));
 		generatedResPanel.add(generatedNamePanel);
-		
+
 		JTextArea concatLabel = new JTextArea(Lang.l().step6bDefineConcatString());
 		concatLabel.setEditable(false);
 		concatLabel.setFocusable(false);
@@ -141,65 +155,65 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		concatLabel.setFont(Constants.DEFAULT_LABEL_FONT);
 		concatLabel.setLineWrap(true);
 		concatLabel.setWrapStyleWord(true);
-		
+
 		columnConcationationString = new JTextField();
 		columnConcationationString.setColumns(10);
-		
+
 		GroupLayout generatedNamePanelGroup = new GroupLayout(generatedNamePanel);
 		generatedNamePanelGroup.setHorizontalGroup(
-			generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
+				generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
 				.addGroup(Alignment.TRAILING, generatedNamePanelGroup.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING)
-						.addComponent(columnConcationationString, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-						.addComponent(concatLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(listView, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-							.addComponent(nameJL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(nameInstructions, Alignment.LEADING)))
-					.addContainerGap())
-		);
+						.addContainerGap()
+						.addGroup(generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING)
+								.addComponent(columnConcationationString, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+								.addComponent(concatLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+								.addGroup(Alignment.LEADING, generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(listView, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+										.addComponent(nameJL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(nameInstructions, Alignment.LEADING)))
+										.addContainerGap())
+				);
 		generatedNamePanelGroup.setVerticalGroup(
-			generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
+				generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
 				.addGroup(generatedNamePanelGroup.createSequentialGroup()
-					.addComponent(nameJL)
-					.addGap(1)
-					.addComponent(nameInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(listView, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(concatLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(columnConcationationString, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(16, Short.MAX_VALUE))
-		);
+						.addComponent(nameJL)
+						.addGap(1)
+						.addComponent(nameInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(listView, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(concatLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(columnConcationationString, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(16, Short.MAX_VALUE))
+				);
 		generatedNamePanel.setLayout(generatedNamePanelGroup);
 		generatedResPanel.add(generatedResURIPanel);
-		
+
 		uriOrPrefixTextField = new JTextField();
 		uriOrPrefixTextField.setColumns(10);
-		
+
 		useNameAfterPrefixCheckBox = new JCheckBox(Lang.l().step6bUseNameAfterPrefix());
 		GroupLayout generatedURIPanelGroup = new GroupLayout(generatedResURIPanel);
 		generatedURIPanelGroup.setHorizontalGroup(
-			generatedURIPanelGroup.createParallelGroup(Alignment.TRAILING)
+				generatedURIPanelGroup.createParallelGroup(Alignment.TRAILING)
 				.addComponent(uriInstructions, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
 				.addComponent(useNameAfterPrefixCheckBox, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
 				.addComponent(uriOrPrefixTextField, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
 				.addComponent(uriJL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-		);
+				);
 		generatedURIPanelGroup.setVerticalGroup(
-			generatedURIPanelGroup.createParallelGroup(Alignment.LEADING)
+				generatedURIPanelGroup.createParallelGroup(Alignment.LEADING)
 				.addGroup(generatedURIPanelGroup.createSequentialGroup()
-					.addComponent(uriJL)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(uriInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(useNameAfterPrefixCheckBox)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(uriOrPrefixTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(157, Short.MAX_VALUE))
-		);
+						.addComponent(uriJL)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(uriInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(useNameAfterPrefixCheckBox)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(uriOrPrefixTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(157, Short.MAX_VALUE))
+				);
 		generatedResURIPanel.setLayout(generatedURIPanelGroup);
 		if (logger.isDebugEnabled() && Constants.GUI_DEBUG) {
 			this.setBorder(Constants.DEBUG_BORDER);
@@ -235,38 +249,61 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		manualResPanel.add(manualResUriComboBox);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(4)
-					.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(14)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(containerPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
-						.addComponent(manualResPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
-					.addContainerGap())
-		);
+						.addGap(4)
+						.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(14)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(containerPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
+								.addComponent(manualResPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
+								.addContainerGap())
+				);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(5)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(manualResPanel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(containerPanel, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE))
-						.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(48))
-		);
-		
-				manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
-				radioButtonPanel.add(manualResInputJRB);
-				manualResInputJRB.addActionListener(this.radioButtionActionListener());
-				
-						bGroup.add(manualResInputJRB);
+						.addGap(5)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(manualResPanel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(containerPanel, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE))
+										.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(48))
+				);
+
+		manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
+		radioButtonPanel.add(manualResInputJRB);
+		manualResInputJRB.addActionListener(this.radioButtionActionListener());
+
+		bGroup.add(manualResInputJRB);
 		setLayout(groupLayout);
 		
-		manualResPanel.setVisible(false);
-		generatedResPanel.setVisible(true);
+		// Default Settings
+		if (manualDefault) {
+			manualResPanel.setVisible(true);
+			manualResInputJRB.setSelected(true);
+			generatedResPanel.setVisible(false);
+		} else {
+			manualResPanel.setVisible(false);
+			generatedResPanel.setVisible(true);
+			generatedResJRB.setSelected(true);
+		}
+		// specific settings
+		if (disableManualInput) {
+			generatedResPanel.setVisible(true);
+			generatedResJRB.setSelected(true);
+			manualResPanel.setVisible(false);
+			manualResInputJRB.setSelected(false);
+			manualResInputJRB.setVisible(false);
+		}
+		if (disableGeneratedInput) {
+			manualResPanel.setVisible(true);
+			manualResInputJRB.setSelected(true);
+			generatedResPanel.setVisible(false);
+			generatedResJRB.setSelected(false);
+			generatedResJRB.setVisible(false);
+		}
 	}
 
 	private ListModel toListModel(String[] columnHeadingsWithId) {
@@ -325,7 +362,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				if(!isUriValid(uriOrPrefix)) {
 					return false;
 				}
-			return true;
+				return true;
 			}
 		} else if (manualResInputJRB.isSelected()) {
 			/*
@@ -378,7 +415,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				Lang.l().infoDialogTitle(),
 				JOptionPane.INFORMATION_MESSAGE);		
 	}
-	
+
 	private void showMissingInputDialog() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("showMissingInputDialog()");
@@ -410,7 +447,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			name = (String) manualResNameComboBox.getSelectedItem();
 			name = name.trim();
 			uri = toURI((String) manualResUriComboBox.getSelectedItem());
-			
+
 		} else if (generatedResJRB.isSelected()) {
 			/*
 			 * GENERATED

@@ -174,6 +174,24 @@ public class TestData {
 				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "degC", "12.5"},
 				};
 	/**
+	 * Example data set without feature of interest
+	 */
+	public static final Object[][] EXAMPLE_TABLE_NO_FOI_BUT_POSITION = {
+				//         0				1			2				3		4		5			6
+				{"Timestamp",			"Sensor",	   "Phenomenon",  "UOM",  "Value",	 "LON",	  "LAT"},
+				{"2012-04-23 11:52:23", "Thermometer", "Temperature", "degC", "14.5",  "11.87", "50.12"},
+				{"2012-04-23 11:52:33", "Thermometer", "Temperature", "degC", "15.5",  "11.88", "50.12"},
+				{"2012-04-23 11:52:43", "Thermometer", "Temperature", "degC", "13.5",  "11.89", "50.12"},
+				{"2012-04-23 11:52:53", "Thermometer", "Temperature", "degC", "12.5",  "11.90", "50.12"},
+				{"2012-04-23 11:53:03", "Thermometer", "Temperature", "degC", "12.7",  "11.91", "50.12"},
+				{"2012-04-23 11:53:13", "Thermometer", "Temperature", "degC", "12.8",  "11.92", "50.12"},
+				{"2012-04-23 11:53:23", "Thermometer", "Temperature", "degC", "12.1",  "11.93", "50.12"},
+				{"2012-04-23 11:53:33", "Thermometer", "Temperature", "degC", "12.2",  "11.94", "50.12"},
+				{"2012-04-23 11:53:43", "Thermometer", "Temperature", "degC", "12.3",  "11.95", "50.12"},
+				{"2012-04-23 11:53:53", "Thermometer", "Temperature", "degC", "12.4",  "11.96", "50.12"},
+				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "degC", "12.5",  "11.97", "50.12"},
+				};
+	/**
 	 * Example feature of interest with position: lat: 52, long: 7, alt: 42, 
 	 * epsg: 4979, table element: col 3, flwd 1</br>
 	 * To change the related column call foi.setTableElement(new Column(newColumnId, firstlinewithData);

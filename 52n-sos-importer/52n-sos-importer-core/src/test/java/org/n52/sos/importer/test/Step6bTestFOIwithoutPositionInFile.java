@@ -39,7 +39,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
 
-public class Step6bTestFOI {
+public class Step6bTestFOIwithoutPositionInFile {
 
 	public static void main(String[] args) {
 		MainController mC = MainController.getInstance();
