@@ -61,4 +61,5 @@ public final class FeatureOfInterest extends Resource {
 				getName(),
 				getUri());
 	}
+	
 }

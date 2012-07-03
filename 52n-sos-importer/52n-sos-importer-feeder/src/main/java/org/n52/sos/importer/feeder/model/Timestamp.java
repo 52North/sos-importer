@@ -25,30 +25,62 @@ package org.n52.sos.importer.feeder.model;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @author Raimund
  */
 public class Timestamp {
 	
-	private short year;
-	private byte month;
-	private byte day;
-	private byte hour;
-	private byte minute;
-	private byte seconds;
-	private byte timezone;
+	private short year = Short.MIN_VALUE;
+	private byte month = Byte.MIN_VALUE;
+	private byte day = Byte.MIN_VALUE;
+	private byte hour = Byte.MIN_VALUE;
+	private byte minute = Byte.MIN_VALUE;
+	private byte seconds = Byte.MIN_VALUE;
+	private byte timezone = Byte.MIN_VALUE;
 	
 	
 	
 	@Override
 	public String toString() {
-		return String.format("%s-%s-%sT%s:%s:%s%s]",
-				year,
-				(month<10?"0"+month:month),
-				(day<10?"0"+day:day),
-				(hour<10?"0"+hour:hour),
-				(minute<10?"0"+minute:minute),
-				(seconds<10?"0"+seconds:seconds),
-				convertTimeZone(timezone));
+		StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
+		if (year != Short.MIN_VALUE) {
+			ts.append(year);
+			if (month != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (month != Byte.MIN_VALUE) {
+			ts.append(month<10?"0"+month:month);
+			if (day != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (day != Byte.MIN_VALUE) {
+			ts.append(day<10?"0"+day:day);
+		}
+		if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
+				&& (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append("T");
+		}
+		if (hour != Byte.MIN_VALUE) {
+			ts.append(hour<10?"0"+hour:hour);
+			if (minute != Byte.MIN_VALUE) {
+				ts.append(":");
+			}
+		}
+		if (minute != Byte.MIN_VALUE) {
+			ts.append(minute<10?"0"+minute:minute);
+			if (seconds != Byte.MIN_VALUE) {
+				ts.append("");
+			}
+		}
+		if (seconds != Byte.MIN_VALUE) {
+			ts.append(seconds<10?"0"+seconds:seconds);
+		}
+		if (timezone != Byte.MIN_VALUE && 
+				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append(convertTimeZone(timezone));
+		}
+		
+		return ts.toString();
 	}
 	
 	private String convertTimeZone(int timeZone) {
