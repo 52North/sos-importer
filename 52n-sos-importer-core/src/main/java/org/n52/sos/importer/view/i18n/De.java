@@ -71,6 +71,16 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String editableComboBoxDeleteItemButton() {
+		return "Entfernt das aktuelle Element auf der List";
+	}
+
+	@Override
+	public String editableComboBoxNewItemButton() {
+		return "Fügt ein neues Element zur Liste hinzu";
+	}
+
+	@Override
 	public String epsgCode() {
 		return "EPSG-Kennzahl";
 	}
@@ -104,7 +114,7 @@ public class De extends Lang{
 	}
 
 	public String exitDialogTitle() { return "Beenden"; }
-
+	
 	public String featureOfInterest() {
 		return "Geoobjekt";
 	}
@@ -112,7 +122,7 @@ public class De extends Lang{
 	public String file() {
 		return "Datei";
 	}
-	
+
 	public String finishButtonLabel() {
 		return "Beenden";
 	}
@@ -165,7 +175,7 @@ public class De extends Lang{
 	public String longitudeDialogDecimalValue() {
 		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
-
+	
 	@Override
 	public String longitudeEasting() {
 		return "Längengrad / Rechtswert";
@@ -174,7 +184,7 @@ public class De extends Lang{
 	public String measuredValue() {
 		return "Messwert";
 	}
-	
+
 	@Override
 	public String minutes() {
 		return "Minuten";
@@ -193,7 +203,7 @@ public class De extends Lang{
 	public String nextButtonLabel() {
 		return "Weiter";
 	}
-
+	
 	public String numValuePanelThousandsSeparator() {
 		return "Tausender-Trennzeichen";
 	}
@@ -201,7 +211,7 @@ public class De extends Lang{
 	public String observation() {
 		return "Beobachtung";
 	}
-	
+
 	public String observedProperty() {
 		return "Phänomen";
 	}
@@ -241,7 +251,7 @@ public class De extends Lang{
 	public String spaceString() {
 		return "Leerzeichen";
 	}
-
+	
 	public String step() {
 		return "Schritt";
 	}
@@ -249,7 +259,7 @@ public class De extends Lang{
 	public String step1BrowseButton() {
 		return "Datendatei auswählen";
 	}
-	
+
 	public String step1Description() {
 		return "Schritt 1: Wählen Sie die CSV-Datei aus";
 	}
@@ -463,11 +473,6 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step6Generation() {
-		return "Automatische Erzeugung";
-	}
-
-	@Override
 	public String step6bDefineConcatString() {
 		return "Bitte geben Sie eine Zeichenkette zur Verknüpfung der Spalten an (Optional).";
 	}
@@ -516,6 +521,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step6Generation() {
+		return "Automatische Erzeugung";
+	}
+
+	@Override
 	public String step6ManualInput() {
 		return "Manuelle Eingabe";
 	}
@@ -550,7 +560,7 @@ public class De extends Lang{
 	public String step7ConfigFileLabel() {
 		return "Konfigurations-Dateiname und -verzeichnis";
 	}
-
+	
 	public String step7Description() {
 		return this.step() + " 7: Geben Sie den " + this.sos() + " an";
 	}
@@ -559,7 +569,7 @@ public class De extends Lang{
 	public String step7DirectImport() {
 		return "Im nächsten Schritt die Daten in den SOS importieren";
 	}
-	
+
 	@Override
 	public String step7OfferingCheckBoxLabel() {
 		return "Offering-Bezeichner aus Sensor-Namen generieren?";

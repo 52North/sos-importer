@@ -99,6 +99,16 @@ public abstract class Lang {
 	 */
 	public abstract String day();
 	/**
+	 * 
+	 * @return Delete the selected item from the list
+	 */
+	public abstract String editableComboBoxDeleteItemButton();
+	/**
+	 * 
+	 * @return Add a new item to the list
+	 */
+	public abstract String editableComboBoxNewItemButton();
+	/**
 	 * @return EPSG-Code
 	 */
 	public abstract String epsgCode();
@@ -497,10 +507,6 @@ public abstract class Lang {
 	 */
 	public abstract String step6aModelDescription();
 	/**
-	 * @return Automatic Generation
-	 */
-	public abstract String step6Generation();
-	/**
 	 * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
 	 */
 	public abstract String step6bDefineConcatString();
@@ -542,11 +548,15 @@ public abstract class Lang {
 	 * @return What is the position of
 	 */
 	public abstract String step6cModelDescription();
+	
+	/**
+	 * @return Automatic Generation
+	 */
+	public abstract String step6Generation();
 	/**
 	 * @return Manual Input
 	 */
 	public abstract String step6ManualInput();
-	
 	/**
 	 * @return Some User Input is missing. Please enter the required information.
 	 */
@@ -592,12 +602,14 @@ public abstract class Lang {
 	 * @return Please specify the offering name or select to generate it.
 	 */
 	public abstract String step7OfferingNameNotGiven();
+
 	/**
 	 * The given offering "offeringName" is not valid. It should match XML-NCName specification.
 	 * @param offeringName
 	 * @return
 	 */
 	public abstract String step7OfferingNameNotValid(String offeringName);
+
 	/**
 	 * @return Save configuration to XML file
 	 */
@@ -641,7 +653,7 @@ public abstract class Lang {
 	 * @return Step 8: Final Step - Summary of the Results
 	 */
 	public abstract String step8Description();
-
+	
 	/**
 	 * @return Register Sensors and Insert Observations into Sensor Observation Service
 	 */
@@ -652,7 +664,7 @@ public abstract class Lang {
 	 * @return Errors: <code>i</code>
 	 */
 	public abstract String step8ErrorLable(int i);
-	
+
 	/**
 	 * @param i
 	 * @return Insert <code>i</code> Observations...

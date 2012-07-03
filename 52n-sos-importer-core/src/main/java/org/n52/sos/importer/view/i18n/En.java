@@ -72,6 +72,16 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String editableComboBoxDeleteItemButton() {
+		return "Delete the selected item from the list";
+	}
+
+	@Override
+	public String editableComboBoxNewItemButton() {
+		return "Add a new item to the list";
+	}
+
+	@Override
 	public String epsgCode() {
 		return "EPSG-Code";
 	}
@@ -109,7 +119,7 @@ public class En extends Lang{
 	public String featureOfInterest() {
 		return "Feature of Interest";
 	}
-
+	
 	public String file() {
 		return "file";
 	}
@@ -117,7 +127,7 @@ public class En extends Lang{
 	public String finishButtonLabel() {
 		return "Finish";
 	}
-	
+
 	@Override
 	public String format() {
 		return "Format";
@@ -169,7 +179,7 @@ public class En extends Lang{
 	public String longitudeDialogDecimalValue() {
 		return "The " + this.longitudeEasting() + " can only be a decimal number so far.";
 	}
-
+	
 	@Override
 	public String longitudeEasting() {
 		return "Longitude / Easting";
@@ -178,7 +188,7 @@ public class En extends Lang{
 	public String measuredValue() {
 		return "measured value";
 	}
-	
+
 	@Override
 	public String minutes() {
 		return "Minutes";
@@ -197,7 +207,7 @@ public class En extends Lang{
 	public String nextButtonLabel() {
 		return "Next";
 	}
-
+	
 	public String numValuePanelThousandsSeparator() {
 		return "Thousands separator";
 	}
@@ -205,7 +215,7 @@ public class En extends Lang{
 	public String observation() {
 		return "Observation";
 	}
-	
+
 	public String observedProperty() {
 		return "Observed Property";
 	}
@@ -248,6 +258,7 @@ public class En extends Lang{
 
 	public String step() { return "Step"; }
 
+
 	public String step1BrowseButton() {
 		return "Select data file";
 	}
@@ -255,7 +266,6 @@ public class En extends Lang{
 	public String step1Description() {
 		return this.step() + " 1: Choose CSV file";
 	}
-
 
 	public String step1File() {
 		return "CSV File";
@@ -316,7 +326,7 @@ public class En extends Lang{
 	public String step3aParseTest1Failed() {
 		return "1 value could not be interpreted.";
 	}
-
+	
 	@Override
 	public String step3aParseTestAllOk() {
 		return "All values could be interpreted.";
@@ -326,7 +336,7 @@ public class En extends Lang{
 	public String step3aParseTestNFailed(int n) {
 		return n + " values could not be interpreted.";
 	}
-	
+
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "The type for this column is \"" + 
@@ -465,11 +475,6 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step6Generation() {
-		return "Generation";
-	}
-
-	@Override
 	public String step6bDefineConcatString() {
 		return "Please provide a String for linking the values from the " +
 				"columns (OPTIONAL).";
@@ -516,6 +521,11 @@ public class En extends Lang{
 
 	public String step6cModelDescription() {
 		return "What is the " + this.position().toLowerCase(En.locale) + " of";
+	}
+
+	@Override
+	public String step6Generation() {
+		return "Generation";
 	}
 
 	@Override

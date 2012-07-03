@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * JCombobox with extended functionality: 
@@ -97,8 +98,8 @@ public class EditableJComboBoxPanel extends JPanel {
 		if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) 
 			model.addElement(WHITESPACE);
 		
-		newItemButton = createIconButton("newItem.png", "Add a new item to the list");
-		deleteItemButton = createIconButton("deleteItem.png", "Delete the selected item from the list");
+		newItemButton = createIconButton("newItem.png", Lang.l().editableComboBoxNewItemButton());
+		deleteItemButton = createIconButton("deleteItem.png", Lang.l().editableComboBoxDeleteItemButton());
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.add(label);
