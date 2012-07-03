@@ -35,6 +35,7 @@ import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -78,6 +79,10 @@ public class Step6bTestUOM {
 		mC.registerProvider(s3M);
 		mC.updateModel();
 		mC.removeProvider(s3M);
+		// add observed property to Modelstore
+		ObservedProperty op = new ObservedProperty();
+		op.setTableElement(new Column(2,firstLineWithData));
+		ms.add(op);
 		//
 		mC.setStepController(new Step6bController(s6bM,firstLineWithData));
 	}

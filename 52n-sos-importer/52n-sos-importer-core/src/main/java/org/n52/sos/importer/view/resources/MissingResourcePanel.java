@@ -29,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -58,6 +59,7 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.MissingComponentPanel;
@@ -95,18 +97,47 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		this.resource = resource;
 		ButtonGroup bGroup = new ButtonGroup();
 		String name = Lang.l().name();
+		ModelStore ms = ModelStore.getInstance();
 		boolean disableManualInput = false, 
 				disableGeneratedInput = false,
 				manualDefault = false;
-		if (resource instanceof UnitOfMeasurement) {
-			name = Lang.l().code();
-		} else if (resource instanceof FeatureOfInterest) {
-			ArrayList<Position> positions = new ArrayList<Position>(ModelStore.getInstance().getPositions());
+		if (resource instanceof FeatureOfInterest) {
+			List<Position> positions = ms.getPositions();
 			if (positions != null && positions.size() > 0) {
 				disableManualInput = true;
 			}
 		} else if (resource instanceof ObservedProperty) {
-//			ArrayList<E>
+			manualDefault = true;
+		} else if (resource instanceof UnitOfMeasurement) {
+			List<ObservedProperty> ops = ms.getObservedProperties();
+			name = Lang.l().code();
+			if (ops != null && ops.size() == 1) {
+				// in the case of having one observed property column -> set generation as default (having table element of type Column set)
+				// in the case of having one generated observed property -> set generation as default
+				ObservedProperty op = ops.get(0);
+				if (op.isGenerated()) {
+					// disableManualInput = true;
+					// generated is default!
+				}
+				// in the case of having one manual observed property -> disable generated (having no table element and generated set to false)
+				else if (op.getTableElement() == null && !op.isGenerated()) {
+					disableGeneratedInput = true;
+				}
+				// in the case of having no observed property -> can this happen?
+			}
+			// TODO what happens in the case of having multiple observed properties. How to relate each other?
+		} else if (resource instanceof Sensor) {
+			// check for 1 foi - 1 op => 1 sensor => only manual input
+			List<FeatureOfInterest> fois = ms.getFeatureOfInterests();
+			List<ObservedProperty> ops = ms.getObservedProperties();
+			if (fois != null && fois.size() == 1 && ops != null && ops.size() == 1) {
+				FeatureOfInterest foi = fois.get(0);
+				ObservedProperty op = ops.get(0);
+				if (!foi.isGenerated() && foi.getTableElement() == null && !op.isGenerated() && op.getTableElement() == null) {
+					disableGeneratedInput = true;
+				}
+			}
+			// else -> generated as default and manual as optional
 		}
 		TableController tc = TableController.getInstance();
 		JLabel nameJL = new JLabel(Lang.l().name() + ":");
