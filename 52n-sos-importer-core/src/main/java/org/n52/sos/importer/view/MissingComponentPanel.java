@@ -28,10 +28,10 @@ import javax.swing.JPanel;
 import org.n52.sos.importer.model.Component;
 
 /**
- * represents the view of a component (e.g. a day) which
+ * Represents the view of a component (e.g. a day) which
  * is not available in the CSV file; therefore, it has to
  * be chosen manually
- * @author Raimund
+ * @author Raimund Schn&uuml;rer
  *
  */
 public abstract class MissingComponentPanel extends JPanel {
