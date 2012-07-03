@@ -28,7 +28,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Formatable;
+import org.n52.sos.importer.model.Formatable;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**

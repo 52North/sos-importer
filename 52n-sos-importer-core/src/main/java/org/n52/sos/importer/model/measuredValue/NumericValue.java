@@ -28,7 +28,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.n52.sos.importer.Constants;
-import org.n52.sos.importer.interfaces.Formatable;
+import org.n52.sos.importer.model.Formatable;
 
 public class NumericValue extends MeasuredValue implements Formatable {
 

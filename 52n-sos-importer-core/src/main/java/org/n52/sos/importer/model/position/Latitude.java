@@ -23,7 +23,7 @@
  */
 package org.n52.sos.importer.model.position;
 
-import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;

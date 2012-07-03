@@ -29,7 +29,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;

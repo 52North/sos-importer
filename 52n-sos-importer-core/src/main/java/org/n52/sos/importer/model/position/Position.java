@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.model.Combination;
 
 public class Position extends Combination {
 

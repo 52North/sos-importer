@@ -29,8 +29,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.Constants;
-import org.n52.sos.importer.combobox.ComboBoxItems;
-import org.n52.sos.importer.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
@@ -42,6 +40,8 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.combobox.ComboBoxItems;
+import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**

@@ -33,7 +33,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.BackNextController;
-import org.n52.sos.importer.interfaces.Parseable;
+import org.n52.sos.importer.model.Parseable;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**

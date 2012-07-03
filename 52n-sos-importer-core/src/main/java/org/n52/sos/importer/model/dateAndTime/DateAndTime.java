@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.interfaces.Combination;
+import org.n52.sos.importer.model.Combination;
 
 public class DateAndTime extends Combination {
 	

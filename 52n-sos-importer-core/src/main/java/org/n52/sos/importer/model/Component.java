@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.model;
 
-import org.n52.sos.importer.interfaces.Combination;
 import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
