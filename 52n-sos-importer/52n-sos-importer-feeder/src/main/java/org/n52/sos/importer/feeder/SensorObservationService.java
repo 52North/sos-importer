@@ -55,19 +55,20 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
-import org.n52.oxf.owsCommon.ExceptionReport;
-import org.n52.oxf.owsCommon.OWSException;
-import org.n52.oxf.owsCommon.OwsExceptionReport.ExceptionCode;
-import org.n52.oxf.owsCommon.ServiceDescriptor;
-import org.n52.oxf.owsCommon.capabilities.Operation;
-import org.n52.oxf.owsCommon.capabilities.OperationsMetadata;
-import org.n52.oxf.serviceAdapters.OperationResult;
-import org.n52.oxf.serviceAdapters.ParameterContainer;
-import org.n52.oxf.serviceAdapters.sos.ISOSRequestBuilder;
-import org.n52.oxf.serviceAdapters.sos.SOSAdapter;
-import org.n52.oxf.serviceAdapters.sos.SOSRequestBuilderFactory;
-import org.n52.oxf.serviceAdapters.sos.caps.ObservationOffering;
-import org.n52.oxf.serviceAdapters.sos.caps.SOSContents;
+import org.n52.oxf.adapter.OperationResult;
+import org.n52.oxf.adapter.ParameterContainer;
+import org.n52.oxf.ows.ExceptionReport;
+import org.n52.oxf.ows.OWSException;
+import org.n52.oxf.ows.OwsExceptionCode;
+import org.n52.oxf.ows.ServiceDescriptor;
+import org.n52.oxf.ows.capabilities.Operation;
+import org.n52.oxf.ows.capabilities.OperationsMetadata;
+import org.n52.oxf.sos.adapter.ISOSRequestBuilder;
+import org.n52.oxf.sos.adapter.SOSAdapter;
+import org.n52.oxf.sos.adapter.SOSRequestBuilderFactory;
+import org.n52.oxf.sos.capabilities.ObservationOffering;
+import org.n52.oxf.sos.capabilities.SOSContents;
+import org.n52.oxf.sos.util.SosUtil;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -140,7 +141,7 @@ public final class SensorObservationService {
 	            sosVersion);
 	    paramCon.addParameterShell(
 	    		ISOSRequestBuilder.GET_CAPABILITIES_SERVICE_PARAMETER,
-	    		SOSAdapter.SERVICE_TYPE);
+	    		SosUtil.SERVICE_TYPE);
 	    if (logger.isDebugEnabled()) {
 	    	logger.debug(
 	        			String.format("GetCapabilitiesRequest to %s:\n%s",
@@ -395,7 +396,7 @@ public final class SensorObservationService {
 		        sosVersion);
 		paramCon.addParameterShell(
         		ISOSRequestBuilder.INSERT_OBSERVATION_SERVICE_PARAMETER,
-        		SOSAdapter.SERVICE_TYPE);
+        		SosUtil.SERVICE_TYPE);
 		/*
 		 * Feature Of Interest
 		 */
@@ -494,7 +495,7 @@ public final class SensorObservationService {
 			Iterator<OWSException> iter = e.getExceptionsIterator();
 			while(iter.hasNext()) {
 				OWSException owsEx = iter.next();
-				if (owsEx.getExceptionCode().equals(ExceptionCode.NoApplicableCode) && 
+				if (owsEx.getExceptionCode().equals(OwsExceptionCode.NoApplicableCode) && 
 						owsEx.getExceptionTexts() != null &&
 						owsEx.getExceptionTexts().length > 0) {
 					for (String string : owsEx.getExceptionTexts()) {

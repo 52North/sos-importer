@@ -10,63 +10,46 @@
 	<artifactId>52n-sos-importer-feeder</artifactId>
 	<name>SOS Feeder</name>
 	<packaging>jar</packaging>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<timestamp>${maven.build.timestamp}</timestamp>
-		<maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-		<oxf.version>1.0.0-SNAPSHOT</oxf.version>
-		<year>2012</year>
-	</properties>
 	<dependencies>
 		<dependency>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-resources-plugin</artifactId>
-		    <version>2.4.3</version>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
-			<version>4.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
-			<version>2.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>52n-sos-importer-bindings</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
-			<artifactId>52n-oxf-adapters</artifactId>
-			<version>${oxf.version}</version>
+			<artifactId>oxf-sos-adapter</artifactId>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>52n-oxf-xmlbeans</artifactId>
-			<version>${oxf.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -74,37 +57,22 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>	
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
-				<version>1.9.0</version>
 				<configuration>
 					<header>src/main/resources/52n_license_header.txt</header>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-					<strictCheck>true</strictCheck>
-					<properties>
-						<year>2012</year>
-					</properties>
-					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.3</version>
 				<configuration>
-	  				<descriptorRefs>
-	    				<descriptorRef>jar-with-dependencies</descriptorRef>
-	  				</descriptorRefs>
-	  				<finalName>${project.artifactId}-${project.version}</finalName>
-	  				<archive>
+					<archive>
 						<index>false</index>
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -114,29 +82,17 @@
 						<manifestEntries>
 							<build-time>${timestamp}</build-time>
 							<!-- TODO get this version from dependency definition -->
-							<SOS-importer-xmlbeans-version>0.2</SOS-importer-xmlbeans-version>
+							<SOS-importer-xmlbeans-version>${importer.xml.binding.version}</SOS-importer-xmlbeans-version>
 						</manifestEntries>
 					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						 <!-- assembly is build through package phase: mvn package -->
-						<phase>package</phase>
-	 					<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	<repositories>
 		<repository>
-			<!--
-				Tentative local repo for libs that are not migrated to Maven
-				dependency mechanism and available in online repositories.
-			-->
+			<!-- Tentative local repo for libs that are not migrated to Maven dependency 
+				mechanism and available in online repositories. -->
 			<id>lib-repository</id>
 			<name>Local Repository</name>
 			<url>file:///${project.basedir}/../lib-repository/</url>
