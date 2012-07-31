@@ -69,7 +69,7 @@ public class Timestamp {
 		if (minute != Byte.MIN_VALUE) {
 			ts.append(minute<10?"0"+minute:minute);
 			if (seconds != Byte.MIN_VALUE) {
-				ts.append("");
+				ts.append(":");
 			}
 		}
 		if (seconds != Byte.MIN_VALUE) {
