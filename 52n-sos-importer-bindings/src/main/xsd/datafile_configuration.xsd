@@ -24,15 +24,10 @@
 			<xs:documentation>The UCUM code used to observed property.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="ColumnSeparator" nillable="false">
+	<xs:element name="ColumnSeparator" type="xs:string" nillable="false">
 		<xs:annotation>
 			<xs:documentation>Character for separating element in content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
 		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:length value="1"/>
-			</xs:restriction>
-		</xs:simpleType>
 	</xs:element>
 	<xs:element name="EPSGCode">
 		<xs:annotation>
