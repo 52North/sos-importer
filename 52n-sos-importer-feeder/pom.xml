@@ -46,6 +46,12 @@
 		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>oxf-sos-adapter</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>GrdcSamplingPoint</artifactId>
+					<groupId>org.n52.sensorweb.oxf-old</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
