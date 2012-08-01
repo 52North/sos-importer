@@ -70,7 +70,7 @@ import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
  *
  */
 public final class Configuration {
-	
+
 	private static final Logger logger = Logger.getLogger(Configuration.class);
 	private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
 	private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
@@ -92,6 +92,7 @@ public final class Configuration {
 	public static final char UNICODE_REPLACER = '_';
 	public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
 	private static final String COLUMN_SEPARATOR_SPACE = "Space";
+	private static final String COLUMN_SEPARATOR_TAB = "Tab";
 	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
 	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END = "is already registered at this SOS";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
@@ -101,7 +102,7 @@ public final class Configuration {
 		EPSG_EASTING_FIRST_MAP.put("4326",false);
 		EPSG_EASTING_FIRST_MAP.put("4979",false);
 		EPSG_EASTING_FIRST_MAP.put("21037",true);
-		
+
 	}
 	private SosImportConfiguration importConf;
 	private File configFile;
@@ -194,7 +195,9 @@ public final class Configuration {
 		String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
 		if (sep.equals(Configuration.COLUMN_SEPARATOR_SPACE)) {
 			return ' ';
-		} else {
+		} else if (sep.equals(Configuration.COLUMN_SEPARATOR_TAB)) {
+			return '\t';
+		} else	{
 			return sep.charAt(0);
 		}
 	}
@@ -513,12 +516,12 @@ public final class Configuration {
 		double[] posValues = new double[3];
 		int epsgCode = -1;
 		for (Column c : cols) {
-//			boolean isCombination = false; // now every position is of type combination
+			//			boolean isCombination = false; // now every position is of type combination
 			for (Metadata m : c.getMetadataArray()) {
 				// check for type combination
-//				if (m.getKey().equals(Key.TYPE) && m.getValue().equals(Configuration.POSITION_TYPE_COMBINATION)) {
-//					isCombination = true;
-//				}
+				//				if (m.getKey().equals(Key.TYPE) && m.getValue().equals(Configuration.POSITION_TYPE_COMBINATION)) {
+				//					isCombination = true;
+				//				}
 				// get parse pattern and parse available values
 				/*else*/ if (m.getKey().equals(Key.PARSE_PATTERN)) {
 					String pattern = m.getValue();
@@ -526,7 +529,7 @@ public final class Configuration {
 					pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LONGITUDE, "{1}");
 					pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_ALTITUDE, "{2}");
 					pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_EPSG, "{3}");
-					
+
 					MessageFormat mf = new MessageFormat(pattern);
 					Object[] tokens = null;
 					try {
@@ -534,12 +537,12 @@ public final class Configuration {
 					} catch (ParseException e) {
 						throw new NumberFormatException();
 					}
-					
+
 					if (tokens == null)
 						throw new NumberFormatException();
-						
+
 					Object[] latitude, longitude, height;
-						
+
 					if (tokens.length > 0 && tokens[0] != null) {
 						latitude = parseLat((String) tokens[0]);
 						posValues[Position.LAT] = (Double) latitude[0];
@@ -583,7 +586,7 @@ public final class Configuration {
 					epsgCode = Integer.valueOf(m.getValue());
 				}
 			}
-			
+
 		}
 		return new Position(posValues, units, epsgCode);
 	}
@@ -595,7 +598,7 @@ public final class Configuration {
 		}
 		double value = 0.0;
 		String unit = "m";
-		
+
 		String number;
 		if (alt.contains("km")) {
 			unit = "km";
@@ -611,9 +614,9 @@ public final class Configuration {
 			number = alt.replace("ft", "");
 		} else
 			number = alt;
-		
+
 		value = parseToDouble(number);
-		
+
 		Object[] result = {value, unit};
 		return result;
 	}
@@ -660,7 +663,7 @@ public final class Configuration {
 		}
 		double value;
 		String unit = "";
-		
+
 		String number;
 		//TODO handle inputs like degrees/minutes/seconds, n.Br.
 		if (lat.contains("°")) {
@@ -683,7 +686,7 @@ public final class Configuration {
 				unit = "m";
 			}
 		}
-		
+
 		Object[] result = {value, unit};
 		return result;
 	}
@@ -697,12 +700,12 @@ public final class Configuration {
 		char dSep = getDecimalSeparator();
 		symbols.setDecimalSeparator(dSep);
 		symbols.setGroupingSeparator(getThousandsSeparator(dSep));
-		
+
 		Number n;
 		DecimalFormat formatter = new DecimalFormat();
 		formatter.setDecimalFormatSymbols(symbols);
 		n = formatter.parse(number);
-		
+
 		return n.doubleValue();
 	}
 
@@ -768,7 +771,7 @@ public final class Configuration {
 		Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
 		for (Column col : cols) {
 			if (col.getType().equals(Type.DATE_TIME)){
-			// it's DATE_TIME -> get group id from metadata[]
+				// it's DATE_TIME -> get group id from metadata[]
 				if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
 					for (Metadata m : col.getMetadataArray()) {
 						if (m.getKey().equals(Key.GROUP)) {
@@ -846,7 +849,7 @@ public final class Configuration {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns
 	 * the id of the first column with Type "OBSERVED_PROPERTY"
@@ -859,7 +862,7 @@ public final class Configuration {
 					mVColumnId));
 		}
 		Column[] cols = importConf.getCsvMetadata().
-									getColumnAssignments().getColumnArray();
+				getColumnAssignments().getColumnArray();
 		for (Column col : cols) {
 			if (col.getType().equals(Type.OBSERVED_PROPERTY)) {
 				return col.getNumber();
@@ -867,7 +870,7 @@ public final class Configuration {
 		}
 		return -1;
 	}
-	
+
 	public Offering getOffering(Sensor s) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getOffering()");
@@ -887,7 +890,7 @@ public final class Configuration {
 	public Object getFileName() {
 		return configFile.getName();
 	}
-	
+
 	public String toString() {
 		return String.format("Configuration [file=%s]", configFile);
 	}
@@ -934,10 +937,10 @@ public final class Configuration {
 					ts.setSeconds( Byte.parseByte( m.getValue() ) );
 					continue;
 				}
-				
+
 			}
 		}
 		return ts;
 	}
-	
+
 }
