@@ -70,9 +70,6 @@ public final class Feeder {
 				// data file
 				DataFile dataFile = new DataFile(c);
 				if (dataFile.isAvailable()) {
-					if (logger.isDebugEnabled()) {
-						logger.debug(String.format("Data file can be accessed: %s", dataFile.toString()));
-					}
 					// check SOS
 					URL sosURL = c.getSosUrl();
 					SensorObservationService sos = new SensorObservationService(sosURL);
