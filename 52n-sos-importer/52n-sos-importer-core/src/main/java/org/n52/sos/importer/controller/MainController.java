@@ -59,7 +59,7 @@ public class MainController {
 		ComboBoxItems.getInstance();
 		//
 		// init xmlmodel TODO load from configuration
-		this.xmlModel = new Model();
+		xmlModel = new Model();
 	}
 	
 	public static MainController getInstance() {
@@ -79,40 +79,40 @@ public class MainController {
 	    //
 	    descP.setText(stepController.getDescription());
 	    stepController.loadSettings();
-	    this.mainFrame.setStepPanel(stepController.getStepPanel());
-	    this.xmlModel.registerProvider(stepController.getModel());
+	    mainFrame.setStepPanel(stepController.getStepPanel());
+	    xmlModel.registerProvider(stepController.getModel());
 		bNM.setCurrentStepController(stepController);
 	}
 	
 	public void updateModel() {
-		this.xmlModel.updateModel();
+		xmlModel.updateModel();
 	}
 	
 	public boolean removeProvider(StepModel sm) {
-		return this.xmlModel.removeProvider(sm);
+		return xmlModel.removeProvider(sm);
 	}
 	
 	public boolean registerProvider(StepModel sm) {
-		return this.xmlModel.registerProvider(sm);
+		return xmlModel.registerProvider(sm);
 	}
 	
 	public void exit() {
-		this.mainFrame.showExitDialog();
+		mainFrame.showExitDialog();
 	}
 	
 	public void pack() {
-		this.mainFrame.pack();
+		mainFrame.pack();
 	}
 
 	public void updateTitle(String csvFilePath) {
-		this.mainFrame.updateTitle(csvFilePath);
+		mainFrame.updateTitle(csvFilePath);
 	}
 
 	public boolean saveModel(File file) throws IOException {
-		return this.xmlModel.save(file);
+		return xmlModel.save(file);
 	}
 
 	public String getFilename() {
-		return this.xmlModel.getFileName();
+		return xmlModel.getFileName();
 	}
 }
