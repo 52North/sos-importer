@@ -121,7 +121,7 @@ public class InsertObservation {
 	@Override
 	public String toString() {
 		return String
-				.format("InsertObservation [value=%s, timeStamp=%s, getSensorName()=%s, getSensorURI()=%s, getFeatureOfInterestName()=%s, getFeatureOfInterestURI()=%s, getObservedPropertyURI()=%s, getUnitOfMeasurementCode()=%s, getValue()=%s, getTimeStamp()=%s, getEpsgCode()=%s, getLatitudeValue()=%s, getLongitudeValue()=%s]",
+				.format("InsertObservation [value=%s, timeStamp=%s, SensorName=%s, SensorURI=%s, FoiName=%s, FoiURI()=%s, ObservedPropertyURI=%s, UnitOfMeasurementCode=%s, Value=%s, TimeStamp=%s, EpsgCode=%s, LatitudeValue=%s, LongitudeValue=%s]",
 						value, timeStamp, getSensorName(), getSensorURI(),
 						getFeatureOfInterestName(), getFeatureOfInterestURI(),
 						getObservedPropertyURI(), getUnitOfMeasurementCode(),
