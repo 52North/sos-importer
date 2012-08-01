@@ -67,13 +67,14 @@ public class Timestamp {
 			}
 		}
 		if (minute != Byte.MIN_VALUE) {
-			ts.append(minute<10?"0"+minute:minute);
-			if (seconds != Byte.MIN_VALUE) {
-				ts.append(":");
-			}
+			ts.append( (minute<10?"0"+minute:minute)+":");
+		} else if (hour != Byte.MIN_VALUE) {
+			ts.append("00:");
 		}
-		if (seconds != Byte.MIN_VALUE) {
+		if (seconds != Byte.MIN_VALUE ) {
 			ts.append(seconds<10?"0"+seconds:seconds);
+		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
+			ts.append("00");
 		}
 		if (timezone != Byte.MIN_VALUE && 
 				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
