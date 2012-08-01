@@ -53,37 +53,37 @@ public class BackNextPanel extends JPanel {
 	private BackNextPanel() {
 		super();
 		if(Constants.GUI_DEBUG) {
-			this.setBorder(Constants.DEBUG_BORDER);
+			setBorder(Constants.DEBUG_BORDER);
 		}
 		GridLayout layout = new GridLayout(1,3);
-		this.setLayout(layout);
+		setLayout(layout);
 		/*
 		 * 	BACK button on the left
 		 */
-		this.back = new JButton(Lang.l().backButtonLabel());
-		this.back.addActionListener(new BackButtonClicked());
+		back = new JButton(Lang.l().backButtonLabel());
+		back.addActionListener(new BackButtonClicked());
 		JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		backPanel.add(this.back);
-		this.add(backPanel);
+		add(backPanel);
 		/*
 		 * EMPTY panel in the middle
 		 */
 		JPanel emptyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		this.add(emptyPanel);
+		add(emptyPanel);
 		/*
 		 * NEXT,FINISH on the right
 		 */
 		JPanel nextFinishPanel  = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		// finish
-		this.finish = new JButton(Lang.l().finishButtonLabel());
-		this.finish.setVisible(false);
-		this.finish.addActionListener(new FinishButtonClicked());
+		finish = new JButton(Lang.l().finishButtonLabel());
+		finish.setVisible(false);
+		finish.addActionListener(new FinishButtonClicked());
 		nextFinishPanel.add(this.finish);
 		// next
-		this.next = new JButton(Lang.l().nextButtonLabel());
-		this.next.addActionListener(new NextButtonClicked());
+		next = new JButton(Lang.l().nextButtonLabel());
+		next.addActionListener(new NextButtonClicked());
 		nextFinishPanel.add(this.next);
-		this.add(nextFinishPanel);
+		add(nextFinishPanel);
 	}
 
 	public static BackNextPanel getInstance() {

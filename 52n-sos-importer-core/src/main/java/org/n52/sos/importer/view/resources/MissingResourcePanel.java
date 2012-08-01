@@ -246,11 +246,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 						.addContainerGap(157, Short.MAX_VALUE))
 				);
 		generatedResURIPanel.setLayout(generatedURIPanelGroup);
-		if (logger.isDebugEnabled() && Constants.GUI_DEBUG) {
-			this.setBorder(Constants.DEBUG_BORDER);
-			manualResPanel.setBorder(Constants.DEBUG_BORDER);
-			generatedResPanel.setBorder(Constants.DEBUG_BORDER);
-		}
 
 		JPanel radioButtonPanel = new JPanel();
 		radioButtonPanel.setLayout(new BoxLayout(radioButtonPanel, BoxLayout.PAGE_AXIS));
@@ -334,6 +329,11 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			generatedResPanel.setVisible(false);
 			generatedResJRB.setSelected(false);
 			generatedResJRB.setVisible(false);
+		}
+		if (logger.isDebugEnabled() && Constants.GUI_DEBUG) {
+			setBorder(Constants.DEBUG_BORDER);
+			manualResPanel.setBorder(Constants.DEBUG_BORDER);
+			generatedResPanel.setBorder(Constants.DEBUG_BORDER);
 		}
 	}
 

@@ -140,9 +140,10 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 	}
 
 	public void unassignPosition() {
-		if (position != null)
+		if (position != null) {
 			logger.info("Unassign " + position + " from " + this);
-		this.setPosition(null);
+			this.setPosition(null);
+		}
 	}
 	
 	public void setPositionFor(String featureOfInterestName, Position position) {

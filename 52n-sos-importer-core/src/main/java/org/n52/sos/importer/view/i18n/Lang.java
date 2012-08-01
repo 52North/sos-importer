@@ -545,10 +545,20 @@ public abstract class Lang {
 	 */
 	public abstract String step6cDescription();
 	/**
+	 * 
+	 * @return Set Position
+	 */
+	public abstract String step6cInfoToolName();
+	
+	/**
+	 * 
+	 * @return Set the position by clicking on the map
+	 */
+	public abstract String step6cInfoToolTooltip();
+	/**
 	 * @return What is the position of
 	 */
 	public abstract String step6cModelDescription();
-	
 	/**
 	 * @return Automatic Generation
 	 */
@@ -594,10 +604,12 @@ public abstract class Lang {
 	 * @return Generate Offering from Sensor name?
 	 */
 	public abstract String step7OfferingCheckBoxLabel();
+
 	/**
 	 * @return Please specify the offering name:
 	 */
 	public abstract String step7OfferingInputTextfieldLabel();
+
 	/**
 	 * @return Please specify the offering name or select to generate it.
 	 */
@@ -643,7 +655,7 @@ public abstract class Lang {
 			String message, 
 			int readTimeoutSeconds,
 			int connectTimeoutSeconds);
-
+	
 	/**
 	 * @return Open Configuration File
 	 */
@@ -653,7 +665,7 @@ public abstract class Lang {
 	 * @return Step 8: Final Step - Summary of the Results
 	 */
 	public abstract String step8Description();
-	
+
 	/**
 	 * @return Register Sensors and Insert Observations into Sensor Observation Service
 	 */

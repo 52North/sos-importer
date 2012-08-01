@@ -34,8 +34,7 @@ import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
-import org.n52.sos.importer.view.MissingComponentPanel;
-import org.n52.sos.importer.view.Step6Panel;
+import org.n52.sos.importer.view.Step6cPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
@@ -53,7 +52,7 @@ public class Step6cController extends StepController {
 	
 	private PositionController positionController;
 	
-	private Step6Panel step6cPanel;
+	private Step6cPanel step6cPanel;
 
 	private int firstLineWithData;
 	
@@ -83,22 +82,22 @@ public class Step6cController extends StepController {
 		} else {
 			foi.removePositionFor(name);
 		}
-		positionController.unassignMissingComponentValues();
+//		XXX positionController.unassignMissingComponentValues();
 		
 		String description = step6cModel.getDescription();
-		List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
-		// TODO add Step6cPanel class for using WMS layer
-		step6cPanel = new Step6Panel(description,
+		step6cPanel = new Step6cPanel(description,
 				// to indicate to the user, that this resource is generated
 				(foi.isGenerated()?Lang.l().generated() + ": " + name:name),
-				null,
-				missingComponentPanels);	
-		BackNextController.getInstance().setNextButtonEnabled(isFinished());
+				step6cModel);	
+		step6cPanel.loadSettings();
+		// XXX What the hack is the reason for this? Why do we check if the step is finished before anything happened?
+//		BackNextController.getInstance().setNextButtonEnabled(isFinished());
 	}
 
 	@Override
 	public void saveSettings() {
-		positionController.assignMissingComponentValues();
+		step6cPanel.saveSettings();
+		// XXX positionController.assignMissingComponentValues();
 		
 		List<Component> components = positionController.getMissingComponents();
 		step6cModel.setMissingPositionComponents(components);
@@ -177,7 +176,7 @@ public class Step6cController extends StepController {
 
 	@Override
 	public boolean isFinished() {
-		return positionController.checkMissingComponentValues();
+		return step6cPanel.isFinished();
 	}
 
 	@Override

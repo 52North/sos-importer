@@ -44,9 +44,12 @@ public class DescriptionPanel extends JPanel {
 
 	private DescriptionPanel() {
 		super();
-		this.setLayout(new FlowLayout(FlowLayout.CENTER));
+		setLayout(new FlowLayout(FlowLayout.CENTER));
 		descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
-		this.add(descriptionLabel);
+		add(descriptionLabel);
+		if (Constants.GUI_DEBUG) {
+			setBorder(Constants.DEBUG_BORDER);
+		}
 	}
 
 	public static DescriptionPanel getInstance() {

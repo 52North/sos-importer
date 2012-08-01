@@ -516,6 +516,16 @@ public class De extends Lang{
 		return this.step() + " 6c: Fehlende " + this.position() + "s-Angaben hinzufügen";
 	}
 
+	@Override
+	public String step6cInfoToolName() {
+		return "Position festlegen";
+	}
+
+	@Override
+	public String step6cInfoToolTooltip() {
+		return "Legen Sie die Position durch Mausklick fest";
+	}
+
 	public String step6cModelDescription() {
 		return "Wie ist die " + this.position() + "s-Angabe von";
 	}
@@ -550,7 +560,7 @@ public class De extends Lang{
 	public String step7ConfigFileButton() {
 		return "Verzeichnis wählen";
 	}
-
+	
 	@Override
 	public String step7ConfigFileDialogTitel() {
 		return "Bitte das Verzeichnis für die Konfigurations-Datei wählen";
@@ -560,7 +570,7 @@ public class De extends Lang{
 	public String step7ConfigFileLabel() {
 		return "Konfigurations-Dateiname und -verzeichnis";
 	}
-	
+
 	public String step7Description() {
 		return this.step() + " 7: Geben Sie den " + this.sos() + " an";
 	}

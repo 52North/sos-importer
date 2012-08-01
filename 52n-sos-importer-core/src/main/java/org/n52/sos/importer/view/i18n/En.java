@@ -519,6 +519,16 @@ public class En extends Lang{
 		return this.step() + " 6c: Add missing " + this.position().toLowerCase(En.locale) + "s";
 	}
 
+	@Override
+	public String step6cInfoToolName() {
+		return "Set Position";
+	}
+
+	@Override
+	public String step6cInfoToolTooltip() {
+		 return "Set the position by clicking on the map";
+	}
+
 	public String step6cModelDescription() {
 		return "What is the " + this.position().toLowerCase(En.locale) + " of";
 	}

@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -56,7 +57,6 @@ public class MainFrame extends JFrame {
 	private final JPanel stepContainerPanel;
 	private final DescriptionPanel descriptionPanel;
 	private final BackNextPanel backNextPanel;
-//	private final JPanel infoPanel;
 	
 	// TODO read this from general configuration file
 	private String frameTitle = Lang.l().frameTitle();
@@ -68,28 +68,33 @@ public class MainFrame extends JFrame {
 	public MainFrame(MainController mainController) {
 		super();
 		this.mainController = mainController;
-		this.initLookAndFeel();
-		this.backNextPanel = BackNextPanel.getInstance();
-		this.descriptionPanel = DescriptionPanel.getInstance();
-		this.stepContainerPanel = new JPanel();
-//		this.infoPanel = new JPanel();
-		this.setTitle(this.frameTitle);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowChanged());
+		initLookAndFeel();
+		backNextPanel = BackNextPanel.getInstance();
+		descriptionPanel = DescriptionPanel.getInstance();
+		stepContainerPanel = new JPanel();
+		stepContainerPanel.setLayout(new BorderLayout());
+		setTitle(frameTitle);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setResizable(true);
+		addWindowListener(new WindowChanged());
 		
 		Container cp = this.getContentPane();
 			
-		cp.setLayout(new BorderLayout(0,5));
+		cp.setLayout(new BorderLayout());
 		cp.add(descriptionPanel, BorderLayout.NORTH);
 		cp.add(stepContainerPanel, BorderLayout.CENTER);
-//		cp.add(infoPanel);
 		cp.add(backNextPanel, BorderLayout.SOUTH);
 
-		this.pack();
+		pack();
 		// this centers the dialog on the current screen of the user
-		this.setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+		setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		setLocationRelativeTo(null);
+		setVisible(true);
+		if (Constants.GUI_DEBUG) {
+			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
+			stepContainerPanel.setBorder(Constants.DEBUG_BORDER);
+			backNextPanel.setBorder(Constants.DEBUG_BORDER);
+		}
 	}
 	
 	private void initLookAndFeel() {
@@ -118,11 +123,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setStepPanel(JPanel stepPanel) {		
-		this.stepContainerPanel.removeAll();
-		this.initLookAndFeel();
-		this.stepContainerPanel.add(stepPanel);
-		this.pack();
-		this.setBounds(this.getBounds().x, this.getBounds().y, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		stepContainerPanel.removeAll();
+		initLookAndFeel();
+		stepContainerPanel.add(stepPanel);
+		pack();
+		setBounds(this.getBounds().x, this.getBounds().y, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
 	}
 	
 	public void showExitDialog() {

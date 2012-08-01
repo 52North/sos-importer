@@ -99,6 +99,11 @@ public class Constants {
 	public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
 	public static final String UNICODE_FOI_PREFIX = "_foi-";
 	public static final String SOS_GET_GET_CAPABILITIES_REQUEST = "?service=SOS&REQUEST=GetCapabilities&AcceptVersions=1.0.0";
+	public static final int DEFAULT_EPSG_CODE = 4326;
+	public static final double DEFAULT_HEIGHT_FOI_POSITION = 0.0;
+	public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
+	public static final String DEFAULT_UNIT_FOI_POSITION = "deg";
+	public static final String WMS_VIEW_SELECT_TOOL_ICON_PNG_PATH = "/org/n52/sos/importer/view/position/noxin_crosshairs.png";
 	/*
 	 * CHANGEABLE VALUES
 	 */
