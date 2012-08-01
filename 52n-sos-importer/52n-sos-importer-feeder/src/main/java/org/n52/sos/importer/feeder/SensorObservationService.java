@@ -200,19 +200,8 @@ public final class SensorObservationService {
 				logger.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
 			}
 			// A: collect all information
-			try {
-				InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
-				insertObservationsForOneLine(ios,values);
-			} catch (ParseException e) {
-				logger.error(String.format("Could not parse values from data file \"%s\" with configuration \"%s\".\n" +
-						"Raw data: %s.\n" +
-						"Exception thrown: %s",
-						dataFile.getFileName(),
-						dataFile.getConfigurationFileName(),
-						Arrays.toString(values),
-						e.getMessage()),
-						e);
-			}
+			InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+			insertObservationsForOneLine(ios,values);
 			lineCounter++;
 			if (logger.isDebugEnabled()) {
 				logger.debug(Feeder.heapSizeInformation());
@@ -224,7 +213,7 @@ public final class SensorObservationService {
 	private InsertObservation[] getInsertObservations(String[] values,
 			int[] mVColumns,
 			DataFile df,
-			int currentLine) throws ParseException {
+			int currentLine){
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("getInsertObservations(%s, %s)",
 					Arrays.toString(values),
@@ -249,76 +238,105 @@ public final class SensorObservationService {
 
 	private InsertObservation getInsertObservationForColumnIdFromValues(int mVColumnId,
 			String[] values,
-			DataFile df) throws ParseException{
+			DataFile df){
 		if (logger.isTraceEnabled()) {
 			logger.trace("getInsertObservationForColumnIdFromValues()");
 		}
-		// SENSOR
-		Sensor sensor = df.getSensorForColumn(mVColumnId,values);
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Sensor: %s", 
-					sensor));
+		try {
+			// SENSOR
+			Sensor sensor = df.getSensorForColumn(mVColumnId,values);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Sensor: %s", 
+						sensor));
+			}
+			// FEATURE OF INTEREST incl. Position
+			FeatureOfInterest foi = df.getFoiForColumn(mVColumnId,values);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Feature of Interest: %s",
+						foi));
+			}
+			// VALUE
+			Object value = df.getValue(mVColumnId,values);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Value: %s", value.toString()));
+			}
+			// TODO implement using different templates in later version depending on the class of value
+			// TIMESTAMP
+			String timeStamp = df.getTimeStamp(mVColumnId,values).toString();
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Timestamp: %s", timeStamp));
+			}
+			// UOM CODE
+			UnitOfMeasurement uom = df.getUnitOfMeasurement(mVColumnId,values);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("UomCode: \"%s\"", uom));
+			}
+			// OBSERVED_PROPERTY
+			ObservedProperty observedProperty = df.getObservedProperty(mVColumnId,values);
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("ObservedProperty: %s", observedProperty));
+			}
+			Offering offer = df.getOffering(sensor);
+			return new InsertObservation(sensor,foi,value,timeStamp,uom,observedProperty,offer);
+		} catch (ParseException pe) {
+			logger.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s",
+					pe.getClass().getName(),
+					pe.getMessage()));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Exception stack trace:",pe);
+			}
+			/*
+			 catch (ParseException e) {
+				logger.error(String.format("Could not parse values from data file \"%s\" with configuration \"%s\".\n" +
+						"Raw data: %s.\n" +
+						"Exception thrown: %s",
+						dataFile.getFileName(),
+						dataFile.getConfigurationFileName(),
+						Arrays.toString(values),
+						e.getMessage()),
+						e);
+			} 
+			 */
 		}
-		// FEATURE OF INTEREST incl. Position
-		FeatureOfInterest foi = df.getFoiForColumn(mVColumnId,values);
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Feature of Interest: %s",
-					foi));
-		}
-		// VALUE
-		Object value = df.getValue(mVColumnId,values);
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Value: %s", value.toString()));
-		}
-		// TODO implement using different templates in later version depending on the class of value
-		// TIMESTAMP
-		String timeStamp = df.getTimeStamp(mVColumnId,values).toString();
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("Timestamp: %s", timeStamp));
-		}
-		// UOM CODE
-		UnitOfMeasurement uom = df.getUnitOfMeasurement(mVColumnId,values);
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("UomCode: \"%s\"", uom));
-		}
-		// OBSERVED_PROPERTY
-		ObservedProperty observedProperty = df.getObservedProperty(mVColumnId,values);
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("ObservedProperty: %s", observedProperty));
-		}
-		Offering offer = df.getOffering(sensor);
-		return new InsertObservation(sensor,foi,value,timeStamp,uom,observedProperty,offer);
+		return null;
 	}
 
 	private void insertObservationsForOneLine(InsertObservation[] ios, String[] values) throws OXFException, XmlException, IOException {
 		insertObservationForALine:
 			for (InsertObservation io : ios) {
-				if (!isSensorRegistered(io.getSensorURI())) {
-					String assignedSensorId = registerSensor(new RegisterSensor(io),values);
-					if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
-						logger.error(String.format("Sensor \"%s\"[%s] could not be registered at SOS \"%s\". Skipping insert obsevation for this and store it.",
+				if (io != null) {
+					if (!isSensorRegistered(io.getSensorURI())) {
+						String assignedSensorId = registerSensor(new RegisterSensor(io),values);
+						if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
+							logger.error(String.format("Sensor \"%s\"[%s] could not be registered at SOS \"%s\". Skipping insert obsevation for this and store it.",
+									io.getSensorName(),
+									io.getSensorURI(),
+									sosUrl.toExternalForm()));
+							failedInsertObservations.add(io);
+							continue insertObservationForALine;
+						} else {
+							if (logger.isDebugEnabled()) {
+								logger.debug(String.format("Sensor registered at SOS  \"%s\" with assigned id \"%s\"", 
+										sosUrl.toExternalForm(),
+										assignedSensorId));
+							}
+							registeredSensors.add(assignedSensorId);
+						}
+					}
+					// sensor is registered -> insert the data
+					String observationId = insertObservation(io);
+					if (observationId == null || observationId.equalsIgnoreCase("")) {
+						logger.error(String.format("Insert observation failed for sensor \"%s\"[%s]. Store: %s",
 								io.getSensorName(),
 								io.getSensorURI(),
-								sosUrl.toExternalForm()));
+								io));
 						failedInsertObservations.add(io);
-						continue insertObservationForALine;
-					} else {
+					} else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
 						if (logger.isDebugEnabled()) {
-							logger.debug(String.format("Sensor registered at SOS  \"%s\" with assigned id \"%s\"", 
-									sosUrl.toExternalForm(),
-									assignedSensorId));
+							logger.debug(String.format("Observation was already contained in SOS: %s",
+									io));
 						}
-						registeredSensors.add(assignedSensorId);
 					}
-				}
-				// sensor is registered -> insert the data
-				String observationId = insertObservation(io);
-				if (observationId == null || observationId.equalsIgnoreCase("")) {
-					logger.error(String.format("Insert observation failed for sensor \"%s\"[%s]. Store: %s",
-							io.getSensorName(),
-							io.getSensorURI(),
-							io));
-					failedInsertObservations.add(io);
 				}
 			}
 	}
@@ -340,7 +358,7 @@ public final class SensorObservationService {
 			}
 			try {
 				if (logger.isDebugEnabled()) {
-					logger.debug("\n\nBEFORE OXF\n\n");
+					logger.debug("\n\nBEFORE OXF - doOperation \"InsertObservation\"\n\n");
 				}
 				opResult = sosAdapter.doOperation(
 						new Operation(SOSAdapter.INSERT_OBSERVATION,
@@ -348,7 +366,7 @@ public final class SensorObservationService {
 								sosUrl.toExternalForm()),
 								paramCon);
 				if (logger.isDebugEnabled()) {
-					logger.debug("\n\nAFTER OXF\n\n");
+					logger.debug("\n\nAFTER OXF - doOperation \"InsertObservation\"\n\n");
 				}
 				if (sosVersion.equals("1.0.0")) {
 					try {
@@ -372,6 +390,12 @@ public final class SensorObservationService {
 				StringBuffer buf = new StringBuffer();
 				while (iter.hasNext()) {
 					OWSException owsEx = iter.next();
+					// check for observation already contained exception
+					if (owsEx.getExceptionCode().equals(Configuration.SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
+							owsEx.getExceptionTexts().length > 0 &&
+							owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT) > -1) {
+						return Configuration.SOS_OBSERVATION_ALREADY_CONTAINED;
+					}
 					buf = buf.append(String.format("ExceptionCode: \"%s\" because of \"%s\"\n",
 							owsEx.getExceptionCode(),
 							Arrays.toString(owsEx.getExceptionTexts())));

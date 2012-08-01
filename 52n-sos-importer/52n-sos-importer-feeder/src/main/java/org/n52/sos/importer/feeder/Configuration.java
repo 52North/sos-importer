@@ -95,6 +95,9 @@ public final class Configuration {
 	private static final String COLUMN_SEPARATOR_TAB = "Tab";
 	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
 	public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END = "is already registered at this SOS";
+	public static final String SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE = "NoApplicableCode";
+	public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
+	public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
