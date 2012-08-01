@@ -76,8 +76,8 @@ public class Step1Panel extends JPanel {
 	public Step1Panel(Step1Controller step1Controller) {
 		super();
 		// init fields
-		JScrollPane welcomePanel = this.welcomePanel();
-		JPanel languagePanel = this.languagePanel();
+		JScrollPane welcomePanel = welcomePanel();
+		JPanel languagePanel = languagePanel();
 		// csv Panel
 		JPanel csvPanel = new JPanel();
 		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -86,10 +86,10 @@ public class Step1Panel extends JPanel {
 		csvPanel.add(browse);
 		// create gui
 		this.step1Controller = step1Controller;
-		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		this.add(languagePanel);
-		this.add(welcomePanel);
-		this.add(csvPanel);
+		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		add(languagePanel);
+		add(welcomePanel);
+		add(csvPanel);
 		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
 		browse.addActionListener(new BrowseButtonClicked());
 	}

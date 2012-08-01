@@ -185,7 +185,7 @@ public class Step2Panel extends JPanel {
 		//
 		//	CSV text area
 		//
-		csvFileTextArea = new JTextArea(20, 70);
+		csvFileTextArea = new JTextArea(20, 60);
 		csvFileTextArea.setEditable(false);	
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
 		JPanel csvDataPanel = new JPanel();
