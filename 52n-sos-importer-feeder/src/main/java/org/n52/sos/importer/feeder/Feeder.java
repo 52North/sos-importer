@@ -25,9 +25,6 @@ package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -36,11 +33,9 @@ import java.util.jar.Manifest;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
+import org.n52.sos.importer.feeder.task.OneTimeFeeder;
 
 /**
- * TODO check System.exit(-1)
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
@@ -58,7 +53,7 @@ public final class Feeder {
 		if (logger.isTraceEnabled()) {
 			logger.trace("main()");
 		}
-		if(logger.isInfoEnabled()) {
+		if(logger.isDebugEnabled()) {
 			logApplicationMetadata();
 		}
 		if (checkArgs(args)) {
@@ -68,23 +63,9 @@ public final class Feeder {
 				Configuration c = new Configuration(configFile);
 				// start application with valid configuration
 				// data file
-				DataFile dataFile = new DataFile(c);
-				if (dataFile.isAvailable()) {
-					// check SOS
-					URL sosURL = c.getSosUrl();
-					SensorObservationService sos = new SensorObservationService(sosURL);
-					if (!sos.isAvailable()) {
-						logger.fatal(String.format("SOS \"%s\" is not available. Please check the configuration!", sosURL));
-					} else if (!sos.isTransactional()){
-						logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
-					} else {
-						// SOS is available and transactional
-						// start reading data file line by line starting from flwd
-						// TODO if failed observations-> store in file
-						ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
-						saveFailedInsertObservations(failedInserts);
-					}
-				} 
+				if (args.length == 2) { // Case: one time feeding with defined configuration
+					new Thread(new OneTimeFeeder(c),"OneTimeFeeder").start();
+				}
 			} catch (XmlException e) {
 				String errorMsg = 
 						String.format("Configuration file \"%s\" could not be " +
@@ -95,41 +76,14 @@ public final class Feeder {
 				if (logger.isDebugEnabled()) {
 					logger.debug("", e);
 				}
-			} catch (MalformedURLException mue) {
-				String errorMsg = 
-						String.format("SOS URL syntax not correct in configuration file %s. Exception thrown: %s", 
-								configFile,
-								mue.getMessage());
-				logger.error(errorMsg);
-				if (logger.isDebugEnabled()) {
-					logger.debug("", mue);
-				}
 			} catch (IOException e) {
 				logger.error(String.format("Exception thrown: %s", e.getMessage()));
-				if (logger.isDebugEnabled()) {
-					logger.debug("", e);
-				}
-			} catch (OXFException e) {
-				// TODO Auto-generated catch block generated on 21.06.2012 around 15:26:34
-				logger.error(String.format("Exception thrown: %s",
-						e.getMessage()));
 				if (logger.isDebugEnabled()) {
 					logger.debug("", e);
 				}
 			}
 		} else {
 			showUsage();
-		}
-	}
-
-	/*
-	 * Method should store failed insertObservations in a defined directory and created configuration for this.
-	 */
-	private static void saveFailedInsertObservations(
-			ArrayList<InsertObservation> failedInserts) {
-		// TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("saveFailedInsertObservations()");
 		}
 	}
 
