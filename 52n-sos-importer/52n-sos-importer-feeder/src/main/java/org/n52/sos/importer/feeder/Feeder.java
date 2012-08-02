@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.feeder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -34,6 +35,7 @@ import java.util.jar.Manifest;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.task.OneTimeFeeder;
+import org.n52.sos.importer.feeder.task.RepeatedFeeder;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -43,12 +45,8 @@ public final class Feeder {
 
 	private static final Logger logger = Logger.getLogger(Feeder.class);
 
-	private static final String[] ALLOWED_PARAMETERS = { "-f", "--config-file"};
+	private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
-	/**
-	 * 
-	 * @param args must contain at least the following parameter: (-f|--config-file) /path/to/config/file.xml
-	 */
 	public static void main(String[] args) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("main()");
@@ -65,6 +63,16 @@ public final class Feeder {
 				// data file
 				if (args.length == 2) { // Case: one time feeding with defined configuration
 					new Thread(new OneTimeFeeder(c),"OneTimeFeeder").start();
+					
+				} else if (args.length == 4) { // Case: one time feeding with file override or period with file from configuration
+					if (args[2].equals(ALLOWED_PARAMETERS[1])) { // Case: file override
+						new Thread(new OneTimeFeeder(c,new File(args[3])));
+						
+					} else if (args[2].equals(ALLOWED_PARAMETERS[2])) { // Case: repeated feeding
+						new RepeatedFeeder(c,Integer.parseInt(args[3]));
+					}
+				} else if (args.length == 6) { // Case: repeated feeding with file override
+					new RepeatedFeeder(c,new File(args[3]),Integer.parseInt(args[5]));
 				}
 			} catch (XmlException e) {
 				String errorMsg = 
@@ -72,14 +80,19 @@ public final class Feeder {
 								"parsed. Exception thrown: %s",
 								configFile,
 								e.getMessage());
-				logger.error(errorMsg);
+				logger.fatal(errorMsg);
 				if (logger.isDebugEnabled()) {
 					logger.debug("", e);
 				}
 			} catch (IOException e) {
-				logger.error(String.format("Exception thrown: %s", e.getMessage()));
+				logger.fatal(String.format("Exception thrown: %s", e.getMessage()));
 				if (logger.isDebugEnabled()) {
 					logger.debug("", e);
+				}
+			} catch (IllegalArgumentException iae) {
+				logger.fatal("Given parameters could not be parsed! -p must be a number.");
+				if (logger.isDebugEnabled()) {
+					logger.debug("Exception Stack Trace:",iae);
 				}
 			}
 		} else {
@@ -89,14 +102,17 @@ public final class Feeder {
 
 	/**
 	 * Prints the usage test to the Standard-Output.
+	 * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
 	 */
 	private static void showUsage() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("showUsage()");
 		}
-		logger.info("\nusage: java -jar Feeder.jar (-f | --config-file) file\n" +
+		logger.info("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n" +
 				"options and arguments:\n" + 
-				"-f file	: read the config file and start the import process");
+				"-c file	 : read the config file and start the import process" +
+				"-d datafile : OPTIONAL override of the datafile defined in config file" +
+				"-p period   : OPTIONAL time period in minutes for repeated feeding");
 	}
 
 	/**
@@ -113,20 +129,27 @@ public final class Feeder {
 			logger.trace("checkArgs()");
 		}
 		if (args == null) {
-			logger.error("no parameters defined. null received as args!");
+			logger.fatal("no parameters defined. null received as args!");
 			return false;
-		} else if (args.length != 2) {
-			logger.error("given parameters do not match programm specification.");
-			return false;
-		} else {
-			for (int i = 0; i < ALLOWED_PARAMETERS.length; i++) {
-				if (ALLOWED_PARAMETERS[i].equalsIgnoreCase(args[0])) {
-					return true;
-				}
+		} else if (args.length == 2) {
+			if (ALLOWED_PARAMETERS[0].equals(args[0])) {
+				return true;
 			}
-			logger.error("given parameters is not supported: " + args[0]);
-			return false;
+		} else if (args.length == 4) {
+			if (ALLOWED_PARAMETERS[0].equals(args[0]) && (
+					args[2].equals(ALLOWED_PARAMETERS[1]) || 
+					args[2].equals(ALLOWED_PARAMETERS[2]) ) ) {
+				return true;
+			}
+		} else if (args.length == 6) {
+			if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
+					args[2].equals(ALLOWED_PARAMETERS[1]) &&
+					args[4].equals(ALLOWED_PARAMETERS[2])) {
+				return true;
+			}
 		}
+		logger.fatal("Given parameters do not match programm specification. ");
+		return false;
 	}
 
 	/**
