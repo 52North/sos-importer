@@ -175,6 +175,11 @@ public final class SensorObservationService {
 		// check for RegisterSensor and InsertObservationOperation
 		if (opMeta.getOperationByName(SOSAdapter.REGISTER_SENSOR) != null &&
 				opMeta.getOperationByName(SOSAdapter.INSERT_OBSERVATION) != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Found all required operations: %s, %s",
+						SOSAdapter.REGISTER_SENSOR,
+						SOSAdapter.INSERT_OBSERVATION));
+			}
 			return true;
 		}
 		return false;
@@ -279,7 +284,7 @@ public final class SensorObservationService {
 			Offering offer = df.getOffering(sensor);
 			return new InsertObservation(sensor,foi,value,timeStamp,uom,observedProperty,offer);
 		} catch (ParseException pe) {
-			logger.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s",
+			logger.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s. Skipped this one.",
 					pe.getClass().getName(),
 					pe.getMessage()));
 			if (logger.isDebugEnabled()) {

@@ -74,12 +74,17 @@ public class DataFile {
 	
 	private Configuration c;
 	
-	public DataFile(Configuration configuration) {
+	private File f;
+	
+	public DataFile(Configuration configuration, File file) {
 		c = configuration;
+		f = file;
 	}
 
 	/**
-	 * Checks if the file is available and can be read.
+	 * Checks if the file is available and can be read. All errors like not 
+	 * available, not a file, and not readable are logged to 
+	 * <code>logger.error()</code>.
 	 * @return <code>true</code>, if the Datafile is a file and can be read,<br />
 	 * 			else <code>false</code>.
 	 */
@@ -87,21 +92,20 @@ public class DataFile {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isAvailable()");
 		}
-		File file = c.getDataFile();
-		if (!file.exists()) {
+		if (!f.exists()) {
 			logger.error(String.format("Data file \"%s\" specified in \"%s\" does not exist.",
-					file.getAbsolutePath(),
+					f.getAbsolutePath(),
 					c.getConfigFile().getAbsolutePath()));
-		} else if (!file.isFile()){
+		} else if (!f.isFile()){
 			logger.error(String.format("Data file \"%s\" is not a file!",
-					file.getAbsolutePath()));
-		} else if (!file.canRead()) {
+					f.getAbsolutePath()));
+		} else if (!f.canRead()) {
 			logger.error(String.format("Data file \"%s\" can not be accessed, please check file permissions!",
-					file.getAbsolutePath()));
+					f.getAbsolutePath()));
 		} else {
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("Data file \"%s\" is a file and read permission is available.",
-						file.getAbsolutePath()));
+						f.getAbsolutePath()));
 			}
 			return true;
 		}
@@ -118,7 +122,7 @@ public class DataFile {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getCSVReader()");
 		}
-		FileReader fr = new FileReader(c.getDataFile());
+		FileReader fr = new FileReader(f);
 		BufferedReader br = new BufferedReader(fr);
 		int flwd = c.getFirstLineWithData();
 		char separator = c.getCsvSeparator(), 
@@ -296,6 +300,8 @@ public class DataFile {
 				if (m.getValue().equals("TEXT")) {
 					return new String(value);
 				}
+				// text is done -> clean string before parsing to other types
+				value = value.trim();
 				// BOOLEAN
 				if (m.getValue().equals("BOOLEAN")) {
 					if (value.equalsIgnoreCase("0")) {
@@ -575,7 +581,7 @@ public class DataFile {
 	 * @return the name of the data file. Not the whole path.
 	 */
 	public String getFileName() {
-		return c.getDataFile().getName();
+		return f.getName();
 	}
 
 	/**
@@ -787,6 +793,6 @@ public class DataFile {
 	}
 
 	public String toString() {
-		return String.format("DataFile [c=%s, file=%s]",c,c.getDataFile());
+		return String.format("DataFile [c=%s, file=%s]",c,f);
 	}
 }

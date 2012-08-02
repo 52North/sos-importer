@@ -28,7 +28,7 @@
 	</logger>
 	-->
 	<logger name="org.n52.sos">
-		<level value="DEBUG" />
+		<level value="TRACE" />
 	</logger>
 	<logger name="org.n52.oxf">
 		<level value="DEBUG" />
