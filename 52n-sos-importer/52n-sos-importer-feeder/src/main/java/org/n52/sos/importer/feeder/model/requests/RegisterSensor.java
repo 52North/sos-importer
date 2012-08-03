@@ -24,6 +24,7 @@
 package org.n52.sos.importer.feeder.model.requests;
 
 
+
 /**
  * Holds all information for the RegisterSensor request
  * @author Raimund
@@ -116,20 +117,57 @@ public class RegisterSensor {
 	public String getOfferingUri() {
 		return io.getOffering().getUri();
 	}
+	
+	public String getMvType() {
+		return io.getMvType();
+	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return String
-				.format("RegisterSensor [getSensorName()=%s, getSensorURI()=%s, getFeatureOfInterestName()=%s, getObservedPropertyName()=%s, getObservedPropertyURI()=%s, getOfferingName()=%s, getUnitOfMeasurementCode()=%s, getEpsgCode()=%s, getLatitudeValue()=%s, getLatitudeUnit()=%s, getLongitudeValue()=%s, getLongitudeUnit()=%s, getAltitudeValue()=%s, getAltitudeUnit()=%s, getFeatureOfInterestURI()=%s, getDefaultValue()=%s, getOfferingUri()=%s]",
-						getSensorName(), getSensorURI(),
-						getFeatureOfInterestName(), getObservedPropertyName(),
-						getObservedPropertyURI(), getOfferingName(),
-						getUnitOfMeasurementCode(), getEpsgCode(),
-						getLatitudeValue(), getLatitudeUnit(),
-						getLongitudeValue(), getLongitudeUnit(),
-						getAltitudeValue(), getAltitudeUnit(),
-						getFeatureOfInterestURI(), getDefaultValue(),
-						getOfferingUri());
+		StringBuilder builder = new StringBuilder();
+		builder.append("RegisterSensor [io=");
+		builder.append(io);
+		builder.append(", getSensorName()=");
+		builder.append(getSensorName());
+		builder.append(", getSensorURI()=");
+		builder.append(getSensorURI());
+		builder.append(", getFeatureOfInterestName()=");
+		builder.append(getFeatureOfInterestName());
+		builder.append(", getObservedPropertyName()=");
+		builder.append(getObservedPropertyName());
+		builder.append(", getObservedPropertyURI()=");
+		builder.append(getObservedPropertyURI());
+		builder.append(", getOfferingName()=");
+		builder.append(getOfferingName());
+		builder.append(", getUnitOfMeasurementCode()=");
+		builder.append(getUnitOfMeasurementCode());
+		builder.append(", getEpsgCode()=");
+		builder.append(getEpsgCode());
+		builder.append(", getLatitudeValue()=");
+		builder.append(getLatitudeValue());
+		builder.append(", getLatitudeUnit()=");
+		builder.append(getLatitudeUnit());
+		builder.append(", getLongitudeValue()=");
+		builder.append(getLongitudeValue());
+		builder.append(", getLongitudeUnit()=");
+		builder.append(getLongitudeUnit());
+		builder.append(", getAltitudeValue()=");
+		builder.append(getAltitudeValue());
+		builder.append(", getAltitudeUnit()=");
+		builder.append(getAltitudeUnit());
+		builder.append(", getFeatureOfInterestURI()=");
+		builder.append(getFeatureOfInterestURI());
+		builder.append(", getDefaultValue()=");
+		builder.append(getDefaultValue());
+		builder.append(", getOfferingUri()=");
+		builder.append(getOfferingUri());
+		builder.append(", getMvType()=");
+		builder.append(getMvType());
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

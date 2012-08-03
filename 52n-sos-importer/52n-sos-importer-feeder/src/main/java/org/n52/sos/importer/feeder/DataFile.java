@@ -793,6 +793,10 @@ public class DataFile {
 	}
 
 	public String toString() {
-		return String.format("DataFile [c=%s, file=%s]",c,f);
+		return String.format("DataFile [file=%s, c=%s]",f,c);
+	}
+
+	public String getType(int mVColumnId) {
+		return c.getType(mVColumnId);
 	}
 }

@@ -98,6 +98,7 @@ public final class Configuration {
 	public static final String SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE = "NoApplicableCode";
 	public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
 	public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
+	public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
@@ -944,6 +945,19 @@ public final class Configuration {
 			}
 		}
 		return ts;
+	}
+
+	public String getType(int mVColumnId) {
+		for (Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+			if (col.getNumber() == mVColumnId) {
+				for (Metadata m : col.getMetadataArray()) {
+					if (m.getKey().equals(Key.TYPE)) {
+						return m.getValue();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

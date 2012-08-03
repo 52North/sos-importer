@@ -42,6 +42,7 @@ import net.opengis.sos.x10.RegisterSensorResponseDocument;
 import net.opengis.swe.x101.AbstractDataRecordType;
 import net.opengis.swe.x101.AnyScalarPropertyType;
 import net.opengis.swe.x101.BooleanDocument.Boolean;
+import net.opengis.swe.x101.CategoryDocument.Category;
 import net.opengis.swe.x101.PositionType;
 import net.opengis.swe.x101.QuantityDocument.Quantity;
 import net.opengis.swe.x101.SimpleDataRecordType;
@@ -230,15 +231,19 @@ public final class SensorObservationService {
 					Arrays.toString(mVColumns)));
 			return null;
 		}
-		InsertObservation[] result = new InsertObservation[mVColumns.length];
+		ArrayList<InsertObservation> result = new ArrayList<InsertObservation>(mVColumns.length);
 		for (int i = 0; i < mVColumns.length; i++) {
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("Parsing for measure value column %s",
 						mVColumns[i]));
 			}
-			result[i] = getInsertObservationForColumnIdFromValues(mVColumns[i],values,df);
+			InsertObservation io = getInsertObservationForColumnIdFromValues(mVColumns[i],values,df);
+			if (io != null) {
+				result.add(io);
+			}
 		}
-		return result;
+		result.trimToSize();
+		return result.toArray(new InsertObservation[result.size()]);
 	}
 
 	private InsertObservation getInsertObservationForColumnIdFromValues(int mVColumnId,
@@ -282,7 +287,14 @@ public final class SensorObservationService {
 				logger.debug(String.format("ObservedProperty: %s", observedProperty));
 			}
 			Offering offer = df.getOffering(sensor);
-			return new InsertObservation(sensor,foi,value,timeStamp,uom,observedProperty,offer);
+			return new InsertObservation(sensor,
+					foi,
+					value,
+					timeStamp,
+					uom,
+					observedProperty,
+					offer,
+					df.getType(mVColumnId));
 		} catch (ParseException pe) {
 			logger.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s. Skipped this one.",
 					pe.getClass().getName(),
@@ -489,6 +501,13 @@ public final class SensorObservationService {
 		/*
 		 * Value
 		 */
+		// if the parameter INSERT_OBSERVATION_TYPE is not set, the OXF uses measurement as default
+		if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+			paramCon.addParameterShell(ISOSRequestBuilder.INSERT_OBSERVATION_TYPE,
+					ISOSRequestBuilder.INSERT_OBSERVATION_TYPE_CATEGORY);
+			paramCon.addParameterShell(ISOSRequestBuilder.INSERT_OBSERVATION_CATEGORY_OBSERVATION_RESULT_CODESPACE,
+					io.getUnitOfMeasurementCode());
+		}
 		paramCon.addParameterShell(
 				ISOSRequestBuilder.INSERT_OBSERVATION_VALUE_PARAMETER,
 				io.getValue().toString());
@@ -573,15 +592,22 @@ public final class SensorObservationService {
         paramCon.addParameterShell(
         		ISOSRequestBuilder.REGISTER_SENSOR_ML_DOC_PARAMETER,
         		createSML(registerSensor));
-        paramCon.addParameterShell(ISOSRequestBuilder.REGISTER_SENSOR_UOM_PARAMETER,
-        		registerSensor.getUnitOfMeasurementCode());
         // TODO implement handling of different types
-        paramCon.addParameterShell(
-        		ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE,
-        		ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE_MEASUREMENT);
+        if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+        	paramCon.addParameterShell(
+        			ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE,
+        			ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE_CATEGORY);
+        	paramCon.addParameterShell(ISOSRequestBuilder.REGISTER_SENSOR_CODESPACE_PARAMETER,
+            		registerSensor.getUnitOfMeasurementCode());
+        } else { // default: MEASUREMENT
+        	paramCon.addParameterShell(
+        			ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE,
+        			ISOSRequestBuilder.REGISTER_SENSOR_OBSERVATION_TYPE_MEASUREMENT);
+        	paramCon.addParameterShell(ISOSRequestBuilder.REGISTER_SENSOR_UOM_PARAMETER,
+            		registerSensor.getUnitOfMeasurementCode());
+        }
         paramCon.addParameterShell(ISOSRequestBuilder.REGISTER_SENSOR_DEFAULT_RESULT_VALUE,
         		registerSensor.getDefaultValue());
-        
 		return paramCon;
 	}
 
@@ -690,16 +716,26 @@ public final class SensorObservationService {
 	private void addOutputs(SystemType system, RegisterSensor rs) {
 		IoComponentPropertyType output = system.addNewOutputs().addNewOutputList().addNewOutput();
 		output.setName(rs.getObservedPropertyName());
-		Quantity quantity = output.addNewQuantity();
-		quantity.setDefinition(rs.getObservedPropertyURI());
-		MetaDataPropertyType offering = quantity.addNewMetaDataProperty();
-		XmlCursor c = offering.newCursor();
+		if (rs.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+			Category category = output.addNewCategory();
+			category.setDefinition(rs.getObservedPropertyURI());
+			addOfferingMetadata(category.addNewMetaDataProperty(),rs);
+			category.addNewCodeSpace();
+		} else {
+			Quantity quantity = output.addNewQuantity();
+			quantity.setDefinition(rs.getObservedPropertyURI());
+			addOfferingMetadata(quantity.addNewMetaDataProperty(), rs);
+			quantity.addNewUom().setCode(rs.getUnitOfMeasurementCode());
+		}
+	}
+
+	private void addOfferingMetadata(MetaDataPropertyType addNewMetaDataProperty, RegisterSensor rs) {
+		XmlCursor c = addNewMetaDataProperty.newCursor();
 		c.toNextToken();
 		c.beginElement(Configuration.QN_SOS_1_0_OFFERING);
 		c.insertElementWithText(Configuration.QN_SOS_1_0_ID,rs.getOfferingUri());
 		c.insertElementWithText(Configuration.QN_SOS_1_0_NAME,rs.getOfferingName());
 		c.dispose();
-		quantity.addNewUom().setCode(rs.getUnitOfMeasurementCode());
 	}
 
 	private boolean isSensorRegistered(String sensorURI) {

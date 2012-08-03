@@ -41,6 +41,7 @@ public class InsertObservation {
 	private FeatureOfInterest f;
 	private UnitOfMeasurement u;
 	private Offering off;
+	private String mvType;
 	
 	public InsertObservation(Sensor sensor,
 			FeatureOfInterest foi,
@@ -48,7 +49,8 @@ public class InsertObservation {
 			String timeStamp,
 			UnitOfMeasurement uom,
 			ObservedProperty obsProp,
-			Offering off) {
+			Offering off,
+			String mvType) {
 		this.f = foi; 
 		this.s = sensor;
 		this.o = obsProp;
@@ -56,6 +58,7 @@ public class InsertObservation {
 		this.u = uom;
 		this.value = value;
 		this.off = off;
+		this.mvType = mvType;
 	}
 	
 	public String getSensorName() {
@@ -117,16 +120,35 @@ public class InsertObservation {
 	protected Offering getOffering() {
 		return off;
 	}
+	
+	public String getMvType() {
+		return mvType;
+	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return String
-				.format("InsertObservation [value=%s, timeStamp=%s, SensorName=%s, SensorURI=%s, FoiName=%s, FoiURI()=%s, ObservedPropertyURI=%s, UnitOfMeasurementCode=%s, Value=%s, TimeStamp=%s, EpsgCode=%s, LatitudeValue=%s, LongitudeValue=%s]",
-						value, timeStamp, getSensorName(), getSensorURI(),
-						getFeatureOfInterestName(), getFeatureOfInterestURI(),
-						getObservedPropertyURI(), getUnitOfMeasurementCode(),
-						getValue(), getTimeStamp(), getEpsgCode(),
-						getLatitudeValue(), getLongitudeValue());
+		StringBuilder builder = new StringBuilder();
+		builder.append("InsertObservation [value=");
+		builder.append(value);
+		builder.append(", timeStamp=");
+		builder.append(timeStamp);
+		builder.append(", s=");
+		builder.append(s);
+		builder.append(", o=");
+		builder.append(o);
+		builder.append(", f=");
+		builder.append(f);
+		builder.append(", u=");
+		builder.append(u);
+		builder.append(", off=");
+		builder.append(off);
+		builder.append(", mvType=");
+		builder.append(mvType);
+		builder.append("]");
+		return builder.toString();
 	}
 	
 }
