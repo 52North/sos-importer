@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Timer;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
@@ -62,17 +63,17 @@ public final class Feeder {
 				// start application with valid configuration
 				// data file
 				if (args.length == 2) { // Case: one time feeding with defined configuration
-					new Thread(new OneTimeFeeder(c),"OneTimeFeeder").start();
+					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getCanonicalName()).start();
 					
 				} else if (args.length == 4) { // Case: one time feeding with file override or period with file from configuration
 					if (args[2].equals(ALLOWED_PARAMETERS[1])) { // Case: file override
-						new Thread(new OneTimeFeeder(c,new File(args[3])));
+						new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
 						
 					} else if (args[2].equals(ALLOWED_PARAMETERS[2])) { // Case: repeated feeding
-						new RepeatedFeeder(c,Integer.parseInt(args[3]));
+						repeatedFeeding(c,Integer.parseInt(args[3]));
 					}
 				} else if (args.length == 6) { // Case: repeated feeding with file override
-					new RepeatedFeeder(c,new File(args[3]),Integer.parseInt(args[5]));
+					repeatedFeeding(c,new File(args[3]),Integer.parseInt(args[5]));
 				}
 			} catch (XmlException e) {
 				String errorMsg = 
@@ -100,6 +101,15 @@ public final class Feeder {
 		}
 	}
 
+	private static void repeatedFeeding(Configuration c, File f, int periodInMinutes) {
+		Timer t = new Timer("FeederTimer");
+		t.schedule(new RepeatedFeeder(c,f), 1, periodInMinutes*1000*60);
+	}
+
+	private static void repeatedFeeding(Configuration c, int periodInMinutes) {
+		repeatedFeeding(c,c.getDataFile(),periodInMinutes);
+	}
+
 	/**
 	 * Prints the usage test to the Standard-Output.
 	 * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
@@ -110,8 +120,8 @@ public final class Feeder {
 		}
 		logger.info("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n" +
 				"options and arguments:\n" + 
-				"-c file	 : read the config file and start the import process" +
-				"-d datafile : OPTIONAL override of the datafile defined in config file" +
+				"-c file	 : read the config file and start the import process\n" +
+				"-d datafile : OPTIONAL override of the datafile defined in config file\n" +
 				"-p period   : OPTIONAL time period in minutes for repeated feeding");
 	}
 
