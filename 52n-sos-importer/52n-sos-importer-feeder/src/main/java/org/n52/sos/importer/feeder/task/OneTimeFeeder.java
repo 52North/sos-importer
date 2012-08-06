@@ -110,7 +110,10 @@ public class OneTimeFeeder implements Runnable {
 					logger.debug("Exception Stack Trace:",e);
 				}
 			} 
-		} 
+		}
+		if (logger.isInfoEnabled()) {
+			logger.info("Feeding data to SOS instance finished.");
+		}
 	}
 	
 	/*
