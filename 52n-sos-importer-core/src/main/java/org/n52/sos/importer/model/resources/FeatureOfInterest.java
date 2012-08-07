@@ -74,7 +74,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 		 * case A: this is not a feature of interest row or column; 
 		 * 			it is a global foi or a generated one
 		 */
-		if (getTableElement() == null) {
+		if (getTableElement() == null || isGenerated()) {
 			return this;
 		} else {
 			// TODO check position handling here!
@@ -82,6 +82,8 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 			FeatureOfInterest foi = new FeatureOfInterest();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			foi.setName(name);
+			// FIXME check, if the next line break any logic
+			foi.setTableElement(getTableElement());
 			
 			/* 
 			 * case B: this is a feature of interest row or column
@@ -180,16 +182,13 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 	@Override
 	public int compareTo(FeatureOfInterest o) {
 		// try to compare by name
-		if (this.getName() != null && o.getName() != null) {
-			return this.getName().compareTo(o.getName());
+		if (getName() != null && o.getName() != null) {
+			return getName().compareTo(o.getName());
 		}
 		// compare by xmlId
-		return this.getXMLId().compareTo(o.getXMLId());
+		return getXMLId().compareTo(o.getXMLId());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.n52.sos.importer.model.resources.Resource#getName()
-	 */
 	@Override
 	public String getName() {
 		if (isGenerated()) {

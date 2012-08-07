@@ -38,7 +38,6 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
-import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step6Panel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -67,7 +66,7 @@ public class Step6bSpecialController extends StepController {
 	
 	public Step6bSpecialController(int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
-		this.tableController = TableController.getInstance();
+		tableController = TableController.getInstance();
 	}
 	
 	public Step6bSpecialController(Step6bSpecialModel step6bSpecialModel, int firstLineWithData) {
@@ -77,6 +76,7 @@ public class Step6bSpecialController extends StepController {
 	
 	@Override
 	public void loadSettings() {
+		// FIXME does not work with generated
 		String description = step6bSpecialModel.getDescription();
 		String foiName = step6bSpecialModel.getFeatureOfInterest().getName();
 		String opName = step6bSpecialModel.getObservedProperty().getName();
@@ -114,7 +114,7 @@ public class Step6bSpecialController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step6cController(this.firstLineWithData);
+		return new Step6cController(firstLineWithData);
 	}
 
 	@Override
@@ -137,41 +137,46 @@ public class Step6bSpecialController extends StepController {
 	}
 		
 	public Step6bSpecialModel getNextModel() {
-		int rows = this.tableController.getRowCount();
-		int flwd = this.tableController.getFirstLineWithData();
+		int rows = tableController.getRowCount();
+		int flwd = tableController.getFirstLineWithData();
+		ModelStore ms = ModelStore.getInstance();
 
 		//iterate through all measured value columns/rows
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			int rowOrColumnNumber;
-			if (mv.getTableElement() instanceof Column) 
-				rowOrColumnNumber = ((Column)mv.getTableElement()).getNumber();
-			else 
-				rowOrColumnNumber = ((Row)mv.getTableElement()).getNumber();
+		mvLoop:
+			for (MeasuredValue mv: ms.getMeasuredValues()) {
 				
-			for (int i = flwd; i < rows; i++) {	
-				//test if the measuredValue can be parsed
-				Cell cell = new Cell(i, rowOrColumnNumber);
-				String value = this.tableController.getValueAt(cell);
-				if (i >= firstLineWithData) {
-					try {
-						mv.parse(value);
-					} catch (Exception e) {
-						if (logger.isTraceEnabled()) {
-							logger.trace("Value could not be parsed: " + value, e);
-						}
-						continue;
-						// TODO implement better exception handling here. Do not just skip!
-					}	
+				rowsLoop:
+					for (int i = flwd; i < rows; i++) {	
+						//test if the measuredValue can be parsed
+						Cell cell = new Cell(i, ((Column)mv.getTableElement()).getNumber());
+						String value = tableController.getValueAt(cell);
+						if (i >= firstLineWithData) {
+							try {
+								mv.parse(value);
+							} catch (Exception e) {
+								if (logger.isTraceEnabled()) {
+									logger.trace("Value could not be parsed: " + value, e);
+								}
+								continue rowsLoop; // it okay this way because parsing test happened during step 3
+							}	
 
-					FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
-					ObservedProperty op = mv.getObservedProperty().forThis(cell);
-					Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
-					if (!ModelStore.getInstance().getStep6bSpecialModels().contains(model)) {
-						return model;
+							FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
+							ObservedProperty op = mv.getObservedProperty().forThis(cell);
+							Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
+							// check, if for the column of foi and obsProp a model is available and if the sensor is generated in this model
+							for (Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
+								if (s6bsM.getSensor().isGenerated() &&
+										s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) && // XXX maybe own equals
+										s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) { // XXX check if foi and obsprop 
+									continue mvLoop;
+								}
+							}
+							if (!ms.getStep6bSpecialModels().contains(model)) {
+								return model;
+							}
+						}
 					}
-				}
 			}
-		}
 		return null;
 	}
 
@@ -184,14 +189,14 @@ public class Step6bSpecialController extends StepController {
 	public StepController getNext() {
 		Step6bSpecialModel step6bSpecialModel = getNextModel();
 		if (step6bSpecialModel != null)
-			return new Step6bSpecialController(step6bSpecialModel,this.firstLineWithData);
+			return new Step6bSpecialController(step6bSpecialModel,firstLineWithData);
 		
 		return null;
 	}
 
 	@Override
 	public StepModel getModel() {
-		return this.step6bSpecialModel;
+		return step6bSpecialModel;
 	}
 
 }
