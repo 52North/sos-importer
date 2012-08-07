@@ -72,6 +72,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		SensorType sensorXB = null;
 		SensorType[] sensorsXB;
 		AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
+		ModelStore ms = ModelStore.getInstance();
 		if (addiMeta == null) {
 			addiMeta = sosImportConf.addNewAdditionalMetadata();
 			if (logger.isDebugEnabled()) {
@@ -90,6 +91,15 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 					break findSensor;
 				}
 			}
+		}
+		// if only 1 mv column is present, we have to replace the old sensor with the new one
+		if (ms.getMeasuredValues() != null &&
+				ms.getMeasuredValues().size() == 1 &&
+				addiMeta.getSensorArray() != null) {
+			for (int i = 0; i < addiMeta.getSensorArray().length; i++) {
+				addiMeta.removeSensor(0);
+			}
+			sensorXB = null;
 		}
 		// sensor found or add new one?
 		if (sensorXB == null) {
@@ -164,13 +174,12 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 			}
 		} else {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Sensor is already  contained in AdditionalMetadata element");
+				logger.debug("Sensor is already contained in AdditionalMetadata element");
 			}
 		}
 		/*
 		 * identify related measured value columns and update relation
 		 */
-		ModelStore ms = ModelStore.getInstance();
 		ArrayList<MeasuredValue> mVs = (ArrayList<MeasuredValue>) ms.getMeasuredValues();
 		ArrayList<MeasuredValue> relatedMVs = new ArrayList<MeasuredValue>(mVs.size());
 		for (Iterator<MeasuredValue> iterator = mVs.iterator(); iterator.hasNext();) {

@@ -64,7 +64,7 @@ public class ObservedProperty extends Resource {
 			ObservedProperty op = new ObservedProperty();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			op.setName(name);
-			// FIXME check, if the next line break any logic
+			// TODO check, if the next line break any logic
 			op.setTableElement(getTableElement());
 			return op;
 		}
