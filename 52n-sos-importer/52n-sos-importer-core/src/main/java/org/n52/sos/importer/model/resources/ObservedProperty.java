@@ -58,12 +58,14 @@ public class ObservedProperty extends Resource {
 	
 	@Override
 	public ObservedProperty forThis(Cell measuredValuePosition) {
-		if (getTableElement() == null) {
+		if (getTableElement() == null || isGenerated()) {
 			return this;
 		} else {
 			ObservedProperty op = new ObservedProperty();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			op.setName(name);
+			// FIXME check, if the next line break any logic
+			op.setTableElement(getTableElement());
 			return op;
 		}
 	}
