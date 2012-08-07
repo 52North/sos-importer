@@ -30,6 +30,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.Constants;
+
 
 /**
  * consists of an instruction panel, the table and 
@@ -44,15 +46,13 @@ public class Step5Panel extends JPanel {
 	
 	public Step5Panel(String description, List<MissingComponentPanel> missingComponentPanels) {
 		super();
-		JLabel descriptionLabel = new JLabel(description);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		JLabel descriptionLabel = new JLabel(description);
 		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		descriptionPanel.add(descriptionLabel);
-		this.add(descriptionPanel);
 		
 		TablePanel tablePanel = TablePanel.getInstance();
-		this.add(tablePanel);
 		
 		JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
@@ -60,6 +60,12 @@ public class Step5Panel extends JPanel {
 		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
 		}
-		this.add(containerPanel);
+		add(descriptionPanel);
+		add(tablePanel);
+		add(containerPanel);
+		if (Constants.GUI_DEBUG) {
+			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
+			containerPanel.setBorder(Constants.DEBUG_BORDER);
+		}
 	}
 }
