@@ -56,6 +56,7 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.utils.n52Utils;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -94,9 +95,6 @@ public class MissingPositionPanel extends JPanel{
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new BorderLayout(0,0));
 		containerPanel.add(mapPanel,BorderLayout.CENTER);
-		containerPanel.add(manualInputPanel,BorderLayout.CENTER);
-		manualInputPanel.setVisible(false);
-		mapPanel.setVisible(true);
 		
 		add(inputType,BorderLayout.NORTH);
 		add(containerPanel,BorderLayout.CENTER);
@@ -106,6 +104,7 @@ public class MissingPositionPanel extends JPanel{
 			manualInputPanel.setBorder(Constants.DEBUG_BORDER);
 			mapPanel.setBorder(Constants.DEBUG_BORDER);
 		}
+		setVisible(true);
 	}
 
 	private JPanel initManualInputPanel(Step6cModel s6cM) {
@@ -120,6 +119,7 @@ public class MissingPositionPanel extends JPanel{
 
 	private JPanel initMapPanel() {
 		mapPane = new JMapPane();
+		mapPane.setEnabled(true);
 		WMS.set(mapPane);
 		
 		JPanel mapPanel = new JPanel();
@@ -221,7 +221,7 @@ public class MissingPositionPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				containerPanel.removeAll();
 				containerPanel.add(manualInputPanel,BorderLayout.CENTER);
-				manualInputPanel.setVisible(true);
+				revalidate();
 				repaint();
 			}
 		});
@@ -234,7 +234,7 @@ public class MissingPositionPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				containerPanel.removeAll();
 				containerPanel.add(mapPanel,BorderLayout.CENTER);
-				mapPanel.setVisible(true);
+				revalidate();
 				repaint();
 			}
 		});
@@ -276,9 +276,9 @@ public class MissingPositionPanel extends JPanel{
 		if (this.mapInput.isSelected()) {
 			Position p = s6cM.getPosition();
 			p.setEPSGCode(new EPSGCode(Constants.DEFAULT_EPSG_CODE));
-			p.setLatitude(new Latitude(Double.parseDouble(latitudeTextField.getText()), 
+			p.setLatitude(new Latitude(n52Utils.parseDouble(latitudeTextField.getText()), 
 					Constants.DEFAULT_UNIT_FOI_POSITION));
-			p.setLongitude(new Longitude(Double.parseDouble(longitudeTextField.getText()),
+			p.setLongitude(new Longitude(n52Utils.parseDouble(longitudeTextField.getText()),
 					Constants.DEFAULT_UNIT_FOI_POSITION));
 			p.setHeight(new Height(Constants.DEFAULT_HEIGHT_FOI_POSITION, 
 					Constants.DEFAULT_HEIGHT_UNIT_FOI_POSITION));
@@ -294,22 +294,36 @@ public class MissingPositionPanel extends JPanel{
 	}
 	
 	public void loadSettings() {
-		// XXX implement
 		// load settings from model and set map and manual interface to model position
 		Position p = s6cM.getPosition();
 		if (p.getEPSGCode() == null && p.getHeight() == null && p.getLatitude() == null && p.getLongitude() == null) {
-			// XXX on init -> set to default
+			// on init -> set to default
 			return;
 		}
-		// XXX transform from EPSG:? to EPSG 4326
 		if (p.getEPSGCode() != null && p.getEPSGCode().getValue() != Constants.DEFAULT_EPSG_CODE) {
-//			p = transform(p,Constants.DEFAULT_ALTITUDE_UNIT);
+			longitudeTextField.setText(p.getLongitude().getValue()+"");
+			latitudeTextField.setText(p.getLatitude().getValue()+"");
+			java.awt.Component[] subPanels = manualInputPanel.getComponents();
+			for (java.awt.Component component : subPanels) {
+				if (component instanceof MissingLatitudePanel) {
+					MissingLatitudePanel mcp = (MissingLatitudePanel) component;
+					mcp.setMissingComponent(p.getLatitude());
+				} else if (component instanceof MissingLongitudePanel) {
+					MissingLongitudePanel mcp = (MissingLongitudePanel) component;
+					mcp.setMissingComponent(p.getLongitude());
+				} else if (component instanceof MissingHeightPanel) {
+					MissingHeightPanel mcp = (MissingHeightPanel) component;
+					mcp.setMissingComponent(p.getHeight());
+				} else if (component instanceof MissingEPSGCodePanel) {
+					MissingEPSGCodePanel mcp = (MissingEPSGCodePanel) component;
+					mcp.setMissingComponent(p.getEPSGCode());
+				}
+			} 
+		} else {
+			latitudeTextField.setText(p.getLatitude().getValue()+"");
+			longitudeTextField.setText(p.getLongitude().getValue()+"");
+			epsgTextField.setText(p.getEPSGCode().getValue()+"");
 		}
-		latitudeTextField.setText(p.getLatitude().getValue()+"");
-		longitudeTextField.setText(p.getLongitude().getValue()+"");
-		epsgTextField.setText(p.getEPSGCode().getValue()+"");
-//		wmsCanvas.centerOnPoint(p);
-		// implement WMSCanvas.setToPosition(s6cM.getPosition());
 	}
 
 	public void setSelectedPosition(DirectPosition2D pos) {
@@ -322,13 +336,8 @@ public class MissingPositionPanel extends JPanel{
 		ReferenceIdentifier[] idsA = ids.toArray(new ReferenceIdentifier[ids.size()]);
 		// update current panel
 		epsgTextField.setText(idsA[0].getCode());
-		longitudeTextField.setText(pos.x+"");
-		latitudeTextField.setText(pos.y+"");
-		// update model
-		Position p = s6cM.getPosition();
-		p.setEPSGCode(new EPSGCode(Integer.parseInt(idsA[0].getCode())));
-		p.setLongitude(new Longitude(pos.x, Constants.DEFAULT_LONGITUDE_UNIT));
-		p.setLatitude(new Latitude(pos.y, Constants.DEFAULT_LATITUDE_UNIT));
+		longitudeTextField.setText(String.format("%.4f",pos.x));
+		latitudeTextField.setText(String.format("%.4f",pos.y));
 	}
 	
 }

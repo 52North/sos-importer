@@ -28,7 +28,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.StepModel;
@@ -50,8 +49,6 @@ public class Step6cController extends StepController {
 	
 	private Step6cModel step6cModel;
 	
-	private PositionController positionController;
-	
 	private Step6cPanel step6cPanel;
 
 	private int firstLineWithData;
@@ -67,12 +64,6 @@ public class Step6cController extends StepController {
 
 	@Override
 	public void loadSettings() {
-		// FIXME implement selection of already available positions like previous in step3 defined ones
-		Position position = step6cModel.getPosition();
-		positionController = new PositionController(position);
-		List<Component> components = step6cModel.getMissingPositionComponents();
-		positionController.setMissingComponents(components);	
-
 		FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 		String name = step6cModel.getFeatureOfInterestName();
 		// TODO is this assumption still valid? better check for TableElement?!
@@ -82,7 +73,6 @@ public class Step6cController extends StepController {
 		} else {
 			foi.removePositionFor(name);
 		}
-//		XXX positionController.unassignMissingComponentValues();
 		
 		String description = step6cModel.getDescription();
 		step6cPanel = new Step6cPanel(description,
@@ -90,17 +80,11 @@ public class Step6cController extends StepController {
 				(foi.isGenerated()?Lang.l().generated() + ": " + name:name),
 				step6cModel);	
 		step6cPanel.loadSettings();
-		// XXX What the hack is the reason for this? Why do we check if the step is finished before anything happened?
-//		BackNextController.getInstance().setNextButtonEnabled(isFinished());
 	}
 
 	@Override
 	public void saveSettings() {
 		step6cPanel.saveSettings();
-		// XXX positionController.assignMissingComponentValues();
-		
-		List<Component> components = positionController.getMissingComponents();
-		step6cModel.setMissingPositionComponents(components);
 		
 		String name = step6cModel.getFeatureOfInterestName();
 		Position position = step6cModel.getPosition();
@@ -110,7 +94,6 @@ public class Step6cController extends StepController {
 			step6cModel.getFeatureOfInterest().setPositionFor(name, position);
 		}
 		step6cPanel = null;
-		positionController = null;
 	}
 	
 	

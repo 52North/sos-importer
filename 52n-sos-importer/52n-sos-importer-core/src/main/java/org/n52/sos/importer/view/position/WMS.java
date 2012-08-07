@@ -12,8 +12,8 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.MapContent;
 import org.geotools.map.WMSLayer;
 import org.geotools.ows.ServiceException;
-import org.geotools.referencing.CRS;
 import org.geotools.swing.JMapPane;
+import org.n52.sos.importer.Constants;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
@@ -28,7 +28,7 @@ public class WMS {
 
 			URL url = null;
 			try {
-				url = new URL("http://osmtud.dyndns.org/wms/?VERSION=1.1.0&REQUEST=GetCapabilities");
+				url = new URL(Constants.WMS_URL() + Constants.WMS_GET_CAPABILITIES_REQUEST);
 			} catch (MalformedURLException e) {
 				//will not happen
 			}
@@ -45,52 +45,42 @@ public class WMS {
 			// When first shown on screen it will display the layers.
 			mapPane.setMapContent( map );
 			// 										values: minX, maxX, minY, maxY, crs
-			ReferencedEnvelope bounds = new ReferencedEnvelope(-180.0, 180.0, -90.0, 90.0, CRS.decode("EPSG:4326"));
+			ReferencedEnvelope bounds = Constants.WMS_ENVELOPE();
 			mapPane.setDisplayArea(bounds);
 			//mapPane.setDisplayArea(map.getMaxBounds());
 
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block generated on 04.07.2012 around 10:32:20
 			logger.error(String.format("Exception thrown: %s",
 					e1.getMessage()),
 					e1);
 		} catch (IllegalStateException e1) {
-			// TODO Auto-generated catch block generated on 04.07.2012 around 10:32:20
 			logger.error(String.format("Exception thrown: %s",
 					e1.getMessage()),
 					e1);
 		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block generated on 04.07.2012 around 10:32:20
 			logger.error(String.format("Exception thrown: %s",
 					e1.getMessage()),
 					e1);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block generated on 04.07.2012 around 10:32:20
 			logger.error(String.format("Exception thrown: %s",
 					e1.getMessage()),
 					e1);
-		}
-		// TODO Auto-generated constructor stub generated on 03.07.2012 around 16:37:07
-		catch (ServiceException e) {
-			// TODO Auto-generated catch block generated on 06.07.2012 around 15:30:48
+		} catch (ServiceException e) {
 			logger.error(String.format("Exception thrown: %s",
 					e.getMessage()),
 					e);
 		} catch (MismatchedDimensionException e) {
-			// TODO Auto-generated catch block generated on 27.07.2012 around 15:56:01
 			logger.error(String.format("Exception thrown: %s",
 						e.getMessage()),
 					e);
 		} catch (NoSuchAuthorityCodeException e) {
-			// TODO Auto-generated catch block generated on 27.07.2012 around 16:32:48
 			logger.error(String.format("Exception thrown: %s",
 						e.getMessage()),
 					e);
 		} catch (FactoryException e) {
-			// TODO Auto-generated catch block generated on 27.07.2012 around 16:32:48
 			logger.error(String.format("Exception thrown: %s",
 						e.getMessage()),
 					e);
-		} 
+		}
 	}
 }

@@ -23,9 +23,15 @@
  */
 package org.n52.sos.importer.test;
 
+import java.awt.AWTEvent;
+import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
+
 import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.controller.LoggingController;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
@@ -42,15 +48,29 @@ public class Step6cWMSPanelTest extends JFrame {
 	private static final Logger logger = Logger.getLogger(Step6cWMSPanelTest.class);
 	
 	public static void main(String[] args) {
+		Constants.GUI_DEBUG = true;
 		FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("testFOIname");
 		foi.setPosition(new Position());
 		Step6cModel s6cM = new Step6cModel(foi);
 		
+		LoggingController.getInstance();
+		
 		JFrame frame = new Step6cWMSPanelTest(s6cM);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		if (Constants.GUI_DEBUG) {
+			long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
+			Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener() {
+			    public void eventDispatched(AWTEvent e)
+			    {
+			        if (logger.isDebugEnabled() && e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
+						logger.debug(e);
+					}
+			    }
+			}, eventMask);
+		}
 	}
 
 	public Step6cWMSPanelTest(Step6cModel s6cM) {

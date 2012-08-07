@@ -85,16 +85,16 @@ public class MainFrame extends JFrame {
 		cp.add(stepContainerPanel, BorderLayout.CENTER);
 		cp.add(backNextPanel, BorderLayout.SOUTH);
 
-		pack();
-		// this centers the dialog on the current screen of the user
-		setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
-		setLocationRelativeTo(null);
-		setVisible(true);
 		if (Constants.GUI_DEBUG) {
 			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
 			stepContainerPanel.setBorder(Constants.DEBUG_BORDER);
 			backNextPanel.setBorder(Constants.DEBUG_BORDER);
 		}
+		pack();
+		// this centers the dialog on the current screen of the user
+		setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 	
 	private void initLookAndFeel() {
@@ -128,6 +128,7 @@ public class MainFrame extends JFrame {
 		stepContainerPanel.add(stepPanel);
 		pack();
 		setBounds(this.getBounds().x, this.getBounds().y, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		setVisible(true);
 	}
 	
 	public void showExitDialog() {
@@ -138,6 +139,7 @@ public class MainFrame extends JFrame {
 
 		if (n == JOptionPane.YES_OPTION) {
 			ComboBoxItems.getInstance().save();
+			Constants.save();
 			System.exit(0);
 		}
 	}
