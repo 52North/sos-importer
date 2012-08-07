@@ -61,18 +61,13 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
+import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
 import org.n52.sos.importer.view.utils.ToolTips;
 
-/**
- * Consists of a combobox for the name and a combobox for the URI;
- * both are linked with each other
- * @author Raimund
- *
- */
 public class MissingResourcePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -101,44 +96,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		boolean disableManualInput = false, 
 				disableGeneratedInput = false,
 				manualDefault = false;
-		if (resource instanceof FeatureOfInterest) {
-			List<Position> positions = ms.getPositions();
-			if (positions != null && positions.size() > 0) {
-				disableManualInput = true;
-			}
-		} else if (resource instanceof ObservedProperty) {
-			manualDefault = true;
-		} else if (resource instanceof UnitOfMeasurement) {
-			List<ObservedProperty> ops = ms.getObservedProperties();
-			name = Lang.l().code();
-			if (ops != null && ops.size() == 1) {
-				// in the case of having one observed property column -> set generation as default (having table element of type Column set)
-				// in the case of having one generated observed property -> set generation as default
-				ObservedProperty op = ops.get(0);
-				if (op.isGenerated()) {
-					// disableManualInput = true;
-					// generated is default!
-				}
-				// in the case of having one manual observed property -> disable generated (having no table element and generated set to false)
-				else if (op.getTableElement() == null && !op.isGenerated()) {
-					disableGeneratedInput = true;
-				}
-				// in the case of having no observed property -> can this happen?
-			}
-			// TODO what happens in the case of having multiple observed properties. How to relate each other?
-		} else if (resource instanceof Sensor) {
-			// check for 1 foi - 1 op => 1 sensor => only manual input
-			List<FeatureOfInterest> fois = ms.getFeatureOfInterests();
-			List<ObservedProperty> ops = ms.getObservedProperties();
-			if (fois != null && fois.size() == 1 && ops != null && ops.size() == 1) {
-				FeatureOfInterest foi = fois.get(0);
-				ObservedProperty op = ops.get(0);
-				if (!foi.isGenerated() && foi.getTableElement() == null && !op.isGenerated() && op.getTableElement() == null) {
-					disableGeneratedInput = true;
-				}
-			}
-			// else -> generated as default and manual as optional
-		}
 		TableController tc = TableController.getInstance();
 		JLabel nameJL = new JLabel(Lang.l().name() + ":");
 		JPanel generatedNamePanel = new JPanel();
@@ -305,6 +262,63 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		bGroup.add(manualResInputJRB);
 		setLayout(groupLayout);
 		
+		if (resource.getName() == null && !resource.isGenerated()) {
+			if (resource instanceof FeatureOfInterest) {
+				List<Position> positions = ms.getPositions();
+				if (positions != null && positions.size() > 0) {
+					disableManualInput = true;
+				}
+			} else if (resource instanceof ObservedProperty) {
+				manualDefault = true;
+			} else if (resource instanceof UnitOfMeasurement) {
+				List<ObservedProperty> ops = ms.getObservedProperties();
+				name = Lang.l().code();
+				if (ops != null && ops.size() == 1) {
+					// in the case of having one observed property column -> set generation as default (having table element of type Column set)
+					// in the case of having one generated observed property -> set generation as default
+					ObservedProperty op = ops.get(0);
+					if (op.isGenerated()) {
+						// disableManualInput = true;
+						// generated is default!
+					}
+					// in the case of having one manual observed property -> disable generated (having no table element and generated set to false)
+					else if (op.getTableElement() == null && !op.isGenerated()) {
+						disableGeneratedInput = true;
+					}
+					// in the case of having no observed property -> can this happen?
+				}
+				// TODO what happens in the case of having multiple observed properties. How to relate each other?
+			} else if (resource instanceof Sensor) {
+				// check for 1 foi - 1 op => 1 sensor => only manual input
+				List<FeatureOfInterest> fois = ms.getFeatureOfInterests();
+				List<ObservedProperty> ops = ms.getObservedProperties();
+				if (fois != null && fois.size() == 1 && ops != null && ops.size() == 1) {
+					FeatureOfInterest foi = fois.get(0);
+					ObservedProperty op = ops.get(0);
+					if (!foi.isGenerated() && foi.getTableElement() == null && !op.isGenerated() && op.getTableElement() == null) {
+						disableGeneratedInput = true;
+					}
+				}
+				// else -> generated as default and manual as optional
+			}
+		} else { // Case: Back button hit -> set values from resource
+			if (resource.isGenerated()) {
+				manualDefault = false;
+				// URI
+				useNameAfterPrefixCheckBox.setSelected(resource.isUseNameAfterPrefixAsURI());
+				uriOrPrefixTextField.setText(resource.getUriPrefix());
+				// Name
+				columnConcationationString.setText(resource.getConcatString());
+				columnList.setSelectedIndices(columnIdsToModelIndices(resource.getRelatedCols()));
+			} else {
+				manualDefault = true;
+				// URI
+				manualResUriComboBox.setSelectedItem(resource.getURI().toString());
+				// Name
+				manualResNameComboBox.setSelectedItem(resource.getName());
+			}
+		}
+		
 		// Default Settings
 		if (manualDefault) {
 			manualResPanel.setVisible(true);
@@ -330,11 +344,19 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			generatedResJRB.setSelected(false);
 			generatedResJRB.setVisible(false);
 		}
-		if (logger.isDebugEnabled() && Constants.GUI_DEBUG) {
+		if (Constants.GUI_DEBUG) {
 			setBorder(Constants.DEBUG_BORDER);
 			manualResPanel.setBorder(Constants.DEBUG_BORDER);
 			generatedResPanel.setBorder(Constants.DEBUG_BORDER);
 		}
+	}
+
+	private int[] columnIdsToModelIndices(TableElement[] relatedCols) {
+		int[] indices = new int[relatedCols.length];
+		for (int i = 0; i < relatedCols.length; i++) {
+			indices[i] = ((Column) relatedCols[i]).getNumber();
+		}
+		return indices;
 	}
 
 	private ListModel toListModel(String[] columnHeadingsWithId) {
