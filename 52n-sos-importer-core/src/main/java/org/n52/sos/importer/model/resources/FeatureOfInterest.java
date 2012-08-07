@@ -82,7 +82,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 			FeatureOfInterest foi = new FeatureOfInterest();
 			String name = getTableElement().getValueFor(measuredValuePosition);
 			foi.setName(name);
-			// FIXME check, if the next line break any logic
+			// TODO check, if the next line break any logic
 			foi.setTableElement(getTableElement());
 			
 			/* 
