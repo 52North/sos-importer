@@ -23,11 +23,14 @@
  */
 package org.n52.sos.importer.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import org.n52.sos.importer.Constants;
 
 /**
  * contains the table which is used by step panels 3, 4 and 5
@@ -44,10 +47,15 @@ public class TablePanel extends JPanel {
 	
 	private TablePanel() { 
 		super();
-		this.table = new JTable();
+		setLayout(new BorderLayout());
+		table = new JTable();
 		table.setPreferredScrollableViewportSize(new Dimension(MainFrame.DIALOG_WIDTH - 100, MainFrame.DIALOG_HEIGHT-450));
 		JScrollPane scrollPane = new JScrollPane(table);
-		this.add(scrollPane);
+		add(scrollPane,BorderLayout.CENTER);
+		if (Constants.GUI_DEBUG) {
+			setBorder(Constants.DEBUG_BORDER);
+			scrollPane.setBorder(Constants.DEBUG_BORDER);
+		}
 	}
 	
 	public static TablePanel getInstance() {
