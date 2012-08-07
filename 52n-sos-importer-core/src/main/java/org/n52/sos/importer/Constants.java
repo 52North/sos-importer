@@ -25,19 +25,35 @@ package org.n52.sos.importer;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * TODO move to shared module all constants that need to be shared!
  */
 public class Constants {
+	
+	private static final Logger logger = Logger.getLogger(Constants.class);
 	
 	public static final String BOOLEAN = "BOOLEAN";
 	public static final String COMBINATION = "COMBINATION";
@@ -104,12 +120,21 @@ public class Constants {
 	public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
 	public static final String DEFAULT_UNIT_FOI_POSITION = "deg";
 	public static final String WMS_VIEW_SELECT_TOOL_ICON_PNG_PATH = "/org/n52/sos/importer/view/position/noxin_crosshairs.png";
+	public static final String WMS_DEFAULT_URL = "http://osmtud.dyndns.org/wms/";
+	public static final String WMS_GET_CAPABILITIES_REQUEST = "?VERSION=1.1.0&REQUEST=GetCapabilities";
+	
+	private static final String WMS_EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
+	private static final String WMS_INTERNAL_FILE_PATH = "/org/n52/sos/importer/view/position/";
+	private static final String WMS_FILE_NAME = "wms.properties";
+	
 	/*
 	 * CHANGEABLE VALUES
 	 */
 	public static boolean GUI_DEBUG = false;
 	public static char DECIMAL_SEPARATOR = '.';
 	public static char THOUSANDS_SEPARATOR = ',';
+
+	private static String wms_url = "wms_url";
 	
 	/**
 	 * TODO implement loading of language parameter from configuration file
@@ -117,6 +142,78 @@ public class Constants {
 	 */
 	public static String language() {
 		return Lang.l().getClass().getSimpleName();
+	}
+
+	public static String WMS_URL() {
+		Properties props = load();
+		if (props != null && 
+				props.getProperty(wms_url) != null &&
+				!props.getProperty(wms_url).equals("")) {
+			return props.getProperty(wms_url);
+		}
+		return WMS_DEFAULT_URL;
+	}
+
+	private static Properties load() {
+		try {
+			InputStream is;
+			String filePath = WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME;
+			File file = new File(filePath);
+			if (!file.exists()) {
+				logger.info("Load default settings from jar file");
+				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
+				is = Constants.class.getClass().getResourceAsStream(filePath);
+			} else if (!file.canRead()) {
+				logger.warn("Could not load settings.");
+				logger.warn("No reading permissions for " + file);
+				logger.info("Load default settings from jar file");
+				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
+				is = Constants.class.getClass().getResourceAsStream(filePath);
+			} else {		
+				logger.info("Load settings from " + file);
+				is = new FileInputStream(file);
+			}
+			Properties props = new Properties();
+			props.load(is);
+			return props;
+		} catch (FileNotFoundException e) {
+			logger.error("SOS Importer Settings not found", e);
+		} catch (IOException  e) {
+			logger.error("SOS Importer Settings not readable.", e);
+		}
+		return null;
+	}
+
+	public static ReferencedEnvelope WMS_ENVELOPE()
+			throws
+			MismatchedDimensionException,
+			NoSuchAuthorityCodeException,
+			FactoryException {
+		return new ReferencedEnvelope(-180.0, 180.0, -90.0, 90.0, CRS.decode("EPSG:4326"));
+	}
+
+	public static void save() {
+		File folder = new File(WMS_EXTERNAL_FILE_PATH);
+		Properties props = load();
+		if (!folder.exists()) {
+			
+			boolean successful = folder.mkdir();	
+			if (!successful) {
+				logger.warn("WMS properties could not be saved.");
+				logger.warn("No writing permissions at " + folder);
+				return;
+			} 
+		}
+		
+		File file = new File(WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME);
+		
+		try { //save properties
+			OutputStream os = new FileOutputStream(file);
+			props.store(os, null); 
+			logger.info("Save settings at " + file.getAbsolutePath());	
+		} catch (IOException e) {
+			logger.error("WMS properties could not be saved.", e);
+		}
 	}
 
 }
