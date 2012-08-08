@@ -404,7 +404,7 @@ public class De extends Lang{
 	}
 
 	public String step4aDescription() {
-		return this.step() + " 4a: Kläre Datum & Zeit Unklarheit";
+		return this.step() + " 4a: Klären Sie Datum & Zeit Unklarheit";
 	}
 
 	public String step4aInfoDateAndTime() {
@@ -416,12 +416,12 @@ public class De extends Lang{
 	}
 
 	public String step4aModelDescription() {
-		return "Wähle alle " + this.measuredValue() + " " + Constants.STRING_REPLACER + "n " +
-				", die zur markierten Datum-Zeit-Gruppe gehören.";
+		return "Wähle Sie alle " + this.measuredValue() + " " + Constants.STRING_REPLACER + "n " +
+				", die zur markierten Datum-Zeit-Gruppe gehören, aus.";
 	}
 
 	public String step4bDescription() {
-		return this.step() + " 4b: Kläre Unklarheiten";
+		return this.step() + " 4b: Kläre Sie Unklarheiten";
 	}
 
 	public String step4bInfoNotMeasuredValue() {
