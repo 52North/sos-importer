@@ -132,7 +132,6 @@ public class Step7Controller extends StepController {
 	@Override
 	public boolean isFinished() {
 		//get and check URI
-		boolean result = true;
 		// check inputs 
 		if (!s7P.isGenerateOfferingFromSensorName() && 
 				(s7P.getOfferingName() == null || 
@@ -145,7 +144,7 @@ public class Step7Controller extends StepController {
 					Lang.l().errorDialogTitle(),
 					JOptionPane.ERROR_MESSAGE);
 			logger.error(msg);	
-			result = result & false; // shortcut return false; ???
+			return false;
 		} else if (!s7P.isGenerateOfferingFromSensorName() &&
 				!XMLTools.isNCName(s7P.getOfferingName()) ){
 			// user gave input but it is not valid
@@ -155,13 +154,13 @@ public class Step7Controller extends StepController {
 					Lang.l().errorDialogTitle(),
 					JOptionPane.ERROR_MESSAGE);
 			logger.error(msg);
-			result = result & false;
+			return false;
 		}
 		if (s7P.isDirectImport()) {
 			String url = s7P.getSOSURL();
-			result = result && testConnection(url);
+			return testConnection(url);
 		}
-		return result;
+		return true;
 	}
 
 	/*
