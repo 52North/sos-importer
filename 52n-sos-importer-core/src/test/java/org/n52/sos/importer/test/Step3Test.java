@@ -25,7 +25,7 @@ package org.n52.sos.importer.test;
 
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.MainController;
-import org.n52.sos.importer.controller.Step3aController;
+import org.n52.sos.importer.controller.Step3Controller;
 import org.n52.sos.importer.controller.TableController;
 
 public class Step3Test {
@@ -35,12 +35,13 @@ public class Step3Test {
 		Object[][] o = TestData.EXAMPLE_TABLE;
 		Constants.DECIMAL_SEPARATOR = '.';
 		Constants.THOUSANDS_SEPARATOR = ',';
+		Constants.GUI_DEBUG = false;
 		TableController tc = TableController.getInstance();
 		tc.setContent(o); 
 		int markedColumn = 0;
 		int firstLineWithData = 1;
 		boolean useHeader = false;
-		Step3aController s3C = new Step3aController(markedColumn,
+		Step3Controller s3C = new Step3Controller(markedColumn,
 				firstLineWithData,
 				useHeader);
 		//

@@ -86,7 +86,7 @@ public class Step2Controller extends StepController {
 		TableController.getInstance().setContent(content);
 		TableController.getInstance().setFirstLineWithData(
 				this.step2Model.getFirstLineWithData());
-		return new Step3aController(0,
+		return new Step3Controller(0,
 				this.step2Model.getFirstLineWithData(),
 				this.step2Model.getUseHeader());
 	}
