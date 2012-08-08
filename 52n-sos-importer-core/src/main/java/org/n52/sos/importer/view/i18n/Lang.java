@@ -91,6 +91,11 @@ public abstract class Lang {
 	 */
 	public abstract String column();
 	/**
+	 * 
+	 * @return "Data Preview"
+	 */
+	public abstract String dataPreview();
+	/**
 	 * @return Date
 	 */
 	public abstract String date();
@@ -209,6 +214,11 @@ public abstract class Lang {
 	 * @return measured value
 	 */
 	public abstract String measuredValue();
+	/**
+	 * 
+	 * @return "Metadata"
+	 */
+	public abstract String metadata();
 	/**
 	 * @return Minutes
 	 */
@@ -540,6 +550,7 @@ public abstract class Lang {
 	 * @return Use Name after prefix?
 	 */
 	public abstract String step6bUseNameAfterPrefix();
+	
 	/**
 	 * @return Step 6c: Add missing positions
 	 */
@@ -549,7 +560,6 @@ public abstract class Lang {
 	 * @return Set Position
 	 */
 	public abstract String step6cInfoToolName();
-	
 	/**
 	 * 
 	 * @return Set the position by clicking on the map
@@ -596,10 +606,12 @@ public abstract class Lang {
 	 * @return Step 7: Choose Sensor Observation Service
 	 */
 	public abstract String step7Description();
+
 	/**
 	 * @return Directly import data during next step
 	 */
 	public abstract String step7DirectImport();
+
 	/**
 	 * @return Generate Offering from Sensor name?
 	 */
@@ -632,7 +644,7 @@ public abstract class Lang {
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
 	 */
 	public abstract String step7SOSConncetionStart(String strURL);
-
+	
 	/**
 	 * @param strURL
 	 * @param responseCode
@@ -655,7 +667,7 @@ public abstract class Lang {
 			String message, 
 			int readTimeoutSeconds,
 			int connectTimeoutSeconds);
-	
+
 	/**
 	 * @return Open Configuration File
 	 */

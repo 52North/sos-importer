@@ -61,6 +61,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String dataPreview() {
+		return "Daten Vorschau";
+	}
+
+	@Override
 	public String date() {
 		return "Datum";
 	}
@@ -112,9 +117,9 @@ public class De extends Lang{
 	public String exitDialogQuestion() { 
 		return "Wollen Sie das Programm wirklich beenden?\n";
 	}
-
-	public String exitDialogTitle() { return "Beenden"; }
 	
+	public String exitDialogTitle() { return "Beenden"; }
+
 	public String featureOfInterest() {
 		return "Geoobjekt";
 	}
@@ -170,19 +175,25 @@ public class De extends Lang{
 	public String latitudeNorthing() {
 		return "Breitengrad / Hochwert";
 	}
-
+	
 	@Override
 	public String longitudeDialogDecimalValue() {
 		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
-	
+
 	@Override
 	public String longitudeEasting() {
 		return "Längengrad / Rechtswert";
 	}
 
+	@Override
 	public String measuredValue() {
 		return "Messwert";
+	}
+
+	@Override
+	public String metadata() {
+		return "Metadaten";
 	}
 
 	@Override
@@ -194,7 +205,7 @@ public class De extends Lang{
 	public String month() {
 		return "Monat";
 	}
-
+	
 	@Override
 	public String name() {
 		return "Name";
@@ -203,7 +214,7 @@ public class De extends Lang{
 	public String nextButtonLabel() {
 		return "Weiter";
 	}
-	
+
 	public String numValuePanelThousandsSeparator() {
 		return "Tausender-Trennzeichen";
 	}
@@ -242,7 +253,7 @@ public class De extends Lang{
 	public String sensor() {
 		return "Sensor";
 	}
-
+	
 	@Override
 	public String sosURL() {
 		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
@@ -251,7 +262,7 @@ public class De extends Lang{
 	public String spaceString() {
 		return "Leerzeichen";
 	}
-	
+
 	public String step() {
 		return "Schritt";
 	}
@@ -549,7 +560,7 @@ public class De extends Lang{
 	public String step6NoUserInput() {
 		return "Keine Nutzereingaben gefunden. Bitte geben Sie die notwendigen Informationen an.";
 	}
-
+	
 	@Override
 	public String step7ConfigDirNotDirOrWriteable(String folder) {
 		return "Auf das Verzeichnis \n\"" + 
@@ -560,7 +571,7 @@ public class De extends Lang{
 	public String step7ConfigFileButton() {
 		return "Verzeichnis wählen";
 	}
-	
+
 	@Override
 	public String step7ConfigFileDialogTitel() {
 		return "Bitte das Verzeichnis für die Konfigurations-Datei wählen";

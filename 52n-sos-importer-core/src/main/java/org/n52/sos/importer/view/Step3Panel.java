@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.model.measuredValue.Boolean;
 import org.n52.sos.importer.model.measuredValue.Count;
@@ -49,6 +50,7 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * consists of the table and a radio button panel for 
  * different types of metadata
  * @author Raimund
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public class Step3Panel extends JPanel {
@@ -56,29 +58,40 @@ public class Step3Panel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * This panel holds the first column with radion buttons for each column
+	 * This panel holds the first column with radio buttons for each column
 	 * type, or Do-not-export
 	 */
-	private JPanel columnTypeJP = new JPanel();
-	private JPanel columnSubTypeJP = new JPanel();
-	private JPanel columnSubTypeMetadataJP = new JPanel();
-	private TablePanel tablePanel = TablePanel.getInstance();
+	private JPanel columnTypeJP;
+	private JPanel columnSubTypeJP;
+	private JPanel columnSubTypeMetadataJP;
+	private TablePanel tablePanel;
 	private final SelectionPanel columnTypeRadioButtonPanel;
 	
 	public Step3Panel(int firstLineWithData) {
 		super();
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		/*
+		 * 	Table preview
+		 */
+		tablePanel = TablePanel.getInstance();
+		/*
+		 * Column Metadata panel
+		 */
+		columnTypeJP = new JPanel();
+		columnSubTypeJP = new JPanel();
+		columnSubTypeMetadataJP = new JPanel();
+		
 		columnTypeRadioButtonPanel = new ColumnTypePanel(firstLineWithData);	
 		columnTypeRadioButtonPanel.getContainerPanel().add(columnTypeRadioButtonPanel);
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
-	    this.add(tablePanel);
-		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		buttonPanel.setBorder(new TitledBorder(null, Lang.l().column().substring(0,1).toUpperCase() + Lang.l().column().substring(1) + " " + Lang.l().metadata(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		buttonPanel.add(columnTypeJP);
 		buttonPanel.add(columnSubTypeJP);
 		buttonPanel.add(columnSubTypeMetadataJP);
-		this.add(buttonPanel);
+		
+		add(tablePanel);
+		add(buttonPanel);
 	}
 	
 	public void clearAdditionalPanels() {

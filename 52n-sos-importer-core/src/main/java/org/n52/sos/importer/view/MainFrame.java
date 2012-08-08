@@ -75,7 +75,7 @@ public class MainFrame extends JFrame {
 		stepContainerPanel.setLayout(new BorderLayout());
 		setTitle(frameTitle);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 		addWindowListener(new WindowChanged());
 		
 		Container cp = this.getContentPane();
@@ -89,6 +89,7 @@ public class MainFrame extends JFrame {
 			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
 			stepContainerPanel.setBorder(Constants.DEBUG_BORDER);
 			backNextPanel.setBorder(Constants.DEBUG_BORDER);
+			setResizable(true);
 		}
 		pack();
 		// this centers the dialog on the current screen of the user
