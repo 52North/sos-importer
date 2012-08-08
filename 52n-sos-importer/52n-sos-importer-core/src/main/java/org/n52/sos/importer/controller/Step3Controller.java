@@ -45,9 +45,9 @@ import org.n52.sos.importer.view.step3.SelectionPanel;
  * @author Raimund
  *
  */
-public class Step3aController extends StepController {
+public class Step3Controller extends StepController {
 	
-	private static final Logger logger = Logger.getLogger(Step3aController.class);
+	private static final Logger logger = Logger.getLogger(Step3Controller.class);
 
 	private Step3Panel step3Panel;
 	
@@ -61,13 +61,13 @@ public class Step3aController extends StepController {
 	 */
 	private TableController tabCtrlr = TableController.getInstance();	
 	
-	public Step3aController(int currentColumn, 
+	public Step3Controller(int currentColumn, 
 			int firstLineWithData, 
 			boolean useHeader) {
-		this.step3Model = new Step3Model(currentColumn, 
+		step3Model = new Step3Model(currentColumn, 
 				firstLineWithData, 
 				useHeader);	
-		this.step3Panel = new Step3Panel(firstLineWithData);
+		step3Panel = new Step3Panel(firstLineWithData);
 	}
 	
 	
@@ -215,7 +215,7 @@ public class Step3aController extends StepController {
 		if (nextColumn == tabCtrlr.getColumnCount()) {
 			return null;
 		}
-		return new Step3aController(nextColumn, 
+		return new Step3Controller(nextColumn, 
 				this.step3Model.getFirstLineWithData(), 
 				this.step3Model.getUseHeader());
 	}	
