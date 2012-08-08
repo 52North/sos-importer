@@ -22,14 +22,16 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.StringTokenizer;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -37,9 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.BadLocationException;
@@ -83,7 +84,6 @@ public class Step2Panel extends JPanel {
 	
 	private JLabel useHeaderJL;
 	private JCheckBox useHeaderJCB;
-	private JPanel panel;
 	
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -91,22 +91,76 @@ public class Step2Panel extends JPanel {
 		this.csvFileRowCount = csvFileRowCount;
 		//
 		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		columnSeparatorCombobox = new EditableJComboBoxPanel(
-				items.getColumnSeparators(),
-				Lang.l().step2ColumnSeparator(), 
-				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
-		commentIndicatorCombobox = new EditableJComboBoxPanel(
-				items.getCommentIndicators(),
-				Lang.l().step2CommentIndicator(),
-				ToolTips.get(ToolTips.COMMENT_INDICATOR));
-		textQualifierCombobox = new EditableJComboBoxPanel(
-				items.getTextQualifiers(),
-				Lang.l().step2TextQualifier(),
-				ToolTips.get(ToolTips.TEXT_QUALIFIER));
 		//
 		// FirstLineWithData
 		//
 		lineModel = new SpinnerNumberModel(0, 0, this.csvFileRowCount-1, 1);
+		//
+		//	useHeader Checkbox
+		//
+		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
+		useHeaderJCB = new JCheckBox();
+		if (logger.isTraceEnabled()) {
+			useHeaderJCB.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					logger.trace("useHeader state changed. is selected?" + 
+							useHeaderJCB.isSelected());
+				}
+			});
+		}
+		useHeaderJCB.setSelected(false);
+		// will be enabled if firstLineWithdata is set to > 0
+		useHeaderJCB.setEnabled(false);
+		JPanel useHeaderPanel = new JPanel();
+		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		useHeaderPanel.add(useHeaderJL);
+		useHeaderPanel.add(useHeaderJCB);
+		/*
+		 * Decimal Separator
+		 */
+		String[] decimalSeparators = Constants.DECIMAL_SEPARATORS;
+		//
+		//		
+		//	CSV-setting panel
+		//
+		JPanel csvSettingsPanel = new JPanel();
+		csvSettingsPanel.setBorder(new TitledBorder(null, Lang.l().metadata(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gbl_csvSettingsPanel = new GridBagLayout();
+		gbl_csvSettingsPanel.columnWidths = new int[]{239, 0};
+		gbl_csvSettingsPanel.rowHeights = new int[]{25, 25, 25, 25, 25, 0};
+		gbl_csvSettingsPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_csvSettingsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		csvSettingsPanel.setLayout(gbl_csvSettingsPanel);
+		columnSeparatorCombobox = new EditableJComboBoxPanel(
+				items.getColumnSeparators(),
+				Lang.l().step2ColumnSeparator(), 
+				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
+		GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
+		gbc_columnSeparatorCombobox.fill = GridBagConstraints.BOTH;
+		gbc_columnSeparatorCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_columnSeparatorCombobox.gridx = 0;
+		gbc_columnSeparatorCombobox.gridy = 0;
+		csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
+		commentIndicatorCombobox = new EditableJComboBoxPanel(
+				items.getCommentIndicators(),
+				Lang.l().step2CommentIndicator(),
+				ToolTips.get(ToolTips.COMMENT_INDICATOR));
+		GridBagConstraints gbc_commentIndicatorCombobox = new GridBagConstraints();
+		gbc_commentIndicatorCombobox.fill = GridBagConstraints.BOTH;
+		gbc_commentIndicatorCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_commentIndicatorCombobox.gridx = 0;
+		gbc_commentIndicatorCombobox.gridy = 1;
+		csvSettingsPanel.add(commentIndicatorCombobox, gbc_commentIndicatorCombobox);
+		textQualifierCombobox = new EditableJComboBoxPanel(
+				items.getTextQualifiers(),
+				Lang.l().step2TextQualifier(),
+				ToolTips.get(ToolTips.TEXT_QUALIFIER));
+		GridBagConstraints gbc_textQualifierCombobox = new GridBagConstraints();
+		gbc_textQualifierCombobox.fill = GridBagConstraints.BOTH;
+		gbc_textQualifierCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_textQualifierCombobox.gridx = 0;
+		gbc_textQualifierCombobox.gridy = 2;
+		csvSettingsPanel.add(textQualifierCombobox, gbc_textQualifierCombobox);
 		firstDataJS = new JSpinner(lineModel);
 		// Highlight the current selected line in the file preview
 		firstDataJS.addChangeListener(new ChangeListener() {
@@ -133,55 +187,30 @@ public class Step2Panel extends JPanel {
 		});
 		firstDataJL = new JLabel(Lang.l().step2FirstLineWithData() + " :");
 		JPanel firstLineWithDataJPanel = new JPanel();
-		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 		firstLineWithDataJPanel.add(firstDataJL);
 		firstLineWithDataJPanel.add(firstDataJS);
-		//
-		//	useHeader Checkbox
-		//
-		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
-		useHeaderJCB = new JCheckBox();
-		if (logger.isTraceEnabled()) {
-			useHeaderJCB.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					logger.trace("useHeader state changed. is selected?" + 
-							useHeaderJCB.isSelected());
-				}
-			});
-		}
-		useHeaderJCB.setSelected(false);
-		// will be enabled if firstLineWithdata is set to > 0
-		useHeaderJCB.setEnabled(false);
-		JPanel useHeaderPanel = new JPanel();
-		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		useHeaderPanel.add(useHeaderJL);
-		useHeaderPanel.add(useHeaderJCB);
-		/*
-		 * Decimal Separator
-		 */
+		GridBagConstraints gbc_firstLineWithDataJPanel = new GridBagConstraints();
+		gbc_firstLineWithDataJPanel.fill = GridBagConstraints.BOTH;
+		gbc_firstLineWithDataJPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_firstLineWithDataJPanel.gridx = 0;
+		gbc_firstLineWithDataJPanel.gridy = 3;
+		csvSettingsPanel.add(firstLineWithDataJPanel, gbc_firstLineWithDataJPanel);
 		JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-		String[] decimalSeparators = Constants.DECIMAL_SEPARATORS;
 		decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 		decimalSeparatorCombobox.setSelectedIndex(0);
 		JPanel decimalSeparatorPanel = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) decimalSeparatorPanel.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.RIGHT);
+		flowLayout_1.setAlignment(FlowLayout.LEADING);
 		decimalSeparatorPanel.add(decimalSeparatorLabel);
 		decimalSeparatorPanel.add(decimalSeparatorCombobox);
-		//
-		//		
-		//	CSV-setting panel
-		//
-		JPanel csvSettingsPanel = new JPanel();
-		csvSettingsPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
-		csvSettingsPanel.setLayout(new GridLayout(6,1));
-		csvSettingsPanel.add(columnSeparatorCombobox);
-		csvSettingsPanel.add(commentIndicatorCombobox);
-		csvSettingsPanel.add(textQualifierCombobox);
-		csvSettingsPanel.add(firstLineWithDataJPanel);
 		// USE_HEADER uncomment next line to enable again
 		// csvSettingsPanel.add(useHeaderPanel);
-		csvSettingsPanel.add(decimalSeparatorPanel);
+		GridBagConstraints gbc_decimalSeparatorPanel = new GridBagConstraints();
+		gbc_decimalSeparatorPanel.fill = GridBagConstraints.BOTH;
+		gbc_decimalSeparatorPanel.gridx = 0;
+		gbc_decimalSeparatorPanel.gridy = 4;
+		csvSettingsPanel.add(decimalSeparatorPanel, gbc_decimalSeparatorPanel);
 		//
 		//	CSV text area
 		//
@@ -189,51 +218,12 @@ public class Step2Panel extends JPanel {
 		csvFileTextArea.setEditable(false);	
 		JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
 		JPanel csvDataPanel = new JPanel();
-		
-		panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		JLabel label = new JLabel(Lang.l().step2DataPreviewLabel());
-		label.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
-		panel.add(label);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(csvSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(csvDataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(csvDataPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(32)
-							.addComponent(csvSettingsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		GroupLayout gl_csvDataPanel = new GroupLayout(csvDataPanel);
-		gl_csvDataPanel.setHorizontalGroup(
-			gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_csvDataPanel.createSequentialGroup()
-					.addGroup(gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		gl_csvDataPanel.setVerticalGroup(
-			gl_csvDataPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_csvDataPanel.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		);
-		csvDataPanel.setLayout(gl_csvDataPanel);
-		setLayout(groupLayout);
+		csvDataPanel.setBorder(new TitledBorder(null, Lang.l().step2DataPreviewLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		csvDataPanel.setLayout(new BorderLayout(0, 0));
+		csvDataPanel.add(scrollPane);
+		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		add(csvSettingsPanel);
+		add(csvDataPanel);
 	}
 	
 	public String getCommentIndicator() {
