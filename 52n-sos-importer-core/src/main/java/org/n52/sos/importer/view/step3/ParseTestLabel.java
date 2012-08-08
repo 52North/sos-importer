@@ -124,7 +124,7 @@ public class ParseTestLabel extends JLabel {
 				text = Lang.l().step3aParseTestNFailed(notParseableValues);
 				_this.setForeground(Color.red);
 			}
-			_this.setText("<html><u>" + text+ "</u></html>");
+			_this.setText("<html>" + text+ "</html>");
 			notParseable.append("</html>");
 			_this.setToolTipText(notParseable.toString());
 			// enabled next button after parsing
