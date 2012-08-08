@@ -23,6 +23,8 @@
  */
 package org.n52.sos.importer.test;
 
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step4bController;
@@ -38,9 +40,9 @@ import org.n52.sos.importer.view.i18n.Lang;
  * @author e.h.juerrens@52north.org
  *
  */
-public class Step4Test {
+public class Step4bTest {
 	
-	private static final Logger logger = Logger.getLogger(Step4Test.class);
+	private static final Logger logger = Logger.getLogger(Step4bTest.class);
 
 	/**
 	 * @param args
@@ -50,7 +52,7 @@ public class Step4Test {
 			logger.trace("main()");
 		}
 		MainController f = MainController.getInstance();
-		//Lang.setCurrentLocale(Locale.GERMAN);
+		Lang.setCurrentLocale(Locale.GERMAN);
 		int firstLineWithData = 1, i = 0;
 		FeatureOfInterest foi = TestData.EXAMPLE_FOI;
 		Object[][] o = TestData.EXAMPLE_TABLE;
