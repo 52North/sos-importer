@@ -23,14 +23,17 @@
  */
 package org.n52.sos.importer.view;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * contains the table which is used by step panels 3, 4 and 5
@@ -47,11 +50,23 @@ public class TablePanel extends JPanel {
 	
 	private TablePanel() { 
 		super();
-		setLayout(new BorderLayout());
+		setBorder(new TitledBorder(null, Lang.l().dataPreview(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		/*gridBagLayout.columnWidths = new int[]{438, 0};
+		gridBagLayout.rowHeights = new int[]{273, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
+		setLayout(gridBagLayout);
 		table = new JTable();
 		table.setPreferredScrollableViewportSize(new Dimension(MainFrame.DIALOG_WIDTH - 100, MainFrame.DIALOG_HEIGHT-450));
 		JScrollPane scrollPane = new JScrollPane(table);
-		add(scrollPane,BorderLayout.CENTER);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		add(scrollPane, c);
 		if (Constants.GUI_DEBUG) {
 			setBorder(Constants.DEBUG_BORDER);
 			scrollPane.setBorder(Constants.DEBUG_BORDER);

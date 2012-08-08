@@ -100,10 +100,6 @@ public class MainController {
 		mainFrame.showExitDialog();
 	}
 	
-	public void pack() {
-		mainFrame.pack();
-	}
-
 	public void updateTitle(String csvFilePath) {
 		mainFrame.updateTitle(csvFilePath);
 	}

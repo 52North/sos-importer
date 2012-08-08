@@ -62,6 +62,11 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String dataPreview() {
+		return "Data Preview";
+	}
+
+	@Override
 	public String date() {
 		return "Date";
 	}
@@ -115,11 +120,11 @@ public class En extends Lang{
 	}
 
 	public String exitDialogTitle() { return "Exit"; }
-
+	
 	public String featureOfInterest() {
 		return "Feature of Interest";
 	}
-	
+
 	public String file() {
 		return "file";
 	}
@@ -174,19 +179,25 @@ public class En extends Lang{
 	public String latitudeNorthing() {
 		return "Latitude / Northing";
 	}
-
+	
 	@Override
 	public String longitudeDialogDecimalValue() {
 		return "The " + this.longitudeEasting() + " can only be a decimal number so far.";
 	}
-	
+
 	@Override
 	public String longitudeEasting() {
 		return "Longitude / Easting";
 	}
 
+	@Override
 	public String measuredValue() {
 		return "measured value";
+	}
+
+	@Override
+	public String metadata() {
+		return "Metadata";
 	}
 
 	@Override
@@ -198,32 +209,38 @@ public class En extends Lang{
 	public String month() {
 		return "Month";
 	}
-
+	
 	@Override
 	public String name() {
 		return "Name";
 	}
 
+	@Override
 	public String nextButtonLabel() {
 		return "Next";
 	}
-	
+
+	@Override
 	public String numValuePanelThousandsSeparator() {
 		return "Thousands separator";
 	}
 
+	@Override
 	public String observation() {
 		return "Observation";
 	}
 
+	@Override
 	public String observedProperty() {
 		return "Observed Property";
 	}
 
+	@Override
 	public String path() {
 		return "path";
 	}
 
+	@Override
 	public String position() {
 		return "Position";
 	}
@@ -252,12 +269,13 @@ public class En extends Lang{
 		return "SOS-URL (incl. endpoint, e.g. http://[...]/sos)";
 	}
 
+
+	@Override
 	public String spaceString() {
 		return "Space";
 	}
 
 	public String step() { return "Step"; }
-
 
 	public String step1BrowseButton() {
 		return "Select data file";
@@ -316,7 +334,7 @@ public class En extends Lang{
 	public String step3aMeasureValueColMissingDialogMessage() {
 		return "You have to specify at least one " + this.measuredValue() + " column!";
 	}
-
+	
 	@Override
 	public String step3aMeasureValueColMissingDialogTitle() {
 		return this.measuredValue() + " column missing";
@@ -326,7 +344,7 @@ public class En extends Lang{
 	public String step3aParseTest1Failed() {
 		return "1 value could not be interpreted.";
 	}
-	
+
 	@Override
 	public String step3aParseTestAllOk() {
 		return "All values could be interpreted.";

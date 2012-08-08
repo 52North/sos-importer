@@ -35,7 +35,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.model.table.TableElement;
 
 /**
@@ -53,7 +52,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	public RadioButtonPanel(JPanel containerPanel) {
 		super(containerPanel);
-        this.setLayout(new GridLayout(0, 1));
+        setLayout(new GridLayout(0, 1));
 	}
 	
 	/**
@@ -67,7 +66,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 			radioButton.setSelected(true);
 		}
 		group.add(radioButton);
-		this.add(radioButton);
+		add(radioButton);
 	}
 	
 	/**
@@ -123,12 +122,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	}
 	
 	@Override
-	public void assign(TableElement tableElement) {		
-	}
+	public void assign(TableElement tableElement) {}
 	
 	@Override
-	public void unAssign(TableElement tableElement) {
-	};
+	public void unAssign(TableElement tableElement) {}
 	
 	/**
 	 * action when a radio button with selection panel is pressed
@@ -152,13 +149,14 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 			setSelectedChildPanel(childPanel);
 			childPanel.addToContainerPanel();		
 			
-			MainController.getInstance().pack();
+//			MainController.getInstance().pack();
+			revalidate();
 			patternChanged();
 		}	
 	}
 	
 	/**
-	 * action when a radio button without any child panels is pressed
+	 * Action when a radio button without any child panels is pressed
 	 * @author Raimund
 	 */
 	private class RemoveChildPanel implements ActionListener {
@@ -167,8 +165,8 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
-				MainController.getInstance().pack();
-				
+//				MainController.getInstance().pack();
+				revalidate();
 				SelectionPanel childPanel = null;
 				setSelectedChildPanel(childPanel);
 			}
