@@ -114,7 +114,7 @@ public class Step6bSpecialController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step6cController(firstLineWithData);
+		return new Step6cController();
 	}
 
 	@Override

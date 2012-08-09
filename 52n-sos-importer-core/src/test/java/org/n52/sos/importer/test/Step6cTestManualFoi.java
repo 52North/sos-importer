@@ -83,7 +83,7 @@ public class Step6cTestManualFoi {
 		MainController f = MainController.getInstance();
 
 		Step6cModel step7Model = new Step6cModel(foi);
-		f.setStepController(new Step6cController(step7Model,firstLineWithData));
+		f.setStepController(new Step6cController(step7Model));
 	}
 
 }

@@ -50,15 +50,10 @@ public class Step6cController extends StepController {
 	private Step6cModel step6cModel;
 	
 	private Step6cPanel step6cPanel;
+	
+	public Step6cController() {	}
 
-	private int firstLineWithData;
-	
-	public Step6cController(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-	}
-	
-	public Step6cController(Step6cModel step6cModel, int firstLineWithData) {
-		this(firstLineWithData);
+	public Step6cController(Step6cModel step6cModel) {
 		this.step6cModel = step6cModel;
 	}
 
@@ -112,12 +107,12 @@ public class Step6cController extends StepController {
 		Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithUnCompletePosition();
 		if (foiWithoutPosition == null) return null;
 		
-		return new Step6cController(foiWithoutPosition,this.firstLineWithData);
+		return new Step6cController(foiWithoutPosition);
 	}
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step7Controller(this.firstLineWithData);
+		return new Step7Controller();
 	}
 	
 	private Step6cModel getNextFeatureOfInterestWithUnCompletePosition() {

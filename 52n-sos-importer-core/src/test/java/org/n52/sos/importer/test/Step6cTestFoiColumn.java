@@ -79,7 +79,7 @@ public class Step6cTestFoiColumn {
 		ModelStore.getInstance().add(nv1);
 		ModelStore.getInstance().add(foi);
 		
-		Step6cController s6c = new Step6cController(firstLineWithData);
+		Step6cController s6c = new Step6cController();
 		s6c.isNecessary();
 		f.setStepController(s6c);
 	}
