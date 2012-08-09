@@ -22,6 +22,7 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -41,7 +42,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -63,10 +65,8 @@ public class Step1Panel extends JPanel {
 	private final Step1Controller step1Controller;
 	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
-	
-	private final JLabel csvFileLabel = new JLabel(Lang.l().step1File() + " :");
 	private final JTextField csvFileTextField = new JTextField(25);
-	private final JButton browse = new JButton(Lang.l().step1BrowseButton());
+	private JButton browse;
 	private final Step1Panel _this = this;
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
@@ -75,25 +75,38 @@ public class Step1Panel extends JPanel {
 	
 	public Step1Panel(Step1Controller step1Controller) {
 		super();
-		// init fields
 		JScrollPane welcomePanel = welcomePanel();
 		JPanel languagePanel = languagePanel();
-		// csv Panel
-		JPanel csvPanel = new JPanel();
-		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		csvPanel.add(csvFileLabel);
-		csvPanel.add(csvFileTextField);
-		csvPanel.add(browse);
-		// create gui
+		JPanel csvPanel = initCsvPanel();
 		this.step1Controller = step1Controller;
+		
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		add(languagePanel);
-		add(welcomePanel);
 		add(csvPanel);
-		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
-		browse.addActionListener(new BrowseButtonClicked());
+		add(welcomePanel);
 	}
 	
+	private JPanel initCsvPanel() {
+		JPanel csvPanel = new JPanel();
+		csvPanel.setBorder(new TitledBorder(null,Lang.l().step1File(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
+		JLabel instructionLabel = new JLabel(Lang.l().step1InstructionLabel() + ":");
+		instructionLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
+		JButton browse =  new JButton(Lang.l().step1BrowseButton());
+		browse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				step1Controller.browseButtonClicked();
+			}
+		});
+		
+		csvPanel.add(instructionLabel);
+		csvPanel.add(csvFileTextField);
+		csvPanel.add(browse);
+		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
+		return csvPanel;
+	}
+
 	public void setCSVFilePath(String filePath) {
 		csvFileTextField.setText(filePath);
 	}
@@ -102,17 +115,9 @@ public class Step1Panel extends JPanel {
 		return csvFileTextField.getText();
 	}
 	
-	private class BrowseButtonClicked implements ActionListener {
-		
-		public void actionPerformed(ActionEvent e) {
-			step1Controller.browseButtonClicked();
-		}
-	}
-	
 	private JPanel languagePanel() {
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
-		label.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
 		jcb.setSelectedItem(Lang.getCurrentLocale());
 		jcb.setEditable(false);
@@ -179,7 +184,7 @@ public class Step1Panel extends JPanel {
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(MainFrame.DIALOG_WIDTH-20, 400));
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Introduction", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		scrollPane.setWheelScrollingEnabled(true);
 		if(Constants.GUI_DEBUG) {
 			scrollPane.setBorder(Constants.DEBUG_BORDER);
