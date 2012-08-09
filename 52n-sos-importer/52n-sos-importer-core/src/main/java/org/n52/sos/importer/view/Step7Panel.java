@@ -24,11 +24,13 @@
 package org.n52.sos.importer.view;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -36,12 +38,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step7Controller;
-import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -51,27 +53,16 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * chooses the URL of the Sensor Observation Service
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * 
- * TODO change to use OneTimeFeeder from feeder module
+ *
  */
 public class Step7Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Step7Panel _this;
 	/*
 	 * SOS URL
 	 */
 	private EditableJComboBoxPanel sosComboBox;
-	
-//	private JLabel directImportJL;
-//	private JCheckBox directImportJCB;
 
-	/*
-	 * CONFIG
-	 */
-//	private JLabel saveConfigJL;
-//	private JCheckBox saveConfigJCB;
-	
 	private JLabel configFileJL;
 	private JButton configFileDirSelectorJB;
 	private JTextField configFileNameJT;
@@ -81,216 +72,207 @@ public class Step7Panel extends JPanel {
 	 * OFFERING
 	 */
 	private JPanel offeringPanel;
-	private JCheckBox offeringGenerationCheckbox;
-	private JPanel offeringNamePanel;
+	private JCheckBox offeringGenerateCheckbox;
 	private JTextField offeringInputTextField;
-	
+	private JLabel offeringInputLabel;
+	private JPanel sosURLPanel;
+	private JLabel configFileNameLabel;
+	private JLabel configFileSelectedFolderLabel;
+	private JPanel panel;
+	private JLabel spacer;
+	private JLabel sosURLInstructionsLabel;
+
 	public Step7Panel(Step7Controller s7C) {
-		_this = this;
-		Step7Model s7M = (Step7Model) s7C.getModel();
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		sosComboBox = new EditableJComboBoxPanel(
-				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().sosURL(), ToolTips.get(ToolTips.SOS));
-		sosComboBox.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
-		add(sosComboBox);
-		/*
-		 * 	directImport Checkbox
-		 */
-//		directImportJL = new JLabel(Lang.l().step7DirectImport() + "?");
-//		directImportJCB = new JCheckBox();
-//		directImportJCB.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				/*
-//				 * if deactivated, active saveConfig checkbox. 
-//				 * Than the user needs an active step to lose their work
-//				 * controller switch
-//				 */
-//				if (!directImportJCB.isSelected()) {
-//					configFileDirSelectorJB.setVisible(true);
-//					configFileNameJT.setVisible(true);
-//					configFileJL.setVisible(true);
-//					saveConfigJCB.setSelected(true);
-//					BackNextController.getInstance().setNextButtonEnabled(false);
-//				} else if (!saveConfigJCB.isSelected()) {
-//					BackNextController.getInstance().setNextButtonEnabled(true);
-//				}
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("directImport state changed. is selected?" + 
-//							directImportJCB.isSelected());
-//				}
-//			}
-//		});
-//		directImportJCB.setSelected(s7M.isDirectImport());
-//		directImportJCB.setEnabled(true);
-//		JPanel directImportPanel = new JPanel();
-//		directImportPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-//		directImportPanel.add(directImportJL);
-//		directImportPanel.add(directImportJCB);
-//		add(directImportPanel);
-		/*
-		 * 	Offering input and checkbox
-		 */
-		offeringPanel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) offeringPanel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		add(offeringPanel);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{579, 0};
+		gridBagLayout.rowHeights = new int[]{80, 43, 74, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+
+		sosURLPanel = initSosUrlPanel();
+		offeringPanel = initOfferingPanel();
+		JPanel configFilePanel = initConfigFilePanel();
 		
-		JLabel offeringLabel = new JLabel(Lang.l().step7OfferingCheckBoxLabel());
-		offeringPanel.add(offeringLabel);
-		
-		offeringGenerationCheckbox = new JCheckBox();
-		offeringGenerationCheckbox.setSelected(true);
-		offeringGenerationCheckbox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!offeringGenerationCheckbox.isSelected()) {
-					offeringNamePanel.setVisible(true);
-				} else {
-					offeringNamePanel.setVisible(false);
-				}
-			}
-		});
-		offeringPanel.add(offeringGenerationCheckbox);
-		offeringPanel.setToolTipText(ToolTips.get(ToolTips.OFFERING));
-		
-		offeringNamePanel = new JPanel();
-		offeringNamePanel.setVisible(false);
-		FlowLayout fl_offeringNamePanel = (FlowLayout) offeringNamePanel.getLayout();
-		fl_offeringNamePanel.setAlignment(FlowLayout.LEADING);
-		add(offeringNamePanel);
-		
-		JLabel offeringInputLabel = new JLabel(Lang.l().step7OfferingInputTextfieldLabel());
-		offeringNamePanel.add(offeringInputLabel);
-		
-		offeringInputTextField = new JTextField();
-		offeringNamePanel.add(offeringInputTextField);
-		offeringInputTextField.setColumns(10);
-		/*
-		 *	saveConfig Checkbox
-		 */
-//		saveConfigJL = new JLabel(Lang.l().step7SaveConfig() + "?");
-//		saveConfigJCB = new JCheckBox();
-//		saveConfigJCB.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				/*
-//				 * If selected, display configuration file selector
-//				 * if not, remove display and reset values
-//				 */
-//				if (saveConfigJCB.isSelected()) {
-//					configFileDirSelectorJB.setVisible(true);
-//					configFileNameJT.setVisible(true);
-//					configFileJL.setVisible(true);
-//					if (configFilePath == null || 
-//							configFileName == null ||
-//							configFilePath.equals("") ||
-//							configFileName.equals("") || 
-//							configFileName.indexOf(".xml") == -1 ) {
-//						BackNextController.getInstance().setNextButtonEnabled(false);
-//					}
-//				} else {
-//					configFileDirSelectorJB.setVisible(false);
-//					configFileNameJT.setVisible(false);
-//					configFileJL.setVisible(false);
-//					if (!directImportJCB.isSelected()) {
-//						BackNextController.getInstance().setNextButtonEnabled(false);
-//					}
-//				}
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("saveConfig state changed. is selected?" + 
-//							saveConfigJCB.isSelected());
-//				}
-//			}
-//		});
-//		saveConfigJCB.setSelected(s7M.isSaveConfig());
-//		saveConfigJCB.setEnabled(true);
-//		JPanel saveConfigPanel = new JPanel();
-//		saveConfigPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-//		saveConfigPanel.add(saveConfigJL);
-//		saveConfigPanel.add(saveConfigJCB);
-//		add(saveConfigPanel);
-		/*
-		 * configFileChooser
-		 */
+		GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
+		gbc_sosURLPanel.fill = GridBagConstraints.BOTH;
+		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_sosURLPanel.gridx = 0;
+		gbc_sosURLPanel.gridy = 0;
+		add(sosURLPanel, gbc_sosURLPanel);
+		GridBagConstraints gbc_offeringPanel = new GridBagConstraints();
+		gbc_offeringPanel.fill = GridBagConstraints.BOTH;
+		gbc_offeringPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_offeringPanel.gridx = 0;
+		gbc_offeringPanel.gridy = 1;
+		add(offeringPanel, gbc_offeringPanel);
+		GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
+		gbc_configFilePanel.fill = GridBagConstraints.BOTH;
+		gbc_configFilePanel.gridx = 0;
+		gbc_configFilePanel.gridy = 2;
+		add(configFilePanel, gbc_configFilePanel);
+	}
+
+	private JPanel initConfigFilePanel() {
+		String tmp = MainController.getInstance().getFilename();
+		if (tmp == null) {
+			tmp = "not-set.";
+		}
+		tmp = tmp + configFileName;
+		JPanel configFilePanel = new JPanel();
+		configFilePanel.setBorder(new TitledBorder(null, Lang.l().step7ConfigurationFile(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gbl_configFilePanel = new GridBagLayout();
+		gbl_configFilePanel.columnWidths = new int[] {50, 50, 0};
+		gbl_configFilePanel.rowHeights = new int[]{23, 0, 0};
+		gbl_configFilePanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_configFilePanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		configFilePanel.setLayout(gbl_configFilePanel);
+		configFileJL = new JLabel(Lang.l().step7ConfigFileLabel() + ":");
+		GridBagConstraints gbc_configFileJL = new GridBagConstraints();
+		gbc_configFileJL.anchor = GridBagConstraints.EAST;
+		gbc_configFileJL.insets = new Insets(0, 0, 5, 5);
+		gbc_configFileJL.gridx = 0;
+		gbc_configFileJL.gridy = 0;
+		configFilePanel.add(configFileJL, gbc_configFileJL);
+
+		panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 0;
+		configFilePanel.add(panel, gbc_panel);
+		panel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		configFileDirSelectorJB = new JButton(Lang.l().step7ConfigFileButton());
+		panel.add(configFileDirSelectorJB);
+
+		spacer = new JLabel(" ");
+		panel.add(spacer);
+
+		configFileSelectedFolderLabel = new JLabel();
+		panel.add(configFileSelectedFolderLabel);
 		configFileDirSelectorJB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if (fc.showDialog(_this, Lang.l().step7ConfigFileDialogTitel())
+				if (fc.showDialog(Step7Panel.this, Lang.l().step7ConfigFileDialogTitel())
 						== JFileChooser.APPROVE_OPTION){
 					if (fc.getSelectedFile().isDirectory() && fc.getSelectedFile().canWrite()) {
 						configFilePath  = fc.getSelectedFile().getAbsolutePath();
+						configFileSelectedFolderLabel.setText(configFilePath + File.separatorChar);
 						BackNextController.getInstance().setNextButtonEnabled(true);
 						return;
 					} else {
-						JOptionPane.showMessageDialog(_this, 
+						JOptionPane.showMessageDialog(Step7Panel.this, 
 								Lang.l().step7ConfigDirNotDirOrWriteable(
 										fc.getSelectedFile().getAbsolutePath()), 
-								Lang.l().errorDialogTitle(), 
-								JOptionPane.ERROR_MESSAGE);
+										Lang.l().errorDialogTitle(), 
+										JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				BackNextController.getInstance().setNextButtonEnabled(false);
 			}
 		});
-		configFileDirSelectorJB.setVisible(s7M.isSaveConfig());
-		configFileJL = new JLabel(Lang.l().step7ConfigFileLabel() + ":");
-		configFileNameJT = new JTextField(15);
-		String tmp = MainController.getInstance().getFilename();
-		tmp = tmp + configFileName;
+		
+		configFileNameJT = new JTextField(50);
 		configFileNameJT.setText(tmp);
-		configFileNameJT.setVisible(s7M.isSaveConfig());
-		configFileJL.setVisible(s7M.isSaveConfig());
-		JPanel configFilePanel = new JPanel();
-		configFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-		configFilePanel.add(configFileJL);
-		configFilePanel.add(configFileDirSelectorJB);
-		configFilePanel.add(configFileNameJT);
-		add(configFilePanel);
-		// TODO remove if not required anymore
-		configFileDirSelectorJB.setVisible(true);
-		configFileNameJT.setVisible(true);
-		configFileJL.setVisible(true);
-		configFilePanel.setVisible(true);
-		configFilePanel.setEnabled(true);
-		// End of remove
-		// enable next button only if something is checked!
-//		BackNextController.getInstance().setNextButtonEnabled(
-//				saveConfigJCB.isSelected() || directImportJCB.isSelected() );
+
+		configFileNameLabel = new JLabel(new StringBuffer().append(Lang.l().name().substring(0,1).toUpperCase())
+				.append(Lang.l().name().substring(1)).
+				append(":").toString());
+		configFileNameLabel.setLabelFor(configFileNameJT);
+		GridBagConstraints gbc_configFileNameLabel = new GridBagConstraints();
+		gbc_configFileNameLabel.anchor = GridBagConstraints.EAST;
+		gbc_configFileNameLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_configFileNameLabel.gridx = 0;
+		gbc_configFileNameLabel.gridy = 1;
+		configFilePanel.add(configFileNameLabel, gbc_configFileNameLabel);
+		GridBagConstraints gbc_configFileNameJT = new GridBagConstraints();
+		gbc_configFileNameJT.anchor = GridBagConstraints.WEST;
+		gbc_configFileNameJT.gridx = 1;
+		gbc_configFileNameJT.gridy = 1;
+		configFilePanel.add(configFileNameJT, gbc_configFileNameJT);
+		return configFilePanel;
 	}
-	
+
+	private JPanel initOfferingPanel() {
+		JLabel offeringLabel = new JLabel(Lang.l().step7OfferingCheckBoxLabel());
+		
+		offeringInputLabel = new JLabel(Lang.l().step7OfferingInputTextfieldLabel());
+		offeringInputLabel.setVisible(false);
+
+		offeringGenerateCheckbox = new JCheckBox();
+		offeringGenerateCheckbox.setSelected(true);
+		offeringGenerateCheckbox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!offeringGenerateCheckbox.isSelected()) {
+					offeringInputTextField.setVisible(true);
+					offeringInputLabel.setVisible(true);
+				} else {
+					offeringInputTextField.setVisible(false);
+					offeringInputLabel.setVisible(false);
+				}
+			}
+		});
+		
+		offeringInputTextField = new JTextField();
+		offeringInputTextField.setColumns(10);
+		offeringInputTextField.setVisible(false);
+		
+		offeringPanel = new JPanel();
+		offeringPanel.setBorder(new TitledBorder(null, Lang.l().offering(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		offeringPanel.setToolTipText(ToolTips.get(ToolTips.OFFERING));
+		offeringPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+		
+		offeringPanel.add(offeringLabel);
+		offeringPanel.add(offeringGenerateCheckbox);
+		offeringPanel.add(offeringInputLabel);
+		offeringPanel.add(offeringInputTextField);
+		
+		return offeringPanel;
+	}
+
+	private JPanel initSosUrlPanel() {
+		JPanel sosURLPanel = new JPanel();
+		sosURLPanel.setBorder(new TitledBorder(null, Lang.l().sos(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gbl_sosURLPanel = new GridBagLayout();
+		gbl_sosURLPanel.columnWidths = new int[]{750, 0};
+		gbl_sosURLPanel.rowHeights = new int[]{30, 0, 0};
+		gbl_sosURLPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_sosURLPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		sosURLPanel.setLayout(gbl_sosURLPanel);
+		sosComboBox = new EditableJComboBoxPanel(
+				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().url(), ToolTips.get(ToolTips.SOS));
+		sosComboBox.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
+		
+		GridBagConstraints gbc_sosComboBox = new GridBagConstraints();
+		gbc_sosComboBox.fill = GridBagConstraints.BOTH;
+		gbc_sosComboBox.gridx = 0;
+		gbc_sosComboBox.gridy = 1;
+		sosURLPanel.add(sosComboBox, gbc_sosComboBox);
+		sosURLInstructionsLabel = new JLabel("  " + Lang.l().step7SosUrlInstructions());
+		GridBagConstraints gbc_sosURLInstructionsLabel = new GridBagConstraints();
+		gbc_sosURLInstructionsLabel.gridy = 0;
+		gbc_sosURLInstructionsLabel.gridx = 0;
+		gbc_sosURLInstructionsLabel.fill = GridBagConstraints.BOTH;
+		sosURLPanel.add(sosURLInstructionsLabel, gbc_sosURLInstructionsLabel);
+		
+		return sosURLPanel;
+	}
+
 	public String getSOSURL() {
 		return (String) sosComboBox.getSelectedItem();
 	}
-	
+
 	public void setSOSURL(String sosURL) {
 		sosComboBox.setSelectedItem(sosURL);
 	}
-	
-	public boolean isDirectImport() {
-		// TODO update
-		return false; //directImportJCB.isSelected();
-	}
-	
-	public void setDirectImport(boolean isDirectImport) {
-		// TODO update
-		//directImportJCB.setSelected(isDirectImport);
-	}
-	
-	public boolean isSaveConfig() {
-		// TODO update
-		return true; // this.saveConfigJCB.isSelected();
-	}
-	
-	public void setSaveConfig(boolean isSaveConfig) {
-		// TODO update
-		// saveConfigJCB.setSelected(isSaveConfig);
-	}
-	
+
 	public String getConfigFile() {
 		return configFilePath + File.separatorChar + configFileNameJT.getText();
 	}
-	
+
 	public void setConfigFile(String configFile) {
 		// split String by last index of File.separatorChar and save to fields
 		configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar)+1);
@@ -298,7 +280,7 @@ public class Step7Panel extends JPanel {
 	}
 
 	public boolean isGenerateOfferingFromSensorName() {
-		return offeringGenerationCheckbox.isSelected();
+		return offeringGenerateCheckbox.isSelected();
 	}
 
 	public String getOfferingName() {

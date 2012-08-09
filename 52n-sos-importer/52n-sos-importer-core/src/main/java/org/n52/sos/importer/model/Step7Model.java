@@ -25,17 +25,9 @@ package org.n52.sos.importer.model;
 
 import java.io.File;
 
-/**
- * @author e.h.juerrens@52north.org
- *
- */
 public class Step7Model implements StepModel {
 	
 	private String sosURL;
-	
-	private boolean saveConfig;
-	
-	private boolean directImport;
 	
 	private File configFile;
 
@@ -44,35 +36,23 @@ public class Step7Model implements StepModel {
 	private String offering;
 
 	public Step7Model(String sosURL, 
-			boolean directImport, 
-			boolean saveConfig,
 			File configFile,
 			boolean generateOfferingFromSensorName,
 			String offering) {
 		this.sosURL = sosURL;
-		this.directImport = directImport;
-		this.saveConfig = saveConfig;
 		this.configFile = configFile;
 		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
 		this.offering = offering;
 	}
 	
 	public Step7Model() {
-		this(null,false,false,null,true,null);
+		this(null,null,true,null);
 	}
 
 	public String getSosURL() {
 		return sosURL;
 	}
 
-	public boolean isSaveConfig() {
-		return saveConfig;
-	}
-
-	public boolean isDirectImport() {
-		return directImport;
-	}
-	
 	public File getConfigFile() {
 		return configFile;
 	}
@@ -85,39 +65,19 @@ public class Step7Model implements StepModel {
 		this.sosURL = sosURL;
 	}
 
-	public void setSaveConfig(boolean isSaveConfig) {
-		this.saveConfig = isSaveConfig;
-	}
-
-	public void setDirectImport(boolean isDirectImport) {
-		this.directImport = isDirectImport;
-	}
-
-	/**
-	 * @return the generateOfferingFromSensorName
-	 */
 	public boolean isGenerateOfferingFromSensorName() {
 		return generateOfferingFromSensorName;
 	}
 
-	/**
-	 * @param generateOfferingFromSensorName the generateOfferingFromSensorName to set
-	 */
 	public void setGenerateOfferingFromSensorName(
 			boolean generateOfferingFromSensorName) {
 		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
 	}
 
-	/**
-	 * @return the offering
-	 */
 	public String getOffering() {
 		return offering;
 	}
 
-	/**
-	 * @param offering the offering to set
-	 */
 	public void setOffering(String offering) {
 		this.offering = offering;
 	}

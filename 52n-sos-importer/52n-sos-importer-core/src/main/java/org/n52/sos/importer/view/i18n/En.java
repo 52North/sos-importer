@@ -234,6 +234,11 @@ public class En extends Lang{
 	public String observedProperty() {
 		return "Observed Property";
 	}
+	
+	@Override
+	public String offering() {
+		return "Offering";
+	}
 
 	@Override
 	public String path() {
@@ -265,8 +270,8 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String sosURL() {
-		return "SOS-URL (incl. endpoint, e.g. http://[...]/sos)";
+	public String url() {
+		return "URL";
 	}
 
 
@@ -600,11 +605,16 @@ public class En extends Lang{
 
 	@Override
 	public String step7ConfigFileLabel() {
-		return "Configuration file folder and name";
+		return "Folder";
+	}
+
+	@Override
+	public String step7ConfigurationFile() {
+		return "Configuration File";
 	}
 
 	public String step7Description() {
-		return this.step() + " 7: Choose " + this.sos();
+		return this.step() + " 7: Final Configuration";
 	}
 
 	@Override
@@ -661,6 +671,11 @@ public class En extends Lang{
 				"failed after " + connectTimeoutSeconds + " seconds connect and " + 
 				readTimeoutSeconds + " seconds read timeout.\n" +
 				"Reason: " + message;
+	}
+
+	@Override
+	public String step7SosUrlInstructions() {
+		return "Please specify the SOS URL including the endpoint like this \"http://www.example.com/52nSOS/sos\" .";
 	}
 
 	@Override

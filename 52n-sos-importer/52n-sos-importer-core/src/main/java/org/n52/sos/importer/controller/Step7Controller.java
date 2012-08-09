@@ -24,15 +24,11 @@
 package org.n52.sos.importer.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
-import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.utils.XMLTools;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
@@ -64,8 +60,6 @@ public class Step7Controller extends StepController {
 	public void loadSettings() {
 		s7P = new Step7Panel(this);
 		if (this.s7M != null) {
-			s7P.setSaveConfig(s7M.isSaveConfig());
-			s7P.setDirectImport(s7M.isDirectImport());
 			if (s7M.getSosURL() != null) {
 				s7P.setSOSURL(s7M.getSosURL());
 			}
@@ -86,22 +80,16 @@ public class Step7Controller extends StepController {
 	public void saveSettings() {
 		String sosURL = s7P.getSOSURL(),
 				offering = s7P.getOfferingName();
-		boolean directImport = s7P.isDirectImport(),
-				saveConfig = s7P.isSaveConfig(),
-				generateOfferingFromSensorName = s7P.isGenerateOfferingFromSensorName();
+		boolean generateOfferingFromSensorName = s7P.isGenerateOfferingFromSensorName();
 		File configFile = new File(s7P.getConfigFile());
 		if (this.s7M == null) {
 			this.s7M = new Step7Model(sosURL,
-					directImport,
-					saveConfig,
 					configFile,
 					generateOfferingFromSensorName,
 					offering);
 		} else {
 			s7M.setSosURL(sosURL);
 			s7M.setConfigFile(configFile);
-			s7M.setDirectImport(directImport);
-			s7M.setSaveConfig(saveConfig);
 			s7M.setGenerateOfferingFromSensorName(generateOfferingFromSensorName);
 			if (!generateOfferingFromSensorName) {
 				s7M.setOffering(offering);
@@ -156,66 +144,10 @@ public class Step7Controller extends StepController {
 			logger.error(msg);
 			return false;
 		}
-		if (s7P.isDirectImport()) {
-			String url = s7P.getSOSURL();
-			return testConnection(url);
-		}
 		return true;
 	}
 
-	/*
-	 * TODO Expand -> Send get capabilities request
-	 *
-	 * TODO add proxy handling: http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
-	 */
-	public boolean testConnection(String strURL) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("testConnection()");
-		}
-		// show dialog to start sos connection testing
-		BackNextController.getInstance().setNextButtonEnabled(false);
-		int userChoice = JOptionPane.showConfirmDialog(s7P,
-				Lang.l().step7SOSConncetionStart(strURL),
-				Lang.l().infoDialogTitle(),
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.INFORMATION_MESSAGE);
-		if (userChoice == JOptionPane.YES_OPTION) {
-			try {
-				// send GetCapabilities via GET-Method
-				strURL = strURL + Constants.SOS_GET_GET_CAPABILITIES_REQUEST;
-				URL url = new URL(strURL);
-				HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-				urlConn.setConnectTimeout(Constants.URL_CONNECT_TIMEOUT_SECONDS*1000);
-				urlConn.setReadTimeout(Constants.URL_CONNECT_READ_TIMEOUT_SECONDS*1000);
-				urlConn.connect();
-
-				if (HttpURLConnection.HTTP_OK == urlConn.getResponseCode()) {
-					logger.info("Successfully tested connection to Sensor Observation Service: " + strURL);
-					BackNextController.getInstance().setNextButtonEnabled(true);
-					return true;
-				} else {
-					String msg = Lang.l().step7SOSconnectionFailed(strURL,urlConn.getResponseCode());
-					JOptionPane.showMessageDialog(null,
-							msg,
-							Lang.l().warningDialogTitle(),
-							JOptionPane.WARNING_MESSAGE);
-					logger.warn(msg);
-				}        	
-			} catch (IOException e) {
-				String msg = Lang.l().step7SOSConnectionFailedException(strURL,
-						e.getMessage(),
-						Constants.URL_CONNECT_READ_TIMEOUT_SECONDS,
-						Constants.URL_CONNECT_TIMEOUT_SECONDS);
-				JOptionPane.showMessageDialog(null,
-						msg,
-						Lang.l().errorDialogTitle(),
-						JOptionPane.ERROR_MESSAGE);
-				logger.error(msg,e);
-			}
-		}
-		BackNextController.getInstance().setNextButtonEnabled(true);
-		return false;
-	}
+	
 
 	@Override
 	public StepController getNext() {

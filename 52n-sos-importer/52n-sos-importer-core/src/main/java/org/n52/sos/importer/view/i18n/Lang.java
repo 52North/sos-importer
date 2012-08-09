@@ -248,6 +248,11 @@ public abstract class Lang {
 	 */
 	public abstract String observedProperty();
 	/**
+	 * 
+	 * @return Offering
+	 */
+	public abstract String offering();
+	/**
 	 * @return path
 	 */
 	public abstract String path();
@@ -278,9 +283,9 @@ public abstract class Lang {
 		return "Sensor Observation Service";
 	}
 	/**
-	 * @return SOS-URL (incl. endpoint, e.g. http://[...]/sos)
+	 * @return URL
 	 */
-	public abstract String sosURL();
+	public abstract String url();
 	/**
 	 * @return Space
 	 */
@@ -548,11 +553,11 @@ public abstract class Lang {
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
+	
 	/**
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
-	
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
 	 */
@@ -604,8 +609,9 @@ public abstract class Lang {
 	 * @return Choose configuration file export folder
 	 */
 	public abstract String step7ConfigFileButton();
+
 	/**
-	 * @return Select Config file folder
+	 * @return Folder
 	 */
 	public abstract String step7ConfigFileDialogTitel();
 
@@ -615,7 +621,13 @@ public abstract class Lang {
 	public abstract String step7ConfigFileLabel();
 
 	/**
-	 * @return Step 7: Choose Sensor Observation Service
+	 * 
+	 * @return Configuration File
+	 */
+	public abstract String step7ConfigurationFile();
+
+	/**
+	 * @return Step 7: Final Configuration
 	 */
 	public abstract String step7Description();
 
@@ -633,7 +645,7 @@ public abstract class Lang {
 	 * @return Please specify the offering name:
 	 */
 	public abstract String step7OfferingInputTextfieldLabel();
-
+	
 	/**
 	 * @return Please specify the offering name or select to generate it.
 	 */
@@ -645,7 +657,7 @@ public abstract class Lang {
 	 * @return
 	 */
 	public abstract String step7OfferingNameNotValid(String offeringName);
-	
+
 	/**
 	 * @return Save configuration to XML file
 	 */
@@ -679,6 +691,12 @@ public abstract class Lang {
 			String message, 
 			int readTimeoutSeconds,
 			int connectTimeoutSeconds);
+
+	/**
+	 * 
+	 * @return	Please specify the SOS URL including the endpoint like this "http://www.example.com/52nSOS/sos" .
+	 */
+	public abstract String step7SosUrlInstructions();
 
 	/**
 	 * @return Open Configuration File

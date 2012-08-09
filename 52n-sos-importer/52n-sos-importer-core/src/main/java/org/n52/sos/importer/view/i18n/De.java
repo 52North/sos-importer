@@ -227,6 +227,11 @@ public class De extends Lang{
 		return "Phänomen";
 	}
 
+	@Override
+	public String offering() {
+		return "Offering";
+	}
+
 	public String path() {
 		return "Pfad";
 	}
@@ -249,14 +254,14 @@ public class De extends Lang{
 	public String seconds() {
 		return "Sekunden";
 	}
-
+	
 	public String sensor() {
 		return "Sensor";
 	}
-	
+
 	@Override
-	public String sosURL() {
-		return "SOS-Web-Adresse (inkl. Endpoint, z.B. ../sos)";
+	public String url() {
+		return "URL";
 	}
 
 	public String spaceString() {
@@ -555,12 +560,12 @@ public class De extends Lang{
 	public String step6Generation() {
 		return "Automatische Erzeugung";
 	}
-
+	
 	@Override
 	public String step6ManualInput() {
 		return "Manuelle Eingabe";
 	}
-	
+
 	@Override
 	public String step6MissingUserInput() {
 		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
@@ -589,11 +594,16 @@ public class De extends Lang{
 
 	@Override
 	public String step7ConfigFileLabel() {
-		return "Konfigurations-Dateiname und -verzeichnis";
+		return "Verzeichnis";
+	}
+
+	@Override
+	public String step7ConfigurationFile() {
+		return "Konfigurations-Datei";
 	}
 
 	public String step7Description() {
-		return this.step() + " 7: Geben Sie den " + this.sos() + " an";
+		return this.step() + " 7: Finale Konfiguration";
 	}
 
 	@Override
@@ -651,6 +661,11 @@ public class De extends Lang{
 				"fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " + 
 				readTimeoutSeconds + " Sekunden Lese-Timeout.\n" +
 				"Grund: " + message;
+	}
+
+	@Override
+	public String step7SosUrlInstructions() {
+		return "Geben Sie die SOS-Web-Adresse inkl. Endpoint wie z.B. \"http://www.example.com/52nSOS/sos\" an";
 	}
 
 	@Override

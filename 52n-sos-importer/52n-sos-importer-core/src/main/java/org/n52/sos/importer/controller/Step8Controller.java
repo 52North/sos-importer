@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -142,29 +144,19 @@ public class Step8Controller extends StepController {
 				logger.info("Log saved to file: " + f.getAbsolutePath());
 			}
 		}
-		// Import only, if required
-		if (step7Model.isDirectImport()) {
-			assembleInformation = new AssembleInformation();
-			registerSensors = new RegisterSensors();
-			insertObservations = new InsertObservations();
-			cancelled = false;
-			assembleInformation.execute();
-		}
-		// save model, if required
-		if (step7Model.isSaveConfig()) {
-			try {
-				if (MainController.getInstance().saveModel(step7Model.getConfigFile())) {
-					if (logger.isInfoEnabled()) {
-						logger.info("Configuration saved to file: " + step7Model.getConfigFile().getAbsolutePath());
-					}
+		// save model always
+		try {
+			if (MainController.getInstance().saveModel(step7Model.getConfigFile())) {
+				if (logger.isInfoEnabled()) {
+					logger.info("Configuration saved to file: " + step7Model.getConfigFile().getAbsolutePath());
 				}
-			} catch (IOException e) {
-				logger.error("Exception thrown: " + e.getMessage(), e);
-				JOptionPane.showMessageDialog(step8Panel, 
-						Lang.l().step8SaveModelFailed(f,e.getLocalizedMessage()), 
-						Lang.l().errorDialogTitle(), 
-						JOptionPane.ERROR_MESSAGE);
 			}
+		} catch (IOException e) {
+			logger.error("Exception thrown: " + e.getMessage(), e);
+			JOptionPane.showMessageDialog(step8Panel, 
+					Lang.l().step8SaveModelFailed(f,e.getLocalizedMessage()), 
+					Lang.l().errorDialogTitle(), 
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -866,5 +858,59 @@ public class Step8Controller extends StepController {
 	 */
 	public void setChangedResourceNames(String[] changedResourceName) {
 		this.changedResourceNames.add(changedResourceName);
+	}
+	
+	/*
+	 * TODO Expand -> Send get capabilities request
+	 *
+	 * TODO add proxy handling: http://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html
+	 */
+	public boolean testConnection(String strURL) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("testConnection()");
+		}
+		// show dialog to start sos connection testing
+		BackNextController.getInstance().setNextButtonEnabled(false);
+		int userChoice = JOptionPane.showConfirmDialog(step8Panel,
+				Lang.l().step7SOSConncetionStart(strURL),
+				Lang.l().infoDialogTitle(),
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+		if (userChoice == JOptionPane.YES_OPTION) {
+			try {
+				// send GetCapabilities via GET-Method
+				strURL = strURL + Constants.SOS_GET_GET_CAPABILITIES_REQUEST;
+				URL url = new URL(strURL);
+				HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+				urlConn.setConnectTimeout(Constants.URL_CONNECT_TIMEOUT_SECONDS*1000);
+				urlConn.setReadTimeout(Constants.URL_CONNECT_READ_TIMEOUT_SECONDS*1000);
+				urlConn.connect();
+
+				if (HttpURLConnection.HTTP_OK == urlConn.getResponseCode()) {
+					logger.info("Successfully tested connection to Sensor Observation Service: " + strURL);
+					BackNextController.getInstance().setNextButtonEnabled(true);
+					return true;
+				} else {
+					String msg = Lang.l().step7SOSconnectionFailed(strURL,urlConn.getResponseCode());
+					JOptionPane.showMessageDialog(null,
+							msg,
+							Lang.l().warningDialogTitle(),
+							JOptionPane.WARNING_MESSAGE);
+					logger.warn(msg);
+				}        	
+			} catch (IOException e) {
+				String msg = Lang.l().step7SOSConnectionFailedException(strURL,
+						e.getMessage(),
+						Constants.URL_CONNECT_READ_TIMEOUT_SECONDS,
+						Constants.URL_CONNECT_TIMEOUT_SECONDS);
+				JOptionPane.showMessageDialog(null,
+						msg,
+						Lang.l().errorDialogTitle(),
+						JOptionPane.ERROR_MESSAGE);
+				logger.error(msg,e);
+			}
+		}
+		BackNextController.getInstance().setNextButtonEnabled(true);
+		return false;
 	}
 }
