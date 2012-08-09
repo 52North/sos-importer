@@ -118,7 +118,7 @@ public class Step6cTestGeneratedFoi {
 		mC.removeProvider(s6bM);
 
 		Step6cModel step7Model = new Step6cModel(foi);
-		mC.setStepController(new Step6cController(step7Model,firstLineWithData));
+		mC.setStepController(new Step6cController(step7Model));
 	}
 
 }

@@ -49,7 +49,7 @@ public class Step6bTestObservedProperty {
 				{"03.01.03", "Zwickau", "PM10", "-999"}, 
 				{"04.01.03", "Zwickau", "PM12", "-999"}};
 		TableController.getInstance().setContent(o);
-		Constants.GUI_DEBUG = true;
+		Constants.GUI_DEBUG = false;
 		
 		DateAndTime dtm1 = new DateAndTime();
 		dtm1.setGroup("1");

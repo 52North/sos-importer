@@ -49,10 +49,7 @@ public class Step7Controller extends StepController {
 
 	private Step7Model s7M;
 
-	private int firstLineWithData;
-
-	public Step7Controller(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
+	public Step7Controller() {
 		this.s7M = new Step7Model();
 	}
 
@@ -109,7 +106,7 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step8Controller(s7M,this.firstLineWithData);
+		return new Step8Controller(s7M);
 	}
 
 	@Override

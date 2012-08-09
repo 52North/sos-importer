@@ -133,6 +133,6 @@ public class Step7TestGLDAS {
 		
 		MainController f = MainController.getInstance();
 		
-		f.setStepController(new Step7Controller(firstLineWithData));
+		f.setStepController(new Step7Controller());
 	}
 }
