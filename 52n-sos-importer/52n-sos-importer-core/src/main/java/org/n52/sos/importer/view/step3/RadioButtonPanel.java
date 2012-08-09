@@ -149,7 +149,6 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 			setSelectedChildPanel(childPanel);
 			childPanel.addToContainerPanel();		
 			
-//			MainController.getInstance().pack();
 			revalidate();
 			patternChanged();
 		}	
@@ -165,7 +164,6 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
-//				MainController.getInstance().pack();
 				revalidate();
 				SelectionPanel childPanel = null;
 				setSelectedChildPanel(childPanel);
