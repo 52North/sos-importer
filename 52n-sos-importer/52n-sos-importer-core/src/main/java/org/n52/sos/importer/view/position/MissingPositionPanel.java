@@ -29,6 +29,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 import javax.swing.ButtonGroup;
@@ -41,7 +45,13 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.ows.Layer;
+import org.geotools.data.wms.WebMapServer;
 import org.geotools.geometry.DirectPosition2D;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.MapContent;
+import org.geotools.map.WMSLayer;
+import org.geotools.ows.ServiceException;
 import org.geotools.swing.JMapPane;
 import org.geotools.swing.action.PanAction;
 import org.geotools.swing.action.ResetAction;
@@ -57,6 +67,9 @@ import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.utils.n52Utils;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -120,7 +133,7 @@ public class MissingPositionPanel extends JPanel{
 	private JPanel initMapPanel() {
 		mapPane = new JMapPane();
 		mapPane.setEnabled(true);
-		WMS.set(mapPane);
+		initMap(mapPane);
 		
 		JPanel mapPanel = new JPanel();
 		mapPanel.setLayout(new BorderLayout(0, 0));
@@ -210,6 +223,68 @@ public class MissingPositionPanel extends JPanel{
 		}
 		
 		return mapPanel;
+	}
+
+	private void initMap(JMapPane mapPane2) {
+		try {
+			MapContent map = new MapContent();
+
+			URL url = null;
+			try {
+				url = new URL(Constants.WMS_URL() + Constants.WMS_GET_CAPABILITIES_REQUEST);
+			} catch (MalformedURLException e) {
+				//will not happen
+			}
+			/*
+			 * @see http://docs.geotools.org/stable/userguide/extension/wms/wms.html#layer
+			 */
+			WebMapServer wms = null;
+			wms = new WebMapServer(url);
+			Layer layer = wms.getCapabilities().getLayerList().get(1);
+
+			WMSLayer displayLayer = new WMSLayer( wms, layer );
+			map.addLayer(displayLayer);
+
+			// When first shown on screen it will display the layers.
+			mapPane.setMapContent( map );
+			// 										values: minX, maxX, minY, maxY, crs
+			ReferencedEnvelope bounds = Constants.WMS_ENVELOPE();
+			mapPane.setDisplayArea(bounds);
+			//mapPane.setDisplayArea(map.getMaxBounds());
+
+		} catch (UnsupportedEncodingException e1) {
+			logger.error(String.format("Exception thrown: %s",
+					e1.getMessage()),
+					e1);
+		} catch (IllegalStateException e1) {
+			logger.error(String.format("Exception thrown: %s",
+					e1.getMessage()),
+					e1);
+		} catch (MalformedURLException e1) {
+			logger.error(String.format("Exception thrown: %s",
+					e1.getMessage()),
+					e1);
+		} catch (IOException e1) {
+			logger.error(String.format("Exception thrown: %s",
+					e1.getMessage()),
+					e1);
+		} catch (ServiceException e) {
+			logger.error(String.format("Exception thrown: %s",
+					e.getMessage()),
+					e);
+		} catch (MismatchedDimensionException e) {
+			logger.error(String.format("Exception thrown: %s",
+						e.getMessage()),
+					e);
+		} catch (NoSuchAuthorityCodeException e) {
+			logger.error(String.format("Exception thrown: %s",
+						e.getMessage()),
+					e);
+		} catch (FactoryException e) {
+			logger.error(String.format("Exception thrown: %s",
+						e.getMessage()),
+					e);
+		}
 	}
 
 	private JPanel initInputType() {
