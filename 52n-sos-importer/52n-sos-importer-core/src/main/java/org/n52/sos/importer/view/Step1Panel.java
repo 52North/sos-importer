@@ -184,7 +184,7 @@ public class Step1Panel extends JPanel {
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(MainFrame.DIALOG_WIDTH-20, 400));
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Introduction", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().step1Introduction(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		scrollPane.setWheelScrollingEnabled(true);
 		if(Constants.GUI_DEBUG) {
 			scrollPane.setBorder(Constants.DEBUG_BORDER);

@@ -307,6 +307,11 @@ public abstract class Lang {
 	 */
 	public abstract String step1InstructionLabel();
 	/**
+	 * 
+	 * @return "Introduction"
+	 */
+	public abstract String step1Introduction();
+	/**
 	 * @return Change language
 	 */
 	public abstract String step1SelectLanguage();
@@ -547,11 +552,11 @@ public abstract class Lang {
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
+	
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
 	 */
 	public abstract String step6bURIInstructions();
-	
 	/**
 	 * @return Use Name after prefix?
 	 */
@@ -603,6 +608,7 @@ public abstract class Lang {
 	 * @return Select Config file folder
 	 */
 	public abstract String step7ConfigFileDialogTitel();
+
 	/**
 	 * @return Configuration file folder and name
 	 */
@@ -639,12 +645,12 @@ public abstract class Lang {
 	 * @return
 	 */
 	public abstract String step7OfferingNameNotValid(String offeringName);
-
+	
 	/**
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
-	
+
 	/**
 	 * @param strURL
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
