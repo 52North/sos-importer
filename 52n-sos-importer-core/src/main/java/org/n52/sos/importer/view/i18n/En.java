@@ -278,7 +278,7 @@ public class En extends Lang{
 	public String step() { return "Step"; }
 
 	public String step1BrowseButton() {
-		return "Select data file";
+		return "Select";
 	}
 
 	public String step1Description() {
@@ -289,8 +289,13 @@ public class En extends Lang{
 		return "CSV File";
 	}
 
+	@Override
+	public String step1InstructionLabel() {
+		return "Please select the CSV file";
+	}
+
 	public String step1SelectLanguage() {
-		return "Please select the language";
+		return "Change language";
 	}
 
 	public String step2ColumnSeparator() {
@@ -329,12 +334,12 @@ public class En extends Lang{
 	public String step3aDescription() {
 		return this.step() + " 3a: Choose Metadata for the selected column";
 	}
-
+	
 	@Override
 	public String step3aMeasureValueColMissingDialogMessage() {
 		return "You have to specify at least one " + this.measuredValue() + " column!";
 	}
-	
+
 	@Override
 	public String step3aMeasureValueColMissingDialogTitle() {
 		return this.measuredValue() + " column missing";

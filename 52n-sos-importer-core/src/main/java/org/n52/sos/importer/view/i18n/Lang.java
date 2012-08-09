@@ -290,7 +290,7 @@ public abstract class Lang {
 	 */
 	public abstract String step();
 	/**
-	 * @return Browse
+	 * @return Select
 	 */
 	public abstract String step1BrowseButton();
 	/**
@@ -302,7 +302,12 @@ public abstract class Lang {
 	 */
 	public abstract String step1File();
 	/**
-	 * @return Please select the language
+	 * 
+	 * @return Please select the CSV file
+	 */
+	public abstract String step1InstructionLabel();
+	/**
+	 * @return Change language
 	 */
 	public abstract String step1SelectLanguage();
 	/**
@@ -546,11 +551,11 @@ public abstract class Lang {
 	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
 	 */
 	public abstract String step6bURIInstructions();
+	
 	/**
 	 * @return Use Name after prefix?
 	 */
 	public abstract String step6bUseNameAfterPrefix();
-	
 	/**
 	 * @return Step 6c: Add missing positions
 	 */
@@ -602,6 +607,7 @@ public abstract class Lang {
 	 * @return Configuration file folder and name
 	 */
 	public abstract String step7ConfigFileLabel();
+
 	/**
 	 * @return Step 7: Choose Sensor Observation Service
 	 */
@@ -638,13 +644,13 @@ public abstract class Lang {
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
-
+	
 	/**
 	 * @param strURL
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
 	 */
 	public abstract String step7SOSConncetionStart(String strURL);
-	
+
 	/**
 	 * @param strURL
 	 * @param responseCode
