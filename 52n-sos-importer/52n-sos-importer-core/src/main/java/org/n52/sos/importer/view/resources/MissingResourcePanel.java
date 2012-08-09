@@ -23,7 +23,11 @@
  */
 package org.n52.sos.importer.view.resources;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
@@ -31,13 +35,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -45,9 +45,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
@@ -73,8 +73,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MissingResourcePanel.class);
 
-	private final EditableJComboBoxPanel manualResNameComboBox; 
-	private final EditableJComboBoxPanel manualResUriComboBox; 
+	private EditableJComboBoxPanel manualResNameComboBox; 
+	private EditableJComboBoxPanel manualResUriComboBox; 
 
 	private JRadioButton manualResInputJRB;
 	private JRadioButton generatedResJRB;
@@ -90,178 +90,21 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 	public MissingResourcePanel(Resource resource) {
 		this.resource = resource;
-		ButtonGroup bGroup = new ButtonGroup();
 		String name = Lang.l().name();
 		ModelStore ms = ModelStore.getInstance();
 		boolean disableManualInput = false, 
 				disableGeneratedInput = false,
 				manualDefault = false;
-		TableController tc = TableController.getInstance();
-		JLabel nameJL = new JLabel(Lang.l().name() + ":");
-		JPanel generatedNamePanel = new JPanel();
-		String[] columnHeadingsWithId = tc.getUsedColumnHeadingsWithId();
-		columnList = new JList(toListModel(columnHeadingsWithId));
-		JScrollPane listView;
-		ArrayListTransferHandler aLTH = new ArrayListTransferHandler();
-		//
-		columnList.setDragEnabled(true);
-		columnList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		columnList.setTransferHandler(aLTH);
-		//
-		listView = new JScrollPane(columnList);
-
-		JTextArea nameInstructions = new JTextArea(Lang.l().step6bSelectColumnsLabel());
-		nameInstructions.setEditable(false);
-		nameInstructions.setFocusable(false);
-		nameInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
-		nameInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
-		nameInstructions.setLineWrap(true);
-		nameInstructions.setWrapStyleWord(true);
-
-		// build components
-		JLabel uriJL = new JLabel(Lang.l().uri() + ":");
-		// build panel
-		JPanel generatedResURIPanel = new JPanel();
-
-		JTextArea uriInstructions = new JTextArea(Lang.l().step6bURIInstructions());
-		uriInstructions.setEditable(false);
-		uriInstructions.setFocusable(false);
-		uriInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
-		uriInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
-		uriInstructions.setLineWrap(true);
-		uriInstructions.setWrapStyleWord(true);
-		//
-
-		generatedResPanel = new JPanel();
-		generatedResPanel.setLayout(new BoxLayout(generatedResPanel, BoxLayout.LINE_AXIS));
-		generatedResPanel.add(generatedNamePanel);
-
-		JTextArea concatLabel = new JTextArea(Lang.l().step6bDefineConcatString());
-		concatLabel.setEditable(false);
-		concatLabel.setFocusable(false);
-		concatLabel.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
-		concatLabel.setFont(Constants.DEFAULT_LABEL_FONT);
-		concatLabel.setLineWrap(true);
-		concatLabel.setWrapStyleWord(true);
-
-		columnConcationationString = new JTextField();
-		columnConcationationString.setColumns(10);
-
-		GroupLayout generatedNamePanelGroup = new GroupLayout(generatedNamePanel);
-		generatedNamePanelGroup.setHorizontalGroup(
-				generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, generatedNamePanelGroup.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING)
-								.addComponent(columnConcationationString, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-								.addComponent(concatLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-								.addGroup(Alignment.LEADING, generatedNamePanelGroup.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(listView, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-										.addComponent(nameJL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(nameInstructions, Alignment.LEADING)))
-										.addContainerGap())
-				);
-		generatedNamePanelGroup.setVerticalGroup(
-				generatedNamePanelGroup.createParallelGroup(Alignment.LEADING)
-				.addGroup(generatedNamePanelGroup.createSequentialGroup()
-						.addComponent(nameJL)
-						.addGap(1)
-						.addComponent(nameInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(listView, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(concatLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(columnConcationationString, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(16, Short.MAX_VALUE))
-				);
-		generatedNamePanel.setLayout(generatedNamePanelGroup);
-		generatedResPanel.add(generatedResURIPanel);
-
-		uriOrPrefixTextField = new JTextField();
-		uriOrPrefixTextField.setColumns(10);
-
-		useNameAfterPrefixCheckBox = new JCheckBox(Lang.l().step6bUseNameAfterPrefix());
-		GroupLayout generatedURIPanelGroup = new GroupLayout(generatedResURIPanel);
-		generatedURIPanelGroup.setHorizontalGroup(
-				generatedURIPanelGroup.createParallelGroup(Alignment.TRAILING)
-				.addComponent(uriInstructions, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-				.addComponent(useNameAfterPrefixCheckBox, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-				.addComponent(uriOrPrefixTextField, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-				.addComponent(uriJL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-				);
-		generatedURIPanelGroup.setVerticalGroup(
-				generatedURIPanelGroup.createParallelGroup(Alignment.LEADING)
-				.addGroup(generatedURIPanelGroup.createSequentialGroup()
-						.addComponent(uriJL)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(uriInstructions, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(useNameAfterPrefixCheckBox)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(uriOrPrefixTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(157, Short.MAX_VALUE))
-				);
-		generatedResURIPanel.setLayout(generatedURIPanelGroup);
-
-		JPanel radioButtonPanel = new JPanel();
-		radioButtonPanel.setLayout(new BoxLayout(radioButtonPanel, BoxLayout.PAGE_AXIS));
-
-		generatedResJRB = new JRadioButton(Lang.l().step6Generation());
-		generatedResJRB.setSelected(true);
-		radioButtonPanel.add(generatedResJRB);
-		generatedResJRB.addActionListener(this.radioButtionActionListener());
-		bGroup.add(generatedResJRB);
-
+		String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
 		JPanel containerPanel = new JPanel();
 		FlowLayout conPanelLayout = (FlowLayout) containerPanel.getLayout();
 		conPanelLayout.setAlignment(FlowLayout.LEADING);
-		containerPanel.add(generatedResPanel);
-		manualResNameComboBox = new EditableJComboBoxPanel(resource.getNames(),
-				name,
-				ToolTips.get(ToolTips.NAME));
-		manualResUriComboBox = new EditableJComboBoxPanel(resource.getURIs(),
-				Lang.l().uri(),
-				ToolTips.get(ToolTips.URI));
-		manualResUriComboBox.setPartnerComboBox(manualResNameComboBox);
-		manualResNameComboBox.setPartnerComboBox(manualResUriComboBox);
+		containerPanel.add(initGeneratedResPanel(columnHeadingsWithId));
+		containerPanel.add(initManualResPanel(name));
 
-		manualResPanel = new JPanel();
-		manualResPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		manualResPanel.add(manualResNameComboBox);
-		manualResPanel.add(manualResUriComboBox);
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(4)
-						.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(14)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(containerPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
-								.addComponent(manualResPanel, GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE))
-								.addContainerGap())
-				);
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(5)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(manualResPanel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(containerPanel, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE))
-										.addComponent(radioButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(48))
-				);
+		add(initRadioButtonPanel(),BorderLayout.NORTH);
+		add(containerPanel,BorderLayout.CENTER);
 
-		manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
-		radioButtonPanel.add(manualResInputJRB);
-		manualResInputJRB.addActionListener(this.radioButtionActionListener());
-
-		bGroup.add(manualResInputJRB);
-		setLayout(groupLayout);
-		
 		if (resource.getName() == null && !resource.isGenerated()) {
 			if (resource instanceof FeatureOfInterest) {
 				List<Position> positions = ms.getPositions();
@@ -318,7 +161,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				manualResNameComboBox.setSelectedItem(resource.getName());
 			}
 		}
-		
+
 		// Default Settings
 		if (manualDefault) {
 			manualResPanel.setVisible(true);
@@ -349,6 +192,184 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			manualResPanel.setBorder(Constants.DEBUG_BORDER);
 			generatedResPanel.setBorder(Constants.DEBUG_BORDER);
 		}
+		revalidate();
+	}
+
+	private JPanel initGeneratedResPanel(String[] columnHeadingsWithId) {
+		generatedResPanel = new JPanel();
+		GridBagLayout gbl_generatedResPanel = new GridBagLayout();
+		gbl_generatedResPanel.columnWidths = new int[]{293, 242, 0};
+		gbl_generatedResPanel.rowHeights = new int[]{275, 0};
+		gbl_generatedResPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_generatedResPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		generatedResPanel.setLayout(gbl_generatedResPanel);
+
+		GridBagConstraints gbc_generatedNamePanel = new GridBagConstraints();
+		gbc_generatedNamePanel.fill = GridBagConstraints.BOTH;
+		gbc_generatedNamePanel.insets = new Insets(0, 0, 0, 5);
+		gbc_generatedNamePanel.gridx = 0;
+		gbc_generatedNamePanel.gridy = 0;
+		generatedResPanel.add(initGeneratedNamePanel(columnHeadingsWithId), gbc_generatedNamePanel);
+
+		// build panel
+		GridBagConstraints gbc_generatedResURIPanel = new GridBagConstraints();
+		gbc_generatedResURIPanel.fill = GridBagConstraints.BOTH;
+		gbc_generatedResURIPanel.gridx = 1;
+		gbc_generatedResURIPanel.gridy = 0;
+		generatedResPanel.add(initGeneratedResURIPanel(), gbc_generatedResURIPanel);
+		return generatedResPanel;
+	}
+
+	private JPanel initGeneratedResURIPanel() {
+		GridBagLayout gbl_generatedResURIPanel = new GridBagLayout();
+		gbl_generatedResURIPanel.columnWidths = new int[]{242, 0};
+		gbl_generatedResURIPanel.rowHeights = new int[]{29, 20, 23, 20, 0};
+		gbl_generatedResURIPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_generatedResURIPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		JPanel generatedResURIPanel = new JPanel();
+		generatedResURIPanel.setBorder(new TitledBorder(null, Lang.l().uri(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		generatedResURIPanel.setToolTipText(ToolTips.get(ToolTips.URI));
+		generatedResURIPanel.setLayout(gbl_generatedResURIPanel);
+
+		JTextArea uriInstructions = new JTextArea(Lang.l().step6bURIInstructions());
+		uriInstructions.setEditable(false);
+		uriInstructions.setFocusable(false);
+		uriInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
+		uriInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
+		uriInstructions.setLineWrap(true);
+		uriInstructions.setWrapStyleWord(true);
+		GridBagConstraints gbc_uriInstructions = new GridBagConstraints();
+		gbc_uriInstructions.fill = GridBagConstraints.BOTH;
+		gbc_uriInstructions.insets = new Insets(0, 0, 5, 0);
+		gbc_uriInstructions.gridx = 0;
+		gbc_uriInstructions.gridy = 0;
+		generatedResURIPanel.add(uriInstructions, gbc_uriInstructions);
+
+		useNameAfterPrefixCheckBox = new JCheckBox(Lang.l().step6bUseNameAfterPrefix());
+		GridBagConstraints gbc_useNameAfterPrefixCheckBox = new GridBagConstraints();
+		gbc_useNameAfterPrefixCheckBox.anchor = GridBagConstraints.NORTHWEST;
+		gbc_useNameAfterPrefixCheckBox.insets = new Insets(0, 0, 5, 0);
+		gbc_useNameAfterPrefixCheckBox.gridx = 0;
+		gbc_useNameAfterPrefixCheckBox.gridy = 1;
+		generatedResURIPanel.add(useNameAfterPrefixCheckBox, gbc_useNameAfterPrefixCheckBox);
+
+		uriOrPrefixTextField = new JTextField();
+		uriOrPrefixTextField.setColumns(10);
+		GridBagConstraints gbc_uriOrPrefixTextField = new GridBagConstraints();
+		gbc_uriOrPrefixTextField.insets = new Insets(0, 0, 5, 0);
+		gbc_uriOrPrefixTextField.anchor = GridBagConstraints.NORTH;
+		gbc_uriOrPrefixTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_uriOrPrefixTextField.gridx = 0;
+		gbc_uriOrPrefixTextField.gridy = 2;
+		generatedResURIPanel.add(uriOrPrefixTextField, gbc_uriOrPrefixTextField);
+		return generatedResURIPanel;
+	}
+
+	private JPanel initGeneratedNamePanel(String[] columnHeadingsWithId) {
+		JPanel generatedNamePanel = new JPanel();
+		generatedNamePanel.setToolTipText(ToolTips.get(ToolTips.NAME));
+		generatedNamePanel.setBorder(new TitledBorder(null, Lang.l().name(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		generatedNamePanel.setFont(Constants.DEFAULT_LABEL_FONT);
+
+		GridBagLayout gbl_generatedNamePanel = new GridBagLayout();
+		gbl_generatedNamePanel.columnWidths = new int[]{300, 0};
+		gbl_generatedNamePanel.rowHeights = new int[]{30, 50, 35, 20, 0};
+		gbl_generatedNamePanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_generatedNamePanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+
+		generatedNamePanel.setLayout(gbl_generatedNamePanel);
+
+		JTextArea nameInstructions = new JTextArea(Lang.l().step6bSelectColumnsLabel());
+		nameInstructions.setEditable(false);
+		nameInstructions.setFocusable(false);
+		nameInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
+		nameInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
+		nameInstructions.setLineWrap(true);
+		nameInstructions.setWrapStyleWord(true);
+		GridBagConstraints gbc_nameInstructions = new GridBagConstraints();
+		gbc_nameInstructions.fill = GridBagConstraints.BOTH;
+		gbc_nameInstructions.insets = new Insets(0, 0, 5, 0);
+		gbc_nameInstructions.gridx = 0;
+		gbc_nameInstructions.gridy = 0;
+		generatedNamePanel.add(nameInstructions, gbc_nameInstructions);
+
+		columnList = new JList(toListModel(columnHeadingsWithId));
+		//
+		columnList.setDragEnabled(true);
+		columnList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		columnList.setTransferHandler(new ArrayListTransferHandler());
+		//
+		JScrollPane listView = new JScrollPane(columnList);
+		GridBagConstraints gbc_listView = new GridBagConstraints();
+		gbc_listView.anchor = GridBagConstraints.NORTH;
+		gbc_listView.fill = GridBagConstraints.HORIZONTAL;
+		gbc_listView.insets = new Insets(0, 0, 5, 0);
+		gbc_listView.gridx = 0;
+		gbc_listView.gridy = 1;
+		generatedNamePanel.add(listView, gbc_listView);
+
+		JTextArea concatLabel = new JTextArea(Lang.l().step6bDefineConcatString());
+		concatLabel.setEditable(false);
+		concatLabel.setFocusable(false);
+		concatLabel.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
+		concatLabel.setFont(Constants.DEFAULT_LABEL_FONT);
+		concatLabel.setLineWrap(true);
+		concatLabel.setWrapStyleWord(true);
+		GridBagConstraints gbc_concatLabel = new GridBagConstraints();
+		gbc_concatLabel.anchor = GridBagConstraints.NORTH;
+		gbc_concatLabel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_concatLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_concatLabel.gridx = 0;
+		gbc_concatLabel.gridy = 2;
+		generatedNamePanel.add(concatLabel, gbc_concatLabel);
+
+		columnConcationationString = new JTextField();
+		columnConcationationString.setColumns(10);
+		GridBagConstraints gbc_columnConcationationString = new GridBagConstraints();
+		gbc_columnConcationationString.anchor = GridBagConstraints.NORTH;
+		gbc_columnConcationationString.fill = GridBagConstraints.HORIZONTAL;
+		gbc_columnConcationationString.gridx = 0;
+		gbc_columnConcationationString.gridy = 3;
+		generatedNamePanel.add(columnConcationationString, gbc_columnConcationationString);
+		return generatedNamePanel;
+	}
+
+	private JPanel initManualResPanel(String name) {
+		manualResNameComboBox = new EditableJComboBoxPanel(resource.getNames(),
+				name,
+				ToolTips.get(ToolTips.NAME));
+		manualResUriComboBox = new EditableJComboBoxPanel(resource.getURIs(),
+				Lang.l().uri(),
+				ToolTips.get(ToolTips.URI));
+		manualResUriComboBox.setPartnerComboBox(manualResNameComboBox);
+		manualResNameComboBox.setPartnerComboBox(manualResUriComboBox);
+		manualResPanel = new JPanel();
+		manualResPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+		manualResPanel.add(manualResNameComboBox);
+		manualResPanel.add(manualResUriComboBox);
+
+		return manualResPanel;
+	}
+
+	private JPanel initRadioButtonPanel() {
+		ButtonGroup bGroup = new ButtonGroup();
+
+		JPanel radioButtonPanel = new JPanel();
+		radioButtonPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
+
+		generatedResJRB = new JRadioButton(Lang.l().step6Generation());
+		generatedResJRB.setSelected(true);
+		radioButtonPanel.add(generatedResJRB);
+		generatedResJRB.addActionListener(radioButtionActionListener());
+		bGroup.add(generatedResJRB);
+
+		manualResInputJRB = new JRadioButton(Lang.l().step6ManualInput());
+		radioButtonPanel.add(manualResInputJRB);
+		manualResInputJRB.addActionListener(radioButtionActionListener());
+		setLayout(new BorderLayout(0, 0));
+
+		bGroup.add(manualResInputJRB);
+		return radioButtonPanel;
 	}
 
 	private int[] columnIdsToModelIndices(TableElement[] relatedCols) {
