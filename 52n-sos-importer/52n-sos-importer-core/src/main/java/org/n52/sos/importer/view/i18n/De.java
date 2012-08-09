@@ -268,7 +268,7 @@ public class De extends Lang{
 	}
 
 	public String step1BrowseButton() {
-		return "Datendatei auswählen";
+		return "Auswählen";
 	}
 
 	public String step1Description() {
@@ -280,8 +280,13 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step1InstructionLabel() {
+		return "Bitte wählen Sie die CSV-Datei aus";
+	}
+
+	@Override
 	public String step1SelectLanguage() {
-		return "Bitte wählen Sie die Sprache aus";
+		return "Sprachauswahl";
 	}
 
 	public String step2ColumnSeparator() {
@@ -555,12 +560,12 @@ public class De extends Lang{
 	public String step6MissingUserInput() {
 		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
 	}
-
+	
 	@Override
 	public String step6NoUserInput() {
 		return "Keine Nutzereingaben gefunden. Bitte geben Sie die notwendigen Informationen an.";
 	}
-	
+
 	@Override
 	public String step7ConfigDirNotDirOrWriteable(String folder) {
 		return "Auf das Verzeichnis \n\"" + 
