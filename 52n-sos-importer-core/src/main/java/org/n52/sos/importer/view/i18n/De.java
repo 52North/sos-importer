@@ -285,6 +285,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step1Introduction() {
+		return "Erklärung";
+	}
+
+	@Override
 	public String step1SelectLanguage() {
 		return "Sprachauswahl";
 	}
@@ -555,12 +560,12 @@ public class De extends Lang{
 	public String step6ManualInput() {
 		return "Manuelle Eingabe";
 	}
-
+	
 	@Override
 	public String step6MissingUserInput() {
 		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
 	}
-	
+
 	@Override
 	public String step6NoUserInput() {
 		return "Keine Nutzereingaben gefunden. Bitte geben Sie die notwendigen Informationen an.";

@@ -294,6 +294,11 @@ public class En extends Lang{
 		return "Please select the CSV file";
 	}
 
+	@Override
+	public String step1Introduction() {
+		return "Introduction";
+	}
+
 	public String step1SelectLanguage() {
 		return "Change language";
 	}
@@ -330,11 +335,11 @@ public class En extends Lang{
 	public String step2TextQualifier() {
 		return "Text qualifier";
 	}
-
+	
 	public String step3aDescription() {
 		return this.step() + " 3a: Choose Metadata for the selected column";
 	}
-	
+
 	@Override
 	public String step3aMeasureValueColMissingDialogMessage() {
 		return "You have to specify at least one " + this.measuredValue() + " column!";
