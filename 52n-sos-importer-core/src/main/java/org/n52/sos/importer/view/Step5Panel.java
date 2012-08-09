@@ -24,6 +24,9 @@
 package org.n52.sos.importer.view;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -46,7 +49,6 @@ public class Step5Panel extends JPanel {
 	
 	public Step5Panel(String description, List<MissingComponentPanel> missingComponentPanels) {
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		JLabel descriptionLabel = new JLabel(description);
 		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -56,13 +58,37 @@ public class Step5Panel extends JPanel {
 		
 		JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
-		
 		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
 		}
-		add(descriptionPanel);
-		add(tablePanel);
-		add(containerPanel);
+		
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{795, 0};
+		gridBagLayout.rowHeights = new int[]{25, 138, 1, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		
+		GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
+		gbc_descriptionPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_descriptionPanel.fill = GridBagConstraints.BOTH;
+		gbc_descriptionPanel.gridx = 0;
+		gbc_descriptionPanel.gridy = 0;
+		add(descriptionPanel, gbc_descriptionPanel);
+		
+		GridBagConstraints gbc_tablePanel = new GridBagConstraints();
+		gbc_tablePanel.gridx = 0;
+		gbc_tablePanel.gridy = 1;
+		gbc_tablePanel.fill = GridBagConstraints.BOTH;
+		add(tablePanel, gbc_tablePanel);
+		
+		
+		GridBagConstraints gbc_containerPanel = new GridBagConstraints();
+		gbc_containerPanel.gridx = 0;
+		gbc_containerPanel.gridy = 2;
+		gbc_containerPanel.fill = GridBagConstraints.BOTH;
+		add(containerPanel, gbc_containerPanel);
+		
 		if (Constants.GUI_DEBUG) {
 			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
 			containerPanel.setBorder(Constants.DEBUG_BORDER);
