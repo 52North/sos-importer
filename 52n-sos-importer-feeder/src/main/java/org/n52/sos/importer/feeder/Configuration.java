@@ -888,9 +888,6 @@ public final class Configuration {
 		}
 	}
 
-	/**
-	 * @return the file name of the configuration xml file
-	 */
 	public Object getFileName() {
 		return configFile.getName();
 	}
@@ -958,6 +955,22 @@ public final class Configuration {
 			}
 		}
 		return null;
+	}
+
+	public SensorType getSensorFromAdditionalMetadata() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("getSensorFromAdditionalMetadata()");
+		}
+		if (importConf.getAdditionalMetadata() != null &&
+				importConf.getAdditionalMetadata().getSensorArray() != null &&
+				importConf.getAdditionalMetadata().getSensorArray().length == 1) {
+			return importConf.getAdditionalMetadata().getSensorArray(0);
+		}
+		return null;
+	}
+
+	public boolean isOneMvColumn() {
+		return (getMeasureValueColumnIds().length == 1);
 	}
 
 }
