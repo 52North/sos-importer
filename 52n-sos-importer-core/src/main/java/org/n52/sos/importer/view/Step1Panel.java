@@ -66,7 +66,6 @@ public class Step1Panel extends JPanel {
 	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
 	private final JTextField csvFileTextField = new JTextField(25);
-	private JButton browse;
 	private final Step1Panel _this = this;
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$

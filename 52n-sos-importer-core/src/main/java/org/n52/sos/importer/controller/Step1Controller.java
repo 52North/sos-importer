@@ -99,7 +99,7 @@ public class Step1Controller extends StepController {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter()); 
 		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
-			this.step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
+			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
 			BackNextController.getInstance().setNextButtonEnabled(true);
 			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
 		}
