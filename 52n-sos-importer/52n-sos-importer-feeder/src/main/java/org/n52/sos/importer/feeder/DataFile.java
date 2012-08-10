@@ -170,6 +170,10 @@ public class DataFile {
 		}
 		// else build sensor from manual or generated resource 
 		SensorType sT = c.getRelatedSensor(mvColumnId);
+		// Case: one mv column => no related sensor element => check for one single sensor in additional metadata
+		if (sT == null && c.isOneMvColumn()) {
+			sT = c.getSensorFromAdditionalMetadata();
+		}
 		if (sT != null && sT.getResource() != null) {
 			// generated sensor
 			if (sT.getResource() instanceof GeneratedResourceType) {
