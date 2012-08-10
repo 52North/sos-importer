@@ -94,7 +94,7 @@ public class Constants {
 	public static final String STRING_REPLACER = "-@@@-";
 	public static final String TEXT = "TEXT";
 	public static final String UNIX_TIME = "UNIX_TIME";
-	public static final String VERSION = "0.2 RC1";
+	public static final String VERSION = "0.2";
 	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX = ".52n-sos-import-config.xml";
 	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);
@@ -126,6 +126,8 @@ public class Constants {
 	private static final String WMS_EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 	private static final String WMS_INTERNAL_FILE_PATH = "/org/n52/sos/importer/view/position/";
 	private static final String WMS_FILE_NAME = "wms.properties";
+
+	public static final String DEFAULT_FEEDER_JAR_NAME = "52n-sos-importer-feeder-".concat(VERSION).concat("-jar-with-dependencies.jar");
 	
 	/*
 	 * CHANGEABLE VALUES

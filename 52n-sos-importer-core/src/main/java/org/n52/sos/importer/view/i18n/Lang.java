@@ -283,10 +283,6 @@ public abstract class Lang {
 		return "Sensor Observation Service";
 	}
 	/**
-	 * @return URL
-	 */
-	public abstract String url();
-	/**
 	 * @return Space
 	 */
 	public abstract String spaceString();
@@ -553,11 +549,11 @@ public abstract class Lang {
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
-	
 	/**
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
+	
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
 	 */
@@ -609,7 +605,6 @@ public abstract class Lang {
 	 * @return Choose configuration file export folder
 	 */
 	public abstract String step7ConfigFileButton();
-
 	/**
 	 * @return Folder
 	 */
@@ -645,12 +640,12 @@ public abstract class Lang {
 	 * @return Please specify the offering name:
 	 */
 	public abstract String step7OfferingInputTextfieldLabel();
-	
+
 	/**
 	 * @return Please specify the offering name or select to generate it.
 	 */
 	public abstract String step7OfferingNameNotGiven();
-
+	
 	/**
 	 * The given offering "offeringName" is not valid. It should match XML-NCName specification.
 	 * @param offeringName
@@ -704,14 +699,32 @@ public abstract class Lang {
 	public abstract String step8ConfigFileButton();
 
 	/**
+	 * 
+	 * @return "For taking a look at the generated configuration file, please click button."
+	 */
+	public abstract String step8ConfigurationFileInstructions();
+
+	/**
 	 * @return Step 8: Final Step - Summary of the Results
 	 */
 	public abstract String step8Description();
 
 	/**
+	 * 
+	 * @return For importing the content of the data file one time, just click + step8DirectImportStartButton()
+	 */
+	public abstract String step8DirectImportInstructions();
+
+	/**
 	 * @return Register Sensors and Insert Observations into Sensor Observation Service
 	 */
 	public abstract String step8DirectImportLabel();
+
+	/**
+	 * 
+	 * @return Start Import 
+	 */
+	public abstract String step8DirectImportStartButton();
 
 	/**
 	 * @param i
@@ -720,15 +733,34 @@ public abstract class Lang {
 	public abstract String step8ErrorLable(int i);
 
 	/**
+	 * 
+	 * @param absolutePath
+	 * @return Could not find jar file!\nPlease place it there:\n\"expectedAbsolutePathToFeederJar\"
+	 */
+	public abstract String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar);
+
+	/**
 	 * @param i
 	 * @return Insert <code>i</code> Observations...
 	 */
 	public abstract String step8InsertObservationLabel(int i);
 
 	/**
+	 * 
+	 * @return "Log File"
+	 */
+	public abstract String step8LogFile();
+
+	/**
 	 * @return Check log file
 	 */
 	public abstract String step8LogFileButton();
+
+	/**
+	 * 
+	 * @return "To check for additional information, please take a look at the log file created during the process."
+	 */
+	public abstract String step8LogFileInstructions();
 
 	/**
 	 * @param i
@@ -747,6 +779,12 @@ public abstract class Lang {
 	 * 						<br />Please check the log file for more details.
 	 */
 	public abstract String step8SaveModelFailed(File f, String exceptionText);
+
+	/**
+	 * 
+	 * @return "Start Import"
+	 */
+	public abstract String step8StartImportButton();
 
 	/**
 	 * @param i
@@ -784,6 +822,11 @@ public abstract class Lang {
 	 * @return The entered URI "<code>uri</code>" is syntactically not correct.
 	 */
 	public abstract String uriSyntaxNotValidDialogMessage(String uri);
+
+	/**
+	 * @return URL
+	 */
+	public abstract String url();
 
 	/**
 	 * @return Testing evaluation pattern for column
