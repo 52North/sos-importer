@@ -162,8 +162,12 @@ public class Model {
 			logger.trace("save(" + file!=null?file.getName():file + ")");
 		}
 		//
-		// we save only valid configurations
-		// if(this.validate()) {
+		if (!sosImpConf.validate() &&
+				sosImpConf.getCsvMetadata() == null && 
+				sosImpConf.getDataFile() == null && 
+				sosImpConf.getSosMetadata() == null) {
+			return false;
+		}
 		//
 		// check write access to file
 		if (file != null) {
