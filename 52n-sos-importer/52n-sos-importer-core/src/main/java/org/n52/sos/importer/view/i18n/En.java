@@ -270,15 +270,10 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String url() {
-		return "URL";
-	}
-
-
-	@Override
 	public String spaceString() {
 		return "Space";
 	}
+
 
 	public String step() { return "Step"; }
 
@@ -340,11 +335,11 @@ public class En extends Lang{
 	public String step2TextQualifier() {
 		return "Text qualifier";
 	}
-	
+
 	public String step3aDescription() {
 		return this.step() + " 3a: Choose Metadata for the selected column";
 	}
-
+	
 	@Override
 	public String step3aMeasureValueColMissingDialogMessage() {
 		return "You have to specify at least one " + this.measuredValue() + " column!";
@@ -680,7 +675,12 @@ public class En extends Lang{
 
 	@Override
 	public String step8ConfigFileButton() {
-		return "Open Configuration File";
+		return "Open";
+	}
+
+	@Override
+	public String step8ConfigurationFileInstructions() {
+		return "For taking a look at the generated configuration file, please click button.";
 	}
 
 	public String step8Description() {
@@ -688,20 +688,47 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step8DirectImportInstructions() {
+		return "For importing the content of the data file one time, just click ".concat(step8DirectImportStartButton());
+	}
+
+	@Override
 	public String step8DirectImportLabel() {
 		return "Register Sensors and Insert Observations into Sensor Observation Service";
+	}
+
+	@Override
+	public String step8DirectImportStartButton() {
+		return "Start Import";
 	}
 
 	public String step8ErrorLable(int i) {
 		return "Errors: " + i;
 	}
 
+	@Override
+	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
+		return String.format("Could not find jar file!\nPlease place it there:\n\"%s\"",
+				expectedAbsolutePathToFeederJar);
+	}
+
 	public String step8InsertObservationLabel(int i) {
 		return "Insert " + i + " Observations...";
 	}
 
+	@Override
+	public String step8LogFile() {
+		return "Log File";
+	}
+
+	@Override
 	public String step8LogFileButton() {
-		return "Check log file";
+		return "Open";
+	}
+
+	@Override
+	public String step8LogFileInstructions() {
+		return "To check for additional information, please take a look at the log file created during the process.";
 	}
 
 	public String step8RegisterSensorLabel(int i) {
@@ -715,6 +742,11 @@ public class En extends Lang{
 				"\".\nAn Exception occurred:\n" +
 				exceptionText +
 				"Please check the log file for more details.";
+	}
+
+	@Override
+	public String step8StartImportButton() {
+		return "Start";
 	}
 
 	public String step8SuccessLabel(int i) {
@@ -748,6 +780,11 @@ public class En extends Lang{
 	@Override
 	public String uriSyntaxNotValidDialogMessage(String uri) {
 		return "The entered URI \"" + uri + "\" is syntactically not correct.";
+	}
+
+	@Override
+	public String url() {
+		return "URL";
 	}
 
 	@Override

@@ -259,11 +259,6 @@ public class De extends Lang{
 		return "Sensor";
 	}
 
-	@Override
-	public String url() {
-		return "URL";
-	}
-
 	public String spaceString() {
 		return "Leerzeichen";
 	}
@@ -560,12 +555,12 @@ public class De extends Lang{
 	public String step6Generation() {
 		return "Automatische Erzeugung";
 	}
-	
+
 	@Override
 	public String step6ManualInput() {
 		return "Manuelle Eingabe";
 	}
-
+	
 	@Override
 	public String step6MissingUserInput() {
 		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
@@ -670,11 +665,21 @@ public class De extends Lang{
 
 	@Override
 	public String step8ConfigFileButton() {
-		return "Konfigurationsdatei öffnen";
+		return "Öffnen";
+	}
+
+	@Override
+	public String step8ConfigurationFileInstructions() {
+		return "Klicken Sie auf den Button um die generierte Konfiguration anzuschauen";
 	}
 
 	public String step8Description() {
 		return this.step() + " 8: Finaler Schritt - Zusammenfassung der Ergebnisse";
+	}
+
+	@Override
+	public String step8DirectImportInstructions() {
+		return "Klicken Sie auf ".concat(step8DirectImportStartButton()).concat(" um einmalig die Daten in den SOS zu laden.");
 	}
 
 	@Override
@@ -684,16 +689,37 @@ public class De extends Lang{
 				"en in den " + this.sos();
 	}
 
+	@Override
+	public String step8DirectImportStartButton() {
+		return "Starte Import-Vorgang";
+	}
+
 	public String step8ErrorLable(int i) {
 		return "Fehler: " + i;
+	}
+
+	@Override
+	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
+		return String.format("Konnte JAR-Datei nicht finden!\nBitte dort ablegen:\n\"%s\"",
+				expectedAbsolutePathToFeederJar);
 	}
 
 	public String step8InsertObservationLabel(int i) {
 		return "Füge " + i + " " + this.observation() + "en hinzu...";
 	}
 
+	@Override
+	public String step8LogFile() {
+		return "Log-Datei";
+	}
+
 	public String step8LogFileButton() {
-		return "Prüfen Sie die Logdatei";
+		return "Öffnen";
+	}
+
+	@Override
+	public String step8LogFileInstructions() {
+		return "Klicken Sie auf den Button um zusätzliche Informationen zu bekommen, die während des Vorgangs gesammelt wurden.";
 	}
 
 	public String step8RegisterSensorLabel(int i) {
@@ -707,6 +733,11 @@ public class De extends Lang{
 				"\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
 				exceptionText +
 				"Für weitere Informationen bitte die Logdatei konsultieren.";
+	}
+
+	@Override
+	public String step8StartImportButton() {
+		return "Starte Importvorgang";
 	}
 
 	public String step8SuccessLabel(int i) {
@@ -740,6 +771,11 @@ public class De extends Lang{
 	@Override
 	public String uriSyntaxNotValidDialogMessage(String uri) {
 		return "Der eingegebene URI \"" + uri + "\" ist syntaktisch nicht korrekt.";
+	}
+
+	@Override
+	public String url() {
+		return "URL";
 	}
 
 	@Override
