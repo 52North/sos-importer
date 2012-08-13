@@ -553,12 +553,12 @@ public class De extends Lang{
 
 	@Override
 	public String step6Generation() {
-		return "Automatische Erzeugung";
+		return "Erzeuge Bezeichner automatisch";
 	}
 
 	@Override
 	public String step6ManualInput() {
-		return "Manuelle Eingabe";
+		return "Setze Bezeichner manuell";
 	}
 	
 	@Override
