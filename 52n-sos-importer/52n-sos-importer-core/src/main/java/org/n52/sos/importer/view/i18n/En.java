@@ -325,7 +325,7 @@ public class En extends Lang{
 	}
 
 	public String step2FirstLineWithData() {
-		return "First Line with data";
+		return "Ignore data until line";
 	}
 
 	public String step2ParseHeader() {

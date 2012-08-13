@@ -337,7 +337,7 @@ public abstract class Lang {
 	 */
 	public abstract String step2Description();
 	/**
-	 * @return First Line with data
+	 * @return Ignore data until line
 	 */
 	public abstract String step2FirstLineWithData();
 	/**
