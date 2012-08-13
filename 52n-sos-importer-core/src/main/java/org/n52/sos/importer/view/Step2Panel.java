@@ -187,7 +187,7 @@ public class Step2Panel extends JPanel {
 		});
 		firstDataJL = new JLabel(Lang.l().step2FirstLineWithData() + " :");
 		JPanel firstLineWithDataJPanel = new JPanel();
-		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+		firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 		firstLineWithDataJPanel.add(firstDataJL);
 		firstLineWithDataJPanel.add(firstDataJS);
 		GridBagConstraints gbc_firstLineWithDataJPanel = new GridBagConstraints();
@@ -200,8 +200,7 @@ public class Step2Panel extends JPanel {
 		decimalSeparatorCombobox = new JComboBox(decimalSeparators);
 		decimalSeparatorCombobox.setSelectedIndex(0);
 		JPanel decimalSeparatorPanel = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) decimalSeparatorPanel.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEADING);
+		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 		decimalSeparatorPanel.add(decimalSeparatorLabel);
 		decimalSeparatorPanel.add(decimalSeparatorCombobox);
 		// USE_HEADER uncomment next line to enable again
