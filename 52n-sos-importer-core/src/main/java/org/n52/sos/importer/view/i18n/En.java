@@ -422,7 +422,7 @@ public class En extends Lang{
 	}
 
 	public String step3MeasuredValText() {
-		return "Text";
+		return "Text (via CategoryObservation)";
 	}
 
 	public String step3PositionCombination() {
