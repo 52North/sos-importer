@@ -417,7 +417,7 @@ public class De extends Lang{
 	}
 
 	public String step3MeasuredValText() {
-		return "Text";
+		return "Text (als CategoyObservation)";
 	}
 
 	public String step3PositionCombination() {
