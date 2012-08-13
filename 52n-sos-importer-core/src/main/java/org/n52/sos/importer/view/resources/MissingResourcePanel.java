@@ -97,8 +97,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				manualDefault = false;
 		String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
 		JPanel containerPanel = new JPanel();
-		FlowLayout conPanelLayout = (FlowLayout) containerPanel.getLayout();
-		conPanelLayout.setAlignment(FlowLayout.LEADING);
+		containerPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		
 		containerPanel.add(initGeneratedResPanel(columnHeadingsWithId));
 		containerPanel.add(initManualResPanel(name));
 

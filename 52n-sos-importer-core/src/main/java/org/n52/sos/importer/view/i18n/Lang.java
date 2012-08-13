@@ -581,11 +581,11 @@ public abstract class Lang {
 	 */
 	public abstract String step6cModelDescription();
 	/**
-	 * @return Automatic Generation
+	 * @return Automatically Generate Identifier
 	 */
 	public abstract String step6Generation();
 	/**
-	 * @return Manual Input
+	 * @return Set Identifier Manually
 	 */
 	public abstract String step6ManualInput();
 	/**

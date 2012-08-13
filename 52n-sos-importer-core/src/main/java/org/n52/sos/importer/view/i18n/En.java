@@ -563,12 +563,12 @@ public class En extends Lang{
 
 	@Override
 	public String step6Generation() {
-		return "Generation";
+		return "Generate identifier automatically";
 	}
 
 	@Override
 	public String step6ManualInput() {
-		return "Manual Input";
+		return "Set identifier manually";
 	}
 
 	@Override
