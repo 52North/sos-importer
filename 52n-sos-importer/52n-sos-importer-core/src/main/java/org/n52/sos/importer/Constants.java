@@ -74,6 +74,7 @@ public class Constants {
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[2]);
 	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
+	public static final Font DEFAULT_LABEL_FONT_BOLD =  new Font("SansSerif", Font.BOLD, 12);
 	public static final Font DEFAULT_STEP_TITLE_FONT = new Font("SansSerif", Font.BOLD, 14);
 	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
 	public static final String NUMERIC = "NUMERIC";
@@ -98,7 +99,7 @@ public class Constants {
 	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX = ".52n-sos-import-config.xml";
 	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);
-	public static final Color DEFAULT_HIGHLIGHT_COLOR = Color.RED;
+	public static final Color DEFAULT_HIGHLIGHT_COLOR = Color.LIGHT_GRAY;
 	public static final int URL_CONNECT_TIMEOUT_SECONDS = 5;
 	public static final int URL_CONNECT_READ_TIMEOUT_SECONDS = 5;
 	public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.2/";
