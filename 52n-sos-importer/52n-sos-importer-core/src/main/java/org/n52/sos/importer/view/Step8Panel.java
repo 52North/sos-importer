@@ -65,7 +65,7 @@ public class Step8Panel extends JPanel {
 
 	private JButton logFileButton;
 
-	private JButton configFileButton = new JButton();
+	private JButton configFileButton;
 	private JTextArea configurationFileInstructions;
 	private JTextArea directImportOutput;
 
@@ -222,13 +222,8 @@ public class Step8Panel extends JPanel {
 		gbc_configurationFileInstructions.gridx = 0;
 		gbc_configurationFileInstructions.gridy = 0;
 		configurationFilePanel.add(configurationFileInstructions, gbc_configurationFileInstructions);
-		GridBagConstraints gbc_configFileButton = new GridBagConstraints();
-		gbc_configFileButton.anchor = GridBagConstraints.WEST;
-		gbc_configFileButton.insets = new Insets(0, 0, 0, 5);
-		gbc_configFileButton.gridx = 0;
-		gbc_configFileButton.gridy = 1;
-		configurationFilePanel.add(configFileButton, gbc_configFileButton);
-
+		
+		configFileButton = new JButton();
 		configFileButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		configFileButton.setText(Lang.l().step8ConfigFileButton());
 		configFileButton.addActionListener(new ActionListener() {
@@ -244,6 +239,13 @@ public class Step8Panel extends JPanel {
 		});
 		configFileButton.setEnabled(true);
 		configFileButton.setVisible(true);
+		
+		GridBagConstraints gbc_configFileButton = new GridBagConstraints();
+		gbc_configFileButton.anchor = GridBagConstraints.WEST;
+		gbc_configFileButton.insets = new Insets(0, 0, 0, 5);
+		gbc_configFileButton.gridx = 0;
+		gbc_configFileButton.gridy = 1;
+		configurationFilePanel.add(configFileButton, gbc_configFileButton);
 
 		return configurationFilePanel;
 	}
