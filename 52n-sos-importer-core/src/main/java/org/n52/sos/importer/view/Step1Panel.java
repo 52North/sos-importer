@@ -74,8 +74,8 @@ public class Step1Panel extends JPanel {
 	
 	public Step1Panel(Step1Controller step1Controller) {
 		super();
-		JScrollPane welcomePanel = welcomePanel();
-		JPanel languagePanel = languagePanel();
+		JScrollPane welcomePanel = initWelcomePanel();
+		JPanel languagePanel = initLanguagePanel();
 		JPanel csvPanel = initCsvPanel();
 		this.step1Controller = step1Controller;
 		
@@ -114,7 +114,7 @@ public class Step1Panel extends JPanel {
 		return csvFileTextField.getText();
 	}
 	
-	private JPanel languagePanel() {
+	private JPanel initLanguagePanel() {
 		JPanel panel = new JPanel();
 		JLabel label = new JLabel(Lang.l().step1SelectLanguage());
 		JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
@@ -143,7 +143,7 @@ public class Step1Panel extends JPanel {
 	 * using a <code>JEditorPane</code>
 	 * {@link javax.swing.JEditorPane }
 	 */
-	private JScrollPane welcomePanel(){
+	private JScrollPane initWelcomePanel(){
 		JEditorPane pane  = new JEditorPane();
 		JScrollPane scrollPane = new JScrollPane(pane);
 		String t = welcomeRes.getString(Constants.language());
@@ -179,8 +179,6 @@ public class Step1Panel extends JPanel {
 		//
 		pane.setCaretPosition(0);
 		//Put the editor pane in a scroll pane.
-		scrollPane.setVerticalScrollBarPolicy(
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setPreferredSize(new Dimension(MainFrame.DIALOG_WIDTH-20, 400));
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().step1Introduction(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
