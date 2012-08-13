@@ -316,7 +316,7 @@ public class De extends Lang{
 	}
 
 	public String step2FirstLineWithData() {
-		return "Erste Zeile mit Daten";
+		return "Ignoriere Daten bis Zeile";
 	}
 
 	public String step2ParseHeader() {
