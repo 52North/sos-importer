@@ -82,7 +82,7 @@ public final class Configuration {
 	/**
 	 * Used in System::identification::IdentifierList::identifier::Term.definition
 	 */
-	public static final String SML_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:uniqueID";
+	public static final String SML_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
 	public static final QName QN_SOS_1_0_OFFERING = new QName("http://www.opengis.net/sos/1.0", "offering");
 	public static final QName QN_SOS_1_0_ID = new QName("http://www.opengis.net/sos/1.0", "id");
 	public static final QName QN_SOS_1_0_NAME = new QName("http://www.opengis.net/sos/1.0", "name");
@@ -99,6 +99,9 @@ public final class Configuration {
 	public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
 	public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
 	public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
+	public static final String SML_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
+	public static final String SML_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
+	public static final String SML_INTENDED_APPLICATION_DEFINITION = "urn:ogc:def:classifier:OGC:1.0:application";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();

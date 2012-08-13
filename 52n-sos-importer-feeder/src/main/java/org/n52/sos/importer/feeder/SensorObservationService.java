@@ -32,7 +32,10 @@ import java.util.Iterator;
 
 import net.opengis.gml.MetaDataPropertyType;
 import net.opengis.sensorML.x101.CapabilitiesDocument.Capabilities;
+import net.opengis.sensorML.x101.ClassificationDocument.Classification.ClassifierList.Classifier;
+import net.opengis.sensorML.x101.IdentificationDocument.Identification.IdentifierList;
 import net.opengis.sensorML.x101.IoComponentPropertyType;
+import net.opengis.sensorML.x101.KeywordsDocument.Keywords.KeywordList;
 import net.opengis.sensorML.x101.PositionDocument.Position;
 import net.opengis.sensorML.x101.SystemDocument;
 import net.opengis.sensorML.x101.SystemType;
@@ -617,6 +620,8 @@ public final class SensorObservationService {
 		}
 		SystemDocument sysDoc = SystemDocument.Factory.newInstance();
 		SystemType system = sysDoc.addNewSystem();
+		addKeywords(system,rs);
+		addIntendedApplicationClassifier(system,rs);
 		addIdentification(system,rs);
 		addCapabilities(system,rs);
 		addPosition(system,rs);
@@ -625,10 +630,35 @@ public final class SensorObservationService {
 		return sysDoc.toString();
 	}
 
+	private void addIntendedApplicationClassifier(SystemType system, RegisterSensor rs) {
+		Classifier intendedApplicationClassifier = system.addNewClassification().addNewClassifierList().addNewClassifier();
+		Term intendedApplication = intendedApplicationClassifier.addNewTerm();
+		intendedApplication.setDefinition(Configuration.SML_INTENDED_APPLICATION_DEFINITION);
+		intendedApplication.setValue(rs.getObservedPropertyName());
+	}
+
+	private void addKeywords(SystemType system, RegisterSensor rs) {
+		KeywordList keywords = system.addNewKeywords().addNewKeywordList();
+		keywords.addKeyword(rs.getFeatureOfInterestName());
+		keywords.addKeyword(rs.getSensorName());
+		keywords.addKeyword(rs.getObservedPropertyName());
+	}
+
 	private void addIdentification(SystemType system, RegisterSensor rs) {
-		Term term = system.addNewIdentification().addNewIdentifierList().addNewIdentifier().addNewTerm();
-		term.setDefinition(Configuration.SML_ID_TERM_DEFINITION);
-		term.setValue(rs.getSensorURI());
+		IdentifierList identifierList = system.addNewIdentification().addNewIdentifierList();
+		
+		Term uniqueId = identifierList.addNewIdentifier().addNewTerm();
+		uniqueId.setDefinition(Configuration.SML_ID_TERM_DEFINITION);
+		uniqueId.setValue(rs.getSensorURI());
+		
+		Term longName = identifierList.addNewIdentifier().addNewTerm();
+		longName.setDefinition(Configuration.SML_LONG_NAME_DEFINITION);
+		longName.setValue(rs.getSensorName());
+		
+		Term shortName = identifierList.addNewIdentifier().addNewTerm();
+		shortName.setDefinition(Configuration.SML_SHORT_NAME_DEFINITION);
+		shortName.setValue(rs.getSensorName());
+		
 	}
 
 	private void addCapabilities(SystemType system, RegisterSensor rs) {
