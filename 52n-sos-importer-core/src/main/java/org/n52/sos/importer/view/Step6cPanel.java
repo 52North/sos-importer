@@ -43,18 +43,22 @@ public class Step6cPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-		private final JLabel descriptionLabel1 = new JLabel();
+		private final JLabel questionStartLabel = new JLabel();
 		private MissingPositionPanel mpp;
 		
 		public Step6cPanel(String description,
 				String featureOfInterestName,
 				Step6cModel s6cM) {
-			String questionStatement = String.format("%s %s \"%s\"?", description, Lang.l().featureOfInterest(),featureOfInterestName);
+			String questionStatement = String.format("%s %s ", description, Lang.l().featureOfInterest());
 			setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-			descriptionLabel1.setText(questionStatement);
+			JLabel questionStartLabel = new JLabel(questionStatement);
+			JLabel foiName = new JLabel(featureOfInterestName);
+			foiName.setFont(Constants.DEFAULT_LABEL_FONT_BOLD);
 			
-			JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			descriptionPanel.add(descriptionLabel1);
+			JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+			descriptionPanel.add(questionStartLabel);
+			descriptionPanel.add(foiName);
+			descriptionPanel.add(new JLabel("?"));
 			add(descriptionPanel, BorderLayout.NORTH);
 			
 			mpp = new MissingPositionPanel(s6cM);
