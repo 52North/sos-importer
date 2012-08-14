@@ -43,12 +43,13 @@ import net.opengis.sensorML.x101.TermDocument.Term;
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.RegisterSensorResponseDocument;
 import net.opengis.swe.x101.AbstractDataRecordType;
-import net.opengis.swe.x101.AnyScalarPropertyType;
 import net.opengis.swe.x101.BooleanDocument.Boolean;
 import net.opengis.swe.x101.CategoryDocument.Category;
+import net.opengis.swe.x101.DataComponentPropertyType;
+import net.opengis.swe.x101.DataRecordType;
+import net.opengis.swe.x101.EnvelopeType;
 import net.opengis.swe.x101.PositionType;
 import net.opengis.swe.x101.QuantityDocument.Quantity;
-import net.opengis.swe.x101.SimpleDataRecordType;
 import net.opengis.swe.x101.TextDocument.Text;
 import net.opengis.swe.x101.UomPropertyType;
 import net.opengis.swe.x101.VectorPropertyType;
@@ -633,7 +634,7 @@ public final class SensorObservationService {
 	private void addIntendedApplicationClassifier(SystemType system, RegisterSensor rs) {
 		Classifier intendedApplicationClassifier = system.addNewClassification().addNewClassifierList().addNewClassifier();
 		Term intendedApplication = intendedApplicationClassifier.addNewTerm();
-		intendedApplication.setDefinition(Configuration.SML_INTENDED_APPLICATION_DEFINITION);
+		intendedApplication.setDefinition(Configuration.OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION);
 		intendedApplication.setValue(rs.getObservedPropertyName());
 	}
 
@@ -648,49 +649,90 @@ public final class SensorObservationService {
 		IdentifierList identifierList = system.addNewIdentification().addNewIdentifierList();
 		
 		Term uniqueId = identifierList.addNewIdentifier().addNewTerm();
-		uniqueId.setDefinition(Configuration.SML_ID_TERM_DEFINITION);
+		uniqueId.setDefinition(Configuration.OGC_DISCOVERY_ID_TERM_DEFINITION);
 		uniqueId.setValue(rs.getSensorURI());
 		
 		Term longName = identifierList.addNewIdentifier().addNewTerm();
-		longName.setDefinition(Configuration.SML_LONG_NAME_DEFINITION);
+		longName.setDefinition(Configuration.OGC_DISCOVERY_LONG_NAME_DEFINITION);
 		longName.setValue(rs.getSensorName());
 		
 		Term shortName = identifierList.addNewIdentifier().addNewTerm();
-		shortName.setDefinition(Configuration.SML_SHORT_NAME_DEFINITION);
+		shortName.setDefinition(Configuration.OGC_DISCOVERY_SHORT_NAME_DEFINITION);
 		shortName.setValue(rs.getSensorName());
 		
 	}
 
 	private void addCapabilities(SystemType system, RegisterSensor rs) {
 		Capabilities caps = system.addNewCapabilities();
-		SimpleDataRecordType simpleDR;
-	    AnyScalarPropertyType f;
+		DataRecordType dataRecordType;
+	    DataComponentPropertyType f;
 	    Boolean b;
 	    Text t;
 	    AbstractDataRecordType adrt = caps.addNewAbstractDataRecord();
-	    simpleDR = (SimpleDataRecordType) adrt.
-	    		substitute(Configuration.QN_SWE_1_0_1_SIMPLE_DATA_RECORD, 
-	    				SimpleDataRecordType.type);
+	    dataRecordType = (DataRecordType) adrt.
+	    		substitute(Configuration.QN_SWE_1_0_1_DATA_RECORD, 
+	    				DataRecordType.type);
+	    
 	    // Status of the Sensor (collecting data?)
-	    f =  simpleDR.addNewField();
+	    f =  dataRecordType.addNewField();
 	    f.setName("status");
 	    b = f.addNewBoolean();
 	    b.setValue(true);
 	    
 	    // add foi id
-	    f = simpleDR.addNewField();
+	    f = dataRecordType.addNewField();
 	    f.setName("FeatureOfInterestID");
 	    t = f.addNewText();
 	    t.setDefinition("FeatureOfInterest identifier");
 	    t.setValue(rs.getFeatureOfInterestName());
 	    
 	    // add foi name
-	    f = simpleDR.addNewField();
+	    f = dataRecordType.addNewField();
 	    f.setName("FeatureOfInterestName");
 	    t = f.addNewText();
 	    t.setValue(rs.getFeatureOfInterestURI());
 	    
-	    caps.setAbstractDataRecord(simpleDR);
+	    // add observed boundingbox
+	    // TODO implement solution for moving sensors
+	    addObservedBoundingBox(dataRecordType,rs);
+	    
+	    caps.setAbstractDataRecord(dataRecordType);
+	    
+	}
+
+	private void addObservedBoundingBox(DataRecordType dRT,
+			RegisterSensor rs) {
+		DataComponentPropertyType observedBBoxField = dRT.addNewField();
+		observedBBoxField.setName("observedBBOX");
+		AbstractDataRecordType aDRT = observedBBoxField.addNewAbstractDataRecord();
+		EnvelopeType envelope = (EnvelopeType) aDRT.substitute(Configuration.QN_SWE_1_0_1_ENVELOPE, EnvelopeType.type);
+		envelope.setDefinition(Configuration.OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION);
+		envelope.addNewLowerCorner().setVector(getLowerCornerOfObservedBBox(rs));
+		envelope.addNewUpperCorner().setVector(getUpperCornerOfObservedBBox(rs));
+	}
+
+	// TODO implement for moving sensors
+	private VectorType getUpperCornerOfObservedBBox(RegisterSensor rs) {
+		return getLowerCornerOfObservedBBox(rs);
+	}
+
+	private VectorType getLowerCornerOfObservedBBox(RegisterSensor rs) {
+		VectorType positionVector = VectorType.Factory.newInstance();
+		Coordinate easting = positionVector.addNewCoordinate();
+		easting.setName("easting");
+		Quantity eastingValue = easting.addNewQuantity();
+		eastingValue.setAxisID("x");
+		eastingValue.addNewUom().setCode(rs.getLongitudeUnit());
+		eastingValue.setValue(rs.getLongitudeValue());
+		
+		Coordinate northing = positionVector.addNewCoordinate();
+		northing.setName("northing");
+		Quantity northingValue = northing.addNewQuantity();
+		northingValue.setAxisID("y");
+		northingValue.addNewUom().setCode(rs.getLatitudeUnit());
+		northingValue.setValue(rs.getLatitudeValue());
+		
+		return positionVector;
 	}
 
 	private void addPosition(SystemType system, RegisterSensor rs) {

@@ -79,14 +79,14 @@ public final class Configuration {
 	// TODO read from configuration file
 	public static final String EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
 	public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
-	/**
-	 * Used in System::identification::IdentifierList::identifier::Term.definition
-	 */
-	public static final String SML_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
-	public static final QName QN_SOS_1_0_OFFERING = new QName("http://www.opengis.net/sos/1.0", "offering");
-	public static final QName QN_SOS_1_0_ID = new QName("http://www.opengis.net/sos/1.0", "id");
-	public static final QName QN_SOS_1_0_NAME = new QName("http://www.opengis.net/sos/1.0", "name");
-	public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName("http://www.opengis.net/swe/1.0.1","SimpleDataRecord");
+	private static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
+	private static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
+	public static final QName QN_SOS_1_0_OFFERING = new QName(NS_SOS_1_0_0, "offering");
+	public static final QName QN_SOS_1_0_ID = new QName(NS_SOS_1_0_0, "id");
+	public static final QName QN_SOS_1_0_NAME = new QName(NS_SOS_1_0_0, "name");
+	public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName(NS_SWE_1_0_1,"SimpleDataRecord");
+	public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName (NS_SWE_1_0_1,"DataRecord");
+	public static final QName QN_SWE_1_0_1_ENVELOPE = new QName (NS_SWE_1_0_1,"Envelope");
 	public static final String SML_ATTRIBUTE_VERSION = "version";
 	public static final String SML_VERSION = "1.0.1";
 	public static final char UNICODE_REPLACER = '_';
@@ -99,9 +99,11 @@ public final class Configuration {
 	public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
 	public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
 	public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
-	public static final String SML_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
-	public static final String SML_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
-	public static final String SML_INTENDED_APPLICATION_DEFINITION = "urn:ogc:def:classifier:OGC:1.0:application";
+	public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
+	public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
+	public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
+	public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION = "urn:ogc:def:classifier:OGC:1.0:application";
+	public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = "urn:ogc:def:property:OGC:1.0:observedBBOX";
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
