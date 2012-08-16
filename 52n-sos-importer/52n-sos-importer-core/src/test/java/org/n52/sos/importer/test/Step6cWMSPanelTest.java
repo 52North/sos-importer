@@ -24,6 +24,7 @@
 package org.n52.sos.importer.test;
 
 import java.awt.AWTEvent;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 
@@ -57,6 +58,7 @@ public class Step6cWMSPanelTest extends JFrame {
 		LoggingController.getInstance();
 		
 		JFrame frame = new Step6cWMSPanelTest(s6cM);
+		frame.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT));
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
