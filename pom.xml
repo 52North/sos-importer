@@ -12,11 +12,8 @@
 	<artifactId>52n-sos-importer</artifactId>
 	<packaging>pom</packaging>
 	<version>0.2</version>
-	<name>52°North SOS-Importer</name>
-	<description>
-		52°North SOS-Importer - for details see 
-		https://wiki.52north.org/bin/view/Sensornet/SosImporter
-	</description>
+	<name>52North SOS-Importer</name>
+	<description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
 	<inceptionYear>2011</inceptionYear>
 	<modules>
 		<module>52n-sos-importer-bindings</module>
@@ -140,8 +137,24 @@
 				<artifactId>52n-oxf-xmlbeans</artifactId>
 				<version>${oxf.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-swing</artifactId>
+				<version>${geotools.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-wms</artifactId>
+				<version>${geotools.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-epsg-hsql</artifactId>
+				<version>${geotools.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+<!-- 
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -172,25 +185,54 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.3</version>
 					<configuration>
 						<descriptorRefs>
 							<descriptorRef>jar-with-dependencies</descriptorRef>
 						</descriptorRefs>
 						<finalName>${project.artifactId}-${project.version}</finalName>
+						<archive>
+							<index>false</index>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addClasspath>true</addClasspath>
+								<mainClass>org.n52.sos.importer.Start</mainClass>
+							</manifest>
+							<manifestEntries>
+								<build-time>${timestamp}</build-time>
+								<n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
+								<n52-oxf-version>${oxf.version}</n52-oxf-version>
+								<geotools-version>${geotools.version}</geotools-version>
+							</manifestEntries>
+						</archive>
 					</configuration>
-					<executions>
-						<execution>
-							<id>make-assembly</id>
-							<!-- assembly is build through package phase: mvn package -->
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
+ -->
+	<repositories>
+		<repository>
+			<id>n52-releases</id>
+			<name>52n Releases</name>
+			<url>http://52north.org/maven/repo/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>n52-snapshots</id>
+			<name>52n Snapshots</name>
+			<url>http://52north.org/maven/repo/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
