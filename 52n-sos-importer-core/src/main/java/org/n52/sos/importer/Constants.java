@@ -128,7 +128,7 @@ public class Constants {
 	private static final String WMS_INTERNAL_FILE_PATH = "/org/n52/sos/importer/view/position/";
 	private static final String WMS_FILE_NAME = "wms.properties";
 
-	public static final String DEFAULT_FEEDER_JAR_NAME = "52n-sos-importer-feeder-".concat(VERSION).concat("-jar-with-dependencies.jar");
+	public static final String DEFAULT_FEEDER_JAR_NAME = "52n-sos-importer-feeder-".concat(VERSION).concat("-bin.jar");
 	
 	public final static int DIALOG_WIDTH = 800;
 	
