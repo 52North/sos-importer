@@ -251,7 +251,8 @@ public class MissingPositionPanel extends JPanel{
 			if (logger.isDebugEnabled()) {
 				logger.debug(String.format("Is layer null? %s; Name: %s",
 						(specifiedBackgroundLayer==null),
-						(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():""));
+ 						(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():"")
+						));
 				logger.debug(String.format("Is WMS null? %s", (wms==null)));
 			}
 
