@@ -43,7 +43,6 @@ public class Step6cPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-		private final JLabel questionStartLabel = new JLabel();
 		private MissingPositionPanel mpp;
 		
 		public Step6cPanel(String description,

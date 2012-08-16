@@ -61,10 +61,6 @@ public class MainFrame extends JFrame {
 	// TODO read this from general configuration file
 	private String frameTitle = Lang.l().frameTitle();
 	
-	protected final static int DIALOG_WIDTH = 800;
-	
-	protected final static int DIALOG_HEIGHT = 600;
-	
 	public MainFrame(MainController mainController) {
 		super();
 		this.mainController = mainController;
@@ -93,7 +89,7 @@ public class MainFrame extends JFrame {
 		}
 		pack();
 		// this centers the dialog on the current screen of the user
-		setBounds(0, 0, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		setBounds(0, 0, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -128,7 +124,7 @@ public class MainFrame extends JFrame {
 		initLookAndFeel();
 		stepContainerPanel.add(stepPanel);
 		pack();
-		setBounds(this.getBounds().x, this.getBounds().y, MainFrame.DIALOG_WIDTH, MainFrame.DIALOG_HEIGHT);
+		setBounds(this.getBounds().x, this.getBounds().y, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
 		setVisible(true);
 	}
 	

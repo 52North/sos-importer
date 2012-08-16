@@ -179,7 +179,7 @@ public class Step1Panel extends JPanel {
 		//
 		pane.setCaretPosition(0);
 		//Put the editor pane in a scroll pane.
-		scrollPane.setPreferredSize(new Dimension(MainFrame.DIALOG_WIDTH-20, 400));
+		scrollPane.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH-20, 400));
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().step1Introduction(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		scrollPane.setWheelScrollingEnabled(true);
