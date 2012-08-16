@@ -85,6 +85,8 @@ public class MissingPositionPanel extends JPanel{
 	
 	private Step6cModel s6cM;
 	
+	private MapContent mapContent;
+	
 	// GUI stuff
 	private JRadioButton manualInput;
 	private JRadioButton mapInput;
@@ -227,30 +229,40 @@ public class MissingPositionPanel extends JPanel{
 
 	private void initMap(JMapPane mapPane2) {
 		try {
-			MapContent map = new MapContent();
+			mapContent = new MapContent();
 
 			URL url = null;
 			try {
 				url = new URL(Constants.WMS_URL() + Constants.WMS_GET_CAPABILITIES_REQUEST);
 			} catch (MalformedURLException e) {
 				//will not happen
+				logger.error(String.format("WMS URL not correct: \"%s\"",url),e);
 			}
 			/*
 			 * @see http://docs.geotools.org/stable/userguide/extension/wms/wms.html#layer
 			 */
 			WebMapServer wms = null;
 			wms = new WebMapServer(url);
-			Layer layer = wms.getCapabilities().getLayerList().get(1);
+			Layer rootLayer = wms.getCapabilities().getLayer();
+			Layer specifiedBackgroundLayer = getBackgroundLayerByName(
+					rootLayer.getChildren(),
+					Constants.WMS_DEFAULT_BACKGROUND_LAYER_NAME); 
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("Is layer null? %s; Name: %s",
+						(specifiedBackgroundLayer==null),
+						(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():""));
+				logger.debug(String.format("Is WMS null? %s", (wms==null)));
+			}
 
-			WMSLayer displayLayer = new WMSLayer( wms, layer );
-			map.addLayer(displayLayer);
+			WMSLayer displayLayer = new WMSLayer( wms, specifiedBackgroundLayer );
+			mapContent.addLayer(displayLayer);
 
 			// When first shown on screen it will display the layers.
-			mapPane.setMapContent( map );
+			mapPane.setMapContent( mapContent );
 			// 										values: minX, maxX, minY, maxY, crs
 			ReferencedEnvelope bounds = Constants.WMS_ENVELOPE();
 			mapPane.setDisplayArea(bounds);
-			//mapPane.setDisplayArea(map.getMaxBounds());
 
 		} catch (UnsupportedEncodingException e1) {
 			logger.error(String.format("Exception thrown: %s",
@@ -285,6 +297,16 @@ public class MissingPositionPanel extends JPanel{
 						e.getMessage()),
 					e);
 		}
+	}
+
+	private Layer getBackgroundLayerByName(Layer[] children,
+			String wmsDefaultBackgroundLayerName) {
+		for (Layer layer : children) {
+			if (layer.getName().equals(wmsDefaultBackgroundLayerName)) {
+				return layer;
+			}
+		}
+		return null;
 	}
 
 	private JPanel initInputType() {
@@ -348,7 +370,7 @@ public class MissingPositionPanel extends JPanel{
 	}
 
 	public void saveSettings() {
-		if (this.mapInput.isSelected()) {
+		if (mapInput.isSelected()) {
 			Position p = s6cM.getPosition();
 			p.setEPSGCode(new EPSGCode(Constants.DEFAULT_EPSG_CODE));
 			p.setLatitude(new Latitude(n52Utils.parseDouble(latitudeTextField.getText()), 
@@ -357,7 +379,7 @@ public class MissingPositionPanel extends JPanel{
 					Constants.DEFAULT_UNIT_FOI_POSITION));
 			p.setHeight(new Height(Constants.DEFAULT_HEIGHT_FOI_POSITION, 
 					Constants.DEFAULT_HEIGHT_UNIT_FOI_POSITION));
-		} else if (this.manualInput.isSelected()) {
+		} else if (manualInput.isSelected()) {
 			java.awt.Component[] subPanels = manualInputPanel.getComponents();
 			for (java.awt.Component component : subPanels) {
 				if (component instanceof MissingComponentPanel) {
@@ -365,6 +387,9 @@ public class MissingPositionPanel extends JPanel{
 					mcp.assignValues();
 				}
 			}
+		}
+		if (mapContent != null) {
+			mapContent.dispose();
 		}
 	}
 	
