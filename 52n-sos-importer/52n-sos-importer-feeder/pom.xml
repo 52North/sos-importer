@@ -8,7 +8,8 @@
 		<version>0.2</version>
 	</parent>
 	<artifactId>52n-sos-importer-feeder</artifactId>
-	<name>SOS Feeder</name>
+	<name>Feeding Module</name>
+	<description>A commandline application which uses XML configurations created by the core module to import data into a SOS 1.0.0 instance</description>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
@@ -63,6 +64,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -71,13 +73,30 @@
 			<plugin>
 				<groupId>com.mycila.maven-license-plugin</groupId>
 				<artifactId>maven-license-plugin</artifactId>
+				<version>1.9.0</version>
 				<configuration>
 					<header>src/main/resources/52n_license_header.txt</header>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<strictCheck>true</strictCheck>
+					<properties>
+						<year>${year}</year>
+					</properties>
+					<encoding>${project.build.sourceEncoding}}</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
 				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<finalName>${project.artifactId}-${project.version}</finalName>
 					<archive>
 						<index>false</index>
 						<manifest>
@@ -87,11 +106,21 @@
 						</manifest>
 						<manifestEntries>
 							<build-time>${timestamp}</build-time>
-							<!-- TODO get this version from dependency definition -->
-							<SOS-importer-xmlbeans-version>${importer.xml.binding.version}</SOS-importer-xmlbeans-version>
+							<n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
+							<n52-oxf-version>${oxf.version}</n52-oxf-version>
+							<geotools-version>${geotools.version}</geotools-version>
 						</manifestEntries>
 					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
