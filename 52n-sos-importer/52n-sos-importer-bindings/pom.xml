@@ -8,6 +8,7 @@
 		<version>0.2</version>
 	</parent>
 	<artifactId>52n-sos-importer-bindings</artifactId>
+	<name>XMLbeans Module</name>
 	<description>52North SOS Importer XML Bindings Module</description>
 	<build>
 		<plugins>
