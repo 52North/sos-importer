@@ -58,7 +58,7 @@ public class TablePanel extends JPanel {
 		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
 		setLayout(gridBagLayout);
 		table = new JTable();
-		table.setPreferredScrollableViewportSize(new Dimension(MainFrame.DIALOG_WIDTH - 100, MainFrame.DIALOG_HEIGHT-450));
+		table.setPreferredScrollableViewportSize(new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT-450));
 		JScrollPane scrollPane = new JScrollPane(table);
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;

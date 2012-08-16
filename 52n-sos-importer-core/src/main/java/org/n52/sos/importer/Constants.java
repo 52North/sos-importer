@@ -121,7 +121,7 @@ public class Constants {
 	public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
 	public static final String DEFAULT_UNIT_FOI_POSITION = "deg";
 	public static final String WMS_VIEW_SELECT_TOOL_ICON_PNG_PATH = "/org/n52/sos/importer/view/position/noxin_crosshairs.png";
-	public static final String WMS_DEFAULT_URL = "http://osmtud.dyndns.org/wms/";
+	public static final String WMS_DEFAULT_URL = "http://osmtud.dyndns.org/wms/wms/";
 	public static final String WMS_GET_CAPABILITIES_REQUEST = "?VERSION=1.1.0&REQUEST=GetCapabilities";
 	
 	private static final String WMS_EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
@@ -129,6 +129,13 @@ public class Constants {
 	private static final String WMS_FILE_NAME = "wms.properties";
 
 	public static final String DEFAULT_FEEDER_JAR_NAME = "52n-sos-importer-feeder-".concat(VERSION).concat("-jar-with-dependencies.jar");
+	
+	public final static int DIALOG_WIDTH = 800;
+	
+	public final static int DIALOG_HEIGHT = 600;
+
+	public static final String WMS_DEFAULT_BACKGROUND_LAYER_NAME = "OSMBackground";
+
 	
 	/*
 	 * CHANGEABLE VALUES
@@ -141,7 +148,7 @@ public class Constants {
 	
 	/**
 	 * TODO implement loading of language parameter from configuration file
-	 * @return {@linkplain org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
+	 * @return {@link org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
 	 */
 	public static String language() {
 		return Lang.l().getClass().getSimpleName();
@@ -149,12 +156,16 @@ public class Constants {
 
 	public static String WMS_URL() {
 		Properties props = load();
+		String wmsUrl = WMS_DEFAULT_URL;
 		if (props != null && 
 				props.getProperty(wms_url) != null &&
 				!props.getProperty(wms_url).equals("")) {
-			return props.getProperty(wms_url);
+			wmsUrl =  props.getProperty(wms_url);
 		}
-		return WMS_DEFAULT_URL;
+		
+		logger.debug(String.format("WMS url: %s", wmsUrl));
+		
+		return wmsUrl;
 	}
 
 	private static Properties load() {
@@ -165,6 +176,7 @@ public class Constants {
 			if (!file.exists()) {
 				logger.info("Load default settings from jar file");
 				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
+				logger.debug(String.format("filepath: %s", filePath));
 				is = Constants.class.getClass().getResourceAsStream(filePath);
 			} else if (!file.canRead()) {
 				logger.warn("Could not load settings.");
@@ -178,6 +190,7 @@ public class Constants {
 			}
 			Properties props = new Properties();
 			props.load(is);
+			logger.info("Settings loaded");
 			return props;
 		} catch (FileNotFoundException e) {
 			logger.error("SOS Importer Settings not found", e);
