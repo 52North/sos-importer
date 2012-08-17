@@ -19,6 +19,11 @@
 		<module>52n-sos-importer-core</module>
 		<module>52n-sos-importer-feeder</module>
 	</modules>
+	<scm>
+		<connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer</connection>
+		<developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/</developerConnection>
+		<url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/52n-sos-importer/?root=sensorweb</url>
+	</scm>
 	<organization>
 		<name>52°North</name>
 		<url>http://52north.org/</url>
@@ -237,7 +242,7 @@
 	<profiles>
 		<profile>
 			<id>release</id>
-			<!-- a profile wich shall be activated if a release is performed -->
+			<!-- a profile which shall be activated if a release is performed -->
 			<build>
 				<plugins>
 					<plugin>
@@ -255,10 +260,4 @@
 			</build>
 		</profile>
 	</profiles>
-
-  <scm>
-    <connection>scm:svn:https://svn.52north.org/svn/52n/maven-root-project/tags/52n-sos-importer-0.2.0</connection>
-    <developerConnection>scm:svn:https://svn.52north.org/svn/52n/maven-root-project/tags/52n-sos-importer-0.2.0</developerConnection>
-    <url>http://svn.52north.org/cgi-bin/viewvc.cgi/maven-root-project/tags/52n-sos-importer-0.2.0?root=52n/52n-sos-importer</url>
-  </scm>
 </project>
