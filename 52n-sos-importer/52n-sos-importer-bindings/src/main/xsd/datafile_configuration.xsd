@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) by Cornelia Müller (52°North GmbH) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.2/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.2/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+			
+			BASE TYPES
+			
+	-->
+	<xs:annotation>
+		<xs:documentation>Namespace ../0.2/ is chosen to match the application version.</xs:documentation>
+	</xs:annotation>
+	<xs:element name="CommentIndicator">
+		<xs:annotation>
+			<xs:documentation>Character for marking non content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Code" type="xs:string" nillable="false">
+		<xs:annotation>
+			<xs:documentation>The UCUM code used to observed property.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ColumnSeparator" type="xs:string" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Character for separating element in content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="EPSGCode">
+		<xs:annotation>
+			<xs:documentation>Integer identifying the used EPSG (between 0...</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0"/>
+				<xs:maxInclusive value="32767"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="FirstLineWithData" default="0">
+		<xs:annotation>
+			<xs:documentation>Defining the first line with data. Line counting starts with 0.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Key">
+		<xs:annotation>
+			<xs:documentation>The key of a key-value-pair.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="GROUP">
+					<xs:annotation>
+						<xs:documentation>Indicates the membership of this column in a POSITION or DATE_TIME group.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="TIME"/>
+				<xs:enumeration value="TIME_DAY"/>
+				<xs:enumeration value="TIME_HOUR"/>
+				<xs:enumeration value="TIME_MINUTE"/>
+				<xs:enumeration value="TIME_MONTH"/>
+				<xs:enumeration value="TIME_SECOND"/>
+				<xs:enumeration value="TIME_YEAR"/>
+				<xs:enumeration value="TIME_ZONE"/>
+				<xs:enumeration value="TYPE"/>
+				<xs:enumeration value="OTHER"/>
+				<xs:enumeration value="PARSE_PATTERN"/>
+				<xs:enumeration value="POSITION_ALTITUDE"/>
+				<xs:enumeration value="POSITION_EPSG_CODE"/>
+				<xs:enumeration value="POSITION_LATITUDE"/>
+				<xs:enumeration value="POSITION_LONGITUDE"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Name" type="xs:string" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Human readable name of a resource like FOI, Sensor, Observed Property,...</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Number" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Reference the columns in the data file. Column counting starts with 0.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Password">
+		<xs:annotation>
+			<xs:documentation>Password for the remote data file. Length restriction of 256 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="256"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Path" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Operating System compliant definition of the path to the local data file.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="TextIndicator">
+		<xs:annotation>
+			<xs:documentation>Character for indicating text in elements in CSV files. Length restriction set to 1 character.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Type" default="DO_NOT_EXPORT">
+		<xs:annotation>
+			<xs:documentation>Type of the column. It defines the class of content. The application handles the optional metadata to parse the content depending on this type definition, for example.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="DO_NOT_EXPORT">
+					<xs:annotation>
+						<xs:documentation>Do not export this column. It should be ignored by the application.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="MEASURED_VALUE">
+					<xs:annotation>
+						<xs:documentation>The result of the performed observation, in most cases some value.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="DATE_TIME">
+					<xs:annotation>
+						<xs:documentation>The date or time or date and time of the performed observation.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="POSITION">
+					<xs:annotation>
+						<xs:documentation>The position of the performed observation.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="FOI">
+					<xs:annotation>
+						<xs:documentation>The feature of interest.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="OBSERVED_PROPERTY">
+					<xs:annotation>
+						<xs:documentation>The observed property.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="UOM">
+					<xs:annotation>
+						<xs:documentation>The Unit of measure using UCUM codes.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="SENSOR">
+					<xs:annotation>
+						<xs:documentation>The sensor id.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Value">
+		<xs:annotation>
+			<xs:documentation>The value of a key-value-pair. Potential values: TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="URI" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Any URL compliant with RFC 3986 "URI" (https://tools.ietf.org/html/rfc3986)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:anyURI">
+					<xs:attribute name="useAsPrefix" type="xs:boolean" use="optional">
+						<xs:annotation>
+							<xs:documentation>Parameter used for generated resources</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="URL" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Any URL compliant with RFC 3986 "URI" (https://tools.ietf.org/html/rfc3986) or better RFC 1738 "URL" (https://tools.ietf.org/html/rfc1738)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:anyURI"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="UseHeader" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Define to use (case "true") or not to use (case "false") the potential header information to search for metadata in the data file.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="UserName">
+		<xs:annotation>
+			<xs:documentation>Username for the remote data file. Length restriction of 256 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="256"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ID" nillable="false">
+		<xs:annotation>
+			<xs:documentation>A ID for linking resources to column and vice versa.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:ID"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="IdRef">
+		<xs:annotation>
+			<xs:documentation>A link to another resource using an ID.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:IDREF"/>
+		</xs:simpleType>
+	</xs:element>
+	<!--
+		 
+			COMPLEX TYPES
+			
+	 -->
+	<xs:element name="Resource" type="ResourceType" abstract="true"/>
+	<xs:complexType name="ResourceType">
+		<xs:sequence>
+			<xs:element ref="ID"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="GeneratedResource" type="GeneratedResourceType" substitutionGroup="Resource"/>
+	<xs:complexType name="GeneratedResourceType">
+		<xs:complexContent>
+			<xs:extension base="ResourceType">
+				<xs:sequence>
+					<xs:element ref="Number" maxOccurs="unbounded"/>
+					<xs:element ref="URI" minOccurs="0"/>
+					<xs:element name="ConcatString" type="xs:string" nillable="false" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="GeneratedSpatialResource" type="GeneratedSpatialResourceType" substitutionGroup="GeneratedResource"/>
+	<xs:complexType name="GeneratedSpatialResourceType">
+		<xs:complexContent>
+			<xs:extension base="GeneratedResourceType">
+				<xs:sequence>
+					<xs:element ref="Position"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ManualResource" type="ManualResourceType" substitutionGroup="Resource"/>
+	<xs:complexType name="ManualResourceType">
+		<xs:complexContent>
+			<xs:extension base="ResourceType">
+				<xs:sequence>
+					<xs:element ref="URI"/>
+					<xs:element ref="Name"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SpatialResource" type="SpatialResourceType" substitutionGroup="ManualResource"/>
+	<xs:complexType name="SpatialResourceType">
+		<xs:complexContent>
+			<xs:extension base="ManualResourceType">
+				<xs:sequence>
+					<xs:element ref="Position"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="RelatedUnitOfMeasurement">
+		<xs:annotation>
+			<xs:documentation>The unit of measurement related to THIS entity. The content of this element MUST match a ID element of a UnitOfMeasurement from AdditionalMetadata OR a column Number.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="IdRef"/>
+				<xs:element ref="Number"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RelatedObservedProperty">
+		<xs:annotation>
+			<xs:documentation>The observed property related to THIS entity. The content of this element MUST match a ID element of a ObservedProperty from AdditionalMetadata OR a column Number.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="IdRef"/>
+				<xs:element ref="Number"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RelatedSensor">
+		<xs:annotation>
+			<xs:documentation>The sensor related to THIS entity. The content of this element MUST match a ID element of a Sensor from AdditionalMetadata OR a column Number.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="IdRef"/>
+				<xs:element ref="Number"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RelatedFOI">
+		<xs:annotation>
+			<xs:documentation>The feature of interest related to THIS entity. The content of this element MUST match a ID element of a FeatureOfInterest from AdditionalMetadata OR a column Number.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="IdRef"/>
+				<xs:element ref="Number"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FeatureOfInterest" type="FeatureOfInterestType">
+		<xs:annotation>
+			<xs:documentation>A feature of interest (linked to a column by URI element and relatedFOI element in column metadata)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="FeatureOfInterestType">
+		<xs:sequence>
+			<xs:element ref="Resource"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="UnitOfMeasurement" type="UnitOfMeasurementType">
+		<xs:annotation>
+			<xs:documentation>A unit of measure related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="UnitOfMeasurementType">
+		<xs:sequence>
+			<xs:element ref="Resource"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ObservedProperty" type="ObservedPropertyType">
+		<xs:annotation>
+			<xs:documentation>A observed property (linked to a column by URI element and relatedObservedProperty element in column metadata)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ObservedPropertyType">
+		<xs:sequence>
+			<xs:element ref="Resource"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Sensor" type="SensorType">
+		<xs:annotation>
+			<xs:documentation>A sensor (linked to a column by URI element and relatedFOI element in column metadata)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="SensorType">
+		<xs:sequence>
+			<xs:element ref="Resource"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Alt">
+		<xs:annotation>
+			<xs:documentation>Altitude element of a position</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AdditionalMetadata">
+		<xs:annotation>
+			<xs:documentation>Additional metadata not contained in any column.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Sensor" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>A sensor (linked to a column by ID element and relatedSensor element in column metadata)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="ObservedProperty" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>An observed property (linked to a column by URI element and relatedObservedProperty element in column metadata)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="FeatureOfInterest" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="UnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>A unit of measurement related to a measured value column (linked by URI element and relatedUOM in column metadata in measured value column)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FOIPosition" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>In the case of having a column of FOIs, the related position information is stored here.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="URI"/>
+							<xs:element ref="Position"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Column">
+		<xs:annotation>
+			<xs:documentation>A column in the data file. This elements holds the configuration how to parse the data elements in this column. In the case of a MeasuredValue column, the elements Related* are only present, if multiple resources of type * are present in the current set-up/file.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Number"/>
+				<xs:element ref="Type"/>
+				<xs:element ref="Metadata" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Position" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>A position using x,y,z (unit for each), epsg-code or the group this position is build from</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedDateTimeGroup" type="xs:string" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>This optional element links THIS measured value column to a DateTimke group in the model by its group ID. It is defined in a Metadata element with the Key.GROUP. When this element is not defined, all measured value columns share the same date time group.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedFOI" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The feature of interest related to THIS measured value column. The content of this element MUST match a ID element of a FeatureOfInterest from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RelatedMeasuredValueColumn" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Column number of the measured value column this column is related to.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:minInclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The observed property related to THIS measured value column. The content of this element MUST match a ID element of a ObservedProperty from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>WHY NOT LIMITED TO 1? The sensor related to THIS measured value column. The content of this element MUST match a ID element of a Sensor from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The unit of measurement related to THIS measured value column. The content of this element MUST match a ID element of a UnitOfMeasurement from AdditionalMetadata OR a column Number.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ColumnAssignments">
+		<xs:annotation>
+			<xs:documentation>Information about each column in the data file. Holding instructions how to parse the elements of each column.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Column" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CsvMetadata">
+		<xs:annotation>
+			<xs:documentation>Metada regarding the CSV format and each column in the data file.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ColumnAssignments"/>
+				<xs:element ref="DecimalSeparator">
+					<xs:annotation>
+						<xs:documentation>The global decimal mark. It delimits the decimal places of a numeric value. For example, '.' would be the decimal separator for the numeric value "1234.56".</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="FirstLineWithData"/>
+				<xs:element ref="Parameter"/>
+				<xs:element ref="UseHeader"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Credentials">
+		<xs:annotation>
+			<xs:documentation>Optional credentials for the remote data file.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="UserName"/>
+				<xs:element ref="Password"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataFile">
+		<xs:annotation>
+			<xs:documentation>The file holding the observations in CSV format.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="LocalFile"/>
+				<xs:element ref="RemoteFile"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DecimalSeparator" default="." nillable="false">
+		<xs:annotation>
+			<xs:documentation>The decimal mark delimits the decimal places of a numeric value. For example, '.' would be the decimal separator for the numeric value "1234.56".</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1" fixed="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Group" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Reference to a position group defined in the CsvMetadata.ColumnAssignments</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Lat">
+		<xs:annotation>
+			<xs:documentation>Latitude element of a position</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LocalFile">
+		<xs:annotation>
+			<xs:documentation>A data file located on the same machine.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Path"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Long">
+		<xs:annotation>
+			<xs:documentation>Longitude element of a position</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:float">
+					<xs:attribute name="unit" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Metadata">
+		<xs:annotation>
+			<xs:documentation>A key-value-pair holding some additional metadata.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Key"/>
+				<xs:element ref="Value"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Offering">
+		<xs:annotation>
+			<xs:documentation>Offering in the SOS which is used for the import. Might be generated from sensor id.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="generate" type="xs:boolean" use="optional" default="true">
+						<xs:annotation>
+							<xs:documentation>If set to "true", the offering should be generated from the sensor id. If set to "false", the xs:string content of element "Offering" should be used as offering for inserting the data.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Parameter">
+		<xs:annotation>
+			<xs:documentation>Basic CSV file parameters.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CommentIndicator"/>
+				<xs:element ref="ColumnSeparator"/>
+				<xs:element ref="TextIndicator"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Position">
+		<xs:annotation>
+			<xs:documentation>A position using x,y,z, unit for each, epsg-code</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="Alt"/>
+					<xs:element ref="EPSGCode"/>
+					<xs:element ref="Lat"/>
+					<xs:element ref="Long"/>
+				</xs:sequence>
+				<xs:element ref="Group">
+					<xs:annotation>
+						<xs:documentation>Links to a position group defined in the CsvMetadata.ColumnAssignments.Column.Metadata.Key::Group</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RemoteFile">
+		<xs:annotation>
+			<xs:documentation>A data file located on a remote server which might required credentials to be accessed.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="URL"/>
+				<xs:element ref="Credentials" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SosMetadata">
+		<xs:annotation>
+			<xs:documentation>Metadata regarding the SOS limited to URL and offering.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="URL"/>
+				<xs:element ref="Offering">
+					<xs:annotation>
+						<xs:documentation>Offering in the SOS which is used for the import. Might be generated from sensor id.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--
+		 
+			ROOT ELEMENT
+			
+	 -->
+	<xs:element name="SosImportConfiguration">
+		<xs:annotation>
+			<xs:documentation>Configuration for a data file containing observation. These observation should be imported to a running SOS instance using the transactional interface. It is used by the 52n-sensorweb-importer to store the metadata and re-use it.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DataFile"/>
+				<xs:element ref="SosMetadata"/>
+				<xs:element ref="CsvMetadata"/>
+				<xs:element ref="AdditionalMetadata"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
