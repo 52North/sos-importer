@@ -21,9 +21,9 @@
 		<module>52n-sos-importer-feeder</module>
 	</modules>
 	<scm>
-		<connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/</connection>
-		<developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/</developerConnection>
-		<url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/52n-sos-importer/?root=sensorweb</url>
+		<connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
+		<developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</developerConnection>
+		<url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/?root=sensorweb</url>
 	</scm>
 	<organization>
 		<name>52°North</name>
