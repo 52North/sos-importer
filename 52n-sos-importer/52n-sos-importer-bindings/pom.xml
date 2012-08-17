@@ -4,9 +4,10 @@
 	<parent>
 		<groupId>org.n52.sensorweb</groupId>
 		<artifactId>52n-sos-importer</artifactId>
-		<version>0.2.0</version>
+		<version>0.3Ã.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>52n-sos-importer-bindings</artifactId>
+  <version>0.3.0-SNAPSHOT</version>
 	<name>XMLbeans Module</name>
 	<description>52North SOS Importer XML Bindings Module</description>
 	<build>

@@ -4,9 +4,10 @@
 	<parent>
 		<groupId>org.n52.sensorweb</groupId>
 		<artifactId>52n-sos-importer</artifactId>
-		<version>0.2.0</version>
+		<version>0.3Ã.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>52n-sos-importer-core</artifactId>
+  <version>0.3.0-SNAPSHOT</version>
 	<name>Core Module</name>
 	<description>GUI application to create XML based configurations which can be used be the feeding module to import data into a SOS 1.0.0</description>
 	<packaging>jar</packaging>
