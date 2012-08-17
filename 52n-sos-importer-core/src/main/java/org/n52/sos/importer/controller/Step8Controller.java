@@ -24,14 +24,21 @@
 package org.n52.sos.importer.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step8Panel;
@@ -62,7 +69,7 @@ public class Step8Controller extends StepController {
 	
 	@Override
 	public void loadSettings() {		
-		step8Panel = new Step8Panel(step7Model);
+		step8Panel = new Step8Panel(step7Model,this);
 		BackNextController.getInstance().changeNextToFinish();
 		File logFile = null;
 		
@@ -136,5 +143,107 @@ public class Step8Controller extends StepController {
 	@Override
 	public StepModel getModel() {
 		return this.step7Model;
+	}
+	
+	public void directImport() {
+		StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
+		pathToJavaExecutable.append(File.separator);
+		pathToJavaExecutable.append("bin");
+		pathToJavaExecutable.append(File.separator);
+		pathToJavaExecutable.append("java");
+		File jvm = new File(pathToJavaExecutable.toString());
+		if (! jvm.exists() && System.getProperty("os.name").indexOf("Windows") != -1) {
+			pathToJavaExecutable.append(".exe");
+		}
+		
+		String pathToFeederJar = System.getProperty("user.dir") + File.separator;
+		pathToFeederJar = searchForFeederJarWithDefaultFileNameStart(pathToFeederJar);
+		File feederJar = new File(pathToFeederJar.toString());
+		
+		if (!feederJar.exists()) {
+			JOptionPane.showMessageDialog(step8Panel,
+					Lang.l().step8FeederJarNotFound(feederJar.getAbsolutePath()),
+					Lang.l().errorDialogTitle(),
+					JOptionPane.ERROR_MESSAGE);
+		} else {
+			step8Panel.setDirectImportExecuteButtonEnabled(false);
+
+			ProcessBuilder builder = new ProcessBuilder(pathToJavaExecutable.toString(),
+					"-jar",
+					pathToFeederJar.toString(),
+					"-c",
+					step7Model.getConfigFile().getAbsolutePath());
+			builder.redirectErrorStream(true);
+			DirectImportWorker directImporter = new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(),builder);
+			directImporter.execute();
+		}
+	}
+	
+	private String searchForFeederJarWithDefaultFileNameStart(
+			String pathToDirectoryWithFeederJar) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("searchForFeederJarWithDefaultFileNameStart()");
+		}
+		File directoryWithFeederJar = new File(pathToDirectoryWithFeederJar);
+		if (directoryWithFeederJar != null &&
+				directoryWithFeederJar.exists() &&
+				directoryWithFeederJar.isDirectory()) {
+			String[] files = directoryWithFeederJar.list(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return (name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar"));
+				}
+			});
+			if (files != null && files.length > 0) {
+				return files[0]; // returns the first matching feeder.jar
+			}
+		}
+		return pathToDirectoryWithFeederJar;
+	}
+
+	private class DirectImportWorker extends SwingWorker<String, String>{
+
+		private JTextArea processOutPut;
+		private ProcessBuilder procBuilder;
+
+		public DirectImportWorker(JTextArea processOutPut,
+				ProcessBuilder procBuilder) {
+			this.processOutPut = processOutPut;
+			this.procBuilder = procBuilder;
+		}
+
+		protected void process(List<String> chunks) {
+			Iterator<String> it = chunks.iterator();
+			while (it.hasNext()) {
+				processOutPut.append(it.next());
+			}
+		}
+
+		protected String doInBackground() throws Exception {
+			Process importProcess;
+			try {
+				importProcess = procBuilder.start();
+				InputStream res = importProcess.getInputStream();
+				byte[] buffer = new byte[128];
+				int len;
+				while ( (len=res.read(buffer,0,buffer.length))!=-1) {
+					publish(new String(buffer,0,len));
+					if (isCancelled()) {
+						importProcess.destroy();
+						return "";
+					}
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "";
+		}
+
+		protected void done() {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Import Task finished");
+			}
+		}
+
 	}
 }
