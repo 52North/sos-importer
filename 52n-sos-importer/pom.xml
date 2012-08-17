@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>52-North</artifactId>
 		<groupId>org.n52</groupId>
@@ -10,7 +11,7 @@
 	<groupId>org.n52.sensorweb</groupId>
 	<artifactId>52n-sos-importer</artifactId>
 	<packaging>pom</packaging>
-	<version>0.2.0</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>52North SOS-Importer</name>
 	<description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
 	<inceptionYear>2011</inceptionYear>
@@ -20,9 +21,9 @@
 		<module>52n-sos-importer-feeder</module>
 	</modules>
 	<scm>
-		<connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/tags/52n-sos-importer-0.2.0</connection>
-		<developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/tags/52n-sos-importer-0.2.0</developerConnection>
-		<url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/52n-sos-importer-0.2.0?root=sensorweb</url>
+		<connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/</connection>
+		<developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/</developerConnection>
+		<url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/52n-sos-importer/?root=sensorweb</url>
 	</scm>
 	<organization>
 		<name>52°North</name>
