@@ -30,24 +30,19 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingWorker;
 import javax.swing.border.TitledBorder;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.controller.Step8Controller;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.i18n.Lang;
 
@@ -64,15 +59,19 @@ public class Step8Panel extends JPanel {
 	private static final Logger logger = Logger.getLogger(Step8Panel.class);
 
 	private JButton logFileButton;
+	private JButton directImportExecuteButton;
 
 	private JButton configFileButton;
 	private JTextArea configurationFileInstructions;
-	private JTextArea directImportOutput;
+	private JTextArea directImportOutputTextArea;
 
 	private final Step7Model s7M;
+	
+	private final Step8Controller controller;
 
-	public Step8Panel(final Step7Model s7M) {
+	public Step8Panel(final Step7Model s7M, Step8Controller controller) {
 		this.s7M = s7M;
+		this.controller = controller;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{450, 0};
 		gridBagLayout.rowHeights = new int[]{50, 50, 0, 0};
@@ -135,41 +134,12 @@ public class Step8Panel extends JPanel {
 		gbc_directImportInstructions.gridy = 0;
 		directImportPanel.add(directImportInstructions, gbc_directImportInstructions);
 
-		final JButton directImportExecuteButton = new JButton(Lang.l().step8StartImportButton());
+		directImportExecuteButton = new JButton(Lang.l().step8StartImportButton());
 		directImportExecuteButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
-				pathToJavaExecutable.append(File.separator);
-				pathToJavaExecutable.append("bin");
-				pathToJavaExecutable.append(File.separator);
-				pathToJavaExecutable.append("java");
-				File jvm = new File(pathToJavaExecutable.toString());
-				if (! jvm.exists() && System.getProperty("os.name").indexOf("Windows") != -1) {
-					pathToJavaExecutable.append(".exe");
-				}
-				StringBuilder pathToFeederJar = new StringBuilder(System.getProperty("user.dir"));
-				pathToFeederJar.append(File.separator);
-				pathToFeederJar.append(Constants.DEFAULT_FEEDER_JAR_NAME);
-				File feederJar = new File(pathToFeederJar.toString());
-				if (!feederJar.exists()) {
-					JOptionPane.showMessageDialog(Step8Panel.this,
-							Lang.l().step8FeederJarNotFound(feederJar.getAbsolutePath()),
-							Lang.l().errorDialogTitle(),
-							JOptionPane.ERROR_MESSAGE);
-				} else {
-					directImportExecuteButton.setEnabled(false);
-
-					ProcessBuilder builder = new ProcessBuilder(pathToJavaExecutable.toString(),
-							"-jar",
-							pathToFeederJar.toString(),
-							"-c",
-							s7M.getConfigFile().getAbsolutePath());
-					builder.redirectErrorStream(true);
-					DirectImportWorker directImporter = new DirectImportWorker(directImportOutput,builder);
-					directImporter.execute();
-				}
+				controller.directImport();
 			}
 		});
 		GridBagConstraints gbc_directImportExecuteButton = new GridBagConstraints();
@@ -189,10 +159,10 @@ public class Step8Panel extends JPanel {
 		gbc_scrollPane.gridy = 2;
 		directImportPanel.add(scrollPane, gbc_scrollPane);
 
-		directImportOutput = new JTextArea();
-		directImportOutput.setEditable(false);
-		directImportOutput.setFont(Constants.DEFAULT_LABEL_FONT);
-		scrollPane.setViewportView(directImportOutput);
+		directImportOutputTextArea = new JTextArea();
+		directImportOutputTextArea.setEditable(false);
+		directImportOutputTextArea.setFont(Constants.DEFAULT_LABEL_FONT);
+		scrollPane.setViewportView(directImportOutputTextArea);
 
 		return directImportPanel;
 	}
@@ -309,51 +279,12 @@ public class Step8Panel extends JPanel {
 		});
 	}
 
-	private class DirectImportWorker extends SwingWorker<String, String>{
+	public void setDirectImportExecuteButtonEnabled(boolean enabled) {
+		directImportExecuteButton.setEnabled(enabled);
+	}
 
-		private JTextArea processOutPut;
-		private ProcessBuilder procBuilder;
-
-		public DirectImportWorker(JTextArea processOutPut,
-				ProcessBuilder procBuilder) {
-			this.processOutPut = processOutPut;
-			this.procBuilder = procBuilder;
-		}
-
-		protected void process(List<String> chunks) {
-			Iterator<String> it = chunks.iterator();
-			while (it.hasNext()) {
-				processOutPut.append(it.next());
-			}
-		}
-
-		protected String doInBackground() throws Exception {
-			Process importProcess;
-			try {
-				importProcess = procBuilder.start();
-				InputStream res = importProcess.getInputStream();
-				byte[] buffer = new byte[128];
-				int len;
-				while ( (len=res.read(buffer,0,buffer.length))!=-1) {
-					publish(new String(buffer,0,len));
-					if (isCancelled()) {
-						importProcess.destroy();
-						return "";
-					}
-				}
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			return "";
-		}
-
-		protected void done() {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Import Task finished");
-			}
-		}
-
+	public JTextArea getDirectImportOutputTextArea() {
+		return directImportOutputTextArea;
 	}
 
 }
