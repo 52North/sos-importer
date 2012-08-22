@@ -129,7 +129,7 @@
 			<dependency>
 				<groupId>org.n52.sensorweb</groupId>
 				<artifactId>52n-sos-importer-bindings</artifactId>
-				<version>${importer.xml.binding.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.n52.sensorweb</groupId>
