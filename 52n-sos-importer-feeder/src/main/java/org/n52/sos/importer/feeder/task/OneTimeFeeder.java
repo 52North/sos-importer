@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
+import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.SensorObservationService;
@@ -71,8 +72,15 @@ public class OneTimeFeeder implements Runnable {
 			try {
 			// check SOS
 			URL sosURL = config.getSosUrl();
-			SensorObservationService sos = new SensorObservationService(sosURL);
-			if (!sos.isAvailable()) {
+			SensorObservationService sos = null;
+				try {
+					sos = new SensorObservationService(sosURL);
+				} catch (ExceptionReport er) {
+					logger.fatal("SOS " + sosURL + " is not available. Please check the configuration!", er);
+				} catch (OXFException oxfe) {
+					logger.fatal("SOS " + sosURL + " is not available. Please check the configuration!", oxfe);
+				}
+			if (sos == null || !sos.isAvailable()) {
 				logger.fatal(String.format("SOS \"%s\" is not available. Please check the configuration!", sosURL));
 			} else if (!sos.isTransactional()){
 				logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
