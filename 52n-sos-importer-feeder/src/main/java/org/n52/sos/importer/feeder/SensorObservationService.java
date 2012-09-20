@@ -44,15 +44,15 @@ import org.n52.oxf.ows.OWSException;
 import org.n52.oxf.ows.OwsExceptionCode;
 import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
-import org.n52.oxf.sos.adapter.CategoryObservationBuilder;
-import org.n52.oxf.sos.adapter.InsertObservationParameterBuilder_v100;
-import org.n52.oxf.sos.adapter.MeasurementBuilder;
-import org.n52.oxf.sos.adapter.ObservationBuilder;
-import org.n52.oxf.sos.adapter.ObservationTemplateBuilder;
-import org.n52.oxf.sos.adapter.RegisterSensorParameterBuilder_v100;
 import org.n52.oxf.sos.adapter.SOSAdapter;
-import org.n52.oxf.sos.adapter.SOSWrapper;
-import org.n52.oxf.sos.adapter.SensorDescriptionBuilder;
+import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
+import org.n52.oxf.sos.adapter.wrapper.builder.CategoryObservationBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.InsertObservationParameterBuilder_v100;
+import org.n52.oxf.sos.adapter.wrapper.builder.MeasurementBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.ObservationBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.ObservationTemplateBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.RegisterSensorParameterBuilder_v100;
+import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.oxf.sos.capabilities.ObservationOffering;
 import org.n52.oxf.sos.capabilities.SOSContents;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
@@ -314,11 +314,6 @@ public final class SensorObservationService {
 		
 		try {
 			builder = createParameterBuilderFromIO(io);
-//			if (logger.isDebugEnabled()) {
-//				logger.debug(
-//						String.format("InsertObservation request:\n%s\n",
-//									SOSRequestBuilderFactory.generateRequestBuilder(sosVersion).buildInsertObservation(paramCon)));
-//			}
 			try {
 				if (logger.isDebugEnabled()) {
 					logger.debug("\n\nBEFORE OXF - doOperation \"InsertObservation\"\n\n");
@@ -418,12 +413,6 @@ public final class SensorObservationService {
 		}
 		RegisterSensorParameterBuilder_v100 builder = createParameterBuilderFromRS(rs);
 		try {
-
-//			if (logger.isDebugEnabled()) {
-//				logger.debug(String.format("This RegisterSensor Request will be send to the SOS running at \"%s\":\n%s",
-//						sosUrl.toExternalForm(),
-//						sosAdapter.getRequestBuilder().buildRegisterSensor(paramCon)));
-//			}
 			OperationResult opResult = sosWrapper.doRegisterSensor(builder);
 			if(sosVersion.equals("1.0.0")){
 				RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
@@ -482,6 +471,7 @@ public final class SensorObservationService {
 		SystemDocument sml = createSML(registerSensor);
 		SensorMLDocument sensorMLDocument = SensorMLDocument.Factory.newInstance();
 		sensorMLDocument.addNewSensorML().addNewMember().set(sml);
+		sensorMLDocument.getSensorML().setVersion("1.0.1"); // TODO version variable
 		
         // create template
 		ObservationTemplateBuilder observationTemplate;
@@ -490,7 +480,7 @@ public final class SensorObservationService {
 		} else {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode());
 		}
-		observationTemplate.setDefaultValue(Double.valueOf(registerSensor.getDefaultValue()));
+		observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
         
 		return new RegisterSensorParameterBuilder_v100(sensorMLDocument.toString(), observationTemplate.generateObservationTemplate());
 	}
@@ -535,9 +525,15 @@ public final class SensorObservationService {
 		builder.addInput(rs.getObservedPropertyName(), rs.getObservedPropertyURI());
 		
 		// add outputs
-		builder.addOutputWithOffering(rs.getObservedPropertyName(),
-				rs.getObservedPropertyURI(), rs.getOfferingUri(),
-				rs.getOfferingName());
+		if (rs.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+			builder.addOutputCategory(rs.getObservedPropertyName(),
+					rs.getObservedPropertyURI(), rs.getOfferingUri(),
+					rs.getOfferingName(), "");
+		} else {
+			builder.addOutputMeasurement(rs.getObservedPropertyName(),
+					rs.getObservedPropertyURI(), rs.getOfferingUri(),
+					rs.getOfferingName(), rs.getUnitOfMeasurementCode());
+		}
 		
 		return builder.buildSensorDescription();
 	}
