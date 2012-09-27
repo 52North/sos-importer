@@ -2,11 +2,11 @@
 <SosImportConfiguration xsi:schemaLocation="http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.2/">
     <DataFile>
         <LocalFile>
-            <Path>D:\52North\Projekte\2010_EO2Heaven\3000_Work-Packages\3400_WP4\SOS-Importer\Testdatensätze\Gldas_small-200.csv</Path>
+            <Path>C:\Users\Eric\Desktop\Gldas_small-200.csv</Path>
         </LocalFile>
     </DataFile>
     <SosMetadata>
-        <URL>http://192.168.1.113:8080/ImportTestSOS/sos</URL>
+        <URL>http://localhost:8080/52nSOSv3.5.0/sos</URL>
         <Offering generate="true"/>
     </SosMetadata>
     <CsvMetadata>

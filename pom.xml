@@ -156,6 +156,11 @@
 				<artifactId>gt-epsg-hsql</artifactId>
 				<version>${geotools.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 <!-- 

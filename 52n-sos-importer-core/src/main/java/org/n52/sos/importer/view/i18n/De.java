@@ -416,7 +416,7 @@ public class De extends Lang{
 		return "Numerischer Wert";
 	}
 
-	public String step3MeasuredValText() {
+	public String step3MeasuredValText() { // TODO update ?
 		return "Text (als CategoyObservation)";
 	}
 

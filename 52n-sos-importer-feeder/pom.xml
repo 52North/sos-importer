@@ -57,6 +57,11 @@
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>52n-oxf-xmlbeans</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

@@ -99,6 +99,8 @@ public final class Configuration {
 	public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
 	public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
 	public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
+	public static final String SOS_OBSERVATION_TYPE_COUNT = "COUNT";
+	public static final String SOS_OBSERVATION_TYPE_BOOLEAN = "BOOLEAN";
 	public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
 	public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
 	public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";

@@ -29,6 +29,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import org.n52.sos.importer.model.measuredValue.Boolean;
+import org.n52.sos.importer.model.measuredValue.Count;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.measuredValue.Text;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
@@ -161,10 +163,8 @@ public class Step3Panel extends JPanel {
 			public MeasuredValuePanel(int firstLineWithData) {	
 				super(columnSubTypeJP);		
 				addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new NumericValue(), firstLineWithData));
-// TODO uncomment next lines when observation types are supported by OXF
-//				addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(),firstLineWithData));
-//				addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(),firstLineWithData));
-// TODO update Lang.l().step3MeasuredValText() if TEXT observations are available				
+				addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(),firstLineWithData));
+				addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(),firstLineWithData));
 				addRadioButton(Lang.l().step3MeasuredValText(), ToolTips.get(ToolTips.TEXT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Text(),firstLineWithData));
 			}	
 		}

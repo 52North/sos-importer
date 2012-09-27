@@ -46,7 +46,9 @@ import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
 import org.n52.oxf.sos.adapter.SOSAdapter;
 import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
+import org.n52.oxf.sos.adapter.wrapper.builder.BooleanObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.CategoryObservationBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.CountObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.InsertObservationParameterBuilder_v100;
 import org.n52.oxf.sos.adapter.wrapper.builder.MeasurementBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.ObservationBuilder;
@@ -375,10 +377,20 @@ public final class SensorObservationService {
 		if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
 			obsBuilder = ObservationBuilder.createObservationForTypeCategory();
 			((CategoryObservationBuilder) obsBuilder).addResultCodespace(io.getUnitOfMeasurementCode());
+			((CategoryObservationBuilder) obsBuilder).addObservationValue(io.getValue().toString());
+		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+			// set count (like measurement for now) TODO
+			obsBuilder = ObservationBuilder.createObservationForTypeCount();
+			((CountObservationBuilder) obsBuilder).addObservationValue((Integer) io.getValue());
+		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+			// set boolean (like text/category) TODO
+			obsBuilder = ObservationBuilder.createObservationForTypeBoolean();
+			((BooleanObservationBuilder) obsBuilder).addObservationValue((Boolean) io.getValue());
 		} else {
 			// set default value type
 			obsBuilder = ObservationBuilder.createObservationForTypeMeasurement();
 			((MeasurementBuilder) obsBuilder).addUom(io.getUnitOfMeasurementCode());
+			((MeasurementBuilder) obsBuilder).addObservationValue(io.getValue().toString());
 		}
 		obsBuilder.addOservedProperty(io.getObservedPropertyURI());
 		obsBuilder.addFoiId(io.getFeatureOfInterestName());
@@ -402,7 +414,6 @@ public final class SensorObservationService {
 		obsBuilder.addFoiPosition(pos);
 		obsBuilder.addOservedProperty(io.getObservedPropertyURI());
 		obsBuilder.addSamplingTime(io.getTimeStamp());
-		obsBuilder.addObservationValue(io.getValue().toString());
 		
 		return new InsertObservationParameterBuilder_v100(io.getSensorURI(), obsBuilder);
 	}
@@ -477,6 +488,10 @@ public final class SensorObservationService {
 		ObservationTemplateBuilder observationTemplate;
 		if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeCategory(registerSensor.getUnitOfMeasurementCode());
+		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeCount();
+		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeTruth();
 		} else {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode());
 		}
