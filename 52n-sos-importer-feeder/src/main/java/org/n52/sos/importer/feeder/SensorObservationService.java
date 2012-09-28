@@ -544,6 +544,16 @@ public final class SensorObservationService {
 			builder.addOutputCategory(rs.getObservedPropertyName(),
 					rs.getObservedPropertyURI(), rs.getOfferingUri(),
 					rs.getOfferingName(), "");
+		} else if (rs.getMvType().equals(
+				Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+			builder.addOutputBoolean(rs.getObservedPropertyName(),
+					rs.getObservedPropertyURI(), rs.getOfferingUri(),
+					rs.getOfferingName());
+		} else if (rs.getMvType().equals(
+				Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+			builder.addOutputCount(rs.getObservedPropertyName(),
+					rs.getObservedPropertyURI(), rs.getOfferingUri(),
+					rs.getOfferingName());
 		} else {
 			builder.addOutputMeasurement(rs.getObservedPropertyName(),
 					rs.getObservedPropertyURI(), rs.getOfferingUri(),
