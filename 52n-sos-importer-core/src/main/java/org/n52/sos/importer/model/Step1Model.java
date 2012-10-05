@@ -25,7 +25,73 @@ package org.n52.sos.importer.model;
 
 public class Step1Model implements StepModel{
 
+	private String url, user, password, directory, filenameSchema, intervallUnit;
+	private int intervallValue, feedingType;
 	private String csvFilePath = "";
+	
+	public int getFeedingType() {
+		return feedingType;
+	}
+
+	public void setFeedingType(int feedingType) {
+		this.feedingType = feedingType;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getDirectory() {
+		return directory;
+	}
+	
+	public void setDirectory(String directory) {
+		this.directory = directory;
+	}
+	
+	public String getFilenameSchema() {
+		return filenameSchema;
+	}
+	
+	public void setFilenameSchema(String filenameSchema) {
+		this.filenameSchema = filenameSchema;
+	}
+	
+	public int getIntervallValue() {
+		return intervallValue;
+	}
+	
+	public void setIntervallValue(int intervallValue) {
+		this.intervallValue = intervallValue;
+	}
+	
+	public String getIntervallUnit() {
+		return intervallUnit;
+	}
+	
+	public void setIntervallUnit(String intervallUnit) {
+		this.intervallUnit = intervallUnit;
+	}
 	
 	public void setCSVFilePath(String csvFilePath) {
 		this.csvFilePath = csvFilePath;

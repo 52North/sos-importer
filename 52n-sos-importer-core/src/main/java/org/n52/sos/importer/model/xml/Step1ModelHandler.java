@@ -51,6 +51,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 		String path = stepModel.getCSVFilePath();
 		DataFile dF = sosImportConf.getDataFile();
 		LocalFile lF = null;
+		// TODO remote data file for ftp
 		//
 		if (dF == null) {
 			dF = sosImportConf.addNewDataFile();

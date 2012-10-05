@@ -22,17 +22,25 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 package org.n52.sos.importer.view;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,8 +48,11 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -64,8 +75,23 @@ public class Step1Panel extends JPanel {
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 	
+	private final String[] intervallUnits = new String[] {"seconds", "minutes", "hours", "days", "weeks", "months", "years"};
+	private final String[] feedingTypes = new String[]{"One-Time-Feed from a local CSV file", "Repetitive Feed from a FTP-Server"};
+	
+	public static final int ONE_TIME_FEED = 0;
+	public static final int REPETITIVE_FEED = 1;
+	
+	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
 	private final JTextField csvFileTextField = new JTextField(25);
+	private final JTextField jtfUrl = new JTextField();
+	private final JTextField jtfUser = new JTextField();
+	private final JTextField jtfDirectory = new JTextField();
+	private final JTextField jtfFilenameSchema = new JTextField();
+	private final JPasswordField jpfPassword = new JPasswordField();
+	private final JComboBox jcbIntervallUnit = new JComboBox(intervallUnits);
+	private final JSpinner jsIntervall = new JSpinner();
+	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
 	private final Step1Panel _this = this;
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
@@ -87,9 +113,13 @@ public class Step1Panel extends JPanel {
 	
 	private JPanel initCsvPanel() {
 		JPanel csvPanel = new JPanel();
-		csvPanel.setBorder(new TitledBorder(null,Lang.l().step1File(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		csvPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		csvPanel.setBorder(BorderFactory.createTitledBorder(Lang.l().step1File()));
+		csvPanel.setLayout(new GridBagLayout());
 		
+		// one time feed
+		JPanel oneTimeFeed = new JPanel();
+		oneTimeFeed.setLayout(new GridBagLayout());
+		oneTimeFeed.setBorder(BorderFactory.createEtchedBorder());
 		JLabel instructionLabel = new JLabel(Lang.l().step1InstructionLabel() + ":");
 		instructionLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
 		JButton browse =  new JButton(Lang.l().step1BrowseButton());
@@ -99,13 +129,166 @@ public class Step1Panel extends JPanel {
 			}
 		});
 		
-		csvPanel.add(instructionLabel);
-		csvPanel.add(csvFileTextField);
-		csvPanel.add(browse);
+		GridBagConstraints gbcOneTimeFeed =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2,
+						2, 2, 2), 0, 0);
+		oneTimeFeed.add(instructionLabel, gbcOneTimeFeed);
+		gbcOneTimeFeed.gridx = 1;
+		oneTimeFeed.add(csvFileTextField, gbcOneTimeFeed);
+		gbcOneTimeFeed.gridx = 2;
+		oneTimeFeed.add(browse, gbcOneTimeFeed);
 		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
+		
+		// repetitive feed
+		RepetitiveFeedKeyListener keyListener = new RepetitiveFeedKeyListener();
+		JPanel repetitiveFeed = new JPanel();
+		repetitiveFeed.setBorder(BorderFactory.createEtchedBorder());
+		repetitiveFeed.setLayout(new GridBagLayout());
+		JLabel jlUrl = new JLabel("FTP-Server:");
+		JLabel jlUser = new JLabel("Benutzer:");
+		JLabel jlPassword = new JLabel("Passwort:");
+		JLabel jlDirectory = new JLabel("Pfad:");
+		JLabel jlFileSchema = new JLabel("Dateinamen-Schema:");
+		JLabel jlIntervall = new JLabel("Intervall:");
+		jsIntervall.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+		
+		jtfUrl.addKeyListener(keyListener);
+		jtfUser.addKeyListener(keyListener);
+		jpfPassword.addKeyListener(keyListener);
+		jtfDirectory.addKeyListener(keyListener);
+		jtfFilenameSchema.addKeyListener(keyListener);
+		
+		GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
+				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2,
+						2, 2, 2), 0, 0);
+		GridBagConstraints gbcInput = new GridBagConstraints(1, 0, 2, 1, 1, 0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
+						2, 2, 2), 0, 0);
+		
+		gbcLabel.gridy = gbcInput.gridy = 0;
+		repetitiveFeed.add(jlUrl, gbcLabel);
+		repetitiveFeed.add(jtfUrl, gbcInput);
+		gbcLabel.gridy = gbcInput.gridy = 1;
+		repetitiveFeed.add(jlUser, gbcLabel);
+		repetitiveFeed.add(jtfUser, gbcInput);
+		gbcLabel.gridy = gbcInput.gridy = 2;
+		repetitiveFeed.add(jlPassword, gbcLabel);
+		repetitiveFeed.add(jpfPassword, gbcInput);
+		gbcLabel.gridy = gbcInput.gridy = 3;
+		repetitiveFeed.add(jlDirectory, gbcLabel);
+		repetitiveFeed.add(jtfDirectory, gbcInput);
+		gbcLabel.gridy = gbcInput.gridy = 4;
+		repetitiveFeed.add(jlFileSchema, gbcLabel);
+		repetitiveFeed.add(jtfFilenameSchema, gbcInput);
+		gbcLabel.gridy = gbcInput.gridy = 5;
+		repetitiveFeed.add(jlIntervall, gbcLabel);
+		
+		GridBagConstraints gbcIndividual = new GridBagConstraints(1, 5, 1, 1, 0.7, 0,
+				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
+						2, 2, 2), 0, 0);
+		
+		repetitiveFeed.add(jsIntervall, gbcIndividual);
+		gbcIndividual.gridx = 2;
+		gbcIndividual.weightx = 0;
+		repetitiveFeed.add(jcbIntervallUnit, gbcIndividual);
+		jcbIntervallUnit.setSelectedIndex(2);
+
+		// feeding type chooser section
+		final JPanel cardPanel = new JPanel(new CardLayout());
+		cardPanel.add(oneTimeFeed, "onetime");
+		cardPanel.add(repetitiveFeed, "repetitive");
+		
+		jcbChooseInputType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				if (jcbChooseInputType.getSelectedIndex() == 0) {
+					((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
+				} else {
+					((CardLayout) cardPanel.getLayout()).show(cardPanel, "repetitive");
+				}
+			}
+		});
+		
+		GridBagConstraints gbcChoose = new GridBagConstraints(0, 0, 1, 1, 1, 0,
+				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,
+						5, 5, 5), 0, 0);
+		
+		csvPanel.add(jcbChooseInputType, gbcChoose);
+		gbcChoose.gridy = 1;
+		gbcChoose.fill = GridBagConstraints.HORIZONTAL;
+		csvPanel.add(cardPanel, gbcChoose);
+		
 		return csvPanel;
 	}
 
+	public int getFeedingType() {
+		return (jcbChooseInputType.getSelectedIndex() == ONE_TIME_FEED) ?
+				ONE_TIME_FEED : REPETITIVE_FEED;
+	}
+	
+	public String getUrl() {
+		return jtfUrl.getText();
+	}
+	
+	public void setUrl(String url) {
+		jtfUrl.setText(url);
+	}
+	
+	public String getUser() {
+		return jtfUser.getText();
+	}
+	
+	public void setUser(String user) {
+		jtfUser.setText(user);
+	}
+	
+	public String getPassword() {
+		String password = new String();
+		for (int i = 0; i < jpfPassword.getPassword().length; i++) {
+			password += jpfPassword.getPassword()[i];
+		}
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		jpfPassword.setText(password);
+	}
+	
+	public String getDirectory() {
+		return jtfDirectory.getText();
+	}
+	
+	public void setDirectory(String directory) {
+		jtfUrl.setText(directory);
+	}
+	
+	public String getFilenameSchema() {
+		return jtfFilenameSchema.getText();
+	}
+	
+	public void setFilenameSchema(String filenameSchema) {
+		jtfFilenameSchema.setText(filenameSchema);
+	}
+	
+	public int getIntervallValue() {
+		return Integer.parseInt((String) jsIntervall.getValue());
+	}
+	
+	public void setIntervallValue(int intervallValue) {
+		jsIntervall.setValue(intervallValue);
+	}
+	
+	public String getIntervallUnit() {
+		return intervallUnits[jcbIntervallUnit.getSelectedIndex()];
+	}
+	
+	public void setIntervallUnit(String intervallUnit) {
+		for (int i = 0; i < intervallUnit.length(); i++) {
+			if (intervallUnit.equals(intervallUnits[i])) {
+				jcbIntervallUnit.setSelectedIndex(i);
+			}
+		}
+	}
+	
 	public void setCSVFilePath(String filePath) {
 		csvFileTextField.setText(filePath);
 	}
@@ -188,5 +371,18 @@ public class Step1Panel extends JPanel {
 		}
 		return scrollPane;
 	}
+	
+	private class RepetitiveFeedKeyListener implements KeyListener {
+
+		public void keyPressed(KeyEvent e) {
+		}
+
+		public void keyReleased(KeyEvent e) {
+			step1Controller.inputTyped();
+		}
+
+		public void keyTyped(KeyEvent e) {
+		}
 		
+	}
 }

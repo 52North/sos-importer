@@ -66,7 +66,7 @@ public class Model {
 
 	private SosImportConfiguration sosImpConf;
 
-	private StepModel[] stepModells = new Step3Model[1];
+	private StepModel[] stepModells = new StepModel[1];
 
 	/**
 	 * Create a new and empty model

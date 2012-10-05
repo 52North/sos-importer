@@ -421,8 +421,8 @@ public class En extends Lang{
 		return "Numeric Value";
 	}
 
-	public String step3MeasuredValText() { // TODO update ?
-		return "Text (via CategoryObservation)";
+	public String step3MeasuredValText() {
+		return "Text";
 	}
 
 	public String step3PositionCombination() {

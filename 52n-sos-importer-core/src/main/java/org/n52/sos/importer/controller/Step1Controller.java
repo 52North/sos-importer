@@ -86,9 +86,19 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public void saveSettings() {
-		String csvFilePath = step1Panel.getCSVFilePath();
-		step1Model.setCSVFilePath(csvFilePath);
-		
+		step1Model.setFeedingType(step1Panel.getFeedingType());
+		if (step1Panel.getFeedingType() == Step1Panel.ONE_TIME_FEED) {
+			step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
+		} else {
+			step1Model.setUrl(step1Panel.getUrl());
+			step1Model.setUser(step1Panel.getUser());
+			step1Model.setPassword(step1Panel.getPassword());
+			step1Model.setDirectory(step1Panel.getDirectory());
+			step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
+			step1Model.setIntervallValue(step1Panel.getIntervallValue());
+			step1Model.setIntervallUnit(step1Panel.getIntervallUnit());
+		}
+
 		//show "back" button
 		BackNextController.getInstance().setBackButtonVisible(true);
 		
@@ -97,11 +107,25 @@ public class Step1Controller extends StepController {
 	
 	public void browseButtonClicked() {
 		JFileChooser fc = new JFileChooser();
-		fc.setFileFilter(new CSVFileFilter()); 
+		fc.setFileFilter(new CSVFileFilter());
 		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
 			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
 			BackNextController.getInstance().setNextButtonEnabled(true);
 			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
+		}
+	}
+	
+	public void inputTyped() {
+		// repetitive feed inputs ok
+		if (step1Panel.getUrl() != null && !step1Panel.getUrl().equals("") &&
+			step1Panel.getUser() != null && !step1Panel.getUser().equals("") &&
+			step1Panel.getPassword() != null && !step1Panel.getPassword().equals("") &&
+			step1Panel.getDirectory() != null && !step1Panel.getDirectory().equals("") &&
+			step1Panel.getFilenameSchema() != null && !step1Panel.getFilenameSchema().equals("")) {
+			BackNextController.getInstance().setNextButtonEnabled(true);
+			MainController.getInstance().updateTitle(step1Panel.getUrl());
+		} else {
+			BackNextController.getInstance().setNextButtonEnabled(false);
 		}
 	}
 
@@ -131,41 +155,42 @@ public class Step1Controller extends StepController {
 	public boolean isFinished() {
 		String filePath = step1Panel.getCSVFilePath();
 		
-		if (filePath.equals("")) {
-			JOptionPane.showMessageDialog(null,
-				    "Please choose a CSV file.",
-				    "File missing",
-				    JOptionPane.WARNING_MESSAGE);
-			return false;
-		}	
+		if (step1Model.getFeedingType() == Step1Panel.ONE_TIME_FEED) {
+			if (filePath.equals("")) {
+				JOptionPane.showMessageDialog(null,
+					    "Please choose a CSV file.",
+					    "File missing",
+					    JOptionPane.WARNING_MESSAGE);
+				return false;
+			}	
+				
+			File f = new File(filePath);
 			
-		File f = new File(filePath);
-		
-		if (!f.exists()) {
-			JOptionPane.showMessageDialog(null,
-				    "The specified file does not exist.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		
-		if (!f.isFile()) {
-			JOptionPane.showMessageDialog(null,
-				    "Please specify a file, not a directory.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
+			if (!f.exists()) {
+				JOptionPane.showMessageDialog(null,
+					    "The specified file does not exist.",
+					    "Error",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 			
-		if (!f.canRead()) {
-			JOptionPane.showMessageDialog(null,
-				    "No reading access on the specified file.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE);
-			return false;
+			if (!f.isFile()) {
+				JOptionPane.showMessageDialog(null,
+					    "Please specify a file, not a directory.",
+					    "Error",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+				
+			if (!f.canRead()) {
+				JOptionPane.showMessageDialog(null,
+					    "No reading access on the specified file.",
+					    "Error",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			this.tmpCSVFileContent = readFile(f);
 		}
-		
-		this.tmpCSVFileContent = readFile(f);
 		
 		return true;
 	}
