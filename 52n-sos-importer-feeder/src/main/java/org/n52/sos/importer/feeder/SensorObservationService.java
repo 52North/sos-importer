@@ -47,7 +47,7 @@ import org.n52.oxf.ows.capabilities.OperationsMetadata;
 import org.n52.oxf.sos.adapter.SOSAdapter;
 import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
 import org.n52.oxf.sos.adapter.wrapper.builder.BooleanObservationBuilder;
-import org.n52.oxf.sos.adapter.wrapper.builder.CategoryObservationBuilder;
+import org.n52.oxf.sos.adapter.wrapper.builder.TextObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.CountObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.InsertObservationParameterBuilder_v100;
 import org.n52.oxf.sos.adapter.wrapper.builder.MeasurementBuilder;
@@ -373,17 +373,16 @@ public final class SensorObservationService {
 		
 		ObservationBuilder obsBuilder = null;
 		
-		// set text/category
 		if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-			obsBuilder = ObservationBuilder.createObservationForTypeCategory();
-			((CategoryObservationBuilder) obsBuilder).addResultCodespace(io.getUnitOfMeasurementCode());
-			((CategoryObservationBuilder) obsBuilder).addObservationValue(io.getValue().toString());
+			// set text
+			obsBuilder = ObservationBuilder.createObservationForTypeText();
+			((TextObservationBuilder) obsBuilder).addObservationValue(io.getValue().toString());
 		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
-			// set count (like measurement for now) TODO
+			// set count
 			obsBuilder = ObservationBuilder.createObservationForTypeCount();
 			((CountObservationBuilder) obsBuilder).addObservationValue((Integer) io.getValue());
 		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
-			// set boolean (like text/category) TODO
+			// set boolean
 			obsBuilder = ObservationBuilder.createObservationForTypeBoolean();
 			((BooleanObservationBuilder) obsBuilder).addObservationValue((Boolean) io.getValue());
 		} else {
@@ -392,7 +391,7 @@ public final class SensorObservationService {
 			((MeasurementBuilder) obsBuilder).addUom(io.getUnitOfMeasurementCode());
 			((MeasurementBuilder) obsBuilder).addObservationValue(io.getValue().toString());
 		}
-		obsBuilder.addOservedProperty(io.getObservedPropertyURI());
+		obsBuilder.addObservedProperty(io.getObservedPropertyURI());
 		obsBuilder.addFoiId(io.getFeatureOfInterestName());
 		obsBuilder.addNewFoiName(io.getFeatureOfInterestURI());
 		obsBuilder.addFoiDescription(io.getFeatureOfInterestURI());
@@ -412,7 +411,7 @@ public final class SensorObservationService {
 							io.getLatitudeValue(),
 							io.getLongitudeValue());
 		obsBuilder.addFoiPosition(pos);
-		obsBuilder.addOservedProperty(io.getObservedPropertyURI());
+		obsBuilder.addObservedProperty(io.getObservedPropertyURI());
 		obsBuilder.addSamplingTime(io.getTimeStamp());
 		
 		return new InsertObservationParameterBuilder_v100(io.getSensorURI(), obsBuilder);
@@ -487,7 +486,7 @@ public final class SensorObservationService {
         // create template
 		ObservationTemplateBuilder observationTemplate;
 		if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeCategory(registerSensor.getUnitOfMeasurementCode());
+			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeText();
 		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeCount();
 		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
@@ -541,9 +540,9 @@ public final class SensorObservationService {
 		
 		// add outputs
 		if (rs.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-			builder.addOutputCategory(rs.getObservedPropertyName(),
+			builder.addOutputText(rs.getObservedPropertyName(),
 					rs.getObservedPropertyURI(), rs.getOfferingUri(),
-					rs.getOfferingName(), "");
+					rs.getOfferingName());
 		} else if (rs.getMvType().equals(
 				Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
 			builder.addOutputBoolean(rs.getObservedPropertyName(),
