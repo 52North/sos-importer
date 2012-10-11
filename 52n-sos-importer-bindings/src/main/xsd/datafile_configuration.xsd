@@ -435,7 +435,7 @@
 						<xs:documentation>A position using x,y,z (unit for each), epsg-code or the group this position is build from</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="RelatedDateTimeGroup" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:element name="RelatedDateTimeGroup" type="xs:string" minOccurs="0">
 					<xs:annotation>
 						<xs:documentation>This optional element links THIS measured value column to a DateTimke group in the model by its group ID. It is defined in a Metadata element with the Key.GROUP. When this element is not defined, all measured value columns share the same date time group.</xs:documentation>
 					</xs:annotation>
@@ -521,6 +521,11 @@
 				<xs:element ref="LocalFile"/>
 				<xs:element ref="RemoteFile"/>
 			</xs:choice>
+			<xs:attribute name="refenceIsARegularExpression" type="xs:boolean" use="required">
+				<xs:annotation>
+					<xs:documentation>If set to TRUE the LocaleFile.Path or RemoteFile.URL contains a regular expression needing special handling before retrieving the data file.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="DecimalSeparator" default="." nillable="false">
