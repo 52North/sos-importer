@@ -29,7 +29,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +42,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -55,6 +55,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -76,10 +78,13 @@ public class Step1Panel extends JPanel {
 	private final Step1Controller step1Controller;
 	
 	private final String[] intervallUnits = new String[] {"seconds", "minutes", "hours", "days", "weeks", "months", "years"};
-	private final String[] feedingTypes = new String[]{"One-Time-Feed from a local CSV file", "Repetitive Feed from a FTP-Server"};
+	private final String[] feedingTypes = new String[]{"One-Time-Feed from a local CSV file", "One-Time-Feed / Repetitive Feed from a FTP-Server"};
 	
-	public static final int ONE_TIME_FEED = 0;
-	public static final int REPETITIVE_FEED = 1;
+	// separation of type cases
+	public static final int CSV_FILE = 0;
+	public static final int FTP_FILE = 1;
+	public static final int ONE_TIME_FEED = 2;
+	public static final int REPETITIVE_FEED = 4;
 	
 	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
@@ -90,6 +95,7 @@ public class Step1Panel extends JPanel {
 	private final JTextField jtfFilenameSchema = new JTextField();
 	private final JPasswordField jpfPassword = new JPasswordField();
 	private final JComboBox jcbIntervallUnit = new JComboBox(intervallUnits);
+	private final JCheckBox jcbOneTimeChooser = new JCheckBox();
 	private final JSpinner jsIntervall = new JSpinner();
 	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
 	private final Step1Panel _this = this;
@@ -152,16 +158,32 @@ public class Step1Panel extends JPanel {
 		JLabel jlIntervall = new JLabel("Intervall:");
 		jsIntervall.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 		
+		// this keylistener instantly checks whether the input data is sufficient
 		jtfUrl.addKeyListener(keyListener);
 		jtfUser.addKeyListener(keyListener);
 		jpfPassword.addKeyListener(keyListener);
 		jtfDirectory.addKeyListener(keyListener);
 		jtfFilenameSchema.addKeyListener(keyListener);
 		
-		GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
+		// this key listener enables one-time feed or repetitive feed for ftp
+		jsIntervall.setEnabled(false);
+		jcbIntervallUnit.setEnabled(false);
+		jcbOneTimeChooser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (jcbOneTimeChooser.isSelected()) {
+					jsIntervall.setEnabled(true);
+					jcbIntervallUnit.setEnabled(true);
+				} else {
+					jsIntervall.setEnabled(false);
+					jcbIntervallUnit.setEnabled(false);
+				}
+			}
+		});
+		
+		GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 2, 1, 0, 0,
 				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
-		GridBagConstraints gbcInput = new GridBagConstraints(1, 0, 2, 1, 1, 0,
+		GridBagConstraints gbcInput = new GridBagConstraints(2, 0, 2, 1, 1, 0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
 		
@@ -180,15 +202,18 @@ public class Step1Panel extends JPanel {
 		gbcLabel.gridy = gbcInput.gridy = 4;
 		repetitiveFeed.add(jlFileSchema, gbcLabel);
 		repetitiveFeed.add(jtfFilenameSchema, gbcInput);
+		gbcLabel.gridwidth = 1;
 		gbcLabel.gridy = gbcInput.gridy = 5;
+		repetitiveFeed.add(jcbOneTimeChooser, gbcLabel);
+		gbcLabel.gridx = 1;
 		repetitiveFeed.add(jlIntervall, gbcLabel);
 		
-		GridBagConstraints gbcIndividual = new GridBagConstraints(1, 5, 1, 1, 0.7, 0,
+		GridBagConstraints gbcIndividual = new GridBagConstraints(2, 5, 1, 1, 0.7, 0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
 		
 		repetitiveFeed.add(jsIntervall, gbcIndividual);
-		gbcIndividual.gridx = 2;
+		gbcIndividual.gridx = 3;
 		gbcIndividual.weightx = 0;
 		repetitiveFeed.add(jcbIntervallUnit, gbcIndividual);
 		jcbIntervallUnit.setSelectedIndex(2);
@@ -202,8 +227,10 @@ public class Step1Panel extends JPanel {
 			public void actionPerformed(ActionEvent ae) {
 				if (jcbChooseInputType.getSelectedIndex() == 0) {
 					((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
+					step1Controller.checkInputFileValue();
 				} else {
 					((CardLayout) cardPanel.getLayout()).show(cardPanel, "repetitive");
+					inputTyped();
 				}
 			}
 		});
@@ -221,8 +248,15 @@ public class Step1Panel extends JPanel {
 	}
 
 	public int getFeedingType() {
-		return (jcbChooseInputType.getSelectedIndex() == ONE_TIME_FEED) ?
-				ONE_TIME_FEED : REPETITIVE_FEED;
+		if (jcbChooseInputType.getSelectedIndex() == CSV_FILE) {
+			return CSV_FILE;
+		} else {
+			if (jcbOneTimeChooser.isSelected()) {
+				return FTP_FILE | REPETITIVE_FEED;
+			} else {
+				return FTP_FILE | ONE_TIME_FEED;
+			}
+		}
 	}
 	
 	public String getUrl() {
@@ -269,8 +303,12 @@ public class Step1Panel extends JPanel {
 		jtfFilenameSchema.setText(filenameSchema);
 	}
 	
+	public void setIntervallEnabled(boolean enabled) {
+		jcbOneTimeChooser.setSelected(enabled);
+	}
+	
 	public int getIntervallValue() {
-		return Integer.parseInt((String) jsIntervall.getValue());
+		return (Integer) jsIntervall.getValue();
 	}
 	
 	public void setIntervallValue(int intervallValue) {
@@ -282,9 +320,11 @@ public class Step1Panel extends JPanel {
 	}
 	
 	public void setIntervallUnit(String intervallUnit) {
-		for (int i = 0; i < intervallUnit.length(); i++) {
-			if (intervallUnit.equals(intervallUnits[i])) {
+		for (int i = 0; i < intervallUnits.length; i++) {
+			if (intervallUnit != null && intervallUnit.equals(intervallUnits[i])) {
 				jcbIntervallUnit.setSelectedIndex(i);
+			} else {
+				jcbIntervallUnit.setSelectedIndex(2);
 			}
 		}
 	}
@@ -372,13 +412,30 @@ public class Step1Panel extends JPanel {
 		return scrollPane;
 	}
 	
+	/*
+	 * Instantly checks whether the data, to recieve a file from a ftp server,
+	 * are complete. Only the server's url and a file name respectively a file
+	 * schema are mandatory.
+	 */
+	private void inputTyped() {
+		// repetitive feed inputs ok
+		if (getUrl() != null && !getUrl().equals("")
+				&& getFilenameSchema() != null
+				&& !getFilenameSchema().equals("")) {
+			BackNextController.getInstance().setNextButtonEnabled(true);
+		} else {
+			BackNextController.getInstance().setNextButtonEnabled(false);
+		}
+	}
+	
 	private class RepetitiveFeedKeyListener implements KeyListener {
 
 		public void keyPressed(KeyEvent e) {
 		}
 
+		
 		public void keyReleased(KeyEvent e) {
-			step1Controller.inputTyped();
+			inputTyped();
 		}
 
 		public void keyTyped(KeyEvent e) {

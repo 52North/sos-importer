@@ -68,41 +68,60 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public void loadSettings() {	
-		step1Panel = new Step1Panel(this);
-		
-		//disable "back" button
-		BackNextController.getInstance().setBackButtonVisible(false);
-		
-		String csvFilePath = step1Model.getCSVFilePath();
-		step1Panel.setCSVFilePath(csvFilePath);
-		
-		if(this.step1Panel.getCSVFilePath() == null ||
-				this.step1Panel.getCSVFilePath().equals("")) {
-			BackNextController.getInstance().setNextButtonEnabled(false);
-		} else {
-			BackNextController.getInstance().setNextButtonEnabled(true);
+		if (step1Panel == null) {
+			step1Panel = new Step1Panel(this);
+			
+			//disable "back" button
+			BackNextController.getInstance().setBackButtonVisible(false);
+			
+			String csvFilePath = step1Model.getCSVFilePath();
+			step1Panel.setCSVFilePath(csvFilePath);
+			
+			if(this.step1Panel.getCSVFilePath() == null ||
+					this.step1Panel.getCSVFilePath().equals("")) {
+				BackNextController.getInstance().setNextButtonEnabled(false);
+			} else {
+				BackNextController.getInstance().setNextButtonEnabled(true);
+			}
+			
+			// load data to ftp panel
+			step1Panel.setUrl(step1Model.getUrl());
+			step1Panel.setUser(step1Model.getUser());
+			step1Panel.setPassword(step1Model.getPassword());
+			step1Panel.setDirectory(step1Model.getDirectory());
+			step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
+			if ((step1Model.getFeedingType() & Step1Panel.REPETITIVE_FEED)
+					== Step1Panel.REPETITIVE_FEED) {
+				step1Panel.setIntervallEnabled(true);
+			} else {
+				step1Panel.setIntervallEnabled(false);
+			}
+			step1Panel.setIntervallValue(step1Model.getIntervallValue());
+			step1Panel.setIntervallUnit(step1Model.getIntervallUnit());
 		}
 	}
 	
 	@Override
 	public void saveSettings() {
-		step1Model.setFeedingType(step1Panel.getFeedingType());
-		if (step1Panel.getFeedingType() == Step1Panel.ONE_TIME_FEED) {
-			step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
-		} else {
-			step1Model.setUrl(step1Panel.getUrl());
-			step1Model.setUser(step1Panel.getUser());
-			step1Model.setPassword(step1Panel.getPassword());
-			step1Model.setDirectory(step1Panel.getDirectory());
-			step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
-			step1Model.setIntervallValue(step1Panel.getIntervallValue());
-			step1Model.setIntervallUnit(step1Panel.getIntervallUnit());
+		if (step1Panel != null) {
+			step1Model.setFeedingType(step1Panel.getFeedingType());
+			if (step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
+				// transfer one-time feed input data to model
+				step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
+			} else if ((step1Panel.getFeedingType() & Step1Panel.FTP_FILE ) == Step1Panel.FTP_FILE) {
+				// transfer repetitive feed input data to model
+				step1Model.setUrl(step1Panel.getUrl());
+				step1Model.setUser(step1Panel.getUser());
+				step1Model.setPassword(step1Panel.getPassword());
+				step1Model.setDirectory(step1Panel.getDirectory());
+				step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
+				step1Model.setIntervallValue(step1Panel.getIntervallValue());
+				step1Model.setIntervallUnit(step1Panel.getIntervallUnit());
+			}
 		}
-
-		//show "back" button
-		BackNextController.getInstance().setBackButtonVisible(true);
-		
-		step1Panel = null;
+		// why shall always the gui be recreated and repainted? - too expensive
+		// and complicates some method calls
+		// step1Panel = null;
 	}
 	
 	public void browseButtonClicked() {
@@ -110,20 +129,19 @@ public class Step1Controller extends StepController {
 		fc.setFileFilter(new CSVFileFilter());
 		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
 			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
-			BackNextController.getInstance().setNextButtonEnabled(true);
-			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
+			checkInputFileValue();
 		}
 	}
 	
-	public void inputTyped() {
-		// repetitive feed inputs ok
-		if (step1Panel.getUrl() != null && !step1Panel.getUrl().equals("") &&
-			step1Panel.getUser() != null && !step1Panel.getUser().equals("") &&
-			step1Panel.getPassword() != null && !step1Panel.getPassword().equals("") &&
-			step1Panel.getDirectory() != null && !step1Panel.getDirectory().equals("") &&
-			step1Panel.getFilenameSchema() != null && !step1Panel.getFilenameSchema().equals("")) {
+	/*
+	 * Checks the validity of the next button enablement after switching the
+	 * feeding type cards. 
+	 */
+	public void checkInputFileValue() {
+		if (step1Panel.getCSVFilePath() != null &&
+				!step1Panel.getCSVFilePath().trim().equals("")) {
 			BackNextController.getInstance().setNextButtonEnabled(true);
-			MainController.getInstance().updateTitle(step1Panel.getUrl());
+			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
 		} else {
 			BackNextController.getInstance().setNextButtonEnabled(false);
 		}
@@ -153,9 +171,17 @@ public class Step1Controller extends StepController {
 
 	@Override
 	public boolean isFinished() {
-		String filePath = step1Panel.getCSVFilePath();
 		
-		if (step1Model.getFeedingType() == Step1Panel.ONE_TIME_FEED) {
+		if (step1Panel != null &&  step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
+			String filePath = step1Panel.getCSVFilePath();
+			if (filePath == null) {
+				JOptionPane.showMessageDialog(null,
+					    "Please choose a CSV file.",
+					    "File missing",
+					    JOptionPane.WARNING_MESSAGE);
+				return false;
+			}
+			// checks one-time feed input data for validity
 			if (filePath.equals("")) {
 				JOptionPane.showMessageDialog(null,
 					    "Please choose a CSV file.",
@@ -189,7 +215,24 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			this.tmpCSVFileContent = readFile(f);
+			readFile(f);
+		} else if (step1Panel != null && (step1Panel.getFeedingType() & Step1Panel.FTP_FILE) == Step1Panel.FTP_FILE) {
+			// checks repetitive feed input data for validity
+			if (step1Panel.getUrl() == null || step1Panel.getUrl().equals("")) {
+				JOptionPane.showMessageDialog(null,
+					    "No ftp server was specified.",
+					    "Server missing",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			
+			if (step1Panel.getFilenameSchema() == null || step1Panel.getFilenameSchema().equals("")) {
+				JOptionPane.showMessageDialog(null,
+					    "No file/file schema was specified.",
+					    "File/file schema missing",
+					    JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		
 		return true;
@@ -203,7 +246,7 @@ public class Step1Controller extends StepController {
 	 * @return a <code>{@link java.Lang.l().l().String}</code> containing the content 
 	 * 				of the given file
 	 */
-	private String readFile(File f) {
+	public String readFile(File f) {
 		logger.info("Read CSV file " + f.getAbsolutePath());
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -221,7 +264,9 @@ public class Step1Controller extends StepController {
 					f.getAbsolutePath() + "\"",
 					ioe);
 		}
-		return sb.toString();
+		// assigns result to internal vaiable for further internal processing
+		// to avoid external calls and returns result
+		return tmpCSVFileContent = sb.toString();
 	}
 
 	@Override

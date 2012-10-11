@@ -25,6 +25,7 @@ package org.n52.sos.importer.model.xml;
 
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
+import org.n52.sos.importer.view.Step1Panel;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
@@ -44,27 +45,29 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 	@Override
 	public void handleModel(Step1Model stepModel,
 			SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
-		//
-		String path = stepModel.getCSVFilePath();
-		DataFile dF = sosImportConf.getDataFile();
-		LocalFile lF = null;
-		// TODO remote data file for ftp
-		//
-		if (dF == null) {
-			dF = sosImportConf.addNewDataFile();
-			lF = dF.addNewLocalFile();
-		} else if (dF.isSetLocalFile()) {
-			lF = dF.getLocalFile();
-		}
-		if (path != null && !path.equals("")) {
-			lF.setPath(path);
-		} else {
-			String msg = "empty path to CSV file in Step1Model: " + path;
-			logger.error(msg);
-			throw new NullPointerException(msg);
+		if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("handleModel()");
+			}
+			//
+			String path = stepModel.getCSVFilePath();
+			DataFile dF = sosImportConf.getDataFile();
+			LocalFile lF = null;
+			// TODO remote data file for ftp
+			//
+			if (dF == null) {
+				dF = sosImportConf.addNewDataFile();
+				lF = dF.addNewLocalFile();
+			} else if (dF.isSetLocalFile()) {
+				lF = dF.getLocalFile();
+			}
+			if (path != null && !path.equals("")) {
+				lF.setPath(path);
+			} else {
+				String msg = "empty path to CSV file in Step1Model: " + path;
+				logger.error(msg);
+				throw new NullPointerException(msg);
+			}
 		}
 	}
 }
