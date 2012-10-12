@@ -26,8 +26,10 @@ package org.n52.sos.importer.model.xml;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
+import org.x52North.sensorweb.sos.importer.x02.CredentialsDocument.Credentials;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
+import org.x52North.sensorweb.sos.importer.x02.RemoteFileDocument.RemoteFile;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -43,24 +45,19 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 	private static final Logger logger = Logger.getLogger(Step1ModelHandler.class);
 
 	@Override
-	public void handleModel(Step1Model stepModel,
-			SosImportConfiguration sosImportConf) {
-		if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
-			if (logger.isTraceEnabled()) {
-				logger.trace("handleModel()");
-			}
-			//
+	public void handleModel(Step1Model stepModel, SosImportConfiguration sosImportConf) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("handleModel()");
+		}
+		
+		DataFile dF = sosImportConf.getDataFile();
+		if (dF == null) {
+			dF = sosImportConf.addNewDataFile();
+		}
+		
+		if ((stepModel.getFeedingType() & Step1Panel.CSV_FILE) == Step1Panel.CSV_FILE) {
+			LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
 			String path = stepModel.getCSVFilePath();
-			DataFile dF = sosImportConf.getDataFile();
-			LocalFile lF = null;
-			// TODO remote data file for ftp
-			//
-			if (dF == null) {
-				dF = sosImportConf.addNewDataFile();
-				lF = dF.addNewLocalFile();
-			} else if (dF.isSetLocalFile()) {
-				lF = dF.getLocalFile();
-			}
 			if (path != null && !path.equals("")) {
 				lF.setPath(path);
 			} else {
@@ -68,6 +65,24 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 				logger.error(msg);
 				throw new NullPointerException(msg);
 			}
+		} else {
+			// TODO apply to schema: remote directory
+			// TODO apply to schema: file schema
+			// TODO apply to schema: regular expression or not
+			RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
+			String url = stepModel.getUrl();
+			if (stepModel.getDirectory() != null) {
+				
+			}
+			if (url.charAt(url.length()-1) != '/' && stepModel.getDirectory().charAt(0) != '/') {
+				url += '/';
+			}
+			url += stepModel.getDirectory();
+			rF.setURL(stepModel.getUrl());
+			Credentials cDoc = rF.addNewCredentials();
+			cDoc.setUserName(stepModel.getUser());
+			cDoc.setPassword(stepModel.getPassword());
+			dF.setRefenceIsARegularExpression(stepModel.isRegex());
 		}
 	}
 }

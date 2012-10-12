@@ -116,65 +116,6 @@ public class BackNextController {
 		//
 		currentSC.saveSettings();
 		
-		
-//		TODO proxy
-//		System.setProperty("proxyPort","8080");
-//		System.setProperty("proxyHost","proxy");
-//		System.setProperty( "http.proxyUser", "user" );
-//		System.setProperty( "http.proxyPassword", "password" );
-		
-		
-		// get first file
-		if(currentSC instanceof Step1Controller &&
-				(((Step1Model) currentSC.getModel()).getFeedingType() & Step1Panel.FTP_FILE) == Step1Panel.FTP_FILE) {
-			Step1Model step1Model = (Step1Model) currentSC.getModel();
-			String csvFilePath = System.getProperty("user.dir") +
-					File.separator + "tmp_" + step1Model.getFilenameSchema();
-			FTPClient client = new FTPClient();
-			try {
-				client.connect(step1Model.getUrl());
-				boolean login = client.login(step1Model.getUser(), step1Model.getPassword());
-				if (login) {
-					// download file
-					int result = client.cwd(step1Model.getDirectory());
-					if (result == 250) { // successfully connected
-						File outputFile = new File(csvFilePath);
-						FileOutputStream fos = new FileOutputStream(outputFile);
-						client.retrieveFile(step1Model.getFilenameSchema(), fos);
-						fos.flush();
-						fos.close();
-					}
-	                boolean logout = client.logout();
-	                if (logout) {
-	                }
-	            } else {
-	            }
-				
-				File csv = new File(csvFilePath);
-				if (csv.length() != 0) {
-					step1Model.setCSVFilePath(csvFilePath);
-					((Step1Controller) currentSC).readFile(new File(csvFilePath));
-				} else {
-					csv.delete();
-					throw new IOException();
-				}
-				
-				
-			} catch (SocketException e) {
-				JOptionPane.showMessageDialog(null,
-					    "The file you specified cannot be obtained.",
-					    "Error",
-					    JOptionPane.ERROR_MESSAGE);
-				return;
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null,
-					    "The file you specified cannot be obtained.",
-					    "Error",
-					    JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		}
-		
 		//show "back" button
 		BackNextController.getInstance().setBackButtonVisible(true);
 		

@@ -25,14 +25,18 @@ package org.n52.sos.importer.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.SocketException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
@@ -90,38 +94,23 @@ public class Step1Controller extends StepController {
 			step1Panel.setPassword(step1Model.getPassword());
 			step1Panel.setDirectory(step1Model.getDirectory());
 			step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
-			if ((step1Model.getFeedingType() & Step1Panel.REPETITIVE_FEED)
-					== Step1Panel.REPETITIVE_FEED) {
-				step1Panel.setIntervallEnabled(true);
-			} else {
-				step1Panel.setIntervallEnabled(false);
-			}
-			step1Panel.setIntervallValue(step1Model.getIntervallValue());
-			step1Panel.setIntervallUnit(step1Model.getIntervallUnit());
 		}
 	}
 	
 	@Override
 	public void saveSettings() {
 		if (step1Panel != null) {
-			step1Model.setFeedingType(step1Panel.getFeedingType());
-			if (step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
-				// transfer one-time feed input data to model
-				step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
-			} else if ((step1Panel.getFeedingType() & Step1Panel.FTP_FILE ) == Step1Panel.FTP_FILE) {
-				// transfer repetitive feed input data to model
-				step1Model.setUrl(step1Panel.getUrl());
-				step1Model.setUser(step1Panel.getUser());
-				step1Model.setPassword(step1Panel.getPassword());
-				step1Model.setDirectory(step1Panel.getDirectory());
-				step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
-				step1Model.setIntervallValue(step1Panel.getIntervallValue());
-				step1Model.setIntervallUnit(step1Panel.getIntervallUnit());
-			}
+			step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
+			step1Model.setUrl(step1Panel.getUrl());
+			step1Model.setUser(step1Panel.getUser());
+			step1Model.setPassword(step1Panel.getPassword());
+			step1Model.setDirectory(step1Panel.getDirectory());
+			step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
+			step1Model.setRegex(step1Panel.getRegexStatus());
 		}
 		// why shall always the gui be recreated and repainted? - too expensive
 		// and complicates some method calls
-		// step1Panel = null;
+		step1Panel = null;
 	}
 	
 	public void browseButtonClicked() {
@@ -216,7 +205,7 @@ public class Step1Controller extends StepController {
 				return false;
 			}
 			readFile(f);
-		} else if (step1Panel != null && (step1Panel.getFeedingType() & Step1Panel.FTP_FILE) == Step1Panel.FTP_FILE) {
+		} else if (step1Panel != null && (step1Panel.getFeedingType() == Step1Panel.FTP_FILE)) {
 			// checks repetitive feed input data for validity
 			if (step1Panel.getUrl() == null || step1Panel.getUrl().equals("")) {
 				JOptionPane.showMessageDialog(null,
@@ -233,6 +222,75 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
+			
+			// ftp client
+			FTPClient client;
+			
+			// proxy
+			String pHost = System.getProperty("proxyHost","proxy");
+			int pPort = -1;
+			if (System.getProperty("proxyPort") != null) {
+				pPort = Integer.parseInt(System.getProperty("proxyPort"));
+			}
+			String pUser = System.getProperty( "http.proxyUser");
+			String pPassword = System.getProperty( "http.proxyPassword");
+			if (pHost != null && pPort != -1) {
+				if (pUser != null && pPassword != null) {
+					client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
+				}
+				client = new FTPHTTPClient(pHost, pPort);
+			} else {
+				client = new FTPClient();
+			}
+			
+			// get first file
+			if(step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
+				String csvFilePath = System.getProperty("user.home")
+						+ File.separator + ".SOSImporter" + File.separator + "tmp_"
+						+ step1Panel.getFilenameSchema();
+				try {
+					client.connect(step1Panel.getUrl());
+					boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
+					if (login) {
+						// download file
+						int result = client.cwd(step1Panel.getDirectory());
+						if (result == 250) { // successfully connected
+							File outputFile = new File(csvFilePath);
+							FileOutputStream fos = new FileOutputStream(outputFile);
+							client.retrieveFile(step1Panel.getFilenameSchema(), fos);
+							fos.flush();
+							fos.close();
+						}
+		                boolean logout = client.logout();
+		                if (logout) {
+		                }
+		            } else {
+		            }
+					
+					File csv = new File(csvFilePath);
+					if (csv.length() != 0) {
+						step1Panel.setCSVFilePath(csvFilePath);
+						readFile(new File(csvFilePath));
+					} else {
+						csv.delete();
+						throw new IOException();
+					}
+					
+					
+				} catch (SocketException e) {
+					JOptionPane.showMessageDialog(null,
+						    "The file you specified cannot be obtained.",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+					return false;
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null,
+						    "The file you specified cannot be obtained.",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			}
 		}
 		
 		return true;
@@ -246,7 +304,7 @@ public class Step1Controller extends StepController {
 	 * @return a <code>{@link java.Lang.l().l().String}</code> containing the content 
 	 * 				of the given file
 	 */
-	public String readFile(File f) {
+	private String readFile(File f) {
 		logger.info("Read CSV file " + f.getAbsolutePath());
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -259,13 +317,12 @@ public class Step1Controller extends StepController {
 				sb.append(line + "\n");
 				csvFileRowCount++;
 			}
+			br.close();
 		} catch (IOException ioe) {
 			logger.error("Problem while reading CSV file \"" + 
 					f.getAbsolutePath() + "\"",
 					ioe);
 		}
-		// assigns result to internal vaiable for further internal processing
-		// to avoid external calls and returns result
 		return tmpCSVFileContent = sb.toString();
 	}
 

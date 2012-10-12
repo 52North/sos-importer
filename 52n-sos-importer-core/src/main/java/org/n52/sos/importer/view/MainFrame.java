@@ -123,7 +123,8 @@ public class MainFrame extends JFrame {
 		stepContainerPanel.removeAll();
 		initLookAndFeel();
 		stepContainerPanel.add(stepPanel);
-		pack();
+		// prevent irrational frame resizing
+		// pack();
 		setBounds(this.getBounds().x, this.getBounds().y, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
 		setVisible(true);
 	}

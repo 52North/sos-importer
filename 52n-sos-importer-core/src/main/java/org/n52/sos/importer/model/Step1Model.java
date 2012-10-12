@@ -25,8 +25,9 @@ package org.n52.sos.importer.model;
 
 public class Step1Model implements StepModel{
 
-	private String url, user, password, directory, filenameSchema, intervallUnit;
-	private int intervallValue, feedingType;
+	private String url, user, password, directory, filenameSchema;
+	private boolean regex;
+	private int feedingType;
 	private String csvFilePath = "";
 	
 	public int getFeedingType() {
@@ -61,6 +62,14 @@ public class Step1Model implements StepModel{
 		this.password = password;
 	}
 	
+	public boolean isRegex() {
+		return regex;
+	}
+
+	public void setRegex(boolean regex) {
+		this.regex = regex;
+	}
+
 	public String getDirectory() {
 		return directory;
 	}
@@ -75,22 +84,6 @@ public class Step1Model implements StepModel{
 	
 	public void setFilenameSchema(String filenameSchema) {
 		this.filenameSchema = filenameSchema;
-	}
-	
-	public int getIntervallValue() {
-		return intervallValue;
-	}
-	
-	public void setIntervallValue(int intervallValue) {
-		this.intervallValue = intervallValue;
-	}
-	
-	public String getIntervallUnit() {
-		return intervallUnit;
-	}
-	
-	public void setIntervallUnit(String intervallUnit) {
-		this.intervallUnit = intervallUnit;
 	}
 	
 	public void setCSVFilePath(String csvFilePath) {

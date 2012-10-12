@@ -55,8 +55,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -77,15 +75,11 @@ public class Step1Panel extends JPanel {
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 	
-	private final String[] intervallUnits = new String[] {"seconds", "minutes", "hours", "days", "weeks", "months", "years"};
 	private final String[] feedingTypes = new String[]{"One-Time-Feed from a local CSV file", "One-Time-Feed / Repetitive Feed from a FTP-Server"};
 	
 	// separation of type cases
 	public static final int CSV_FILE = 0;
 	public static final int FTP_FILE = 1;
-	public static final int ONE_TIME_FEED = 2;
-	public static final int REPETITIVE_FEED = 4;
-	
 	
 	private static final Logger logger = Logger.getLogger(Step1Panel.class);
 	private final JTextField csvFileTextField = new JTextField(25);
@@ -94,9 +88,7 @@ public class Step1Panel extends JPanel {
 	private final JTextField jtfDirectory = new JTextField();
 	private final JTextField jtfFilenameSchema = new JTextField();
 	private final JPasswordField jpfPassword = new JPasswordField();
-	private final JComboBox jcbIntervallUnit = new JComboBox(intervallUnits);
-	private final JCheckBox jcbOneTimeChooser = new JCheckBox();
-	private final JSpinner jsIntervall = new JSpinner();
+	private final JCheckBox jcbRegex = new JCheckBox();
 	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
 	private final Step1Panel _this = this;
 	
@@ -153,37 +145,25 @@ public class Step1Panel extends JPanel {
 		JLabel jlUrl = new JLabel("FTP-Server:");
 		JLabel jlUser = new JLabel("Benutzer:");
 		JLabel jlPassword = new JLabel("Passwort:");
+		JLabel jlRegex = new JLabel("<html>Reguläre<br/>Ausdrücke:</html>");
+		JLabel jlRegexDesc = new JLabel("<html>Hinweis: Wählen Sie diese Option, um " +
+				"nachfolgend dynamische Ordner- oder/und Dateistrukturen zu beschreiben. " +
+				"Achten Sie dabei auf die Bedeutung spezieller Zeichen von regulären " +
+				"Ausdrücken, insbesonde Escape-Zeichen.</html>");
 		JLabel jlDirectory = new JLabel("Pfad:");
 		JLabel jlFileSchema = new JLabel("Dateinamen-Schema:");
-		JLabel jlIntervall = new JLabel("Intervall:");
-		jsIntervall.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
 		
 		// this keylistener instantly checks whether the input data is sufficient
 		jtfUrl.addKeyListener(keyListener);
 		jtfUser.addKeyListener(keyListener);
-		jpfPassword.addKeyListener(keyListener);
+		jpfPassword.addKeyListener(keyListener); 
 		jtfDirectory.addKeyListener(keyListener);
 		jtfFilenameSchema.addKeyListener(keyListener);
-		
-		// this key listener enables one-time feed or repetitive feed for ftp
-		jsIntervall.setEnabled(false);
-		jcbIntervallUnit.setEnabled(false);
-		jcbOneTimeChooser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (jcbOneTimeChooser.isSelected()) {
-					jsIntervall.setEnabled(true);
-					jcbIntervallUnit.setEnabled(true);
-				} else {
-					jsIntervall.setEnabled(false);
-					jcbIntervallUnit.setEnabled(false);
-				}
-			}
-		});
 		
 		GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 2, 1, 0, 0,
 				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
-		GridBagConstraints gbcInput = new GridBagConstraints(2, 0, 2, 1, 1, 0,
+		GridBagConstraints gbcInput = new GridBagConstraints(3, 0, 2, 1, 1, 0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
 		
@@ -196,27 +176,26 @@ public class Step1Panel extends JPanel {
 		gbcLabel.gridy = gbcInput.gridy = 2;
 		repetitiveFeed.add(jlPassword, gbcLabel);
 		repetitiveFeed.add(jpfPassword, gbcInput);
+		
 		gbcLabel.gridy = gbcInput.gridy = 3;
+		gbcLabel.gridwidth = 1;
+		repetitiveFeed.add(jlRegex, gbcLabel);
+		gbcLabel.gridwidth = 2;
+		gbcLabel.gridx = 1;
+		gbcLabel.anchor = GridBagConstraints.CENTER;
+		gbcLabel.fill = GridBagConstraints.NONE;
+		repetitiveFeed.add(jcbRegex, gbcLabel);
+		gbcLabel.gridx = 0;
+		gbcLabel.anchor = GridBagConstraints.WEST;
+		gbcLabel.fill = GridBagConstraints.BOTH;
+		repetitiveFeed.add(jlRegexDesc, gbcInput);
+		
+		gbcLabel.gridy = gbcInput.gridy = 4;
 		repetitiveFeed.add(jlDirectory, gbcLabel);
 		repetitiveFeed.add(jtfDirectory, gbcInput);
-		gbcLabel.gridy = gbcInput.gridy = 4;
+		gbcLabel.gridy = gbcInput.gridy = 5;
 		repetitiveFeed.add(jlFileSchema, gbcLabel);
 		repetitiveFeed.add(jtfFilenameSchema, gbcInput);
-		gbcLabel.gridwidth = 1;
-		gbcLabel.gridy = gbcInput.gridy = 5;
-		repetitiveFeed.add(jcbOneTimeChooser, gbcLabel);
-		gbcLabel.gridx = 1;
-		repetitiveFeed.add(jlIntervall, gbcLabel);
-		
-		GridBagConstraints gbcIndividual = new GridBagConstraints(2, 5, 1, 1, 0.7, 0,
-				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
-						2, 2, 2), 0, 0);
-		
-		repetitiveFeed.add(jsIntervall, gbcIndividual);
-		gbcIndividual.gridx = 3;
-		gbcIndividual.weightx = 0;
-		repetitiveFeed.add(jcbIntervallUnit, gbcIndividual);
-		jcbIntervallUnit.setSelectedIndex(2);
 
 		// feeding type chooser section
 		final JPanel cardPanel = new JPanel(new CardLayout());
@@ -246,17 +225,9 @@ public class Step1Panel extends JPanel {
 		
 		return csvPanel;
 	}
-
+	
 	public int getFeedingType() {
-		if (jcbChooseInputType.getSelectedIndex() == CSV_FILE) {
-			return CSV_FILE;
-		} else {
-			if (jcbOneTimeChooser.isSelected()) {
-				return FTP_FILE | REPETITIVE_FEED;
-			} else {
-				return FTP_FILE | ONE_TIME_FEED;
-			}
-		}
+		return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
 	}
 	
 	public String getUrl() {
@@ -287,6 +258,14 @@ public class Step1Panel extends JPanel {
 		jpfPassword.setText(password);
 	}
 	
+	public boolean getRegexStatus() {
+		return jcbRegex.isSelected();
+	}
+
+	public void setRegexStatus(boolean isSelected) {
+		jcbRegex.setSelected(isSelected);
+	}
+
 	public String getDirectory() {
 		return jtfDirectory.getText();
 	}
@@ -301,32 +280,6 @@ public class Step1Panel extends JPanel {
 	
 	public void setFilenameSchema(String filenameSchema) {
 		jtfFilenameSchema.setText(filenameSchema);
-	}
-	
-	public void setIntervallEnabled(boolean enabled) {
-		jcbOneTimeChooser.setSelected(enabled);
-	}
-	
-	public int getIntervallValue() {
-		return (Integer) jsIntervall.getValue();
-	}
-	
-	public void setIntervallValue(int intervallValue) {
-		jsIntervall.setValue(intervallValue);
-	}
-	
-	public String getIntervallUnit() {
-		return intervallUnits[jcbIntervallUnit.getSelectedIndex()];
-	}
-	
-	public void setIntervallUnit(String intervallUnit) {
-		for (int i = 0; i < intervallUnits.length; i++) {
-			if (intervallUnit != null && intervallUnit.equals(intervallUnits[i])) {
-				jcbIntervallUnit.setSelectedIndex(i);
-			} else {
-				jcbIntervallUnit.setSelectedIndex(2);
-			}
-		}
 	}
 	
 	public void setCSVFilePath(String filePath) {
