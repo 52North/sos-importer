@@ -94,6 +94,5 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 			cDoc.setPassword(stepModel.getPassword());
 			dF.setRefenceIsARegularExpression(stepModel.isRegex());
 		}
-		System.err.println(dF);
 	}
 }
