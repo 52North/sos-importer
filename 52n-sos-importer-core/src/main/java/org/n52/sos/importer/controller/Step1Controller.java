@@ -87,19 +87,21 @@ public class Step1Controller extends StepController {
 			} else {
 				BackNextController.getInstance().setNextButtonEnabled(true);
 			}
-			
-			// load data to ftp panel
-			step1Panel.setUrl(step1Model.getUrl());
-			step1Panel.setUser(step1Model.getUser());
-			step1Panel.setPassword(step1Model.getPassword());
-			step1Panel.setDirectory(step1Model.getDirectory());
-			step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
 		}
+		step1Panel.setFeedingType(step1Model.getFeedingType());
+		step1Panel.setCSVFilePath(step1Model.getCSVFilePath());
+		step1Panel.setUrl(step1Model.getUrl());
+		step1Panel.setUser(step1Model.getUser());
+		step1Panel.setPassword(step1Model.getPassword());
+		step1Panel.setDirectory(step1Model.getDirectory());
+		step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
+		step1Panel.setRegexStatus(step1Model.isRegex());
 	}
 	
 	@Override
 	public void saveSettings() {
 		if (step1Panel != null) {
+			step1Model.setFeedingType(step1Panel.getFeedingType());
 			step1Model.setCSVFilePath(step1Panel.getCSVFilePath());
 			step1Model.setUrl(step1Panel.getUrl());
 			step1Model.setUser(step1Panel.getUser());
@@ -248,6 +250,12 @@ public class Step1Controller extends StepController {
 				String csvFilePath = System.getProperty("user.home")
 						+ File.separator + ".SOSImporter" + File.separator + "tmp_"
 						+ step1Panel.getFilenameSchema();
+				
+				// if back button was used: delete old file
+				if (new File(csvFilePath).exists()) {
+					new File(csvFilePath).delete();
+				}
+				
 				try {
 					client.connect(step1Panel.getUrl());
 					boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
@@ -263,8 +271,10 @@ public class Step1Controller extends StepController {
 						}
 		                boolean logout = client.logout();
 		                if (logout) {
+		                	logger.info("Step1Controller: cannot logout!");
 		                }
 		            } else {
+		            	logger.info("Step1Controller: cannot login!");
 		            }
 					
 					File csv = new File(csvFilePath);
@@ -278,12 +288,14 @@ public class Step1Controller extends StepController {
 					
 					
 				} catch (SocketException e) {
+					System.err.println(e);
 					JOptionPane.showMessageDialog(null,
 						    "The file you specified cannot be obtained.",
 						    "Error",
 						    JOptionPane.ERROR_MESSAGE);
 					return false;
 				} catch (IOException e) {
+					System.err.println(e);
 					JOptionPane.showMessageDialog(null,
 						    "The file you specified cannot be obtained.",
 						    "Error",

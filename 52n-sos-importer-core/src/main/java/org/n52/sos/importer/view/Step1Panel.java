@@ -91,6 +91,7 @@ public class Step1Panel extends JPanel {
 	private final JCheckBox jcbRegex = new JCheckBox();
 	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
 	private final Step1Panel _this = this;
+	private final JPanel cardPanel = new JPanel(new CardLayout());
 	
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
 
@@ -198,7 +199,6 @@ public class Step1Panel extends JPanel {
 		repetitiveFeed.add(jtfFilenameSchema, gbcInput);
 
 		// feeding type chooser section
-		final JPanel cardPanel = new JPanel(new CardLayout());
 		cardPanel.add(oneTimeFeed, "onetime");
 		cardPanel.add(repetitiveFeed, "repetitive");
 		
@@ -230,12 +230,25 @@ public class Step1Panel extends JPanel {
 		return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
 	}
 	
+	public void setFeedingType(int feedingType) {
+		if (feedingType == CSV_FILE) {
+			((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
+			step1Controller.checkInputFileValue();
+			jcbChooseInputType.setSelectedIndex(0);
+		} else {
+			((CardLayout) cardPanel.getLayout()).show(cardPanel, "repetitive");
+			inputTyped();
+			jcbChooseInputType.setSelectedIndex(1);
+		}
+	}
+	
 	public String getUrl() {
 		return jtfUrl.getText();
 	}
 	
 	public void setUrl(String url) {
 		jtfUrl.setText(url);
+		inputTyped();
 	}
 	
 	public String getUser() {
@@ -244,6 +257,7 @@ public class Step1Panel extends JPanel {
 	
 	public void setUser(String user) {
 		jtfUser.setText(user);
+		inputTyped();
 	}
 	
 	public String getPassword() {
@@ -256,6 +270,7 @@ public class Step1Panel extends JPanel {
 	
 	public void setPassword(String password) {
 		jpfPassword.setText(password);
+		inputTyped();
 	}
 	
 	public boolean getRegexStatus() {
@@ -264,6 +279,7 @@ public class Step1Panel extends JPanel {
 
 	public void setRegexStatus(boolean isSelected) {
 		jcbRegex.setSelected(isSelected);
+		inputTyped();
 	}
 
 	public String getDirectory() {
@@ -271,7 +287,8 @@ public class Step1Panel extends JPanel {
 	}
 	
 	public void setDirectory(String directory) {
-		jtfUrl.setText(directory);
+		jtfDirectory.setText(directory);
+		inputTyped();
 	}
 	
 	public String getFilenameSchema() {
@@ -280,6 +297,7 @@ public class Step1Panel extends JPanel {
 	
 	public void setFilenameSchema(String filenameSchema) {
 		jtfFilenameSchema.setText(filenameSchema);
+		inputTyped();
 	}
 	
 	public void setCSVFilePath(String filePath) {

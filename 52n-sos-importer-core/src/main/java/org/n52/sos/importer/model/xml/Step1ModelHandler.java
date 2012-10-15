@@ -55,7 +55,11 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 			dF = sosImportConf.addNewDataFile();
 		}
 		
-		if ((stepModel.getFeedingType() & Step1Panel.CSV_FILE) == Step1Panel.CSV_FILE) {
+		if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
+			if (dF.getRemoteFile() != null) {
+				// TODO remove old
+				dF.setRemoteFile(null);
+			}
 			LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
 			String path = stepModel.getCSVFilePath();
 			if (path != null && !path.equals("")) {
@@ -66,23 +70,30 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 				throw new NullPointerException(msg);
 			}
 		} else {
-			// TODO apply to schema: remote directory
-			// TODO apply to schema: file schema
-			// TODO apply to schema: regular expression or not
+			if (dF.getLocalFile() != null) {
+				// TODO remove old
+				dF.setLocalFile(null);
+			}
 			RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
 			String url = stepModel.getUrl();
 			if (stepModel.getDirectory() != null) {
-				
+				if (url.charAt(url.length() - 1) != '/'
+						&& stepModel.getDirectory().charAt(0) != '/') {
+					url += '/';
+				}
+				url += stepModel.getDirectory();
+				if (url.charAt(url.length() - 1) != '/'
+						&& stepModel.getFilenameSchema().charAt(0) != '/') {
+					url += '/';
+				}
+				url += stepModel.getFilenameSchema();
 			}
-			if (url.charAt(url.length()-1) != '/' && stepModel.getDirectory().charAt(0) != '/') {
-				url += '/';
-			}
-			url += stepModel.getDirectory();
 			rF.setURL(stepModel.getUrl());
-			Credentials cDoc = rF.addNewCredentials();
+			Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
 			cDoc.setUserName(stepModel.getUser());
 			cDoc.setPassword(stepModel.getPassword());
 			dF.setRefenceIsARegularExpression(stepModel.isRegex());
 		}
+		System.err.println(dF);
 	}
 }
