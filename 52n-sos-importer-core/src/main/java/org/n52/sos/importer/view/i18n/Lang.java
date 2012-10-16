@@ -291,6 +291,14 @@ public abstract class Lang {
 	 */
 	public abstract String step();
 	/**
+	 * @return CSV Feed Type
+	 */
+	public abstract String step1FeedTypeCSV();
+	/**
+	 * @return FTP Feed type
+	 */
+	public abstract String step1FeedTypeFTP();
+	/**
 	 * @return Select
 	 */
 	public abstract String step1BrowseButton();
@@ -316,6 +324,34 @@ public abstract class Lang {
 	 * @return Change language
 	 */
 	public abstract String step1SelectLanguage();
+	/**
+	 * @return FTP Server
+	 */
+	public abstract String step1FtpServer();
+	/**
+	 * @return User (FTP Server authentification)
+	 */
+	public abstract String step1User();
+	/**
+	 * @return Password (FTP Server authentification)
+	 */
+	public abstract String step1Password();
+	/**
+	 * @return Regular Expression
+	 */
+	public abstract String step1Regex();
+	/**
+	 * @return Regular Expression Description
+	 */
+	public abstract String step1RegexDescription();
+	/**
+	 * @return Remote Directory
+	 */
+	public abstract String step1Directory();
+	/**
+	 * @return Remote File Schema
+	 */
+	public abstract String step1FileSchema();
 	/**
 	 * @return Column separator
 	 */
@@ -768,6 +804,13 @@ public abstract class Lang {
 	 */
 	public abstract String step8RegisterSensorLabel(int i);
 
+	/**
+	 * @param f The file which was used to save the XML model
+	 * @return The configuration could not be saved to file
+	 * 						<br />"<code>f</code>".
+	 */
+	public abstract String step8SaveModelFailed(File f);
+	
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @param excpetionText A short String describing the exception cause 

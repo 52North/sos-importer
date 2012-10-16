@@ -92,7 +92,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 			Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
 			cDoc.setUserName(stepModel.getUser());
 			cDoc.setPassword(stepModel.getPassword());
-			dF.setRefenceIsARegularExpression(stepModel.isRegex());
 		}
+		dF.setRefenceIsARegularExpression(stepModel.isRegex());
 	}
 }

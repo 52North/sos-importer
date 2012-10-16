@@ -203,7 +203,7 @@ public class Step8Panel extends JPanel {
 				try {
 					desktop.browse(s7M.getConfigFile().toURI());
 				} catch (IOException ioe) {
-					logger.error("Unable to open log file: " + ioe.getMessage());
+					logger.error("Unable to open configuration file: " + ioe.getMessage());
 				}
 			}
 		});

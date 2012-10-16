@@ -26,11 +26,14 @@ package org.n52.sos.importer.model.xml;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
+import org.n52.oxf.xmlbeans.parser.XMLBeansParser;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
@@ -161,10 +164,10 @@ public class Model {
 		if (logger.isTraceEnabled()) {
 			logger.trace("save(" + file!=null?file.getName():file + ")");
 		}
-		//
-		if (!sosImpConf.validate() &&
-				sosImpConf.getCsvMetadata() == null && 
-				sosImpConf.getDataFile() == null && 
+		// laxValidate or validate?
+		if (!laxValidate() ||
+				sosImpConf.getCsvMetadata() == null || 
+				sosImpConf.getDataFile() == null ||
 				sosImpConf.getSosMetadata() == null) {
 			return false;
 		}
@@ -307,14 +310,23 @@ public class Model {
 			logger.trace("validate()");
 		}
 		//
-		SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory
-				.newInstance();
+		SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
 		doc.setSosImportConfiguration(sosImpConf);
 		boolean modelValid = doc.validate();
 		if (!modelValid) {
 			logger.error("The model is not valid. Please update your values.");
 		}
 		return modelValid;
+	}
+	
+	public boolean laxValidate() {
+		SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
+		doc.setSosImportConfiguration(sosImpConf);
+		Collection<XmlError> exs = XMLBeansParser.validate(doc);
+		for (XmlError xmlError : exs) {
+			logger.error(xmlError);
+		}
+		return (exs.size() == 0)? true : false;
 	}
 
 	/*

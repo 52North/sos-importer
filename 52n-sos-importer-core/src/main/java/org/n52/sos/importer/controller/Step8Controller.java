@@ -92,6 +92,12 @@ public class Step8Controller extends StepController {
 				if (logger.isInfoEnabled()) {
 					logger.info("Configuration saved to file: " + step7Model.getConfigFile().getAbsolutePath());
 				}
+			} else {
+				logger.error("File could not be saved. See log file!");
+				JOptionPane.showMessageDialog(step8Panel, 
+						Lang.l().step8SaveModelFailed(step7Model.getConfigFile()), 
+						Lang.l().errorDialogTitle(), 
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IOException e) {
 			logger.error("Exception thrown: " + e.getMessage(), e);

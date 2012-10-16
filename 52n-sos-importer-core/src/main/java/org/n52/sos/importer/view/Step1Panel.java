@@ -50,9 +50,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -75,7 +74,7 @@ public class Step1Panel extends JPanel {
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 	
-	private final String[] feedingTypes = new String[]{"One-Time-Feed from a local CSV file", "One-Time-Feed / Repetitive Feed from a FTP-Server"};
+	private final String[] feedingTypes = new String[]{Lang.l().step1FeedTypeCSV(), Lang.l().step1FeedTypeFTP()};
 	
 	// separation of type cases
 	public static final int CSV_FILE = 0;
@@ -143,16 +142,13 @@ public class Step1Panel extends JPanel {
 		JPanel repetitiveFeed = new JPanel();
 		repetitiveFeed.setBorder(BorderFactory.createEtchedBorder());
 		repetitiveFeed.setLayout(new GridBagLayout());
-		JLabel jlUrl = new JLabel("FTP-Server:");
-		JLabel jlUser = new JLabel("Benutzer:");
-		JLabel jlPassword = new JLabel("Passwort:");
-		JLabel jlRegex = new JLabel("<html>Reguläre<br/>Ausdrücke:</html>");
-		JLabel jlRegexDesc = new JLabel("<html>Hinweis: Wählen Sie diese Option, um " +
-				"nachfolgend dynamische Ordner- oder/und Dateistrukturen zu beschreiben. " +
-				"Achten Sie dabei auf die Bedeutung spezieller Zeichen von regulären " +
-				"Ausdrücken, insbesonde Escape-Zeichen.</html>");
-		JLabel jlDirectory = new JLabel("Pfad:");
-		JLabel jlFileSchema = new JLabel("Dateinamen-Schema:");
+		JLabel jlUrl = new JLabel(Lang.l().step1FtpServer() + ":");
+		JLabel jlUser = new JLabel(Lang.l().step1User() + ":");
+		JLabel jlPassword = new JLabel(Lang.l().step1Password() + ":");
+		JLabel jlRegex = new JLabel(Lang.l().step1Regex() + ":");
+		JLabel jlRegexDesc = new JLabel(Lang.l().step1RegexDescription() + ":");
+		JLabel jlDirectory = new JLabel(Lang.l().step1Directory() + ":");
+		JLabel jlFileSchema = new JLabel(Lang.l().step1FileSchema() + ":");
 		
 		// this keylistener instantly checks whether the input data is sufficient
 		jtfUrl.addKeyListener(keyListener);

@@ -274,6 +274,13 @@ public class En extends Lang{
 		return "Space";
 	}
 
+	public String step1FeedTypeCSV() {
+		return "One-Time-Feed from a local CSV file";
+	}
+	
+	public String step1FeedTypeFTP() {
+		return "One-Time-Feed / Repetitive Feed from a FTP-Server";
+	}
 
 	public String step() { return "Step"; }
 
@@ -301,6 +308,38 @@ public class En extends Lang{
 
 	public String step1SelectLanguage() {
 		return "Change language";
+	}
+	
+	
+	public String step1FtpServer() {
+		return "FTP-Server";
+	}
+	
+	public String step1User() {
+		return "User";
+	}
+	
+	public String step1Password() {
+		return "Password";
+	}
+	
+	public String step1Regex() {
+		return "<html>Regular<br/>expressions:</html>";
+	}
+	
+	public String step1RegexDescription() {
+		return "<html>Note: Choose this option to describe dynamic folder and file "
+				+ "structures in the following lines. "
+				+ "Therefor be careful with special characters of regular expressions"
+				+ ", in front of all escape characters.</html>";
+	}
+	
+	public String step1Directory() {
+		return "Path";
+	}
+	
+	public String step1FileSchema() {
+		return "File-Schema";
 	}
 
 	public String step2ColumnSeparator() {
@@ -733,6 +772,12 @@ public class En extends Lang{
 
 	public String step8RegisterSensorLabel(int i) {
 		return "Register " + i + " " + this.sensor() + "(s)...";
+	}
+	
+	@Override
+	public String step8SaveModelFailed(File f) {
+		return "The configuration could not be saved to file\n\"" +
+				f.getAbsolutePath();
 	}
 
 	@Override

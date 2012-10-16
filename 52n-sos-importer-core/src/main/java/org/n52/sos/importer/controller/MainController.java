@@ -26,6 +26,8 @@ package org.n52.sos.importer.controller;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JFrame;
+
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.xml.Model;

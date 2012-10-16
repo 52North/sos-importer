@@ -267,6 +267,14 @@ public class De extends Lang{
 		return "Schritt";
 	}
 
+	public String step1FeedTypeCSV() {
+		return "Einmaliger Import aus einer CSV Datei";
+	}
+	
+	public String step1FeedTypeFTP() {
+		return "Einmaliger / Wiederholter Import aus einer Datei eines FTP-Servers";
+	}
+	
 	public String step1BrowseButton() {
 		return "Auswählen";
 	}
@@ -292,6 +300,37 @@ public class De extends Lang{
 	@Override
 	public String step1SelectLanguage() {
 		return "Sprachauswahl";
+	}
+	
+	public String step1FtpServer() {
+		return "FTP-Server";
+	}
+	
+	public String step1User() {
+		return "Benutzer";
+	}
+	
+	public String step1Password() {
+		return "Passwort";
+	}
+	
+	public String step1Regex() {
+		return "<html>Reguläre<br/>Ausdrücke:</html>";
+	}
+	
+	public String step1RegexDescription() {
+		return "<html>Hinweis: Wählen Sie diese Option, um "
+				+ "nachfolgend dynamische Ordner- oder/und Dateistrukturen zu beschreiben. "
+				+ "Achten Sie dabei auf die Bedeutung spezieller Zeichen von regulären "
+				+ "Ausdrücken, insbesonde Escape-Zeichen.</html>";
+	}
+	
+	public String step1Directory() {
+		return "Pfad";
+	}
+	
+	public String step1FileSchema() {
+		return "Dateinamen-Schema";
 	}
 
 	public String step2ColumnSeparator() {
@@ -726,6 +765,12 @@ public class De extends Lang{
 		return "Registriere " + i + " " + this.sensor() + "(en)...";
 	}
 
+	@Override
+	public String step8SaveModelFailed(File f) {
+		return "Die Konfiguration konnte nicht in der Datei\n\"" +
+				f.getAbsolutePath();
+	}
+	
 	@Override
 	public String step8SaveModelFailed(File f, String exceptionText) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +

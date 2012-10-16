@@ -33,6 +33,7 @@ import java.net.SocketException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -72,7 +73,7 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public void loadSettings() {	
-		if (step1Panel == null) {
+		//if (step1Panel == null) {
 			step1Panel = new Step1Panel(this);
 			
 			//disable "back" button
@@ -87,7 +88,7 @@ public class Step1Controller extends StepController {
 			} else {
 				BackNextController.getInstance().setNextButtonEnabled(true);
 			}
-		}
+		//}
 		step1Panel.setFeedingType(step1Model.getFeedingType());
 		step1Panel.setCSVFilePath(step1Model.getCSVFilePath());
 		step1Panel.setUrl(step1Model.getUrl());
