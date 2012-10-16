@@ -100,7 +100,7 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:length value="256"/>
+				<xs:maxLength value="256"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -214,7 +214,7 @@
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
-				<xs:length value="256"/>
+				<xs:maxLength value="256"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
