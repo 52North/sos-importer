@@ -76,19 +76,16 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 			}
 			RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
 			String url = stepModel.getUrl();
-			if (stepModel.getDirectory() != null) {
-				if (url.charAt(url.length() - 1) != '/'
-						&& stepModel.getDirectory().charAt(0) != '/') {
-					url += '/';
-				}
-				url += stepModel.getDirectory();
-				if (url.charAt(url.length() - 1) != '/'
-						&& stepModel.getFilenameSchema().charAt(0) != '/') {
-					url += '/';
-				}
-				url += stepModel.getFilenameSchema();
+			if (stepModel.getDirectory() != null && url.charAt(url.length() - 1) != '/'
+					&& stepModel.getDirectory().charAt(0) != '/') {
+				url += '/';
 			}
-			rF.setURL(stepModel.getUrl());
+			url += stepModel.getDirectory();
+			if (url.charAt(url.length() - 1) != '/' && stepModel.getFilenameSchema().charAt(0) != '/') {
+				url += '/';
+			}
+			url += stepModel.getFilenameSchema();
+			rF.setURL(url);
 			Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
 			cDoc.setUserName(stepModel.getUser());
 			cDoc.setPassword(stepModel.getPassword());
