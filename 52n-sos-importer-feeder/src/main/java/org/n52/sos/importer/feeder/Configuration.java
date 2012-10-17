@@ -178,6 +178,52 @@ public final class Configuration {
 		return configFile;
 	}
 
+	public boolean isRemoteFile() {
+		return importConf.getDataFile().getRemoteFile() != null;
+	}
+	
+	/**
+	 * Returns the host name of the ftp server.
+	 * 
+	 * @return ftp host
+	 */
+	public String getFtpHost() {
+		String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
+		return splitString[0];
+	}
+	
+	/**
+	 * Returns a string, that indicates the path of subdirectories, where the
+	 * ftp file is located.
+	 * 
+	 * @return subdirectory structure
+	 */
+	public String getFtpSubdirectory() {
+		String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
+		String result = "";
+		for (int i = 1; i < splitString.length-1; i++) {
+			result += splitString[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the name of the ftp file.
+	 * 
+	 * @return ftp file name
+	 */
+	public String getFtpFile() {
+		String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
+		return splitString[splitString.length-1];
+	}
+
+	public boolean isFtpUrlRegex() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("isSosUrlRegex()");
+		}
+		return importConf.getDataFile().getRefenceIsARegularExpression();
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -194,6 +240,14 @@ public final class Configuration {
 		return null;
 	}
 
+	public String getUser() {
+		return importConf.getDataFile().getRemoteFile().getCredentials().getUserName();
+	}
+	
+	public String getPassword() {
+		return importConf.getDataFile().getRemoteFile().getCredentials().getPassword();
+	}
+		
 	/**
 	 * The number of the first line with data. Line counting starts at 0.
 	 * @return
