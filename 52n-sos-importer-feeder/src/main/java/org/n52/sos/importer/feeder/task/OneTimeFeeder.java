@@ -25,11 +25,14 @@ package org.n52.sos.importer.feeder.task;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPHTTPClient;
@@ -159,9 +162,34 @@ public class OneTimeFeeder implements Runnable {
 			} else if (!sos.isTransactional()){
 				logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
 			} else {
+				String configurationName = (String) config.getFileName();
+//				if (config.isRemoteFile()) {
+//					configurationName = config.getFtpFile();
+//				} else {
+//					configurationName = config.getDataFile().getName();
+//				}
+				
+				String csvFileLineCounterPath = System.getProperty("user.home") + File.separator
+						+ ".SOSImporter" + File.separator + "tmp_" + configurationName + "_counter";
+				File counterFile = new File(csvFileLineCounterPath);
+				
+				// read already inserted line count
+				if (counterFile.exists()) {
+					Scanner sc = new Scanner(counterFile);
+					int count = sc.nextInt();
+					sos.setLastLine(count);
+				}
+				
 				// SOS is available and transactional
 				// start reading data file line by line starting from flwd
 				ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
+				
+				// override counter file
+				FileWriter counterFileWriter = new FileWriter(csvFileLineCounterPath);
+				PrintWriter out = new PrintWriter(counterFileWriter);
+				out.println(sos.getLastLine());
+				out.close();
+				
 				saveFailedInsertObservations(failedInserts);
 			}
 			} catch (MalformedURLException mue) {

@@ -86,6 +86,8 @@ public final class SensorObservationService {
 
 	private ArrayList<InsertObservation> failedInsertObservations;
 	
+	private int lastLine = 0;
+	
 	public SensorObservationService(URL sosUrl) throws ExceptionReport, OXFException {
 		if (logger.isTraceEnabled()) {
 			logger.trace(String.format("SensorObservationService(%s)", sosUrl));
@@ -148,18 +150,24 @@ public final class SensorObservationService {
 			logger.fatal("No measured value columns found in configuration");
 			return null;
 		}
+		// get the number of lines to skip (coming from already read lines)
+		int skipCount = lastLine;
 		// for each line
 		while ((values = cr.readNext()) != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
+			if (skipCount < 1) {
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
+				}
+				// A: collect all information
+				InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+				insertObservationsForOneLine(ios,values);
+				lineCounter++; // line counter overreads failed insert observations
+				if (logger.isDebugEnabled()) {
+					logger.debug(Feeder.heapSizeInformation());
+				}
+				lastLine++;
 			}
-			// A: collect all information
-			InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
-			insertObservationsForOneLine(ios,values);
-			lineCounter++;
-			if (logger.isDebugEnabled()) {
-				logger.debug(Feeder.heapSizeInformation());
-			}
+			skipCount--;
 		}
 		return failedInsertObservations;
 	}
@@ -592,6 +600,14 @@ public final class SensorObservationService {
 			}
 		}
 		return false;
+	}
+
+	public int getLastLine() {
+		return lastLine;
+	}
+
+	public void setLastLine(int lastLine) {
+		this.lastLine = lastLine;
 	}
 
 }

@@ -201,9 +201,17 @@ public final class Configuration {
 	public String getFtpSubdirectory() {
 		String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
 		String result = "";
-		for (int i = 1; i < splitString.length-1; i++) {
-			result += splitString[i];
+		// certain file
+		if (!isFtpUrlRegex()) {
+			for (int i = 1; i < splitString.length-1; i++) {
+				result += splitString[i];
+			}
+		} else
+		// regular expression
+		{
+			// TODO
 		}
+		
 		return result;
 	}
 
@@ -214,7 +222,17 @@ public final class Configuration {
 	 */
 	public String getFtpFile() {
 		String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
-		return splitString[splitString.length-1];
+		String result;
+		// certain file
+		if (!isFtpUrlRegex()) {
+			result = splitString[splitString.length-1];
+		} else
+		// regular expression
+		{
+			// TODO
+			result = null;
+		}
+		return result;
 	}
 
 	public boolean isFtpUrlRegex() {
