@@ -154,6 +154,10 @@ public final class SensorObservationService {
 		int skipCount = lastLine;
 		// for each line
 		while ((values = cr.readNext()) != null) {
+			/*
+			 * check if the decreasing skipcounter indicates, that all lines
+			 * marked for skipping are already skipped
+			 */
 			if (skipCount < 1) {
 				if (logger.isDebugEnabled()) {
 					logger.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
@@ -165,6 +169,12 @@ public final class SensorObservationService {
 				if (logger.isDebugEnabled()) {
 					logger.debug(Feeder.heapSizeInformation());
 				}
+				/*
+				 * The lastline counter initially was set to the last known
+				 * number of read lines. Reaching this part of code means, that
+				 * new lines will be read and thus the counter has to be
+				 * increased.
+				 */
 				lastLine++;
 			}
 			skipCount--;
