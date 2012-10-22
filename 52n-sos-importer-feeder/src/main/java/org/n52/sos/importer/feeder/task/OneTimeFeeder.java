@@ -60,10 +60,6 @@ public class OneTimeFeeder implements Runnable {
 
 	public OneTimeFeeder(Configuration config) {
 		this.config = config;
-		// csv / ftp
-		if (!(config.isRemoteFile() && (dataFile = getRemoteFile(config)) != null)) {
-			this.dataFile = new DataFile(config, config.getDataFile());
-		}
 	}
 	
 	public OneTimeFeeder(Configuration config, File datafile) {
@@ -124,10 +120,10 @@ public class OneTimeFeeder implements Runnable {
 			}
 
 		} catch (SocketException e) {
-			// "The file you specified cannot be obtained."
+			logger.fatal("The file you specified cannot be obtained.");
 			return null;
 		} catch (IOException e) {
-			// "The file you specified cannot be obtained."
+			logger.fatal("The file you specified cannot be obtained.");
 			return null;
 		}
 		
@@ -141,6 +137,15 @@ public class OneTimeFeeder implements Runnable {
 		}
 		if (logger.isInfoEnabled()) {
 			logger.info("Starting feeding data from file to SOS instance");
+		}
+		// csv / ftp
+		if (config.isRemoteFile()) {
+			dataFile = getRemoteFile(config);
+		} else {
+			dataFile = new DataFile(config, config.getDataFile());
+		}
+		if (dataFile == null) {
+			logger.fatal("No datafile was found!");
 		}
 		if (dataFile.isAvailable()) {
 			try {
