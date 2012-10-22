@@ -95,14 +95,12 @@ public class OneTimeFeeder implements Runnable {
 		}
 
 		// get first file
-		String directory = config.getFtpSubdirectory();
-		String fileName = config.getFtpFile();
-		String csvFilePath = System.getProperty("user.home") + File.separator
-				+ ".SOSImporter" + File.separator + "tmp_" + fileName;
+		String directory = config.getConfigFile().getAbsolutePath();
+		dataFile = createTempFile(directory + ".csv");
 
 		// if back button was used: delete old file
-		if (new File(csvFilePath).exists()) {
-			new File(csvFilePath).delete();
+		if (dataFile.exists()) {
+			dataFile.delete();
 		}
 
 		try {
@@ -110,20 +108,19 @@ public class OneTimeFeeder implements Runnable {
 			boolean login = client.login(config.getUser(), config.getPassword());
 			if (login) {
 				// download file
-				int result = client.cwd(directory);
+				int result = client.cwd(config.getFtpSubdirectory());
 				if (result == 250) { // successfully connected
-					dataFile = new File(csvFilePath);
 					FileOutputStream fos = new FileOutputStream(dataFile);
-					client.retrieveFile(fileName, fos);
+					client.retrieveFile(config.getFtpFile(), fos);
 					fos.flush();
 					fos.close();
 				}
 				boolean logout = client.logout();
-				if (logout) {
-					logger.info("Step1Controller: cannot logout!");
+				if (!logout) {
+					logger.info("Step1Controller: ftp - cannot logout!");
 				}
 			} else {
-				logger.info("Step1Controller: cannot login!");
+				logger.info("Step1Controller: ftp - cannot login!");
 			}
 
 		} catch (SocketException e) {
@@ -162,17 +159,15 @@ public class OneTimeFeeder implements Runnable {
 			} else if (!sos.isTransactional()){
 				logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
 			} else {
-				String configurationName = (String) config.getFileName();
-//				if (config.isRemoteFile()) {
-//					configurationName = config.getFtpFile();
-//				} else {
-//					configurationName = config.getDataFile().getName();
-//				}
-				
-				String csvFileLineCounterPath = System.getProperty("user.home") + File.separator
-						+ ".SOSImporter" + File.separator + "tmp_" + configurationName + "_counter";
-				File counterFile = new File(csvFileLineCounterPath);
-				
+				String directory = dataFile.getFileName();
+				File counterFile = null;
+				if (config.isRemoteFile()) {
+					counterFile = createTempFile(directory + "_counter");
+				} else {
+					counterFile = createTempFile(config.getConfigFile().getAbsolutePath()
+							 + "_counter");
+				}
+
 				// read already inserted line count
 				if (counterFile.exists()) {
 					Scanner sc = new Scanner(counterFile);
@@ -185,7 +180,7 @@ public class OneTimeFeeder implements Runnable {
 				ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
 				
 				// override counter file
-				FileWriter counterFileWriter = new FileWriter(csvFileLineCounterPath);
+				FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
 				PrintWriter out = new PrintWriter(counterFileWriter);
 				out.println(sos.getLastLine());
 				out.close();
@@ -224,6 +219,21 @@ public class OneTimeFeeder implements Runnable {
 		if (logger.isInfoEnabled()) {
 			logger.info("Feeding data to SOS instance finished.");
 		}
+	}
+	
+	/**
+	 * Creates a unique filename for the given path.
+	 * 
+	 * @return temporary file
+	 */
+	private File createTempFile(String fileName) {
+		String baseDir = System.getProperty("user.home") + File.separator
+				+ ".SOSImporter" + File.separator;
+		if (!new File(baseDir).exists()) {
+			new File(baseDir).mkdir();
+		}
+		String tempFile = fileName.replace(":", "").replace(File.separatorChar, '_');
+		return new File(baseDir + tempFile);
 	}
 	
 	/*
