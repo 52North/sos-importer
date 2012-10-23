@@ -178,6 +178,12 @@ public final class Configuration {
 		return configFile;
 	}
 
+	/**
+	 * Returns a truth value according to the presence of the remote file
+	 * element in the xml document.
+	 * 
+	 * @return true if it is a remote file
+	 */
 	public boolean isRemoteFile() {
 		return importConf.getDataFile().getRemoteFile() != null;
 	}

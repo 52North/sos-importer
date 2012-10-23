@@ -176,6 +176,10 @@ public final class SensorObservationService {
 				 * increased.
 				 */
 				lastLine++;
+			} else {
+				if (logger.isDebugEnabled()) {
+					logger.debug(String.format("\n\n\t\tSkip CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
+				}
 			}
 			skipCount--;
 		}
@@ -388,6 +392,10 @@ public final class SensorObservationService {
 
 	private InsertObservationParameterBuilder_v100 createParameterBuilderFromIO(
 			InsertObservation io) throws OXFException {
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("createParameterBuilderFromIO()");
+		}
 		
 		ObservationBuilder obsBuilder = null;
 		

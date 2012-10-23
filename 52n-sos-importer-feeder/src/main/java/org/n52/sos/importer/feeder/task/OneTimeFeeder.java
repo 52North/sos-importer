@@ -82,11 +82,13 @@ public class OneTimeFeeder implements Runnable {
 		String pUser = System.getProperty("http.proxyUser");
 		String pPassword = System.getProperty("http.proxyPassword");
 		if (pHost != null && pPort != -1) {
+			logger.info("Using proxy for FTP connection!");
 			if (pUser != null && pPassword != null) {
 				client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
 			}
 			client = new FTPHTTPClient(pHost, pPort);
 		} else {
+			logger.info("Using no proxy for FTP connection!");
 			client = new FTPClient();
 		}
 
@@ -103,20 +105,25 @@ public class OneTimeFeeder implements Runnable {
 			client.connect(config.getFtpHost());
 			boolean login = client.login(config.getUser(), config.getPassword());
 			if (login) {
+				logger.info("FTP: connected...");
 				// download file
 				int result = client.cwd(config.getFtpSubdirectory());
+				logger.info("FTP: go into directory...");
 				if (result == 250) { // successfully connected
 					FileOutputStream fos = new FileOutputStream(dataFile);
+					logger.info("FTP: download file...");
 					client.retrieveFile(config.getFtpFile(), fos);
 					fos.flush();
 					fos.close();
+				} else {
+					logger.info("FTP: cannot go to subdirectory!");
 				}
 				boolean logout = client.logout();
 				if (!logout) {
-					logger.info("Step1Controller: ftp - cannot logout!");
+					logger.info("FTP: cannot logout!");
 				}
 			} else {
-				logger.info("Step1Controller: ftp - cannot login!");
+				logger.info("FTP:  cannot login!");
 			}
 
 		} catch (SocketException e) {
@@ -164,6 +171,7 @@ public class OneTimeFeeder implements Runnable {
 			} else if (!sos.isTransactional()){
 				logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
 			} else {
+				logger.info("OneTimeFeeder: create counter path");
 				String directory = dataFile.getFileName();
 				File counterFile = null;
 				if (config.isRemoteFile()) {
@@ -175,6 +183,7 @@ public class OneTimeFeeder implements Runnable {
 
 				// read already inserted line count
 				if (counterFile.exists()) {
+					logger.info("OneTimeFeeder: get already read lines");
 					Scanner sc = new Scanner(counterFile);
 					int count = sc.nextInt();
 					sos.setLastLine(count);
@@ -184,6 +193,7 @@ public class OneTimeFeeder implements Runnable {
 				// start reading data file line by line starting from flwd
 				ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
 				
+				logger.info("OneTimeFeeder: save read lines count");
 				// override counter file
 				FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
 				PrintWriter out = new PrintWriter(counterFileWriter);
