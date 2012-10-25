@@ -242,7 +242,7 @@ public class Step1Panel extends JPanel {
 		String protocollCheck = "ftp://";
 		String result = jtfUrl.getText();
 		if (result.startsWith(protocollCheck)) {
-			return result.substring(6);
+			return result.substring(protocollCheck.length());
 		}
 		return result;
 	}
