@@ -50,6 +50,7 @@ import org.n52.sos.importer.feeder.model.requests.InsertObservation;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
+// TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
 public class OneTimeFeeder implements Runnable {
 
 	private Configuration config;
@@ -139,12 +140,8 @@ public class OneTimeFeeder implements Runnable {
 	
 	@Override
 	public void run() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("run()");
-		}
-		if (logger.isInfoEnabled()) {
-			logger.info("Starting feeding data from file to SOS instance");
-		}
+		logger.trace("run()");
+		logger.info("Starting feeding data from file to SOS instance");
 		// csv / ftp
 		if (config.isRemoteFile()) {
 			dataFile = getRemoteFile(config);
