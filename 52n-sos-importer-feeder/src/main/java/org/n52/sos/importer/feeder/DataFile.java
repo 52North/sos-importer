@@ -36,7 +36,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
-import org.n52.oxf.xml.XMLTools;
+import org.n52.oxf.xml.NcNameResolver;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Position;
@@ -245,7 +245,7 @@ public class DataFile {
 						p);
 			}
 		}
-		if (!XMLTools.isNCName(foi.getName())){
+		if (!NcNameResolver.isNCName(foi.getName())){
 			String[] a = createCleanNCName(foi); 
 			foi.setName(a[0]);
 			if (logger.isInfoEnabled()) {
@@ -268,7 +268,7 @@ public class DataFile {
 		char[] foiNameChars = name.toCharArray();
 		for (int i = 0; i < foiNameChars.length; i++) {
 			char c = foiNameChars[i];
-			if (!XMLTools.isNCNameChar(c)) {
+			if (!NcNameResolver.isNCNameChar(c)) {
 				foiNameChars[i] = Configuration.UNICODE_REPLACER;
 			}
 		}
@@ -569,7 +569,7 @@ public class DataFile {
 
 	public Offering getOffering(Sensor s) {
 		Offering off = c.getOffering(s);
-		if (!XMLTools.isNCName(off.getName())) {
+		if (!NcNameResolver.isNCName(off.getName())) {
 			String[] a = createCleanNCName(off); 
 			off.setName(a[0]);
 			if (logger.isInfoEnabled()) {
