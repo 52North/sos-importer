@@ -87,7 +87,7 @@
 		<maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
 		<oxf.version>2.0.0-SNAPSHOT</oxf.version>
 		<importer.xml.binding.version>0.2</importer.xml.binding.version>
-		<geotools.version>8.0</geotools.version>
+		<geotools.version>8.3</geotools.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -247,6 +247,10 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>geotools-new</id>
+			<url>http://repo.opengeo.org/</url>
 		</repository>
 	</repositories>
 	<profiles>
