@@ -681,7 +681,7 @@
 				<xs:element ref="DataFile"/>
 				<xs:element ref="SosMetadata"/>
 				<xs:element ref="CsvMetadata"/>
-				<xs:element ref="AdditionalMetadata"/>
+				<xs:element ref="AdditionalMetadata" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
