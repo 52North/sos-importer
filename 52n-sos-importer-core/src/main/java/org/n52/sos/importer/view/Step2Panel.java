@@ -297,9 +297,9 @@ public class Step2Panel extends JPanel {
 		}
 		try {
 			csvFileTextArea.getHighlighter().removeAllHighlights();
-			if (number > 0) {
-				int lineStart = csvFileTextArea.getLineStartOffset(0);
-				int lineEnd = csvFileTextArea.getLineEndOffset(number-1);
+			if (number >= 0) {
+				int lineStart = csvFileTextArea.getLineStartOffset(number);
+				int lineEnd = csvFileTextArea.getLineEndOffset(csvFileRowCount-1);
 				HighlightPainter painter = new DefaultHighlighter.
 						DefaultHighlightPainter(
 								Constants.DEFAULT_HIGHLIGHT_COLOR);
