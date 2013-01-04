@@ -291,14 +291,6 @@ public abstract class Lang {
 	 */
 	public abstract String step();
 	/**
-	 * @return CSV Feed Type
-	 */
-	public abstract String step1FeedTypeCSV();
-	/**
-	 * @return FTP Feed type
-	 */
-	public abstract String step1FeedTypeFTP();
-	/**
 	 * @return Select
 	 */
 	public abstract String step1BrowseButton();
@@ -307,9 +299,29 @@ public abstract class Lang {
 	 */
 	public abstract String step1Description();
 	/**
+	 * @return Remote Directory
+	 */
+	public abstract String step1Directory();
+	/**
+	 * @return CSV Feed Type
+	 */
+	public abstract String step1FeedTypeCSV();
+	/**
+	 * @return FTP Feed type
+	 */
+	public abstract String step1FeedTypeFTP();
+	/**
 	 * @return CSV File
 	 */
 	public abstract String step1File();
+	/**
+	 * @return Remote File Schema
+	 */
+	public abstract String step1FileSchema();
+	/**
+	 * @return FTP Server
+	 */
+	public abstract String step1FtpServer();
 	/**
 	 * 
 	 * @return Please select the CSV file
@@ -320,18 +332,6 @@ public abstract class Lang {
 	 * @return "Introduction"
 	 */
 	public abstract String step1Introduction();
-	/**
-	 * @return Change language
-	 */
-	public abstract String step1SelectLanguage();
-	/**
-	 * @return FTP Server
-	 */
-	public abstract String step1FtpServer();
-	/**
-	 * @return User (FTP Server authentification)
-	 */
-	public abstract String step1User();
 	/**
 	 * @return Password (FTP Server authentification)
 	 */
@@ -345,13 +345,13 @@ public abstract class Lang {
 	 */
 	public abstract String step1RegexDescription();
 	/**
-	 * @return Remote Directory
+	 * @return Change language
 	 */
-	public abstract String step1Directory();
+	public abstract String step1SelectLanguage();
 	/**
-	 * @return Remote File Schema
+	 * @return User (FTP Server authentification)
 	 */
-	public abstract String step1FileSchema();
+	public abstract String step1User();
 	/**
 	 * @return Column separator
 	 */
@@ -776,6 +776,11 @@ public abstract class Lang {
 	public abstract String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar);
 
 	/**
+	 * @return Could not find jar file here:\n\"expectedAbsolutePathToFeederJar\". Click YES to select it.
+	 */
+	public abstract String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar);
+
+	/**
 	 * @param i
 	 * @return Insert <code>i</code> Observations...
 	 */
@@ -803,14 +808,14 @@ public abstract class Lang {
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public abstract String step8RegisterSensorLabel(int i);
-
+	
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @return The configuration could not be saved to file
 	 * 						<br />"<code>f</code>".
 	 */
 	public abstract String step8SaveModelFailed(File f);
-	
+
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @param excpetionText A short String describing the exception cause 

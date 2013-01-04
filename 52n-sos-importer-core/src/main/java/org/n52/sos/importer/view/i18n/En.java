@@ -274,16 +274,8 @@ public class En extends Lang{
 		return "Space";
 	}
 
-	public String step1FeedTypeCSV() {
-		return "One-Time-Feed from a local CSV file";
-	}
-	
-	public String step1FeedTypeFTP() {
-		return "One-Time-Feed / Repetitive Feed from a FTP-Server";
-	}
-
 	public String step() { return "Step"; }
-
+	
 	public String step1BrowseButton() {
 		return "Select";
 	}
@@ -292,31 +284,39 @@ public class En extends Lang{
 		return this.step() + " 1: Choose CSV file";
 	}
 
+	public String step1Directory() {
+		return "Path";
+	}
+
+	public String step1FeedTypeCSV() {
+		return "One-Time-Feed from a local CSV file";
+	}
+
+	public String step1FeedTypeFTP() {
+		return "One-Time-Feed / Repetitive Feed from a FTP-Server";
+	}
+
 	public String step1File() {
 		return "CSV File";
 	}
 
-	@Override
-	public String step1InstructionLabel() {
-		return "Please select the CSV file";
+	public String step1FileSchema() {
+		return "File-Schema";
 	}
 
-	@Override
-	public String step1Introduction() {
-		return "Introduction";
-	}
-
-	public String step1SelectLanguage() {
-		return "Change language";
-	}
-	
-	
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
 	
-	public String step1User() {
-		return "User";
+	
+	@Override
+	public String step1InstructionLabel() {
+		return "Please select the CSV file";
+	}
+	
+	@Override
+	public String step1Introduction() {
+		return "Introduction";
 	}
 	
 	public String step1Password() {
@@ -334,12 +334,12 @@ public class En extends Lang{
 				+ ", in front of all escape characters.</html>";
 	}
 	
-	public String step1Directory() {
-		return "Path";
+	public String step1SelectLanguage() {
+		return "Change language";
 	}
 	
-	public String step1FileSchema() {
-		return "File-Schema";
+	public String step1User() {
+		return "User";
 	}
 
 	public String step2ColumnSeparator() {
@@ -751,6 +751,13 @@ public class En extends Lang{
 				expectedAbsolutePathToFeederJar);
 	}
 
+	@Override
+	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
+	{
+		return String.format("Could not find jar file here:\n\"%s\"\nPlease select YES for selecting the file manually.",
+				pathToDirectoryWithFeederJar);
+	}
+
 	public String step8InsertObservationLabel(int i) {
 		return "Insert " + i + " Observations...";
 	}
@@ -769,11 +776,11 @@ public class En extends Lang{
 	public String step8LogFileInstructions() {
 		return "To check for additional information, please take a look at the log file created during the process.";
 	}
-
+	
 	public String step8RegisterSensorLabel(int i) {
 		return "Register " + i + " " + this.sensor() + "(s)...";
 	}
-	
+
 	@Override
 	public String step8SaveModelFailed(File f) {
 		return "The configuration could not be saved to file\n\"" +

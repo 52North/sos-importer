@@ -31,10 +31,12 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
@@ -199,8 +201,27 @@ public class Step8Controller extends StepController {
 					return (name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar"));
 				}
 			});
-			if (files != null && files.length > 0) {
+			if (files != null && files.length > 0)
+			{
 				return files[0]; // returns the first matching feeder.jar
+			}
+			else {
+				int userChoice = JOptionPane.showConfirmDialog(step8Panel,
+						Lang.l().step8FeederJarNotFoundSelectByUser(pathToDirectoryWithFeederJar), 
+						Lang.l().errorDialogTitle(), JOptionPane.YES_NO_OPTION);
+				if (userChoice == JOptionPane.YES_OPTION)
+				{
+					JFileChooser chooser = new JFileChooser(pathToDirectoryWithFeederJar);
+				    FileNameExtensionFilter filter = new FileNameExtensionFilter("Java ARchives - *.jar","jar");
+				    chooser.setFileFilter(filter);
+				    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				    chooser.setMultiSelectionEnabled(false);
+				    int returnVal = chooser.showOpenDialog(step8Panel);
+				    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				       logger.debug(String.format("Choosen file: %s",chooser.getSelectedFile().getAbsolutePath()));
+				       return chooser.getSelectedFile().getAbsolutePath();
+				    }
+				}
 			}
 		}
 		return pathToDirectoryWithFeederJar;

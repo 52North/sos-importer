@@ -267,47 +267,46 @@ public class De extends Lang{
 		return "Schritt";
 	}
 
-	public String step1FeedTypeCSV() {
-		return "Einmaliger Import aus einer CSV Datei";
-	}
-	
-	public String step1FeedTypeFTP() {
-		return "Einmaliger / Wiederholter Import aus einer Datei eines FTP-Servers";
-	}
-	
 	public String step1BrowseButton() {
 		return "Auswählen";
 	}
-
+	
 	public String step1Description() {
 		return "Schritt 1: Wählen Sie die CSV-Datei aus";
+	}
+	
+	public String step1Directory() {
+		return "Pfad";
+	}
+
+	public String step1FeedTypeCSV() {
+		return "Einmaliger Import aus einer CSV Datei";
+	}
+
+	public String step1FeedTypeFTP() {
+		return "Einmaliger / Wiederholter Import aus einer Datei eines FTP-Servers";
 	}
 
 	public String step1File() {
 		return "CSV-Datei";
 	}
 
-	@Override
-	public String step1InstructionLabel() {
-		return "Bitte wählen Sie die CSV-Datei aus";
+	public String step1FileSchema() {
+		return "Dateinamen-Schema";
 	}
 
-	@Override
-	public String step1Introduction() {
-		return "Erklärung";
-	}
-
-	@Override
-	public String step1SelectLanguage() {
-		return "Sprachauswahl";
-	}
-	
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
 	
-	public String step1User() {
-		return "Benutzer";
+	@Override
+	public String step1InstructionLabel() {
+		return "Bitte wählen Sie die CSV-Datei aus";
+	}
+	
+	@Override
+	public String step1Introduction() {
+		return "Erklärung";
 	}
 	
 	public String step1Password() {
@@ -325,12 +324,13 @@ public class De extends Lang{
 				+ "Ausdrücken, insbesonde Escape-Zeichen.</html>";
 	}
 	
-	public String step1Directory() {
-		return "Pfad";
+	@Override
+	public String step1SelectLanguage() {
+		return "Sprachauswahl";
 	}
 	
-	public String step1FileSchema() {
-		return "Dateinamen-Schema";
+	public String step1User() {
+		return "Benutzer";
 	}
 
 	public String step2ColumnSeparator() {
@@ -743,6 +743,13 @@ public class De extends Lang{
 				expectedAbsolutePathToFeederJar);
 	}
 
+	@Override
+	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
+	{
+		return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n\"%s\".\nKlicken sie auf JA um die Datei auszuwählen!",
+				pathToDirectoryWithFeederJar);
+	}
+
 	public String step8InsertObservationLabel(int i) {
 		return "Füge " + i + " " + this.observation() + "en hinzu...";
 	}
@@ -764,13 +771,13 @@ public class De extends Lang{
 	public String step8RegisterSensorLabel(int i) {
 		return "Registriere " + i + " " + this.sensor() + "(en)...";
 	}
-
+	
 	@Override
 	public String step8SaveModelFailed(File f) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +
 				f.getAbsolutePath();
 	}
-	
+
 	@Override
 	public String step8SaveModelFailed(File f, String exceptionText) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +
