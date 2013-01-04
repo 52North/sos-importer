@@ -46,17 +46,17 @@ import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
 import org.n52.oxf.sos.adapter.SOSAdapter;
 import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
-import org.n52.oxf.sos.adapter.wrapper.builder.BooleanObservationBuilder;
-import org.n52.oxf.sos.adapter.wrapper.builder.TextObservationBuilder;
-import org.n52.oxf.sos.adapter.wrapper.builder.CountObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.InsertObservationParameterBuilder_v100;
-import org.n52.oxf.sos.adapter.wrapper.builder.MeasurementBuilder;
-import org.n52.oxf.sos.adapter.wrapper.builder.ObservationBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.ObservationTemplateBuilder;
-import org.n52.oxf.sos.adapter.wrapper.builder.RegisterSensorParameterBuilder_v100;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.oxf.sos.capabilities.ObservationOffering;
 import org.n52.oxf.sos.capabilities.SOSContents;
+import org.n52.oxf.sos.request.observation.BooleanObservationParameters;
+import org.n52.oxf.sos.request.observation.CountObservationParameters;
+import org.n52.oxf.sos.request.observation.MeasurementObservationParameters;
+import org.n52.oxf.sos.request.observation.ObservationParameters;
+import org.n52.oxf.sos.request.observation.TextObservationParameters;
+import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -397,31 +397,31 @@ public final class SensorObservationService {
 			logger.debug("createParameterBuilderFromIO()");
 		}
 		
-		ObservationBuilder obsBuilder = null;
+		ObservationParameters obsParameter = null;
 		
 		if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
 			// set text
-			obsBuilder = ObservationBuilder.createObservationForTypeText();
-			((TextObservationBuilder) obsBuilder).addObservationValue(io.getValue().toString());
+			obsParameter = new TextObservationParameters();
+			((TextObservationParameters) obsParameter).addObservationValue(io.getValue().toString());
 		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
 			// set count
-			obsBuilder = ObservationBuilder.createObservationForTypeCount();
-			((CountObservationBuilder) obsBuilder).addObservationValue((Integer) io.getValue());
+			obsParameter = new CountObservationParameters();
+			((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getValue());
 		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
 			// set boolean
-			obsBuilder = ObservationBuilder.createObservationForTypeBoolean();
-			((BooleanObservationBuilder) obsBuilder).addObservationValue((Boolean) io.getValue());
+			obsParameter = new BooleanObservationParameters();
+			((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getValue());
 		} else {
 			// set default value type
-			obsBuilder = ObservationBuilder.createObservationForTypeMeasurement();
-			((MeasurementBuilder) obsBuilder).addUom(io.getUnitOfMeasurementCode());
-			((MeasurementBuilder) obsBuilder).addObservationValue(io.getValue().toString());
+			obsParameter = new MeasurementObservationParameters();
+			((MeasurementObservationParameters) obsParameter).addUom(io.getUnitOfMeasurementCode());
+			((MeasurementObservationParameters) obsParameter).addObservationValue(io.getValue().toString());
 		}
-		obsBuilder.addObservedProperty(io.getObservedPropertyURI());
-		obsBuilder.addFoiId(io.getFeatureOfInterestName());
-		obsBuilder.addNewFoiName(io.getFeatureOfInterestURI());
-		obsBuilder.addFoiDescription(io.getFeatureOfInterestURI());
-		obsBuilder.addSrsPosition(Configuration.EPSG_CODE_PREFIX + io.getEpsgCode());
+		obsParameter.addObservedProperty(io.getObservedPropertyURI());
+		obsParameter.addFoiId(io.getFeatureOfInterestName());
+		obsParameter.addNewFoiName(io.getFeatureOfInterestURI());
+		obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
+		obsParameter.addSrsPosition(Configuration.EPSG_CODE_PREFIX + io.getEpsgCode());
 		// position
 		boolean eastingFirst = false;
 		if (Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode()) == null) {
@@ -436,20 +436,20 @@ public final class SensorObservationService {
 					String.format("%s %s",
 							io.getLatitudeValue(),
 							io.getLongitudeValue());
-		obsBuilder.addFoiPosition(pos);
-		obsBuilder.addObservedProperty(io.getObservedPropertyURI());
-		obsBuilder.addSamplingTime(io.getTimeStamp());
+		obsParameter.addFoiPosition(pos);
+		obsParameter.addObservedProperty(io.getObservedPropertyURI());
+		obsParameter.addSamplingTime(io.getTimeStamp());
 		
-		return new InsertObservationParameterBuilder_v100(io.getSensorURI(), obsBuilder);
+		return new InsertObservationParameterBuilder_v100(io.getSensorURI(), obsParameter);
 	}
 
 	private String registerSensor(RegisterSensor rs, String[] values) throws OXFException, XmlException, IOException {
 		if (logger.isTraceEnabled()) {
 			logger.trace("registerSensor()");
 		}
-		RegisterSensorParameterBuilder_v100 builder = createParameterBuilderFromRS(rs);
+		RegisterSensorParameters regSensorParameter = createParameterBuilderFromRS(rs);
 		try {
-			OperationResult opResult = sosWrapper.doRegisterSensor(builder);
+			OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
 			if(sosVersion.equals("1.0.0")){
 				RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 				if (logger.isDebugEnabled()) {
@@ -497,7 +497,7 @@ public final class SensorObservationService {
 		return null;
 	}
 
-	private RegisterSensorParameterBuilder_v100 createParameterBuilderFromRS(
+	private RegisterSensorParameters createParameterBuilderFromRS(
 			RegisterSensor registerSensor) throws OXFException, XmlException, IOException {
 		if (logger.isTraceEnabled()) {
 			logger.trace("createParameterContainterFromRS()");
@@ -521,8 +521,8 @@ public final class SensorObservationService {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode());
 		}
 		observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
-        
-		return new RegisterSensorParameterBuilder_v100(sensorMLDocument.toString(), observationTemplate.generateObservationTemplate());
+		
+		return new RegisterSensorParameters(sensorMLDocument.toString(), observationTemplate.generateObservationTemplate());
 	}
 
 	private SystemDocument createSML(RegisterSensor rs) throws XmlException, IOException {
