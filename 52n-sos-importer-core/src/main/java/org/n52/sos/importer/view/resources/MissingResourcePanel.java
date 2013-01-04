@@ -410,7 +410,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	@Override
 	public boolean checkValues() {
 		// manual or generate selected
-		if (generatedResJRB.isSelected()) {
+		if (generatedResJRB.isSelected())
+		{
 			/*
 			 * GENERATED
 			 * 
@@ -421,24 +422,23 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			Object[] selectedColumns = columnList.getSelectedValues();
 			String uriOrPrefix = uriOrPrefixTextField.getText();
 			String concatString = columnConcationationString.getText();
-			// if no user input was given
-			if (selectedColumns.length < 1 && 
-					(uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) &&
-					(concatString == null || concatString.equalsIgnoreCase(""))) {
+
+			if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString))
+			{
 				showNoInputAtAllDialog();
 				return false;
-			} else {
-				if (uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) {
-					showMissingInputDialog();
-					return false;
-				}
-				// check URI validity at least for the prefix
-				if(!isUriValid(uriOrPrefix)) {
-					return false;
-				}
+			} 
+			else if (validUserInput(selectedColumns, uriOrPrefix))
+			{
 				return true;
+			} 
+			else {
+				showMissingInputDialog();
+				return false;
 			}
-		} else if (manualResInputJRB.isSelected()) {
+		}
+		else if (manualResInputJRB.isSelected())
+		{
 			/*
 			 * MANUAL
 			 * 
@@ -463,6 +463,33 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			showNoInputAtAllDialog();
 			return false;
 		}
+	}
+
+	private boolean validUserInput(Object[] selectedColumns,
+			String uriOrPrefix)
+	{
+		return uriOrPrefix != null && 
+				!uriOrPrefix.isEmpty() && 
+				isUriValid(uriOrPrefix) && 
+				isAtLeastOneColumnSelected(selectedColumns);
+	}
+
+	private boolean noUserInputAtAll(Object[] selectedColumns,
+			String uriOrPrefix,
+			String concatString)
+	{
+		return selectedColumns.length < 1 && 
+				(uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) &&
+				(concatString == null || concatString.equalsIgnoreCase(""));
+	}
+
+	private boolean isAtLeastOneColumnSelected(Object[] selectedColumns)
+	{
+		if (selectedColumns != null && selectedColumns.length > 0)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isUriValid(String uri) {
