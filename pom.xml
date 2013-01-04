@@ -35,6 +35,11 @@
 			<organizationUrl>http://52north.org/</organizationUrl>
 		</developer>
 		<developer>
+            <name>Eric Fiedler</name>
+            <organization>52°North</organization>
+            <organizationUrl>http://52north.org/</organizationUrl>
+        </developer>
+		<developer>
 			<name>Raimund Schnürer</name>
 			<organization>IfGI - University of Muenster</organization>
 			<organizationUrl>http://ifgi.uni-muenster.de/</organizationUrl>
