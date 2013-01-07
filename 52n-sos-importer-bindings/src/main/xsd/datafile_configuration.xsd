@@ -628,7 +628,11 @@
 		<xs:complexType>
 			<xs:choice>
 				<xs:sequence>
-					<xs:element ref="Alt"/>
+					<xs:element ref="Alt" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Altitude element of a position. Presence depends on CRS.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 					<xs:element ref="EPSGCode"/>
 					<xs:element ref="Lat"/>
 					<xs:element ref="Long"/>

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.geotools.referencing.CRS;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
@@ -36,12 +37,16 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 import org.n52.sos.importer.view.position.MissingHeightPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
 import org.n52.sos.importer.view.position.MissingLongitudePanel;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * handles operations on Position objects
@@ -100,23 +105,84 @@ public class PositionController {
 	}
 
 	public List<MissingComponentPanel> getMissingComponentPanels() {		
-		if (!missingComponentPanels.isEmpty()) return missingComponentPanels;
-		
+		if (!missingComponentPanels.isEmpty())
+		{
+			return missingComponentPanels;
+		}
 		if (position.getLatitude() == null)
+		{
 			missingComponentPanels.add(new MissingLatitudePanel(position));
-		
-		if (position.getLongitude() == null) 
+		}
+		if (position.getLongitude() == null)
+		{
 			missingComponentPanels.add(new MissingLongitudePanel(position));
-		
-		if (position.getHeight() == null)
-			missingComponentPanels.add(new MissingHeightPanel(position));
-		
+		}
 		if (position.getEPSGCode() == null) 
+		{
 			missingComponentPanels.add(new MissingEPSGCodePanel(position));
+		}
+		if (position.getHeight() == null && shouldHeightPanelBeAddedForEPSG(position.getEPSGCode()))
+		{
+			missingComponentPanels.add(new MissingHeightPanel(position));
+		}
 		
 		return missingComponentPanels;
 	}	
 	
+	/**
+	 * @return returns <tt>true</tt>, if height is allowed, or we could not say:"it is not allowed" because of parsing errors...
+	 */
+	private boolean shouldHeightPanelBeAddedForEPSG(EPSGCode epsgCode)
+	{
+		if (epsgCode == null)
+		{
+			return true;
+		} 
+		else
+		{
+			// try to create gt-CRS from code and check for height axis
+			// 1 try to create CRS object
+			String epsgString = "EPSG:";
+			TableElement epsgCodeTableElem = epsgCode.getTableElement();
+			if (epsgCodeTableElem != null && epsgCodeTableElem instanceof Column)
+			{
+				int row = ((Column)epsgCodeTableElem).getFirstLineWithData();
+				int column = ((Column)epsgCodeTableElem).getNumber();
+				String cellValue = TableController.getInstance().getValueAt(row,column);
+				epsgString = epsgString.concat(cellValue);
+			}
+			else if (epsgCode.getValue() > 0)
+			{
+				epsgString = epsgString.concat(Integer.toString(epsgCode.getValue()));
+			}
+			try
+			{
+				logger.debug(String.format("Trying to decode CRS from EPSG string : \"%s\"", epsgString));
+				CoordinateReferenceSystem crs = CRS.decode(epsgString);
+				// 2 check for axis Z -> if present -> yes
+				logger.debug(String.format("CRS decoded to \"%s\" with %s dimensions.",crs.getName(),crs.getCoordinateSystem().getDimension()));
+				if (crs.getCoordinateSystem().getDimension() == 3)
+				{
+					return true;
+				}
+			}
+			// TODO what about user feedback?
+			catch (NoSuchAuthorityCodeException e)
+			{
+				logger.error(String.format("Exception thrown: %s",
+							e.getMessage()),
+						e);
+			} 
+			catch (FactoryException e)
+			{
+				logger.error(String.format("Exception thrown: %s",
+							e.getMessage()),
+						e);
+			}
+		}
+		return false;
+	}
+
 	public void setMissingComponents(List<Component> components) {
 		for (Component c: components) {
 			MissingComponentPanel mcp = c.getMissingComponentPanel(position);

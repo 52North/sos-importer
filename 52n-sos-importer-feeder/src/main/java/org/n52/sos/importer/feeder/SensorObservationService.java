@@ -556,10 +556,10 @@ public final class SensorObservationService {
 		// set position data
 		builder.setPosition("sensorPosition",
 				SensorDescriptionBuilder.EPSG_CODE_PREFIX + rs.getEpsgCode(),
-				"SYSTEM_LOCATION", rs.getLongitudeUnit(),
-				rs.getLongitudeValue(), rs.getLatitudeUnit(),
-				rs.getLatitudeValue(), rs.getAltitudeUnit(),
-				rs.getAltitudeValue());
+				"SYSTEM_LOCATION",
+				rs.getLongitudeUnit(), rs.getLongitudeValue(),
+				rs.getLatitudeUnit(), rs.getLatitudeValue(),
+				rs.getAltitudeUnit(), rs.getAltitudeValue());
 		
 		// add inputs
 		builder.addInput(rs.getObservedPropertyName(), rs.getObservedPropertyURI());

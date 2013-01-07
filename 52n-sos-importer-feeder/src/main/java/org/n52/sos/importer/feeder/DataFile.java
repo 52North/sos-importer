@@ -694,7 +694,7 @@ public class DataFile {
 		}
 		// Case A: Position is in configuration
 		if (!p.isSetGroup() && 
-				p.isSetAlt() && 
+				//p.isSetAlt() && 
 				p.isSetEPSGCode() && 
 				p.isSetLat() && 
 				p.isSetLong()) {
@@ -702,7 +702,7 @@ public class DataFile {
 		}
 		// Case B: Position is in data file (and configuration [missing values])
 		else if (p.isSetGroup() && 
-				!p.isSetAlt() && 
+				//!p.isSetAlt() && 
 				!p.isSetEPSGCode() && 
 				!p.isSetLat() && 
 				!p.isSetLong()) {
