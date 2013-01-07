@@ -273,6 +273,7 @@
 							<preparationGoals>clean</preparationGoals>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<tagBase>https://svn.52north.org/svn/swe/incubation/SOS-importer/tags</tagBase>
+							<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
 						</configuration>
 					</plugin>
 				</plugins>
