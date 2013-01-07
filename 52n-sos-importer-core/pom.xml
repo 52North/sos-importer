@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.n52.sensorweb</groupId>
 		<artifactId>52n-sos-importer</artifactId>
-		<version>0.3.0</version>
+		<version>0.4.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>52n-sos-importer-core</artifactId>
 	<name>Core Module</name>
