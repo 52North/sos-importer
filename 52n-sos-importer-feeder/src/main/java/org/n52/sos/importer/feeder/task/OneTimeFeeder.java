@@ -53,48 +53,48 @@ import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 // TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
 public class OneTimeFeeder implements Runnable {
 
-	private Configuration config;
+	private final Configuration config;
 
 	private DataFile dataFile;
 	
-	private static final Logger logger = Logger.getLogger(OneTimeFeeder.class);
+	private static final Logger LOG = Logger.getLogger(OneTimeFeeder.class);
 
-	public OneTimeFeeder(Configuration config) {
+	public OneTimeFeeder(final Configuration config) {
 		this.config = config;
 	}
 	
-	public OneTimeFeeder(Configuration config, File datafile) {
+	public OneTimeFeeder(final Configuration config, final File datafile) {
 		this.config = config;
-		this.dataFile = new DataFile(config, datafile);
+		dataFile = new DataFile(config, datafile);
 	}
 
-	private DataFile getRemoteFile(Configuration config) {
+	private DataFile getRemoteFile(final Configuration config) {
 		File dataFile = null;
 
 		// ftp client
 		FTPClient client;
 
 		// proxy
-		String pHost = System.getProperty("proxyHost", "proxy");
+		final String pHost = System.getProperty("proxyHost", "proxy");
 		int pPort = -1;
 		if (System.getProperty("proxyPort") != null) {
 			pPort = Integer.parseInt(System.getProperty("proxyPort"));
 		}
-		String pUser = System.getProperty("http.proxyUser");
-		String pPassword = System.getProperty("http.proxyPassword");
+		final String pUser = System.getProperty("http.proxyUser");
+		final String pPassword = System.getProperty("http.proxyPassword");
 		if (pHost != null && pPort != -1) {
-			logger.info("Using proxy for FTP connection!");
+			LOG.info("Using proxy for FTP connection!");
 			if (pUser != null && pPassword != null) {
 				client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
 			}
 			client = new FTPHTTPClient(pHost, pPort);
 		} else {
-			logger.info("Using no proxy for FTP connection!");
+			LOG.info("Using no proxy for FTP connection!");
 			client = new FTPClient();
 		}
 
 		// get first file
-		String directory = config.getConfigFile().getAbsolutePath();
+		final String directory = config.getConfigFile().getAbsolutePath();
 		dataFile = createTempFile(directory + ".csv");
 
 		// if back button was used: delete old file
@@ -104,34 +104,34 @@ public class OneTimeFeeder implements Runnable {
 
 		try {
 			client.connect(config.getFtpHost());
-			boolean login = client.login(config.getUser(), config.getPassword());
+			final boolean login = client.login(config.getUser(), config.getPassword());
 			if (login) {
-				logger.info("FTP: connected...");
+				LOG.info("FTP: connected...");
 				// download file
-				int result = client.cwd(config.getFtpSubdirectory());
-				logger.info("FTP: go into directory...");
+				final int result = client.cwd(config.getFtpSubdirectory());
+				LOG.info("FTP: go into directory...");
 				if (result == 250) { // successfully connected
-					FileOutputStream fos = new FileOutputStream(dataFile);
-					logger.info("FTP: download file...");
+					final FileOutputStream fos = new FileOutputStream(dataFile);
+					LOG.info("FTP: download file...");
 					client.retrieveFile(config.getFtpFile(), fos);
 					fos.flush();
 					fos.close();
 				} else {
-					logger.info("FTP: cannot go to subdirectory!");
+					LOG.info("FTP: cannot go to subdirectory!");
 				}
-				boolean logout = client.logout();
+				final boolean logout = client.logout();
 				if (!logout) {
-					logger.info("FTP: cannot logout!");
+					LOG.info("FTP: cannot logout!");
 				}
 			} else {
-				logger.info("FTP:  cannot login!");
+				LOG.info("FTP:  cannot login!");
 			}
 
-		} catch (SocketException e) {
-			logger.fatal("The file you specified cannot be obtained.");
+		} catch (final SocketException e) {
+			LOG.fatal("The file you specified cannot be obtained.");
 			return null;
-		} catch (IOException e) {
-			logger.fatal("The file you specified cannot be obtained.");
+		} catch (final IOException e) {
+			LOG.fatal("The file you specified cannot be obtained.");
 			return null;
 		}
 		
@@ -140,8 +140,8 @@ public class OneTimeFeeder implements Runnable {
 	
 	@Override
 	public void run() {
-		logger.trace("run()");
-		logger.info("Starting feeding data from file to SOS instance");
+		LOG.trace("run()");
+		LOG.info("Starting feeding data from file to SOS instance");
 		// csv / ftp
 		if (config.isRemoteFile()) {
 			dataFile = getRemoteFile(config);
@@ -149,102 +149,93 @@ public class OneTimeFeeder implements Runnable {
 			dataFile = new DataFile(config, config.getDataFile());
 		}
 		if (dataFile == null) {
-			logger.fatal("No datafile was found!");
+			LOG.fatal("No datafile was found!");
 		}
 		if (dataFile.isAvailable()) {
 			try {
-			// check SOS
-			URL sosURL = config.getSosUrl();
-			SensorObservationService sos = null;
+				// check SOS
+				final URL sosURL = config.getSosUrl();
+				SensorObservationService sos = null;
 				try {
 					sos = new SensorObservationService(sosURL);
-				} catch (ExceptionReport er) {
-					logger.fatal("SOS " + sosURL + " is not available. Please check the configuration!", er);
-				} catch (OXFException oxfe) {
-					logger.fatal("SOS " + sosURL + " is not available. Please check the configuration!", oxfe);
+				} catch (final ExceptionReport er) {
+					LOG.fatal("SOS " + sosURL + " is not available. Please check the configuration!", er);
+				} catch (final OXFException oxfe) {
+					LOG.fatal("SOS " + sosURL + " is not available. Please check the configuration!", oxfe);
 				}
-			if (sos == null || !sos.isAvailable()) {
-				logger.fatal(String.format("SOS \"%s\" is not available. Please check the configuration!", sosURL));
-			} else if (!sos.isTransactional()){
-				logger.fatal(String.format("SOS \"%s\" does not support required operations \"InsertObservation\" & \"RegisterSensor\"!", sosURL));
-			} else {
-				logger.info("OneTimeFeeder: create counter path");
-				String directory = dataFile.getFileName();
-				File counterFile = null;
-				if (config.isRemoteFile()) {
-					counterFile = createTempFile(directory + "_counter");
+				if (sos == null || !sos.isAvailable()) {
+					LOG.fatal(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
+				} else if (!sos.isTransactional()){
+					LOG.fatal(String.format("SOS '%s' does not support required transactional operations!", sosURL));
 				} else {
-					counterFile = createTempFile(config.getConfigFile().getAbsolutePath()
-							 + "_counter");
-				}
+					LOG.info("OneTimeFeeder: create counter file");
+					final String directory = dataFile.getFileName();
+					File counterFile = null;
+					if (config.isRemoteFile()) {
+						counterFile = createTempFile(directory + "_counter");
+					} else {
+						counterFile = createTempFile(config.getConfigFile().getAbsolutePath()
+								+ "_counter");
+					}
 
-				// read already inserted line count
-				if (counterFile.exists()) {
-					logger.info("OneTimeFeeder: get already read lines");
-					Scanner sc = new Scanner(counterFile);
-					int count = sc.nextInt();
-					sos.setLastLine(count);
+					// read already inserted line count
+					if (counterFile.exists()) {
+						LOG.info("OneTimeFeeder: get already read lines");
+						final Scanner sc = new Scanner(counterFile);
+						final int count = sc.nextInt();
+						sos.setLastLine(count);
+					}
+
+					// SOS is available and transactional
+					// start reading data file line by line starting from flwd
+					final ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
+
+					LOG.info("OneTimeFeeder: save read lines count");
+					// override counter file
+					final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
+					final PrintWriter out = new PrintWriter(counterFileWriter);
+					out.println(sos.getLastLine());
+					out.close();
+
+					saveFailedInsertObservations(failedInserts);
 				}
-				
-				// SOS is available and transactional
-				// start reading data file line by line starting from flwd
-				ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
-				
-				logger.info("OneTimeFeeder: save read lines count");
-				// override counter file
-				FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-				PrintWriter out = new PrintWriter(counterFileWriter);
-				out.println(sos.getLastLine());
-				out.close();
-				
-				saveFailedInsertObservations(failedInserts);
-			}
-			} catch (MalformedURLException mue) {
-				String errorMsg = 
+			} catch (final MalformedURLException mue) {
+				final String errorMsg = 
 						String.format("SOS URL syntax not correct in configuration file %s. Exception thrown: %s", 
 								config.getFileName(),
 								mue.getMessage());
-				logger.error(errorMsg);
-				if (logger.isDebugEnabled()) {
-					logger.debug("Exception Stack Trace:", mue);
-				}
-			} catch (IOException e) {
-				logger.error(String.format("Exception thrown: %s",
-						e.getMessage()));
-				if (logger.isDebugEnabled()) {
-					logger.debug("Exception Stack Trace:",e);
-				}
-			} catch (OXFException e) {
-				logger.error(String.format("Exception thrown: %s",
-						e.getMessage()));
-				if (logger.isDebugEnabled()) {
-					logger.debug("Exception Stack Trace:",e);
-				}
-			} catch (XmlException e) {
-				logger.error(String.format("Exception thrown: %s",
-						e.getMessage()));
-				if (logger.isDebugEnabled()) {
-					logger.debug("Exception Stack Trace:",e);
-				}
+				LOG.error(errorMsg);
+				LOG.debug("Exception Stack Trace:", mue);
+			} catch (final IOException e) {
+				log(e);
+			} catch (final OXFException e) {
+				log(e);
+			} catch (final XmlException e) {
+				log(e);
 			} 
 		}
-		if (logger.isInfoEnabled()) {
-			logger.info("Feeding data to SOS instance finished.");
-		}
+		LOG.info("Feeding data to SOS instance finished.");
 	}
-	
+
+	private void log(final Exception e)
+	{
+		LOG.error(String.format("Exception thrown: %s",
+				e.getMessage()));
+		LOG.debug("Exception Stack Trace:",e);
+	}
+
 	/**
 	 * Creates a unique filename for the given path.
 	 * 
 	 * @return temporary file
 	 */
-	private File createTempFile(String fileName) {
-		String baseDir = System.getProperty("user.home") + File.separator
+	private File createTempFile(final String fileName) {
+		final String baseDir = System.getProperty("user.home") + File.separator
 				+ ".SOSImporter" + File.separator;
 		if (!new File(baseDir).exists()) {
 			new File(baseDir).mkdir();
 		}
-		String tempFile = fileName.replace(":", "").replace(File.separatorChar, '_');
+		final String tempFile = fileName.replace(":", "").replace(File.separatorChar, '_');
 		return new File(baseDir + tempFile);
 	}
 	
@@ -253,11 +244,9 @@ public class OneTimeFeeder implements Runnable {
 	 * created configuration for this.
 	 */
 	private static void saveFailedInsertObservations(
-			ArrayList<InsertObservation> failedInserts) {
+			final ArrayList<InsertObservation> failedInserts) {
 		// TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace("saveFailedInsertObservations()");
-		}
+		LOG.trace("saveFailedInsertObservations() <-- NOT YET IMPLEMENTED");
 	}
 
 }

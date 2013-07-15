@@ -70,13 +70,13 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class DataFile {
 	
-	private static final Logger logger = Logger.getLogger(DataFile.class);
+	private static final Logger LOG = Logger.getLogger(DataFile.class);
 	
-	private Configuration c;
+	private final Configuration c;
 	
-	private File f;
+	private final File f;
 	
-	public DataFile(Configuration configuration, File file) {
+	public DataFile(final Configuration configuration, final File file) {
 		c = configuration;
 		f = file;
 	}
@@ -84,29 +84,25 @@ public class DataFile {
 	/**
 	 * Checks if the file is available and can be read. All errors like not 
 	 * available, not a file, and not readable are logged to 
-	 * <code>logger.error()</code>.
+	 * <code>LOG.error()</code>.
 	 * @return <code>true</code>, if the Datafile is a file and can be read,<br />
 	 * 			else <code>false</code>.
 	 */
 	public boolean isAvailable() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("isAvailable()");
-		}
+		LOG.trace("isAvailable()");
 		if (!f.exists()) {
-			logger.error(String.format("Data file \"%s\" specified in \"%s\" does not exist.",
+			LOG.error(String.format("Data file '%s' specified in '%s' does not exist.",
 					f.getAbsolutePath(),
 					c.getConfigFile().getAbsolutePath()));
 		} else if (!f.isFile()){
-			logger.error(String.format("Data file \"%s\" is not a file!",
+			LOG.error(String.format("Data file '%s' is not a file!",
 					f.getAbsolutePath()));
 		} else if (!f.canRead()) {
-			logger.error(String.format("Data file \"%s\" can not be accessed, please check file permissions!",
+			LOG.error(String.format("Data file '%s' can not be accessed, please check file permissions!",
 					f.getAbsolutePath()));
 		} else {
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Data file \"%s\" is a file and read permission is available.",
+			LOG.debug(String.format("Data file '%s' is a file and read permission is available.",
 						f.getAbsolutePath()));
-			}
 			return true;
 		}
 		return false;
@@ -119,16 +115,14 @@ public class DataFile {
 	 * @throws FileNotFoundException 
 	 */
 	public CSVReader getCSVReader() throws FileNotFoundException {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getCSVReader()");
-		}
-		FileReader fr = new FileReader(f);
-		BufferedReader br = new BufferedReader(fr);
-		int flwd = c.getFirstLineWithData();
-		char separator = c.getCsvSeparator(), 
+		LOG.trace("getCSVReader()");
+		final FileReader fr = new FileReader(f);
+		final BufferedReader br = new BufferedReader(fr);
+		final int flwd = c.getFirstLineWithData();
+		final char separator = c.getCsvSeparator(), 
 				quotechar = c.getCsvQuoteChar(),
 				escape = c.getCsvEscape();
-		CSVReader cr = new CSVReader(br, separator, quotechar, escape, flwd);
+		final CSVReader cr = new CSVReader(br, separator, quotechar, escape, flwd);
 		return cr;
 	}
 
@@ -152,19 +146,15 @@ public class DataFile {
 	 * @param values
 	 * @return
 	 */
-	public Sensor getSensorForColumn(int mvColumnId, String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getSensorForColumn(%d,%s)",
-					mvColumnId,
-					Arrays.toString(values)));
-		}
+	public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
+		LOG.trace(String.format("getSensorForColumn(%d,%s)",
+				mvColumnId,
+				Arrays.toString(values)));
 		// check for sensor column and return new sensor
 		Sensor s = getSensorFromColumn(mvColumnId,values);
 		if (s == null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Could not find sensor column for column id %d",
-						mvColumnId));
-			}
+			LOG.debug(String.format("Could not find sensor column for column id %d",
+					mvColumnId));
 		} else {
 			return s;
 		}
@@ -177,8 +167,8 @@ public class DataFile {
 		if (sT != null && sT.getResource() != null) {
 			// generated sensor
 			if (sT.getResource() instanceof GeneratedResourceType) {
-				GeneratedResourceType gRT = (GeneratedResourceType) sT.getResource();
-				String[] a = getUriAndNameFromGeneratedResourceType(
+				final GeneratedResourceType gRT = (GeneratedResourceType) sT.getResource();
+				final String[] a = getUriAndNameFromGeneratedResourceType(
 						gRT.isSetConcatString()?gRT.getConcatString():null, // concatstring
 						gRT.isSetURI()?gRT.getURI().getStringValue():null, // uri
 						gRT.isSetURI()&&gRT.getURI().isSetUseAsPrefix()?gRT.getURI().getUseAsPrefix():false, // useUriAsPrefix
@@ -188,7 +178,7 @@ public class DataFile {
 				s = new Sensor(a[0],a[1]);
 			} else if (sT.getResource() instanceof ManualResourceType) {
 				// manual sensor
-				ManualResourceType mRT = (ManualResourceType) sT.getResource();
+				final ManualResourceType mRT = (ManualResourceType) sT.getResource();
 				s = new Sensor(mRT.getName(),
 						mRT.getURI().getStringValue());
 			}
@@ -203,56 +193,49 @@ public class DataFile {
 	 * @return
 	 * @throws ParseException 
 	 */
-	public FeatureOfInterest getFoiForColumn(int mvColumnId, String[] values) throws ParseException {
-		// TODO Auto-generated method stub generated on 13.06.2012 around 11:03:25 by eike
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getFoiForColumn(%d,%s)",
+	public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
+		LOG.trace(String.format("getFoiForColumn(%d,%s)",
 					mvColumnId,
 					Arrays.toString(values)));
-		}
 		// check for foi column and return new sensor
 		FeatureOfInterest foi = getFoiColumn(mvColumnId,values);
 		if (foi == null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Could not find foi column for column id %d",
-						mvColumnId));
-			}
+			LOG.debug(String.format("Could not find foi column for column id %d",
+					mvColumnId));
 		} else {
 			return foi;
 		}
 		// else build foi from manual or generated resource 
-		FeatureOfInterestType foiT = c.getRelatedFoi(mvColumnId);
+		final FeatureOfInterestType foiT = c.getRelatedFoi(mvColumnId);
 		if (foiT != null && foiT.getResource() != null) {
 			// generated sensor
 			if (foiT.getResource() instanceof GeneratedSpatialResourceType) {
-				GeneratedSpatialResourceType gSRT = 
+				final GeneratedSpatialResourceType gSRT = 
 						(GeneratedSpatialResourceType) foiT.getResource();
-				String[] a = getUriAndNameFromGeneratedResourceType(
+				final String[] a = getUriAndNameFromGeneratedResourceType(
 						gSRT.isSetConcatString()?gSRT.getConcatString():null, // concatstring
 								gSRT.isSetURI()?gSRT.getURI().getStringValue():null, // uri
 										gSRT.isSetURI()&&gSRT.getURI().isSetUseAsPrefix()?gSRT.getURI().getUseAsPrefix():false, // useUriAsPrefix
 												gSRT.getNumberArray(),
 												values
 						);
-				Position p = getPosition(gSRT.getPosition(),values);
+				final Position p = getPosition(gSRT.getPosition(),values);
 				foi = new FeatureOfInterest(a[0],a[1],p);
 			} else if (foiT.getResource() instanceof SpatialResourceType) {
 				// manual sensor
-				SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
-				Position p = getPosition(mSRT.getPosition(),values);
+				final SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
+				final Position p = getPosition(mSRT.getPosition(),values);
 				foi = new FeatureOfInterest(mSRT.getName(),
 						mSRT.getURI().getStringValue(),
 						p);
 			}
 		}
 		if (!NcNameResolver.isNCName(foi.getName())){
-			String[] a = createCleanNCName(foi); 
+			final String[] a = createCleanNCName(foi); 
 			foi.setName(a[0]);
-			if (logger.isInfoEnabled()) {
-				logger.info(String.format("Feature Of Interest name changed to match NCName production: \"%s\" to \"%s\"", 
-						a[1],
-						a[0]));
-			}
+			LOG.info(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'", 
+					a[1],
+					a[0]));
 		}
 		return foi; 
 	}
@@ -260,26 +243,26 @@ public class DataFile {
 	/**
 	 * @return result[0] := newName<br /> result[1] := originaleName
 	 */
-	private String[] createCleanNCName(Resource res) {
+	private String[] createCleanNCName(final Resource res) {
 		// implement check for NCName compliance and remove bad values
 		String name = res.getName();
-		String origName = new String(name);
+		final String origName = new String(name);
 		// clean rest of string using Constants.UNICODE_REPLACER
-		char[] foiNameChars = name.toCharArray();
+		final char[] foiNameChars = name.toCharArray();
 		for (int i = 0; i < foiNameChars.length; i++) {
-			char c = foiNameChars[i];
+			final char c = foiNameChars[i];
 			if (!NcNameResolver.isNCNameChar(c)) {
 				foiNameChars[i] = Configuration.UNICODE_REPLACER;
 			}
 		}
 		name = String.valueOf(foiNameChars);
 		// check if name is only containing "_"
-		Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
+		final Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
 		if (matcher.matches()) {
 			// if yes -> change to "className" + res.getUri().hashCode()
 			name = res.getClass().getSimpleName().toLowerCase() + res.getUri().hashCode();
 		}
-		String[] result = { name, origName };
+		final String[] result = { name, origName };
 		return result;
 	}
 
@@ -289,15 +272,13 @@ public class DataFile {
 	 * @param values
 	 * @return
 	 */
-	public Object getValue(int mVColumn, String[] values) throws ParseException {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getValue(%s,%s)",
-					mVColumn,
-					Arrays.toString(values)));
-		}
-		Column column = c.getColumnById(mVColumn);
+	public Object getValue(final int mVColumn, final String[] values) throws ParseException {
+		LOG.trace(String.format("getValue(%s,%s)",
+				mVColumn,
+				Arrays.toString(values)));
+		final Column column = c.getColumnById(mVColumn);
 		String value = values[mVColumn];
-		for (Metadata m : column.getMetadataArray()) {
+		for (final Metadata m : column.getMetadataArray()) {
 			if (m.getKey().equals(Key.TYPE)) {
 				// check various types of observation
 				// TEXT
@@ -340,29 +321,27 @@ public class DataFile {
 	 * @return
 	 * @throws ParseException 
 	 */
-	public Timestamp getTimeStamp(int mVColumn, String[] values) throws ParseException {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getTimeStamp()");
-		}
+	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
+		LOG.trace("getTimeStamp()");
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
-		Column col = c.getColumnById(mVColumn);
+		final Column col = c.getColumnById(mVColumn);
 		String group = null;
 		if (col.isSetRelatedDateTimeGroup()) {
 			group = col.getRelatedDateTimeGroup();
 		}
 		// else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
 		group = c.getFirstDateTimeGroup();
-		Column[] cols = c.getAllColumnsForGroup(group, Type.DATE_TIME);
+		final Column[] cols = c.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
 			// get value from each column
 			Timestamp ts = new Timestamp();
-			for (Column column : cols) {
+			for (final Column column : cols) {
 				// get pattern and fields
-				String pattern = getParsePattern(column);
-				int[] fields = getGregorianCalendarFields(pattern);
-				for (int field : fields) {
+				final String pattern = getParsePattern(column);
+				final int[] fields = getGregorianCalendarFields(pattern);
+				for (final int field : fields) {
 					// parse values
-					short value = 
+					final short value = 
 							parseTimestampComponent(values[column.getNumber()],
 									pattern,
 									field);
@@ -428,35 +407,33 @@ public class DataFile {
 	 * @return
 	 * 			
 	 */
-	public UnitOfMeasurement getUnitOfMeasurement(int mVColumnId, String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getUnitOfMeasurement()");
-		}
-		Column mvColumn = c.getColumnById(mVColumnId);
+	public UnitOfMeasurement getUnitOfMeasurement(final int mVColumnId, final String[] values) {
+		LOG.trace("getUnitOfMeasurement()");
+		final Column mvColumn = c.getColumnById(mVColumnId);
 		
 		// Case A*
 		if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
 				mvColumn.getRelatedUnitOfMeasurementArray().length > 0) {
-			RelatedUnitOfMeasurement relUom = 
+			final RelatedUnitOfMeasurement relUom = 
 					mvColumn.getRelatedUnitOfMeasurementArray(0);
 		
 			// Case A.1.*: idRef
 			if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
-				UnitOfMeasurementType uom = c.getUomById(relUom.getIdRef());
+				final UnitOfMeasurementType uom = c.getUomById(relUom.getIdRef());
 				if (uom != null) {
 			
 					// Case A.1.1
 					if (uom.getResource() instanceof ManualResourceType) {
-						ManualResourceType uomMRT =
+						final ManualResourceType uomMRT =
 								(ManualResourceType) uom.getResource();
 						return new UnitOfMeasurement(uomMRT.getName(), uomMRT.getURI().getStringValue());
 					}
 					
 					// Case A.1.2
 					if (uom.getResource() instanceof GeneratedResourceType) {
-						GeneratedResourceType uomGRT =
+						final GeneratedResourceType uomGRT =
 								(GeneratedResourceType) uom.getResource();
-						String[] a = getUriAndNameFromGeneratedResourceType(
+						final String[] a = getUriAndNameFromGeneratedResourceType(
 								uomGRT.isSetConcatString()?
 										uomGRT.getConcatString():"",
 								"",
@@ -475,7 +452,7 @@ public class DataFile {
 		}
 		
 		// Case B: Information stored in another column
-		int uomColumnId = c.getColumnIdForUom(mVColumnId);
+		final int uomColumnId = c.getColumnIdForUom(mVColumnId);
 		if (uomColumnId > -1) {
 			return new UnitOfMeasurement(values[uomColumnId],values[uomColumnId]);
 		}
@@ -510,26 +487,24 @@ public class DataFile {
 	 * @return
 	 * 			
 	 */
-	public ObservedProperty getObservedProperty(int mVColumnId, String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getObservedProperty()");
-		}
-		Column mvColumn = c.getColumnById(mVColumnId);
+	public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
+		LOG.trace("getObservedProperty()");
+		final Column mvColumn = c.getColumnById(mVColumnId);
 		
 		// Case A*
 		if (mvColumn.getRelatedObservedPropertyArray() != null &&
 				mvColumn.getRelatedObservedPropertyArray().length > 0) {
-			RelatedObservedProperty relOp = 
+			final RelatedObservedProperty relOp = 
 					mvColumn.getRelatedObservedPropertyArray(0);
 		
 			// Case A.1.*: idRef
 			if (relOp.isSetIdRef() && !relOp.isSetNumber()) {
-				ObservedPropertyType op = c.getObsPropById(relOp.getIdRef());
+				final ObservedPropertyType op = c.getObsPropById(relOp.getIdRef());
 				if (op != null) {
 			
 					// Case A.1.1
 					if (op.getResource() instanceof ManualResourceType) {
-						ManualResourceType opMRT =
+						final ManualResourceType opMRT =
 								(ManualResourceType) op.getResource();
 						return new ObservedProperty(opMRT.getName(),opMRT.getURI().getStringValue());
 								
@@ -537,9 +512,9 @@ public class DataFile {
 					
 					// Case A.1.2
 					if (op.getResource() instanceof GeneratedResourceType) {
-						GeneratedResourceType opGRT =
+						final GeneratedResourceType opGRT =
 								(GeneratedResourceType) op.getResource();
-						String[] a = getUriAndNameFromGeneratedResourceType(
+						final String[] a = getUriAndNameFromGeneratedResourceType(
 								opGRT.isSetConcatString()?
 										opGRT.getConcatString():"",
 								opGRT.getURI().getStringValue(),
@@ -558,7 +533,7 @@ public class DataFile {
 		}
 		
 		// Case B: Information stored in another column
-		int opColumnId = c.getColumnIdForOpsProp(mVColumnId);
+		final int opColumnId = c.getColumnIdForOpsProp(mVColumnId);
 		if (opColumnId > -1) {
 			return new ObservedProperty(values[opColumnId],values[opColumnId]);
 		}
@@ -567,16 +542,14 @@ public class DataFile {
 		return null;
 	}
 
-	public Offering getOffering(Sensor s) {
-		Offering off = c.getOffering(s);
+	public Offering getOffering(final Sensor s) {
+		final Offering off = c.getOffering(s);
 		if (!NcNameResolver.isNCName(off.getName())) {
-			String[] a = createCleanNCName(off); 
+			final String[] a = createCleanNCName(off); 
 			off.setName(a[0]);
-			if (logger.isInfoEnabled()) {
-				logger.info(String.format("Offering name changed to match NCName production: \"%s\" to \"%s\"", 
-						a[1],
-						a[0]));
-			}
+			LOG.info(String.format("Offering name changed to match NCName production: '%s' to '%s'", 
+					a[1],
+					a[0]));
 		}
 		return off;
 	}
@@ -601,17 +574,15 @@ public class DataFile {
 	 */
 	private String[] getUriAndNameFromGeneratedResourceType(String concatString,
 			String uri,
-			boolean useUriAsPrefixAfterNameAsUri,
-			int[] columnIds,
-			String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getValuesFromResourceType(%s,%s,%b,%s,%s)",
-					concatString,
-					uri,
-					useUriAsPrefixAfterNameAsUri,
-					Arrays.toString(columnIds),
-					Arrays.toString(values)));
-		}
+			final boolean useUriAsPrefixAfterNameAsUri,
+			final int[] columnIds,
+			final String[] values) {
+		LOG.trace(String.format("getValuesFromResourceType(%s,%s,%b,%s,%s)",
+				concatString,
+				uri,
+				useUriAsPrefixAfterNameAsUri,
+				Arrays.toString(columnIds),
+				Arrays.toString(values)));
 		String name = "";
 		// first the name
 		if (concatString == null) {
@@ -623,75 +594,59 @@ public class DataFile {
 			} else {
 				name = values[columnIds[i]];
 			}
-			if (logger.isTraceEnabled()) {
-				logger.trace(String.format("name: %s", name));
-			}
+			LOG.trace(String.format("name: %s", name));
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("name: %s", name));
-		}
+		LOG.debug(String.format("name: %s", name));
 		// than the uri
 		if (uri != null && useUriAsPrefixAfterNameAsUri) {
 			uri = uri + name;
 		} else {
 			uri = name;
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("uri: %s", uri));
-		}
-		String[] result = {name,uri};
+		LOG.debug(String.format("uri: %s", uri));
+		final String[] result = {name,uri};
 		return result;
 	}
 
-	private Sensor getSensorFromColumn(int mvColumnId, String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getSensorColumn(%d,%s)",
+	private Sensor getSensorFromColumn(final int mvColumnId, final String[] values) {
+		LOG.trace(String.format("getSensorColumn(%d,%s)",
 			mvColumnId,
 			Arrays.toString(values)));
-		}
-		int i = c.getColumnIdForSensor(mvColumnId);
+		final int i = c.getColumnIdForSensor(mvColumnId);
 		if (i < 0) {
 			// sensor is not in the data file -> return null
 			return null;
 		} else {
-			Sensor s = new Sensor(values[i],values[i]);
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Sensor found in datafile: %s", s));
-			}
+			final Sensor s = new Sensor(values[i],values[i]);
+			LOG.debug(String.format("Sensor found in datafile: %s", s));
 			return s;
 		}
 	}
 	
-	private FeatureOfInterest getFoiColumn(int mvColumnId, String[] values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getFoiColumn(%d,%s)",
+	private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) {
+		LOG.trace(String.format("getFoiColumn(%d,%s)",
 					mvColumnId,
 					Arrays.toString(values)));
-		}
-		int i = c.getColumnIdForFoi(mvColumnId);
+		final int i = c.getColumnIdForFoi(mvColumnId);
 		if (i < 0) {
 			// foi is not in the data file -> return null
 			return null;
 		} else {
-			Position p = c.getFoiPosition(values[i]);
-			FeatureOfInterest s = new FeatureOfInterest(values[i],
+			final Position p = c.getFoiPosition(values[i]);
+			final FeatureOfInterest s = new FeatureOfInterest(values[i],
 					values[i],
 					p);
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Feature of Interst found in datafile: %s", s));
-			}
+			LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
 			return s;
 		}
 	}
 
 	private Position getPosition(
-			org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p,
-			String[] values) throws ParseException {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getPosition(%s,%s)",
+			final org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p,
+			final String[] values) throws ParseException {
+		LOG.trace(String.format("getPosition(%s,%s)",
 					p.xmlText(),
 					Arrays.toString(values)));
-		}
 		// Case A: Position is in configuration
 		if (!p.isSetGroup() && 
 				//p.isSetAlt() && 
@@ -711,32 +666,28 @@ public class DataFile {
 		return null;
 	}
 
-	private short parseTimestampComponent(String timestampPart,
-			String pattern,
-			int field) throws ParseException {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("parseTimestampComponent(%s,%s,%d)",
+	private short parseTimestampComponent(final String timestampPart,
+			final String pattern,
+			final int field) throws ParseException {
+		LOG.trace(String.format("parseTimestampComponent(%s,%s,%d)",
 					timestampPart,
 					pattern,
 					field));
-		}
 		Date date = null;
-		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		
 		date = sdf.parse(timestampPart);
 		
-		GregorianCalendar gc = new GregorianCalendar();
+		final GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
 		
 		return new Integer(gc.get(field)).shortValue();
 	}
 
-	private int[] getGregorianCalendarFields(String pattern) {
-		if (logger.isTraceEnabled()) {
-			logger.trace(String.format("getGregorianCalendarFields(%s)",
+	private int[] getGregorianCalendarFields(final String pattern) {
+		LOG.trace(String.format("getGregorianCalendarFields(%s)",
 					pattern));
-		}
-		ArrayList<Integer> fields = new ArrayList<Integer>();
+		final ArrayList<Integer> fields = new ArrayList<Integer>();
 		if (pattern.indexOf("y") != -1) {
     		fields.add(GregorianCalendar.YEAR);
 		}
@@ -765,42 +716,37 @@ public class DataFile {
     		fields.add(GregorianCalendar.ZONE_OFFSET);
     	}
     	fields.trimToSize();
-    	int[] result = new int[fields.size()];
+    	final int[] result = new int[fields.size()];
     	int j = 0;
-    	for (Integer i : fields) {
+    	for (final Integer i : fields) {
 			result[j++] = i.intValue();
 		}
     	return result;
 	}
 
-	private String getParsePattern(Column column) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getParsePattern()");
-		}
+	private String getParsePattern(final Column column) {
+		LOG.trace("getParsePattern()");
 		if (column.getMetadataArray() != null && column.getMetadataArray().length > 1) {
-			for (Metadata m : column.getMetadataArray()) {
+			for (final Metadata m : column.getMetadataArray()) {
 				if (m.getKey().equals(Key.PARSE_PATTERN)) {
-					if (logger.isDebugEnabled()) {
-						logger.debug(String.format("Parsepattern found: %s",
+					LOG.debug(String.format("Parsepattern found: %s",
 								m.getValue()));
-					}
 					return m.getValue();
 				}
 			}
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug(String.format("No Metadata element found with key %s in column %s",
+		LOG.debug(String.format("No Metadata element found with key %s in column %s",
 					Key.PARSE_PATTERN.toString(),
 					column.xmlText()));
-		}
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("DataFile [file=%s, c=%s]",f,c);
 	}
 
-	public String getType(int mVColumnId) {
+	public String getType(final int mVColumnId) {
 		return c.getType(mVColumnId);
 	}
 }

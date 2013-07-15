@@ -23,10 +23,11 @@
  */
 package org.n52.sos.importer.feeder;
 
+import static java.lang.Integer.parseInt;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.Timer;
 import java.util.jar.Attributes;
@@ -44,69 +45,77 @@ import org.n52.sos.importer.feeder.task.RepeatedFeeder;
  */
 public final class Feeder {
 
-	private static final Logger logger = Logger.getLogger(Feeder.class);
+	private static final Logger LOG = Logger.getLogger(Feeder.class);
 
 	private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
-	public static void main(String[] args) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("main()");
-		}
-		if(logger.isDebugEnabled()) {
-			logApplicationMetadata();
-		}
+	public static void main(final String[] args) {
+		LOG.trace("main()");
+		logApplicationMetadata();
 		if (checkArgs(args)) {
 			// read configuration
-			String configFile = args[1];
+			final String configFile = args[1];
 			try {
-				Configuration c = new Configuration(configFile);
+				final Configuration c = new Configuration(configFile);
 				// start application with valid configuration
 				// data file
-				if (args.length == 2) { // Case: one time feeding with defined configuration
+				if (args.length == 2) 
+				{ 
+					// Case: one time feeding with defined configuration
 					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getCanonicalName()).start();
-					
-				} else if (args.length == 4) { // Case: one time feeding with file override or period with file from configuration
-					if (args[2].equals(ALLOWED_PARAMETERS[1])) { // Case: file override
+				} 
+				else if (args.length == 4)
+				{ 
+					// Case: one time feeding with file override or period with file from configuration
+					if (args[2].equals(ALLOWED_PARAMETERS[1])) 
+					{ 
+						// Case: file override
 						new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
 						
-					} else if (args[2].equals(ALLOWED_PARAMETERS[2])) { // Case: repeated feeding
-						repeatedFeeding(c,Integer.parseInt(args[3]));
+					} 
+					else if (args[2].equals(ALLOWED_PARAMETERS[2]))
+					{
+						// Case: repeated feeding
+						repeatedFeeding(c,parseInt(args[3]));
 					}
-				} else if (args.length == 6) { // Case: repeated feeding with file override
-					repeatedFeeding(c,new File(args[3]),Integer.parseInt(args[5]));
+				} else if (args.length == 6) 
+				{ 
+					// Case: repeated feeding with file override
+					repeatedFeeding(c,new File(args[3]),parseInt(args[5]));
 				}
-			} catch (XmlException e) {
-				String errorMsg = 
-						String.format("Configuration file \"%s\" could not be " +
+			} 
+			catch (final XmlException e)
+			{
+				final String errorMsg = 
+						String.format("Configuration file '%s' could not be " +
 								"parsed. Exception thrown: %s",
 								configFile,
 								e.getMessage());
-				logger.fatal(errorMsg);
-				if (logger.isDebugEnabled()) {
-					logger.debug("", e);
-				}
-			} catch (IOException e) {
-				logger.fatal(String.format("Exception thrown: %s", e.getMessage()));
-				if (logger.isDebugEnabled()) {
-					logger.debug("", e);
-				}
-			} catch (IllegalArgumentException iae) {
-				logger.fatal("Given parameters could not be parsed! -p must be a number.");
-				if (logger.isDebugEnabled()) {
-					logger.debug("Exception Stack Trace:",iae);
-				}
+				LOG.fatal(errorMsg);
+				LOG.debug("", e);
+			} 
+			catch (final IOException e) 
+			{
+				LOG.fatal(String.format("Exception thrown: %s", e.getMessage()));
+				LOG.debug("", e);
 			}
-		} else {
+			catch (final IllegalArgumentException iae)
+			{
+				LOG.fatal("Given parameters could not be parsed! -p must be a number.");
+				LOG.debug("Exception Stack Trace:",iae);
+			}
+		} 
+		else {
 			showUsage();
 		}
 	}
 
-	private static void repeatedFeeding(Configuration c, File f, int periodInMinutes) {
-		Timer t = new Timer("FeederTimer");
+	private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
+		final Timer t = new Timer("FeederTimer");
 		t.schedule(new RepeatedFeeder(c,f), 1, periodInMinutes*1000*60);
 	}
 
-	private static void repeatedFeeding(Configuration c, int periodInMinutes) {
+	private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
 		repeatedFeeding(c,c.getDataFile(),periodInMinutes);
 	}
 
@@ -115,10 +124,8 @@ public final class Feeder {
 	 * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
 	 */
 	private static void showUsage() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("showUsage()");
-		}
-		logger.info("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n" +
+		LOG.trace("showUsage()");
+		LOG.info("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n" +
 				"options and arguments:\n" + 
 				"-c file	 : read the config file and start the import process\n" +
 				"-d datafile : OPTIONAL override of the datafile defined in config file\n" +
@@ -134,12 +141,10 @@ public final class Feeder {
 	 * 			<b>false</b> if parameters are missing or not usable in the 
 	 * 				specified form.
 	 */
-	private static boolean checkArgs(String[] args) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("checkArgs()");
-		}
+	private static boolean checkArgs(final String[] args) {
+		LOG.trace("checkArgs()");
 		if (args == null) {
-			logger.fatal("no parameters defined. null received as args!");
+			LOG.fatal("no parameters defined. null received as args!");
 			return false;
 		} else if (args.length == 2) {
 			if (ALLOWED_PARAMETERS[0].equals(args[0])) {
@@ -158,7 +163,7 @@ public final class Feeder {
 				return true;
 			}
 		}
-		logger.fatal("Given parameters do not match programm specification. ");
+		LOG.fatal("Given parameters do not match programm specification. ");
 		return false;
 	}
 
@@ -166,41 +171,38 @@ public final class Feeder {
 	 * Method print all available information from the jar's manifest file. 
 	 */
 	private static void logApplicationMetadata() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("logApplicationMetadata()");
-		}
+		LOG.trace("logApplicationMetadata()");
 		InputStream manifestStream;
 		String logMessage;
 		//
 		logMessage = "Application started";
 		manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
 		try {
-			Manifest manifest = new Manifest(manifestStream);
-			Attributes attributes = manifest.getMainAttributes();
-			Set<Object> keys = attributes.keySet();
-			for (Iterator<Object> iterator = keys.iterator(); iterator.hasNext();) {
-				Object object = iterator.next();
+			final Manifest manifest = new Manifest(manifestStream);
+			final Attributes attributes = manifest.getMainAttributes();
+			final Set<Object> keys = attributes.keySet();
+			for (final Object object : keys) {
 				if (object instanceof Name) {
-					Name key = (Name) object;
+					final Name key = (Name) object;
 					logMessage += String.format("\n\t\t%s: %s",key,attributes.getValue(key));
 				}
 			}
 			// add heap information
 			logMessage += "\n\t\t" + heapSizeInformation();
 		}
-		catch(IOException ex) {
-			logger.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
+		catch(final IOException ex) {
+			LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
 		}
-		logger.info(logMessage);
+		LOG.info(logMessage);
 	}
 
 	protected static String heapSizeInformation() {
-		long mb = 1024 * 1024;
-		Runtime rt = Runtime.getRuntime();
-		long maxMemoryMB = rt.maxMemory() / mb;
-		long totalMemoryMB = rt.totalMemory() / mb;
-		long freeMemoryMB = rt.freeMemory() / mb;
-		long usedMemoryMB = (rt.totalMemory() - rt.freeMemory()) / mb;
+		final long mb = 1024 * 1024;
+		final Runtime rt = Runtime.getRuntime();
+		final long maxMemoryMB = rt.maxMemory() / mb;
+		final long totalMemoryMB = rt.totalMemory() / mb;
+		final long freeMemoryMB = rt.freeMemory() / mb;
+		final long usedMemoryMB = (rt.totalMemory() - rt.freeMemory()) / mb;
 		return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
 				maxMemoryMB,
 				totalMemoryMB,
