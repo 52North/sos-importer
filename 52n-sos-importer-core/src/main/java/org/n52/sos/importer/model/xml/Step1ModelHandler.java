@@ -45,7 +45,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 	private static final Logger logger = Logger.getLogger(Step1ModelHandler.class);
 
 	@Override
-	public void handleModel(Step1Model stepModel, SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step1Model stepModel, final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -60,12 +60,12 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 				// TODO remove old
 				dF.setRemoteFile(null);
 			}
-			LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
-			String path = stepModel.getCSVFilePath();
+			final LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
+			final String path = stepModel.getCSVFilePath();
 			if (path != null && !path.equals("")) {
 				lF.setPath(path);
 			} else {
-				String msg = "empty path to CSV file in Step1Model: " + path;
+				final String msg = "empty path to CSV file in Step1Model: " + path;
 				logger.error(msg);
 				throw new NullPointerException(msg);
 			}
@@ -74,7 +74,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 				// TODO remove old
 				dF.setLocalFile(null);
 			}
-			RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
+			final RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
 			String url = stepModel.getUrl();
 			if (stepModel.getDirectory() != null && url.charAt(url.length() - 1) != '/'
 					&& stepModel.getDirectory().charAt(0) != '/') {
@@ -86,10 +86,10 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 			}
 			url += stepModel.getFilenameSchema();
 			rF.setURL(url);
-			Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
+			final Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
 			cDoc.setUserName(stepModel.getUser());
 			cDoc.setPassword(stepModel.getPassword());
 		}
-		dF.setRefenceIsARegularExpression(stepModel.isRegex());
+		dF.setReferenceIsARegularExpression(stepModel.isRegex());
 	}
 }
