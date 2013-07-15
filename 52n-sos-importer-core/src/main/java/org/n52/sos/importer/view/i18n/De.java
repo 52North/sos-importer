@@ -662,7 +662,7 @@ public class De extends Lang{
 
 	@Override
 	public String step7OfferingNameNotValid(String offeringName) {
-		return String.format("Der Name \"%s\" für das Offering ist nicht erlaubt. Er muss der Spezifikation für XML-NCName entsprechen.", offeringName);
+		return String.format("Der Name '%s' für das Offering ist nicht erlaubt. Er muss der Spezifikation für XML-NCName entsprechen.", offeringName);
 	}
 
 	@Override
@@ -739,14 +739,14 @@ public class De extends Lang{
 
 	@Override
 	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
-		return String.format("Konnte JAR-Datei nicht finden!\nBitte dort ablegen:\n\"%s\"",
+		return String.format("Konnte JAR-Datei nicht finden!\nBitte dort ablegen:\n'%s'",
 				expectedAbsolutePathToFeederJar);
 	}
 
 	@Override
 	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
 	{
-		return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n\"%s\".\nKlicken sie auf JA um die Datei auszuwählen!",
+		return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n'%s'.\nKlicken sie auf JA um die Datei auszuwählen!",
 				pathToDirectoryWithFeederJar);
 	}
 

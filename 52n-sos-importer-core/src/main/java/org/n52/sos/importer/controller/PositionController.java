@@ -157,10 +157,10 @@ public class PositionController {
 			}
 			try
 			{
-				logger.debug(String.format("Trying to decode CRS from EPSG string : \"%s\"", epsgString));
+				logger.debug(String.format("Trying to decode CRS from EPSG string : '%s'", epsgString));
 				CoordinateReferenceSystem crs = CRS.decode(epsgString);
 				// 2 check for axis Z -> if present -> yes
-				logger.debug(String.format("CRS decoded to \"%s\" with %s dimensions.",crs.getName(),crs.getCoordinateSystem().getDimension()));
+				logger.debug(String.format("CRS decoded to '%s' with %s dimensions.",crs.getName(),crs.getCoordinateSystem().getDimension()));
 				if (crs.getCoordinateSystem().getDimension() == 3)
 				{
 					return true;

@@ -673,7 +673,7 @@ public class En extends Lang{
 
 	@Override
 	public String step7OfferingNameNotValid(String offeringName) {
-		return String.format("The given offering \"%s\" is not valid. It should match XML-NCName specification.", offeringName);
+		return String.format("The given offering '%s' is not valid. It should match XML-NCName specification.", offeringName);
 	}
 
 	@Override
@@ -747,14 +747,14 @@ public class En extends Lang{
 
 	@Override
 	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
-		return String.format("Could not find jar file!\nPlease place it there:\n\"%s\"",
+		return String.format("Could not find jar file!\nPlease place it there:\n'%s'",
 				expectedAbsolutePathToFeederJar);
 	}
 
 	@Override
 	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
 	{
-		return String.format("Could not find jar file here:\n\"%s\"\nPlease select YES for selecting the file manually.",
+		return String.format("Could not find jar file here:\n'%s'\nPlease select YES for selecting the file manually.",
 				pathToDirectoryWithFeederJar);
 	}
 

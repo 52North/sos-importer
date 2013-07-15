@@ -236,7 +236,7 @@ public class MissingPositionPanel extends JPanel{
 				url = new URL(Constants.WMS_URL() + Constants.WMS_GET_CAPABILITIES_REQUEST);
 			} catch (MalformedURLException e) {
 				//will not happen
-				logger.error(String.format("WMS URL not correct: \"%s\"",url),e);
+				logger.error(String.format("WMS URL not correct: '%s'",url),e);
 			}
 			/*
 			 * @see http://docs.geotools.org/stable/userguide/extension/wms/wms.html#layer
