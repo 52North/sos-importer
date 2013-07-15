@@ -38,20 +38,20 @@ import org.n52.sos.importer.feeder.Configuration;
  */
 public class RepeatedFeeder extends TimerTask{
 	
-	private static final Logger logger = Logger.getLogger(RepeatedFeeder.class);
+	private static final Logger LOG = Logger.getLogger(RepeatedFeeder.class);
 
-	private Configuration configuration;
-	private File file;
+	private final Configuration configuration;
+	private final File file;
 	
 	final private static Lock oneFeederLock = new ReentrantLock(true);
 	
 	private static File lastUsedDateFile;
 	
-	public RepeatedFeeder(Configuration c) {
+	public RepeatedFeeder(final Configuration c) {
 		this(c,c.getDataFile());
 	}
 
-	public RepeatedFeeder(Configuration c, File f) {
+	public RepeatedFeeder(final Configuration c, final File f) {
 		configuration = c;
 		file = f;
 	}
@@ -63,8 +63,9 @@ public class RepeatedFeeder extends TimerTask{
 		try {
 			// if file is a directory, get latest from file list
 			if (file.isDirectory()) {
-				File[] files = file.listFiles(new FileFilter() {
-					public boolean accept(File pathname) {
+				final File[] files = file.listFiles(new FileFilter() {
+					@Override
+					public boolean accept(final File pathname) {
 						return pathname.isFile();
 					}
 				});
@@ -78,7 +79,7 @@ public class RepeatedFeeder extends TimerTask{
 					}
 					datafile = newestFile;
 					if (datafile.equals(lastUsedDateFile)) {
-						logger.error(String.format("No new file found in directory \"%s\". Last used file was \"%s\".",
+						LOG.error(String.format("No new file found in directory '%s'. Last used file was '%s'.",
 								file.getAbsolutePath(),
 								lastUsedDateFile.getName()));
 						return;
@@ -86,7 +87,7 @@ public class RepeatedFeeder extends TimerTask{
 						lastUsedDateFile = datafile;
 					}
 				} else {
-					logger.fatal(String.format("No file found in directory \"%s\"",file.getAbsolutePath()));
+					LOG.fatal(String.format("No file found in directory '%s'",file.getAbsolutePath()));
 					return;
 				}
 			} else {
