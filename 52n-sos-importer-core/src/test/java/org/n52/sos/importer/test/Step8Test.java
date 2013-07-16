@@ -34,14 +34,14 @@ import org.n52.sos.importer.model.Step7Model;
 
 public class Step8Test {
 
-	public static void main(String[] args) {
-		JFileChooser fc = new JFileChooser();
+	public static void main(final String[] args) {
+		final JFileChooser fc = new JFileChooser();
 		if (fc.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
-			File configFile = fc.getSelectedFile();
+			final File configFile = fc.getSelectedFile();
 
-			Step7Model s7M = new Step7Model("http://192.168.1.113:8080/ImportTestSOS/sos",  
-					configFile, true, null);
-			MainController f = MainController.getInstance();
+			final Step7Model s7M = new Step7Model("http://localhost:8080/ImportTestSOS/sos",  
+					configFile, true, null,"1.0.0",null);
+			final MainController f = MainController.getInstance();
 
 			f.setStepController(new Step8Controller(s7M));
 		}		

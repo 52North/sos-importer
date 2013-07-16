@@ -36,7 +36,7 @@ public abstract class Lang {
 	}
 	
 	public static Locale[] getAvailableLocales() {
-		Set <Locale> locales = availableLocales.keySet();
+		final Set <Locale> locales = availableLocales.keySet();
 		return locales.toArray(new Locale[locales.size()]);
 	}
 	
@@ -60,7 +60,7 @@ public abstract class Lang {
 	/**
 	 * @param newLocale the currentLocale to set
 	 */
-	public static void setCurrentLocale(Locale newLocale) {
+	public static void setCurrentLocale(final Locale newLocale) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("setCurrentLocale(" + newLocale + ")");
 		}
@@ -82,6 +82,10 @@ public abstract class Lang {
 	 * @return Back
 	 */
 	public abstract String backButtonLabel();
+	/**
+	 * @return Binding
+	 */
+	public abstract String binding();
 	/**
 	 * @return Code
 	 */
@@ -170,8 +174,8 @@ public abstract class Lang {
 	 * @param path
 	 * @return - file: "<code>file</code>" (path: "<code>path</code>")
 	 */
-	public String frameTitleExtension(String file, String path) {
-		return " - " + this.file() + ":\"" + file + "\" (" + this.path() + ": \"" + path + "\")";
+	public String frameTitleExtension(final String file, final String path) {
+		return " - " + file() + ":\"" + file + "\" (" + path() + ": \"" + path + "\")";
 	}
 	/**
 	 * @return generated
@@ -286,6 +290,11 @@ public abstract class Lang {
 	 * @return Space
 	 */
 	public abstract String spaceString();
+	/**
+	 * 
+	 * @return Specification Version
+	 */
+	public abstract String specificationVersion();
 	/**
 	 * @return Step
 	 */
@@ -497,23 +506,22 @@ public abstract class Lang {
 	 * 
 	 */
 	public abstract String step4bInfoNotMeasuredValue();
-	protected abstract String step4bInfoResourceAlreadySetText();
 	/**
 	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
 	 * @return
 	 */
-	public String step4bInfoResoureAlreadySet(Resource resource) {
+	public String step4bInfoResoureAlreadySet(final Resource resource) {
 		String res = "RESOURCE NOT FOUND!";
 		if (resource instanceof FeatureOfInterest) {
-			res = this.featureOfInterest();
+			res = featureOfInterest();
 		} else if (resource instanceof ObservedProperty) {
-			res = this.observedProperty();
+			res = observedProperty();
 		} else if (resource instanceof Sensor) {
-			res = this.sensor();
+			res = sensor();
 		} else if (resource instanceof UnitOfMeasurement) {
-			res = this.unitOfMeasurement();
+			res = unitOfMeasurement();
 		}
-		return res + this.step4bInfoResourceAlreadySetText() + this.measuredValue();
+		return res + step4bInfoResourceAlreadySetText() + measuredValue();
 	}
 	/**
 	 * 
@@ -585,11 +593,11 @@ public abstract class Lang {
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
+	
 	/**
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
-	
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
 	 */
@@ -641,6 +649,7 @@ public abstract class Lang {
 	 * @return Choose configuration file export folder
 	 */
 	public abstract String step7ConfigFileButton();
+
 	/**
 	 * @return Folder
 	 */
@@ -676,12 +685,12 @@ public abstract class Lang {
 	 * @return Please specify the offering name:
 	 */
 	public abstract String step7OfferingInputTextfieldLabel();
-
+	
 	/**
 	 * @return Please specify the offering name or select to generate it.
 	 */
 	public abstract String step7OfferingNameNotGiven();
-	
+
 	/**
 	 * The given offering "offeringName" is not valid. It should match XML-NCName specification.
 	 * @param offeringName
@@ -693,6 +702,12 @@ public abstract class Lang {
 	 * @return Save configuration to XML file
 	 */
 	public abstract String step7SaveConfig();
+
+	/**
+	 * 
+	 * @return Please specify the binding.
+	 */
+	public abstract String step7SosBindingInstructions();
 
 	/**
 	 * @param strURL
@@ -728,6 +743,12 @@ public abstract class Lang {
 	 * @return	Please specify the SOS URL including the endpoint like this "http://www.example.com/52nSOS/sos" .
 	 */
 	public abstract String step7SosUrlInstructions();
+
+	/**
+	 * 
+	 * @return Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.
+	 */
+	public abstract String step7SosVersionInstructions();
 
 	/**
 	 * @return Open Configuration File
@@ -791,7 +812,7 @@ public abstract class Lang {
 	 * @return "Log File"
 	 */
 	public abstract String step8LogFile();
-
+	
 	/**
 	 * @return Check log file
 	 */
@@ -808,7 +829,7 @@ public abstract class Lang {
 	 * @return Register <code>i</code> Sensors...
 	 */
 	public abstract String step8RegisterSensorLabel(int i);
-	
+
 	/**
 	 * @param f The file which was used to save the XML model
 	 * @return The configuration could not be saved to file
@@ -877,6 +898,11 @@ public abstract class Lang {
 	public abstract String url();
 
 	/**
+	 * @return Version
+	 */
+	public abstract String version();
+
+	/**
 	 * @return Testing evaluation pattern for column
 	 */
 	public abstract String waitForParseResultsLabel();
@@ -890,4 +916,6 @@ public abstract class Lang {
 	 * @return Year
 	 */
 	public abstract String year();
+
+	protected abstract String step4bInfoResourceAlreadySetText();
 }

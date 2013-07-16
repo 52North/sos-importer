@@ -23,12 +23,15 @@
  */
 package org.n52.sos.importer.view;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -38,6 +41,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.Constants;
@@ -58,11 +62,8 @@ import org.n52.sos.importer.view.utils.ToolTips;
 public class Step7Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	/*
-	 * SOS URL
-	 */
-	private EditableJComboBoxPanel sosComboBox;
 
+	private EditableJComboBoxPanel sosUrlComboBox;
 	private JLabel configFileJL;
 	private JButton configFileDirSelectorJB;
 	private JTextField configFileNameJT;
@@ -81,54 +82,81 @@ public class Step7Panel extends JPanel {
 	private JPanel panel;
 	private JLabel spacer;
 	private JLabel sosURLInstructionsLabel;
+	private JLabel sosVersionInstructionsLabel;
+	private JPanel sosVersionPanel;
+	private JTextField sosVersionTextField;
+	private JLabel sosBindingLabel;
+	private JTextField sosBindingTextField;
+	private JPanel sosBindingPanel;
+	private JPanel configFilePanel;
 
-	public Step7Panel(Step7Controller s7C) {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{579, 0};
-		gridBagLayout.rowHeights = new int[]{80, 43, 74, 0};
+	public Step7Panel(final Step7Controller s7C) {
+		setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		final GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{750, 0};
+		gridBagLayout.rowHeights = new int[]{80, 0, 0, 43, 74, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 
-		sosURLPanel = initSosUrlPanel();
-		offeringPanel = initOfferingPanel();
-		JPanel configFilePanel = initConfigFilePanel();
+		initSosUrlPanel();
+		initOfferingPanel();
+		initConfigFilePanel();
+		initSosVersionPanel();
+		initSosBindingPanel();
 		
-		GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
+		final GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
 		gbc_sosURLPanel.fill = GridBagConstraints.BOTH;
-		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_sosURLPanel.gridx = 0;
 		gbc_sosURLPanel.gridy = 0;
 		add(sosURLPanel, gbc_sosURLPanel);
-		GridBagConstraints gbc_offeringPanel = new GridBagConstraints();
-		gbc_offeringPanel.fill = GridBagConstraints.BOTH;
-		gbc_offeringPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_offeringPanel.gridx = 0;
-		gbc_offeringPanel.gridy = 1;
-		add(offeringPanel, gbc_offeringPanel);
-		GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
+		
+		final GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
+		gbc_configFilePanel.insets = new Insets(0, 0, 5, 5);
 		gbc_configFilePanel.fill = GridBagConstraints.BOTH;
 		gbc_configFilePanel.gridx = 0;
-		gbc_configFilePanel.gridy = 2;
+		gbc_configFilePanel.gridy = 1;
 		add(configFilePanel, gbc_configFilePanel);
+		
+		final GridBagConstraints gbc_offeringPanel = new GridBagConstraints();
+		gbc_offeringPanel.fill = GridBagConstraints.BOTH;
+		gbc_offeringPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_offeringPanel.gridx = 0;
+		gbc_offeringPanel.gridy = 2;
+		add(offeringPanel, gbc_offeringPanel);
+		
+		final GridBagConstraints gbc_versionPanel = new GridBagConstraints();
+		gbc_versionPanel.fill = GridBagConstraints.BOTH;
+		gbc_versionPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_versionPanel.gridx = 0;
+		gbc_versionPanel.gridy = 3;
+		add(sosVersionPanel, gbc_versionPanel);
+		
+		final GridBagConstraints gbc_bindingPanel = new GridBagConstraints();
+		gbc_bindingPanel.fill = GridBagConstraints.BOTH;
+		gbc_bindingPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_bindingPanel.gridx = 0;
+		gbc_bindingPanel.gridy = 4;
+		add(sosBindingPanel, gbc_bindingPanel);
 	}
 
-	private JPanel initConfigFilePanel() {
+	private void initConfigFilePanel() {
 		String tmp = MainController.getInstance().getFilename();
 		if (tmp == null) {
 			tmp = "not-set.";
 		}
 		tmp = tmp + configFileName;
-		JPanel configFilePanel = new JPanel();
+		configFilePanel = new JPanel();
 		configFilePanel.setBorder(new TitledBorder(null, Lang.l().step7ConfigurationFile(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagLayout gbl_configFilePanel = new GridBagLayout();
+		final GridBagLayout gbl_configFilePanel = new GridBagLayout();
 		gbl_configFilePanel.columnWidths = new int[] {50, 50, 0};
 		gbl_configFilePanel.rowHeights = new int[]{23, 0, 0};
 		gbl_configFilePanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		gbl_configFilePanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		configFilePanel.setLayout(gbl_configFilePanel);
 		configFileJL = new JLabel(Lang.l().step7ConfigFileLabel() + ":");
-		GridBagConstraints gbc_configFileJL = new GridBagConstraints();
+		final GridBagConstraints gbc_configFileJL = new GridBagConstraints();
 		gbc_configFileJL.anchor = GridBagConstraints.EAST;
 		gbc_configFileJL.insets = new Insets(0, 0, 5, 5);
 		gbc_configFileJL.gridx = 0;
@@ -136,7 +164,7 @@ public class Step7Panel extends JPanel {
 		configFilePanel.add(configFileJL, gbc_configFileJL);
 
 		panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
+		final GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.gridx = 1;
@@ -152,8 +180,9 @@ public class Step7Panel extends JPanel {
 		configFileSelectedFolderLabel = new JLabel();
 		panel.add(configFileSelectedFolderLabel);
 		configFileDirSelectorJB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				final JFileChooser fc = new JFileChooser();
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (fc.showDialog(Step7Panel.this, Lang.l().step7ConfigFileDialogTitel())
 						== JFileChooser.APPROVE_OPTION){
@@ -181,22 +210,21 @@ public class Step7Panel extends JPanel {
 				.append(Lang.l().name().substring(1)).
 				append(":").toString());
 		configFileNameLabel.setLabelFor(configFileNameJT);
-		GridBagConstraints gbc_configFileNameLabel = new GridBagConstraints();
+		final GridBagConstraints gbc_configFileNameLabel = new GridBagConstraints();
 		gbc_configFileNameLabel.anchor = GridBagConstraints.EAST;
 		gbc_configFileNameLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_configFileNameLabel.gridx = 0;
 		gbc_configFileNameLabel.gridy = 1;
 		configFilePanel.add(configFileNameLabel, gbc_configFileNameLabel);
-		GridBagConstraints gbc_configFileNameJT = new GridBagConstraints();
+		final GridBagConstraints gbc_configFileNameJT = new GridBagConstraints();
 		gbc_configFileNameJT.anchor = GridBagConstraints.WEST;
 		gbc_configFileNameJT.gridx = 1;
 		gbc_configFileNameJT.gridy = 1;
 		configFilePanel.add(configFileNameJT, gbc_configFileNameJT);
-		return configFilePanel;
 	}
 
-	private JPanel initOfferingPanel() {
-		JLabel offeringLabel = new JLabel(Lang.l().step7OfferingCheckBoxLabel());
+	private void initOfferingPanel() {
+		final JLabel offeringLabel = new JLabel(Lang.l().step7OfferingCheckBoxLabel());
 		
 		offeringInputLabel = new JLabel(Lang.l().step7OfferingInputTextfieldLabel());
 		offeringInputLabel.setVisible(false);
@@ -205,7 +233,7 @@ public class Step7Panel extends JPanel {
 		offeringGenerateCheckbox.setSelected(true);
 		offeringGenerateCheckbox.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (!offeringGenerateCheckbox.isSelected()) {
 					offeringInputTextField.setVisible(true);
 					offeringInputLabel.setVisible(true);
@@ -229,51 +257,133 @@ public class Step7Panel extends JPanel {
 		offeringPanel.add(offeringGenerateCheckbox);
 		offeringPanel.add(offeringInputLabel);
 		offeringPanel.add(offeringInputTextField);
-		
-		return offeringPanel;
 	}
 
-	private JPanel initSosUrlPanel() {
-		JPanel sosURLPanel = new JPanel();
-		sosURLPanel.setBorder(new TitledBorder(null, Lang.l().sos(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagLayout gbl_sosURLPanel = new GridBagLayout();
+	private void initSosUrlPanel() {
+		sosURLPanel = new JPanel();
+		sosURLPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().url(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		final GridBagLayout gbl_sosURLPanel = new GridBagLayout();
 		gbl_sosURLPanel.columnWidths = new int[]{750, 0};
 		gbl_sosURLPanel.rowHeights = new int[]{30, 0, 0};
 		gbl_sosURLPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_sosURLPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		sosURLPanel.setLayout(gbl_sosURLPanel);
-		sosComboBox = new EditableJComboBoxPanel(
+		sosUrlComboBox = new EditableJComboBoxPanel(
 				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().url(), ToolTips.get(ToolTips.SOS));
-		sosComboBox.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
+		sosUrlComboBox.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		
-		GridBagConstraints gbc_sosComboBox = new GridBagConstraints();
+		final GridBagConstraints gbc_sosComboBox = new GridBagConstraints();
 		gbc_sosComboBox.fill = GridBagConstraints.BOTH;
 		gbc_sosComboBox.gridx = 0;
 		gbc_sosComboBox.gridy = 1;
-		sosURLPanel.add(sosComboBox, gbc_sosComboBox);
+		sosURLPanel.add(sosUrlComboBox, gbc_sosComboBox);
 		sosURLInstructionsLabel = new JLabel("  " + Lang.l().step7SosUrlInstructions());
-		GridBagConstraints gbc_sosURLInstructionsLabel = new GridBagConstraints();
+		final GridBagConstraints gbc_sosURLInstructionsLabel = new GridBagConstraints();
 		gbc_sosURLInstructionsLabel.gridy = 0;
 		gbc_sosURLInstructionsLabel.gridx = 0;
 		gbc_sosURLInstructionsLabel.fill = GridBagConstraints.BOTH;
 		sosURLPanel.add(sosURLInstructionsLabel, gbc_sosURLInstructionsLabel);
+	}
+	
+	private void initSosVersionPanel() {
+		sosVersionPanel = new JPanel();
+		sosVersionPanel.setBorder(
+				new TitledBorder(UIManager.getBorder("TitledBorder.border"),
+						Lang.l().specificationVersion(),
+						TitledBorder.LEADING,
+						TitledBorder.TOP,
+						null, 
+						new Color(0, 0, 0)));
 		
-		return sosURLPanel;
+		final GridBagLayout gbl_sosURLPanel = new GridBagLayout();
+		gbl_sosURLPanel.columnWidths = new int[]{750, 0};
+		gbl_sosURLPanel.rowHeights = new int[]{30, 0, 0};
+		gbl_sosURLPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_sosURLPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		sosVersionPanel.setLayout(gbl_sosURLPanel);
+		
+		sosVersionInstructionsLabel = new JLabel("  " + Lang.l().step7SosVersionInstructions());
+		
+		final GridBagConstraints gbc_sosURLInstructionsLabel = new GridBagConstraints();
+		gbc_sosURLInstructionsLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_sosURLInstructionsLabel.gridy = 0;
+		gbc_sosURLInstructionsLabel.gridx = 0;
+		gbc_sosURLInstructionsLabel.fill = GridBagConstraints.BOTH;
+		sosVersionPanel.add(sosVersionInstructionsLabel, gbc_sosURLInstructionsLabel);
+		
+		sosVersionTextField = new JTextField();
+		sosVersionTextField.setColumns(10);
+		sosVersionTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(final KeyEvent e)
+			{
+				if (sosVersionTextField.getText().equalsIgnoreCase("2.0.0"))
+				{
+					sosBindingPanel.setVisible(true);
+				}
+				else
+				{
+					sosBindingPanel.setVisible(false);
+					sosBindingTextField.setText("");
+				}
+			}
+		});
+		final GridBagConstraints gbc_sosVersionTextField = new GridBagConstraints();
+		gbc_sosVersionTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_sosVersionTextField.gridx = 0;
+		gbc_sosVersionTextField.gridy = 1;
+		sosVersionPanel.add(sosVersionTextField, gbc_sosVersionTextField);
+	}
+	
+	private void initSosBindingPanel() {
+		sosBindingPanel = new JPanel();
+		sosBindingPanel.setBorder(
+				new TitledBorder(UIManager.getBorder("TitledBorder.border"),
+						Lang.l().binding(), 
+						TitledBorder.LEADING, 
+						TitledBorder.TOP, 
+						null, 
+						new Color(0, 0, 0)));
+		
+		final GridBagLayout gbl_sosBindingPanel = new GridBagLayout();
+		gbl_sosBindingPanel.columnWidths = new int[]{750, 0};
+		gbl_sosBindingPanel.rowHeights = new int[]{20, 0, 0};
+		gbl_sosBindingPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_sosBindingPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		sosBindingPanel.setLayout(gbl_sosBindingPanel);
+		
+		sosBindingLabel = new JLabel("  " + Lang.l().step7SosBindingInstructions());
+		
+		final GridBagConstraints gbc_sosBindingLabel = new GridBagConstraints();
+		gbc_sosBindingLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_sosBindingLabel.gridx = 0;
+		gbc_sosBindingLabel.gridy = 0;
+		gbc_sosBindingLabel.fill = GridBagConstraints.BOTH;
+		sosBindingPanel.add(sosBindingLabel, gbc_sosBindingLabel);
+		
+		sosBindingTextField = new JTextField();
+		sosBindingTextField.setColumns(10);
+		final GridBagConstraints gbc_sosBindingTextField = new GridBagConstraints();
+		gbc_sosBindingTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_sosBindingTextField.gridx = 0;
+		gbc_sosBindingTextField.gridy = 1;
+		sosBindingPanel.add(sosBindingTextField, gbc_sosBindingTextField);
+		sosBindingPanel.setVisible(false);
 	}
 
 	public String getSOSURL() {
-		return (String) sosComboBox.getSelectedItem();
+		return (String) sosUrlComboBox.getSelectedItem();
 	}
 
-	public void setSOSURL(String sosURL) {
-		sosComboBox.setSelectedItem(sosURL);
+	public void setSOSURL(final String sosURL) {
+		sosUrlComboBox.setSelectedItem(sosURL);
 	}
 
 	public String getConfigFile() {
 		return configFilePath + File.separatorChar + configFileNameJT.getText();
 	}
 
-	public void setConfigFile(String configFile) {
+	public void setConfigFile(final String configFile) {
 		// split String by last index of File.separatorChar and save to fields
 		configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar)+1);
 		configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar)+1);
@@ -285,6 +395,26 @@ public class Step7Panel extends JPanel {
 
 	public String getOfferingName() {
 		return offeringInputTextField.getText();
+	}
+
+	public String getSosBinding()
+	{
+		return sosBindingTextField.getText();
+	}
+	
+	public void setBinding(final String binding)
+	{
+		sosBindingTextField.setText(binding);
+	}
+	
+	public String getSosVersion()
+	{
+		return sosVersionTextField.getText();
+	}
+	
+	public void setVersion(final String version)
+	{
+		sosVersionTextField.setText(version);
 	}
 }
 

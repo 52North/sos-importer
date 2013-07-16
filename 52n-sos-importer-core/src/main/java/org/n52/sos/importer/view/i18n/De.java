@@ -46,8 +46,15 @@ public class De extends Lang{
 		return "und";
 	}
 
+	@Override
 	public String backButtonLabel() {
 		return "Zurück";
+	}
+
+	@Override
+	public String binding()
+	{
+		return "Binding";
 	}
 
 	@Override
@@ -92,12 +99,12 @@ public class De extends Lang{
 
 	@Override
 	public String epsgCodeWarningDialogNaturalNumber() {
-		return "Die " + this.epsgCode() + " muss eine natürliche Zahl sein.";
+		return "Die " + epsgCode() + " muss eine natürliche Zahl sein.";
 	}
 
 	@Override
 	public String epsgCodeWarningDialogOutOfRange() {
-		return "Die " + this.epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
+		return "Die " + epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
 	}
 
 	@Override
@@ -105,6 +112,7 @@ public class De extends Lang{
 		return "Fehler";
 	}
 
+	@Override
 	public String errorDialogTitle() {
 		return "Fehler";
 	}
@@ -113,21 +121,26 @@ public class De extends Lang{
 	public String example() {
 		return "Beispiel";
 	}
-
+	
+	@Override
 	public String exitDialogQuestion() { 
 		return "Wollen Sie das Programm wirklich beenden?\n";
 	}
-	
+
+	@Override
 	public String exitDialogTitle() { return "Beenden"; }
 
+	@Override
 	public String featureOfInterest() {
 		return "Geoobjekt";
 	}
 
+	@Override
 	public String file() {
 		return "Datei";
 	}
 
+	@Override
 	public String finishButtonLabel() {
 		return "Beenden";
 	}
@@ -154,7 +167,7 @@ public class De extends Lang{
 
 	@Override
 	public String heightWarningDialogDecimalNumber() {
-		return "Die " + this.altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+		return "Die " + altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
 
 	@Override
@@ -162,23 +175,24 @@ public class De extends Lang{
 		return "Stunden";
 	}
 
+	@Override
 	public String infoDialogTitle() {
 		return "Information";
 	}
 
 	@Override
 	public String latitudeDialogDecimalValue() {
-		return "Der " + this.latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+		return "Der " + latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
-
+	
 	@Override
 	public String latitudeNorthing() {
 		return "Breitengrad / Hochwert";
 	}
-	
+
 	@Override
 	public String longitudeDialogDecimalValue() {
-		return "Der " + this.longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+		return "Der " + longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
 
 	@Override
@@ -200,29 +214,33 @@ public class De extends Lang{
 	public String minutes() {
 		return "Minuten";
 	}
-
+	
 	@Override
 	public String month() {
 		return "Monat";
 	}
-	
+
 	@Override
 	public String name() {
 		return "Name";
 	}
 
+	@Override
 	public String nextButtonLabel() {
 		return "Weiter";
 	}
 
+	@Override
 	public String numValuePanelThousandsSeparator() {
 		return "Tausender-Trennzeichen";
 	}
 
+	@Override
 	public String observation() {
 		return "Beobachtung";
 	}
 
+	@Override
 	public String observedProperty() {
 		return "Phänomen";
 	}
@@ -232,10 +250,12 @@ public class De extends Lang{
 		return "Offering";
 	}
 
+	@Override
 	public String path() {
 		return "Pfad";
 	}
 
+	@Override
 	public String position() {
 		return "Position";
 	}
@@ -249,52 +269,69 @@ public class De extends Lang{
 	public String row() {
 		return "Zeile";
 	}
-
+	
 	@Override
 	public String seconds() {
 		return "Sekunden";
 	}
-	
+
+	@Override
 	public String sensor() {
 		return "Sensor";
 	}
 
+	@Override
 	public String spaceString() {
 		return "Leerzeichen";
 	}
 
+	@Override
+	public String specificationVersion()
+	{
+		return "Spezifikations-Version";
+	}
+	
+	@Override
 	public String step() {
 		return "Schritt";
 	}
-
+	
+	@Override
 	public String step1BrowseButton() {
 		return "Auswählen";
 	}
-	
+
+	@Override
 	public String step1Description() {
 		return "Schritt 1: Wählen Sie die CSV-Datei aus";
 	}
-	
+
+	@Override
 	public String step1Directory() {
 		return "Pfad";
 	}
 
+	@Override
 	public String step1FeedTypeCSV() {
 		return "Einmaliger Import aus einer CSV Datei";
 	}
 
+	@Override
 	public String step1FeedTypeFTP() {
 		return "Einmaliger / Wiederholter Import aus einer Datei eines FTP-Servers";
 	}
 
+	@Override
 	public String step1File() {
 		return "CSV-Datei";
 	}
-
+	
+	@Override
 	public String step1FileSchema() {
 		return "Dateinamen-Schema";
 	}
-
+	
+	@Override
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
@@ -309,34 +346,40 @@ public class De extends Lang{
 		return "Erklärung";
 	}
 	
+	@Override
 	public String step1Password() {
 		return "Passwort";
 	}
 	
+	@Override
 	public String step1Regex() {
 		return "<html>Reguläre<br/>Ausdrücke:</html>";
 	}
 	
+	@Override
 	public String step1RegexDescription() {
 		return "<html>Hinweis: Wählen Sie diese Option, um "
 				+ "nachfolgend dynamische Ordner- oder/und Dateistrukturen zu beschreiben. "
 				+ "Achten Sie dabei auf die Bedeutung spezieller Zeichen von regulären "
 				+ "Ausdrücken, insbesonde Escape-Zeichen.</html>";
 	}
-	
+
 	@Override
 	public String step1SelectLanguage() {
 		return "Sprachauswahl";
 	}
-	
+
+	@Override
 	public String step1User() {
 		return "Benutzer";
 	}
 
+	@Override
 	public String step2ColumnSeparator() {
 		return "Spalten-Trenner";
 	}
 
+	@Override
 	public String step2CommentIndicator() {
 		return "Kommentar-Indikator";
 	}
@@ -346,38 +389,44 @@ public class De extends Lang{
 		return "Datendatei-Vorschau";
 	}
 
+	@Override
 	public String step2DecimalSeparator() {
 		return "Dezimal-Separator";
 	}
 
+	@Override
 	public String step2Description() {
-		return this.step() + " 2: Definieren Sie die Metadaten zum Einlesen der CSV-Datei";
+		return step() + " 2: Definieren Sie die Metadaten zum Einlesen der CSV-Datei";
 	}
 
+	@Override
 	public String step2FirstLineWithData() {
 		return "Ignoriere Daten bis Zeile";
 	}
 
+	@Override
 	public String step2ParseHeader() {
 		return "Kopfzeile auswerten";
 	}
 
+	@Override
 	public String step2TextQualifier() {
 		return "Text-Qualifier";
 	}
 
+	@Override
 	public String step3aDescription() {
-		return this.step() + " 3a: Wählen Sie die Metainformationen für die aktuelle Spalte";
+		return step() + " 3a: Wählen Sie die Metainformationen für die aktuelle Spalte";
 	}
 
 	@Override
 	public String step3aMeasureValueColMissingDialogMessage() {
-		return "Es muss mindestens 1 " + this.measuredValue() + "-Spalte definiert werden!";
+		return "Es muss mindestens 1 " + measuredValue() + "-Spalte definiert werden!";
 	}
 
 	@Override
 	public String step3aMeasureValueColMissingDialogTitle() {
-		return this.measuredValue() + "-Spalte fehlt!";
+		return measuredValue() + "-Spalte fehlt!";
 	}
 
 	@Override
@@ -391,106 +440,119 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step3aParseTestNFailed(int n) {
+	public String step3aParseTestNFailed(final int n) {
 		return n + " Werte nicht einlesbar.";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "Der Typ für die Spalte ist \"" + 
-				this.step3ColTypeUndefined() + 
+				step3ColTypeUndefined() + 
 				"\".\n" +
 				"Bitte wählen Sie einen anderen Typ.\n" +
 				"Sollten Sie diese Spalte überspringen\n" +
 				"(= nicht exportieren) wollen, dann " +
 				"wählen Sie bitte als Typ \n\"" +
-				this.step3ColTypeDoNotExport() + 
+				step3ColTypeDoNotExport() + 
 				"\".";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
 		return "Spalten-Typ ist \"" + 
-				this.step3ColTypeUndefined() + 
+				step3ColTypeUndefined() + 
 				"\"";
 	}
 
+	@Override
 	public String step3bDescription() {
-		return this.step() + " 3b: Wählen Sie die Metainformationen für die aktuelle Zeile";
+		return step() + " 3b: Wählen Sie die Metainformationen für die aktuelle Zeile";
 	}
 
+	@Override
 	public String step3ColTypeDateTime() {
 		return "Datum & Zeit";
 	}
 
+	@Override
 	public String step3ColTypeDoNotExport() {
 		return "Nicht exportieren";
 	}
 
+	@Override
 	public String step3ColTypeMeasuredValue() {
-		return this.measuredValue();
+		return measuredValue();
 	}
 
+	@Override
 	public String step3ColTypeUndefined() {
 		return "Unbekannt";
 	}
 
+	@Override
 	public String step3DateAndTimeCombination() {
 		return "Kombination";
 	}
 
+	@Override
 	public String step3DateAndTimeUnixTime() {
 		return "UNIX-Zeit";
 	}
 
+	@Override
 	public String step3MeasuredValBoolean() {
 		return "Wahrheitswert";
 	}
 
+	@Override
 	public String step3MeasuredValCount() {
 		return "Zählwert";
 	}
 
+	@Override
 	public String step3MeasuredValNumericValue() {
 		return "Numerischer Wert";
 	}
 
+	@Override
 	public String step3MeasuredValText() {
 		return "Text";
 	}
 
+	@Override
 	public String step3PositionCombination() {
-		return this.step3DateAndTimeCombination();
-	}
-
-	public String step4aDescription() {
-		return this.step() + " 4a: Klären Sie Datum & Zeit Unklarheit";
-	}
-
-	public String step4aInfoDateAndTime() {
-		return "Datum und Zeit sind schon gesetzt für diesen " + this.measuredValue() + ".";
-	}
-
-	public String step4aInfoMeasuredValue() {
-		return "Dies ist kein " + this.measuredValue() + ".";
-	}
-
-	public String step4aModelDescription() {
-		return "Wähle Sie alle " + this.measuredValue() + " " + Constants.STRING_REPLACER + "n " +
-				", die zur markierten Datum-Zeit-Gruppe gehören, aus.";
-	}
-
-	public String step4bDescription() {
-		return this.step() + " 4b: Kläre Sie Unklarheiten";
-	}
-
-	public String step4bInfoNotMeasuredValue() {
-		return this.step4aInfoMeasuredValue();
+		return step3DateAndTimeCombination();
 	}
 
 	@Override
-	protected String step4bInfoResourceAlreadySetText() {
-		return " schon gesetzt für ";
+	public String step4aDescription() {
+		return step() + " 4a: Klären Sie Datum & Zeit Unklarheit";
+	}
+
+	@Override
+	public String step4aInfoDateAndTime() {
+		return "Datum und Zeit sind schon gesetzt für diesen " + measuredValue() + ".";
+	}
+
+	@Override
+	public String step4aInfoMeasuredValue() {
+		return "Dies ist kein " + measuredValue() + ".";
+	}
+
+	@Override
+	public String step4aModelDescription() {
+		return "Wähle Sie alle " + measuredValue() + " " + Constants.STRING_REPLACER + "n " +
+				", die zur markierten Datum-Zeit-Gruppe gehören, aus.";
+	}
+
+	@Override
+	public String step4bDescription() {
+		return step() + " 4b: Kläre Sie Unklarheiten";
+	}
+
+	@Override
+	public String step4bInfoNotMeasuredValue() {
+		return step4aInfoMeasuredValue();
 	}
 
 	@Override
@@ -507,24 +569,29 @@ public class De extends Lang{
 			"n dazugehören, wählen Sie sie mit gedrückter Strg-Taste aus.";
 	}
 
+	@Override
 	public String step5aDescription() {
-		return this.step() + " 5a: Zeit-Informationen vervollständigen";
+		return step() + " 5a: Zeit-Informationen vervollständigen";
 	}
 
+	@Override
 	public String step5aModelDescription() {
 		return "Bitte geben Sie die Zeitzone für die markierte Spalte an.";
 	}
 
+	@Override
 	public String step5cDescription() {
-		return this.step() + " 5c: Positionsdaten vervollständigen";
+		return step() + " 5c: Positionsdaten vervollständigen";
 	}
 
+	@Override
 	public String step5cModelDescription() {
 		return "Vervollständigen Sie die fehlenden Positions-Informationen für die markierte Spalte.";
 	}
 
+	@Override
 	public String step6aDescription() {
-		return this.step() + " 6a: Fehlende Zeiten und Daten hinzufügen";
+		return step() + " 6a: Fehlende Zeiten und Daten hinzufügen";
 	}
 
 	@Override
@@ -537,14 +604,16 @@ public class De extends Lang{
 		return "Bitte geben Sie eine Zeichenkette zur Verknüpfung der Spalten an (Optional).";
 	}
 
+	@Override
 	public String step6bDescription() {
-		return this.step() + " 6b: Fehlende Metainformationen hinzufügen";
+		return step() + " 6b: Fehlende Metainformationen hinzufügen";
 	}
 
+	@Override
 	public String step6bModelDescription() {
 		return "<html>Welche(r/s) <u>" + 
 				Constants.STRING_REPLACER + 
-				"</u> gehört zur markierten " + this.measuredValue() + "-" +
+				"</u> gehört zur markierten " + measuredValue() + "-" +
 				Constants.STRING_REPLACER + 
 				"?</html>";
 	}
@@ -554,12 +623,14 @@ public class De extends Lang{
 		return "Bitte wählen Sie die Spalte(n) zum Generieren des Namens aus.";
 	}
 
+	@Override
 	public String step6bSpecialDescription() {
-		return this.step() + " 6b (Spezial): Fehlende " + this.sensor() + "en hinzufügen";
+		return step() + " 6b (Spezial): Fehlende " + sensor() + "en hinzufügen";
 	}
 
+	@Override
 	public String step6bSpecialModelDescription() {
-		return "Welches ist der " + this.sensor() + " für";
+		return "Welches ist der " + sensor() + " für";
 	}
 
 	@Override
@@ -572,8 +643,9 @@ public class De extends Lang{
 		return "Namen an prefix anhängen als URI?";
 	}
 
+	@Override
 	public String step6cDescription() {
-		return this.step() + " 6c: Fehlende " + this.position() + "s-Angaben hinzufügen";
+		return step() + " 6c: Fehlende " + position() + "s-Angaben hinzufügen";
 	}
 
 	@Override
@@ -586,20 +658,21 @@ public class De extends Lang{
 		return "Legen Sie die Position durch Mausklick fest";
 	}
 
+	@Override
 	public String step6cModelDescription() {
-		return "Wie ist die " + this.position() + "s-Angabe von";
+		return "Wie ist die " + position() + "s-Angabe von";
 	}
 
 	@Override
 	public String step6Generation() {
 		return "Erzeuge Bezeichner automatisch";
 	}
-
+	
 	@Override
 	public String step6ManualInput() {
 		return "Setze Bezeichner manuell";
 	}
-	
+
 	@Override
 	public String step6MissingUserInput() {
 		return "Ihre Angaben sind nicht vollständig. Bitte überprüfen Sie sie.";
@@ -611,7 +684,7 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step7ConfigDirNotDirOrWriteable(String folder) {
+	public String step7ConfigDirNotDirOrWriteable(final String folder) {
 		return "Auf das Verzeichnis \n\"" + 
 				folder + "\"\n kann nicht zugegriffen werden";
 	}
@@ -636,8 +709,9 @@ public class De extends Lang{
 		return "Konfigurations-Datei";
 	}
 
+	@Override
 	public String step7Description() {
-		return this.step() + " 7: Finale Konfiguration";
+		return step() + " 7: Finale Konfiguration";
 	}
 
 	@Override
@@ -661,7 +735,7 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step7OfferingNameNotValid(String offeringName) {
+	public String step7OfferingNameNotValid(final String offeringName) {
 		return String.format("Der Name '%s' für das Offering ist nicht erlaubt. Er muss der Spezifikation für XML-NCName entsprechen.", offeringName);
 	}
 
@@ -671,26 +745,34 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String step7SOSConncetionStart(String strURL) {
-		return "Um mit dem Verbindungstest zu dem " + this.sos() + 
+	public String step7SosBindingInstructions()
+	{
+		return "Geben Sie das Binding (Kommunikationprotokoll) an.";
+	}
+
+	@Override
+	public String step7SOSConncetionStart(final String strURL) {
+		return "Um mit dem Verbindungstest zu dem " + sos() + 
 				"\n\"" + strURL + "\"\n" +
 				"zu starten, wählen Sie JA.\n" +
 				"Falls Sie Einstellungen ändern möchten, dann wählen Sie NEIN.";
 	}
 
-	public String step7SOSconnectionFailed(String strURL,
-			int responseCode) {
-		return "Could not connect to " + this.sos() + ": "
+	@Override
+	public String step7SOSconnectionFailed(final String strURL,
+			final int responseCode) {
+		return "Could not connect to " + sos() + ": "
         		+ strURL + 
         		". HTTP Response Code: " 
         		+ responseCode;
 	}
 
-	public String step7SOSConnectionFailedException(String strURL,
-			String message, 
-			int readTimeoutSeconds,
-			int connectTimeoutSeconds) {
-		return "Verbindung zu " + this.sos() + 
+	@Override
+	public String step7SOSConnectionFailedException(final String strURL,
+			final String message, 
+			final int readTimeoutSeconds,
+			final int connectTimeoutSeconds) {
+		return "Verbindung zu " + sos() + 
 				"\n\"" + strURL + "\"\n" +
 				"fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " + 
 				readTimeoutSeconds + " Sekunden Lese-Timeout.\n" +
@@ -703,6 +785,12 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step7SosVersionInstructions()
+	{ 
+		return "Bitte die Spezifikations-Version angeben, die durch die SOS-Instanz implementiert wird.";
+	}
+
+	@Override
 	public String step8ConfigFileButton() {
 		return "Öffnen";
 	}
@@ -712,8 +800,9 @@ public class De extends Lang{
 		return "Klicken Sie auf den Button um die generierte Konfiguration anzuschauen";
 	}
 
+	@Override
 	public String step8Description() {
-		return this.step() + " 8: Finaler Schritt - Zusammenfassung der Ergebnisse";
+		return step() + " 8: Finaler Schritt - Zusammenfassung der Ergebnisse";
 	}
 
 	@Override
@@ -723,9 +812,9 @@ public class De extends Lang{
 
 	@Override
 	public String step8DirectImportLabel() {
-		return "Registriere " + this.sensor() + 
-				"en und lade " + this.observation() + 
-				"en in den " + this.sos();
+		return "Registriere " + sensor() + 
+				"en und lade " + observation() + 
+				"en in den " + sos();
 	}
 
 	@Override
@@ -733,32 +822,35 @@ public class De extends Lang{
 		return "Starte Import-Vorgang";
 	}
 
-	public String step8ErrorLable(int i) {
+	@Override
+	public String step8ErrorLable(final int i) {
 		return "Fehler: " + i;
 	}
 
 	@Override
-	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
+	public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {
 		return String.format("Konnte JAR-Datei nicht finden!\nBitte dort ablegen:\n'%s'",
 				expectedAbsolutePathToFeederJar);
 	}
 
 	@Override
-	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
+	public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar)
 	{
 		return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n'%s'.\nKlicken sie auf JA um die Datei auszuwählen!",
 				pathToDirectoryWithFeederJar);
 	}
 
-	public String step8InsertObservationLabel(int i) {
-		return "Füge " + i + " " + this.observation() + "en hinzu...";
+	@Override
+	public String step8InsertObservationLabel(final int i) {
+		return "Füge " + i + " " + observation() + "en hinzu...";
 	}
 
 	@Override
 	public String step8LogFile() {
 		return "Log-Datei";
 	}
-
+	
+	@Override
 	public String step8LogFileButton() {
 		return "Öffnen";
 	}
@@ -768,18 +860,19 @@ public class De extends Lang{
 		return "Klicken Sie auf den Button um zusätzliche Informationen zu bekommen, die während des Vorgangs gesammelt wurden.";
 	}
 
-	public String step8RegisterSensorLabel(int i) {
-		return "Registriere " + i + " " + this.sensor() + "(en)...";
-	}
-	
 	@Override
-	public String step8SaveModelFailed(File f) {
+	public String step8RegisterSensorLabel(final int i) {
+		return "Registriere " + i + " " + sensor() + "(en)...";
+	}
+
+	@Override
+	public String step8SaveModelFailed(final File f) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +
 				f.getAbsolutePath();
 	}
 
 	@Override
-	public String step8SaveModelFailed(File f, String exceptionText) {
+	public String step8SaveModelFailed(final File f, final String exceptionText) {
 		return "Die Konfiguration konnte nicht in der Datei\n\"" +
 				f.getAbsolutePath() +
 				"\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
@@ -792,7 +885,8 @@ public class De extends Lang{
 		return "Starte Importvorgang";
 	}
 
-	public String step8SuccessLabel(int i) {
+	@Override
+	public String step8SuccessLabel(final int i) {
 		return "Erfolgreich: " + i;
 	}
 
@@ -811,6 +905,7 @@ public class De extends Lang{
 		return "Einheit";
 	}
 
+	@Override
 	public String unitOfMeasurement() {
 		return "Maßeinheit";
 	}
@@ -821,7 +916,7 @@ public class De extends Lang{
 	}
 
 	@Override
-	public String uriSyntaxNotValidDialogMessage(String uri) {
+	public String uriSyntaxNotValidDialogMessage(final String uri) {
 		return "Der eingegebene URI \"" + uri + "\" ist syntaktisch nicht korrekt.";
 	}
 
@@ -831,10 +926,17 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String version()
+	{
+		return "Version";
+	}
+
+	@Override
 	public String waitForParseResultsLabel() {
 		return "Teste Einlesen der Spalte...";
 	}
 
+	@Override
 	public String warningDialogTitle() {
 		return "Warnung";
 	}
@@ -842,6 +944,11 @@ public class De extends Lang{
 	@Override
 	public String year() {
 		return "Jahr";
+	}
+
+	@Override
+	protected String step4bInfoResourceAlreadySetText() {
+		return " schon gesetzt für ";
 	}
 
 }

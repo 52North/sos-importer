@@ -29,24 +29,32 @@ public class Step7Model implements StepModel {
 	
 	private String sosURL;
 	
+	private String version;
+	
+	private String binding;
+	
 	private File configFile;
 
 	private boolean generateOfferingFromSensorName;
 
 	private String offering;
 
-	public Step7Model(String sosURL, 
-			File configFile,
-			boolean generateOfferingFromSensorName,
-			String offering) {
+	public Step7Model(final String sosURL, 
+			final File configFile,
+			final boolean generateOfferingFromSensorName,
+			final String offering,
+			final String version,
+			final String binding) {
 		this.sosURL = sosURL;
 		this.configFile = configFile;
 		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
 		this.offering = offering;
+		this.binding = binding;
+		this.version = version;
 	}
 	
 	public Step7Model() {
-		this(null,null,true,null);
+		this(null,null,true,null,null,null);
 	}
 
 	public String getSosURL() {
@@ -57,11 +65,11 @@ public class Step7Model implements StepModel {
 		return configFile;
 	}
 
-	public void setConfigFile(File configFile) {
+	public void setConfigFile(final File configFile) {
 		this.configFile = configFile;
 	}
 
-	public void setSosURL(String sosURL) {
+	public void setSosURL(final String sosURL) {
 		this.sosURL = sosURL;
 	}
 
@@ -70,7 +78,7 @@ public class Step7Model implements StepModel {
 	}
 
 	public void setGenerateOfferingFromSensorName(
-			boolean generateOfferingFromSensorName) {
+			final boolean generateOfferingFromSensorName) {
 		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
 	}
 
@@ -78,7 +86,28 @@ public class Step7Model implements StepModel {
 		return offering;
 	}
 
-	public void setOffering(String offering) {
+	public void setOffering(final String offering) {
 		this.offering = offering;
 	}
+
+	public String getVersion()
+	{
+		return version;
+	}
+
+	public String getBinding()
+	{
+		return binding;
+	}
+
+	public void setSosVersion(final String version)
+	{
+		this.version = version;
+	}
+
+	public void setSosBinding(final String binding)
+	{
+		this.binding = binding;
+	}
+
 }

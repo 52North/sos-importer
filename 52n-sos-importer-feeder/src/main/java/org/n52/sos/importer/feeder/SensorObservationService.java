@@ -318,10 +318,8 @@ public final class SensorObservationService {
 								io));
 						failedInsertObservations.add(io);
 					} else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
-						if (LOG.isDebugEnabled()) {
-							LOG.debug(String.format("Observation was already contained in SOS: %s",
-									io));
-						}
+						LOG.debug(String.format("Observation was already contained in SOS: %s",
+								io));
 					}
 				}
 			}
@@ -342,10 +340,8 @@ public final class SensorObservationService {
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
-						if (LOG.isDebugEnabled()) {
-							LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
-									response.getInsertObservationResponse().getAssignedObservationId()));
-						}
+						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
+								response.getInsertObservationResponse().getAssignedObservationId()));
 						return response.getInsertObservationResponse().getAssignedObservationId();
 					} catch (final XmlException e) {
 						// TODO Auto-generated catch block generated on 20.06.2012 around 10:43:01
@@ -375,9 +371,7 @@ public final class SensorObservationService {
 							Arrays.toString(owsEx.getExceptionTexts())));
 				}
 				LOG.error(String.format("Exception thrown: %s\n%s",e.getMessage(),buf.toString()));
-				if (LOG.isDebugEnabled()) {
-					LOG.debug(e.getMessage(),e);
-				}
+				LOG.debug(e.getMessage(),e);
 			}
 			
 		} catch (final OXFException e) {
@@ -389,9 +383,7 @@ public final class SensorObservationService {
 	private InsertObservationParameterBuilder_v100 createParameterBuilderFromIO(
 			final InsertObservation io) throws OXFException {
 		
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("createParameterBuilderFromIO()");
-		}
+		LOG.trace("createParameterBuilderFromIO()");
 		
 		ObservationParameters obsParameter = null;
 		

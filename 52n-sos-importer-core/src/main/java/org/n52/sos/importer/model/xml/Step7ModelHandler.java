@@ -36,14 +36,12 @@ import org.x52North.sensorweb.sos.importer.x02.SosMetadataDocument.SosMetadata;
  */
 public class Step7ModelHandler implements ModelHandler<Step7Model> {
 
-	private static final Logger logger = Logger.getLogger(Step7ModelHandler.class);
+	private static final Logger LOG = Logger.getLogger(Step7ModelHandler.class);
 	
 	@Override
-	public void handleModel(Step7Model stepModel,
-			SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
+	public void handleModel(final Step7Model stepModel,
+			final SosImportConfiguration sosImportConf) {
+		LOG.trace("handleModel()");
 		SosMetadata sosMeta;
 		Offering off;
 		boolean generateOffering;
@@ -57,22 +55,24 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
 		//
 		if (sosMeta == null) {
 			sosMeta = sosImportConf.addNewSosMetadata();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Added new SosMetadata element.");
-			}
+			LOG.debug("Added new SosMetadata element.");
 		}
 		sosMeta.setURL(sosURL);
 		off = sosMeta.getOffering();
 		if (off == null) {
 			off = sosMeta.addNewOffering();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Added new Offering element");
-			}
+			LOG.debug("Added new Offering element");
 		}
 		off.setGenerate(generateOffering);
 		if (!generateOffering) {
 			off.setStringValue(offering);
 		}
+		if (stepModel.getBinding() != null && !stepModel.getBinding().isEmpty()) {
+			sosMeta.setBinding(stepModel.getBinding());
+		}
+		if (stepModel.getVersion() != null && !stepModel.getVersion().isEmpty()) {
+			sosMeta.setVersion(stepModel.getVersion());
+		} 
 	}
 
 }

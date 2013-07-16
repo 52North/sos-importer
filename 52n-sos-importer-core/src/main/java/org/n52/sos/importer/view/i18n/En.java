@@ -47,8 +47,15 @@ public class En extends Lang{
 		return "and";
 	}
 
+	@Override
 	public String backButtonLabel() {
 		return "Back";
+	}
+
+	@Override
+	public String binding()
+	{
+		return "Binding";
 	}
 
 	@Override
@@ -106,6 +113,7 @@ public class En extends Lang{
 		return "Error";
 	}
 
+	@Override
 	public String errorDialogTitle() {
 		return "Error";
 	}
@@ -115,20 +123,25 @@ public class En extends Lang{
 		return "Example";
 	}
 
+	@Override
 	public String exitDialogQuestion() { 
 		return "Do you really want to exit?\n";
 	}
-
-	public String exitDialogTitle() { return "Exit"; }
 	
+	@Override
+	public String exitDialogTitle() { return "Exit"; }
+
+	@Override
 	public String featureOfInterest() {
 		return "Feature of Interest";
 	}
 
+	@Override
 	public String file() {
 		return "file";
 	}
 
+	@Override
 	public String finishButtonLabel() {
 		return "Finish";
 	}
@@ -158,7 +171,7 @@ public class En extends Lang{
 
 	@Override
 	public String heightWarningDialogDecimalNumber() {
-		return "The " + this.altitude() + " has to be a decimal number.";
+		return "The " + altitude() + " has to be a decimal number.";
 	}
 
 	@Override
@@ -166,23 +179,24 @@ public class En extends Lang{
 		return "Hours";
 	}
 
+	@Override
 	public String infoDialogTitle() {
 		return "Information";
 	}
 
 	@Override
 	public String latitudeDialogDecimalValue() {
-		return "The " + this.latitudeNorthing() + " can only be a decimal number so far.";
+		return "The " + latitudeNorthing() + " can only be a decimal number so far.";
 	}
-
+	
 	@Override
 	public String latitudeNorthing() {
 		return "Latitude / Northing";
 	}
-	
+
 	@Override
 	public String longitudeDialogDecimalValue() {
-		return "The " + this.longitudeEasting() + " can only be a decimal number so far.";
+		return "The " + longitudeEasting() + " can only be a decimal number so far.";
 	}
 
 	@Override
@@ -204,12 +218,12 @@ public class En extends Lang{
 	public String minutes() {
 		return "Minutes";
 	}
-
+	
 	@Override
 	public String month() {
 		return "Month";
 	}
-	
+
 	@Override
 	public String name() {
 		return "Name";
@@ -229,12 +243,12 @@ public class En extends Lang{
 	public String observation() {
 		return "Observation";
 	}
-
+	
 	@Override
 	public String observedProperty() {
 		return "Observed Property";
 	}
-	
+
 	@Override
 	public String offering() {
 		return "Offering";
@@ -265,6 +279,7 @@ public class En extends Lang{
 		return "Seconds";
 	}
 
+	@Override
 	public String sensor() {
 		return "Sensor";
 	}
@@ -273,41 +288,56 @@ public class En extends Lang{
 	public String spaceString() {
 		return "Space";
 	}
-
-	public String step() { return "Step"; }
 	
+	@Override
+	public String specificationVersion()
+	{
+		return "Specification Version";
+	}
+
+	@Override
+	public String step() { return "Step"; }
+
+	@Override
 	public String step1BrowseButton() {
 		return "Select";
 	}
 
+	@Override
 	public String step1Description() {
-		return this.step() + " 1: Choose CSV file";
+		return step() + " 1: Choose CSV file";
 	}
 
+	@Override
 	public String step1Directory() {
 		return "Path";
 	}
 
+	@Override
 	public String step1FeedTypeCSV() {
 		return "One-Time-Feed from a local CSV file";
 	}
 
+	@Override
 	public String step1FeedTypeFTP() {
 		return "One-Time-Feed / Repetitive Feed from a FTP-Server";
 	}
 
+	@Override
 	public String step1File() {
 		return "CSV File";
 	}
-
+	
+	
+	@Override
 	public String step1FileSchema() {
 		return "File-Schema";
 	}
-
+	
+	@Override
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
-	
 	
 	@Override
 	public String step1InstructionLabel() {
@@ -319,33 +349,40 @@ public class En extends Lang{
 		return "Introduction";
 	}
 	
+	@Override
 	public String step1Password() {
 		return "Password";
 	}
 	
+	@Override
 	public String step1Regex() {
 		return "<html>Regular<br/>expressions:</html>";
 	}
 	
+	@Override
 	public String step1RegexDescription() {
 		return "<html>Note: Choose this option to describe dynamic folder and file "
 				+ "structures in the following lines. "
 				+ "Therefor be careful with special characters of regular expressions"
 				+ ", in front of all escape characters.</html>";
 	}
-	
+
+	@Override
 	public String step1SelectLanguage() {
 		return "Change language";
 	}
-	
+
+	@Override
 	public String step1User() {
 		return "User";
 	}
 
+	@Override
 	public String step2ColumnSeparator() {
 		return "Column separator";
 	}
 
+	@Override
 	public String step2CommentIndicator() {
 		return "Comment indicator";
 	}
@@ -355,38 +392,44 @@ public class En extends Lang{
 		return "CSV-Data-Preview";
 	}
 
+	@Override
 	public String step2DecimalSeparator() {
 		return "Decimal separator";
 	}
 
+	@Override
 	public String step2Description() {
-		return this.step() + " 2: Define CSV File Metadata";
+		return step() + " 2: Define CSV File Metadata";
 	}
 
+	@Override
 	public String step2FirstLineWithData() {
 		return "Ignore data until line";
 	}
 
+	@Override
 	public String step2ParseHeader() {
 		return "Interpret Header";
 	}
-
+	
+	@Override
 	public String step2TextQualifier() {
 		return "Text qualifier";
 	}
 
+	@Override
 	public String step3aDescription() {
-		return this.step() + " 3a: Choose Metadata for the selected column";
+		return step() + " 3a: Choose Metadata for the selected column";
 	}
-	
+
 	@Override
 	public String step3aMeasureValueColMissingDialogMessage() {
-		return "You have to specify at least one " + this.measuredValue() + " column!";
+		return "You have to specify at least one " + measuredValue() + " column!";
 	}
 
 	@Override
 	public String step3aMeasureValueColMissingDialogTitle() {
-		return this.measuredValue() + " column missing";
+		return measuredValue() + " column missing";
 	}
 
 	@Override
@@ -400,102 +443,115 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step3aParseTestNFailed(int n) {
+	public String step3aParseTestNFailed(final int n) {
 		return n + " values could not be interpreted.";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
 		return "The type for this column is \"" + 
-				this.step3ColTypeUndefined() + 
+				step3ColTypeUndefined() + 
 				"\".\nPlease select one.\nChoose \"" +
-				this.step3ColTypeDoNotExport() + 
+				step3ColTypeDoNotExport() + 
 				"\" for skipping it.";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
 		return "Column Type is \"" + 
-				this.step3ColTypeUndefined() + 
+				step3ColTypeUndefined() + 
 				"\"";
 	}
 
+	@Override
 	public String step3bDescription() {
-		return this.step() + " 3b: Choose metadata for rows";
+		return step() + " 3b: Choose metadata for rows";
 	}
 
+	@Override
 	public String step3ColTypeDateTime() {
 		return "Date & Time";
 	}
 
+	@Override
 	public String step3ColTypeDoNotExport() {
 		return "Do not export";
 	}
 
+	@Override
 	public String step3ColTypeMeasuredValue() {
 		return "Measured Value";
 	}
 
+	@Override
 	public String step3ColTypeUndefined() {
 		return "Undefined";
 	}
 
+	@Override
 	public String step3DateAndTimeCombination() {
 		return "Combination";
 	}
 
+	@Override
 	public String step3DateAndTimeUnixTime() {
 		return "UNIX time";
 	}
 
+	@Override
 	public String step3MeasuredValBoolean() {
 		return "Boolean";
 	}
 
+	@Override
 	public String step3MeasuredValCount() {
 		return "Count";
 	}
 
+	@Override
 	public String step3MeasuredValNumericValue() {
 		return "Numeric Value";
 	}
 
+	@Override
 	public String step3MeasuredValText() {
 		return "Text";
 	}
 
+	@Override
 	public String step3PositionCombination() {
-		return this.step3DateAndTimeCombination();
-	}
-
-	public String step4aDescription() {
-		return this.step() + " 4a: Solve Date & Time ambiguities";
-	}
-
-	public String step4aInfoDateAndTime() {
-		return "Date and Time are already set for this " + this.measuredValue() + ".";
-	}
-
-	public String step4aInfoMeasuredValue() {
-		return "This is not a " + this.measuredValue() + ".";
-	}
-
-	public String step4aModelDescription() {
-		return "Select all " + this.measuredValue() + " " + Constants.STRING_REPLACER + "s " +
-				"where the marked Date & Time group corresponds to.";
-	}
-
-	public String step4bDescription() {
-		return this.step() + " 4b: Solve ambiguities";
-	}
-
-	public String step4bInfoNotMeasuredValue() {
-		return this.step4aInfoMeasuredValue();
+		return step3DateAndTimeCombination();
 	}
 
 	@Override
-	protected String step4bInfoResourceAlreadySetText() {
-		return " already set for this ";
+	public String step4aDescription() {
+		return step() + " 4a: Solve Date & Time ambiguities";
+	}
+
+	@Override
+	public String step4aInfoDateAndTime() {
+		return "Date and Time are already set for this " + measuredValue() + ".";
+	}
+
+	@Override
+	public String step4aInfoMeasuredValue() {
+		return "This is not a " + measuredValue() + ".";
+	}
+
+	@Override
+	public String step4aModelDescription() {
+		return "Select all " + measuredValue() + " " + Constants.STRING_REPLACER + "s " +
+				"where the marked Date & Time group corresponds to.";
+	}
+
+	@Override
+	public String step4bDescription() {
+		return step() + " 4b: Solve ambiguities";
+	}
+
+	@Override
+	public String step4bInfoNotMeasuredValue() {
+		return step4aInfoMeasuredValue();
 	}
 
 	@Override
@@ -516,24 +572,29 @@ public class En extends Lang{
 			", click all of them with pressed CTRL key.";
 	}
 
+	@Override
 	public String step5aDescription() {
-		return this.step() + " 5a: Complete time data";
+		return step() + " 5a: Complete time data";
 	}
 
+	@Override
 	public String step5aModelDescription() {
 		return "Please define the timezone for the marked date and time.";
 	}
 
+	@Override
 	public String step5cDescription() {
-		return this.step() + " 5c: Complete position data";
+		return step() + " 5c: Complete position data";
 	}
 
+	@Override
 	public String step5cModelDescription() {
 		return "Complete missing information for the marked position.";
 	}
 
+	@Override
 	public String step6aDescription() {
-		return this.step() + " 6a: Add missing dates and times";
+		return step() + " 6a: Add missing dates and times";
 	}
 
 	@Override
@@ -547,14 +608,16 @@ public class En extends Lang{
 				"columns (OPTIONAL).";
 	}
 
+	@Override
 	public String step6bDescription() {
-		return this.step() + " 6b: Add missing metadata";
+		return step() + " 6b: Add missing metadata";
 	}
 
+	@Override
 	public String step6bModelDescription() {
 		return "<html>What is the <u>" + 
 				Constants.STRING_REPLACER + 
-				"</u> for the marked " + this.measuredValue() + " " + 
+				"</u> for the marked " + measuredValue() + " " + 
 				Constants.STRING_REPLACER + 
 				"?</html>";
 	}
@@ -564,12 +627,14 @@ public class En extends Lang{
 		return "Please select the column(s) to generate the name.";
 	}
 
+	@Override
 	public String step6bSpecialDescription() {
-		return this.step() + " 6b (Special): Add missing " + this.sensor() + "s";
+		return step() + " 6b (Special): Add missing " + sensor() + "s";
 	}
 
+	@Override
 	public String step6bSpecialModelDescription() {
-		return "What is the " + this.sensor().toLowerCase(En.locale) + " for";
+		return "What is the " + sensor().toLowerCase(En.locale) + " for";
 	}
 
 	@Override
@@ -582,8 +647,9 @@ public class En extends Lang{
 		return "Use Name after prefix?";
 	}
 
+	@Override
 	public String step6cDescription() {
-		return this.step() + " 6c: Add missing " + this.position().toLowerCase(En.locale) + "s";
+		return step() + " 6c: Add missing " + position().toLowerCase(En.locale) + "s";
 	}
 
 	@Override
@@ -596,8 +662,9 @@ public class En extends Lang{
 		 return "Set the position by clicking on the map";
 	}
 
+	@Override
 	public String step6cModelDescription() {
-		return "What is the " + this.position().toLowerCase(En.locale) + " of";
+		return "What is the " + position().toLowerCase(En.locale) + " of";
 	}
 
 	@Override
@@ -621,7 +688,7 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step7ConfigDirNotDirOrWriteable(String folder) {
+	public String step7ConfigDirNotDirOrWriteable(final String folder) {
 		return "The selected config file folder \n\"" + 
 				folder + 
 				"\"\nis not accessible for the application.";
@@ -647,8 +714,9 @@ public class En extends Lang{
 		return "Configuration File";
 	}
 
+	@Override
 	public String step7Description() {
-		return this.step() + " 7: Final Configuration";
+		return step() + " 7: Final Configuration";
 	}
 
 	@Override
@@ -672,7 +740,7 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step7OfferingNameNotValid(String offeringName) {
+	public String step7OfferingNameNotValid(final String offeringName) {
 		return String.format("The given offering '%s' is not valid. It should match XML-NCName specification.", offeringName);
 	}
 
@@ -682,25 +750,33 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String step7SOSConncetionStart(String strURL) {
+	public String step7SosBindingInstructions()
+	{
+		return "Please specify the binding.";
+	}
+
+	@Override
+	public String step7SOSConncetionStart(final String strURL) {
 		return "To start connection testing to URL" +
 				"\n\"" + strURL + "\"\n" +
 				"select YES. For changing values select NO.";
 	}
 
-	public String step7SOSconnectionFailed(String strURL,
-			int responseCode) {
-		return "Could not connect to " + this.sos() + ": "
+	@Override
+	public String step7SOSconnectionFailed(final String strURL,
+			final int responseCode) {
+		return "Could not connect to " + sos() + ": "
         		+ strURL + 
         		". HTTP Response Code: " 
         		+ responseCode;
 	}
 
-	public String step7SOSConnectionFailedException(String strURL,
-			String message,
-			int readTimeoutSeconds,
-			int connectTimeoutSeconds) {
-		return "Connection to " + this.sos() + 
+	@Override
+	public String step7SOSConnectionFailedException(final String strURL,
+			final String message,
+			final int readTimeoutSeconds,
+			final int connectTimeoutSeconds) {
+		return "Connection to " + sos() + 
 				"\n\"" + strURL + "\"\n" +
 				"failed after " + connectTimeoutSeconds + " seconds connect and " + 
 				readTimeoutSeconds + " seconds read timeout.\n" +
@@ -713,6 +789,12 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step7SosVersionInstructions()
+	{
+		return "Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.";
+	}
+
+	@Override
 	public String step8ConfigFileButton() {
 		return "Open";
 	}
@@ -722,8 +804,9 @@ public class En extends Lang{
 		return "For taking a look at the generated configuration file, please click button.";
 	}
 
+	@Override
 	public String step8Description() {
-		return this.step() + " 8: Final Step - Summary of the Results";
+		return step() + " 8: Final Step - Summary of the Results";
 	}
 
 	@Override
@@ -741,27 +824,29 @@ public class En extends Lang{
 		return "Start Import";
 	}
 
-	public String step8ErrorLable(int i) {
+	@Override
+	public String step8ErrorLable(final int i) {
 		return "Errors: " + i;
 	}
 
 	@Override
-	public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
+	public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {
 		return String.format("Could not find jar file!\nPlease place it there:\n'%s'",
 				expectedAbsolutePathToFeederJar);
 	}
 
 	@Override
-	public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar)
+	public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar)
 	{
 		return String.format("Could not find jar file here:\n'%s'\nPlease select YES for selecting the file manually.",
 				pathToDirectoryWithFeederJar);
 	}
 
-	public String step8InsertObservationLabel(int i) {
+	@Override
+	public String step8InsertObservationLabel(final int i) {
 		return "Insert " + i + " Observations...";
 	}
-
+	
 	@Override
 	public String step8LogFile() {
 		return "Log File";
@@ -776,19 +861,20 @@ public class En extends Lang{
 	public String step8LogFileInstructions() {
 		return "To check for additional information, please take a look at the log file created during the process.";
 	}
-	
-	public String step8RegisterSensorLabel(int i) {
-		return "Register " + i + " " + this.sensor() + "(s)...";
+
+	@Override
+	public String step8RegisterSensorLabel(final int i) {
+		return "Register " + i + " " + sensor() + "(s)...";
 	}
 
 	@Override
-	public String step8SaveModelFailed(File f) {
+	public String step8SaveModelFailed(final File f) {
 		return "The configuration could not be saved to file\n\"" +
 				f.getAbsolutePath();
 	}
 
 	@Override
-	public String step8SaveModelFailed(File f, String exceptionText) {
+	public String step8SaveModelFailed(final File f, final String exceptionText) {
 		return "The configuration could not be saved to file\n\"" +
 				f.getAbsolutePath() +
 				"\".\nAn Exception occurred:\n" +
@@ -801,7 +887,8 @@ public class En extends Lang{
 		return "Start";
 	}
 
-	public String step8SuccessLabel(int i) {
+	@Override
+	public String step8SuccessLabel(final int i) {
 		return "Successful: " + i;
 	}
 
@@ -820,6 +907,7 @@ public class En extends Lang{
 		return "Unit";
 	}
 
+	@Override
 	public String unitOfMeasurement() {
 		return "Unit of Measurement";
 	}
@@ -830,7 +918,7 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String uriSyntaxNotValidDialogMessage(String uri) {
+	public String uriSyntaxNotValidDialogMessage(final String uri) {
 		return "The entered URI \"" + uri + "\" is syntactically not correct.";
 	}
 
@@ -840,10 +928,17 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String version()
+	{
+		return "Version";
+	}
+
+	@Override
 	public String waitForParseResultsLabel() {
 		return "Testing evaluation pattern for column...";
 	}
 
+	@Override
 	public String warningDialogTitle() {
 		return "Warning";
 	}
@@ -851,6 +946,11 @@ public class En extends Lang{
 	@Override
 	public String year() {
 		return "Year";
+	}
+
+	@Override
+	protected String step4bInfoResourceAlreadySetText() {
+		return " already set for this ";
 	}
 
 }
