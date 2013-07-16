@@ -30,6 +30,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.Constants;
@@ -51,7 +52,7 @@ public class TablePanel extends JPanel {
 	private TablePanel() { 
 		super();
 		setBorder(new TitledBorder(null, Lang.l().dataPreview(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagLayout gridBagLayout = new GridBagLayout();
+		final GridBagLayout gridBagLayout = new GridBagLayout();
 		/*gridBagLayout.columnWidths = new int[]{438, 0};
 		gridBagLayout.rowHeights = new int[]{273, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -59,8 +60,11 @@ public class TablePanel extends JPanel {
 		setLayout(gridBagLayout);
 		table = new JTable();
 		table.setPreferredScrollableViewportSize(new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT-450));
-		JScrollPane scrollPane = new JScrollPane(table);
-		GridBagConstraints c = new GridBagConstraints();
+		table.setAutoscrolls(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		final JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		final GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -74,8 +78,9 @@ public class TablePanel extends JPanel {
 	}
 	
 	public static TablePanel getInstance() {
-		if (instance == null) 
+		if (instance == null) {
 			instance = new TablePanel();
+		}
 		return instance;
 	}
 

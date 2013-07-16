@@ -50,7 +50,7 @@ public class TestData {
 	private static final Logger logger = Logger.getLogger(TestData.class);
 	
 	static {
-		Logger root = Logger.getRootLogger();
+		final Logger root = Logger.getRootLogger();
 		root.setLevel(Level.DEBUG);
 		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
 	}
@@ -112,6 +112,22 @@ public class TestData {
 				{"2012-04-23 11:53:43", "Thermometer", "Temperature", "Münster", "degC", "12.3", "Berlin", "degC", "12.5"},
 				{"2012-04-23 11:53:53", "Thermometer", "Temperature", "Münster", "degC", "12.4", "Berlin", "degC", "12.6"},
 				{"2012-04-23 11:54:13", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.7"},
+				};
+	
+	/**
+	 * Example data set with many columns<br />
+	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Feature UOM Value ...</code><br />
+	 * <code>2012-04-23 11:52:23 Thermometer Temperature Münster degC 14.5 Berlin degC 14.5 ...</code>
+	 */
+	public static final Object[][] EXAMPLE_TABLE_MANY_MANY_COLUMNS = {
+				//         0				1			2				3		4		5		6			7		8
+				{"Timestamp",			"Sensor",	   "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value", "Sensor", "Phenomenon",  "Feature", "UOM",  "Value","Feature","UOM",  "Value"},
+				{"2012-04-23 11:52:23", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5", "Thermometer", "Temperature", "Münster", "degC", "14.5", "Berlin", "degC", "14.5"},
+				{"2012-04-23 11:52:33", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5", "Thermometer", "Temperature", "Münster", "degC", "15.5", "Berlin", "degC", "15.5"},
+				{"2012-04-23 11:52:43", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5", "Thermometer", "Temperature", "Münster", "degC", "13.5", "Berlin", "degC", "13.5"},
+				{"2012-04-23 11:52:53", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5", "Thermometer", "Temperature", "Münster", "degC", "12.5", "Berlin", "degC", "12.5"},
+				{"2012-04-23 11:53:03", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7", "Thermometer", "Temperature", "Münster", "degC", "12.7", "Berlin", "degC", "12.7"},
+				{"2012-04-23 11:53:13", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8", "Thermometer", "Temperature", "Münster", "degC", "12.8", "Berlin", "degC", "12.8"},
 				};
 	
 	/**
@@ -202,7 +218,7 @@ public class TestData {
 		if (logger.isTraceEnabled()) {
 			logger.trace("exampleFoi()");
 		}
-		FeatureOfInterest foi = new FeatureOfInterest();
+		final FeatureOfInterest foi = new FeatureOfInterest();
 		
 		foi.setName("FOI_TEST_1");
 		foi.setGenerated(false);
@@ -213,7 +229,7 @@ public class TestData {
 				new EPSGCode(4979)));
 		try {
 			foi.setURI(new URI("http://example.com/spatial/fois/test/1"));
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			logger.error("Exception thrown: " + e.getMessage(), e);
 		}
 		foi.setTableElement(new Column(3, 1));
@@ -230,12 +246,12 @@ public class TestData {
 		if (logger.isTraceEnabled()) {
 			logger.trace("exampleObsProp()");
 		}
-		ObservedProperty obsProp = new ObservedProperty();
+		final ObservedProperty obsProp = new ObservedProperty();
 		obsProp.setName("OBS_PROP_TEST_1");
 		obsProp.setGenerated(false);
 		try {
 			obsProp.setURI(new URI("http://example.com/spatial/observedproperties/test/1"));
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			logger.error("Exception thrown: " + e.getMessage(), e);
 		}
 		obsProp.setTableElement(new Column(3, 1));
@@ -252,7 +268,7 @@ public class TestData {
 		if (logger.isTraceEnabled()) {
 			logger.trace("exampleMVnumeric()");
 		}
-		NumericValue nv = new NumericValue();
+		final NumericValue nv = new NumericValue();
 		nv.setTableElement(new Column(1, 1));
 		return nv;
 	}
