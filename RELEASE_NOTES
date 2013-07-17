@@ -1,0 +1,72 @@
+For a complete Release Notes overview visit
+
+  https://wiki.52north.org/bin/view/SensorWeb/SosImporter#Road_map
+ 
+
+Release Notes for SOS-Importer 0.4.0
+====================================
+Features:
+---------
+ * Support for sensors with multiple outputs
+ 
+Changes:
+--------
+ * 
+
+Bugfixes:
+---------
+ * 878 SOS Feeder (v.0.4.0-SNAPSHOT) Error: InvalidParameterValue
+ * "Too many columns issue" 
+
+
+Release Notes for SOS-Importer 0.3.0
+====================================
+Features:
+---------
+ * Support more observation types
+ * FTP Remote File Support
+ 
+ Changes:
+--------
+ * Use SOSWrapper from OXF
+
+ Bugfixes:
+---------
+ * 736 Cannot run from source
+ * 738 Could not save xml file
+ * 650 Design: Instructions are not very large
+ * 630 Some steps don't seem to exist
+ * 645 Step 6b and 6c: Spend hours clicking
+ * 733 Step 6b: Freeze in the workflow on missing selection
+ * 629 Step 6c: The unit degree exists twice ("deg", "°")
+ * 668 Step 6b: "Enter" goes "back" instead of "next"
+ * 589 Step 3b: Not yet implemented
+ * 649 Usability: User can not (really) change window size
+ * 669 Step 6b: Question - Accidentally deleting a sensor name in dropdown list --> Consequences?
+ * 586 Step 6c: Add Missing Position Information for Feature of Interest
+ * 707 Step 5c & 6c: Altitude input requested from user in the case of using an reference system which is not 3d
+ * 523 Step 3: Merge DateAndTimes and Positions
+
+ 
+Release Notes for SOS-Importer 0.2.0
+====================================
+Features:
+---------
+ * Multi language support
+ * Xml configuration
+ * Generation of FOIs and other data from columns
+ * Feeding component
+
+ Changes:
+--------
+ * Maven build
+
+
+Release Notes for SOS-Importer 0.2.0
+====================================
+Features:
+---------Features* 
+ * Swing GUI
+ * CSV file support
+ * One time import
+
