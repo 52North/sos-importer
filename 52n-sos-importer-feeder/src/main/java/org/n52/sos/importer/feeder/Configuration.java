@@ -998,4 +998,21 @@ public final class Configuration {
 		return (getMeasureValueColumnIds().length == 1);
 	}
 
+	public String getSosVersion()
+	{
+		LOG.trace("getSosVersion()");
+		return importConf.getSosMetadata().getVersion();
+	}
+	
+	public String getSosBinding()
+	{
+		LOG.trace("getSosBinding()");
+		if (importConf.getSosMetadata().isSetBinding())
+		{
+			return importConf.getSosMetadata().getBinding();
+		}
+		LOG.info("Optional SosMetadata.Binding not set!");
+		return null;
+	}
+
 }

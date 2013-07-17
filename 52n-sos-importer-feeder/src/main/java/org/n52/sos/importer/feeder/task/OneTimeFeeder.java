@@ -155,9 +155,11 @@ public class OneTimeFeeder implements Runnable {
 			try {
 				// check SOS
 				final URL sosURL = config.getSosUrl();
+				final String sosVersion = config.getSosVersion();
+				final String sosBinding = config.getSosBinding();
 				SensorObservationService sos = null;
 				try {
-					sos = new SensorObservationService(sosURL);
+					sos = new SensorObservationService(sosURL,sosVersion,sosBinding);
 				} catch (final ExceptionReport er) {
 					LOG.fatal("SOS " + sosURL + " is not available. Please check the configuration!", er);
 				} catch (final OXFException oxfe) {
