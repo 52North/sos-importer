@@ -72,13 +72,13 @@ public class DataFile {
 	
 	private static final Logger LOG = Logger.getLogger(DataFile.class);
 	
-	private final Configuration c;
+	private final Configuration configuration;
 	
-	private final File f;
+	private final File file;
 	
 	public DataFile(final Configuration configuration, final File file) {
-		c = configuration;
-		f = file;
+		this.configuration = configuration;
+		this.file = file;
 	}
 
 	/**
@@ -90,19 +90,19 @@ public class DataFile {
 	 */
 	public boolean isAvailable() {
 		LOG.trace("isAvailable()");
-		if (!f.exists()) {
+		if (!file.exists()) {
 			LOG.error(String.format("Data file '%s' specified in '%s' does not exist.",
-					f.getAbsolutePath(),
-					c.getConfigFile().getAbsolutePath()));
-		} else if (!f.isFile()){
+					file.getAbsolutePath(),
+					configuration.getConfigFile().getAbsolutePath()));
+		} else if (!file.isFile()){
 			LOG.error(String.format("Data file '%s' is not a file!",
-					f.getAbsolutePath()));
-		} else if (!f.canRead()) {
+					file.getAbsolutePath()));
+		} else if (!file.canRead()) {
 			LOG.error(String.format("Data file '%s' can not be accessed, please check file permissions!",
-					f.getAbsolutePath()));
+					file.getAbsolutePath()));
 		} else {
 			LOG.debug(String.format("Data file '%s' is a file and read permission is available.",
-						f.getAbsolutePath()));
+						file.getAbsolutePath()));
 			return true;
 		}
 		return false;
@@ -116,12 +116,12 @@ public class DataFile {
 	 */
 	public CSVReader getCSVReader() throws FileNotFoundException {
 		LOG.trace("getCSVReader()");
-		final FileReader fr = new FileReader(f);
+		final FileReader fr = new FileReader(file);
 		final BufferedReader br = new BufferedReader(fr);
-		final int flwd = c.getFirstLineWithData();
-		final char separator = c.getCsvSeparator(), 
-				quotechar = c.getCsvQuoteChar(),
-				escape = c.getCsvEscape();
+		final int flwd = configuration.getFirstLineWithData();
+		final char separator = configuration.getCsvSeparator(), 
+				quotechar = configuration.getCsvQuoteChar(),
+				escape = configuration.getCsvEscape();
 		final CSVReader cr = new CSVReader(br, separator, quotechar, escape, flwd);
 		return cr;
 	}
@@ -130,14 +130,14 @@ public class DataFile {
 	 * @see {@link Configuration#getMeasureValueColumnIds()}
 	 */
 	public int[] getMeasuredValueColumnIds() {
-		return c.getMeasureValueColumnIds();
+		return configuration.getMeasureValueColumnIds();
 	}
 
 	/**
 	 * @see {@link Configuration#getFirstLineWithData()}
 	 */
 	public int getFirstLineWithData() {
-		return c.getFirstLineWithData();
+		return configuration.getFirstLineWithData();
 	}
 
 	/**
@@ -151,23 +151,23 @@ public class DataFile {
 				mvColumnId,
 				Arrays.toString(values)));
 		// check for sensor column and return new sensor
-		Sensor s = getSensorFromColumn(mvColumnId,values);
-		if (s == null) {
+		Sensor sensor = getSensorFromColumn(mvColumnId,values);
+		if (sensor == null) {
 			LOG.debug(String.format("Could not find sensor column for column id %d",
 					mvColumnId));
 		} else {
-			return s;
+			return sensor;
 		}
 		// else build sensor from manual or generated resource 
-		SensorType sT = c.getRelatedSensor(mvColumnId);
+		SensorType sensorType = configuration.getRelatedSensor(mvColumnId);
 		// Case: one mv column => no related sensor element => check for one single sensor in additional metadata
-		if (sT == null && c.isOneMvColumn()) {
-			sT = c.getSensorFromAdditionalMetadata();
+		if (sensorType == null && configuration.isOneMvColumn()) {
+			sensorType = configuration.getSensorFromAdditionalMetadata();
 		}
-		if (sT != null && sT.getResource() != null) {
+		if (sensorType != null && sensorType.getResource() != null) {
 			// generated sensor
-			if (sT.getResource() instanceof GeneratedResourceType) {
-				final GeneratedResourceType gRT = (GeneratedResourceType) sT.getResource();
+			if (sensorType.getResource() instanceof GeneratedResourceType) {
+				final GeneratedResourceType gRT = (GeneratedResourceType) sensorType.getResource();
 				final String[] a = getUriAndNameFromGeneratedResourceType(
 						gRT.isSetConcatString()?gRT.getConcatString():null, // concatstring
 						gRT.isSetURI()?gRT.getURI().getStringValue():null, // uri
@@ -175,15 +175,15 @@ public class DataFile {
 						gRT.getNumberArray(),
 						values
 						);
-				s = new Sensor(a[0],a[1]);
-			} else if (sT.getResource() instanceof ManualResourceType) {
+				sensor = new Sensor(a[0],a[1]);
+			} else if (sensorType.getResource() instanceof ManualResourceType) {
 				// manual sensor
-				final ManualResourceType mRT = (ManualResourceType) sT.getResource();
-				s = new Sensor(mRT.getName(),
+				final ManualResourceType mRT = (ManualResourceType) sensorType.getResource();
+				sensor = new Sensor(mRT.getName(),
 						mRT.getURI().getStringValue());
 			}
 		}
-		return s; 
+		return sensor; 
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class DataFile {
 			return foi;
 		}
 		// else build foi from manual or generated resource 
-		final FeatureOfInterestType foiT = c.getRelatedFoi(mvColumnId);
+		final FeatureOfInterestType foiT = configuration.getRelatedFoi(mvColumnId);
 		if (foiT != null && foiT.getResource() != null) {
 			// generated sensor
 			if (foiT.getResource() instanceof GeneratedSpatialResourceType) {
@@ -276,7 +276,7 @@ public class DataFile {
 		LOG.trace(String.format("getValue(%s,%s)",
 				mVColumn,
 				Arrays.toString(values)));
-		final Column column = c.getColumnById(mVColumn);
+		final Column column = configuration.getColumnById(mVColumn);
 		String value = values[mVColumn];
 		for (final Metadata m : column.getMetadataArray()) {
 			if (m.getKey().equals(Key.TYPE)) {
@@ -303,7 +303,7 @@ public class DataFile {
 				}
 				// NUMERIC
 				else if (m.getValue().equals("NUMERIC")) {
-					return c.parseToDouble(value);
+					return configuration.parseToDouble(value);
 				}
 			}
 		}
@@ -324,14 +324,14 @@ public class DataFile {
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
-		final Column col = c.getColumnById(mVColumn);
+		final Column col = configuration.getColumnById(mVColumn);
 		String group = null;
 		if (col.isSetRelatedDateTimeGroup()) {
 			group = col.getRelatedDateTimeGroup();
 		}
 		// else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
-		group = c.getFirstDateTimeGroup();
-		final Column[] cols = c.getAllColumnsForGroup(group, Type.DATE_TIME);
+		group = configuration.getFirstDateTimeGroup();
+		final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
 			// get value from each column
 			Timestamp ts = new Timestamp();
@@ -373,7 +373,7 @@ public class DataFile {
 						break;
 					}
 				}
-				ts = c.getAddtionalTimestampValuesFromColumn(ts,column);
+				ts = configuration.getAddtionalTimestampValuesFromColumn(ts,column);
 			}
 			// create timestamp string via toString()
 			return ts;
@@ -409,7 +409,7 @@ public class DataFile {
 	 */
 	public UnitOfMeasurement getUnitOfMeasurement(final int mVColumnId, final String[] values) {
 		LOG.trace("getUnitOfMeasurement()");
-		final Column mvColumn = c.getColumnById(mVColumnId);
+		final Column mvColumn = configuration.getColumnById(mVColumnId);
 		
 		// Case A*
 		if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
@@ -419,7 +419,7 @@ public class DataFile {
 		
 			// Case A.1.*: idRef
 			if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
-				final UnitOfMeasurementType uom = c.getUomById(relUom.getIdRef());
+				final UnitOfMeasurementType uom = configuration.getUomById(relUom.getIdRef());
 				if (uom != null) {
 			
 					// Case A.1.1
@@ -452,7 +452,7 @@ public class DataFile {
 		}
 		
 		// Case B: Information stored in another column
-		final int uomColumnId = c.getColumnIdForUom(mVColumnId);
+		final int uomColumnId = configuration.getColumnIdForUom(mVColumnId);
 		if (uomColumnId > -1) {
 			return new UnitOfMeasurement(values[uomColumnId],values[uomColumnId]);
 		}
@@ -489,7 +489,7 @@ public class DataFile {
 	 */
 	public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
 		LOG.trace("getObservedProperty()");
-		final Column mvColumn = c.getColumnById(mVColumnId);
+		final Column mvColumn = configuration.getColumnById(mVColumnId);
 		
 		// Case A*
 		if (mvColumn.getRelatedObservedPropertyArray() != null &&
@@ -499,7 +499,7 @@ public class DataFile {
 		
 			// Case A.1.*: idRef
 			if (relOp.isSetIdRef() && !relOp.isSetNumber()) {
-				final ObservedPropertyType op = c.getObsPropById(relOp.getIdRef());
+				final ObservedPropertyType op = configuration.getObsPropById(relOp.getIdRef());
 				if (op != null) {
 			
 					// Case A.1.1
@@ -533,7 +533,7 @@ public class DataFile {
 		}
 		
 		// Case B: Information stored in another column
-		final int opColumnId = c.getColumnIdForOpsProp(mVColumnId);
+		final int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
 		if (opColumnId > -1) {
 			return new ObservedProperty(values[opColumnId],values[opColumnId]);
 		}
@@ -543,7 +543,7 @@ public class DataFile {
 	}
 
 	public Offering getOffering(final Sensor s) {
-		final Offering off = c.getOffering(s);
+		final Offering off = configuration.getOffering(s);
 		if (!NcNameResolver.isNCName(off.getName())) {
 			final String[] a = createCleanNCName(off); 
 			off.setName(a[0]);
@@ -558,14 +558,14 @@ public class DataFile {
 	 * @return the name of the data file. Not the whole path.
 	 */
 	public String getFileName() {
-		return f.getName();
+		return file.getName();
 	}
 
 	/**
 	 * @see {@link Configuration#getFileName()}
 	 */
 	public Object getConfigurationFileName() {
-		return c.getFileName();
+		return configuration.getFileName();
 	}
 
 	/**
@@ -612,7 +612,7 @@ public class DataFile {
 		LOG.trace(String.format("getSensorColumn(%d,%s)",
 			mvColumnId,
 			Arrays.toString(values)));
-		final int i = c.getColumnIdForSensor(mvColumnId);
+		final int i = configuration.getColumnIdForSensor(mvColumnId);
 		if (i < 0) {
 			// sensor is not in the data file -> return null
 			return null;
@@ -627,12 +627,12 @@ public class DataFile {
 		LOG.trace(String.format("getFoiColumn(%d,%s)",
 					mvColumnId,
 					Arrays.toString(values)));
-		final int i = c.getColumnIdForFoi(mvColumnId);
+		final int i = configuration.getColumnIdForFoi(mvColumnId);
 		if (i < 0) {
 			// foi is not in the data file -> return null
 			return null;
 		} else {
-			final Position p = c.getFoiPosition(values[i]);
+			final Position p = configuration.getFoiPosition(values[i]);
 			final FeatureOfInterest s = new FeatureOfInterest(values[i],
 					values[i],
 					p);
@@ -653,7 +653,7 @@ public class DataFile {
 				p.isSetEPSGCode() && 
 				p.isSetLat() && 
 				p.isSetLong()) {
-			return c.getModelPositionXBPosition(p);
+			return configuration.getModelPositionXBPosition(p);
 		}
 		// Case B: Position is in data file (and configuration [missing values])
 		else if (p.isSetGroup() && 
@@ -661,7 +661,7 @@ public class DataFile {
 				!p.isSetEPSGCode() && 
 				!p.isSetLat() && 
 				!p.isSetLong()) {
-			return c.getPosition(p.getGroup(),values);
+			return configuration.getPosition(p.getGroup(),values);
 		}
 		return null;
 	}
@@ -743,10 +743,10 @@ public class DataFile {
 
 	@Override
 	public String toString() {
-		return String.format("DataFile [file=%s, c=%s]",f,c);
+		return String.format("DataFile [file=%s, configuration=%s]",file,configuration);
 	}
 
 	public String getType(final int mVColumnId) {
-		return c.getType(mVColumnId);
+		return configuration.getType(mVColumnId);
 	}
 }
