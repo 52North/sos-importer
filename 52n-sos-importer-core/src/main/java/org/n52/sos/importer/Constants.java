@@ -95,7 +95,7 @@ public class Constants {
 	public static final String STRING_REPLACER = "-@@@-";
 	public static final String TEXT = "TEXT";
 	public static final String UNIX_TIME = "UNIX_TIME";
-	public static final String VERSION = "0.3";
+	public static final String VERSION = "0.4";
 	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX = ".52n-sos-import-config.xml";
 	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);
@@ -155,7 +155,7 @@ public class Constants {
 	}
 
 	public static String WMS_URL() {
-		Properties props = load();
+		final Properties props = load();
 		String wmsUrl = WMS_DEFAULT_URL;
 		if (props != null && 
 				props.getProperty(wms_url) != null &&
@@ -172,7 +172,7 @@ public class Constants {
 		try {
 			InputStream is;
 			String filePath = WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME;
-			File file = new File(filePath);
+			final File file = new File(filePath);
 			if (!file.exists()) {
 				logger.info("Load default settings from jar file");
 				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
@@ -188,13 +188,13 @@ public class Constants {
 				logger.info("Load settings from " + file);
 				is = new FileInputStream(file);
 			}
-			Properties props = new Properties();
+			final Properties props = new Properties();
 			props.load(is);
 			logger.info("Settings loaded");
 			return props;
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			logger.error("SOS Importer Settings not found", e);
-		} catch (IOException  e) {
+		} catch (final IOException  e) {
 			logger.error("SOS Importer Settings not readable.", e);
 		}
 		return null;
@@ -209,11 +209,11 @@ public class Constants {
 	}
 
 	public static void save() {
-		File folder = new File(WMS_EXTERNAL_FILE_PATH);
-		Properties props = load();
+		final File folder = new File(WMS_EXTERNAL_FILE_PATH);
+		final Properties props = load();
 		if (!folder.exists()) {
 			
-			boolean successful = folder.mkdir();	
+			final boolean successful = folder.mkdir();	
 			if (!successful) {
 				logger.warn("WMS properties could not be saved.");
 				logger.warn("No writing permissions at " + folder);
@@ -221,13 +221,13 @@ public class Constants {
 			} 
 		}
 		
-		File file = new File(WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME);
+		final File file = new File(WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME);
 		
 		try { //save properties
-			OutputStream os = new FileOutputStream(file);
+			final OutputStream os = new FileOutputStream(file);
 			props.store(os, null); 
 			logger.info("Save settings at " + file.getAbsolutePath());	
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.error("WMS properties could not be saved.", e);
 		}
 	}
