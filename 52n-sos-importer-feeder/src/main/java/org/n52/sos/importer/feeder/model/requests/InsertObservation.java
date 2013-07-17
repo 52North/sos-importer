@@ -34,59 +34,59 @@ import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
  */
 public class InsertObservation {
 	
-	private Object value;
-	private String timeStamp;
-	private Sensor s;
-	private ObservedProperty o;
-	private FeatureOfInterest f;
-	private UnitOfMeasurement u;
-	private Offering off;
-	private String mvType;
+	private final Object resultValue;
+	private final String timeStamp;
+	private final Sensor sensor;
+	private final ObservedProperty observedProperty;
+	private final FeatureOfInterest featureOfInterest;
+	private final UnitOfMeasurement unitOfMeasurement;
+	private final Offering offering;
+	private final String measuredValueType;
 	
-	public InsertObservation(Sensor sensor,
-			FeatureOfInterest foi,
-			Object value,
-			String timeStamp,
-			UnitOfMeasurement uom,
-			ObservedProperty obsProp,
-			Offering off,
-			String mvType) {
-		this.f = foi; 
-		this.s = sensor;
-		this.o = obsProp;
+	public InsertObservation(final Sensor sensor,
+			final FeatureOfInterest foi,
+			final Object value,
+			final String timeStamp,
+			final UnitOfMeasurement uom,
+			final ObservedProperty obsProp,
+			final Offering off,
+			final String mvType) {
+		featureOfInterest = foi; 
+		this.sensor = sensor;
+		observedProperty = obsProp;
 		this.timeStamp = timeStamp;
-		this.u = uom;
-		this.value = value;
-		this.off = off;
-		this.mvType = mvType;
+		unitOfMeasurement = uom;
+		resultValue = value;
+		offering = off;
+		measuredValueType = mvType;
 	}
 	
 	public String getSensorName() {
-		return s.getName();
+		return sensor.getName();
 	}
 
 	public String getSensorURI() {
-		return s.getUri();
+		return sensor.getUri();
 	}
 
 	public String getFeatureOfInterestName() {
-		return f.getName();
+		return featureOfInterest.getName();
 	}
 
 	public String getFeatureOfInterestURI() {
-		return f.getUri();
+		return featureOfInterest.getUri();
 	}
 
 	public String getObservedPropertyURI() {
-		return o.getUri();
+		return observedProperty.getUri();
 	}
 
 	public String getUnitOfMeasurementCode() {
-		return u.getCode();
+		return unitOfMeasurement.getCode();
 	}
 
-	public Object getValue() {
-		return value;
+	public Object getResultValue() {
+		return resultValue;
 	}
 
 	public String getTimeStamp() {
@@ -94,35 +94,35 @@ public class InsertObservation {
 	}
 
 	public String getEpsgCode() {
-		return f.getPosition().getEpsgCode()+"";
+		return Integer.toString(featureOfInterest.getPosition().getEpsgCode());
 	}
 
 	public double getLatitudeValue() {
-		return f.getPosition().getLatitude();
+		return featureOfInterest.getPosition().getLatitude();
 	}
 
 	public double getLongitudeValue() {
-		return f.getPosition().getLongitude();
+		return featureOfInterest.getPosition().getLongitude();
 	}
 
-	protected ObservedProperty getObservedProperty() {
-		return o;
+	public ObservedProperty getObservedProperty() {
+		return observedProperty;
 	}
 
 	protected FeatureOfInterest getFeatureOfInterest() {
-		return f;
+		return featureOfInterest;
 	}
 
 	protected UnitOfMeasurement getUnitOfMeasurment() {
-		return u;
+		return unitOfMeasurement;
 	}
 	
 	protected Offering getOffering() {
-		return off;
+		return offering;
 	}
 	
-	public String getMvType() {
-		return mvType;
+	public String getMeasuredValueType() {
+		return measuredValueType;
 	}
 
 	/* (non-Javadoc)
@@ -130,23 +130,23 @@ public class InsertObservation {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("InsertObservation [value=");
-		builder.append(value);
+		final StringBuilder builder = new StringBuilder();
+		builder.append("InsertObservation [resultValue=");
+		builder.append(resultValue);
 		builder.append(", timeStamp=");
 		builder.append(timeStamp);
-		builder.append(", s=");
-		builder.append(s);
-		builder.append(", o=");
-		builder.append(o);
-		builder.append(", f=");
-		builder.append(f);
-		builder.append(", u=");
-		builder.append(u);
-		builder.append(", off=");
-		builder.append(off);
-		builder.append(", mvType=");
-		builder.append(mvType);
+		builder.append(", sensor=");
+		builder.append(sensor);
+		builder.append(", observedProperty=");
+		builder.append(observedProperty);
+		builder.append(", featureOfInterest=");
+		builder.append(featureOfInterest);
+		builder.append(", unitOfMeasurement=");
+		builder.append(unitOfMeasurement);
+		builder.append(", offering=");
+		builder.append(offering);
+		builder.append(", measuredValueType=");
+		builder.append(measuredValueType);
 		builder.append("]");
 		return builder.toString();
 	}

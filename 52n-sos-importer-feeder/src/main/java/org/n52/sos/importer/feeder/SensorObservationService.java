@@ -24,13 +24,19 @@
 package org.n52.sos.importer.feeder;
 
 import static java.lang.String.format;
+import static org.n52.sos.importer.feeder.Configuration.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import net.opengis.sensorML.x101.SensorMLDocument;
 import net.opengis.sensorML.x101.SystemDocument;
@@ -83,19 +89,18 @@ public final class SensorObservationService {
 	private final String sosVersion;
 	private final SOSWrapper sosWrapper;
 	private final ServiceDescriptor serviceDescriptor;
-
 	private final ArrayList<String> registeredSensors;
-
 	private final ArrayList<InsertObservation> failedInsertObservations;
-	
 	private int lastLine = 0;
+	private final String sosBinding;
 	
-	public SensorObservationService(final URL sosUrl) throws ExceptionReport, OXFException {
+	public SensorObservationService(final URL sosUrl, final String version, final String binding) throws ExceptionReport, OXFException {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
 		}
 		this.sosUrl = sosUrl;
-		sosVersion = "1.0.0"; // TODO get from configuration
+		sosVersion = version;
+		sosBinding = binding;
 		sosWrapper = SOSWrapper.createFromCapabilities(sosUrl.toString(), sosVersion);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
 		failedInsertObservations = new ArrayList<InsertObservation>();
@@ -159,7 +164,7 @@ public final class SensorObservationService {
 				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
 				// A: collect all information
 				final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
-				insertObservationsForOneLine(ios,values);
+				insertObservationsForOneLine(ios,values,dataFile);
 				lineCounter++; // line counter overreads failed insert observations
 				LOG.debug(Feeder.heapSizeInformation());
 				/*
@@ -193,11 +198,9 @@ public final class SensorObservationService {
 			final int[] mVColumns,
 			final DataFile df,
 			final int currentLine){
-		if (LOG.isTraceEnabled()) {
-			LOG.trace(String.format("getInsertObservations(%s, %s)",
-					Arrays.toString(values),
-					Arrays.toString(mVColumns)));
-		}
+		LOG.trace(String.format("getInsertObservations(%s, %s)",
+				Arrays.toString(values),
+				Arrays.toString(mVColumns)));
 		if (values == null || values.length == 0 || mVColumns == null || mVColumns.length == 0) {
 			LOG.error(String.format("Method called with bad arguments: values: %s, mVColumns: %s",
 					Arrays.toString(values),
@@ -221,43 +224,29 @@ public final class SensorObservationService {
 
 	private InsertObservation getInsertObservationForColumnIdFromValues(final int mVColumnId,
 			final String[] values,
-			final DataFile df){
+			final DataFile dataFile){
 		LOG.trace("getInsertObservationForColumnIdFromValues()");
 		try {
 			// SENSOR
-			final Sensor sensor = df.getSensorForColumn(mVColumnId,values);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("Sensor: %s", 
-						sensor));
-			}
+			final Sensor sensor = dataFile.getSensorForColumn(mVColumnId,values);
+			LOG.debug(String.format("Sensor: %s",sensor));
 			// FEATURE OF INTEREST incl. Position
-			final FeatureOfInterest foi = df.getFoiForColumn(mVColumnId,values);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("Feature of Interest: %s",
-						foi));
-			}
+			final FeatureOfInterest foi = dataFile.getFoiForColumn(mVColumnId,values);
+			LOG.debug(String.format("Feature of Interest: %s",foi));
 			// VALUE
-			final Object value = df.getValue(mVColumnId,values);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("Value: %s", value.toString()));
-			}
+			final Object value = dataFile.getValue(mVColumnId,values);
+			LOG.debug(String.format("Value: %s", value.toString()));
 			// TODO implement using different templates in later version depending on the class of value
 			// TIMESTAMP
-			final String timeStamp = df.getTimeStamp(mVColumnId,values).toString();
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("Timestamp: %s", timeStamp));
-			}
+			final String timeStamp = dataFile.getTimeStamp(mVColumnId,values).toString();
+			LOG.debug(String.format("Timestamp: %s", timeStamp));
 			// UOM CODE
-			final UnitOfMeasurement uom = df.getUnitOfMeasurement(mVColumnId,values);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("UomCode: '%s'", uom));
-			}
+			final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId,values);
+			LOG.debug(String.format("UomCode: '%s'", uom));
 			// OBSERVED_PROPERTY
-			final ObservedProperty observedProperty = df.getObservedProperty(mVColumnId,values);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("ObservedProperty: %s", observedProperty));
-			}
-			final Offering offer = df.getOffering(sensor);
+			final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId,values);
+			LOG.debug(String.format("ObservedProperty: %s", observedProperty));
+			final Offering offer = dataFile.getOffering(sensor);
 			return new InsertObservation(sensor,
 					foi,
 					value,
@@ -265,7 +254,7 @@ public final class SensorObservationService {
 					uom,
 					observedProperty,
 					offer,
-					df.getType(mVColumnId));
+					dataFile.getType(mVColumnId));
 		} catch (final ParseException pe) {
 			LOG.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s. Skipped this one.",
 					pe.getClass().getName(),
@@ -289,12 +278,16 @@ public final class SensorObservationService {
 		return null;
 	}
 
-	private void insertObservationsForOneLine(final InsertObservation[] ios, final String[] values) throws OXFException, XmlException, IOException {
+	private void insertObservationsForOneLine(final InsertObservation[] ios, final String[] values, final DataFile dataFile) throws OXFException, XmlException, IOException {
 		insertObservationForALine:
 			for (final InsertObservation io : ios) {
 				if (io != null) {
 					if (!isSensorRegistered(io.getSensorURI())) {
-						final String assignedSensorId = registerSensor(new RegisterSensor(io),values);
+						final RegisterSensor rs = new RegisterSensor(io,
+								getObservedProperties(io.getSensorURI(),ios), 
+								getMeasuredValueTypes(io.getSensorURI(),ios),
+								getUnitsOfMeasurement(io.getSensorURI(),ios));
+						final String assignedSensorId = registerSensor(rs,values);
 						if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
 							LOG.error(String.format("Sensor '%s'[%s] could not be registered at SOS '%s'. Skipping insert obsevation for this and store it.",
 									io.getSensorName(),
@@ -323,6 +316,51 @@ public final class SensorObservationService {
 					}
 				}
 			}
+	}
+
+	private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
+			final InsertObservation[] ios)
+	{
+		LOG.trace("getUnitsOfMeasurement(...)");
+		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(ios.length);
+		for (final InsertObservation insertObservation : ios) {
+			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
+			{
+				unitsOfMeasurement.put(insertObservation.getObservedProperty(), insertObservation.getUnitOfMeasurementCode());
+			}
+		}
+		LOG.debug(String.format("Found '%d' units of measurement for observed properties of sensor '%s': '%s'.",
+				unitsOfMeasurement.size(),sensorURI, unitsOfMeasurement));
+		return unitsOfMeasurement;
+	}
+
+	private Map<ObservedProperty, String> getMeasuredValueTypes(final String sensorURI, final InsertObservation[] ios)
+	{
+		LOG.trace("getMeasuredValueTypes(...)");
+		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(ios.length);
+		for (final InsertObservation insertObservation : ios) {
+			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
+			{
+				measuredValueTypes.put(insertObservation.getObservedProperty(), insertObservation.getMeasuredValueType());
+			}
+		}
+		LOG.debug(String.format("Found '%d' Measured value types for observed properties of sensor '%s': '%s'.",
+				measuredValueTypes.size(),sensorURI, measuredValueTypes));
+		return measuredValueTypes;
+	}
+
+	private Collection<ObservedProperty> getObservedProperties(final String sensorURI, final InsertObservation[] ios)
+	{
+		LOG.trace("getObservedProperties(...)");
+		final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(ios.length);
+		for (final InsertObservation insertObservation : ios) {
+			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
+			{
+				observedProperties.add(insertObservation.getObservedProperty());
+			}
+		}
+		LOG.debug(String.format("Found '%d' Observed Properties for Sensor '%s': '%s'",observedProperties.size(),sensorURI,observedProperties));
+		return observedProperties;
 	}
 
 	private String insertObservation(final InsertObservation io) throws IOException {
@@ -387,23 +425,23 @@ public final class SensorObservationService {
 		
 		ObservationParameters obsParameter = null;
 		
-		if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+		if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
 			// set text
 			obsParameter = new TextObservationParameters();
-			((TextObservationParameters) obsParameter).addObservationValue(io.getValue().toString());
-		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+			((TextObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+		} else if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
 			// set count
 			obsParameter = new CountObservationParameters();
-			((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getValue());
-		} else if (io.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+			((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getResultValue());
+		} else if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
 			// set boolean
 			obsParameter = new BooleanObservationParameters();
-			((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getValue());
+			((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getResultValue());
 		} else {
 			// set default value type
 			obsParameter = new MeasurementObservationParameters();
 			((MeasurementObservationParameters) obsParameter).addUom(io.getUnitOfMeasurementCode());
-			((MeasurementObservationParameters) obsParameter).addObservationValue(io.getValue().toString());
+			((MeasurementObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
 		}
 		obsParameter.addObservedProperty(io.getObservedPropertyURI());
 		obsParameter.addFoiId(io.getFeatureOfInterestName());
@@ -491,16 +529,17 @@ public final class SensorObservationService {
 		sensorMLDocument.addNewSensorML().addNewMember().set(sml);
 		sensorMLDocument.getSensorML().setVersion("1.0.1"); // TODO version variable
 		
-        // create template
+        // create template --> within the 52N 1.0.0 SOS implementation this template is somehow ignored --> take first observed property to get values for template
 		ObservationTemplateBuilder observationTemplate;
-		if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+		final ObservedProperty firstObservedProperty = registerSensor.getObservedProperties().iterator().next();
+		if (registerSensor.getMeasuredValueType(firstObservedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeText();
-		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+		} else if (registerSensor.getMeasuredValueType(firstObservedProperty).equals(SOS_OBSERVATION_TYPE_COUNT)) {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeCount();
-		} else if (registerSensor.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+		} else if (registerSensor.getMeasuredValueType(firstObservedProperty).equals(SOS_OBSERVATION_TYPE_BOOLEAN)) {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeTruth();
 		} else {
-			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode());
+			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode(firstObservedProperty));
 		}
 		observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
 		
@@ -508,18 +547,14 @@ public final class SensorObservationService {
 	}
 
 	private SystemDocument createSML(final RegisterSensor rs) throws XmlException, IOException {
-		if (LOG.isTraceEnabled()) {
-			LOG.trace("createSML()");
-		}
+		LOG.trace("createSML()");
 		final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
 		
-		// add all keywords
+		final StringBuilder intendedApplication = new StringBuilder();
+		
+		// add keywords
 		builder.addKeyword(rs.getFeatureOfInterestName());
 		builder.addKeyword(rs.getSensorName());
-		builder.addKeyword(rs.getObservedPropertyName());
-		
-		// add all classifier
-		builder.setClassifierIntendedApplication(rs.getObservedPropertyName());
 		
 		// add all identifier
 		builder.setIdentifierUniqeId(rs.getSensorURI());
@@ -543,29 +578,43 @@ public final class SensorObservationService {
 				rs.getLatitudeUnit(), rs.getLatitudeValue(),
 				rs.getAltitudeUnit(), rs.getAltitudeValue());
 		
-		// add inputs
-		builder.addInput(rs.getObservedPropertyName(), rs.getObservedPropertyURI());
-		
-		// add outputs
-		if (rs.getMvType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-			builder.addOutputText(rs.getObservedPropertyName(),
-					rs.getObservedPropertyURI(), rs.getOfferingUri(),
-					rs.getOfferingName());
-		} else if (rs.getMvType().equals(
-				Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
-			builder.addOutputBoolean(rs.getObservedPropertyName(),
-					rs.getObservedPropertyURI(), rs.getOfferingUri(),
-					rs.getOfferingName());
-		} else if (rs.getMvType().equals(
-				Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
-			builder.addOutputCount(rs.getObservedPropertyName(),
-					rs.getObservedPropertyURI(), rs.getOfferingUri(),
-					rs.getOfferingName());
-		} else {
-			builder.addOutputMeasurement(rs.getObservedPropertyName(),
-					rs.getObservedPropertyURI(), rs.getOfferingUri(),
-					rs.getOfferingName(), rs.getUnitOfMeasurementCode());
+		for (final ObservedProperty observedProperty : rs.getObservedProperties()) {
+			// add inputs
+			builder.addInput(observedProperty.getName(), observedProperty.getUri());
+			// add outputs
+			if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
+				builder.addOutputText(observedProperty.getName(),
+						observedProperty.getUri(), 
+						rs.getOfferingUri(),
+						rs.getOfferingName());
+			} 
+			else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_BOOLEAN)) {
+				builder.addOutputBoolean(observedProperty.getName(),
+						observedProperty.getUri(),
+						rs.getOfferingUri(),
+						rs.getOfferingName());
+			} 
+			else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_COUNT)) {
+				builder.addOutputCount(observedProperty.getName(),
+						observedProperty.getUri(),
+						rs.getOfferingUri(),
+						rs.getOfferingName());
+			}
+			else {
+				builder.addOutputMeasurement(observedProperty.getName(),
+						observedProperty.getUri(),
+						rs.getOfferingUri(),
+						rs.getOfferingName(),
+						rs.getUnitOfMeasurementCode(observedProperty));
+			}
+			// add keyword
+			builder.addKeyword(observedProperty.getName());
+			intendedApplication.append(observedProperty.getName());
+			intendedApplication.append(", ");
 		}
+		
+		// add all classifier
+		builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length()-2));
 		
 		return builder.buildSensorDescription();
 	}

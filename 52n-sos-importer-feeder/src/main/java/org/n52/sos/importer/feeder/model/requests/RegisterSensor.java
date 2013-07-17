@@ -23,7 +23,10 @@
  */
 package org.n52.sos.importer.feeder.model.requests;
 
+import java.util.Collection;
+import java.util.Map;
 
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 
 /**
  * Holds all information for the RegisterSensor request
@@ -32,142 +35,104 @@ package org.n52.sos.importer.feeder.model.requests;
  */
 public class RegisterSensor {
 
-	private InsertObservation io;
+	private final InsertObservation io;
 	
-	public RegisterSensor(InsertObservation io) {
+	private final Map<ObservedProperty, String> measuredValueTypes;
+
+	private final Collection<ObservedProperty> observedProperties;
+
+	private final Map<ObservedProperty, String> unitOfMeasurements;
+	
+	public RegisterSensor(
+			final InsertObservation io, 
+			final Collection<ObservedProperty> observedProperties,
+			final Map<ObservedProperty, String> measuredValueTypes,
+			final Map<ObservedProperty, String> unitOfMeasurements) {
 		this.io = io;
-	}
-
-	public String getSensorName() {
-		return io.getSensorName();
-	}
-
-	public String getSensorURI() {
-		return io.getSensorURI();
-	}
-
-	public String getFeatureOfInterestName() {
-		return io.getFeatureOfInterestName();
-	}
-
-	public String getObservedPropertyName() {
-		return io.getObservedProperty().getName();
-	}
-
-	public String getObservedPropertyURI() {
-		return io.getObservedPropertyURI();
-	}
-
-	public String getOfferingName() {
-		return io.getOffering().getName();
-	}
-
-	public String getUnitOfMeasurementCode() {
-		return io.getUnitOfMeasurementCode();
-	}
-
-	public String getEpsgCode() {
-		return io.getEpsgCode();
-	}
-
-	public double getLatitudeValue() {
-		return io.getLatitudeValue();
-	}
-
-	public String getLatitudeUnit() {
-		return io.getFeatureOfInterest().getPosition().getLatitudeUnit();
-	}
-
-	public double getLongitudeValue() {
-		return io.getLongitudeValue();
-	}
-
-	public String getLongitudeUnit() {
-		return io.getFeatureOfInterest().getPosition().getLongitudeUnit();
-	}
-
-	public double getAltitudeValue() {
-		return io.getFeatureOfInterest().getPosition().getAltitude();
+		this.observedProperties = observedProperties;
+		this.measuredValueTypes = measuredValueTypes;
+		this.unitOfMeasurements = unitOfMeasurements;
 	}
 
 	public String getAltitudeUnit() {
 		return io.getFeatureOfInterest().getPosition().getAltitudeUnit();
 	}
 
-	public String getFeatureOfInterestURI() {
-		return io.getFeatureOfInterestURI();
+	public double getAltitudeValue() {
+		return io.getFeatureOfInterest().getPosition().getAltitude();
 	}
 
 	public String getDefaultValue() {
-		if (io.getValue() instanceof Boolean) {
+		if (io.getResultValue() instanceof Boolean) {
 			return "false";
 		}
-		if (io.getValue() instanceof Integer) {
+		if (io.getResultValue() instanceof Integer) {
 			return "0";
 		}
-		if (io.getValue() instanceof Double) {
+		if (io.getResultValue() instanceof Double) {
 			return "0.0";
 		}
-		if (io.getValue() instanceof String) {
+		if (io.getResultValue() instanceof String) {
 			return " ";
 		}
 		return "notDefined";
 	}
 
+	public String getEpsgCode() {
+		return io.getEpsgCode();
+	}
+
+	public String getFeatureOfInterestName() {
+		return io.getFeatureOfInterestName();
+	}
+
+	public String getFeatureOfInterestURI() {
+		return io.getFeatureOfInterestURI();
+	}
+
+	public String getLatitudeUnit() {
+		return io.getFeatureOfInterest().getPosition().getLatitudeUnit();
+	}
+
+	public double getLatitudeValue() {
+		return io.getLatitudeValue();
+	}
+
+	public String getLongitudeUnit() {
+		return io.getFeatureOfInterest().getPosition().getLongitudeUnit();
+	}
+
+	public double getLongitudeValue() {
+		return io.getLongitudeValue();
+	}
+
+	public String getMeasuredValueType(final ObservedProperty observedProperty)
+	{
+		return measuredValueTypes.get(observedProperty);
+	}
+
+	public Collection<ObservedProperty> getObservedProperties()
+	{
+		return observedProperties;
+	}
+
+	public String getOfferingName() {
+		return io.getOffering().getName();
+	}
+
 	public String getOfferingUri() {
 		return io.getOffering().getUri();
 	}
+
+	public String getSensorName() {
+		return io.getSensorName();
+	}
 	
-	public String getMvType() {
-		return io.getMvType();
+	public String getSensorURI() {
+		return io.getSensorURI();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("RegisterSensor [io=");
-		builder.append(io);
-		builder.append(", getSensorName()=");
-		builder.append(getSensorName());
-		builder.append(", getSensorURI()=");
-		builder.append(getSensorURI());
-		builder.append(", getFeatureOfInterestName()=");
-		builder.append(getFeatureOfInterestName());
-		builder.append(", getObservedPropertyName()=");
-		builder.append(getObservedPropertyName());
-		builder.append(", getObservedPropertyURI()=");
-		builder.append(getObservedPropertyURI());
-		builder.append(", getOfferingName()=");
-		builder.append(getOfferingName());
-		builder.append(", getUnitOfMeasurementCode()=");
-		builder.append(getUnitOfMeasurementCode());
-		builder.append(", getEpsgCode()=");
-		builder.append(getEpsgCode());
-		builder.append(", getLatitudeValue()=");
-		builder.append(getLatitudeValue());
-		builder.append(", getLatitudeUnit()=");
-		builder.append(getLatitudeUnit());
-		builder.append(", getLongitudeValue()=");
-		builder.append(getLongitudeValue());
-		builder.append(", getLongitudeUnit()=");
-		builder.append(getLongitudeUnit());
-		builder.append(", getAltitudeValue()=");
-		builder.append(getAltitudeValue());
-		builder.append(", getAltitudeUnit()=");
-		builder.append(getAltitudeUnit());
-		builder.append(", getFeatureOfInterestURI()=");
-		builder.append(getFeatureOfInterestURI());
-		builder.append(", getDefaultValue()=");
-		builder.append(getDefaultValue());
-		builder.append(", getOfferingUri()=");
-		builder.append(getOfferingUri());
-		builder.append(", getMvType()=");
-		builder.append(getMvType());
-		builder.append("]");
-		return builder.toString();
+	public String getUnitOfMeasurementCode(final ObservedProperty observedProperty) {
+		return unitOfMeasurements.get(observedProperty);
 	}
-
 }
