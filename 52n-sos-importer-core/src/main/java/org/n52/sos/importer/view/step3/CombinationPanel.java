@@ -34,12 +34,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * selection panel in step 3 for date&time and position combinations,
@@ -57,44 +58,44 @@ public abstract class CombinationPanel extends SelectionPanel {
 	// 			ComboBoxDemo2.java
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(CombinationPanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(CombinationPanel.class);
 
-	private JLabel groupLabel;
-	private JComboBox groupComboBox = new JComboBox(getGroupItems());
+	private final JLabel groupLabel;
+	private final JComboBox groupComboBox = new JComboBox(getGroupItems());
 	
-	private EditableJComboBoxPanel patternComboBox;
+	private final EditableJComboBoxPanel patternComboBox;
 	
-    private JLabel exampleLabel;
-    private ExampleFormatLabel exampleFormatLabel;
+    private final JLabel exampleLabel;
+    private final ExampleFormatLabel exampleFormatLabel;
 	
-    private ParseTestLabel parseTestLabel;
+    private final ParseTestLabel parseTestLabel;
 
-	public CombinationPanel(JPanel containerPanel,int firstLineWithData) {	
+	public CombinationPanel(final JPanel containerPanel,final int firstLineWithData) {	
 		super(containerPanel);
 		
-		this.parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
-		this.patternComboBox= new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
-		this.exampleFormatLabel =  new ExampleFormatLabel(getCombination());
+		parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
+		patternComboBox= new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
+		exampleFormatLabel =  new ExampleFormatLabel(getCombination());
 		patternComboBox.addActionListener(new FormatChanged());
 		groupComboBox.setToolTipText(getGroupToolTip());
 		//setDefaultSelection();
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		formatPanel.add(patternComboBox);
 							
-		JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		this.groupLabel = new JLabel(Lang.l().group() + ": ");
+		final JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		groupLabel = new JLabel(Lang.l().group() + ": ");
 		groupPanel.add(groupLabel);
 		groupPanel.add(groupComboBox);
 		
-		JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		this.exampleLabel = new JLabel(Lang.l().example() + ": ");
+		final JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		exampleLabel = new JLabel(Lang.l().example() + ": ");
 		examplePanel.add(exampleLabel);
 		examplePanel.add(exampleFormatLabel);
 		
-		JPanel dateTimePanel = new JPanel();
+		final JPanel dateTimePanel = new JPanel();
 		dateTimePanel.setLayout(new BoxLayout(dateTimePanel, BoxLayout.PAGE_AXIS));
 		dateTimePanel.add(formatPanel);	
 		dateTimePanel.add(examplePanel);
@@ -116,11 +117,11 @@ public abstract class CombinationPanel extends SelectionPanel {
 	public abstract String getGroupToolTip();
 
     @Override
-	public void setSelection(String s) {
+	public void setSelection(final String s) {
     	if (logger.isTraceEnabled()) {
 			logger.trace("setSelection()");
 		}
-    	String[] part = s.split(Constants.SEPARATOR_STRING);
+    	final String[] part = s.split(Constants.SEPARATOR_STRING);
 		patternComboBox.setSelectedItem(part[0]);
 		groupComboBox.setSelectedItem(part[1]);
 	}
@@ -130,30 +131,31 @@ public abstract class CombinationPanel extends SelectionPanel {
 		if (logger.isTraceEnabled()) {
 			logger.trace("setDefaultSelection()");
 		}
-		String pattern = (String) getPatterns().getElementAt(0);
-		String group = getGroupItems()[0];
+		final String pattern = (String) getPatterns().getElementAt(0);
+		final String group = getGroupItems()[0];
 		patternComboBox.setSelectedItem(pattern);
-		this.getCombination().setPattern(pattern);
+		getCombination().setPattern(pattern);
 		groupComboBox.setSelectedItem(group);
 	}
 	
 	@Override
 	public String getSelection() {
-		String pattern = (String) patternComboBox.getSelectedItem();
-		String group = (String) groupComboBox.getSelectedItem();
+		final String pattern = (String) patternComboBox.getSelectedItem();
+		final String group = (String) groupComboBox.getSelectedItem();
 		return pattern + Constants.SEPARATOR_STRING + group;
 	}
     
-    protected void patternChanged() {
-    	String pattern = (String) patternComboBox.getSelectedItem();
+    @Override
+	protected void patternChanged() {
+    	final String pattern = (String) patternComboBox.getSelectedItem();
     	if (logger.isTraceEnabled()) {
 			logger.trace("patternChanged(" + pattern + ")");
 		}
-    	List<String> values = TableController.getInstance().getMarkedValues();
-    	Object tester = getTestValue();
+    	final List<String> values = TableController.getInstance().getMarkedValues();
+    	final Object tester = getTestValue();
     	//
-    	this.getCombination().setPattern(pattern);
-    	this.exampleFormatLabel.getFormatter().setPattern(pattern);
+    	getCombination().setPattern(pattern);
+    	exampleFormatLabel.getFormatter().setPattern(pattern);
     	// test if the current selected pattern is applicable 
     	parseTestLabel.parseValues(values);
     	// display example using the current defined pattern
@@ -165,14 +167,16 @@ public abstract class CombinationPanel extends SelectionPanel {
     	if (logger.isTraceEnabled()) {
 			logger.trace("reInit()");
 		}
-    	this.patternChanged();
+    	patternChanged();
     }
   	    
 	private class FormatChanged implements ActionListener {
 		
-		public void actionPerformed(ActionEvent e) {
-			if (!patternComboBox.isEditable())
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			if (!patternComboBox.isEditable()) {
 				patternChanged();
+			}
 	    }
 	}
 }

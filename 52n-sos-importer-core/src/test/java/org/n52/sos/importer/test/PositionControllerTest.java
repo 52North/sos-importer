@@ -23,16 +23,14 @@
  */
 package org.n52.sos.importer.test;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Column;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to test the methods of the position controller
@@ -42,35 +40,31 @@ import org.n52.sos.importer.model.table.Column;
 public class PositionControllerTest {
 
 	private static final Logger logger = 
-			Logger.getLogger(PositionControllerTest.class);
+			LoggerFactory.getLogger(PositionControllerTest.class);
 
-	public static void main(String[] args) {
-		// init logger
-		Logger root = Logger.getRootLogger();
-		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
+	public static void main(final String[] args) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Start Test");
 		}
-		int firstLineWithData = 1;
-		String g = "1", 
+		final int firstLineWithData = 1;
+		final String g = "1", 
 				pa1 = "LAT",
 				pa2 = "LON";
 		//
 		// first element
-		Column c1 = new Column(0, firstLineWithData);
-		Position p1 = new Position();
+		final Column c1 = new Column(0, firstLineWithData);
+		final Position p1 = new Position();
 		p1.setLatitude(new Latitude(c1, pa1));
 		p1.setGroup(g);
 		//
 		// second element
-		Column c2 = new Column(1, firstLineWithData);
-		Position p2 = new Position();
+		final Column c2 = new Column(1, firstLineWithData);
+		final Position p2 = new Position();
 		p2.setLongitude(new Longitude(c2, pa2));
 		p2.setGroup(g);
 		//
 		// add elements to modelstore
-		ModelStore ms = ModelStore.getInstance();
+		final ModelStore ms = ModelStore.getInstance();
 		ms.add(p1);
 		ms.add(p2);
 		//
@@ -79,7 +73,7 @@ public class PositionControllerTest {
 		}
 		//
 		// Position controller
-		PositionController pc = new PositionController();
+		final PositionController pc = new PositionController();
 		pc.mergePositions();
 	}
 

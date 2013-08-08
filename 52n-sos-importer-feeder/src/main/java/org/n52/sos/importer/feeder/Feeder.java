@@ -34,10 +34,11 @@ import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
-import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.task.OneTimeFeeder;
 import org.n52.sos.importer.feeder.task.RepeatedFeeder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -45,7 +46,7 @@ import org.n52.sos.importer.feeder.task.RepeatedFeeder;
  */
 public final class Feeder {
 
-	private static final Logger LOG = Logger.getLogger(Feeder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
 
 	private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
@@ -91,17 +92,17 @@ public final class Feeder {
 								"parsed. Exception thrown: %s",
 								configFile,
 								e.getMessage());
-				LOG.fatal(errorMsg);
+				LOG.error(errorMsg);
 				LOG.debug("", e);
 			} 
 			catch (final IOException e) 
 			{
-				LOG.fatal(String.format("Exception thrown: %s", e.getMessage()));
+				LOG.error("Exception thrown: {}", e.getMessage());
 				LOG.debug("", e);
 			}
 			catch (final IllegalArgumentException iae)
 			{
-				LOG.fatal("Given parameters could not be parsed! -p must be a number.");
+				LOG.error("Given parameters could not be parsed! -p must be a number.");
 				LOG.debug("Exception Stack Trace:",iae);
 			}
 		} 
@@ -144,7 +145,7 @@ public final class Feeder {
 	private static boolean checkArgs(final String[] args) {
 		LOG.trace("checkArgs()");
 		if (args == null) {
-			LOG.fatal("no parameters defined. null received as args!");
+			LOG.error("no parameters defined. null received as args!");
 			return false;
 		} else if (args.length == 2) {
 			if (ALLOWED_PARAMETERS[0].equals(args[0])) {
@@ -163,7 +164,7 @@ public final class Feeder {
 				return true;
 			}
 		}
-		LOG.fatal("Given parameters do not match programm specification. ");
+		LOG.error("Given parameters do not match programm specification. ");
 		return false;
 	}
 

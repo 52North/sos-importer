@@ -30,13 +30,13 @@ import java.awt.event.AWTEventListener;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
-import org.n52.sos.importer.controller.LoggingController;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.Step6cPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -46,36 +46,35 @@ public class Step6cWMSPanelTest extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(Step6cWMSPanelTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
 	
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		Constants.GUI_DEBUG = true;
-		FeatureOfInterest foi = new FeatureOfInterest();
+		final FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("testFOIname");
 		foi.setPosition(new Position());
-		Step6cModel s6cM = new Step6cModel(foi);
+		final Step6cModel s6cM = new Step6cModel(foi);
 		
-		LoggingController.getInstance();
-		
-		JFrame frame = new Step6cWMSPanelTest(s6cM);
+		final JFrame frame = new Step6cWMSPanelTest(s6cM);
 		frame.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT));
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		if (Constants.GUI_DEBUG) {
-			long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
+			final long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
 			Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener() {
-			    public void eventDispatched(AWTEvent e)
+			    @Override
+				public void eventDispatched(final AWTEvent e)
 			    {
 			        if (logger.isDebugEnabled() && e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
-						logger.debug(e);
+						logger.debug("Exception:",e);
 					}
 			    }
 			}, eventMask);
 		}
 	}
 
-	public Step6cWMSPanelTest(Step6cModel s6cM) {
+	public Step6cWMSPanelTest(final Step6cModel s6cM) {
 		getContentPane().add(new Step6cPanel("test description", "testFOIname", s6cM));
 	}
 

@@ -25,10 +25,11 @@ package org.n52.sos.importer.model.xml;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step4bModel;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
@@ -49,11 +50,11 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
-	private static final Logger logger = Logger.getLogger(Step4bModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step4bModelHandler.class);
 	
 	@Override
-	public void handleModel(Step4bModel s4M,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step4bModel s4M,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -70,24 +71,24 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		relatedColumnsIds = s4M.getSelectedColumns();
 		csvMeta = sosImportConf.getCsvMetadata();
 		if (csvMeta == null) {
-			logger.fatal("CsvMetadata element not set in step 4; should not " +
+			logger.error("CsvMetadata element not set in step 4; should not " +
 					"happen. Please check the log file!");
 			return;
 		}
 		colAssignmts = csvMeta.getColumnAssignments();
 		if (colAssignmts == null) {
-			logger.fatal("CsvMetadata.ColumnAssignments element not set in " +
+			logger.error("CsvMetadata.ColumnAssignments element not set in " +
 					"step 4; should not happen. Please check the log file!");
 			return;
 		}
 		availableCols = colAssignmts.getColumnArray();
 		if (availableCols == null) {
-			logger.fatal("CsvMetadata.ColumnAssignments.Column elements not set in " +
+			logger.error("CsvMetadata.ColumnAssignments.Column elements not set in " +
 					"step 4; should not happen. Please check the log file!");
 			return;
 		}
 		relCol = new ArrayList<Column>(availableCols.length);
-		for (Column column : availableCols) {
+		for (final Column column : availableCols) {
 			// check for correct column id
 			if(isIntInArray(relatedColumnsIds, column.getNumber()) ) {
 				// add column to result set	
@@ -111,34 +112,34 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 	 * @param res the resource to add
 	 * @param relatedCols the column where to add the resource
 	 */
-	private boolean addRelatedResourceColumn(Resource res, Column[] relatedCols) {
+	private boolean addRelatedResourceColumn(final Resource res, final Column[] relatedCols) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\taddRelatedResourceColumn()");
 		}
 		/*
 		 * 	LOCALE FIELDS
 		 */
-		TableElement tabE = res.getTableElement();
+		final TableElement tabE = res.getTableElement();
 		int colId;
 		boolean result = true;
 		// get resource column
 		if (tabE instanceof org.n52.sos.importer.model.table.Column) {
-			org.n52.sos.importer.model.table.Column col = (org.n52.sos.importer.model.table.Column) tabE;
+			final org.n52.sos.importer.model.table.Column col = (org.n52.sos.importer.model.table.Column) tabE;
 			colId = col.getNumber();
 		} else {
-			logger.fatal("Type org.n52.sos.importer.model.table.Column expected. Type is:" + tabE.getClass());
+			logger.error("Type org.n52.sos.importer.model.table.Column expected. Type is: {}", tabE.getClass());
 			return false;
 		}
 		/*
 		 * add colId of related resource to Columns in relatedCols
 		 */
-		for (Column column : relatedCols) {
+		for (final Column column : relatedCols) {
 			boolean addNew;
 			/*
 			 * 	FEATURE_OF_INTEREST
 			 */
 			if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
-				RelatedFOI[] relFois = column.getRelatedFOIArray();
+				final RelatedFOI[] relFois = column.getRelatedFOIArray();
 				addNew = !isFoiColIdInArray(relFois, colId);
 				if (addNew) {
 					column.addNewRelatedFOI().setNumber(colId);
@@ -154,7 +155,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			 * 	SENSOR
 			 */
 			if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
-				RelatedSensor[] relSensors = column.getRelatedSensorArray();
+				final RelatedSensor[] relSensors = column.getRelatedSensorArray();
 				addNew = !isSensorInArray(relSensors, colId);
 				if (addNew) {
 					column.addNewRelatedSensor().setNumber(colId);
@@ -171,7 +172,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			 */
 			if (res instanceof 
 					org.n52.sos.importer.model.resources.UnitOfMeasurement) {
-				RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
+				final RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
 				addNew = !isUOMInArray(relUOMs, colId);
 				if (addNew) {
 					column.addNewRelatedUnitOfMeasurement().setNumber(colId);
@@ -188,7 +189,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			 */
 			if (res instanceof 
 					org.n52.sos.importer.model.resources.ObservedProperty) {
-				RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
+				final RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
 				addNew = !isObsPropInArray(relObsProps, colId);
 				if (addNew) {
 					column.addNewRelatedObservedProperty().setNumber(colId);
@@ -210,11 +211,11 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 	 * @param colId
 	 * @return
 	 */
-	private boolean isFoiColIdInArray(RelatedFOI[] relFois, int colId) {
+	private boolean isFoiColIdInArray(final RelatedFOI[] relFois, final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isFoiInArray()");
 		}
-		for (RelatedFOI relatedFOI : relFois) {
+		for (final RelatedFOI relatedFOI : relFois) {
 			if (relatedFOI.isSetNumber() && 
 					relatedFOI.getNumber() == colId) {
 				return true;
@@ -223,11 +224,11 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		return false;
 	}
 	
-	private boolean isIntInArray(int[] array, int i) {
+	private boolean isIntInArray(final int[] array, final int i) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\t\tisIntInArray()");
 		}
-		for (int intFromArray : array) {
+		for (final int intFromArray : array) {
 			if (intFromArray == i) {
 				return true;
 			}
@@ -235,12 +236,12 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		return false;
 	}
 	
-	private boolean isObsPropInArray(RelatedObservedProperty[] relObsProps,
-			int colId) {
+	private boolean isObsPropInArray(final RelatedObservedProperty[] relObsProps,
+			final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isObsPropInArray()");
 		}
-		for (RelatedObservedProperty relatedObsProp : relObsProps) {
+		for (final RelatedObservedProperty relatedObsProp : relObsProps) {
 			if (relatedObsProp.isSetNumber() && 
 					relatedObsProp.getNumber() == colId) {
 				return true;
@@ -249,11 +250,11 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		return false;
 	}
 	
-	private boolean isSensorInArray(RelatedSensor[] relSensors, int colId) {
+	private boolean isSensorInArray(final RelatedSensor[] relSensors, final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isSensorInArray()");
 		}
-		for (RelatedSensor relatedSensor : relSensors) {
+		for (final RelatedSensor relatedSensor : relSensors) {
 			if (relatedSensor.isSetNumber() && 
 					relatedSensor.getNumber() == colId) {
 				return true;
@@ -262,11 +263,11 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		return false;
 	}
 	
-	private boolean isUOMInArray(RelatedUnitOfMeasurement[] relUOMs, int colId) {
+	private boolean isUOMInArray(final RelatedUnitOfMeasurement[] relUOMs, final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isUOMInArray()");
 		}
-		for (RelatedUnitOfMeasurement relatedUOM : relUOMs) {
+		for (final RelatedUnitOfMeasurement relatedUOM : relUOMs) {
 			if (relatedUOM.isSetNumber() && 
 					relatedUOM.getNumber() == colId) {
 				return true;

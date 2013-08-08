@@ -34,8 +34,9 @@ import java.util.Properties;
 
 import javax.swing.DefaultComboBoxModel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * loads and saves all combobox items in the properties file
@@ -44,7 +45,7 @@ import org.n52.sos.importer.Constants;
  */
 public class ComboBoxItems {
 
-	private static final Logger logger = Logger.getLogger(ComboBoxItems.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComboBoxItems.class);
 
 	private static ComboBoxItems instance = null;
 	
@@ -103,7 +104,9 @@ public class ComboBoxItems {
 	}
 	
 	public static ComboBoxItems getInstance() {
-		if (instance == null) instance = new ComboBoxItems();
+		if (instance == null) {
+			instance = new ComboBoxItems();
+		}
 		return instance;
 	}
 	
@@ -111,7 +114,7 @@ public class ComboBoxItems {
 		try {
 			InputStream is;
 			String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
-			File file = new File(filePath);
+			final File file = new File(filePath);
 			if (!file.exists()) {
 				logger.info("Load default settings from jar file");
 				filePath = INTERNAL_FILE_PATH + FILE_NAME;
@@ -128,42 +131,44 @@ public class ComboBoxItems {
 			}
 			 
 			props.load(is);     
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			logger.error("SOS Importer Settings not found", e);
 			System.exit(1);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.error("SOS Importer Settings not readable.", e);
 			System.exit(1);
 		}
 
-		this.decimalSeparators = parse(props.getProperty("decimalSeparators"));	
-		this.latLonUnits = parse(props.getProperty("latLonUnits"));	
-		this.heightUnits = parse(props.getProperty("heightUnits"));	
-		this.dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
-		this.positionGroups = parse(props.getProperty("positionGroups"));
+		decimalSeparators = parse(props.getProperty("decimalSeparators"));	
+		latLonUnits = parse(props.getProperty("latLonUnits"));	
+		heightUnits = parse(props.getProperty("heightUnits"));	
+		dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
+		positionGroups = parse(props.getProperty("positionGroups"));
 		
-		this.columnSeparators = parse(props.getProperty("columnSeparators"));	
-		this.commentIndicators = parse(props.getProperty("commentIndicators"));	
-		this.textQualifiers = parse(props.getProperty("textQualifiers"));	
-		this.dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));
-		this.positionPatterns = parse(props.getProperty("positionPatterns"));
-		this.epsgCodes = parse(props.getProperty("epsgCodes"));	
-		this.referenceSystemNames = parse(props.getProperty("referenceSystemNames"));
-		this.sosURLs = parse(props.getProperty("sosURLs"));	
+		columnSeparators = parse(props.getProperty("columnSeparators"));	
+		commentIndicators = parse(props.getProperty("commentIndicators"));	
+		textQualifiers = parse(props.getProperty("textQualifiers"));	
+		dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));
+		positionPatterns = parse(props.getProperty("positionPatterns"));
+		epsgCodes = parse(props.getProperty("epsgCodes"));	
+		referenceSystemNames = parse(props.getProperty("referenceSystemNames"));
+		sosURLs = parse(props.getProperty("sosURLs"));	
 		
-		this.featureOfInterestNames = parse(props.getProperty("featureOfInterestNames"));	
-		this.observedPropertyNames = parse(props.getProperty("observedPropertyNames"));	
-		this.unitOfMeasurementCodes = parse(props.getProperty("unitOfMeasurementCodes"));	
-		this.sensorNames = parse(props.getProperty("sensorNames"));	
-		this.featureOfInterestURIs = parse(props.getProperty("featureOfInterestURIs"));	
-		this.observedPropertyURIs = parse(props.getProperty("observedPropertyURIs"));	
-		this.unitOfMeasurementURIs = parse(props.getProperty("unitOfMeasurementURIs"));	
-		this.sensorURIs = parse(props.getProperty("sensorURIs"));	
+		featureOfInterestNames = parse(props.getProperty("featureOfInterestNames"));	
+		observedPropertyNames = parse(props.getProperty("observedPropertyNames"));	
+		unitOfMeasurementCodes = parse(props.getProperty("unitOfMeasurementCodes"));	
+		sensorNames = parse(props.getProperty("sensorNames"));	
+		featureOfInterestURIs = parse(props.getProperty("featureOfInterestURIs"));	
+		observedPropertyURIs = parse(props.getProperty("observedPropertyURIs"));	
+		unitOfMeasurementURIs = parse(props.getProperty("unitOfMeasurementURIs"));	
+		sensorURIs = parse(props.getProperty("sensorURIs"));	
 	}
 	
-	public String[] parse(String property) {
-		if (property == null) return new String[0];
-		String[] values = property.split(Constants.SEPARATOR_STRING);
+	public String[] parse(final String property) {
+		if (property == null) {
+			return new String[0];
+		}
+		final String[] values = property.split(Constants.SEPARATOR_STRING);
 		return values;
 	}
 	
@@ -186,10 +191,10 @@ public class ComboBoxItems {
 		props.setProperty("unitOfMeasurementURIs", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
 		props.setProperty("sensorURIs", format(EditableComboBoxItems.getInstance().getSensorURIs()));
 		
-		File folder = new File(EXTERNAL_FILE_PATH);
+		final File folder = new File(EXTERNAL_FILE_PATH);
 		if (!folder.exists()) {
 			
-			boolean successful = folder.mkdir();	
+			final boolean successful = folder.mkdir();	
 			if (!successful) {
 				logger.warn("SOS properties could not be saved.");
 				logger.warn("No writing permissions at " + folder);
@@ -197,21 +202,22 @@ public class ComboBoxItems {
 			} 
 		}
 		
-		File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
+		final File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
 		logger.info("Save settings at " + file.getAbsolutePath());	
 		
 		try { //save properties
-			OutputStream os = new FileOutputStream(file);
+			final OutputStream os = new FileOutputStream(file);
 			props.store(os, null);  
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.error("SOS properties could not be saved.", e);
 		}
 	}
 	
-	public String format(DefaultComboBoxModel dcbm) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < dcbm.getSize(); i++) 
+	public String format(final DefaultComboBoxModel dcbm) {
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dcbm.getSize(); i++) {
 			sb.append(dcbm.getElementAt(i) + Constants.SEPARATOR_STRING);
+		}
 		return sb.toString();
 	}
 	
@@ -219,7 +225,7 @@ public class ComboBoxItems {
 		return featureOfInterestNames;
 	}
 
-	public void setFeatureOfInterestNames(String[] featureOfInterestNames) {
+	public void setFeatureOfInterestNames(final String[] featureOfInterestNames) {
 		this.featureOfInterestNames = featureOfInterestNames;
 	}
 
@@ -227,7 +233,7 @@ public class ComboBoxItems {
 		return observedPropertyNames;
 	}
 
-	public void setObservedPropertyNames(String[] observedPropertyNames) {
+	public void setObservedPropertyNames(final String[] observedPropertyNames) {
 		this.observedPropertyNames = observedPropertyNames;
 	}
 
@@ -235,7 +241,7 @@ public class ComboBoxItems {
 		return unitOfMeasurementCodes;
 	}
 
-	public void setUnitOfMeasurementCodes(String[] unitOfMeasurementCodes) {
+	public void setUnitOfMeasurementCodes(final String[] unitOfMeasurementCodes) {
 		this.unitOfMeasurementCodes = unitOfMeasurementCodes;
 	}
 
@@ -243,7 +249,7 @@ public class ComboBoxItems {
 		return sensorNames;
 	}
 
-	public void setSensorNames(String[] sensorNames) {
+	public void setSensorNames(final String[] sensorNames) {
 		this.sensorNames = sensorNames;
 	}
 
@@ -251,7 +257,7 @@ public class ComboBoxItems {
 		return featureOfInterestURIs;
 	}
 
-	public void setFeatureOfInterestURIs(String[] featureOfInterestURIs) {
+	public void setFeatureOfInterestURIs(final String[] featureOfInterestURIs) {
 		this.featureOfInterestURIs = featureOfInterestURIs;
 	}
 
@@ -259,7 +265,7 @@ public class ComboBoxItems {
 		return observedPropertyURIs;
 	}
 
-	public void setObservedPropertyURIs(String[] observedPropertyURIs) {
+	public void setObservedPropertyURIs(final String[] observedPropertyURIs) {
 		this.observedPropertyURIs = observedPropertyURIs;
 	}
 
@@ -267,7 +273,7 @@ public class ComboBoxItems {
 		return unitOfMeasurementURIs;
 	}
 
-	public void setUnitOfMeasurementURIs(String[] unitOfMeasurementURIs) {
+	public void setUnitOfMeasurementURIs(final String[] unitOfMeasurementURIs) {
 		this.unitOfMeasurementURIs = unitOfMeasurementURIs;
 	}
 
@@ -275,7 +281,7 @@ public class ComboBoxItems {
 		return sensorURIs;
 	}
 
-	public void setSensorURIs(String[] sensorURIs) {
+	public void setSensorURIs(final String[] sensorURIs) {
 		this.sensorURIs = sensorURIs;
 	}
 	
@@ -283,7 +289,7 @@ public class ComboBoxItems {
 		return decimalSeparators;
 	}
 
-	public void setDecimalSeparators(String[] decimalSeparators) {
+	public void setDecimalSeparators(final String[] decimalSeparators) {
 		this.decimalSeparators = decimalSeparators;
 	}
 
@@ -291,7 +297,7 @@ public class ComboBoxItems {
 		return latLonUnits;
 	}
 
-	public void setLatLonUnits(String[] latLonUnits) {
+	public void setLatLonUnits(final String[] latLonUnits) {
 		this.latLonUnits = latLonUnits;
 	}
 
@@ -299,7 +305,7 @@ public class ComboBoxItems {
 		return heightUnits;
 	}
 
-	public void setHeightUnits(String[] heightUnits) {
+	public void setHeightUnits(final String[] heightUnits) {
 		this.heightUnits = heightUnits;
 	}
 
@@ -307,7 +313,7 @@ public class ComboBoxItems {
 		return columnSeparators;
 	}
 
-	public void setColumnSeparators(String[] columnSeparators) {
+	public void setColumnSeparators(final String[] columnSeparators) {
 		this.columnSeparators = columnSeparators;
 	}
 
@@ -315,7 +321,7 @@ public class ComboBoxItems {
 		return commentIndicators;
 	}
 
-	public void setCommentIndicators(String[] commentIndicators) {
+	public void setCommentIndicators(final String[] commentIndicators) {
 		this.commentIndicators = commentIndicators;
 	}
 
@@ -323,7 +329,7 @@ public class ComboBoxItems {
 		return textQualifiers;
 	}
 
-	public void setTextQualifiers(String[] textQualifiers) {
+	public void setTextQualifiers(final String[] textQualifiers) {
 		this.textQualifiers = textQualifiers;
 	}
 
@@ -331,7 +337,7 @@ public class ComboBoxItems {
 		return dateAndTimePatterns;
 	}
 
-	public void setDateAndTimePatterns(String[] dateAndTimePatterns) {
+	public void setDateAndTimePatterns(final String[] dateAndTimePatterns) {
 		this.dateAndTimePatterns = dateAndTimePatterns;
 	}
 
@@ -339,7 +345,7 @@ public class ComboBoxItems {
 		return epsgCodes;
 	}
 
-	public void setEpsgCodes(String[] epsgCodes) {
+	public void setEpsgCodes(final String[] epsgCodes) {
 		this.epsgCodes = epsgCodes;
 	}
 
@@ -347,7 +353,7 @@ public class ComboBoxItems {
 		return sosURLs;
 	}
 
-	public void setSosURLs(String[] sosURLs) {
+	public void setSosURLs(final String[] sosURLs) {
 		this.sosURLs = sosURLs;
 	}
 
@@ -359,7 +365,7 @@ public class ComboBoxItems {
 		return positionGroups;
 	}
 
-	public void setPositionPatterns(String[] positionPatterns) {
+	public void setPositionPatterns(final String[] positionPatterns) {
 		this.positionPatterns = positionPatterns;
 	}
 
@@ -367,7 +373,7 @@ public class ComboBoxItems {
 		return positionPatterns;
 	}
 
-	public void setReferenceSystemNames(String[] referenceSystemNames) {
+	public void setReferenceSystemNames(final String[] referenceSystemNames) {
 		this.referenceSystemNames = referenceSystemNames;
 	}
 

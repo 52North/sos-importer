@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
@@ -46,6 +45,8 @@ import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.requests.Offering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
@@ -71,7 +72,7 @@ import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
  */
 public final class Configuration {
 
-	private static final Logger LOG = Logger.getLogger(Configuration.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 	
 	private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
 	private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
@@ -121,8 +122,10 @@ public final class Configuration {
 	private SosImportConfiguration importConf;
 	private final File configFile;
 
+	private Pattern localeFilePattern = null;
+
 	public Configuration(final String pathToFile) throws XmlException, IOException {
-		LOG.trace(String.format("Configuration(%s)",pathToFile));
+		LOG.trace("Configuration({})",pathToFile);
 		configFile = new File(pathToFile);
 		final SosImportConfigurationDocument sosImportDoc = 
 				SosImportConfigurationDocument.Factory.parse(configFile);
@@ -140,18 +143,27 @@ public final class Configuration {
 			for (int i = 0; i < errorList.size(); i++) {
 				final XmlError error = errorList.get(i);
 
-				final String xmlErrorMessage = 
-						String.format("Message: %s; Location: %s",
-								error.getMessage(),
-								error.getCursorLocation().xmlText()
-								);
-				LOG.fatal(xmlErrorMessage);
+				LOG.error("Message: {}; Location: {}",
+						error.getMessage(),
+						error.getCursorLocation().xmlText());
 			}
 			final String msg = "Configuration is not valid and could not be parsed.";
 			throw new XmlException(msg, null, errorList);
 		} else {
 			importConf = sosImportDoc.getSosImportConfiguration();
+			// TODO validate and save locale file name pattern if available
+			if (isRegularExpressionForLocalFileAvailable()) {
+				localeFilePattern  = Pattern.compile(importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames());
+			}
 		}
+	}
+
+	private boolean isRegularExpressionForLocalFileAvailable()
+	{
+		return importConf.getDataFile().isSetLocalFile() && 
+				importConf.getDataFile().getLocalFile().isSetRegularExpresssionForAllowedFileNames() &&
+				importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames() != null &&
+				!importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames().isEmpty();
 	}
 
 	/**
@@ -422,7 +434,7 @@ public final class Configuration {
 						sensorXmlId));
 				return null;
 			} else {
-				LOG.fatal("Element AdditionalMetadata.Sensor not found.");
+				LOG.error("Element AdditionalMetadata.Sensor not found.");
 			}
 		}
 		LOG.debug(String.format("RelatedSensor element not found for given measured value column id %s",
@@ -548,7 +560,7 @@ public final class Configuration {
 						foiXmlId));
 				return null;
 			} else {
-				LOG.fatal("Element AdditionalMetadata.FeatureOfInterest not found.");
+				LOG.error("Element AdditionalMetadata.FeatureOfInterest not found.");
 			}
 		}
 		LOG.debug(String.format("RelatedFOI element not found for given measured value column id %s",
@@ -914,7 +926,7 @@ public final class Configuration {
 		}
 	}
 
-	public Object getFileName() {
+	public String getFileName() {
 		return configFile.getName();
 	}
 
@@ -1013,6 +1025,16 @@ public final class Configuration {
 		}
 		LOG.info("Optional SosMetadata.Binding not set!");
 		return null;
+	}
+
+	public int getExpectedColumnCount()
+	{
+		return importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray();
+	}
+
+	public Pattern getLocaleFilePattern()
+	{
+		return localeFilePattern;
 	}
 
 }

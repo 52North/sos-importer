@@ -28,12 +28,13 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.utils.XMLTools;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step7Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Lets the user choose a URL of a Sensor Observation Service (and test the 
@@ -42,7 +43,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step7Controller extends StepController {
 
-	private static final Logger LOG = Logger.getLogger(Step7Controller.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Step7Controller.class);
 
 	private Step7Panel s7P;
 

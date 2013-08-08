@@ -34,8 +34,9 @@ import javax.swing.ButtonModel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * used for all radio buttons in step 3
@@ -48,9 +49,9 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	protected ButtonGroup group = new ButtonGroup();
 	
-	private static final Logger logger = Logger.getLogger(RadioButtonPanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(RadioButtonPanel.class);
 	
-	public RadioButtonPanel(JPanel containerPanel) {
+	public RadioButtonPanel(final JPanel containerPanel) {
 		super(containerPanel);
         setLayout(new GridLayout(0, 1));
 	}
@@ -59,8 +60,8 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	 * creates a radio button with the given name on the panel
 	 * @param name
 	 */
-	protected void addRadioButton(String name) {
-		JRadioButton radioButton = new JRadioButton(name);
+	protected void addRadioButton(final String name) {
+		final JRadioButton radioButton = new JRadioButton(name);
 		radioButton.addActionListener(new RemoveChildPanel());
 		if (group.getButtonCount() == 0) {
 			radioButton.setSelected(true);
@@ -74,10 +75,11 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	 * when this button is pressed the given selection panel appears
 	 * @param name
 	 */
-	protected void addRadioButton(String name, String toolTip, SelectionPanel childPanel) {
-		JRadioButton radioButton = new JRadioButton(name);
-		if (toolTip != null) 
+	protected void addRadioButton(final String name, final String toolTip, final SelectionPanel childPanel) {
+		final JRadioButton radioButton = new JRadioButton(name);
+		if (toolTip != null) {
 			radioButton.setToolTipText(toolTip);
+		}
 		addChildPanel(name, childPanel);
 		radioButton.addActionListener(new AddChildPanel(childPanel));
 		if (group.getButtonCount() == 0) {
@@ -89,11 +91,11 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	}
 
 	@Override
-	public void setSelection(String s) {
+	public void setSelection(final String s) {
 		ButtonModel m = null;
-		Enumeration<AbstractButton> e = group.getElements();
+		final Enumeration<AbstractButton> e = group.getElements();
 		while(e.hasMoreElements()) {
-			JRadioButton b = (JRadioButton) e.nextElement();
+			final JRadioButton b = (JRadioButton) e.nextElement();
 			if (s.equals(b.getText())) {
 				m = b.getModel();
 				break;
@@ -104,16 +106,16 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	
 	@Override
 	public void setDefaultSelection() {
-		JRadioButton firstButton = (JRadioButton) group.getElements().nextElement();
+		final JRadioButton firstButton = (JRadioButton) group.getElements().nextElement();
 		group.setSelected(firstButton.getModel(), true);
 		setSelectedChildPanel(firstButton.getText());
 	}
 
 	@Override
 	public String getSelection() {
-		Enumeration<AbstractButton> e = group.getElements();
+		final Enumeration<AbstractButton> e = group.getElements();
 		while(e.hasMoreElements()) {
-			JRadioButton b = (JRadioButton) e.nextElement();
+			final JRadioButton b = (JRadioButton) e.nextElement();
 			if (b.isSelected()) {
 				return b.getText();
 			}
@@ -122,10 +124,10 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	}
 	
 	@Override
-	public void assign(TableElement tableElement) {}
+	public void assign(final TableElement tableElement) {}
 	
 	@Override
-	public void unAssign(TableElement tableElement) {}
+	public void unAssign(final TableElement tableElement) {}
 	
 	/**
 	 * action when a radio button with selection panel is pressed
@@ -134,12 +136,12 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	private class AddChildPanel implements ActionListener {
 		SelectionPanel childPanel;
 		
-		public AddChildPanel(SelectionPanel childPanel) {
+		public AddChildPanel(final SelectionPanel childPanel) {
 			this.childPanel = childPanel;
 		}
 		
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(final ActionEvent arg0) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("actionPerformed(cmd: " + arg0.getActionCommand() + ")");
 			}
@@ -161,11 +163,11 @@ public abstract class RadioButtonPanel extends SelectionPanel {
 	private class RemoveChildPanel implements ActionListener {
 		
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			if (getSelectedChildPanel() != null) {
 				getSelectedChildPanel().removeFromContainerPanel();
 				revalidate();
-				SelectionPanel childPanel = null;
+				final SelectionPanel childPanel = null;
 				setSelectedChildPanel(childPanel);
 			}
 			patternChanged();

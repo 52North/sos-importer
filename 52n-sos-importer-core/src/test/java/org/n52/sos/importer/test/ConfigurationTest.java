@@ -26,11 +26,9 @@ package org.n52.sos.importer.test;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.apache.xmlbeans.XmlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
 import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
@@ -41,7 +39,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosMetadataDocument.SosMetadata;
 
 public class ConfigurationTest {
 
-	private static final Logger logger = Logger.getLogger(ConfigurationTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
 	
 	private static final File testConfig = new File("src/test/xml/configuration-test.xml");
 	/**
@@ -49,35 +47,30 @@ public class ConfigurationTest {
 	 * @throws IOException 
 	 * @throws XmlException 
 	 */
-	public static void main(String[] args) throws XmlException, IOException {
-		// init looger
-		Logger root = Logger.getRootLogger();
-		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
-		//
+	public static void main(final String[] args) throws XmlException, IOException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Starting configuration test.");
 			logger.debug("try loading file \"" + 
 					testConfig.getAbsolutePath() + "\"");
 		}
-		SosImportConfigurationDocument importerConfiguration = SosImportConfigurationDocument.Factory.parse(testConfig);
-		SosImportConfiguration importConf = importerConfiguration.getSosImportConfiguration();
+		final SosImportConfigurationDocument importerConfiguration = SosImportConfigurationDocument.Factory.parse(testConfig);
+		final SosImportConfiguration importConf = importerConfiguration.getSosImportConfiguration();
 		if(importConf.getDataFile().isSetLocalFile()) {
-			String path = importConf.getDataFile().getLocalFile().getPath();
+			final String path = importConf.getDataFile().getLocalFile().getPath();
 			if(logger.isDebugEnabled()) {
 				logger.debug("Path for datafile: " + path);
 			}
 		}
-		CsvMetadata csvMeta = importConf.getCsvMetadata();
+		final CsvMetadata csvMeta = importConf.getCsvMetadata();
 		if (logger.isDebugEnabled()) {
 			logger.debug("CSV metadata found:");
 			//
-			boolean useHeader = csvMeta.getUseHeader();
-			int firstLineWithData = csvMeta.getFirstLineWithData();
-			String commentIndicator = csvMeta.getParameter().getCommentIndicator();
-			String elemSep = csvMeta.getParameter().getColumnSeparator();
-			String txtIndi = csvMeta.getParameter().getTextIndicator();
-			Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
+			final boolean useHeader = csvMeta.getUseHeader();
+			final int firstLineWithData = csvMeta.getFirstLineWithData();
+			final String commentIndicator = csvMeta.getParameter().getCommentIndicator();
+			final String elemSep = csvMeta.getParameter().getColumnSeparator();
+			final String txtIndi = csvMeta.getParameter().getTextIndicator();
+			final Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
 			Metadata[] colMetadata;
 			//
 			logger.debug("useHeader: "         + useHeader);
@@ -86,8 +79,7 @@ public class ConfigurationTest {
 			logger.debug("elementSeparator: "  + elemSep);
 			logger.debug("textIndicator: "     + txtIndi);
 			logger.debug("Columns (" + columns.length + "): ");
-			for (int i = 0; i < columns.length; i++) {
-				Column column = columns[i];
+			for (final Column column : columns) {
 				logger.debug("Column[" + column.getNumber() + "]: " + 
 						"; type: " +
 						column.getType().toString() +
@@ -95,8 +87,7 @@ public class ConfigurationTest {
 						column.sizeOfMetadataArray());
 				if(column.sizeOfMetadataArray() > 0) {
 					colMetadata = column.getMetadataArray();
-					for (int j = 0; j < colMetadata.length; j++) {
-						Metadata m = colMetadata[j];
+					for (final Metadata m : colMetadata) {
 						logger.debug("\tKey: " +
 								m.getKey().toString() + 
 								"; Value: " +
@@ -105,14 +96,14 @@ public class ConfigurationTest {
 				}
 			}
 		}
-		SosMetadata sosMeta = importConf.getSosMetadata();
+		final SosMetadata sosMeta = importConf.getSosMetadata();
 		if (logger.isDebugEnabled()) {
 			logger.debug("SOS metadata found");
 			//
-			String sosUrl = sosMeta.getURL();
+			final String sosUrl = sosMeta.getURL();
 			boolean offeringAutogenerate = false;
-			Offering sosOff = sosMeta.getOffering();
-			String offeringInfo = sosOff.getStringValue();
+			final Offering sosOff = sosMeta.getOffering();
+			final String offeringInfo = sosOff.getStringValue();
 			//
 			if(sosOff.isSetGenerate()) {
 				offeringAutogenerate = sosOff.getGenerate();

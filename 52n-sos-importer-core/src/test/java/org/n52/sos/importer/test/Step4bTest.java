@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.test;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step4bController;
 import org.n52.sos.importer.controller.TableController;
@@ -33,6 +32,8 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author e.h.juerrens@52north.org
@@ -40,21 +41,22 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step4bTest {
 	
-	private static final Logger logger = Logger.getLogger(Step4bTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step4bTest.class);
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("main()");
 		}
-		MainController f = MainController.getInstance();
+		final MainController f = MainController.getInstance();
 //		Lang.setCurrentLocale(Locale.GERMAN);
-		int firstLineWithData = 1, i = 0;
-		FeatureOfInterest foi = TestData.EXAMPLE_FOI;
-		Object[][] o = TestData.EXAMPLE_TABLE;
-		TableController tc = TableController.getInstance();
+		final int firstLineWithData = 1;
+		int i = 0;
+		final FeatureOfInterest foi = TestData.EXAMPLE_FOI;
+		final Object[][] o = TestData.EXAMPLE_TABLE;
+		final TableController tc = TableController.getInstance();
 		tc.setContent(o); 
 		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
 		tc.setColumnHeading(++i, Lang.l().sensor());
@@ -66,8 +68,8 @@ public class Step4bTest {
 		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
 		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
 		
-		ModelStore ms = ModelStore.getInstance();
-		NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();
+		final ModelStore ms = ModelStore.getInstance();
+		final NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();
 		nV1.setTableElement(new Column(5, firstLineWithData));
 		nV2.setTableElement(new Column(8, firstLineWithData));
 		

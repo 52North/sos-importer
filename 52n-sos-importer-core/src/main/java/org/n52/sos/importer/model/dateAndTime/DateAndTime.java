@@ -27,12 +27,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Combination;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DateAndTime extends Combination {
 	
-	private static final Logger logger = Logger.getLogger(DateAndTime.class);
+	private static final Logger logger = LoggerFactory.getLogger(DateAndTime.class);
 	
 	private Year year;
 	private Month month;
@@ -45,111 +46,126 @@ public class DateAndTime extends Combination {
 	public Year getYear() {
 		return year;
 	}
-	public void setYear(Year year) {
-		if (getGroup() != null)
-			if (year != null)
+	public void setYear(final Year year) {
+		if (getGroup() != null) {
+			if (year != null) {
 				logger.info("Add " + year + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.year + " from " + this);
+			}
+		}
 		this.year = year;
 	}
 	public Month getMonth() {
 		return month;
 	}
-	public void setMonth(Month month) {
-		if (getGroup() != null)
-			if (month != null)
+	public void setMonth(final Month month) {
+		if (getGroup() != null) {
+			if (month != null) {
 				logger.info("Add " + month + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.month + " from " + this);
+			}
+		}
 		this.month = month;
 	}
 	public Day getDay() {
 		return day;
 	}
-	public void setDay(Day day) {
-		if (getGroup() != null)
-			if (day != null)
+	public void setDay(final Day day) {
+		if (getGroup() != null) {
+			if (day != null) {
 				logger.info("Add " + day + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.day + " from " + this);
+			}
+		}
 		this.day = day;
 	}
 	public Hour getHour() {
 		return hour;
 	}
-	public void setHour(Hour hour) {
-		if (getGroup() != null)
-			if (hour != null)
+	public void setHour(final Hour hour) {
+		if (getGroup() != null) {
+			if (hour != null) {
 				logger.info("Add " + hour + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.hour + " from " + this);
+			}
+		}
 		this.hour = hour;
 	}
 	public Minute getMinute() {
 		return minute;
 	}
-	public void setMinute(Minute minute) {
-		if (getGroup() != null)
-			if (minute != null)
+	public void setMinute(final Minute minute) {
+		if (getGroup() != null) {
+			if (minute != null) {
 				logger.info("Add " + minute + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.minute + " from " + this);
+			}
+		}
 		this.minute = minute;
 	}
 	public Second getSeconds() {
 		return second;
 	}
-	public void setSecond(Second second) {
-		if (getGroup() != null)
-			if (second != null)
+	public void setSecond(final Second second) {
+		if (getGroup() != null) {
+			if (second != null) {
 				logger.info("Add " + second + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.second + " from " + this);
+			}
+		}
 		this.second = second;
 	}
 	public TimeZone getTimeZone() {
 		return timeZone;
 	}
-	public void setTimeZone(TimeZone timeZone) {
-		if (getGroup() != null)
-			if (timeZone != null)
+	public void setTimeZone(final TimeZone timeZone) {
+		if (getGroup() != null) {
+			if (timeZone != null) {
 				logger.info("Add " + timeZone + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.timeZone + " from " + this);
+			}
+		}
 		this.timeZone = timeZone;
 	}	
 	
 	@Override
-	public Object parse(String s) {
+	public Object parse(final String s) {
 		Date dateTime = null;
-		String currentPattern = this.getPattern();
-		SimpleDateFormat formatter =
+		final String currentPattern = getPattern();
+		final SimpleDateFormat formatter =
 	           new SimpleDateFormat(currentPattern);      	
         try {
         	dateTime = formatter.parse(s);
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			throw new NumberFormatException(e.getLocalizedMessage());
 		}
 		return dateTime;
 	}
 	
 	@Override
-	public String format(Object o) {
-        Date date = (Date)o;		        
-    	SimpleDateFormat formatter =
-	           new SimpleDateFormat(this.getPattern());      	
-        String dateString = formatter.format(date);
+	public String format(final Object o) {
+        final Date date = (Date)o;		        
+    	final SimpleDateFormat formatter =
+	           new SimpleDateFormat(getPattern());      	
+        final String dateString = formatter.format(date);
 
 		return dateString;
 	}
 	@Override
 	public String toString() {
-		if (getGroup() == null)
+		if (getGroup() == null) {
 			return "Date and Time(" + year + ", " + month + ", "
 					+ day + ", " + hour + ", " + minute + ", "
 					+ second + ", " + timeZone + ")";
-		else 
+		} else {
 			return "Date&Time group " + getGroup();
+		}
 	}
 }

@@ -26,25 +26,26 @@ package org.n52.sos.importer.model;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Step3Model implements StepModel{
 	
-	private static final Logger logger = Logger.getLogger(Step3Model.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step3Model.class);
 	
 	private int markedColumn;
-	private HashMap<Integer, List<String>> columnAssignments;
+	private final HashMap<Integer, List<String>> columnAssignments;
 	
 	private final int firstLineWithData;
 	private final boolean useHeader;
 	
-	public Step3Model(int markedColumn,
-			int firstLineWithData,
-			boolean useHeader) {
+	public Step3Model(final int markedColumn,
+			final int firstLineWithData,
+			final boolean useHeader) {
 		this.markedColumn = markedColumn;
 		this.firstLineWithData = firstLineWithData;
 		this.useHeader = useHeader;
-		this.columnAssignments = new HashMap<Integer, List<String>>();
+		columnAssignments = new HashMap<Integer, List<String>>();
 	}
 
 	/**
@@ -54,12 +55,12 @@ public class Step3Model implements StepModel{
 	 * <code>Step3Controller.saveSettings()</code>.
 	 * @param selection the selection by the user for the current column
 	 */
-	public boolean addSelection(List<String> selection) {
+	public boolean addSelection(final List<String> selection) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addSelection()");
 		}
 		columnAssignments.put(markedColumn, selection);
-		List<String> addedValue = this.columnAssignments.get(markedColumn);
+		final List<String> addedValue = columnAssignments.get(markedColumn);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Next two values should be equal: " + 
 					"addedValue: \"" + addedValue + "\"; " +
@@ -74,11 +75,11 @@ public class Step3Model implements StepModel{
 	 * @param colIndex index of the column
 	 * @return a <code>List&lt;String&gt;</code>
 	 */
-	public List<String> getSelectionForColumn(int colIndex){
+	public List<String> getSelectionForColumn(final int colIndex){
 		if (logger.isTraceEnabled()) {
 			logger.trace("getSelectionForColumn(colIndex:=" + colIndex +")");
 		}
-		List<String> value = columnAssignments.get(colIndex);
+		final List<String> value = columnAssignments.get(colIndex);
 		if (logger.isDebugEnabled()) {
 			logger.debug("found selection: " + value);
 		}
@@ -99,11 +100,12 @@ public class Step3Model implements StepModel{
 	 */
 	public int getFirstLineWithData() {	return firstLineWithData; }
 	public int getMarkedColumn() { return markedColumn; }
-	public void setMarkedColumn(int colIndex) { this.markedColumn = colIndex; }
+	public void setMarkedColumn(final int colIndex) { markedColumn = colIndex; }
 	public boolean getUseHeader() { return useHeader; }
 	
+	@Override
 	public String toString() {
-		String s = "Step3Model" + 
+		final String s = "Step3Model" + 
 				"[" + hashCode() + "]: " +
 				"fLWD: " + firstLineWithData + ", " + 
 				"uH: " + useHeader + ", " + 

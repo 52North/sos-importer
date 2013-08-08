@@ -24,9 +24,7 @@
 package org.n52.sos.importer.model.xml;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.ModelStore;
@@ -37,6 +35,8 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
 import org.x52North.sensorweb.sos.importer.x02.ManualResourceType;
@@ -55,24 +55,24 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialModel> {
 
-	private static final Logger logger = Logger.getLogger(Step6bSpecialModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialModelHandler.class);
 	
 	@Override
-	public void handleModel(Step6bSpecialModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step6bSpecialModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
 		/*
 		 * add sensor to model
 		 */
-		Sensor sensor = stepModel.getSensor();
-		FeatureOfInterest foi = stepModel.getFeatureOfInterest();
-		ObservedProperty obsProp = stepModel.getObservedProperty();
+		final Sensor sensor = stepModel.getSensor();
+		final FeatureOfInterest foi = stepModel.getFeatureOfInterest();
+		final ObservedProperty obsProp = stepModel.getObservedProperty();
 		SensorType sensorXB = null;
 		SensorType[] sensorsXB;
 		AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
-		ModelStore ms = ModelStore.getInstance();
+		final ModelStore ms = ModelStore.getInstance();
 		if (addiMeta == null) {
 			addiMeta = sosImportConf.addNewAdditionalMetadata();
 			if (logger.isDebugEnabled()) {
@@ -82,7 +82,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 			 sensorsXB = addiMeta.getSensorArray();
 			 
 			 findSensor: 
-			 for (SensorType aSensor : sensorsXB) {
+			 for (final SensorType aSensor : sensorsXB) {
 				if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
 					sensorXB = aSensor;
 					if (logger.isDebugEnabled()) {
@@ -124,14 +124,14 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 				/*
 				 * Add generation parameter
 				 */
-				String concat = sensor.getConcatString();
+				final String concat = sensor.getConcatString();
 				if (concat != null && !concat.equalsIgnoreCase("")) {
 					sensorGRT.setConcatString(concat);
 				}
-				java.net.URI uri = sensor.getURI();
-				String uriPrefix = sensor.getUriPrefix();
-				boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
-				org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
+				final java.net.URI uri = sensor.getURI();
+				final String uriPrefix = sensor.getUriPrefix();
+				final boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
+				final org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
 				uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
 				if (uri != null) {
 					uriXB.setStringValue(uri.toString());
@@ -140,10 +140,9 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 						useNameAfterPrefixAsUri) {
 					uriXB.setStringValue(uriPrefix);
 				}
-				Column[] relCols = (Column[]) sensor.getRelatedCols();
-				for (int i = 0; i < relCols.length; i++) {
-					Number num = sensorGRT.addNewNumber();
-					Column c = relCols[i];
+				final Column[] relCols = (Column[]) sensor.getRelatedCols();
+				for (final Column c : relCols) {
+					final Number num = sensorGRT.addNewNumber();
 					num.setIntValue(c.getNumber());
 					if (logger.isDebugEnabled()) {
 						logger.debug("Added new number element: " + num.xmlText(new XmlOptions().setSaveOuter()));
@@ -180,10 +179,9 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		/*
 		 * identify related measured value columns and update relation
 		 */
-		ArrayList<MeasuredValue> mVs = (ArrayList<MeasuredValue>) ms.getMeasuredValues();
-		ArrayList<MeasuredValue> relatedMVs = new ArrayList<MeasuredValue>(mVs.size());
-		for (Iterator<MeasuredValue> iterator = mVs.iterator(); iterator.hasNext();) {
-			MeasuredValue measuredValue = iterator.next();
+		final ArrayList<MeasuredValue> mVs = (ArrayList<MeasuredValue>) ms.getMeasuredValues();
+		final ArrayList<MeasuredValue> relatedMVs = new ArrayList<MeasuredValue>(mVs.size());
+		for (final MeasuredValue measuredValue : mVs) {
 			if (foi.isAssignedTo(measuredValue) && obsProp.isAssigned(measuredValue)) {
 				relatedMVs.add(measuredValue);
 				if (logger.isDebugEnabled()) {
@@ -206,14 +204,14 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		/*
 		 * Add relation to all found measured value column using the xmlId
 		 */
-		for (MeasuredValue mV : relatedMVs) {
-			TableElement tabE = mV.getTableElement();
-			int mvColId = Helper.getColumnIdFromTableElement(tabE);
-			org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column 
+		for (final MeasuredValue mV : relatedMVs) {
+			final TableElement tabE = mV.getTableElement();
+			final int mvColId = Helper.getColumnIdFromTableElement(tabE);
+			final org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column 
 						mvColumn = Helper.getColumnById(mvColId, sosImportConf);
-			RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
+			final RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
 			if (!Helper.isSensorInArray(relSensors,sensor.getXMLId())) {
-				RelatedSensor relSensor = mvColumn.addNewRelatedSensor();
+				final RelatedSensor relSensor = mvColumn.addNewRelatedSensor();
 				relSensor.setIdRef(sensor.getXMLId());
 				if (logger.isDebugEnabled()) {
 					logger.debug("Added new related sensor" +

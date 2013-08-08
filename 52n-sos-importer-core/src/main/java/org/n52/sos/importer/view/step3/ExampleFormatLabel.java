@@ -27,9 +27,10 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Formatable;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * formats an exemplary String along the selected pattern
@@ -40,11 +41,11 @@ public class ExampleFormatLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(ExampleFormatLabel.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExampleFormatLabel.class);
 	
 	private Formatable formatter;
 	
-	public ExampleFormatLabel(Formatable formatter) {
+	public ExampleFormatLabel(final Formatable formatter) {
 		super();
 		if (logger.isTraceEnabled()) {
 			logger.trace("ExampleFormatLabel(formatter: " + 
@@ -61,14 +62,14 @@ public class ExampleFormatLabel extends JLabel {
 	 * example label.
 	 * @param o
 	 */
-	public void reformat(Object o) {
+	public void reformat(final Object o) {
 		try {
-			String formattedValue = formatter.format(o);
-	        this.setForeground(Color.black);
-	        this.setText(formattedValue);
-		} catch (Exception e) {
-	    	this.setForeground(Color.red);
-	    	this.setText(Lang.l().error() + ": " + e.getLocalizedMessage());
+			final String formattedValue = formatter.format(o);
+	        setForeground(Color.black);
+	        setText(formattedValue);
+		} catch (final Exception e) {
+	    	setForeground(Color.red);
+	    	setText(Lang.l().error() + ": " + e.getLocalizedMessage());
 		}
 	}
 
@@ -82,7 +83,7 @@ public class ExampleFormatLabel extends JLabel {
 	/**
 	 * @param formatter the formatter to set
 	 */
-	public void setFormatter(Formatable formatter) {
+	public void setFormatter(final Formatable formatter) {
 		this.formatter = formatter;
 	}
 		

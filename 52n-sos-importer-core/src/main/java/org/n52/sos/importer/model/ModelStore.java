@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.position.Position;
@@ -40,6 +39,8 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * stores all identified and manually set metadata instances;
@@ -48,29 +49,29 @@ import org.n52.sos.importer.model.table.TableElement;
  */
 public class ModelStore {
 	
-	private static final Logger logger = Logger.getLogger(ModelStore.class);
+	private static final Logger logger = LoggerFactory.getLogger(ModelStore.class);
 	
 	private static ModelStore instance = null;
 	
-	private List<MeasuredValue> measuredValues;
+	private final List<MeasuredValue> measuredValues;
 	
 	private List<DateAndTime> dateAndTimes;
 	
 	private List<FeatureOfInterest> featureOfInterests;
 	
-	private List<ObservedProperty> observedProperties;
+	private final List<ObservedProperty> observedProperties;
 
-	private List<UnitOfMeasurement> unitOfMeasurements;
+	private final List<UnitOfMeasurement> unitOfMeasurements;
 	
-	private List<Sensor> sensors;
+	private final List<Sensor> sensors;
 	
 	private List<Position> positions;
 	
-	private HashSet<Step6bSpecialModel> step6bSpecialModels;
+	private final HashSet<Step6bSpecialModel> step6bSpecialModels;
 	
-	private HashSet<InsertObservation> observationsToInsert;
+	private final HashSet<InsertObservation> observationsToInsert;
 	
-	private HashSet<RegisterSensor> sensorsToRegister;
+	private final HashSet<RegisterSensor> sensorsToRegister;
 	
 	private ModelStore() {
 		measuredValues = new ArrayList<MeasuredValue>();
@@ -86,12 +87,13 @@ public class ModelStore {
 	}
 	
 	public static ModelStore getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new ModelStore();
+		}
 		return instance;
 	}
 	
-	public void add(MeasuredValue mv) {
+	public void add(final MeasuredValue mv) {
 		measuredValues.add(mv);
 	}
 	
@@ -100,19 +102,20 @@ public class ModelStore {
 		return measuredValues;
 	}
 	
-	public MeasuredValue getMeasuredValueAt(TableElement tableElement) {
-		for (MeasuredValue mv: measuredValues) {
-			if (mv.getTableElement().equals(tableElement))
+	public MeasuredValue getMeasuredValueAt(final TableElement tableElement) {
+		for (final MeasuredValue mv: measuredValues) {
+			if (mv.getTableElement().equals(tableElement)) {
 				return mv;
+			}
 		}
 		return null;
 	}
 	
-	public void remove(MeasuredValue mv) {
+	public void remove(final MeasuredValue mv) {
 		measuredValues.remove(mv);
 	}
 	
-	public void add(DateAndTime dateAndTime) {
+	public void add(final DateAndTime dateAndTime) {
 		dateAndTimes.add(dateAndTime);
 	}
 	
@@ -121,60 +124,62 @@ public class ModelStore {
 		return dateAndTimes;
 	}
 	
-	public void setDateAndTimes(List<DateAndTime> dateAndTimes) {
+	public void setDateAndTimes(final List<DateAndTime> dateAndTimes) {
 		this.dateAndTimes = dateAndTimes;
 	}
 	
-	public void remove(DateAndTime dateAndTime) {
+	public void remove(final DateAndTime dateAndTime) {
 		dateAndTimes.remove(dateAndTime);
 	}
 
-	public void add(Resource resource) {
-		if (resource instanceof FeatureOfInterest)
+	public void add(final Resource resource) {
+		if (resource instanceof FeatureOfInterest) {
 			add((FeatureOfInterest) resource);
-		else if (resource instanceof ObservedProperty)
+		} else if (resource instanceof ObservedProperty) {
 			add((ObservedProperty) resource);
-		else if (resource instanceof UnitOfMeasurement)
+		} else if (resource instanceof UnitOfMeasurement) {
 			add((UnitOfMeasurement) resource);
-		else if (resource instanceof Sensor)
+		} else if (resource instanceof Sensor) {
 			add((Sensor) resource);
+		}
 	}
 	
-	public void remove(Resource resource) {
-		if (resource instanceof FeatureOfInterest)
+	public void remove(final Resource resource) {
+		if (resource instanceof FeatureOfInterest) {
 			remove((FeatureOfInterest) resource);
-		else if (resource instanceof ObservedProperty)
+		} else if (resource instanceof ObservedProperty) {
 			remove((ObservedProperty) resource);
-		else if (resource instanceof UnitOfMeasurement)
+		} else if (resource instanceof UnitOfMeasurement) {
 			remove((UnitOfMeasurement) resource);
-		else if (resource instanceof Sensor)
+		} else if (resource instanceof Sensor) {
 			remove((Sensor) resource);
+		}
 	}
 	
-	public void add(FeatureOfInterest featureOfInterest) {
+	public void add(final FeatureOfInterest featureOfInterest) {
 		featureOfInterests.add(featureOfInterest);
 	}
 	
-	public void remove(FeatureOfInterest featureOfInterest) {
+	public void remove(final FeatureOfInterest featureOfInterest) {
 		featureOfInterests.remove(featureOfInterest);
 	}
 
 	public List<FeatureOfInterest> getFeatureOfInterests() {
 		((ArrayList<FeatureOfInterest>) featureOfInterests).trimToSize();
-		Object[] a = featureOfInterests.toArray(); 
+		final Object[] a = featureOfInterests.toArray(); 
 		Arrays.sort(a);
 		featureOfInterests = new ArrayList<FeatureOfInterest>(a.length);
-		for (int i = 0; i < a.length; i++) {
-			featureOfInterests.add((FeatureOfInterest) a[i]);
+		for (final Object element : a) {
+			featureOfInterests.add((FeatureOfInterest) element);
 		}
 		return featureOfInterests;
 	}
 	
-	public void add(ObservedProperty observedProperty) {
+	public void add(final ObservedProperty observedProperty) {
 		observedProperties.add(observedProperty);
 	}
 	
-	public void remove(ObservedProperty observedProperty) {
+	public void remove(final ObservedProperty observedProperty) {
 		observedProperties.remove(observedProperty);
 	}
 	
@@ -183,11 +188,11 @@ public class ModelStore {
 		return observedProperties;
 	}
 		
-	public void add(UnitOfMeasurement unitOfMeasurement) {
+	public void add(final UnitOfMeasurement unitOfMeasurement) {
 		unitOfMeasurements.add(unitOfMeasurement);
 	}
 	
-	public void remove(UnitOfMeasurement unitOfMeasurement) {
+	public void remove(final UnitOfMeasurement unitOfMeasurement) {
 		unitOfMeasurements.remove(unitOfMeasurement);
 	}
 
@@ -196,11 +201,11 @@ public class ModelStore {
 		return unitOfMeasurements;
 	}
 	
-	public void add(Sensor sensor) {
+	public void add(final Sensor sensor) {
 		sensors.add(sensor);
 	}
 	
-	public void remove(Sensor sensor) {
+	public void remove(final Sensor sensor) {
 		sensors.remove(sensor);
 	}
 
@@ -209,7 +214,7 @@ public class ModelStore {
 		return sensors;
 	}
 	
-	public void add(Position position) {
+	public void add(final Position position) {
 		positions.add(position);
 	}
 
@@ -218,15 +223,15 @@ public class ModelStore {
 		return positions;
 	}
 	
-	public void setPositions(List<Position> positions) {
+	public void setPositions(final List<Position> positions) {
 		this.positions = positions;
 	}
 	
-	public void addObservationToInsert(InsertObservation io) {
+	public void addObservationToInsert(final InsertObservation io) {
 		observationsToInsert.add(io);
 	}
 	
-	public void addSensorToRegister(RegisterSensor rs) {
+	public void addSensorToRegister(final RegisterSensor rs) {
 		sensorsToRegister.add(rs);
 	}
 	
@@ -246,53 +251,57 @@ public class ModelStore {
 		observationsToInsert.clear();
 	}
 	
-	public void remove(Position position) {
+	public void remove(final Position position) {
 		positions.remove(position);
 	}
 	
 	public List<FeatureOfInterest> getFeatureOfInterestsInTable() {
-		ArrayList<FeatureOfInterest> foisInTable = new ArrayList<FeatureOfInterest>();
-		for (FeatureOfInterest foi: featureOfInterests) {
-			if (foi.getTableElement() != null) 
+		final ArrayList<FeatureOfInterest> foisInTable = new ArrayList<FeatureOfInterest>();
+		for (final FeatureOfInterest foi: featureOfInterests) {
+			if (foi.getTableElement() != null) {
 				foisInTable.add(foi);
+			}
 		}
 		foisInTable.trimToSize();
 		return foisInTable;
 	}
 	
 	public List<Sensor> getSensorsInTable() {
-		ArrayList<Sensor> sensorsInTable = new ArrayList<Sensor>();
-		for (Sensor s: sensors) {
-			if (s.getTableElement() != null) 
+		final ArrayList<Sensor> sensorsInTable = new ArrayList<Sensor>();
+		for (final Sensor s: sensors) {
+			if (s.getTableElement() != null) {
 				sensorsInTable.add(s);
+			}
 		}
 		sensorsInTable.trimToSize();
 		return sensorsInTable;
 	}
 
 	public List<ObservedProperty> getObservedPropertiesInTable() {
-		ArrayList<ObservedProperty> opsInTable = new ArrayList<ObservedProperty>();
-		for (ObservedProperty op: observedProperties) {
-			if (op.getTableElement() != null) 
+		final ArrayList<ObservedProperty> opsInTable = new ArrayList<ObservedProperty>();
+		for (final ObservedProperty op: observedProperties) {
+			if (op.getTableElement() != null) {
 				opsInTable.add(op);
+			}
 		}
 		opsInTable.trimToSize();
 		return opsInTable;
 	}
 
-	public void add(Step6bSpecialModel step6bSpecialModel) {
+	public void add(final Step6bSpecialModel step6bSpecialModel) {
 		logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
 				step6bSpecialModel.getFeatureOfInterest().getName() + "\" and Observed Property \"" +
 				step6bSpecialModel.getObservedProperty().getName() + "\"");
 		step6bSpecialModels.add(step6bSpecialModel);
 	} 
 	
-	public void remove(Step6bSpecialModel step6bSpecialModel) {
+	public void remove(final Step6bSpecialModel step6bSpecialModel) {
 		if (step6bSpecialModel.getSensor().getName() != null ||
-				step6bSpecialModel.getSensor().getURI() != null)
+				step6bSpecialModel.getSensor().getURI() != null) {
 			logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
 				step6bSpecialModel.getFeatureOfInterest().getName() + " and Observed Property \"" +
 				step6bSpecialModel.getObservedProperty().getName()+ "\"");
+		}
 		step6bSpecialModels.remove(step6bSpecialModel);
 	}
 

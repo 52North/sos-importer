@@ -41,8 +41,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JCombobox with extended functionality: 
@@ -55,7 +56,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class EditableJComboBoxPanel extends JPanel {
 
-	private static final Logger logger = Logger.getLogger(EditableJComboBoxPanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(EditableJComboBoxPanel.class);
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -65,17 +66,17 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	private String lastSelectedItem;
 
-	private JLabel label;
+	private final JLabel label;
 	
-	private JComboBox comboBox;
+	private final JComboBox comboBox;
 	
-	private DefaultComboBoxModel model;
+	private final DefaultComboBoxModel model;
 	
-	private ActionListener selectionChanged;
+	private final ActionListener selectionChanged;
 	
-	private JButton newItemButton;
+	private final JButton newItemButton;
 	
-	private JButton deleteItemButton;
+	private final JButton deleteItemButton;
 	
 	private EditableJComboBoxPanel partnerComboBox;
 	
@@ -88,20 +89,21 @@ public class EditableJComboBoxPanel extends JPanel {
 	 * @param labelName
 	 * @param toolTip
 	 */
-	public EditableJComboBoxPanel(DefaultComboBoxModel model, String labelName, String toolTip) {
+	public EditableJComboBoxPanel(final DefaultComboBoxModel model, final String labelName, final String toolTip) {
 		super();
 		this.model = model;
 		label = new JLabel(labelName + ":   ");
 		comboBox = new JComboBox(model);
 		comboBox.setToolTipText(toolTip);
 		
-		if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) 
+		if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) {
 			model.addElement(WHITESPACE);
+		}
 		
 		newItemButton = createIconButton("newItem.png", Lang.l().editableComboBoxNewItemButton());
 		deleteItemButton = createIconButton("deleteItem.png", Lang.l().editableComboBoxDeleteItemButton());
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.add(label);
 		this.add(comboBox);
 		this.add(newItemButton);
@@ -119,7 +121,7 @@ public class EditableJComboBoxPanel extends JPanel {
 	}
 	
 	public void setSelectedIndex(int i) {
-		int max = comboBox.getModel().getSize();
+		final int max = comboBox.getModel().getSize();
 		// fixing bug when having selected element nr 2 and deleting element nr 1
 		if (i > max) {
 			i = max;
@@ -132,11 +134,11 @@ public class EditableJComboBoxPanel extends JPanel {
 	 * Set the value of the selected item. The selected item may be null. 
 	 * @param item The combo box value or null for no selection.
 	 */
-	public void setSelectedItem(Object item) {
+	public void setSelectedItem(final Object item) {
 		model.setSelectedItem(item);
 	}
 	
-	public void addActionListener(ActionListener al) {
+	public void addActionListener(final ActionListener al) {
 		comboBox.addActionListener(al);
 	}
 	
@@ -145,9 +147,9 @@ public class EditableJComboBoxPanel extends JPanel {
 	}
 	
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	protected JButton createIconButton(String fileName, String toolTip) {
-		JButton iconButton = new JButton();
-		URL imgURL = getClass().getResource(ICON_FILE_PATH + fileName);
+	protected JButton createIconButton(final String fileName, final String toolTip) {
+		final JButton iconButton = new JButton();
+		final URL imgURL = getClass().getResource(ICON_FILE_PATH + fileName);
 		ImageIcon icon = null;
 		if (imgURL != null) {
 			icon = new ImageIcon(imgURL);
@@ -169,7 +171,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		disableButtons();
 		
 		if (getPartnerComboBox() != null) {
-			this.removeSelectionChangeListener();
+			removeSelectionChangeListener();
 			getPartnerComboBox().disableButtons();
 		}
 		
@@ -179,7 +181,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		comboBox.getEditor().setItem("");
 		
 		if (model.getElementAt(0).equals(WHITESPACE)) {
-			JTextComponent editor = (JTextComponent) comboBox.getEditor().getEditorComponent();
+			final JTextComponent editor = (JTextComponent) comboBox.getEditor().getEditorComponent();
 			editor.setCaretPosition(0);
 		}	
 	}
@@ -188,8 +190,9 @@ public class EditableJComboBoxPanel extends JPanel {
 		comboBox.setEditable(false);
 		comboBox.setSelectedItem(lastSelectedItem);
 		enableButtons();
-		if (getPartnerComboBox() != null)
+		if (getPartnerComboBox() != null) {
 			getPartnerComboBox().enableButtons();
+		}
 	}
 
 	public void saveNewItem() {
@@ -200,8 +203,9 @@ public class EditableJComboBoxPanel extends JPanel {
 				comboBox.setEditable(false);
 				comboBox.setSelectedItem(lastSelectedItem);
 				enableButtons();
-				if (getPartnerComboBox() != null)
+				if (getPartnerComboBox() != null) {
 					getPartnerComboBox().enableButtons();
+				}
 				return;
 			} else { //when it is the second combobox
 				newItem = getNextBiggestWhiteSpace(); //since no duplicate values are allowed
@@ -211,12 +215,12 @@ public class EditableJComboBoxPanel extends JPanel {
 		} else if (model.getIndexOf(newItem) != -1) { //element already in list
 			if (getPartnerComboBox() != null) {
 				comboBox.setEditable(false);
-				if (this.isSecondComboBox()) {
+				if (isSecondComboBox()) {
 					getPartnerComboBox().deleteFirstItem();
 					setSecondComboBox(false);
 				}
 				comboBox.setSelectedItem(newItem);
-				this.addSelectionChangeListener();
+				addSelectionChangeListener();
 				enableButtons();
 				getPartnerComboBox().enableButtons();
 				return;
@@ -224,19 +228,22 @@ public class EditableJComboBoxPanel extends JPanel {
 		} else if (lastSelectedItem.trim().length() == 0) { //when last element was an empty string
 			if (getPartnerComboBox() != null && !isSecondComboBox()) {
 				//put element at the place of the old element
-				int index = model.getIndexOf(lastSelectedItem);
+				final int index = model.getIndexOf(lastSelectedItem);
 				model.removeElement(lastSelectedItem);
 				
-				Object[] items = new Object[model.getSize()];
-				for (int i = 0; i < model.getSize(); i++)
+				final Object[] items = new Object[model.getSize()];
+				for (int i = 0; i < model.getSize(); i++) {
 					items[i] = model.getElementAt(i);
+				}
 				model.removeAllElements();
 				
-				for (int i = 0; i < index; i++)
+				for (int i = 0; i < index; i++) {
 					model.addElement(items[i]);
+				}
 				model.addElement(newItem);
-				for (int i = index; i < items.length; i++)
+				for (int i = index; i < items.length; i++) {
 					model.addElement(items[i]);
+				}
 				
 				comboBox.setEditable(false);
 				comboBox.setSelectedItem(newItem);
@@ -246,31 +253,34 @@ public class EditableJComboBoxPanel extends JPanel {
 			}			
 		}
 		//put the new element at the first position of the list
-		Object[] items = new Object[model.getSize()];
-		for (int i = 0; i < model.getSize(); i++)
+		final Object[] items = new Object[model.getSize()];
+		for (int i = 0; i < model.getSize(); i++) {
 			items[i] = model.getElementAt(i);
+		}
 		
 		model.removeAllElements();
 		model.addElement(newItem);
-		for (int i = 0; i < items.length; i++)
-			model.addElement(items[i]);
+		for (final Object item : items) {
+			model.addElement(item);
+		}
 		
 		comboBox.setEditable(false);
 		comboBox.setSelectedItem(newItem);
 		
 		if (getPartnerComboBox() != null) {
-			if (this.isSecondComboBox())  {
-				this.addSelectionChangeListener();
+			if (isSecondComboBox())  {
+				addSelectionChangeListener();
 				setSecondComboBox(false);
 				enableButtons();
 				getPartnerComboBox().enableButtons();
 			} else {
-				this.addSelectionChangeListener();
+				addSelectionChangeListener();
 				getPartnerComboBox().setSecondComboBox(true);
 				getPartnerComboBox().insertNewItem();				
 			}				
-		} else //when it is a single combobox
+		} else {
 			enableButtons();
+		}
 	}
 	
 	private String getNextBiggestWhiteSpace() {
@@ -282,37 +292,41 @@ public class EditableJComboBoxPanel extends JPanel {
 			int maxWhiteSpaces = 0;
 			int whiteSpaces = 0;
 			for (int i = 0; i < model.getSize(); i++) {
-				String item = (String) model.getElementAt(i);
+				final String item = (String) model.getElementAt(i);
 				
 				whiteSpaces = 0;
-				for (char ch: item.toCharArray())
-					if (Character.isWhitespace(ch)) 
+				for (final char ch: item.toCharArray()) {
+					if (Character.isWhitespace(ch)) {
 						whiteSpaces++;
+					}
+				}
 				
-				if (whiteSpaces > maxWhiteSpaces) 
+				if (whiteSpaces > maxWhiteSpaces) {
 					maxWhiteSpaces = whiteSpaces;
+				}
 			}
 			
 			String newBiggestWhiteSpace = " ";
-			for (int j = 0; j < maxWhiteSpaces; j++)
+			for (int j = 0; j < maxWhiteSpaces; j++) {
 				newBiggestWhiteSpace += " ";
+			}
 
 			return newBiggestWhiteSpace;
 		}
 	}
 	
 	private void deleteFirstItem() {
-		this.removeSelectionChangeListener();
+		removeSelectionChangeListener();
 		comboBox.removeItemAt(0);
-		this.addSelectionChangeListener();
+		addSelectionChangeListener();
 	}
 	
 	public void deleteSelectedItem() {
 		if (getPartnerComboBox() != null) {
-			this.removeSelectionChangeListener();
+			removeSelectionChangeListener();
 		}
 		
-		int index = comboBox.getSelectedIndex();
+		final int index = comboBox.getSelectedIndex();
 		if (index > -1) {
 			model.removeElementAt(index);
 		}
@@ -325,11 +339,11 @@ public class EditableJComboBoxPanel extends JPanel {
 		
 		//delete also the item from the partner ComboBox
 		if (getPartnerComboBox() != null) {
-			if (this.isSecondComboBox()) {
-				this.addSelectionChangeListener();
+			if (isSecondComboBox()) {
+				addSelectionChangeListener();
 				setSecondComboBox(false);
 			} else {
-				this.addSelectionChangeListener();
+				addSelectionChangeListener();
 				getPartnerComboBox().setSecondComboBox(true);
 				getPartnerComboBox().deleteSelectedItem();				
 			}
@@ -341,24 +355,24 @@ public class EditableJComboBoxPanel extends JPanel {
 	
 	public void selectionChanged() {
 		if (getPartnerComboBox() != null) {
-			int i = comboBox.getSelectedIndex();
+			final int i = comboBox.getSelectedIndex();
 			getPartnerComboBox().removeSelectionChangeListener();
 			getPartnerComboBox().setSelectedIndex(i);
 			getPartnerComboBox().addSelectionChangeListener();
 		}		
 	}
 	
-	public void setPartnerComboBox(EditableJComboBoxPanel partnerComboBox) {
+	public void setPartnerComboBox(final EditableJComboBoxPanel partnerComboBox) {
 		this.partnerComboBox = partnerComboBox;
-		this.addSelectionChangeListener();
+		addSelectionChangeListener();
 	}
 
 	public EditableJComboBoxPanel getPartnerComboBox() {
 		return partnerComboBox;
 	}
 
-	public void setSecondComboBox(boolean flag) {
-		this.secondComboBox = flag;
+	public void setSecondComboBox(final boolean flag) {
+		secondComboBox = flag;
 	}
 
 	public boolean isSecondComboBox() {
@@ -383,7 +397,7 @@ public class EditableJComboBoxPanel extends JPanel {
 		comboBox.removeActionListener(selectionChanged);
 	}
 
-	public void setEnterPressed(boolean enterPressed) {
+	public void setEnterPressed(final boolean enterPressed) {
 		this.enterPressed = enterPressed;
 	}
 
@@ -394,23 +408,24 @@ public class EditableJComboBoxPanel extends JPanel {
 	private class FocusChanged implements FocusListener {
 
 		@Override
-		public void focusGained(FocusEvent arg0) {	
+		public void focusGained(final FocusEvent arg0) {	
 		}
 
 		@Override
-		public void focusLost(FocusEvent arg0) {
-			if (isEnterPressed())
+		public void focusLost(final FocusEvent arg0) {
+			if (isEnterPressed()) {
 				setEnterPressed(false);
-			else 
+			} else {
 				saveNewItem();
+			}
 		}
 	}
 	
 	private class EnterOrESCPressed implements KeyListener {
 
 		@Override
-		public void keyPressed(KeyEvent arg0) {
-			int key = arg0.getKeyCode();
+		public void keyPressed(final KeyEvent arg0) {
+			final int key = arg0.getKeyCode();
 		    if (key == KeyEvent.VK_ENTER) {
 		    	setEnterPressed(true);
 				saveNewItem();
@@ -420,36 +435,38 @@ public class EditableJComboBoxPanel extends JPanel {
 		}
 
 		@Override
-		public void keyReleased(KeyEvent arg0) {			
+		public void keyReleased(final KeyEvent arg0) {			
 		}
 
 		@Override
-		public void keyTyped(KeyEvent arg0) {
+		public void keyTyped(final KeyEvent arg0) {
 		}	
 	}
 	
 	private class NewItem implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			if (!comboBox.isEditable())
+		public void actionPerformed(final ActionEvent arg0) {
+			if (!comboBox.isEditable()) {
 				insertNewItem();
+			}
 		}
 	}
 	
 	private class DeleteItem implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (!comboBox.isEditable())
-				deleteSelectedItem();		
+		public void actionPerformed(final ActionEvent e) {
+			if (!comboBox.isEditable()) {
+				deleteSelectedItem();
+			}		
 		}
 	}
 	
 	private class SelectionChanged implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			selectionChanged();
 		}	
 	}

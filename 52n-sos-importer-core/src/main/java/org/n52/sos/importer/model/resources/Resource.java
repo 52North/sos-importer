@@ -28,13 +28,14 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * In this project, a resource has a URI and a name. This can be
@@ -48,7 +49,7 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  */
 public abstract class Resource extends Component {
 	
-	private static final Logger logger = Logger.getLogger(Resource.class);
+	private static final Logger logger = LoggerFactory.getLogger(Resource.class);
 
 	private TableElement tableElement;
 	private String name;
@@ -59,9 +60,9 @@ public abstract class Resource extends Component {
 	private boolean useNameAfterPrefixAsURI;
 	private boolean generated;
 	
-	public void setName(String name) { this.name = name; }
+	public void setName(final String name) { this.name = name; }
 	public String getName() { return name; }
-	public void setURI(URI uri) { this.uri = uri; }
+	public void setURI(final URI uri) { this.uri = uri; }
 	public URI getURI() { return uri; }
 	
 	/**
@@ -81,10 +82,11 @@ public abstract class Resource extends Component {
 	 * @return a String representation of this resource's name
 	 */
 	public String getNameString() {
-		if (getName() == null || getName().equals(""))
+		if (getName() == null || getName().equals("")) {
 			return uri.toString();
-		else 
+		} else {
 			return getName();
+		}
 	}
 	
 	/**
@@ -93,13 +95,14 @@ public abstract class Resource extends Component {
 	 * @return a String representation of this resource's URI
 	 */
 	public String getURIString() {
-		if (uri == null || uri.toString().equals(""))
+		if (uri == null || uri.toString().equals("")) {
 			return name;
-		else 
+		} else {
 			return uri.toString();
+		}
 	}
 	
-	public void setTableElement(TableElement tableElement) {
+	public void setTableElement(final TableElement tableElement) {
 		logger.info("In " + tableElement + " are " + this + "s");
 		this.tableElement = tableElement;
 	}
@@ -149,7 +152,7 @@ public abstract class Resource extends Component {
 	public abstract Resource getNextResourceType();
 	
 	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
+	public MissingComponentPanel getMissingComponentPanel(final Combination c) {
 		//not used since all resources have the same panel
 		return null; 
 	}
@@ -168,10 +171,12 @@ public abstract class Resource extends Component {
 	
 	@Override 
 	public String toString() {
-		if (getTableElement() != null)
+		if (getTableElement() != null) {
 			return " " + getTableElement();
-		if (getName() != null)
+		}
+		if (getName() != null) {
 			return " \"" + getName() + "\"";
+		}
 		return "";	
 	}
 
@@ -192,29 +197,38 @@ public abstract class Resource extends Component {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof Resource))
+		}
+		if (!(obj instanceof Resource)) {
 			return false;
-		Resource other = (Resource) obj;
+		}
+		final Resource other = (Resource) obj;
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (tableElement == null) {
-			if (other.tableElement != null)
+			if (other.tableElement != null) {
 				return false;
-		} else if (!tableElement.equals(other.tableElement))
+			}
+		} else if (!tableElement.equals(other.tableElement)) {
 			return false;
+		}
 		if (uri == null) {
-			if (other.uri != null)
+			if (other.uri != null) {
 				return false;
-		} else if (!uri.equals(other.uri))
+			}
+		} else if (!uri.equals(other.uri)) {
 			return false;
+		}
 		return true;
 	}
 	/**
@@ -226,7 +240,7 @@ public abstract class Resource extends Component {
 	/**
 	 * @param uriPrefix the uriPrefix to set
 	 */
-	public void setUriPrefix(String uriPrefix) {
+	public void setUriPrefix(final String uriPrefix) {
 		this.uriPrefix = uriPrefix;
 	}
 	/**
@@ -238,7 +252,7 @@ public abstract class Resource extends Component {
 	/**
 	 * @param relatedCols the relatedCols to set
 	 */
-	public void setRelatedCols(TableElement[] relatedCols) {
+	public void setRelatedCols(final TableElement[] relatedCols) {
 		this.relatedCols = relatedCols;
 	}
 	/**
@@ -250,7 +264,7 @@ public abstract class Resource extends Component {
 	/**
 	 * @param concatString the concatString to set
 	 */
-	public void setConcatString(String concatString) {
+	public void setConcatString(final String concatString) {
 		this.concatString = concatString;
 	}
 	/**
@@ -262,7 +276,7 @@ public abstract class Resource extends Component {
 	/**
 	 * @param useNameAfterPrefixAsURI the useNameAfterPrefixAsURI to set
 	 */
-	public void setUseNameAfterPrefixAsURI(boolean useNameAfterPrefixAsURI) {
+	public void setUseNameAfterPrefixAsURI(final boolean useNameAfterPrefixAsURI) {
 		this.useNameAfterPrefixAsURI = useNameAfterPrefixAsURI;
 	}
 	/**
@@ -276,7 +290,7 @@ public abstract class Resource extends Component {
 	/**
 	 * @param generated the generated to set
 	 */
-	public void setGenerated(boolean generated) {
+	public void setGenerated(final boolean generated) {
 		this.generated = generated;
 	}
 	

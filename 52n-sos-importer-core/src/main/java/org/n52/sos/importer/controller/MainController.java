@@ -26,8 +26,6 @@ package org.n52.sos.importer.controller;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-
 import org.n52.sos.importer.model.BackNextModel;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.model.xml.Model;
@@ -48,10 +46,9 @@ public class MainController {
 
 	private final MainFrame mainFrame = new MainFrame(this);
 	
-	private Model xmlModel;
+	private final Model xmlModel;
 	
 	private MainController() {
-		LoggingController.getInstance();
 		//
 		// Load the tooltips
 		ToolTips.loadSettings();
@@ -65,8 +62,9 @@ public class MainController {
 	}
 	
 	public static MainController getInstance() {
-		if (MainController.instance == null)
+		if (MainController.instance == null) {
 			MainController.instance = new MainController();
+		}
 		return MainController.instance;
 	}
 	
@@ -75,9 +73,9 @@ public class MainController {
 	 * in the GUI.
 	 * @param stepController
 	 */
-	public void setStepController(StepController stepController) {
-	    DescriptionPanel descP = DescriptionPanel.getInstance();
-	    BackNextModel bNM = BackNextController.getInstance().getModel();
+	public void setStepController(final StepController stepController) {
+	    final DescriptionPanel descP = DescriptionPanel.getInstance();
+	    final BackNextModel bNM = BackNextController.getInstance().getModel();
 	    //
 	    descP.setText(stepController.getDescription());
 	    stepController.loadSettings();
@@ -90,11 +88,11 @@ public class MainController {
 		xmlModel.updateModel();
 	}
 	
-	public boolean removeProvider(StepModel sm) {
+	public boolean removeProvider(final StepModel sm) {
 		return xmlModel.removeProvider(sm);
 	}
 	
-	public boolean registerProvider(StepModel sm) {
+	public boolean registerProvider(final StepModel sm) {
 		return xmlModel.registerProvider(sm);
 	}
 	
@@ -102,11 +100,11 @@ public class MainController {
 		mainFrame.showExitDialog();
 	}
 	
-	public void updateTitle(String csvFilePath) {
+	public void updateTitle(final String csvFilePath) {
 		mainFrame.updateTitle(csvFilePath);
 	}
 
-	public boolean saveModel(File file) throws IOException {
+	public boolean saveModel(final File file) throws IOException {
 		return xmlModel.save(file);
 	}
 

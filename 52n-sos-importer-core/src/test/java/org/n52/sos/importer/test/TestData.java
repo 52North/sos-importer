@@ -26,10 +26,6 @@ package org.n52.sos.importer.test;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.position.EPSGCode;
@@ -40,6 +36,8 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.table.Column;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author e.h.juerrens@52north.org
@@ -47,13 +45,7 @@ import org.n52.sos.importer.model.table.Column;
  */
 public class TestData {
 	
-	private static final Logger logger = Logger.getLogger(TestData.class);
-	
-	static {
-		final Logger root = Logger.getRootLogger();
-		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
-	}
+	private static final Logger logger = LoggerFactory.getLogger(TestData.class);
 	
 	/**
 	 * Example GLDAS data set with 7 columns:<br />

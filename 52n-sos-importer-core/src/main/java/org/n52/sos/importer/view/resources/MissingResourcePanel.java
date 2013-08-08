@@ -49,7 +49,6 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Component;
@@ -67,11 +66,13 @@ import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
 import org.n52.sos.importer.view.utils.ToolTips;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MissingResourcePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(MissingResourcePanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(MissingResourcePanel.class);
 
 	private EditableJComboBoxPanel manualResNameComboBox; 
 	private EditableJComboBoxPanel manualResUriComboBox; 
@@ -82,21 +83,21 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private JPanel manualResPanel;
 	private JPanel generatedResPanel;
 
-	private Resource resource;
+	private final Resource resource;
 	private JTextField columnConcationationString;
 	private JTextField uriOrPrefixTextField;
 	private JList columnList;
 	private JCheckBox useNameAfterPrefixCheckBox;
 
-	public MissingResourcePanel(Resource resource) {
+	public MissingResourcePanel(final Resource resource) {
 		this.resource = resource;
 		String name = Lang.l().name();
-		ModelStore ms = ModelStore.getInstance();
+		final ModelStore ms = ModelStore.getInstance();
 		boolean disableManualInput = false, 
 				disableGeneratedInput = false,
 				manualDefault = false;
-		String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
-		JPanel containerPanel = new JPanel();
+		final String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
+		final JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		
 		containerPanel.add(initGeneratedResPanel(columnHeadingsWithId));
@@ -107,19 +108,19 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 		if (resource.getName() == null && !resource.isGenerated()) {
 			if (resource instanceof FeatureOfInterest) {
-				List<Position> positions = ms.getPositions();
+				final List<Position> positions = ms.getPositions();
 				if (positions != null && positions.size() > 0) {
 					disableManualInput = true;
 				}
 			} else if (resource instanceof ObservedProperty) {
 				manualDefault = true;
 			} else if (resource instanceof UnitOfMeasurement) {
-				List<ObservedProperty> ops = ms.getObservedProperties();
+				final List<ObservedProperty> ops = ms.getObservedProperties();
 				name = Lang.l().code();
 				if (ops != null && ops.size() == 1) {
 					// in the case of having one observed property column -> set generation as default (having table element of type Column set)
 					// in the case of having one generated observed property -> set generation as default
-					ObservedProperty op = ops.get(0);
+					final ObservedProperty op = ops.get(0);
 					if (op.isGenerated()) {
 						// disableManualInput = true;
 						// generated is default!
@@ -133,11 +134,11 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				// TODO what happens in the case of having multiple observed properties. How to relate each other?
 			} else if (resource instanceof Sensor) {
 				// check for 1 foi - 1 op => 1 sensor => only manual input
-				List<FeatureOfInterest> fois = ms.getFeatureOfInterests();
-				List<ObservedProperty> ops = ms.getObservedProperties();
+				final List<FeatureOfInterest> fois = ms.getFeatureOfInterests();
+				final List<ObservedProperty> ops = ms.getObservedProperties();
 				if (fois != null && fois.size() == 1 && ops != null && ops.size() == 1) {
-					FeatureOfInterest foi = fois.get(0);
-					ObservedProperty op = ops.get(0);
+					final FeatureOfInterest foi = fois.get(0);
+					final ObservedProperty op = ops.get(0);
 					if (!foi.isGenerated() && foi.getTableElement() == null && !op.isGenerated() && op.getTableElement() == null) {
 						disableGeneratedInput = true;
 					}
@@ -195,16 +196,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		revalidate();
 	}
 
-	private JPanel initGeneratedResPanel(String[] columnHeadingsWithId) {
+	private JPanel initGeneratedResPanel(final String[] columnHeadingsWithId) {
 		generatedResPanel = new JPanel();
-		GridBagLayout gbl_generatedResPanel = new GridBagLayout();
+		final GridBagLayout gbl_generatedResPanel = new GridBagLayout();
 		gbl_generatedResPanel.columnWidths = new int[]{293, 242, 0};
 		gbl_generatedResPanel.rowHeights = new int[]{275, 0};
 		gbl_generatedResPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		gbl_generatedResPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		generatedResPanel.setLayout(gbl_generatedResPanel);
 
-		GridBagConstraints gbc_generatedNamePanel = new GridBagConstraints();
+		final GridBagConstraints gbc_generatedNamePanel = new GridBagConstraints();
 		gbc_generatedNamePanel.fill = GridBagConstraints.BOTH;
 		gbc_generatedNamePanel.insets = new Insets(0, 0, 0, 5);
 		gbc_generatedNamePanel.gridx = 0;
@@ -212,7 +213,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		generatedResPanel.add(initGeneratedNamePanel(columnHeadingsWithId), gbc_generatedNamePanel);
 
 		// build panel
-		GridBagConstraints gbc_generatedResURIPanel = new GridBagConstraints();
+		final GridBagConstraints gbc_generatedResURIPanel = new GridBagConstraints();
 		gbc_generatedResURIPanel.fill = GridBagConstraints.BOTH;
 		gbc_generatedResURIPanel.gridx = 1;
 		gbc_generatedResURIPanel.gridy = 0;
@@ -221,24 +222,24 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	}
 
 	private JPanel initGeneratedResURIPanel() {
-		GridBagLayout gbl_generatedResURIPanel = new GridBagLayout();
+		final GridBagLayout gbl_generatedResURIPanel = new GridBagLayout();
 		gbl_generatedResURIPanel.columnWidths = new int[]{242, 0};
 		gbl_generatedResURIPanel.rowHeights = new int[]{29, 20, 23, 20, 0};
 		gbl_generatedResURIPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_generatedResURIPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		JPanel generatedResURIPanel = new JPanel();
+		final JPanel generatedResURIPanel = new JPanel();
 		generatedResURIPanel.setBorder(new TitledBorder(null, Lang.l().uri(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		generatedResURIPanel.setToolTipText(ToolTips.get(ToolTips.URI));
 		generatedResURIPanel.setLayout(gbl_generatedResURIPanel);
 
-		JTextArea uriInstructions = new JTextArea(Lang.l().step6bURIInstructions());
+		final JTextArea uriInstructions = new JTextArea(Lang.l().step6bURIInstructions());
 		uriInstructions.setEditable(false);
 		uriInstructions.setFocusable(false);
 		uriInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
 		uriInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
 		uriInstructions.setLineWrap(true);
 		uriInstructions.setWrapStyleWord(true);
-		GridBagConstraints gbc_uriInstructions = new GridBagConstraints();
+		final GridBagConstraints gbc_uriInstructions = new GridBagConstraints();
 		gbc_uriInstructions.fill = GridBagConstraints.BOTH;
 		gbc_uriInstructions.insets = new Insets(0, 0, 5, 0);
 		gbc_uriInstructions.gridx = 0;
@@ -246,7 +247,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		generatedResURIPanel.add(uriInstructions, gbc_uriInstructions);
 
 		useNameAfterPrefixCheckBox = new JCheckBox(Lang.l().step6bUseNameAfterPrefix());
-		GridBagConstraints gbc_useNameAfterPrefixCheckBox = new GridBagConstraints();
+		final GridBagConstraints gbc_useNameAfterPrefixCheckBox = new GridBagConstraints();
 		gbc_useNameAfterPrefixCheckBox.anchor = GridBagConstraints.NORTHWEST;
 		gbc_useNameAfterPrefixCheckBox.insets = new Insets(0, 0, 5, 0);
 		gbc_useNameAfterPrefixCheckBox.gridx = 0;
@@ -255,7 +256,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 		uriOrPrefixTextField = new JTextField();
 		uriOrPrefixTextField.setColumns(10);
-		GridBagConstraints gbc_uriOrPrefixTextField = new GridBagConstraints();
+		final GridBagConstraints gbc_uriOrPrefixTextField = new GridBagConstraints();
 		gbc_uriOrPrefixTextField.insets = new Insets(0, 0, 5, 0);
 		gbc_uriOrPrefixTextField.anchor = GridBagConstraints.NORTH;
 		gbc_uriOrPrefixTextField.fill = GridBagConstraints.HORIZONTAL;
@@ -265,13 +266,13 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return generatedResURIPanel;
 	}
 
-	private JPanel initGeneratedNamePanel(String[] columnHeadingsWithId) {
-		JPanel generatedNamePanel = new JPanel();
+	private JPanel initGeneratedNamePanel(final String[] columnHeadingsWithId) {
+		final JPanel generatedNamePanel = new JPanel();
 		generatedNamePanel.setToolTipText(ToolTips.get(ToolTips.NAME));
 		generatedNamePanel.setBorder(new TitledBorder(null, Lang.l().name(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		generatedNamePanel.setFont(Constants.DEFAULT_LABEL_FONT);
 
-		GridBagLayout gbl_generatedNamePanel = new GridBagLayout();
+		final GridBagLayout gbl_generatedNamePanel = new GridBagLayout();
 		gbl_generatedNamePanel.columnWidths = new int[]{300, 0};
 		gbl_generatedNamePanel.rowHeights = new int[]{30, 50, 35, 20, 0};
 		gbl_generatedNamePanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
@@ -279,14 +280,14 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 		generatedNamePanel.setLayout(gbl_generatedNamePanel);
 
-		JTextArea nameInstructions = new JTextArea(Lang.l().step6bSelectColumnsLabel());
+		final JTextArea nameInstructions = new JTextArea(Lang.l().step6bSelectColumnsLabel());
 		nameInstructions.setEditable(false);
 		nameInstructions.setFocusable(false);
 		nameInstructions.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
 		nameInstructions.setFont(Constants.DEFAULT_LABEL_FONT);
 		nameInstructions.setLineWrap(true);
 		nameInstructions.setWrapStyleWord(true);
-		GridBagConstraints gbc_nameInstructions = new GridBagConstraints();
+		final GridBagConstraints gbc_nameInstructions = new GridBagConstraints();
 		gbc_nameInstructions.fill = GridBagConstraints.BOTH;
 		gbc_nameInstructions.insets = new Insets(0, 0, 5, 0);
 		gbc_nameInstructions.gridx = 0;
@@ -299,8 +300,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		columnList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		columnList.setTransferHandler(new ArrayListTransferHandler());
 		//
-		JScrollPane listView = new JScrollPane(columnList);
-		GridBagConstraints gbc_listView = new GridBagConstraints();
+		final JScrollPane listView = new JScrollPane(columnList);
+		final GridBagConstraints gbc_listView = new GridBagConstraints();
 		gbc_listView.anchor = GridBagConstraints.NORTH;
 		gbc_listView.fill = GridBagConstraints.HORIZONTAL;
 		gbc_listView.insets = new Insets(0, 0, 5, 0);
@@ -308,14 +309,14 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		gbc_listView.gridy = 1;
 		generatedNamePanel.add(listView, gbc_listView);
 
-		JTextArea concatLabel = new JTextArea(Lang.l().step6bDefineConcatString());
+		final JTextArea concatLabel = new JTextArea(Lang.l().step6bDefineConcatString());
 		concatLabel.setEditable(false);
 		concatLabel.setFocusable(false);
 		concatLabel.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
 		concatLabel.setFont(Constants.DEFAULT_LABEL_FONT);
 		concatLabel.setLineWrap(true);
 		concatLabel.setWrapStyleWord(true);
-		GridBagConstraints gbc_concatLabel = new GridBagConstraints();
+		final GridBagConstraints gbc_concatLabel = new GridBagConstraints();
 		gbc_concatLabel.anchor = GridBagConstraints.NORTH;
 		gbc_concatLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_concatLabel.insets = new Insets(0, 0, 5, 0);
@@ -325,7 +326,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 		columnConcationationString = new JTextField();
 		columnConcationationString.setColumns(10);
-		GridBagConstraints gbc_columnConcationationString = new GridBagConstraints();
+		final GridBagConstraints gbc_columnConcationationString = new GridBagConstraints();
 		gbc_columnConcationationString.anchor = GridBagConstraints.NORTH;
 		gbc_columnConcationationString.fill = GridBagConstraints.HORIZONTAL;
 		gbc_columnConcationationString.gridx = 0;
@@ -334,7 +335,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return generatedNamePanel;
 	}
 
-	private JPanel initManualResPanel(String name) {
+	private JPanel initManualResPanel(final String name) {
 		manualResNameComboBox = new EditableJComboBoxPanel(resource.getNames(),
 				name,
 				ToolTips.get(ToolTips.NAME));
@@ -352,9 +353,9 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	}
 
 	private JPanel initRadioButtonPanel() {
-		ButtonGroup bGroup = new ButtonGroup();
+		final ButtonGroup bGroup = new ButtonGroup();
 
-		JPanel radioButtonPanel = new JPanel();
+		final JPanel radioButtonPanel = new JPanel();
 		radioButtonPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 
 		generatedResJRB = new JRadioButton(Lang.l().step6Generation());
@@ -372,20 +373,20 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return radioButtonPanel;
 	}
 
-	private int[] columnIdsToModelIndices(TableElement[] relatedCols) {
-		int[] indices = new int[relatedCols.length];
+	private int[] columnIdsToModelIndices(final TableElement[] relatedCols) {
+		final int[] indices = new int[relatedCols.length];
 		for (int i = 0; i < relatedCols.length; i++) {
 			indices[i] = ((Column) relatedCols[i]).getNumber();
 		}
 		return indices;
 	}
 
-	private ListModel toListModel(String[] columnHeadingsWithId) {
+	private ListModel toListModel(final String[] columnHeadingsWithId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("toListModel()");
 		}
-		DefaultListModel listModel = new DefaultListModel();
-		for (String string : columnHeadingsWithId) {
+		final DefaultListModel listModel = new DefaultListModel();
+		for (final String string : columnHeadingsWithId) {
 			listModel.addElement(string);
 		}
 		return listModel;
@@ -394,7 +395,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private ActionListener radioButtionActionListener() {
 		return new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				// show additional gui elements if checkbox is selected
 				if (manualResInputJRB.isSelected()) {
 					manualResPanel.setVisible(true);
@@ -419,9 +420,9 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			 * - Name -> column selection
 			 * - URI -> uriOrPrefix
 			 */
-			Object[] selectedColumns = columnList.getSelectedValues();
-			String uriOrPrefix = uriOrPrefixTextField.getText();
-			String concatString = columnConcationationString.getText();
+			final Object[] selectedColumns = columnList.getSelectedValues();
+			final String uriOrPrefix = uriOrPrefixTextField.getText();
+			final String concatString = columnConcationationString.getText();
 
 			if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString))
 			{
@@ -446,8 +447,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			 * - name
 			 * - URI
 			 */
-			String name = manualResNameComboBox.getSelectedItem().toString().trim();
-			String uri = manualResUriComboBox.getSelectedItem().toString().trim();
+			final String name = manualResNameComboBox.getSelectedItem().toString().trim();
+			final String uri = manualResUriComboBox.getSelectedItem().toString().trim();
 
 			if(!isUriValid(uri)) {
 				return false;
@@ -465,8 +466,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		}
 	}
 
-	private boolean validUserInput(Object[] selectedColumns,
-			String uriOrPrefix)
+	private boolean validUserInput(final Object[] selectedColumns,
+			final String uriOrPrefix)
 	{
 		return uriOrPrefix != null && 
 				!uriOrPrefix.isEmpty() && 
@@ -474,16 +475,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				isAtLeastOneColumnSelected(selectedColumns);
 	}
 
-	private boolean noUserInputAtAll(Object[] selectedColumns,
-			String uriOrPrefix,
-			String concatString)
+	private boolean noUserInputAtAll(final Object[] selectedColumns,
+			final String uriOrPrefix,
+			final String concatString)
 	{
 		return selectedColumns.length < 1 && 
 				(uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) &&
 				(concatString == null || concatString.equalsIgnoreCase(""));
 	}
 
-	private boolean isAtLeastOneColumnSelected(Object[] selectedColumns)
+	private boolean isAtLeastOneColumnSelected(final Object[] selectedColumns)
 	{
 		if (selectedColumns != null && selectedColumns.length > 0)
 		{
@@ -492,7 +493,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return false;
 	}
 
-	private boolean isUriValid(String uri) {
+	private boolean isUriValid(final String uri) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isUriValid()");
 		}
@@ -500,7 +501,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		try {
 			new URI(uri);
 			return true;
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			logger.error("URI syntax not valid: " + uri, e);
 			showInvalidURISyntaxDialog(uri);
 			return false;
@@ -527,7 +528,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				JOptionPane.INFORMATION_MESSAGE);		
 	}
 
-	private void showInvalidURISyntaxDialog(String uri) {
+	private void showInvalidURISyntaxDialog(final String uri) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("showInvalidURISyntaxDialog()");
 		}
@@ -562,7 +563,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			resource.setUriPrefix(uriPrefix);
 			resource.setConcatString(columnConcationationString.getText());
 			// get TableElements
-			Column[] relatedCols = 
+			final Column[] relatedCols = 
 					getColumnsFromSelection(columnList.getSelectedValues());
 			resource.setRelatedCols(relatedCols);
 		}
@@ -573,20 +574,20 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		}
 	}
 
-	private Column[] getColumnsFromSelection(Object[] selectedValues) {
+	private Column[] getColumnsFromSelection(final Object[] selectedValues) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getColumnsFromSelection()");
 		}
 		if (selectedValues == null || selectedValues.length < 1) {
 			return null;
 		}
-		int fLWD = TableController.getInstance().getFirstLineWithData();
-		ArrayList<Column> result = new ArrayList<Column>(selectedValues.length);
-		for (Object obj : selectedValues) {
+		final int fLWD = TableController.getInstance().getFirstLineWithData();
+		final ArrayList<Column> result = new ArrayList<Column>(selectedValues.length);
+		for (final Object obj : selectedValues) {
 			if (obj instanceof String) {
-				String s = (String) obj;
-				int index = Integer.parseInt(s.substring(0,s.indexOf(":")));
-				Column c = new Column(index, fLWD);
+				final String s = (String) obj;
+				final int index = Integer.parseInt(s.substring(0,s.indexOf(":")));
+				final Column c = new Column(index, fLWD);
 				result.add(c);
 			}
 		}
@@ -601,7 +602,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		uri = uri.trim();
 		try {
 			return new URI(uri);
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			logger.error("Given URI syntax not valid: " + uri, e);
 		}	
 		return null;
@@ -629,10 +630,11 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	}
 
 	@Override
-	public void setMissingComponent(Component c) {
-		Resource r = (Resource) c;
-		String name = r.getName();
-		if (name != null)
+	public void setMissingComponent(final Component c) {
+		final Resource r = (Resource) c;
+		final String name = r.getName();
+		if (name != null) {
 			manualResNameComboBox.setSelectedItem(name);
+		}
 	}
 }

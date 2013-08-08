@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
@@ -48,6 +47,8 @@ import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
 import org.x52North.sensorweb.sos.importer.x02.RemoteFileDocument.RemoteFile;
@@ -65,9 +66,9 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Model {
 
-	private static final Logger logger = Logger.getLogger(Model.class);
+	private static final Logger logger = LoggerFactory.getLogger(Model.class);
 
-	private SosImportConfiguration sosImpConf;
+	private final SosImportConfiguration sosImpConf;
 
 	private StepModel[] stepModells = new StepModel[1];
 
@@ -75,7 +76,7 @@ public class Model {
 	 * Create a new and empty model
 	 */
 	public Model() {
-		this.sosImpConf = SosImportConfiguration.Factory.newInstance();
+		sosImpConf = SosImportConfiguration.Factory.newInstance();
 	}
 
 	/**
@@ -89,10 +90,10 @@ public class Model {
 	 * @throws IOException
 	 *             having any problems while reading file
 	 */
-	public Model(File xmlFileWithModel) throws XmlException, IOException {
-		SosImportConfigurationDocument sosImpConfDoc = SosImportConfigurationDocument.Factory
+	public Model(final File xmlFileWithModel) throws XmlException, IOException {
+		final SosImportConfigurationDocument sosImpConfDoc = SosImportConfigurationDocument.Factory
 				.parse(xmlFileWithModel);
-		this.sosImpConf = sosImpConfDoc.getSosImportConfiguration();
+		sosImpConf = sosImpConfDoc.getSosImportConfiguration();
 	}
 
 	/**
@@ -100,7 +101,7 @@ public class Model {
 	 * 
 	 * @param sosImpConf
 	 */
-	public Model(SosImportConfiguration sosImpConf) {
+	public Model(final SosImportConfiguration sosImpConf) {
 		this.sosImpConf = sosImpConf;
 	}
 
@@ -108,15 +109,15 @@ public class Model {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getFileName()");
 		}
-		DataFile df = this.sosImpConf.getDataFile();
+		final DataFile df = sosImpConf.getDataFile();
 		String result = null;
 		if (df != null) {
 			if (df.isSetLocalFile()) {
-				LocalFile lf = df.getLocalFile();
+				final LocalFile lf = df.getLocalFile();
 				result = lf.getPath();
 				result = result.substring(result.lastIndexOf(File.separatorChar)+1);
 			} else if (df.isSetRemoteFile()) {
-				RemoteFile rf = df.getRemoteFile();
+				final RemoteFile rf = df.getRemoteFile();
 				result = rf.getURL();
 				result = result.substring(result.lastIndexOf("/")+1);
 			}
@@ -124,7 +125,7 @@ public class Model {
 		return result;
 	}
 
-	public boolean registerProvider(StepModel sm) {
+	public boolean registerProvider(final StepModel sm) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("registerProvider(" + 
 					(sm.getClass().getSimpleName()==null?
@@ -136,13 +137,13 @@ public class Model {
 		ArrayList<StepModel> sMs;
 		//
 		sMs = createArrayListFromArray(stepModells);
-		boolean result = sMs.add(sm);
+		final boolean result = sMs.add(sm);
 		saveProvidersInArray(sMs);
 		//
 		return result;
 	}
 
-	public boolean removeProvider(StepModel sm) {
+	public boolean removeProvider(final StepModel sm) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("removeProvider(" +  
 					(sm.getClass().getSimpleName()==null? 
@@ -154,13 +155,13 @@ public class Model {
 		ArrayList<StepModel> provider;
 		//
 		provider = createArrayListFromArray(stepModells);
-		boolean result = provider.remove(sm);
+		final boolean result = provider.remove(sm);
 		saveProvidersInArray(provider);
 		//
 		return result;
 	}
 
-	public boolean save(File file) throws IOException {
+	public boolean save(final File file) throws IOException {
 		if (logger.isTraceEnabled()) {
 			logger.trace("save(" + file!=null?file.getName():file + ")");
 		}
@@ -189,16 +190,16 @@ public class Model {
 			}
 			if (file.isFile()) {
 				if (file.canWrite()) {
-					SosImportConfigurationDocument doc = 
+					final SosImportConfigurationDocument doc = 
 						SosImportConfigurationDocument.Factory.newInstance();
 					// insert schema location
-					XmlCursor c = sosImpConf.newCursor();
+					final XmlCursor c = sosImpConf.newCursor();
 					c.toFirstChild();
 					c.insertNamespace(Constants.XML_SCHEMA_PREFIX,
 							Constants.XML_SCHEMA_NAMESPACE);
 					c.insertAttributeWithValue(Constants.XML_SCHEMALOCATION_QNAME,
 							Constants.XML_SOS_IMPORTER_SCHEMA_LOCATION);
-					XmlOptions xmlOpts = new XmlOptions()
+					final XmlOptions xmlOpts = new XmlOptions()
 						.setSavePrettyPrint()
 						.setSavePrettyPrintIndent(4)
 						.setUseDefaultNamespace();
@@ -234,66 +235,66 @@ public class Model {
 		
 		if (stepModells != null && stepModells.length > 0) {
 			//
-			for (StepModel sm : this.stepModells) {
+			for (final StepModel sm : stepModells) {
 				//
 				if (sm instanceof Step1Model) {
 					//
-					Step1Model s1M = (Step1Model) sm;
+					final Step1Model s1M = (Step1Model) sm;
 					new Step1ModelHandler().handleModel(s1M, sosImpConf);
 					//
 				} else if (sm instanceof Step2Model) {
 					//
-					Step2Model s2M = (Step2Model) sm;
+					final Step2Model s2M = (Step2Model) sm;
 					new Step2ModelHandler().handleModel(s2M, sosImpConf);
 					//
 				} else if (sm instanceof Step3Model) {
 					//
-					Step3Model s3M = (Step3Model) sm;
+					final Step3Model s3M = (Step3Model) sm;
 					new Step3ModelHandler().handleModel(s3M, sosImpConf);
 					//
 				} else if (sm instanceof Step4aModel) {
 					//
-					Step4aModel s4aM = (Step4aModel) sm;
+					final Step4aModel s4aM = (Step4aModel) sm;
 					new Step4aModelHandler().handleModel(s4aM, sosImpConf);
 					//
 				} else if (sm instanceof Step4bModel) {
 					//
-					Step4bModel s4bM = (Step4bModel) sm;
+					final Step4bModel s4bM = (Step4bModel) sm;
 					new Step4bModelHandler().handleModel(s4bM, sosImpConf);
 					//
 				} else if (sm instanceof Step5aModel) {
 					//
-					Step5aModel s5aM = (Step5aModel) sm;
+					final Step5aModel s5aM = (Step5aModel) sm;
 					new Step5aModelHandler().handleModel(s5aM, sosImpConf);
 					//
 				} else if (sm instanceof Step5cModel) {
 					//
-					Step5cModel s5cM = (Step5cModel) sm;
+					final Step5cModel s5cM = (Step5cModel) sm;
 					new Step5cModelHandler().handleModel(s5cM, sosImpConf);
 					//
 				} else if (sm instanceof Step6aModel) {
 					//
-					Step6aModel s6aM = (Step6aModel) sm;
+					final Step6aModel s6aM = (Step6aModel) sm;
 					new Step6aModelHandler().handleModel(s6aM, sosImpConf);
 					//
 				} else if (sm instanceof Step6bModel) {
 					//
-					Step6bModel s6bM = (Step6bModel) sm;
+					final Step6bModel s6bM = (Step6bModel) sm;
 					new Step6bModelHandler().handleModel(s6bM, sosImpConf);
 					//
 				} else if (sm instanceof Step6bSpecialModel) {
 					//
-					Step6bSpecialModel s6bSM = (Step6bSpecialModel) sm;
+					final Step6bSpecialModel s6bSM = (Step6bSpecialModel) sm;
 					new Step6bSpecialModelHandler().handleModel(s6bSM, sosImpConf);
 					//
 				} else if (sm instanceof Step6cModel) {
 					//
-					Step6cModel s6cM = (Step6cModel) sm;
+					final Step6cModel s6cM = (Step6cModel) sm;
 					new Step6cModelHandler().handleModel(s6cM, sosImpConf);
 					//
 				} else if (sm instanceof Step7Model) {
 					//
-					Step7Model s7M = (Step7Model) sm;
+					final Step7Model s7M = (Step7Model) sm;
 					new Step7ModelHandler().handleModel(s7M, sosImpConf);
 				}
 			}
@@ -310,9 +311,9 @@ public class Model {
 			logger.trace("validate()");
 		}
 		//
-		SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
+		final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
 		doc.setSosImportConfiguration(sosImpConf);
-		boolean modelValid = doc.validate();
+		final boolean modelValid = doc.validate();
 		if (!modelValid) {
 			logger.error("The model is not valid. Please update your values.");
 		}
@@ -320,11 +321,11 @@ public class Model {
 	}
 	
 	public boolean laxValidate() {
-		SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
+		final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
 		doc.setSosImportConfiguration(sosImpConf);
-		Collection<XmlError> exs = XMLBeansParser.validate(doc);
-		for (XmlError xmlError : exs) {
-			logger.error(xmlError);
+		final Collection<XmlError> exs = XMLBeansParser.validate(doc);
+		for (final XmlError xmlError : exs) {
+			logger.error("Xml error: ",xmlError);
 		}
 		return (exs.size() == 0)? true : false;
 	}
@@ -332,7 +333,7 @@ public class Model {
 	/*
 	 * Private Helper methods for provider and model handling
 	 */
-	private ArrayList<StepModel> createArrayListFromArray(StepModel[] models) {
+	private ArrayList<StepModel> createArrayListFromArray(final StepModel[] models) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\tcreateArrayListFromArray()");
 		}
@@ -340,7 +341,7 @@ public class Model {
 		ArrayList<StepModel> result;
 		//
 		result = new ArrayList<StepModel>(stepModells.length + 1);
-		for (StepModel stepModel : this.stepModells) {
+		for (final StepModel stepModel : stepModells) {
 			if (stepModel != null) {
 				result.add(stepModel);
 			}
@@ -350,13 +351,13 @@ public class Model {
 		return result;
 	}
 
-	private void saveProvidersInArray(ArrayList<StepModel> aL) {
+	private void saveProvidersInArray(final ArrayList<StepModel> aL) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\tsaveProvidersInArray()");
 		}
 		//
 		aL.trimToSize();
-		this.stepModells = aL.toArray(new StepModel[aL.size()]);
+		stepModells = aL.toArray(new StepModel[aL.size()]);
 	}
 
 }

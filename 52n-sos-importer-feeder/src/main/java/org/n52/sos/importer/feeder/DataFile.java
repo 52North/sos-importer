@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 
-import org.apache.log4j.Logger;
 import org.n52.oxf.xml.NcNameResolver;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -45,6 +45,8 @@ import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.model.requests.Offering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
@@ -70,7 +72,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class DataFile {
 	
-	private static final Logger LOG = Logger.getLogger(DataFile.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DataFile.class);
 	
 	private final Configuration configuration;
 	
@@ -100,12 +102,44 @@ public class DataFile {
 		} else if (!file.canRead()) {
 			LOG.error(String.format("Data file '%s' can not be accessed, please check file permissions!",
 					file.getAbsolutePath()));
+		} else if (checkWindowsJavaApiBugJDK6203387(file)){
+			LOG.error(String.format("Data file '%s' can not be accessed, because another process blocked read access!",
+					file.getAbsolutePath()));
+			throw new JavaApiBugJDL6203387Exception(file.getName());
 		} else {
 			LOG.debug(String.format("Data file '%s' is a file and read permission is available.",
 						file.getAbsolutePath()));
 			return true;
 		}
 		return false;
+	}
+
+	private boolean checkWindowsJavaApiBugJDK6203387(final File file)
+	{
+		if (isWindows()) {
+			try {
+				new FileReader(file);
+			}
+			catch (final FileNotFoundException fnfe) {
+				// TODO add more language specific versions of this error message
+				if (
+						(
+        					fnfe.getMessage().indexOf("Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird")>=0
+        					|| 
+        					fnfe.getMessage().indexOf("The process cannot access the file because it is being used by another process")>=0
+						)	
+					&&
+						fnfe.getMessage().indexOf(file.getName()) >=0) 
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isWindows() {
+		return System.getProperty("os.name").indexOf("Windows")>=0||System.getProperty("os.name").indexOf("windows")>=0;
 	}
 
 	/**
@@ -147,14 +181,11 @@ public class DataFile {
 	 * @return
 	 */
 	public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
-		LOG.trace(String.format("getSensorForColumn(%d,%s)",
-				mvColumnId,
-				Arrays.toString(values)));
+		LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
 		// check for sensor column and return new sensor
 		Sensor sensor = getSensorFromColumn(mvColumnId,values);
 		if (sensor == null) {
-			LOG.debug(String.format("Could not find sensor column for column id %d",
-					mvColumnId));
+			LOG.debug("Could not find sensor column for column id {}", mvColumnId);
 		} else {
 			return sensor;
 		}
@@ -560,11 +591,15 @@ public class DataFile {
 	public String getFileName() {
 		return file.getName();
 	}
+	
+	public String getCanonicalPath() throws IOException {
+		return file.getCanonicalPath();
+	}
 
 	/**
 	 * @see {@link Configuration#getFileName()}
 	 */
-	public Object getConfigurationFileName() {
+	public String getConfigurationFileName() {
 		return configuration.getFileName();
 	}
 
@@ -748,5 +783,10 @@ public class DataFile {
 
 	public String getType(final int mVColumnId) {
 		return configuration.getType(mVColumnId);
+	}
+
+	public int getExpectedColumnCount()
+	{
+		return configuration.getExpectedColumnCount();
 	}
 }

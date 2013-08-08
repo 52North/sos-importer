@@ -23,12 +23,13 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
@@ -61,11 +62,11 @@ import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
  */
 public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
-	private static final Logger logger = Logger.getLogger(Step6bModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6bModelHandler.class);
 	
 	@Override
-	public void handleModel(Step6bModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step6bModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -120,7 +121,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	 * @param mVColumnID
 	 * @return
 	 */
-	private boolean addRelatedResource(Resource res, Column mVColumn, AdditionalMetadata addiMeta) {
+	private boolean addRelatedResource(final Resource res, final Column mVColumn, final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\taddRelatedResource()");
 		}
@@ -128,7 +129,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		 * 	ADD FEATURE_OF_INTEREST
 		 */
 		if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
-			org.n52.sos.importer.model.resources.FeatureOfInterest foi = 
+			final org.n52.sos.importer.model.resources.FeatureOfInterest foi = 
 					(org.n52.sos.importer.model.resources.FeatureOfInterest) res;
 			return addRelatedFOI(foi,mVColumn,addiMeta);
 		}
@@ -136,7 +137,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		 * 	ADD OBSERVED_PROPERTY
 		 */
 		else if (res instanceof org.n52.sos.importer.model.resources.ObservedProperty) {
-			org.n52.sos.importer.model.resources.ObservedProperty obsProp = 
+			final org.n52.sos.importer.model.resources.ObservedProperty obsProp = 
 					(org.n52.sos.importer.model.resources.ObservedProperty) res;
 			return addRelatedObservedProperty(obsProp,mVColumn,addiMeta);
 		}
@@ -144,7 +145,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		 * 	ADD SENSOR
 		 */
 		else if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
-			org.n52.sos.importer.model.resources.Sensor sensor = 
+			final org.n52.sos.importer.model.resources.Sensor sensor = 
 					(org.n52.sos.importer.model.resources.Sensor) res;
 			return addRelatedSensor(sensor,mVColumn,addiMeta);
 		}
@@ -152,22 +153,22 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		 * 	ADD UNIT_OF_MEASUREMENT
 		 */
 		else if (res instanceof org.n52.sos.importer.model.resources.UnitOfMeasurement) {
-			org.n52.sos.importer.model.resources.UnitOfMeasurement uOM = 
+			final org.n52.sos.importer.model.resources.UnitOfMeasurement uOM = 
 					(org.n52.sos.importer.model.resources.UnitOfMeasurement) res;
 			return addRelatedUOM(uOM,mVColumn,addiMeta);
 		}
 		return false;
 	}
 
-	private boolean addRelatedFOI(FeatureOfInterest foi, 
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
+	private boolean addRelatedFOI(final FeatureOfInterest foi, 
+			final Column mVColumn,
+			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\taddRelatedFOI()");
 		}
 		//
 		FeatureOfInterestType foiXB = null;
-		FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
+		final FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
 		RelatedFOI[] relatedFOIs;
 		boolean addNew;
 		org.n52.sos.importer.model.position.Position pos;
@@ -176,7 +177,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		if(foisXB != null && foisXB.length > 0) {
 						
 			findFOI : 
-			for (FeatureOfInterestType aFOI : foisXB) {
+			for (final FeatureOfInterestType aFOI : foisXB) {
 				if ( aFOI.getResource().getID().equalsIgnoreCase(foi.getXMLId()) ) {
 					foiXB = aFOI;
 					break findFOI;
@@ -210,10 +211,10 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 				uri.setStringValue(foi.getUriPrefix());
 			}
 			foiGRT.setConcatString(foi.getConcatString());
-			org.n52.sos.importer.model.table.Column[] relCols = (org.n52.sos.importer.model.table.Column[]) foi.getRelatedCols();
-			int[] numbers = new int[relCols.length];
+			final org.n52.sos.importer.model.table.Column[] relCols = (org.n52.sos.importer.model.table.Column[]) foi.getRelatedCols();
+			final int[] numbers = new int[relCols.length];
 			for (int i = 0; i < relCols.length; i++) {
-				org.n52.sos.importer.model.table.Column c = relCols[i];
+				final org.n52.sos.importer.model.table.Column c = relCols[i];
 				numbers[i] = c.getNumber();
 			}
 			foiGRT.setNumberArray(numbers);
@@ -268,8 +269,8 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return isFoiInArray(relatedFOIs, foi.getXMLId());
 	}
 
-	private void fillXBPosition(Position posXB,
-			org.n52.sos.importer.model.position.Position pos) {
+	private void fillXBPosition(final Position posXB,
+			final org.n52.sos.importer.model.position.Position pos) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\t\taddOrUpdatePosition()");
 		}
@@ -288,7 +289,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 			 * The position is contained in the file, so just add the link to 
 			 * the group and finish
 			 */
-			String groupId = pos.getGroup();
+			final String groupId = pos.getGroup();
 			// check for old artifacts like alt/lat/long/epsg
 			if (posXB.isSetAlt()) 		{ posXB.unsetAlt(); } 
 			if (posXB.isSetEPSGCode()) 	{ posXB.unsetEPSGCode(); }
@@ -336,22 +337,22 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	}
 
 	private boolean addRelatedObservedProperty(
-			org.n52.sos.importer.model.resources.ObservedProperty obsProp,
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
+			final org.n52.sos.importer.model.resources.ObservedProperty obsProp,
+			final Column mVColumn,
+			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\taddRelatedObservedProperty()");
 		}
 		//
 		ObservedPropertyType obsPropXB = null;
-		ObservedPropertyType[] obsPropsXB = addiMeta.getObservedPropertyArray();
+		final ObservedPropertyType[] obsPropsXB = addiMeta.getObservedPropertyArray();
 		RelatedObservedProperty[] relatedObsProps;
 		boolean addNew;
 		//
 		if(obsPropsXB != null && obsPropsXB.length > 0) {
 						
 			findObservedProperty : 
-			for (ObservedPropertyType obsPropy : obsPropsXB) {
+			for (final ObservedPropertyType obsPropy : obsPropsXB) {
 				if (obsPropy.getResource().getID().equalsIgnoreCase(obsProp.getXMLId())) {
 					obsPropXB = obsPropy;
 					break findObservedProperty;
@@ -385,12 +386,12 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 				uri.setStringValue(obsProp.getUriPrefix());
 			}
 			obsPropGRT.setConcatString(obsProp.getConcatString());
-			org.n52.sos.importer.model.table.Column[] relCols = 
+			final org.n52.sos.importer.model.table.Column[] relCols = 
 					(org.n52.sos.importer.model.table.Column[])
 					obsProp.getRelatedCols();
-			int[] numbers = new int[relCols.length];
+			final int[] numbers = new int[relCols.length];
 			for (int i = 0; i < relCols.length; i++) {
-				org.n52.sos.importer.model.table.Column c = relCols[i];
+				final org.n52.sos.importer.model.table.Column c = relCols[i];
 				numbers[i] = c.getNumber();
 			}
 			obsPropGRT.setNumberArray(numbers);
@@ -429,22 +430,22 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	}
 
 	private boolean addRelatedSensor(
-			org.n52.sos.importer.model.resources.Sensor sensor,
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
+			final org.n52.sos.importer.model.resources.Sensor sensor,
+			final Column mVColumn,
+			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\taddRelatedSensor()");
 		}
 		//
 		SensorType sensorXB = null;
-		SensorType[] sensorsXB = addiMeta.getSensorArray();
+		final SensorType[] sensorsXB = addiMeta.getSensorArray();
 		RelatedSensor[] relatedSensors;
 		boolean addNew;
 		//
 		if(sensorsXB != null && sensorsXB.length > 0) {
 						
 			findSensor : 
-			for (SensorType aSensor : sensorsXB) {
+			for (final SensorType aSensor : sensorsXB) {
 				if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
 					sensorXB = aSensor;
 					break findSensor;
@@ -478,12 +479,12 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 				uri.setStringValue(sensor.getUriPrefix());
 			}
 			sensorGRT.setConcatString(sensor.getConcatString());
-			org.n52.sos.importer.model.table.Column[] relCols = 
+			final org.n52.sos.importer.model.table.Column[] relCols = 
 					(org.n52.sos.importer.model.table.Column[])
 					sensor.getRelatedCols();
-			int[] numbers = new int[relCols.length];
+			final int[] numbers = new int[relCols.length];
 			for (int i = 0; i < relCols.length; i++) {
-				org.n52.sos.importer.model.table.Column c = relCols[i];
+				final org.n52.sos.importer.model.table.Column c = relCols[i];
 				numbers[i] = c.getNumber();
 			}
 			sensorGRT.setNumberArray(numbers);
@@ -523,22 +524,22 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 	}
 	
 	private boolean addRelatedUOM(
-			org.n52.sos.importer.model.resources.UnitOfMeasurement uOM,
-			Column mVColumn,
-			AdditionalMetadata addiMeta) {
+			final org.n52.sos.importer.model.resources.UnitOfMeasurement uOM,
+			final Column mVColumn,
+			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\taddRelatedUOM()");
 		}
 		//
 		UnitOfMeasurementType uOMXB = null;
-		UnitOfMeasurementType[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
+		final UnitOfMeasurementType[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
 		RelatedUnitOfMeasurement[] relatedUOMs;
 		boolean addNew;
 		//
 		if(uOMsXB != null && uOMsXB.length > 0) {
 						
 			findUOM : 
-			for (UnitOfMeasurementType uom : uOMsXB) {
+			for (final UnitOfMeasurementType uom : uOMsXB) {
 				if (uom.getResource().getID().equalsIgnoreCase(uOM.getXMLId())) {
 					uOMXB = uom;
 					break findUOM;
@@ -572,12 +573,12 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 				uri.setStringValue(uOM.getUriPrefix());
 			}
 			uOMGRT.setConcatString(uOM.getConcatString());
-			org.n52.sos.importer.model.table.Column[] relCols = 
+			final org.n52.sos.importer.model.table.Column[] relCols = 
 					(org.n52.sos.importer.model.table.Column[]) 
 														uOM.getRelatedCols();
-			int[] numbers = new int[relCols.length];
+			final int[] numbers = new int[relCols.length];
 			for (int i = 0; i < relCols.length; i++) {
-				org.n52.sos.importer.model.table.Column c = relCols[i];
+				final org.n52.sos.importer.model.table.Column c = relCols[i];
 				numbers[i] = c.getNumber();
 			}
 			uOMGRT.setNumberArray(numbers);
@@ -615,11 +616,11 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return isUOMInArray(relatedUOMs, uOM.getURIString());
 	}
 	
-	private boolean isFoiInArray(RelatedFOI[] relatedFOIs, String foiXmlId) {
+	private boolean isFoiInArray(final RelatedFOI[] relatedFOIs, final String foiXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\tisFoiInArray()");
 		}
-		for (RelatedFOI relatedFoiFromArray : relatedFOIs) {
+		for (final RelatedFOI relatedFoiFromArray : relatedFOIs) {
 			if (relatedFoiFromArray.isSetIdRef()  && 
 					relatedFoiFromArray.getIdRef().equalsIgnoreCase(foiXmlId) ) {
 				return true;
@@ -628,12 +629,12 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return false;
 	}
 	
-	private boolean isObsPropInArray(RelatedObservedProperty[] relatedObsProps,
-			String obsPropXmlId) {
+	private boolean isObsPropInArray(final RelatedObservedProperty[] relatedObsProps,
+			final String obsPropXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\t\tisObsPropInArray()");
 		}
-		for (RelatedObservedProperty relatedObsPropFromArray : relatedObsProps) {
+		for (final RelatedObservedProperty relatedObsPropFromArray : relatedObsProps) {
 			if (relatedObsPropFromArray.isSetIdRef() && 
 					relatedObsPropFromArray.getIdRef().equalsIgnoreCase(obsPropXmlId) ) {
 				return true;
@@ -642,12 +643,12 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 		return false;
 	}
 	
-	private boolean isUOMInArray(RelatedUnitOfMeasurement[] relatedUOMs,
-			String uomUriXmlId) {
+	private boolean isUOMInArray(final RelatedUnitOfMeasurement[] relatedUOMs,
+			final String uomUriXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isUOMInArray()");
 		}
-		for (RelatedUnitOfMeasurement relatedUOMFromArray : relatedUOMs) {
+		for (final RelatedUnitOfMeasurement relatedUOMFromArray : relatedUOMs) {
 			if (relatedUOMFromArray.isSetIdRef() && 
 					relatedUOMFromArray.getIdRef().equalsIgnoreCase(uomUriXmlId) ) {
 				return true;

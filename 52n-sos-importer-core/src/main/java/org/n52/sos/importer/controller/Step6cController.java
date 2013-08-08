@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.StepModel;
@@ -35,6 +34,8 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.Step6cPanel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * lets the user choose the position for each feature of interest
@@ -45,7 +46,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step6cController extends StepController {
 
-	private static final Logger logger = Logger.getLogger(Step6cController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6cController.class);
 	
 	private Step6cModel step6cModel;
 	
@@ -53,13 +54,13 @@ public class Step6cController extends StepController {
 	
 	public Step6cController() {	}
 
-	public Step6cController(Step6cModel step6cModel) {
+	public Step6cController(final Step6cModel step6cModel) {
 		this.step6cModel = step6cModel;
 	}
 
 	@Override
 	public void loadSettings() {
-		FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
+		final FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
 		String name = step6cModel.getFeatureOfInterestName();
 		// TODO is this assumption still valid? better check for TableElement?!
 		if (name == null) { //when this feature is not contained in the table
@@ -69,7 +70,7 @@ public class Step6cController extends StepController {
 			foi.removePositionFor(name);
 		}
 		
-		String description = step6cModel.getDescription();
+		final String description = step6cModel.getDescription();
 		step6cPanel = new Step6cPanel(description,
 				// to indicate to the user, that this resource is generated
 				(foi.isGenerated()?Lang.l().generated() + ": " + name:name),
@@ -81,8 +82,8 @@ public class Step6cController extends StepController {
 	public void saveSettings() {
 		step6cPanel.saveSettings();
 		
-		String name = step6cModel.getFeatureOfInterestName();
-		Position position = step6cModel.getPosition();
+		final String name = step6cModel.getFeatureOfInterestName();
+		final Position position = step6cModel.getPosition();
 		if (name == null) {//when this feature is not contained in the table
 			step6cModel.getFeatureOfInterest().assignPosition(position);
 		} else {
@@ -104,8 +105,10 @@ public class Step6cController extends StepController {
 
 	@Override
 	public StepController getNext() {
-		Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithUnCompletePosition();
-		if (foiWithoutPosition == null) return null;
+		final Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithUnCompletePosition();
+		if (foiWithoutPosition == null) {
+			return null;
+		}
 		
 		return new Step6cController(foiWithoutPosition);
 	}
@@ -116,20 +119,22 @@ public class Step6cController extends StepController {
 	}
 	
 	private Step6cModel getNextFeatureOfInterestWithUnCompletePosition() {
-		List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
+		final List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
 		// TODO check if the current foi is in the no data area of the column
-		for (FeatureOfInterest foi: featureOfInterests) {
+		for (final FeatureOfInterest foi: featureOfInterests) {
 			
 			if (foi.getTableElement() == null) {
 				// FIXME implement handling of generated fois
-				if (foi.getPosition() == null) 
+				if (foi.getPosition() == null)
+				 {
 					return new Step6cModel(foi);
 				//otherwise the feature has already a position
+				}
 			} else {
 				if (foi.getPosition() == null) {
-					for (String name: foi.getTableElement().getValues()) {
+					for (final String name: foi.getTableElement().getValues()) {
 						
-						Position p = foi.getPositionFor(name);
+						final Position p = foi.getPositionFor(name);
 						if (p == null) {
 							return new Step6cModel(foi, name);
 						}
@@ -146,7 +151,9 @@ public class Step6cController extends StepController {
 	@Override
 	public boolean isNecessary() {
 		step6cModel = getNextFeatureOfInterestWithUnCompletePosition();
-		if (step6cModel != null) return true;
+		if (step6cModel != null) {
+			return true;
+		}
 
 		logger.info("Skip Step 6c since there is at least one position");
 		return false;
@@ -159,7 +166,7 @@ public class Step6cController extends StepController {
 
 	@Override
 	public StepModel getModel() {
-		return this.step6cModel;
+		return step6cModel;
 	}
 
 }

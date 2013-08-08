@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step6aModel;
@@ -37,6 +36,8 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Lets the user choose date&time for all measured value columns 
@@ -46,7 +47,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step6aController extends StepController {
 	
-	private static final Logger logger = Logger.getLogger(Step6aController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6aController.class);
 	
 	private Step6aModel step6aModel;
 	
@@ -54,16 +55,16 @@ public class Step6aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
-	private TableController tableController;
+	private final TableController tableController;
 
-	private int firstLineWithData;
+	private final int firstLineWithData;
 	
-	public Step6aController(int firstLineWithData) {
+	public Step6aController(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
-		this.tableController = TableController.getInstance();
+		tableController = TableController.getInstance();
 	}
 	
-	public Step6aController(Step6aModel step6aModel,int firstLineWithData) {
+	public Step6aController(final Step6aModel step6aModel,final int firstLineWithData) {
 		this(firstLineWithData);
 		this.step6aModel = step6aModel;
 	}
@@ -72,18 +73,19 @@ public class Step6aController extends StepController {
 	public void loadSettings() {
 		tableController.turnSelectionOff();
 		
-		DateAndTime dateAndTime = step6aModel.getDateAndTime();
+		final DateAndTime dateAndTime = step6aModel.getDateAndTime();
 		dateAndTimeController = new DateAndTimeController(dateAndTime);
-		List<Component> components = step6aModel.getMissingDateAndTimeComponents();
+		final List<Component> components = step6aModel.getMissingDateAndTimeComponents();
 		dateAndTimeController.setMissingComponents(components);
 		
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			mv.setDateAndTime(null);
+		}
 		
 		dateAndTimeController.unassignMissingComponentValues();
 		
-		String description = step6aModel.getDescription();
-		List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
+		final String description = step6aModel.getDescription();
+		final List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
 		step5Panel = new Step5Panel(description, mcp);
 	}
 
@@ -91,13 +93,14 @@ public class Step6aController extends StepController {
 	public void saveSettings() {
 		dateAndTimeController.assignMissingComponentValues();	
 		
-		List<Component> components = dateAndTimeController.getMissingComponents();
+		final List<Component> components = dateAndTimeController.getMissingComponents();
 		step6aModel.setMissingDateAndTimeComponents(components);
 
-		DateAndTime dateAndTime = dateAndTimeController.getDateAndTime();
+		final DateAndTime dateAndTime = dateAndTimeController.getDateAndTime();
 		
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			mv.setDateAndTime(dateAndTime);
+		}
 		
 		tableController.turnSelectionOn();
 		
@@ -123,14 +126,14 @@ public class Step6aController extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		return new Step6bController(this.firstLineWithData);
+		return new Step6bController(firstLineWithData);
 	}
 
 	@Override
 	public boolean isNecessary() {
-		int n = ModelStore.getInstance().getDateAndTimes().size();
+		final int n = ModelStore.getInstance().getDateAndTimes().size();
 		if (n == 0) {
-			DateAndTime dateAndTime = new DateAndTime();
+			final DateAndTime dateAndTime = new DateAndTime();
 			step6aModel = new Step6aModel(dateAndTime);
 			return true;
 		}
@@ -152,7 +155,7 @@ public class Step6aController extends StepController {
 
 	@Override
 	public StepModel getModel() {
-		return this.step6aModel;
+		return step6aModel;
 	}
 
 }

@@ -23,10 +23,11 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
@@ -60,11 +61,11 @@ import org.x52North.sensorweb.sos.importer.x02.SpatialResourceType;
  */
 public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 
-	private static final Logger logger = Logger.getLogger(Step6cModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6cModelHandler.class);
 	
 	@Override
-	public void handleModel(Step6cModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step6cModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -91,14 +92,14 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	}
 
 	private void addToFeatureOfInterestElement(
-			FeatureOfInterest foi, 
-			org.n52.sos.importer.model.position.Position pos, 
-			SosImportConfiguration sosImportConf) {
+			final FeatureOfInterest foi, 
+			final org.n52.sos.importer.model.position.Position pos, 
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addToFeatureOfInterestElement()");
 		}
 		// Get Foi by foi.getXMLId()
-		String xmlId = foi.getXMLId();
+		final String xmlId = foi.getXMLId();
 		FeatureOfInterestType foiXB;
 		foiXB = getFoiByXmlId(xmlId,sosImportConf);
 		Position posXB;
@@ -155,21 +156,21 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	 * 			<code>xmlId</code> or<br>
 	 * 			<code>null</code> if the element is not found.
 	 */
-	private FeatureOfInterestType getFoiByXmlId(String xmlId,
-			SosImportConfiguration sosImportConf) {
+	private FeatureOfInterestType getFoiByXmlId(final String xmlId,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getFoiByXmlId(" + xmlId + ",...)");
 		}
 		// get all feature of interests from additional metadata element
-		AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
+		final AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
 		if (addiMeta != null) {
-			FeatureOfInterestType[] fois = addiMeta.getFeatureOfInterestArray();
+			final FeatureOfInterestType[] fois = addiMeta.getFeatureOfInterestArray();
 			if (fois != null && fois.length > 0) {
 				// iterate of fois
-				for (FeatureOfInterestType foi : fois) {
+				for (final FeatureOfInterestType foi : fois) {
 					// compare ids
 					if (!foi.isNil() && foi.getResource() != null) {
-						ResourceType foiRes = foi.getResource();
+						final ResourceType foiRes = foi.getResource();
 						if (foiRes.getID()!= null &&
 								!foiRes.getID().equalsIgnoreCase("") &&
 								foiRes.getID().equalsIgnoreCase(xmlId)) {
@@ -202,9 +203,9 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	 * @param pos the {@link org.n52.sos.importer.model.position.Position}
 	 * @param sosImportConf 
 	 */
-	private void addToFoiPositionsElement(FeatureOfInterest foi,
-			org.n52.sos.importer.model.position.Position pos,
-			SosImportConfiguration sosImportConf) {
+	private void addToFoiPositionsElement(final FeatureOfInterest foi,
+			final org.n52.sos.importer.model.position.Position pos,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addToFoiPositionsElement()");
 		}
@@ -233,7 +234,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 			foiPositions = addiMeta.getFOIPositionArray();
 			if (foiPositions != null && foiPositions.length == 0) {
 				// check for foi uri in FOIPosition.relatedFOI
-				for (FOIPosition foiPosition : foiPositions) {
+				for (final FOIPosition foiPosition : foiPositions) {
 					if (foiPosition.getURI().getStringValue().equalsIgnoreCase(name)) {
 						addNewFoi = false;
 						foiPos = foiPosition;
@@ -264,15 +265,15 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	}
 
 	private Position getXBPosition(
-			org.n52.sos.importer.model.position.Position position) {
+			final org.n52.sos.importer.model.position.Position position) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\tgetXBPosition()");
 		}
-		Position pos = Position.Factory.newInstance();
+		final Position pos = Position.Factory.newInstance();
 		/*
 		 * 	ALTITUDE
 		 */
-		Alt altitude = pos.addNewAlt();
+		final Alt altitude = pos.addNewAlt();
 		altitude.setUnit(position.getHeight().getUnit());
 		altitude.setFloatValue(new Double(position.getHeight().getValue()).floatValue());
 		/*
@@ -282,13 +283,13 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		/*
 		 * 	LATITUDE
 		 */
-		Lat latitude = pos.addNewLat();
+		final Lat latitude = pos.addNewLat();
 		latitude.setUnit(position.getLatitude().getUnit());
 		latitude.setFloatValue(new Double(position.getLatitude().getValue()).floatValue());
 		/*
 		 *	LONGITUDE
 		 */
-		Long longitude = pos.addNewLong();
+		final Long longitude = pos.addNewLong();
 		longitude.setUnit(position.getLongitude().getUnit());
 		longitude.setFloatValue(new Double(position.getLongitude().getValue()).floatValue());
 		if (logger.isDebugEnabled()) {
@@ -298,14 +299,13 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		return pos;
 	}
 
-	private void updateXBPosition(Position posXB,
-			org.n52.sos.importer.model.position.Position pos) {
+	private void updateXBPosition(final Position posXB,
+			final org.n52.sos.importer.model.position.Position pos) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\tupdateXBPosition()");
 		}
 		if(posXB == null || pos == null) {
-			logger.fatal("at least one parameter is null but MUST NOT: pos? " + 
-					pos + "; posXB? " + posXB);
+			logger.error("at least one parameter is null but MUST NOT: pos? {}; posXB? {}", pos, posXB);
 			return;
 		}
 		// Update each element in this position element

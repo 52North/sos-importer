@@ -25,7 +25,6 @@ package org.n52.sos.importer.model.measuredValue;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Parseable;
 import org.n52.sos.importer.model.Step6bSpecialModel;
@@ -35,10 +34,12 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class MeasuredValue implements Parseable {
 	
-	private static final Logger logger = Logger.getLogger(MeasuredValue.class);
+	private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);
 	
 	private TableElement tableElement;
 	
@@ -52,11 +53,12 @@ public abstract class MeasuredValue implements Parseable {
 	
 	private Sensor sensor;
 	
-	public void setFeatureOfInterest(FeatureOfInterest featureOfInterest) {
-		if (featureOfInterest == null)
+	public void setFeatureOfInterest(final FeatureOfInterest featureOfInterest) {
+		if (featureOfInterest == null) {
 			logger.info("Unassign Feature Of Interest from " + this);
-		else
+		} else {
 			logger.info("Assign " + featureOfInterest + " to " + this);
+		}
 		this.featureOfInterest = featureOfInterest;
 	}
 
@@ -64,11 +66,12 @@ public abstract class MeasuredValue implements Parseable {
 		return featureOfInterest;
 	}
 
-	public void setObservedProperty(ObservedProperty observedProperty) {
-		if (observedProperty != null)
+	public void setObservedProperty(final ObservedProperty observedProperty) {
+		if (observedProperty != null) {
 			logger.info("Assign " + observedProperty + " to " + this);
-		else 
+		} else {
 			logger.info("Unassign Observed Property from " + this);
+		}
 		this.observedProperty = observedProperty;
 	}
 
@@ -76,11 +79,12 @@ public abstract class MeasuredValue implements Parseable {
 		return observedProperty;
 	}
 
-	public void setUnitOfMeasurement(UnitOfMeasurement unitOfMeasurement) {
-		if (unitOfMeasurement != null)
+	public void setUnitOfMeasurement(final UnitOfMeasurement unitOfMeasurement) {
+		if (unitOfMeasurement != null) {
 			logger.info("Assign " + unitOfMeasurement + " to " + this);
-		else 
+		} else {
 			logger.info("Unassign Unit of Measurement from " + this);
+		}
 		this.unitOfMeasurement = unitOfMeasurement;
 	}
 
@@ -88,11 +92,12 @@ public abstract class MeasuredValue implements Parseable {
 		return unitOfMeasurement;
 	}
 
-	public void setSensor(Sensor sensor) {
-		if (sensor != null)
+	public void setSensor(final Sensor sensor) {
+		if (sensor != null) {
 			logger.info("Assign " + sensor + " to " + this);
-		else 
+		} else {
 			logger.info("Unassign Sensor from " + this);
+		}
 		this.sensor = sensor;
 	}
 
@@ -100,7 +105,7 @@ public abstract class MeasuredValue implements Parseable {
 		return sensor;
 	}
 
-	public void setTableElement(TableElement tableElement) {
+	public void setTableElement(final TableElement tableElement) {
 		logger.info("In " + tableElement + " are " + this + "s");
 		this.tableElement = tableElement;
 	}
@@ -109,11 +114,12 @@ public abstract class MeasuredValue implements Parseable {
 		return tableElement;
 	}
 
-	public void setDateAndTime(DateAndTime dateAndTime) {
-		if (dateAndTime != null)
+	public void setDateAndTime(final DateAndTime dateAndTime) {
+		if (dateAndTime != null) {
 			logger.info("Assign " + dateAndTime + " to " + this);
-		else 
+		} else {
 			logger.info("Unassign " + this.dateAndTime + " from " + this);
+		}
 		this.dateAndTime = dateAndTime;
 	}
 
@@ -126,16 +132,17 @@ public abstract class MeasuredValue implements Parseable {
 	 * name; this method is called when a sensor has been assigned to them in
 	 * step 6b (special)
 	 */
-	public Sensor getSensorFor(String featureOfInterestName, String observedPropertyName) {
-		Iterator<Step6bSpecialModel> iterator = 
+	public Sensor getSensorFor(final String featureOfInterestName, final String observedPropertyName) {
+		final Iterator<Step6bSpecialModel> iterator = 
 			ModelStore.getInstance().getStep6bSpecialModels().iterator();
 		
 		Step6bSpecialModel step6bSpecialModel;
 		while (iterator.hasNext()) {
 			step6bSpecialModel = iterator.next();
 			if (step6bSpecialModel.getFeatureOfInterest().getName().equals(featureOfInterestName) &&
-				step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName))
+				step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName)) {
 				return step6bSpecialModel.getSensor();
+			}
 		}
 		
 		//should never get here
@@ -144,9 +151,10 @@ public abstract class MeasuredValue implements Parseable {
 	
 	@Override
 	public String toString() {
-		if (getTableElement() == null)
+		if (getTableElement() == null) {
 			return "";
-		else
+		} else {
 			return " " + getTableElement();
+		}
 	}
 }

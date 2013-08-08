@@ -23,8 +23,9 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step4aModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
@@ -35,19 +36,19 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step4aModelHandler implements ModelHandler<Step4aModel> {
 
-	private static final Logger logger = Logger.getLogger(Step4aModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step4aModelHandler.class);
 	
 	@Override
-	public void handleModel(Step4aModel s4aM,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step4aModel s4aM,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
 		// for each element in s4aM.selectedRowsOrColumns -> set RelatedDateTimeGroup to s4aM.dateAndTimeModel.getGroup()
-		for (int mvColumnId : s4aM.getSelectedRowsOrColumns()) {
-			Column c = Helper.getColumnById(mvColumnId, sosImportConf);
+		for (final int mvColumnId : s4aM.getSelectedRowsOrColumns()) {
+			final Column c = Helper.getColumnById(mvColumnId, sosImportConf);
 			if (c.isSetRelatedDateTimeGroup() && logger.isDebugEnabled()) {
-				String dateTimeGroup = c.getRelatedDateTimeGroup();
+				final String dateTimeGroup = c.getRelatedDateTimeGroup();
 				logger.debug(String.format("Element RelatedDateTimeGroup already set to: %s",
 						dateTimeGroup));
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012
+h * Copyright (C) 2012
  * by 52North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,13 +37,13 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step8Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Assembles all information from previous steps, 
@@ -59,13 +58,13 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step8Controller extends StepController {
 
-	private static final Logger logger = Logger.getLogger(Step8Controller.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step8Controller.class);
 
 	private Step8Panel step8Panel;
 	
-	private Step7Model step7Model;
+	private final Step7Model step7Model;
 	
-	public Step8Controller(Step7Model step7Model) {
+	public Step8Controller(final Step7Model step7Model) {
 		this.step7Model = step7Model;
 	}
 	
@@ -75,18 +74,23 @@ public class Step8Controller extends StepController {
 		BackNextController.getInstance().changeNextToFinish();
 		File logFile = null;
 		
-		Logger rL = Logger.getRootLogger();
-		@SuppressWarnings("rawtypes")
-		Enumeration appender = rL.getAllAppenders();
+		// FIXME get path to log file
+		/*
+		final Logger rL = Logger.getRootLogger();
+		final Enumeration<?> appender = rL.getAllAppenders();
 		while(appender.hasMoreElements()) {
-			Object o = appender.nextElement();
+			final Object o = appender.nextElement();
 			if(o instanceof FileAppender) {
-				FileAppender fA = (FileAppender) o;
+				final FileAppender fA = (FileAppender) o;
 				logFile = new File(fA.getFile());
 				step8Panel.setLogFileURI(logFile.toURI());
 				logger.info("Log saved to file: " + logFile.getAbsolutePath());
 			}
 		}
+		*/
+		logFile = new File("logs/sos-importer-core.log");
+		step8Panel.setLogFileURI(logFile.toURI());
+		logger.info("Log saved to file: " + logFile.getAbsolutePath());
 		
 		// save model always
 		try {
@@ -101,7 +105,7 @@ public class Step8Controller extends StepController {
 						Lang.l().errorDialogTitle(), 
 						JOptionPane.ERROR_MESSAGE);
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			logger.error("Exception thrown: " + e.getMessage(), e);
 			JOptionPane.showMessageDialog(step8Panel, 
 					Lang.l().step8SaveModelFailed(logFile,e.getLocalizedMessage()), 
@@ -150,23 +154,23 @@ public class Step8Controller extends StepController {
 
 	@Override
 	public StepModel getModel() {
-		return this.step7Model;
+		return step7Model;
 	}
 	
 	public void directImport() {
-		StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
+		final StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
 		pathToJavaExecutable.append(File.separator);
 		pathToJavaExecutable.append("bin");
 		pathToJavaExecutable.append(File.separator);
 		pathToJavaExecutable.append("java");
-		File jvm = new File(pathToJavaExecutable.toString());
+		final File jvm = new File(pathToJavaExecutable.toString());
 		if (! jvm.exists() && System.getProperty("os.name").indexOf("Windows") != -1) {
 			pathToJavaExecutable.append(".exe");
 		}
 		
 		String pathToFeederJar = System.getProperty("user.dir") + File.separator;
 		pathToFeederJar = searchForFeederJarWithDefaultFileNameStart(pathToFeederJar);
-		File feederJar = new File(pathToFeederJar.toString());
+		final File feederJar = new File(pathToFeederJar.toString());
 		
 		if (!feederJar.exists()) {
 			JOptionPane.showMessageDialog(step8Panel,
@@ -176,28 +180,29 @@ public class Step8Controller extends StepController {
 		} else {
 			step8Panel.setDirectImportExecuteButtonEnabled(false);
 
-			ProcessBuilder builder = new ProcessBuilder(pathToJavaExecutable.toString(),
+			final ProcessBuilder builder = new ProcessBuilder(pathToJavaExecutable.toString(),
 					"-jar",
 					pathToFeederJar.toString(),
 					"-c",
 					step7Model.getConfigFile().getAbsolutePath());
 			builder.redirectErrorStream(true);
-			DirectImportWorker directImporter = new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(),builder);
+			final DirectImportWorker directImporter = new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(),builder);
 			directImporter.execute();
 		}
 	}
 	
 	private String searchForFeederJarWithDefaultFileNameStart(
-			String pathToDirectoryWithFeederJar) {
+			final String pathToDirectoryWithFeederJar) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("searchForFeederJarWithDefaultFileNameStart()");
 		}
-		File directoryWithFeederJar = new File(pathToDirectoryWithFeederJar);
+		final File directoryWithFeederJar = new File(pathToDirectoryWithFeederJar);
 		if (directoryWithFeederJar != null &&
 				directoryWithFeederJar.exists() &&
 				directoryWithFeederJar.isDirectory()) {
-			String[] files = directoryWithFeederJar.list(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
+			final String[] files = directoryWithFeederJar.list(new FilenameFilter() {
+				@Override
+				public boolean accept(final File dir, final String name) {
 					return (name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar"));
 				}
 			});
@@ -206,17 +211,17 @@ public class Step8Controller extends StepController {
 				return files[0]; // returns the first matching feeder.jar
 			}
 			else {
-				int userChoice = JOptionPane.showConfirmDialog(step8Panel,
+				final int userChoice = JOptionPane.showConfirmDialog(step8Panel,
 						Lang.l().step8FeederJarNotFoundSelectByUser(pathToDirectoryWithFeederJar), 
 						Lang.l().errorDialogTitle(), JOptionPane.YES_NO_OPTION);
 				if (userChoice == JOptionPane.YES_OPTION)
 				{
-					JFileChooser chooser = new JFileChooser(pathToDirectoryWithFeederJar);
-				    FileNameExtensionFilter filter = new FileNameExtensionFilter("Java ARchives - *.jar","jar");
+					final JFileChooser chooser = new JFileChooser(pathToDirectoryWithFeederJar);
+				    final FileNameExtensionFilter filter = new FileNameExtensionFilter("Java ARchives - *.jar","jar");
 				    chooser.setFileFilter(filter);
 				    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				    chooser.setMultiSelectionEnabled(false);
-				    int returnVal = chooser.showOpenDialog(step8Panel);
+				    final int returnVal = chooser.showOpenDialog(step8Panel);
 				    if(returnVal == JFileChooser.APPROVE_OPTION) {
 				       logger.debug(String.format("Choosen file: %s",chooser.getSelectedFile().getAbsolutePath()));
 				       return chooser.getSelectedFile().getAbsolutePath();
@@ -229,28 +234,30 @@ public class Step8Controller extends StepController {
 
 	private class DirectImportWorker extends SwingWorker<String, String>{
 
-		private JTextArea processOutPut;
-		private ProcessBuilder procBuilder;
+		private final JTextArea processOutPut;
+		private final ProcessBuilder procBuilder;
 
-		public DirectImportWorker(JTextArea processOutPut,
-				ProcessBuilder procBuilder) {
+		public DirectImportWorker(final JTextArea processOutPut,
+				final ProcessBuilder procBuilder) {
 			this.processOutPut = processOutPut;
 			this.procBuilder = procBuilder;
 		}
 
-		protected void process(List<String> chunks) {
-			Iterator<String> it = chunks.iterator();
+		@Override
+		protected void process(final List<String> chunks) {
+			final Iterator<String> it = chunks.iterator();
 			while (it.hasNext()) {
 				processOutPut.append(it.next());
 			}
 		}
 
+		@Override
 		protected String doInBackground() throws Exception {
 			Process importProcess;
 			try {
 				importProcess = procBuilder.start();
-				InputStream res = importProcess.getInputStream();
-				byte[] buffer = new byte[128];
+				final InputStream res = importProcess.getInputStream();
+				final byte[] buffer = new byte[128];
 				int len;
 				while ( (len=res.read(buffer,0,buffer.length))!=-1) {
 					publish(new String(buffer,0,len));
@@ -260,12 +267,13 @@ public class Step8Controller extends StepController {
 					}
 				}
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				e.printStackTrace();
 			}
 			return "";
 		}
 
+		@Override
 		protected void done() {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Import Task finished");

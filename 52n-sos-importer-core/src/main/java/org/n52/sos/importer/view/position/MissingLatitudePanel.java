@@ -30,13 +30,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * consists of a text field for the latitude and a combobox for the units
@@ -47,36 +48,38 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(MissingLatitudePanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(MissingLatitudePanel.class);
 
 	private final Position position;
 	
-	private JLabel latitudeLabel;
+	private final JLabel latitudeLabel;
 	private final JTextField latitudeTextField = new JTextField(8);
-	private JLabel latitudeUnitLabel;
+	private final JLabel latitudeUnitLabel;
 	private final JComboBox latitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
 	
-	public MissingLatitudePanel(Position position) {
+	public MissingLatitudePanel(final Position position) {
 		super();
 		this.position = position;
 		latitudeTextField.setText("0");
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
+		setLayout(new FlowLayout(FlowLayout.LEFT));
+		latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
 		this.add(latitudeLabel);
 		this.add(latitudeTextField);
-		this.latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+		latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
 		this.add(latitudeUnitLabel);
 		this.add(latitudeUnitComboBox);
 	}
 	
+	@Override
 	public void assignValues() {
-		double value = Double.parseDouble(latitudeTextField.getText());
-		String unit = (String) latitudeUnitComboBox.getSelectedItem();
-		Latitude l = new Latitude(value, unit);
+		final double value = Double.parseDouble(latitudeTextField.getText());
+		final String unit = (String) latitudeUnitComboBox.getSelectedItem();
+		final Latitude l = new Latitude(value, unit);
 		position.setLatitude(l);
 	}
 	
+	@Override
 	public void unassignValues() {
 		position.setLatitude(null);
 	}
@@ -87,7 +90,7 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		try {
 			latVal = latitudeTextField.getText();
 			Double.parseDouble(latVal);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			logger.error("Latitude value could not be parsed: " + latVal, e);
 			JOptionPane.showMessageDialog(null,
 				    Lang.l().latitudeDialogDecimalValue(),
@@ -100,14 +103,14 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 	
 	@Override
 	public Component getMissingComponent() {
-		double value = Double.parseDouble(latitudeTextField.getText());
-		String unit = (String) latitudeUnitComboBox.getSelectedItem();
+		final double value = Double.parseDouble(latitudeTextField.getText());
+		final String unit = (String) latitudeUnitComboBox.getSelectedItem();
 		return new Latitude(value, unit);
 	}
 
 	@Override
-	public void setMissingComponent(Component c) {
-		Latitude latitude = (Latitude)c;
+	public void setMissingComponent(final Component c) {
+		final Latitude latitude = (Latitude)c;
 		latitudeTextField.setText(latitude.getValue() + "");
 		latitudeUnitComboBox.setSelectedItem(latitude.getUnit());
 	}

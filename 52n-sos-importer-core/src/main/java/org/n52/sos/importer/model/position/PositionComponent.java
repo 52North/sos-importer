@@ -23,14 +23,15 @@
  */
 package org.n52.sos.importer.model.position;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class PositionComponent extends Component {
 
-	private static final Logger logger = Logger.getLogger(PositionComponent.class);
+	private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);
 	
 	private TableElement tableElement;
 	
@@ -40,17 +41,17 @@ public abstract class PositionComponent extends Component {
 	
 	private String unit = null;
 
-	public PositionComponent(TableElement tableElement, String pattern) {
+	public PositionComponent(final TableElement tableElement, final String pattern) {
 		this.tableElement = tableElement;
 		this.pattern = pattern;
 	}
 	
-	public PositionComponent(double value, String unit) {
+	public PositionComponent(final double value, final String unit) {
 		this.value = value;
 		this.unit = unit;
 	}
 
-	public void setValue(double value) {
+	public void setValue(final double value) {
 		logger.info("Assign Value to " + this.getClass().getName());
 		this.value = value;
 	}
@@ -59,7 +60,7 @@ public abstract class PositionComponent extends Component {
 		return value;
 	}
 	
-	public void setUnit(String unit) {
+	public void setUnit(final String unit) {
 		this.unit = unit;
 	}
 
@@ -67,7 +68,7 @@ public abstract class PositionComponent extends Component {
 		return unit;
 	}
 
-	public void setTableElement(TableElement tableElement) {
+	public void setTableElement(final TableElement tableElement) {
 		logger.info("Assign Column to " + this.getClass().getName());
 		this.tableElement = tableElement;
 	}
@@ -80,31 +81,34 @@ public abstract class PositionComponent extends Component {
 	 * colors this particular component
 	 */
 	public void mark() {
-		if (tableElement != null)
+		if (tableElement != null) {
 			tableElement.mark();
+		}
 	}
 
 	public String getParsedUnit() {
-		if (unit == null || unit.equals(""))
+		if (unit == null || unit.equals("")) {
 			return "n/a";
-		else if (unit.equals("m") || unit.equals("meters")) 
+		} else if (unit.equals("m") || unit.equals("meters")) {
 			return "m";
-		else if (unit.equals("ft") || unit.equals("feet"))
+		} else if (unit.equals("ft") || unit.equals("feet")) {
 			return "ft";
-		else if (unit.equals("degree") || unit.equals("°"))
+		} else if (unit.equals("degree") || unit.equals("°")) {
 			return "degree";
+		}
 		return "n/a";
 	}
 	
 	@Override 
 	public String toString() {
-		if (getTableElement() == null)
+		if (getTableElement() == null) {
 			return " " + getValue() + getUnit();
-		else 
+		} else {
 			return " " + getTableElement();
+		}
 	}
 
-	public void setPattern(String pattern) {
+	public void setPattern(final String pattern) {
 		this.pattern = pattern;
 	}
 

@@ -39,13 +39,14 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -53,7 +54,7 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
  */
 public class Constants {
 	
-	private static final Logger logger = Logger.getLogger(Constants.class);
+	private static final Logger logger = LoggerFactory.getLogger(Constants.class);
 	
 	public static final String BOOLEAN = "BOOLEAN";
 	public static final String COMBINATION = "COMBINATION";

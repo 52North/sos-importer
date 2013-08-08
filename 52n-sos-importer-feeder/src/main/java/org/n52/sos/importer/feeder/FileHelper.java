@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2012
- * by 52North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2013
+ * by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -21,39 +21,40 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.view.utils;
+package org.n52.sos.importer.feeder;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
-import java.util.Locale;
+import java.io.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
-public class n52Utils {
+public class FileHelper {
 	
-	private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
-
-	public static Double parseDouble(final String text){
-		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-
-		Number n;
-		final DecimalFormat formatter = new DecimalFormat();
-		formatter.setDecimalFormatSymbols(symbols);
-		try {
-			n = formatter.parse(text);
-			return n.doubleValue();
-		} catch (final ParseException e) {
-			logger.error(String.format("Exception thrown: %s",
-						e.getMessage()),
-					e);
-		}
-		return null;
+	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
+	
+	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
+		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
 	}
 
+	public static String cleanPathToCreateFileName(final String fileName)
+	{
+		return fileName.replace(":", "").replace(File.separatorChar, '_');
+	}
+
+	public static File getHome()
+	{
+		final String baseDir = System.getProperty("user.home") + File.separator
+				+ ".SOSImporter" + File.separator;
+		final File home = new File(baseDir);
+		if (!home.exists() && !home.mkdir()) {
+			LOG.error("Could not create importer home '{}'",home.getAbsolutePath());
+		}
+		return home;
+	}
+	
 }

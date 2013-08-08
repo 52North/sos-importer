@@ -28,15 +28,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class DateAndTimeComponent extends Component {
 
-	private static final Logger logger = Logger.getLogger(DateAndTimeComponent.class);
+	private static final Logger logger = LoggerFactory.getLogger(DateAndTimeComponent.class);
 	
 	private TableElement tableElement;
 	
@@ -44,16 +45,16 @@ public abstract class DateAndTimeComponent extends Component {
 	
 	private int value = Constants.NO_INPUT_INT;
 
-	public DateAndTimeComponent(TableElement tableElement, String pattern) {
+	public DateAndTimeComponent(final TableElement tableElement, final String pattern) {
 		this.tableElement = tableElement;
 		this.pattern = pattern;
 	}
 	
-	public DateAndTimeComponent(int value) {
+	public DateAndTimeComponent(final int value) {
 		this.value = value;
 	}
 	
-	public void setValue(int value) {
+	public void setValue(final int value) {
 		logger.info("Assign Value to " + this.getClass().getName());
 		this.value = value;
 	}
@@ -65,7 +66,7 @@ public abstract class DateAndTimeComponent extends Component {
 		return value;
 	}
 
-	public void setTableElement(TableElement tableElement) {
+	public void setTableElement(final TableElement tableElement) {
 		logger.info("Assign Column to " + this.getClass().getName());
 		this.tableElement = tableElement;
 	}
@@ -78,8 +79,9 @@ public abstract class DateAndTimeComponent extends Component {
 	 * Colours the particular date&time component
 	 */
 	public void mark() {
-		if (tableElement != null)
+		if (tableElement != null) {
 			tableElement.mark();
+		}
 	}
 	
 	/**
@@ -87,11 +89,12 @@ public abstract class DateAndTimeComponent extends Component {
 	 * the value of this component in the table
 	 * @throws ParseException 
 	 */
-	public int getParsedValue(Cell measuredValuePosition) throws ParseException {
-		if (tableElement == null)
+	public int getParsedValue(final Cell measuredValuePosition) throws ParseException {
+		if (tableElement == null) {
 			return getValue();
-		else 
+		} else {
 			return parse(tableElement.getValueFor(measuredValuePosition));
+		}
 	}
 	
 	/**
@@ -100,21 +103,21 @@ public abstract class DateAndTimeComponent extends Component {
 	 * @return
 	 * @throws ParseException 
 	 */
-	public int parse(String s) throws ParseException {
+	public int parse(final String s) throws ParseException {
 		Date date = null;
-		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+		final SimpleDateFormat formatter = new SimpleDateFormat(pattern);
 		
         try {
         	date = formatter.parse(s);
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			logger.error("Given String could not be parsed: " + s, e);
 			throw e;
 		}
 		
-		GregorianCalendar gc = new GregorianCalendar();
+		final GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
 		
-		int value = gc.get(getGregorianCalendarField());
+		final int value = gc.get(getGregorianCalendarField());
 		return value;
 	}
 	
@@ -127,10 +130,11 @@ public abstract class DateAndTimeComponent extends Component {
 	
 	@Override
 	public String toString() {
-		if (getTableElement() == null)
+		if (getTableElement() == null) {
 			return " '" + getValue() + "'";
-		else 
+		} else {
 			return " " + getTableElement();
+		}
 	}
 	
 }

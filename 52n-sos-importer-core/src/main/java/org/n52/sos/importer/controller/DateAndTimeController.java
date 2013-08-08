@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
@@ -43,6 +42,8 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * handles operations on DateAndTime objects
@@ -51,18 +52,18 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
  */
 public class DateAndTimeController {
 	
-	private static final Logger logger = Logger.getLogger(DateAndTimeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DateAndTimeController.class);
 	
 	private DateAndTime dateAndTime;
 	
-	private List<MissingComponentPanel> missingComponentPanels;
+	private final List<MissingComponentPanel> missingComponentPanels;
 	
 	public DateAndTimeController() {
 		dateAndTime = new DateAndTime();
 		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
 	
-	public DateAndTimeController(DateAndTime dateAndTime) {
+	public DateAndTimeController(final DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
 		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
@@ -131,18 +132,19 @@ public class DateAndTimeController {
 		return missingComponentPanels;
 	}	
 	
-	public void setMissingComponents(List<Component> components) {
-		for (Component c: components) {
-			MissingComponentPanel mcp = c.getMissingComponentPanel(dateAndTime);
+	public void setMissingComponents(final List<Component> components) {
+		for (final Component c: components) {
+			final MissingComponentPanel mcp = c.getMissingComponentPanel(dateAndTime);
 			mcp.setMissingComponent(c);
 			missingComponentPanels.add(mcp);
 		}
 	}
 	
 	public List<Component> getMissingComponents() {
-		List<Component> components = new ArrayList<Component>();
-		for (MissingComponentPanel mcp: missingComponentPanels) 
+		final List<Component> components = new ArrayList<Component>();
+		for (final MissingComponentPanel mcp: missingComponentPanels) {
 			components.add(mcp.getMissingComponent());
+		}
 		return components;
 	}
 	
@@ -150,7 +152,7 @@ public class DateAndTimeController {
 		return dateAndTime;
 	}
 	
-	public void setDateAndTime(DateAndTime dateAndTime) {
+	public void setDateAndTime(final DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
 	}
 	
@@ -158,14 +160,15 @@ public class DateAndTimeController {
 	 * Assigns for each MissingComponentPanel the values
 	 */
 	public void assignMissingComponentValues() {
-		for (MissingComponentPanel mcp: missingComponentPanels) {
+		for (final MissingComponentPanel mcp: missingComponentPanels) {
 			mcp.assignValues();
 		}
 	}
 	
 	public void unassignMissingComponentValues() {
-		for (MissingComponentPanel mcp: missingComponentPanels) 
+		for (final MissingComponentPanel mcp: missingComponentPanels) {
 			mcp.unassignValues();
+		}
 	}
 	
 	
@@ -175,64 +178,79 @@ public class DateAndTimeController {
 	 * @param pattern
 	 * @param tableElement
 	 */
-	public void assignPattern(String pattern, TableElement tableElement) {		
+	public void assignPattern(final String pattern, final TableElement tableElement) {		
 		logger.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
 		
-    	if (pattern.indexOf("y") != -1) 
-    		dateAndTime.setYear(new Year(tableElement, pattern));
-    	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) 
-    		dateAndTime.setMonth(new Month(tableElement, pattern));
-    	if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) 
-    		dateAndTime.setDay(new Day(tableElement, pattern));
-    	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1 || ((pattern.indexOf("K") != -1 || (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) 
-    		dateAndTime.setHour(new Hour(tableElement, pattern));
-    	if (pattern.indexOf("m") != -1)
-    		dateAndTime.setMinute(new Minute(tableElement, pattern));
-    	if (pattern.indexOf("s") != -1)
-    		dateAndTime.setSecond(new Second(tableElement, pattern));
-    	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1)
-    		dateAndTime.setTimeZone(new TimeZone(tableElement, pattern));
+    	if (pattern.indexOf("y") != -1) {
+			dateAndTime.setYear(new Year(tableElement, pattern));
+		}
+    	if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) {
+			dateAndTime.setMonth(new Month(tableElement, pattern));
+		}
+    	if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
+			dateAndTime.setDay(new Day(tableElement, pattern));
+		}
+    	if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1 || ((pattern.indexOf("K") != -1 || (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
+			dateAndTime.setHour(new Hour(tableElement, pattern));
+		}
+    	if (pattern.indexOf("m") != -1) {
+			dateAndTime.setMinute(new Minute(tableElement, pattern));
+		}
+    	if (pattern.indexOf("s") != -1) {
+			dateAndTime.setSecond(new Second(tableElement, pattern));
+		}
+    	if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1) {
+			dateAndTime.setTimeZone(new TimeZone(tableElement, pattern));
+		}
 	}
 	
 	public DateAndTime getNextDateAndTimeWithMissingValues() {
 		List<MissingComponentPanel> missingComponentPanels;
 		
-		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
+		for (final DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
 			setDateAndTime(dateAndTime);
 			missingComponentPanels = getMissingComponentPanels();
-			if (missingComponentPanels.size() > 0)
+			if (missingComponentPanels.size() > 0) {
 				return dateAndTime;
+			}
 		}
 		return null;
 	}
 	
 	public void markComponents() {
-		if (dateAndTime.getSeconds() != null)
+		if (dateAndTime.getSeconds() != null) {
 			dateAndTime.getSeconds().mark();
-		if (dateAndTime.getMinute() != null) 
+		}
+		if (dateAndTime.getMinute() != null) {
 			dateAndTime.getMinute().mark();
-		if (dateAndTime.getHour() != null)
+		}
+		if (dateAndTime.getHour() != null) {
 			dateAndTime.getHour().mark();
-		if (dateAndTime.getDay() != null)
+		}
+		if (dateAndTime.getDay() != null) {
 			dateAndTime.getDay().mark();
-		if (dateAndTime.getMonth() != null) 
+		}
+		if (dateAndTime.getMonth() != null) {
 			dateAndTime.getMonth().mark();
-		if (dateAndTime.getYear() != null)
+		}
+		if (dateAndTime.getYear() != null) {
 			dateAndTime.getYear().mark();
-		if (dateAndTime.getTimeZone() != null)
+		}
+		if (dateAndTime.getTimeZone() != null) {
 			dateAndTime.getTimeZone().mark();
+		}
 	}
 	
-	public String forThis(Cell measuredValuePosition) throws ParseException {
-		int second = dateAndTime.getSeconds()!=null?dateAndTime.getSeconds().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		int minute = dateAndTime.getMinute()!=null?dateAndTime.getMinute().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		int hour = dateAndTime.getHour()!=null?dateAndTime.getHour().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		int day = dateAndTime.getDay()!=null?dateAndTime.getDay().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		int month = dateAndTime.getMonth()!=null?dateAndTime.getMonth().getParsedValue(measuredValuePosition) + 1:Integer.MIN_VALUE;
-		int year = dateAndTime.getYear()!=null?dateAndTime.getYear().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		int timezone = dateAndTime.getTimeZone()!=null?dateAndTime.getTimeZone().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+	public String forThis(final Cell measuredValuePosition) throws ParseException {
+		final int second = dateAndTime.getSeconds()!=null?dateAndTime.getSeconds().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+		final int minute = dateAndTime.getMinute()!=null?dateAndTime.getMinute().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+		final int hour = dateAndTime.getHour()!=null?dateAndTime.getHour().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+		final int day = dateAndTime.getDay()!=null?dateAndTime.getDay().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+		final int month = dateAndTime.getMonth()!=null?dateAndTime.getMonth().getParsedValue(measuredValuePosition) + 1:Integer.MIN_VALUE;
+		final int year = dateAndTime.getYear()!=null?dateAndTime.getYear().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
+		final int timezone = dateAndTime.getTimeZone()!=null?dateAndTime.getTimeZone().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
 		
-		StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
+		final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
 		if (year != Integer.MIN_VALUE) {
 			ts.append(year);
 			if (month != Integer.MIN_VALUE) {
@@ -275,13 +293,19 @@ public class DateAndTimeController {
 		return ts.toString();
 	}
 	
-	private String convertTimeZone(int timeZone) {
+	private String convertTimeZone(final int timeZone) {
 		if (timeZone >= 0) {
-			if (timeZone >= 10) return "+" + timeZone + ":00";
-			else return "+0" + timeZone + ":00";
+			if (timeZone >= 10) {
+				return "+" + timeZone + ":00";
+			} else {
+				return "+0" + timeZone + ":00";
+			}
 		} else {
-			if (timeZone <= -10) return timeZone + ":00";
-			else return "-0" + Math.abs(timeZone) + ":00";
+			if (timeZone <= -10) {
+				return timeZone + ":00";
+			} else {
+				return "-0" + Math.abs(timeZone) + ":00";
+			}
 		}
 	}
 	
@@ -293,18 +317,18 @@ public class DateAndTimeController {
 		if (logger.isInfoEnabled()) {
 			logger.info("Merge Date & Times");
 		}
-		List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
-		ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>(dateAndTimes.size());
+		final List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
+		final ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>(dateAndTimes.size());
 		while (!dateAndTimes.isEmpty()) {
-			DateAndTime dt1 = dateAndTimes.get(0);
+			final DateAndTime dt1 = dateAndTimes.get(0);
 			dateAndTimes.remove(dt1);
 			// create tmp list from left over dts
-			List<DateAndTime> list2 = new ArrayList<DateAndTime>(dateAndTimes);
-			Iterator<DateAndTime> dATIter = list2.iterator();
+			final List<DateAndTime> list2 = new ArrayList<DateAndTime>(dateAndTimes);
+			final Iterator<DateAndTime> dATIter = list2.iterator();
 			while (dATIter.hasNext()) {
-				DateAndTime dt2 = dATIter.next();
+				final DateAndTime dt2 = dATIter.next();
 				if (dt1.getGroup().equals(dt2.getGroup())) {
-					this.merge(dt1, dt2);
+					merge(dt1, dt2);
 					dateAndTimes.remove(dt2);
 				}
 			}
@@ -314,20 +338,27 @@ public class DateAndTimeController {
 		ModelStore.getInstance().setDateAndTimes(mergedDateAndTimes);
 	}
 	
-	private void merge(DateAndTime dateAndTime1, DateAndTime dateAndTime2) {
-		if (dateAndTime1.getSeconds() == null && dateAndTime2.getSeconds() != null)
+	private void merge(final DateAndTime dateAndTime1, final DateAndTime dateAndTime2) {
+		if (dateAndTime1.getSeconds() == null && dateAndTime2.getSeconds() != null) {
 			dateAndTime1.setSecond(dateAndTime2.getSeconds());
-		if (dateAndTime1.getMinute() == null && dateAndTime2.getMinute() != null) 
+		}
+		if (dateAndTime1.getMinute() == null && dateAndTime2.getMinute() != null) {
 			dateAndTime1.setMinute(dateAndTime2.getMinute());
-		if (dateAndTime1.getHour() == null && dateAndTime2.getHour() != null)
+		}
+		if (dateAndTime1.getHour() == null && dateAndTime2.getHour() != null) {
 			dateAndTime1.setHour(dateAndTime2.getHour());
-		if (dateAndTime1.getDay() == null && dateAndTime2.getDay() != null)
+		}
+		if (dateAndTime1.getDay() == null && dateAndTime2.getDay() != null) {
 			dateAndTime1.setDay(dateAndTime2.getDay());
-		if (dateAndTime1.getMonth() == null && dateAndTime2.getMonth() != null) 
+		}
+		if (dateAndTime1.getMonth() == null && dateAndTime2.getMonth() != null) {
 			dateAndTime1.setMonth(dateAndTime2.getMonth());
-		if (dateAndTime1.getYear() == null && dateAndTime2.getYear() != null)
+		}
+		if (dateAndTime1.getYear() == null && dateAndTime2.getYear() != null) {
 			dateAndTime1.setYear(dateAndTime2.getYear());
-		if (dateAndTime1.getTimeZone() == null && dateAndTime2.getTimeZone() != null)
+		}
+		if (dateAndTime1.getTimeZone() == null && dateAndTime2.getTimeZone() != null) {
 			dateAndTime1.setTimeZone(dateAndTime2.getTimeZone());
+		}
 	}
 }

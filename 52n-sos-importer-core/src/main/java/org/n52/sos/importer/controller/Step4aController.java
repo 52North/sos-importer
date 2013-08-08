@@ -26,7 +26,6 @@ package org.n52.sos.importer.controller;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step4aModel;
@@ -36,6 +35,8 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step4Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Solves ambiguities in case there is more than one date&time column.
@@ -44,52 +45,52 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step4aController extends StepController {
 	
-	private static final Logger logger = Logger.getLogger(Step4aController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step4aController.class);
 	
 	private Step4aModel step4aModel;
 	
 	private Step4Panel step4Panel;
 	
-	private TableController tableController;
+	private final TableController tableController;
 
-	public Step4aController(Step4aModel step4bModel) {
-		this.step4aModel = step4bModel;
-		this.tableController = TableController.getInstance();
+	public Step4aController(final Step4aModel step4bModel) {
+		step4aModel = step4bModel;
+		tableController = TableController.getInstance();
 	}
 	
 	@Override
 	public void loadSettings() {
 		String text = step4aModel.getDescription();
-		String orientation = tableController.getOrientationString();
-		int fLWData = step4aModel.getFirstLineWithData();
+		final String orientation = tableController.getOrientationString();
+		final int fLWData = step4aModel.getFirstLineWithData();
 		text = text.replaceAll(Constants.STRING_REPLACER, orientation);
 		step4Panel = new Step4Panel(text);		
 
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.addMultipleSelectionListener(new SelectionChanged(fLWData));
 		
-		int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
-		for (int number: selectedRowsOrColumns) {
-			Column c = new Column(number,fLWData);
-			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
+		final int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
+		for (final int number: selectedRowsOrColumns) {
+			final Column c = new Column(number,fLWData);
+			final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 			mv.setDateAndTime(null);
 			tableController.selectColumn(number);
 		}
 		
-		DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());	
+		final DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());	
 		dateAndTimeController.markComponents();	
 	}
 
 	@Override
 	public void saveSettings() {
-		int[] selectedRowsOrColumns = tableController.getSelectedColumns();
-		DateAndTime dateAndTime = step4aModel.getDateAndTimeModel();
+		final int[] selectedRowsOrColumns = tableController.getSelectedColumns();
+		final DateAndTime dateAndTime = step4aModel.getDateAndTimeModel();
 		step4aModel.setSelectedRowsOrColumns(selectedRowsOrColumns);
-		int fLWData = step4aModel.getFirstLineWithData();
+		final int fLWData = step4aModel.getFirstLineWithData();
 		
-		for (int number: selectedRowsOrColumns) {
-			Column c = new Column(number,fLWData);
-			MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
+		for (final int number: selectedRowsOrColumns) {
+			final Column c = new Column(number,fLWData);
+			final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 			mv.setDateAndTime(dateAndTime);
 		}
 		
@@ -122,33 +123,34 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public boolean isNecessary() {
-		int dateAndTimes = ModelStore.getInstance().getDateAndTimes().size();
+		final int dateAndTimes = ModelStore.getInstance().getDateAndTimes().size();
 		
 		if (dateAndTimes == 0) {
 			logger.info("Skip Step 4a since there are not any Date&Times");
 			return false;
 		}
 		if (dateAndTimes == 1) {
-			DateAndTime dateAndTime = ModelStore.getInstance().getDateAndTimes().get(0);
+			final DateAndTime dateAndTime = ModelStore.getInstance().getDateAndTimes().get(0);
 			logger.info("Skip Step 4a since there is just " + dateAndTime);
 			
-			for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+			for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 				mv.setDateAndTime(dateAndTime);
+			}
 			
 			return false;
 		}
 		
-		DateAndTime dtm = getNextUnassignedDateAndTime();
-		step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
+		final DateAndTime dtm = getNextUnassignedDateAndTime();
+		step4aModel = new Step4aModel(dtm,step4aModel.getFirstLineWithData());
 		return true;
 	}
 
 	@Override
 	public StepController getNext() {
-		DateAndTime dtm = getNextUnassignedDateAndTime();
+		final DateAndTime dtm = getNextUnassignedDateAndTime();
 		if (dtm != null) {
 			// this method is called after a Step4aController has existed before
-			Step4aModel step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
+			final Step4aModel step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
 			return new Step4aController(step4aModel);
 		} 
 	
@@ -157,46 +159,54 @@ public class Step4aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {	
-		return new Step4bController(this.step4aModel.getFirstLineWithData()); 
+		return new Step4bController(step4aModel.getFirstLineWithData()); 
 	}
 	
 	private DateAndTime getNextUnassignedDateAndTime() {
-		boolean unassignedMeasuredValues = areThereAnyUnassignedMeasuredValuesLeft();
-		if (!unassignedMeasuredValues) return null;
+		final boolean unassignedMeasuredValues = areThereAnyUnassignedMeasuredValuesLeft();
+		if (!unassignedMeasuredValues) {
+			return null;
+		}
 		
-		for (DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes())
-			if (!isAssignedToMeasuredValue(dateAndTime))
-				return dateAndTime;	
+		for (final DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
+			if (!isAssignedToMeasuredValue(dateAndTime)) {
+				return dateAndTime;
+			}
+		}	
 		return null;
 	}
 	
 	private boolean areThereAnyUnassignedMeasuredValuesLeft() {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
-			if (mv.getDateAndTime() == null)
+		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			if (mv.getDateAndTime() == null) {
 				return true;
+			}
+		}
 		return false;
 	}
 	
-	private boolean isAssignedToMeasuredValue(DateAndTime dateAndTime) {
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) 
-			if (dateAndTime.equals(mv.getDateAndTime()))
+	private boolean isAssignedToMeasuredValue(final DateAndTime dateAndTime) {
+		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+			if (dateAndTime.equals(mv.getDateAndTime())) {
 				return true;
+			}
+		}
 		return false;
 	}
 	
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 		
-		private int firstLineWithData;
+		private final int firstLineWithData;
 
-		public SelectionChanged(int fLWData) {
-			this.firstLineWithData = fLWData;
+		public SelectionChanged(final int fLWData) {
+			firstLineWithData = fLWData;
 		}
 
 		@Override
-		public void columnSelectionChanged(int[] selectedColumns) {
-			for (int number: selectedColumns) {
-				Column c = new Column(number,firstLineWithData);
-				MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
+		public void columnSelectionChanged(final int[] selectedColumns) {
+			for (final int number: selectedColumns) {
+				final Column c = new Column(number,firstLineWithData);
+				final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
 				if (mv == null) {
 					JOptionPane.showMessageDialog(null,
 						    Lang.l().step4aInfoMeasuredValue(),
@@ -219,7 +229,7 @@ public class Step4aController extends StepController {
 		}
 
 		@Override
-		public void rowSelectionChanged(int[] selectedRows) {
+		public void rowSelectionChanged(final int[] selectedRows) {
 			// Do nothing here!
 		}	
 	}
@@ -231,6 +241,6 @@ public class Step4aController extends StepController {
 
 	@Override
 	public StepModel getModel() {
-		return this.step4aModel;
+		return step4aModel;
 	}
 }

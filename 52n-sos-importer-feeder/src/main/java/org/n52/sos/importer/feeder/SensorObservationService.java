@@ -43,7 +43,6 @@ import net.opengis.sensorML.x101.SystemDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.RegisterSensorResponseDocument;
 
-import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.adapter.OperationResult;
@@ -72,6 +71,8 @@ import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.model.requests.Offering;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -83,7 +84,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public final class SensorObservationService {
 	
-	private static final Logger LOG = Logger.getLogger(SensorObservationService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SensorObservationService.class);
 	
 	private final URL sosUrl;
 	private final String sosVersion;
@@ -140,7 +141,7 @@ public final class SensorObservationService {
 		return false;
 	}
 
-	public ArrayList<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException {
+	public ArrayList<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException {
 		LOG.trace("importData()");
 		// 0 Get line
 		final CSVReader cr = dataFile.getCSVReader();
@@ -149,7 +150,7 @@ public final class SensorObservationService {
 		// 1 Get all measured value columns =: mvCols
 		final int[] mVCols = dataFile.getMeasuredValueColumnIds();
 		if (mVCols == null || mVCols.length == 0) {
-			LOG.fatal("No measured value columns found in configuration");
+			LOG.error("No measured value columns found in configuration");
 			return null;
 		}
 		// get the number of lines to skip (coming from already read lines)
@@ -160,8 +161,8 @@ public final class SensorObservationService {
 			 * check if the decreasing skip counter indicates, that all lines
 			 * marked for skipping are already skipped
 			 */
-			if (skipCount < 1 && isNotEmpty(values)) {
-				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
+			if (skipCount < 1 && isNotEmpty(values) && isSizeValid(dataFile, values)) {
+				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter+1,Arrays.toString(values)));
 				// A: collect all information
 				final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 				insertObservationsForOneLine(ios,values,dataFile);
@@ -175,11 +176,24 @@ public final class SensorObservationService {
 				 */
 				lastLine++;
 			} else {
-				LOG.debug(String.format("\n\n\t\tSkip CSV line #%d: %s\n\n",lineCounter,Arrays.toString(values)));
+				LOG.debug(String.format("\n\n\t\tSkip CSV line #%d: %s\n\n",(lineCounter++)+1,Arrays.toString(values)));
 			}
 			skipCount--;
 		}
 		return failedInsertObservations;
+	}
+
+	private boolean isSizeValid(final DataFile dataFile,
+			final String[] values)
+	{
+		if (values.length != dataFile.getExpectedColumnCount()) {
+			final String errorMsg = String.format("Number of Expected columns '%s' does not match number of found columns '%s' -> Cancel import!",
+					dataFile.getExpectedColumnCount(),
+					values.length);
+			LOG.error(errorMsg);
+			throw new InvalidColumnCountException(errorMsg);
+		}
+		return true;
 	}
 
 	private boolean isNotEmpty(final String[] values)
@@ -198,21 +212,14 @@ public final class SensorObservationService {
 			final int[] mVColumns,
 			final DataFile df,
 			final int currentLine){
-		LOG.trace(String.format("getInsertObservations(%s, %s)",
-				Arrays.toString(values),
-				Arrays.toString(mVColumns)));
+		LOG.trace("getInsertObservations({}, {})", Arrays.toString(values), Arrays.toString(mVColumns));
 		if (values == null || values.length == 0 || mVColumns == null || mVColumns.length == 0) {
-			LOG.error(String.format("Method called with bad arguments: values: %s, mVColumns: %s",
-					Arrays.toString(values),
-					Arrays.toString(mVColumns)));
+			LOG.error("Method called with bad arguments: values: {}, mVColumns: {}", Arrays.toString(values), Arrays.toString(mVColumns));
 			return null;
 		}
 		final ArrayList<InsertObservation> result = new ArrayList<InsertObservation>(mVColumns.length);
 		for (final int mVColumn : mVColumns) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(String.format("Parsing for measure value column %s",
-						mVColumn));
-			}
+			LOG.debug("Parsing for measure value column {}",mVColumn);
 			final InsertObservation io = getInsertObservationForColumnIdFromValues(mVColumn,values,df);
 			if (io != null) {
 				result.add(io);
@@ -229,23 +236,23 @@ public final class SensorObservationService {
 		try {
 			// SENSOR
 			final Sensor sensor = dataFile.getSensorForColumn(mVColumnId,values);
-			LOG.debug(String.format("Sensor: %s",sensor));
+			LOG.debug("Sensor: {}",sensor);
 			// FEATURE OF INTEREST incl. Position
 			final FeatureOfInterest foi = dataFile.getFoiForColumn(mVColumnId,values);
-			LOG.debug(String.format("Feature of Interest: %s",foi));
+			LOG.debug("Feature of Interest: {}",foi);
 			// VALUE
 			final Object value = dataFile.getValue(mVColumnId,values);
-			LOG.debug(String.format("Value: %s", value.toString()));
+			LOG.debug("Value: {}", value.toString());
 			// TODO implement using different templates in later version depending on the class of value
 			// TIMESTAMP
 			final String timeStamp = dataFile.getTimeStamp(mVColumnId,values).toString();
-			LOG.debug(String.format("Timestamp: %s", timeStamp));
+			LOG.debug("Timestamp: {}", timeStamp);
 			// UOM CODE
 			final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId,values);
-			LOG.debug(String.format("UomCode: '%s'", uom));
+			LOG.debug("UomCode: '{}'", uom);
 			// OBSERVED_PROPERTY
 			final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId,values);
-			LOG.debug(String.format("ObservedProperty: %s", observedProperty));
+			LOG.debug("ObservedProperty: {}", observedProperty);
 			final Offering offer = dataFile.getOffering(sensor);
 			return new InsertObservation(sensor,
 					foi,
@@ -256,24 +263,10 @@ public final class SensorObservationService {
 					offer,
 					dataFile.getType(mVColumnId));
 		} catch (final ParseException pe) {
-			LOG.error(String.format("Could not retrieve all information required for insert observation because of parsing error: %s: %s. Skipped this one.",
+			LOG.error("Could not retrieve all information required for insert observation because of parsing error: {}: {}. Skipped this one.",
 					pe.getClass().getName(),
-					pe.getMessage()));
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Exception stack trace:",pe);
-			}
-			/*
-			 catch (ParseException e) {
-				LOG.error(String.format("Could not parse values from data file '%s' with configuration '%s'.\n" +
-						"Raw data: %s.\n" +
-						"Exception thrown: %s",
-						dataFile.getFileName(),
-						dataFile.getConfigurationFileName(),
-						Arrays.toString(values),
-						e.getMessage()),
-						e);
-			} 
-			 */
+					pe.getMessage());
+			LOG.debug("Exception stack trace:",pe);
 		}
 		return null;
 	}

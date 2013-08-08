@@ -27,7 +27,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.EPSGCode;
 import org.n52.sos.importer.model.position.Position;
@@ -36,6 +35,8 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.utils.ToolTips;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * consists of a combobox for the EPSG code and a combobox for the 
@@ -47,23 +48,23 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(MissingEPSGCodePanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(MissingEPSGCodePanel.class);
 	
 	private final Position position;
 	
-	private EditableJComboBoxPanel EPSGCodeComboBox;
-	private EditableJComboBoxPanel referenceSystemNameComboBox;
+	private final EditableJComboBoxPanel EPSGCodeComboBox;
+	private final EditableJComboBoxPanel referenceSystemNameComboBox;
 
-	public MissingEPSGCodePanel(Position position) {
+	public MissingEPSGCodePanel(final Position position) {
 		super();
 		this.position = position;
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.referenceSystemNameComboBox = new EditableJComboBoxPanel(
+		setLayout(new FlowLayout(FlowLayout.LEFT));
+		referenceSystemNameComboBox = new EditableJComboBoxPanel(
 				EditableComboBoxItems.getInstance().getReferenceSystemNames(), 
 				Lang.l().referenceSystem(), 
 				ToolTips.get(ToolTips.REFERENCE_SYSTEMS));
-		this.EPSGCodeComboBox = new EditableJComboBoxPanel(
+		EPSGCodeComboBox = new EditableJComboBoxPanel(
 				EditableComboBoxItems.getInstance().getEPSGCodes(), 
 				Lang.l().epsgCode(), 
 				ToolTips.get(ToolTips.EPSG));
@@ -74,7 +75,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 	}
 	@Override
 	public void assignValues() {
-		int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+		final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
 		position.setEPSGCode(new EPSGCode(code));
 	}
 	
@@ -88,7 +89,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 		int code = 0;
 		try {
 			code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,
 				    Lang.l().epsgCodeWarningDialogNaturalNumber(),
 				    Lang.l().warningDialogTitle(),
@@ -111,12 +112,12 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
 	
 	@Override
 	public Component getMissingComponent() {
-		int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+		final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
 		return new EPSGCode(code);
 	}
 	
 	@Override
-	public void setMissingComponent(Component c) {
+	public void setMissingComponent(final Component c) {
 		EPSGCodeComboBox.setSelectedItem(String.valueOf(((EPSGCode)c).getValue()));
 	}	
 }

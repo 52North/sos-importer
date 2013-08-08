@@ -28,8 +28,9 @@ import java.util.ResourceBundle;
 
 import javax.swing.ToolTipManager;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * loads tooltips from the properties file
@@ -38,7 +39,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class ToolTips {
 	
-	private static final Logger logger = Logger.getLogger(ToolTips.class);
+	private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
 	
 	private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips"; //$NON-NLS-1$
 	
@@ -79,13 +80,13 @@ public class ToolTips {
 
 	private ToolTips() {}
 
-	public static String get(String key) {
+	public static String get(final String key) {
 		try {
 			if (res == null) {
 				res = ResourceBundle.getBundle(BUNDLE_NAME, Lang.getCurrentLocale());
 			}
 			return res.getString(key);
-		} catch (MissingResourceException e) {
+		} catch (final MissingResourceException e) {
 			logger.error("Value for key: \"" + 
 						key + 
 						"\" not found in resource bundle \"" 

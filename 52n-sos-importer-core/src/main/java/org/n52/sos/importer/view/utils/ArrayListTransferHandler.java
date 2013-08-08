@@ -68,7 +68,8 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.TransferHandler;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author e.h.juerrens@52north.org
@@ -108,12 +109,11 @@ import org.apache.log4j.Logger;
  * for use in the design, construction, operation or maintenance of any
  * nuclear facility.
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ArrayListTransferHandler extends TransferHandler {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(ArrayListTransferHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ArrayListTransferHandler.class);
 	
 	DataFlavor localArrayListFlavor, serialArrayListFlavor;
 
@@ -131,7 +131,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 	public ArrayListTransferHandler() {
 		try {
 			localArrayListFlavor = new DataFlavor(localArrayListType);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			logger.error(
 					"ArrayListTransferHandler: unable to create data flavor",
 					e);
@@ -139,25 +139,26 @@ public class ArrayListTransferHandler extends TransferHandler {
 		serialArrayListFlavor = new DataFlavor(ArrayList.class, "ArrayList");
 	}
 
-	public boolean importData(JComponent c, Transferable t) {
+	@Override
+	public boolean importData(final JComponent c, final Transferable t) {
 		JList target = null;
-		ArrayList alist = null;
+		ArrayList<?> alist = null;
 		if (!canImport(c, t.getTransferDataFlavors())) {
 			return false;
 		}
 		try {
 			target = (JList) c;
 			if (hasLocalArrayListFlavor(t.getTransferDataFlavors())) {
-				alist = (ArrayList) t.getTransferData(localArrayListFlavor);
+				alist = (ArrayList<?>) t.getTransferData(localArrayListFlavor);
 			} else if (hasSerialArrayListFlavor(t.getTransferDataFlavors())) {
-				alist = (ArrayList) t.getTransferData(serialArrayListFlavor);
+				alist = (ArrayList<?>) t.getTransferData(serialArrayListFlavor);
 			} else {
 				return false;
 			}
-		} catch (UnsupportedFlavorException ufe) {
+		} catch (final UnsupportedFlavorException ufe) {
 			logger.error("importData: unsupported data flavor",ufe);
 			return false;
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			logger.error("importData: I/O exception",ioe);
 			return false;
 		}
@@ -182,8 +183,8 @@ public class ArrayListTransferHandler extends TransferHandler {
 			}
 		}
 
-		DefaultListModel listModel = (DefaultListModel) target.getModel();
-		int max = listModel.getSize();
+		final DefaultListModel listModel = (DefaultListModel) target.getModel();
+		final int max = listModel.getSize();
 		if (index < 0) {
 			index = max;
 		} else {
@@ -200,9 +201,10 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return true;
 	}
 
-	protected void exportDone(JComponent c, Transferable data, int action) {
+	@Override
+	protected void exportDone(final JComponent c, final Transferable data, final int action) {
 		if ((action == MOVE) && (indices != null)) {
-			DefaultListModel model = (DefaultListModel) source.getModel();
+			final DefaultListModel model = (DefaultListModel) source.getModel();
 
 			//If we are moving items around in the same list, we
 			//need to adjust the indices accordingly since those
@@ -214,41 +216,43 @@ public class ArrayListTransferHandler extends TransferHandler {
 					}
 				}
 			}
-			for (int i = indices.length - 1; i >= 0; i--)
+			for (int i = indices.length - 1; i >= 0; i--) {
 				model.remove(indices[i]);
+			}
 		}
 		indices = null;
 		addIndex = -1;
 		addCount = 0;
 	}
 
-	private boolean hasLocalArrayListFlavor(DataFlavor[] flavors) {
+	private boolean hasLocalArrayListFlavor(final DataFlavor[] flavors) {
 		if (localArrayListFlavor == null) {
 			return false;
 		}
 
-		for (int i = 0; i < flavors.length; i++) {
-			if (flavors[i].equals(localArrayListFlavor)) {
+		for (final DataFlavor flavor : flavors) {
+			if (flavor.equals(localArrayListFlavor)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean hasSerialArrayListFlavor(DataFlavor[] flavors) {
+	private boolean hasSerialArrayListFlavor(final DataFlavor[] flavors) {
 		if (serialArrayListFlavor == null) {
 			return false;
 		}
 
-		for (int i = 0; i < flavors.length; i++) {
-			if (flavors[i].equals(serialArrayListFlavor)) {
+		for (final DataFlavor flavor : flavors) {
+			if (flavor.equals(serialArrayListFlavor)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean canImport(JComponent c, DataFlavor[] flavors) {
+	@Override
+	public boolean canImport(final JComponent c, final DataFlavor[] flavors) {
 		if (hasLocalArrayListFlavor(flavors)) {
 			return true;
 		}
@@ -258,20 +262,21 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return false;
 	}
 
-	protected Transferable createTransferable(JComponent c) {
+	@Override
+	protected Transferable createTransferable(final JComponent c) {
 		if (c instanceof JList) {
 			source = (JList) c;
 			indices = source.getSelectedIndices();
-			Object[] values = source.getSelectedValues();
+			final Object[] values = source.getSelectedValues();
 			if (values == null || values.length == 0) {
 				return null;
 			}
-			ArrayList alist = new ArrayList(values.length);
-			for (int i = 0; i < values.length; i++) {
-				Object o = values[i];
+			final ArrayList<String> alist = new ArrayList<String>(values.length);
+			for (final Object o : values) {
 				String str = o.toString();
-				if (str == null)
+				if (str == null) {
 					str = "";
+				}
 				alist.add(str);
 			}
 			return new ArrayListTransferable(alist);
@@ -279,18 +284,20 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return null;
 	}
 
-	public int getSourceActions(JComponent c) {
+	@Override
+	public int getSourceActions(final JComponent c) {
 		return COPY_OR_MOVE;
 	}
 
 	public class ArrayListTransferable implements Transferable {
-		ArrayList data;
+		ArrayList<?> data;
 
-		public ArrayListTransferable(ArrayList alist) {
+		public ArrayListTransferable(final ArrayList<?> alist) {
 			data = alist;
 		}
 
-		public Object getTransferData(DataFlavor flavor)
+		@Override
+		public Object getTransferData(final DataFlavor flavor)
 				throws UnsupportedFlavorException {
 			if (!isDataFlavorSupported(flavor)) {
 				throw new UnsupportedFlavorException(flavor);
@@ -298,12 +305,14 @@ public class ArrayListTransferHandler extends TransferHandler {
 			return data;
 		}
 
+		@Override
 		public DataFlavor[] getTransferDataFlavors() {
 			return new DataFlavor[] { localArrayListFlavor,
 					serialArrayListFlavor };
 		}
 
-		public boolean isDataFlavorSupported(DataFlavor flavor) {
+		@Override
+		public boolean isDataFlavorSupported(final DataFlavor flavor) {
 			if (localArrayListFlavor.equals(flavor)) {
 				return true;
 			}

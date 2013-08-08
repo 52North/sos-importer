@@ -27,10 +27,11 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
@@ -44,11 +45,11 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 
-	private static final Logger logger = Logger.getLogger(Step6aModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6aModelHandler.class);
 	
 	@Override
-	public void handleModel(Step6aModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step6aModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -60,7 +61,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 		 */
 		DateAndTime dAT;
 		String timeStamp;
-		Enum key = Key.TIME;
+		final Enum key = Key.TIME;
 		//
 		dAT = stepModel.getDateAndTime();
 		timeStamp = getTimeStampFromDateAndTime(dAT);
@@ -80,21 +81,21 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 						+ timeStamp);
 			}
 		}else {
-			logger.fatal("Timestamp element could not be updated");
+			logger.error("Timestamp element could not be updated");
 		}
 	}
 
-	private boolean addOrUpdateMetadata(Enum key, 
-			String value,
-			AdditionalMetadata addiMeta) {
+	private boolean addOrUpdateMetadata(final Enum key, 
+			final String value,
+			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addOrUpdateMetadata()");
 		}
-		Metadata[] metaElems = addiMeta.getMetadataArray();
+		final Metadata[] metaElems = addiMeta.getMetadataArray();
 		Metadata meta = null;
 		String addedOrUpdated = "Updated";
 		// check if there is already a element with the given key
-		for (Metadata metadata : metaElems) {
+		for (final Metadata metadata : metaElems) {
 			if (metadata.getKey().equals(key) ) {
 				meta = metadata;
 				break;
@@ -128,7 +129,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 	 * @param dAT
 	 * @return a String or null, if dAT is null.
 	 */
-	private String getTimeStampFromDateAndTime(DateAndTime dAT) {
+	private String getTimeStampFromDateAndTime(final DateAndTime dAT) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getTimeStampFromDateAndTime()");
 		}

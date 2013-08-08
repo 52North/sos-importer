@@ -25,8 +25,9 @@ package org.n52.sos.importer.model;
 
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.controller.StepController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * stores past, future and present step controller
@@ -35,11 +36,11 @@ import org.n52.sos.importer.controller.StepController;
  */
 public class BackNextModel {
 
-	private Stack<StepController> previousStepControllers;
+	private final Stack<StepController> previousStepControllers;
 	
-	private static final Logger logger = Logger.getLogger(BackNextModel.class);
+	private static final Logger logger = LoggerFactory.getLogger(BackNextModel.class);
 	
-	private Stack<StepController> followingStepControllers;
+	private final Stack<StepController> followingStepControllers;
 	
 	private StepController currentStepController;
 	
@@ -52,7 +53,7 @@ public class BackNextModel {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getPreviousStepController()");
 		}
-		StepController sc = previousStepControllers.pop();
+		final StepController sc = previousStepControllers.pop();
 		if (logger.isTraceEnabled()) {
 			logger.trace("result: " + 
 					(sc!=null?sc.getClass().getSimpleName():sc) + 
@@ -61,7 +62,7 @@ public class BackNextModel {
 		return sc;
 	}
 	
-	public void addPreviousStepController(StepController sc) {
+	public void addPreviousStepController(final StepController sc) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addPreviousStepController(" + 
 					(sc!=null?sc.getClass().getSimpleName():sc) + 
@@ -70,21 +71,21 @@ public class BackNextModel {
 		previousStepControllers.push(sc);
 	}
 
-	public void setCurrentStepController(StepController currentSC) {
+	public void setCurrentStepController(final StepController currentSC) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("setCurrentStepController(" + 
 					currentSC.getClass().getSimpleName() + 
 					"[" + currentSC.hashCode() + "])");
 		}
-		this.currentStepController = currentSC;
+		currentStepController = currentSC;
 	}
 
 	public StepController getCurrentStepController() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getCurrentStepController()" +
-					(this.currentStepController != null? ": result:" +
-					this.currentStepController.getClass().getSimpleName() + 
-					"[" + this.currentStepController.hashCode() + "]":""));
+					(currentStepController != null? ": result:" +
+					currentStepController.getClass().getSimpleName() + 
+					"[" + currentStepController.hashCode() + "]":""));
 		}
 		return currentStepController;
 	}
@@ -108,7 +109,7 @@ public class BackNextModel {
 		return sc;
 	}
 	
-	public void addFollowingStepController(StepController sc) {
+	public void addFollowingStepController(final StepController sc) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addFollowingStepController(" + 
 					(sc!=null?sc.getClass().getSimpleName():sc) + 

@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -26,7 +27,7 @@ public abstract class Lang {
 	
 	private static Lang instance = null;
 
-	private static final Logger logger = Logger.getLogger(Lang.class);
+	private static final Logger logger = LoggerFactory.getLogger(Lang.class);
 	
 	// Add default locale En
 	static {

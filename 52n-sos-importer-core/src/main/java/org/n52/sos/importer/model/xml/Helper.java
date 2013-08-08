@@ -23,10 +23,11 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
@@ -42,7 +43,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Helper {
 	
-	private static final Logger logger = Logger.getLogger(Helper.class);
+	private static final Logger logger = LoggerFactory.getLogger(Helper.class);
 	
 	/**
 	 * Checks, if a Metadata element with the given <b>key</b> exists,<br />
@@ -53,17 +54,17 @@ public class Helper {
 	 * @param col
 	 * @return
 	 */
-	protected static boolean addOrUpdateColumnMetadata(Enum key, 
-			String value, 
-			Column col) {
+	protected static boolean addOrUpdateColumnMetadata(final Enum key, 
+			final String value, 
+			final Column col) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\taddOrUpdateColumnMetadata()");
 		}
-		Metadata[] metaElems = col.getMetadataArray();
+		final Metadata[] metaElems = col.getMetadataArray();
 		Metadata meta = null;
 		String addedOrUpdated = "Updated";
 		// check if there is already a element with the given key
-		for (Metadata metadata : metaElems) {
+		for (final Metadata metadata : metaElems) {
 			if (metadata.getKey().equals(key) ) {
 				meta = metadata;
 				break;
@@ -86,7 +87,7 @@ public class Helper {
 	 * @param tabElem
 	 * @return the id of the column of this TableElement or -1
 	 */
-	protected static int getColumnIdFromTableElement(TableElement tabElem) {
+	protected static int getColumnIdFromTableElement(final TableElement tabElem) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getColumnIdFromTableElement()");
 		}
@@ -94,10 +95,10 @@ public class Helper {
 			return -1;
 		}
 		if (tabElem instanceof Cell) {
-			Cell c = (Cell) tabElem;
+			final Cell c = (Cell) tabElem;
 			return c.getColumn();
 		} else if (tabElem instanceof org.n52.sos.importer.model.table.Column) {
-			org.n52.sos.importer.model.table.Column c = (org.n52.sos.importer.model.table.Column) tabElem;
+			final org.n52.sos.importer.model.table.Column c = (org.n52.sos.importer.model.table.Column) tabElem;
 			return c.getNumber();
 			// TODO What is the reason for having it in rows?
 		} else if (tabElem instanceof Row) {
@@ -112,20 +113,20 @@ public class Helper {
 	 * @param sosImportConf
 	 * @return the Column from the configuration having id columnId
 	 */
-	protected static Column getColumnById(int columnId,
-			SosImportConfiguration sosImportConf) {
+	protected static Column getColumnById(final int columnId,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getColumnById()");
 		}
-		CsvMetadata csvMeta = sosImportConf.getCsvMetadata();
+		final CsvMetadata csvMeta = sosImportConf.getCsvMetadata();
 		if (csvMeta != null) {
-			ColumnAssignments colAssignMnts = csvMeta.getColumnAssignments();
+			final ColumnAssignments colAssignMnts = csvMeta.getColumnAssignments();
 			if (colAssignMnts != null) {
-				Column[] cols = colAssignMnts.getColumnArray();
+				final Column[] cols = colAssignMnts.getColumnArray();
 				if (cols != null && cols.length > 0) {
 					// now we have the columns, iterate and check the id
 					// return the one with the required one
-					for (Column col : cols) {
+					for (final Column col : cols) {
 						if (col.getNumber() == columnId) {
 							return col;
 						}
@@ -143,12 +144,12 @@ public class Helper {
 	 * 		given <code>RelatedSensors[]</code> , <br />
 	 * 		else <b>false</b>
 	 */
-	protected static boolean isSensorInArray(RelatedSensor[] relatedSensors,
-			String sensorXmlId) {
+	protected static boolean isSensorInArray(final RelatedSensor[] relatedSensors,
+			final String sensorXmlId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isSensorInArray()");
 		}
-		for (RelatedSensor relatedSensorFromArray : relatedSensors) {
+		for (final RelatedSensor relatedSensorFromArray : relatedSensors) {
 			if (relatedSensorFromArray.isSetIdRef() && 
 					relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId) ) {
 				return true;

@@ -23,10 +23,6 @@
  */
 package org.n52.sos.importer.test;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
@@ -35,6 +31,8 @@ import org.n52.sos.importer.model.dateAndTime.Hour;
 import org.n52.sos.importer.model.dateAndTime.Month;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.Column;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to test the methods of the date and time controller
@@ -45,44 +43,40 @@ public class DateAndTimeControllerTest {
 
 
 	private static final Logger logger = 
-			Logger.getLogger(DateAndTimeControllerTest.class);
+			LoggerFactory.getLogger(DateAndTimeControllerTest.class);
 
-	public static void main(String[] args) {
-		// init logger
-		Logger root = Logger.getRootLogger();
-		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
+	public static void main(final String[] args) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Start Test");
 		}
-		int firstLineWithData = 1;
-		String g = "1";
+		final int firstLineWithData = 1;
+		final String g = "1";
 		//
 		// first element
-		String p1 = "d.M.yyyy";
-		Column c1 = new Column(0, firstLineWithData);
-		DateAndTime dt1 = new DateAndTime();
+		final String p1 = "d.M.yyyy";
+		final Column c1 = new Column(0, firstLineWithData);
+		final DateAndTime dt1 = new DateAndTime();
 		dt1.setDay(new Day(c1,p1));
 		dt1.setMonth(new Month(c1,p1));
 		dt1.setYear(new Year(c1,p1));
 		dt1.setGroup(g);
 		//
 		// second element
-		String p2 = "HH,00";
-		Column c2 = new Column(1, firstLineWithData);
-		DateAndTime dt2 = new DateAndTime();
+		final String p2 = "HH,00";
+		final Column c2 = new Column(1, firstLineWithData);
+		final DateAndTime dt2 = new DateAndTime();
 		dt2.setHour(new Hour(c2, p2));
 		dt2.setGroup(g);
 		//
 		// third element
-		String p3 = "mm,00";
-		Column c3 = new Column(2, firstLineWithData);
-		DateAndTime dt3 = new DateAndTime();
+		final String p3 = "mm,00";
+		final Column c3 = new Column(2, firstLineWithData);
+		final DateAndTime dt3 = new DateAndTime();
 		dt3.setHour(new Hour(c3, p3));
 		dt3.setGroup(g);
 		//
 		// add elements to modelstore
-		ModelStore ms = ModelStore.getInstance();
+		final ModelStore ms = ModelStore.getInstance();
 		ms.add(dt1);
 		ms.add(dt2);
 		ms.add(dt3);
@@ -92,7 +86,7 @@ public class DateAndTimeControllerTest {
 		}
 		//
 		// DateAndTimeController
-		DateAndTimeController dtc = new DateAndTimeController();
+		final DateAndTimeController dtc = new DateAndTimeController();
 		dtc.mergeDateAndTimes();
 	}
 

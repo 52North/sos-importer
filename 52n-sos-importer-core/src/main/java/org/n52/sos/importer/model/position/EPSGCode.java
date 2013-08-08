@@ -23,17 +23,18 @@
  */
 package org.n52.sos.importer.model.position;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EPSGCode extends Component {
 
-	private static final Logger logger = Logger.getLogger(EPSGCode.class);
+	private static final Logger logger = LoggerFactory.getLogger(EPSGCode.class);
 	
 	private TableElement tableElement;
 	
@@ -41,16 +42,16 @@ public class EPSGCode extends Component {
 	
 	private int value = -1;
 
-	public EPSGCode(TableElement tableElement, String pattern) {
+	public EPSGCode(final TableElement tableElement, final String pattern) {
 		this.tableElement = tableElement;
 		this.pattern = pattern;
 	}
 	
-	public EPSGCode(int value) {
+	public EPSGCode(final int value) {
 		this.value = value;
 	}
 	
-	public void setValue(int value) {
+	public void setValue(final int value) {
 		logger.info("Assign Value to " + this.getClass().getName());
 		this.value = value;
 	}
@@ -59,7 +60,7 @@ public class EPSGCode extends Component {
 		return value;
 	}
 
-	public void setTableElement(TableElement tableElement) {
+	public void setTableElement(final TableElement tableElement) {
 		logger.info("Assign Column to " + this.getClass().getName());
 		this.tableElement = tableElement;
 	}
@@ -71,11 +72,11 @@ public class EPSGCode extends Component {
 	/**
 	 * returns the corresponding position component for a feature of interest cell
 	 */
-	public EPSGCode forThis(Cell featureOfInterestPosition) {
-		if (tableElement == null)
+	public EPSGCode forThis(final Cell featureOfInterestPosition) {
+		if (tableElement == null) {
 			return new EPSGCode(value);
-		else {
-			String epsgString = tableElement.getValueFor(featureOfInterestPosition);
+		} else {
+			final String epsgString = tableElement.getValueFor(featureOfInterestPosition);
 			return EPSGCode.parse(epsgString);
 		}
 	}
@@ -84,19 +85,21 @@ public class EPSGCode extends Component {
 	 * colors this particular component
 	 */
 	public void mark() {
-		if (tableElement != null)
+		if (tableElement != null) {
 			tableElement.mark();
+		}
 	}
 	
 	@Override 
 	public String toString() {
-		if (getTableElement() == null)
+		if (getTableElement() == null) {
 			return "EPSG-Code "  + getValue();
-		else 
+		} else {
 			return "EPSG-Code " + getTableElement();
+		}
 	}
 
-	public void setPattern(String pattern) {
+	public void setPattern(final String pattern) {
 		this.pattern = pattern;
 	}
 
@@ -105,15 +108,15 @@ public class EPSGCode extends Component {
 	}
 
 	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
+	public MissingComponentPanel getMissingComponentPanel(final Combination c) {
 		return new MissingEPSGCodePanel((Position)c);
 	}
 	
 	/**
 	 * converts a given String into an EPSG code object
 	 */
-	public static EPSGCode parse(String s) {
-		int value = Integer.valueOf(s);
+	public static EPSGCode parse(final String s) {
+		final int value = Integer.valueOf(s);
 		return new EPSGCode(value);
 	}
 	

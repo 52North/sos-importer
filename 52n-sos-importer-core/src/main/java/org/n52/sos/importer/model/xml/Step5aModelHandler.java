@@ -23,11 +23,12 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
@@ -39,11 +40,11 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step5aModelHandler implements ModelHandler<Step5aModel> {
 	
-	private static final Logger logger = Logger.getLogger(Step5aModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step5aModelHandler.class);
 
 	@Override
-	public void handleModel(Step5aModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step5aModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -146,7 +147,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
 		}
 	}
 
-	private TableElement getTableElementFromDateTime(DateAndTime dat) {
+	private TableElement getTableElementFromDateTime(final DateAndTime dat) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getTableElementFromDateTime()");
 		}

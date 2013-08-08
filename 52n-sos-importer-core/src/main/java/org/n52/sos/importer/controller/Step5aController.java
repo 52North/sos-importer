@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.Step5aModel;
 import org.n52.sos.importer.model.StepModel;
@@ -35,6 +34,8 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.Step5Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * lets the user add missing metadata for identified date&times
@@ -43,7 +44,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step5aController extends StepController {
 
-	private static final Logger logger = Logger.getLogger(Step5aController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step5aController.class);
 	
 	private Step5aModel step5aModel;
 	
@@ -51,31 +52,31 @@ public class Step5aController extends StepController {
 	
 	private DateAndTimeController dateAndTimeController;
 	
-	private TableController tabController;
+	private final TableController tabController;
 
-	private int firstLineWithData;
+	private final int firstLineWithData;
 
 	
-	public Step5aController(int firstLineWithData) {
+	public Step5aController(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
-		this.tabController =  TableController.getInstance();
+		tabController =  TableController.getInstance();
 	}
 	
-	public Step5aController(Step5aModel step5aModel,int firstLineWithData) {
+	public Step5aController(final Step5aModel step5aModel,final int firstLineWithData) {
 		this(firstLineWithData);
 		this.step5aModel = step5aModel;
 	}
 	
 	@Override
 	public void loadSettings() {				
-		DateAndTime dateAndTime = step5aModel.getDateAndTime();
+		final DateAndTime dateAndTime = step5aModel.getDateAndTime();
 		dateAndTimeController = new DateAndTimeController(dateAndTime);
-		List<Component> components = step5aModel.getMissingDateAndTimeComponents();
+		final List<Component> components = step5aModel.getMissingDateAndTimeComponents();
 		dateAndTimeController.setMissingComponents(components);
 		dateAndTimeController.unassignMissingComponentValues();
 		
-		String description = step5aModel.getDescription();
-		List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
+		final String description = step5aModel.getDescription();
+		final List<MissingComponentPanel> missingComponentPanels = dateAndTimeController.getMissingComponentPanels();	
 		step5Panel = new Step5Panel(description, missingComponentPanels);
 		
 		tabController.turnSelectionOff();
@@ -91,7 +92,7 @@ public class Step5aController extends StepController {
 	public void saveSettings() {
 		dateAndTimeController.assignMissingComponentValues();	
 		
-		List<Component> components = dateAndTimeController.getMissingComponents();
+		final List<Component> components = dateAndTimeController.getMissingComponents();
 		step5aModel.setMissingDateAndTimeComponents(components);
 		
 		tabController.clearMarkedTableElements();
@@ -123,7 +124,7 @@ public class Step5aController extends StepController {
 	@Override
 	public boolean isNecessary() {
 		dateAndTimeController = new DateAndTimeController();
-		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
+		final DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
 		
 		if (dtm == null) {
 			logger.info("Skip Step 5a since there are not any Date&Times" +
@@ -138,8 +139,10 @@ public class Step5aController extends StepController {
 	@Override
 	public StepController getNext() {	
 		dateAndTimeController = new DateAndTimeController();
-		DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
-		if (dtm != null) return new Step5aController(new Step5aModel(dtm),this.firstLineWithData);
+		final DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
+		if (dtm != null) {
+			return new Step5aController(new Step5aModel(dtm),firstLineWithData);
+		}
 		
 		dateAndTimeController = null;
 		return null;	
@@ -147,11 +150,11 @@ public class Step5aController extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {
-		return new Step5cController(this.firstLineWithData);
+		return new Step5cController(firstLineWithData);
 	}
 
 	@Override
 	public StepModel getModel() {
-		return this.step5aModel;
+		return step5aModel;
 	}
 }

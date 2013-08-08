@@ -33,17 +33,17 @@ import java.net.SocketException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPHTTPClient;
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step1Panel;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * chooses a CSV file
@@ -52,11 +52,11 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step1Controller extends StepController {
 	
-	private static final Logger logger = Logger.getLogger(Step1Controller.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step1Controller.class);
 	
 	private Step1Panel step1Panel;
 	
-	private Step1Model step1Model;
+	private final Step1Model step1Model;
 	
 	private String tmpCSVFileContent;
 	
@@ -79,11 +79,11 @@ public class Step1Controller extends StepController {
 			//disable "back" button
 			BackNextController.getInstance().setBackButtonVisible(false);
 			
-			String csvFilePath = step1Model.getCSVFilePath();
+			final String csvFilePath = step1Model.getCSVFilePath();
 			step1Panel.setCSVFilePath(csvFilePath);
 			
-			if(this.step1Panel.getCSVFilePath() == null ||
-					this.step1Panel.getCSVFilePath().equals("")) {
+			if(step1Panel.getCSVFilePath() == null ||
+					step1Panel.getCSVFilePath().equals("")) {
 				BackNextController.getInstance().setNextButtonEnabled(false);
 			} else {
 				BackNextController.getInstance().setNextButtonEnabled(true);
@@ -117,7 +117,7 @@ public class Step1Controller extends StepController {
 	}
 	
 	public void browseButtonClicked() {
-		JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter());
 		if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
 			step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
@@ -133,7 +133,7 @@ public class Step1Controller extends StepController {
 		if (step1Panel.getCSVFilePath() != null &&
 				!step1Panel.getCSVFilePath().trim().equals("")) {
 			BackNextController.getInstance().setNextButtonEnabled(true);
-			MainController.getInstance().updateTitle(this.step1Panel.getCSVFilePath());
+			MainController.getInstance().updateTitle(step1Panel.getCSVFilePath());
 		} else {
 			BackNextController.getInstance().setNextButtonEnabled(false);
 		}
@@ -141,7 +141,7 @@ public class Step1Controller extends StepController {
 
 	private class CSVFileFilter extends FileFilter {
 		@Override
-	    public boolean accept(File file) {
+	    public boolean accept(final File file) {
 	        return file.isDirectory() || 
 	        	   file.getName().toLowerCase().endsWith(".csv");
 	    }	
@@ -165,7 +165,7 @@ public class Step1Controller extends StepController {
 	public boolean isFinished() {
 		
 		if (step1Panel != null &&  step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
-			String filePath = step1Panel.getCSVFilePath();
+			final String filePath = step1Panel.getCSVFilePath();
 			if (filePath == null) {
 				JOptionPane.showMessageDialog(null,
 					    "Please choose a CSV file.",
@@ -182,7 +182,7 @@ public class Step1Controller extends StepController {
 				return false;
 			}	
 				
-			File f = new File(filePath);
+			final File f = new File(filePath);
 			
 			if (!f.exists()) {
 				JOptionPane.showMessageDialog(null,
@@ -230,13 +230,13 @@ public class Step1Controller extends StepController {
 			FTPClient client;
 			
 			// proxy
-			String pHost = System.getProperty("proxyHost","proxy");
+			final String pHost = System.getProperty("proxyHost","proxy");
 			int pPort = -1;
 			if (System.getProperty("proxyPort") != null) {
 				pPort = Integer.parseInt(System.getProperty("proxyPort"));
 			}
-			String pUser = System.getProperty( "http.proxyUser");
-			String pPassword = System.getProperty( "http.proxyPassword");
+			final String pUser = System.getProperty( "http.proxyUser");
+			final String pPassword = System.getProperty( "http.proxyPassword");
 			if (pHost != null && pPort != -1) {
 				if (pUser != null && pPassword != null) {
 					client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
@@ -248,7 +248,7 @@ public class Step1Controller extends StepController {
 			
 			// get first file
 			if(step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
-				String csvFilePath = System.getProperty("user.home")
+				final String csvFilePath = System.getProperty("user.home")
 						+ File.separator + ".SOSImporter" + File.separator + "tmp_"
 						+ step1Panel.getFilenameSchema();
 				
@@ -259,18 +259,18 @@ public class Step1Controller extends StepController {
 				
 				try {
 					client.connect(step1Panel.getUrl());
-					boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
+					final boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
 					if (login) {
 						// download file
-						int result = client.cwd(step1Panel.getDirectory());
+						final int result = client.cwd(step1Panel.getDirectory());
 						if (result == 250) { // successfully connected
-							File outputFile = new File(csvFilePath);
-							FileOutputStream fos = new FileOutputStream(outputFile);
+							final File outputFile = new File(csvFilePath);
+							final FileOutputStream fos = new FileOutputStream(outputFile);
 							client.retrieveFile(step1Panel.getFilenameSchema(), fos);
 							fos.flush();
 							fos.close();
 						}
-		                boolean logout = client.logout();
+		                final boolean logout = client.logout();
 		                if (logout) {
 		                	logger.info("Step1Controller: cannot logout!");
 		                }
@@ -278,7 +278,7 @@ public class Step1Controller extends StepController {
 		            	logger.info("Step1Controller: cannot login!");
 		            }
 					
-					File csv = new File(csvFilePath);
+					final File csv = new File(csvFilePath);
 					if (csv.length() != 0) {
 						step1Panel.setCSVFilePath(csvFilePath);
 						readFile(new File(csvFilePath));
@@ -288,14 +288,14 @@ public class Step1Controller extends StepController {
 					}
 					
 					
-				} catch (SocketException e) {
+				} catch (final SocketException e) {
 					System.err.println(e);
 					JOptionPane.showMessageDialog(null,
 						    "The file you specified cannot be obtained.",
 						    "Error",
 						    JOptionPane.ERROR_MESSAGE);
 					return false;
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					System.err.println(e);
 					JOptionPane.showMessageDialog(null,
 						    "The file you specified cannot be obtained.",
@@ -317,21 +317,21 @@ public class Step1Controller extends StepController {
 	 * @return a <code>{@link java.Lang.l().l().String}</code> containing the content 
 	 * 				of the given file
 	 */
-	private String readFile(File f) {
+	private String readFile(final File f) {
 		logger.info("Read CSV file " + f.getAbsolutePath());
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		try {
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
+			final FileReader fr = new FileReader(f);
+			final BufferedReader br = new BufferedReader(fr);
 			String line;
-			this.csvFileRowCount = 0;
+			csvFileRowCount = 0;
 			//
 			while ((line = br.readLine()) != null) {
 				sb.append(line + "\n");
 				csvFileRowCount++;
 			}
 			br.close();
-		} catch (IOException ioe) {
+		} catch (final IOException ioe) {
 			logger.error("Problem while reading CSV file \"" + 
 					f.getAbsolutePath() + "\"",
 					ioe);
@@ -346,14 +346,14 @@ public class Step1Controller extends StepController {
 	
 	@Override
 	public StepController getNextStepController() {			
-		Step2Model s2m = new Step2Model(this.tmpCSVFileContent,this.csvFileRowCount);
-		this.tmpCSVFileContent = null;
+		final Step2Model s2m = new Step2Model(tmpCSVFileContent,csvFileRowCount);
+		tmpCSVFileContent = null;
 		
 		return new Step2Controller(s2m);
 	}
 
 	@Override
 	public StepModel getModel() {
-		return this.step1Model;
+		return step1Model;
 	}
 }

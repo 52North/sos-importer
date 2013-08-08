@@ -26,12 +26,13 @@ package org.n52.sos.importer.model.position;
 import java.text.MessageFormat;
 import java.text.ParseException;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Combination;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Position extends Combination {
 
-	private static final Logger logger = Logger.getLogger(Position.class);
+	private static final Logger logger = LoggerFactory.getLogger(Position.class);
 	
 	private Latitude latitude;
 	
@@ -47,8 +48,8 @@ public class Position extends Combination {
 		super();
 	}
 	
-	public Position(Latitude latitude, Longitude longitude, Height height,
-			EPSGCode epsgCode) {
+	public Position(final Latitude latitude, final Longitude longitude, final Height height,
+			final EPSGCode epsgCode) {
 		super();
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -60,12 +61,14 @@ public class Position extends Combination {
 		return height;
 	}
 
-	public void setHeight(Height height) {
-		if (getGroup() != null)
-			if (height != null)
+	public void setHeight(final Height height) {
+		if (getGroup() != null) {
+			if (height != null) {
 				logger.info("Add " + height + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.height + " from " + this);
+			}
+		}
 		this.height = height;
 	}
 
@@ -73,21 +76,25 @@ public class Position extends Combination {
 		return epsgCode;
 	}
 
-	public void setEPSGCode(EPSGCode epsgCode) {
-		if (getGroup() != null)
-			if (epsgCode != null)
+	public void setEPSGCode(final EPSGCode epsgCode) {
+		if (getGroup() != null) {
+			if (epsgCode != null) {
 				logger.info("Add " + epsgCode + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.epsgCode + " from " + this);
+			}
+		}
 		this.epsgCode = epsgCode;
 	}
 
-	public void setLongitude(Longitude longitude) {
-		if (getGroup() != null)
-			if (longitude != null)
+	public void setLongitude(final Longitude longitude) {
+		if (getGroup() != null) {
+			if (longitude != null) {
 				logger.info("Add " + longitude + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.longitude + " from " + this);
+			}
+		}
 		this.longitude = longitude;
 	}
 
@@ -95,12 +102,14 @@ public class Position extends Combination {
 		return longitude;
 	}
 
-	public void setLatitude(Latitude latitude) {
-		if (getGroup() != null)
-			if (latitude != null)
+	public void setLatitude(final Latitude latitude) {
+		if (getGroup() != null) {
+			if (latitude != null) {
 				logger.info("Add " + latitude + " to " + this);
-			else
+			} else {
 				logger.info("Remove " + this.latitude + " from " + this);
+			}
+		}
 		this.latitude = latitude;
 	}
 
@@ -108,17 +117,19 @@ public class Position extends Combination {
 		return latitude;
 	}
 
-	public void setGroup(String group) {
+	@Override
+	public void setGroup(final String group) {
 		this.group = group;
 	}
 
+	@Override
 	public String getGroup() {
 		return group;
 	}
 
 	@Override
-	public String format(Object o) {
-		Position p = (Position) o;
+	public String format(final Object o) {
+		final Position p = (Position) o;
 		String positionString = getPattern();
 		// TODO remove explicit string from here
 		positionString = positionString.replaceAll("LAT", p.getLatitude().getValue() + p.getLatitude().getUnit());
@@ -129,7 +140,7 @@ public class Position extends Combination {
 	}
 
 	@Override
-	public Position parse(String s) {
+	public Position parse(final String s) {
 		String pattern = getPattern();
 		
 		pattern = pattern.replaceAll("LAT", "{0}");
@@ -137,39 +148,45 @@ public class Position extends Combination {
 		pattern = pattern.replaceAll("ALT", "{2}");
 		pattern = pattern.replaceAll("EPSG", "{3}");
 		
-		MessageFormat mf = new MessageFormat(pattern);
+		final MessageFormat mf = new MessageFormat(pattern);
 		Object[] o = null;
 		try {
 			o = mf.parse(s);
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			throw new NumberFormatException();
 		}
 		
-		if (o == null)
+		if (o == null) {
 			throw new NumberFormatException();
+		}
 			
 		Latitude latitude = null;
 		Longitude longitude = null;
 		Height height = null;
 		EPSGCode epsgCode = null;
 			
-		if (o.length > 0 && o[0] != null) 
+		if (o.length > 0 && o[0] != null) {
 			latitude = Latitude.parse((String) o[0]);
-		if (o.length > 1 && o[1] != null) 
+		}
+		if (o.length > 1 && o[1] != null) {
 			longitude = Longitude.parse((String)o[1]);
-		if (o.length > 2 && o[2] != null) 
+		}
+		if (o.length > 2 && o[2] != null) {
 			height = Height.parse((String)o[2]);
-		if (o.length > 3 && o[3] != null)
+		}
+		if (o.length > 3 && o[3] != null) {
 			epsgCode = EPSGCode.parse((String)o[3]);
+		}
 		return new Position(latitude, longitude, height, epsgCode);
 	}
 
 	@Override
 	public String toString() {
-		if (getGroup() == null)
+		if (getGroup() == null) {
 			return "Position (" + latitude + ", " + longitude + ", " 
 			+ height + ", " + epsgCode + ")";
-		else
+		} else {
 			return "Position group " + getGroup();
+		}
 	}
 }

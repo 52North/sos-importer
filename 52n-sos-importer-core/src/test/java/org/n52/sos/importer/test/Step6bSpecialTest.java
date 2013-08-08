@@ -27,10 +27,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6bSpecialController;
@@ -44,24 +40,23 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Step6bSpecialTest {
 	
-	private static final Logger logger = Logger.getLogger(Step6bSpecialTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTest.class);
 
-	public static void main(String[] args) throws URISyntaxException {
-		// init logger
-		Logger root = Logger.getRootLogger();
-		root.setLevel(Level.DEBUG);
-		root.addAppender(new ConsoleAppender(new PatternLayout("%-6r %-1p (%c{1}.java:%L) - %m %n")));
+	public static void main(final String[] args) throws URISyntaxException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Start Test");
 		}
-		MainController mC = MainController.getInstance();
-		TableController tc = TableController.getInstance();
-		ModelStore ms = ModelStore.getInstance(); 
-		Object[][] o = TestData.EXAMPLE_TABLE_NO_FOI;
-		int firstLineWithData = 1, i = 0;
+		final MainController mC = MainController.getInstance();
+		final TableController tc = TableController.getInstance();
+		final ModelStore ms = ModelStore.getInstance(); 
+		final Object[][] o = TestData.EXAMPLE_TABLE_NO_FOI;
+		final int firstLineWithData = 1;
+		int i = 0;
 		MeasuredValue mv;
 		Column markedColumn;
 		Constants.GUI_DEBUG = false;

@@ -23,10 +23,11 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.table.TableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
@@ -39,11 +40,11 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 	
-	private static final Logger logger = Logger.getLogger(Step5cModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step5cModelHandler.class);
 
 	@Override
-	public void handleModel(Step5cModel stepModel,
-			SosImportConfiguration sosImportConf) {
+	public void handleModel(final Step5cModel stepModel,
+			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
@@ -102,7 +103,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 		// 4.4 check EPSG code
 		if (pos.getEPSGCode() != null &&
 				pos.getEPSGCode().getTableElement() == null) {
-			int valI = pos.getEPSGCode().getValue();
+			final int valI = pos.getEPSGCode().getValue();
 			if (valI != Constants.NO_INPUT_INT) {
 				key = Key.POSITION_EPSG_CODE;
 				value = valI + "";
@@ -112,7 +113,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 	}
 
 	private TableElement getTableElementFromPosition(
-			org.n52.sos.importer.model.position.Position pos) {
+			final org.n52.sos.importer.model.position.Position pos) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getTableElementFromPosition()");
 		}

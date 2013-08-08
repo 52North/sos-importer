@@ -30,13 +30,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * consists of a text field for the longitude and a combobox for the units
@@ -47,7 +48,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(MissingLongitudePanel.class);
+	private static final Logger logger = LoggerFactory.getLogger(MissingLongitudePanel.class);
 
 	private final Position position;
 	
@@ -56,27 +57,29 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	private final JLabel longitudeUnitLabel;
 	private final JComboBox longitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
 	
-	public MissingLongitudePanel(Position position) {
+	public MissingLongitudePanel(final Position position) {
 		super();
 		this.position = position;
 		longitudeTextField.setText("0");
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.longitudeLabel = new JLabel("   " + Lang.l().longitudeEasting() + ": ");
+		setLayout(new FlowLayout(FlowLayout.LEFT));
+		longitudeLabel = new JLabel("   " + Lang.l().longitudeEasting() + ": ");
 		this.add(longitudeLabel);
 		this.add(longitudeTextField);
-		this.longitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+		longitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
 		this.add(longitudeUnitLabel);
 		this.add(longitudeUnitComboBox);
 	}
 	
+	@Override
 	public void assignValues() {
-		double value = Double.parseDouble(longitudeTextField.getText());
-		String unit = (String) longitudeUnitComboBox.getSelectedItem();
-		Longitude l = new Longitude(value, unit);
+		final double value = Double.parseDouble(longitudeTextField.getText());
+		final String unit = (String) longitudeUnitComboBox.getSelectedItem();
+		final Longitude l = new Longitude(value, unit);
 		position.setLongitude(l);
 	}
 	
+	@Override
 	public void unassignValues() {
 		position.setLongitude(null);
 	}
@@ -87,7 +90,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 		try {
 			longVal = longitudeTextField.getText();
 			Double.parseDouble(longVal);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			logger.error("Given Longitude value could not be parsed: " + longVal, e);
 			JOptionPane.showMessageDialog(null,
 				    Lang.l().longitudeDialogDecimalValue(),
@@ -100,14 +103,14 @@ public class MissingLongitudePanel extends MissingComponentPanel {
 	
 	@Override
 	public Component getMissingComponent() {
-		double value = Double.parseDouble(longitudeTextField.getText());
-		String unit = (String) longitudeUnitComboBox.getSelectedItem();
+		final double value = Double.parseDouble(longitudeTextField.getText());
+		final String unit = (String) longitudeUnitComboBox.getSelectedItem();
 		return new Longitude(value, unit);
 	}
 
 	@Override
-	public void setMissingComponent(Component c) {
-		Longitude longitude = (Longitude)c;
+	public void setMissingComponent(final Component c) {
+		final Longitude longitude = (Longitude)c;
 		longitudeTextField.setText(longitude.getValue() + "");
 		longitudeUnitComboBox.setSelectedItem(longitude.getUnit());
 	}

@@ -23,9 +23,10 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import org.apache.log4j.Logger;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.CredentialsDocument.Credentials;
 import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
 import org.x52North.sensorweb.sos.importer.x02.LocalFileDocument.LocalFile;
@@ -42,7 +43,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  */
 public class Step1ModelHandler implements ModelHandler<Step1Model> {
 	
-	private static final Logger logger = Logger.getLogger(Step1ModelHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(Step1ModelHandler.class);
 
 	@Override
 	public void handleModel(final Step1Model stepModel, final SosImportConfiguration sosImportConf) {
