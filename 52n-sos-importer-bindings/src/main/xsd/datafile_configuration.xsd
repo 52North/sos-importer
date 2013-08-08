@@ -130,7 +130,7 @@
 	</xs:element>
 	<xs:element name="RegularExpresssionForAllowedFileNames" nillable="false">
 		<xs:annotation>
-			<xs:documentation>Optional regular expression the data files have to match if Path is pointing to an directory.</xs:documentation>
+			<xs:documentation>Optional regular expression the data files have to match if Path is pointing to an directory. Specify the expression in conformance to http://docs.oracle.com/javase/6/docs/api/index.html?java/util/regex/Pattern.html</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string"/>
