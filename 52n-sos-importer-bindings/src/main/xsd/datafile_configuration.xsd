@@ -7,7 +7,7 @@
 			
 	-->
 	<xs:annotation>
-		<xs:documentation>Namespace ../0.2/ is chosen to match the application version.</xs:documentation>
+		<xs:documentation>TODO enter docuementation here.</xs:documentation>
 	</xs:annotation>
 	<xs:element name="CommentIndicator">
 		<xs:annotation>
@@ -48,6 +48,22 @@
 			<xs:restriction base="xs:int">
 				<xs:minInclusive value="0"/>
 			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="ID" nillable="false">
+		<xs:annotation>
+			<xs:documentation>A ID for linking resources to column and vice versa.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:ID"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="IdRef">
+		<xs:annotation>
+			<xs:documentation>A link to another resource using an ID.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:IDREF"/>
 		</xs:simpleType>
 	</xs:element>
 	<xs:element name="Key">
@@ -107,6 +123,14 @@
 	<xs:element name="Path" nillable="false">
 		<xs:annotation>
 			<xs:documentation>Operating System compliant definition of the path to the local data file.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="RegularExpresssionForAllowedFileNames" nillable="false">
+		<xs:annotation>
+			<xs:documentation>Optional regular expression the data files have to match if Path is pointing to an directory.</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string"/>
@@ -216,22 +240,6 @@
 			<xs:restriction base="xs:string">
 				<xs:maxLength value="256"/>
 			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="ID" nillable="false">
-		<xs:annotation>
-			<xs:documentation>A ID for linking resources to column and vice versa.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:ID"/>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="IdRef">
-		<xs:annotation>
-			<xs:documentation>A link to another resource using an ID.</xs:documentation>
-		</xs:annotation>
-		<xs:simpleType>
-			<xs:restriction base="xs:IDREF"/>
 		</xs:simpleType>
 	</xs:element>
 	<!--
@@ -567,6 +575,7 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="Path"/>
+				<xs:element ref="RegularExpresssionForAllowedFileNames" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -668,16 +677,15 @@
 						<xs:documentation>Offering in the SOS which is used for the import. Might be generated from sensor id.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="Version" type="xs:string"
-					maxOccurs="1" minOccurs="1">
+				<xs:element name="Version" type="xs:string">
 					<xs:annotation>
 						<xs:documentation>Indicates the specification version implemented by the SOS instance. E.g. 1.0.0, 2.0.0.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="Binding" type="xs:string" maxOccurs="1" minOccurs="0">
-				    <xs:annotation>
-				        <xs:documentation>If version 2.0.0 is used, the binding has to be defined, e.g. SOAP, POX binding.</xs:documentation>
-				    </xs:annotation>
+				<xs:element name="Binding" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>If version 2.0.0 is used, the binding has to be defined, e.g. SOAP, POX binding.</xs:documentation>
+					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
