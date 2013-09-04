@@ -63,7 +63,7 @@ public final class Feeder {
 				if (args.length == 2) 
 				{ 
 					// Case: one time feeding with defined configuration
-					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getCanonicalName()).start();
+					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
 				} 
 				else if (args.length == 4)
 				{ 
