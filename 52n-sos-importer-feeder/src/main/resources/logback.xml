@@ -22,10 +22,10 @@
 		
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${logFile}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
-			<!-- keep ${config.logger.history.max} days' worth of history -->
-			<maxHistory>${config.logger.history.max}</maxHistory>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>${config.logger.maxFileSize}</maxFileSize>
+				<maxFileSize>5MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
 		<encoder>
