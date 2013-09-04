@@ -32,16 +32,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.opengis.sensorML.x101.SensorMLDocument;
-import net.opengis.sensorML.x101.SystemDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument;
+import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
 import net.opengis.sos.x10.RegisterSensorResponseDocument;
+import net.opengis.sos.x20.InsertObservationResponseType;
+import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
@@ -51,19 +53,21 @@ import org.n52.oxf.ows.OWSException;
 import org.n52.oxf.ows.OwsExceptionCode;
 import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
+import org.n52.oxf.sos.adapter.ISOSRequestBuilder.Binding;
 import org.n52.oxf.sos.adapter.SOSAdapter;
 import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
-import org.n52.oxf.sos.adapter.wrapper.builder.InsertObservationParameterBuilder_v100;
+import org.n52.oxf.sos.adapter.wrapper.SosWrapperFactory;
 import org.n52.oxf.sos.adapter.wrapper.builder.ObservationTemplateBuilder;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.oxf.sos.capabilities.ObservationOffering;
 import org.n52.oxf.sos.capabilities.SOSContents;
-import org.n52.oxf.sos.request.observation.BooleanObservationParameters;
-import org.n52.oxf.sos.request.observation.CountObservationParameters;
-import org.n52.oxf.sos.request.observation.MeasurementObservationParameters;
-import org.n52.oxf.sos.request.observation.ObservationParameters;
-import org.n52.oxf.sos.request.observation.TextObservationParameters;
+import org.n52.oxf.sos.observation.BooleanObservationParameters;
+import org.n52.oxf.sos.observation.CountObservationParameters;
+import org.n52.oxf.sos.observation.MeasurementObservationParameters;
+import org.n52.oxf.sos.observation.ObservationParameters;
+import org.n52.oxf.sos.observation.TextObservationParameters;
 import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
+import org.n52.oxf.sos.request.v200.InsertSensorParameters;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -85,6 +89,10 @@ import au.com.bytecode.opencsv.CSVReader;
 public final class SensorObservationService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SensorObservationService.class);
+
+	private static final String SML_101_FORMAT_URI = "http://www.opengis.net/sensorML/1.0.1";
+
+	private static final String OM_200_SAMPLING_FEATURE = "http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint";
 	
 	private final URL sosUrl;
 	private final String sosVersion;
@@ -93,7 +101,8 @@ public final class SensorObservationService {
 	private final ArrayList<String> registeredSensors;
 	private final ArrayList<InsertObservation> failedInsertObservations;
 	private int lastLine = 0;
-	private final String sosBinding;
+	private final Binding sosBinding;
+	private Map<String, String> offerings;
 	
 	public SensorObservationService(final URL sosUrl, final String version, final String binding) throws ExceptionReport, OXFException {
 		if (LOG.isTraceEnabled()) {
@@ -101,11 +110,25 @@ public final class SensorObservationService {
 		}
 		this.sosUrl = sosUrl;
 		sosVersion = version;
-		sosBinding = binding;
-		sosWrapper = SOSWrapper.createFromCapabilities(sosUrl.toString(), sosVersion);
+		sosBinding = getBinding(binding);
+		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
 		failedInsertObservations = new ArrayList<InsertObservation>();
 		registeredSensors = new ArrayList<String>();
+		if (sosVersion.equals("2.0.0")) {
+			offerings = new HashMap<String, String>();
+		}
+	}
+
+	private Binding getBinding(final String binding) throws OXFException
+	{
+		if (binding.equals(Binding.POX.name())) {
+			return Binding.POX;
+		}
+		if (binding.equals(Binding.SOAP.name())) {
+			return Binding.SOAP;
+		}
+		throw new OXFException(String.format("Binding not supported by this implementation: %s",binding));
 	}
 
 	public boolean isAvailable() {
@@ -126,15 +149,16 @@ public final class SensorObservationService {
 			return false;
 		}
 		final OperationsMetadata opMeta = serviceDescriptor.getOperationsMetadata();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(String.format("OperationsMetadata found: %s", opMeta));
-		}
+		LOG.debug(String.format("OperationsMetadata found: %s", opMeta));
 		// check for RegisterSensor and InsertObservationOperation
 		// TODO implement version specific
-		if (opMeta.getOperationByName(SOSAdapter.REGISTER_SENSOR) != null &&
+		if ((opMeta.getOperationByName(SOSAdapter.REGISTER_SENSOR) != null ||
+				opMeta.getOperationByName(SOSAdapter.INSERT_SENSOR) != null)
+				&&
 				opMeta.getOperationByName(SOSAdapter.INSERT_OBSERVATION) != null) {
-			LOG.debug(String.format("Found all required operations: %s, %s",
+			LOG.debug(String.format("Found all required operations: (%s|%s), %s",
 					SOSAdapter.REGISTER_SENSOR,
+					SOSAdapter.INSERT_SENSOR,
 					SOSAdapter.INSERT_OBSERVATION));
 			return true;
 		}
@@ -359,27 +383,36 @@ public final class SensorObservationService {
 	private String insertObservation(final InsertObservation io) throws IOException {
 		LOG.trace("insertObservation()");
 		OperationResult opResult = null;
-		InsertObservationResponseDocument response = null;
-		InsertObservationParameterBuilder_v100 builder = null;
+		org.n52.oxf.sos.request.InsertObservationParameters parameters = null;
 		
 		try {
-			builder = createParameterBuilderFromIO(io);
+			parameters = createParameterAssemblyFromIO(io);
 			try {
 				LOG.debug("\n\nBEFORE OXF - doOperation \"InsertObservation\"\n\n");
-				opResult = sosWrapper.doInsertObservation(builder);
+				opResult = sosWrapper.doInsertObservation(parameters);
 				LOG.debug("\n\nAFTER OXF - doOperation \"InsertObservation\"\n\n");
 				if (sosVersion.equals("1.0.0")) {
 					try {
-						response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
 						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
-								response.getInsertObservationResponse().getAssignedObservationId()));
-						return response.getInsertObservationResponse().getAssignedObservationId();
+								response.getAssignedObservationId()));
+						return response.getAssignedObservationId();
 					} catch (final XmlException e) {
 						// TODO Auto-generated catch block generated on 20.06.2012 around 10:43:01
 						LOG.error(String.format("Exception thrown: %s",e.getMessage()),e);
 					} catch (final IOException e) {
 						// TODO Auto-generated catch block generated on 20.06.2012 around 10:43:01
 						LOG.error(String.format("Exception thrown: %s",e.getMessage()),e);
+					}
+				}
+				else if (sosVersion.equals("2.0.0")) {
+					try {
+						final InsertObservationResponseType response = net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						LOG.debug("Observation inserted successfully.");
+						return "SOS 2.0 InsertObservation doesn't return the assigned id";
+					} catch (final XmlException e) {
+						// TODO Auto-generated catch block generated on 04.09.2013 around 16:33:33
+						LOG.error("Exception thrown: {}", e.getMessage(), e);
 					}
 				}
 			} catch (final ExceptionReport e) {
@@ -411,11 +444,10 @@ public final class SensorObservationService {
         return null;
 	}
 
-	private InsertObservationParameterBuilder_v100 createParameterBuilderFromIO(
+	private org.n52.oxf.sos.request.InsertObservationParameters createParameterAssemblyFromIO(
 			final InsertObservation io) throws OXFException {
 		
 		LOG.trace("createParameterBuilderFromIO()");
-		
 		ObservationParameters obsParameter = null;
 		
 		if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
@@ -437,10 +469,9 @@ public final class SensorObservationService {
 			((MeasurementObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
 		}
 		obsParameter.addObservedProperty(io.getObservedPropertyURI());
-		obsParameter.addFoiId(io.getFeatureOfInterestName());
-		obsParameter.addNewFoiName(io.getFeatureOfInterestURI());
+		obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
+		obsParameter.addNewFoiName(io.getFeatureOfInterestName());
 		obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
-		obsParameter.addSrsPosition(Configuration.EPSG_CODE_PREFIX + io.getEpsgCode());
 		// position
 		boolean eastingFirst = false;
 		if (Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode()) == null) {
@@ -457,23 +488,61 @@ public final class SensorObservationService {
 							io.getLongitudeValue());
 		obsParameter.addFoiPosition(pos);
 		obsParameter.addObservedProperty(io.getObservedPropertyURI());
-		obsParameter.addSamplingTime(io.getTimeStamp());
+		obsParameter.addProcedure(io.getSensorURI());
+
+		if (sosVersion.equalsIgnoreCase("2.0.0")) {
+			obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + io.getEpsgCode());
+			obsParameter.addPhenomenonTime(io.getTimeStamp());
+			obsParameter.addResultTime(io.getTimeStamp());
+			return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(io.getSensorURI()));
+		} 
 		
-		return new InsertObservationParameterBuilder_v100(io.getSensorURI(), obsParameter);
+		obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
+		obsParameter.addSamplingTime(io.getTimeStamp());
+		return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
+	}
+
+	private String getOfferingForSensor(final InsertObservation io)
+	{
+		if (offerings != null && offerings.containsKey(io.getSensorURI())){
+			return offerings.get(io.getSensorURI());
+		}
+		final SOSContents sosContent = (SOSContents) serviceDescriptor.getContents();
+		final String[] offeringIds = sosContent.getDataIdentificationIDArray();
+		if (offeringIds != null) {
+			for (final String offeringId : offeringIds) {
+				final ObservationOffering offering = sosContent.getDataIdentification(offeringId);
+				final String[] sensorIds = offering.getProcedures();
+				for (final String sensorId : sensorIds) {
+					if (sensorId.equals(io.getSensorURI())) {
+						return offering.getIdentifier();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	private String registerSensor(final RegisterSensor rs, final String[] values) throws OXFException, XmlException, IOException {
-		LOG.trace("registerSensor()");
-		final RegisterSensorParameters regSensorParameter = createParameterBuilderFromRS(rs);
 		try {
-			final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
-			if(sosVersion.equals("1.0.0")){
+			if(sosVersion.equals("1.0.0")) {
+				LOG.trace("registerSensor()");
+				final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
+				final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
 				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 				LOG.debug("RegisterSensorResponse parsed");
 				return response.getRegisterSensorResponse().getAssignedSensorId();
 			}
+			else if (sosVersion.equals("2.0.0")) {
+				LOG.trace("insertSensor()");
+				final InsertSensorParameters insSensorParams = createInsertSensorParametersFromRS(rs);
+				final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
+				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+				LOG.debug("InsertSensorResponse parsed");
+				offerings.put(response.getInsertSensorResponse().getAssignedProcedure(),response.getInsertSensorResponse().getAssignedOffering());
+				return response.getInsertSensorResponse().getAssignedProcedure();
+			}
 		} catch (final ExceptionReport e) {
-			// TODO Auto-generated catch block generated on 21.06.2012 around 14:53:40
 			// Handle already registered sensor case here (happens when the sensor is registered but not listed in the capabilities):
 			final Iterator<OWSException> iter = e.getExceptionsIterator();
 			while(iter.hasNext()) {
@@ -484,6 +553,19 @@ public final class SensorObservationService {
 					for (final String string : owsEx.getExceptionTexts()) {
 						if (string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START) > -1 &&
 								string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END) > -1) {
+							return rs.getSensorURI();
+						}
+					}
+				}
+				// handle offering already contained case here
+				else if (owsEx.getExceptionCode().equals(OwsExceptionCode.InvalidParameterValue.name()) &&
+						owsEx.getLocator().equals("offeringIdentifier") &&
+						owsEx.getExceptionTexts() != null &&
+						owsEx.getExceptionTexts().length > 0) {
+					for (final String string : owsEx.getExceptionTexts()) {
+						if (string.indexOf(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START) > -1 &&
+								string.indexOf(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END) > -1) {
+							offerings.put(rs.getSensorURI(), rs.getOfferingUri());
 							return rs.getSensorURI();
 						}
 					}
@@ -512,17 +594,67 @@ public final class SensorObservationService {
 		return null;
 	}
 
-	private RegisterSensorParameters createParameterBuilderFromRS(
+	private InsertSensorParameters createInsertSensorParametersFromRS(final RegisterSensor rs) throws XmlException, IOException
+	{
+		return new InsertSensorParameters(createSML(rs),
+				SML_101_FORMAT_URI,
+				getObservedPropertyURIs(rs.getObservedProperties()),
+				Collections.singleton(OM_200_SAMPLING_FEATURE),
+				getObservationTypeURIs(rs));
+	}
+
+	private Collection<String> getObservationTypeURIs(final RegisterSensor rs)
+	{
+		if (rs == null || rs.getObservedProperties() == null || rs.getObservedProperties().size() < 1) {
+			return Collections.emptyList();
+		}
+		final Set<String> tmp = new HashSet<String>(rs.getObservedProperties().size());
+		for (final ObservedProperty obsProp : rs.getObservedProperties()) {
+			final String measuredValueType = rs.getMeasuredValueType(obsProp);
+			if (measuredValueType != null) {
+				tmp.add(getURIForObservationType(measuredValueType));
+			}
+		}
+		return tmp;
+	}
+
+	private String getURIForObservationType(final String measuredValueType)
+	{
+		if (measuredValueType.equals("NUMERIC")) {
+			return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement";
+		}
+		if (measuredValueType.equals("COUNT")) {
+			return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CountObservation";
+		}
+		if (measuredValueType.equals("BOOLEAN")) {
+			return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_TruthObservation";
+		}
+		if (measuredValueType.equals("TEXT")) {
+			return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_TextObservation";
+		}
+		final String errorMsg = String.format("Observation type '%s' not supported!", measuredValueType);
+		LOG.error(errorMsg);
+		throw new IllegalArgumentException(errorMsg);
+	}
+
+	private Collection<String> getObservedPropertyURIs(final Collection<ObservedProperty> observedProperties)
+	{
+		if (observedProperties == null || observedProperties.size() < 1) {
+			return Collections.emptyList();
+		}
+		final Collection<String> result = new ArrayList<String>(observedProperties.size());
+		for (final ObservedProperty observedProperty : observedProperties) {
+			result.add(observedProperty.getUri());
+		}
+		return result;
+	}
+
+	private RegisterSensorParameters createRegisterSensorParametersFromRS(
 			final RegisterSensor registerSensor) throws OXFException, XmlException, IOException {
 		LOG.trace("createParameterContainterFromRS()");
 		
 		// create SensorML
-		final SystemDocument sml = createSML(registerSensor);
-		final SensorMLDocument sensorMLDocument = SensorMLDocument.Factory.newInstance();
-		sensorMLDocument.addNewSensorML().addNewMember().set(sml);
-		sensorMLDocument.getSensorML().setVersion("1.0.1"); // TODO version variable
-		
-        // create template --> within the 52N 1.0.0 SOS implementation this template is somehow ignored --> take first observed property to get values for template
+		// create template --> within the 52N 1.0.0 SOS implementation this template is somehow ignored --> take first observed property to get values for template
 		ObservationTemplateBuilder observationTemplate;
 		final ObservedProperty firstObservedProperty = registerSensor.getObservedProperties().iterator().next();
 		if (registerSensor.getMeasuredValueType(firstObservedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
@@ -536,10 +668,10 @@ public final class SensorObservationService {
 		}
 		observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
 		
-		return new RegisterSensorParameters(sensorMLDocument.toString(), observationTemplate.generateObservationTemplate());
+		return new RegisterSensorParameters(createSML(registerSensor), observationTemplate.generateObservationTemplate());
 	}
 
-	private SystemDocument createSML(final RegisterSensor rs) throws XmlException, IOException {
+	private String createSML(final RegisterSensor rs) throws XmlException, IOException {
 		LOG.trace("createSML()");
 		final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
 		
@@ -563,6 +695,7 @@ public final class SensorObservationService {
 				rs.getLongitudeValue(), rs.getLatitudeUnit(),
 				rs.getLatitudeValue());
 		
+		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:offeringID",rs.getOfferingUri());
 		// set position data
 		builder.setPosition("sensorPosition",
 				SensorDescriptionBuilder.EPSG_CODE_PREFIX + rs.getEpsgCode(),
@@ -619,6 +752,21 @@ public final class SensorObservationService {
 					sosUrl));
 			return false;
 		}
+		// 0 check operation metadata of DescribeSensor
+//		if (serviceDescriptor.getOperationsMetadata() != null &&
+//				serviceDescriptor.getOperationsMetadata().getOperationByName(SOSAdapter.DESCRIBE_SENSOR) != null &&
+//				serviceDescriptor.getOperationsMetadata().getOperationByName(SOSAdapter.DESCRIBE_SENSOR).getParameters() != null &&
+//				serviceDescriptor.getOperationsMetadata().getOperationByName(SOSAdapter.DESCRIBE_SENSOR).getParameters().size() > 0)
+//		{
+//			for (final Parameter parameter : serviceDescriptor.getOperationsMetadata().getOperationByName(SOSAdapter.DESCRIBE_SENSOR).getParameters()) {
+//				if (((parameter.getCommonName() != null && parameter.getCommonName().equals("procedure")) || (parameter.getServiceSidedName() != null && parameter.getServiceSidedName().equals("procedure"))) &&
+//						parameter.getValueDomain().containsValue(sensorURI)) {
+//					return true;
+//				}
+//			}
+//		}
+	
+		// 1 check if offering is available
 		final SOSContents sosContent = (SOSContents) serviceDescriptor.getContents();
 		final String[] offeringIds = sosContent.getDataIdentificationIDArray();
 		if (offeringIds != null) {
@@ -631,7 +779,8 @@ public final class SensorObservationService {
 					}
 				}
 			}
-		} // check the list of newly registered sensors because the capabilities update might take to long to wait for
+		}
+		// 2 check the list of newly registered sensors because the capabilities update might take to long to wait for
 		if (registeredSensors != null && registeredSensors.size() > 0) {
 			for (final String sensorId : registeredSensors) {
 				if (sensorId.equals(sensorURI)) {

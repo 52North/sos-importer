@@ -79,7 +79,8 @@ public final class Configuration {
 	private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
 	private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
 	// TODO read from configuration file
-	public static final String EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
+	public static final String SOS_200_EPSG_CODE_PREFIX = "http://www.opengis.net/def/crs/EPSG/0/";
+	public static final String SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
 	public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
 	private static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
 	private static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
@@ -110,6 +111,10 @@ public final class Configuration {
 	public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = "urn:ogc:def:property:OGC:1.0:observedBBOX";
 
 	public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = "This observation is already contained in SOS database!";
+
+	public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START = "The offering with the identifier";
+	public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
+
 	public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
 	static {
 		EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
