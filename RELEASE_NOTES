@@ -11,7 +11,8 @@ Features:
  
 Changes:
 --------
- * 
+ * SOS 2.0 support incl. bindings
+ * Support for sensors with multiple outputs
 
 Bugfixes:
 ---------
