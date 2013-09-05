@@ -51,18 +51,17 @@ public class RepeatedFeeder extends TimerTask{
 
 	private final Configuration configuration;
 	private final File file;
+
+	private final int periodInMinutes;
 	
 	final private static Lock oneFeederLock = new ReentrantLock(true);
 	
 	private static File lastUsedDateFile;
 	
-	public RepeatedFeeder(final Configuration c) {
-		this(c,c.getDataFile());
-	}
-
-	public RepeatedFeeder(final Configuration c, final File f) {
+	public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
 		configuration = c;
 		file = f;
+		this.periodInMinutes = periodInMinutes;
 	}
 
 	@Override
@@ -70,7 +69,6 @@ public class RepeatedFeeder extends TimerTask{
 		File datafile;
 		oneFeederLock.lock(); // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
 		try {
-			// FIXME implement new logic
 			/*
 			 * save last feeded file incl. counter
 			 * check for newer files
@@ -86,14 +84,16 @@ public class RepeatedFeeder extends TimerTask{
 					filesToFeed.add(lastUsedDateFile);
 				}
 				addNewerFiles(filesToFeed);
-				// TODO for each in "filesToFeed" run a single OneTimeFeeder
 				for (final File fileToFeed : filesToFeed) {
 					LOG.info("Start feeding file {}",fileToFeed.getName());
 					try {
 						new OneTimeFeeder(configuration, fileToFeed).run();
-						LOG.info("Finished feeding file {}.",fileToFeed.getName());
 						lastUsedDateFile = fileToFeed;
 						saveLastFeedFile();
+						LOG.info("Finished feeding file {}. Next run in {} minute{}.",
+								fileToFeed.getName(),
+								periodInMinutes,
+								periodInMinutes>1?"s":"");
 					} 
 					catch (final InvalidColumnCountException iae) {
 						// Exception is already logged -> nothing to do
@@ -107,7 +107,6 @@ public class RepeatedFeeder extends TimerTask{
 				// OneTimeFeeder with file override used not as thread
 				new OneTimeFeeder(configuration, datafile).run();
 			}
-			// TODO finished feeding for datafile -> store as last feeded
 		} catch (final Exception e) {
 			LOG.debug("Exception catched: {}", e.getMessage(),e);
 		} finally {
@@ -130,15 +129,15 @@ public class RepeatedFeeder extends TimerTask{
 		});
 		if (files != null) {
 
-			for (final File file2 : files) {
-				if (lastUsedDateFile == null || file2.lastModified() > lastUsedDateFile.lastModified()) {
-					filesToFeed.add(file2);
+			for (final File file : files) {
+				if (lastUsedDateFile == null || file.lastModified() > lastUsedDateFile.lastModified()) {
+					filesToFeed.add(file);
 				}
 			}
 			if (filesToFeed.size() < 1) {
 				LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
 						file.getAbsolutePath(),
-						lastUsedDateFile.getName());
+						lastUsedDateFile!=null?lastUsedDateFile.getName():"none");
 			}
 		} else {
 			LOG.error("No file found in directory '{}'",file.getAbsolutePath());
@@ -147,11 +146,10 @@ public class RepeatedFeeder extends TimerTask{
 	
 	private void saveLastFeedFile()
 	{
-		// TODO Auto-generated method "saveLastFeedFile" stub generated on 07.08.2013 around 10:35:50 by eike
 		final Properties prop = new Properties();
 		prop.put("lastFeedFile", lastUsedDateFile.getAbsolutePath());
 		try {
-			prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath() + "_lastFeedFile")), null);
+			prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"), null);
 			LOG.info("Saved last used data file: {}", lastUsedDateFile.getName());
 		} catch (final IOException e) {
 			LOG.error("Exception thrown: {}", e.getMessage(), e);
@@ -160,10 +158,9 @@ public class RepeatedFeeder extends TimerTask{
 
 	private void getLastFeedFile()
 	{
-		// TODO get last feed file from .SOSImporter/$configfile_lastFeedFile and add to list "filesToFeed"
 		final Properties prop = new Properties();
 		try {
-			prop.load(new FileReader(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath() + "_lastFeedFile")));
+			prop.load(new FileReader(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"));
 		} catch (final IOException e) {
 			LOG.debug("Exception thrown: {}", e.getMessage(), e); // only on DEBUG because it is not a problem if this file does not exist
 		}

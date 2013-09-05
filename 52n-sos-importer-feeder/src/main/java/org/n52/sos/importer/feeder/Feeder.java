@@ -113,7 +113,7 @@ public final class Feeder {
 
 	private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
 		final Timer t = new Timer("FeederTimer");
-		t.schedule(new RepeatedFeeder(c,f), 1, periodInMinutes*1000*60);
+		t.schedule(new RepeatedFeeder(c,f,periodInMinutes), 1, periodInMinutes*1000*60);
 	}
 
 	private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
