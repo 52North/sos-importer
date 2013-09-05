@@ -171,6 +171,8 @@ public final class SensorObservationService {
 		final CSVReader cr = dataFile.getCSVReader();
 		String[] values;
 		int lineCounter = dataFile.getFirstLineWithData();
+		final int failedObservationsBefore = failedInsertObservations.size();
+		int numOfObsTriedToInsert = 0;
 		// 1 Get all measured value columns =: mvCols
 		final int[] mVCols = dataFile.getMeasuredValueColumnIds();
 		if (mVCols == null || mVCols.length == 0) {
@@ -189,6 +191,7 @@ public final class SensorObservationService {
 				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter+1,Arrays.toString(values)));
 				// A: collect all information
 				final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+				numOfObsTriedToInsert += ios.length;
 				insertObservationsForOneLine(ios,values,dataFile);
 				lineCounter++; // line counter overreads failed insert observations
 				LOG.debug(Feeder.heapSizeInformation());
@@ -204,6 +207,9 @@ public final class SensorObservationService {
 			}
 			skipCount--;
 		}
+		final int newFailedObservationsCount = failedInsertObservations.size()-failedObservationsBefore;
+		final int newObservationsCount = numOfObsTriedToInsert-newFailedObservationsCount;
+		LOG.info("New observations in SOS: {}. Failed observations: {}.", newObservationsCount,newFailedObservationsCount);
 		return failedInsertObservations;
 	}
 
