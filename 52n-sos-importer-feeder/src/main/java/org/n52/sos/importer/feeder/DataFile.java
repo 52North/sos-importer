@@ -264,9 +264,11 @@ public class DataFile {
 		if (!NcNameResolver.isNCName(foi.getName())){
 			final String[] a = createCleanNCName(foi); 
 			foi.setName(a[0]);
-			LOG.info(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'", 
-					a[1],
-					a[0]));
+			if (!a[0].equals(a[1])) {
+				LOG.info(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'", 
+						a[1],
+						a[0]));
+			}
 		}
 		return foi; 
 	}
@@ -578,9 +580,11 @@ public class DataFile {
 		if (!NcNameResolver.isNCName(off.getName())) {
 			final String[] a = createCleanNCName(off); 
 			off.setName(a[0]);
-			LOG.info(String.format("Offering name changed to match NCName production: '%s' to '%s'", 
-					a[1],
-					a[0]));
+			if (!a[0].equals(a[1])) {
+				LOG.info(String.format("Offering name changed to match NCName production: '%s' to '%s'", 
+						a[1],
+						a[0]));
+			}
 		}
 		return off;
 	}
