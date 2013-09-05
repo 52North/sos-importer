@@ -24,6 +24,8 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.File;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,28 @@ public class FileHelper {
 
 	public static String cleanPathToCreateFileName(final String fileName)
 	{
-		return fileName.replace(":", "").replace(File.separatorChar, '_');
+		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
+	}
+	
+	public static String shortenStringViaMD5Hash(final String longString) {
+		try {
+			final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(longString.getBytes());
+			final byte[] hash = messageDigest.digest();
+
+			//converting byte array to Hexadecimal String
+			final StringBuilder sb = new StringBuilder(2*hash.length);
+			for(final byte b : hash){
+				sb.append(String.format("%02x", b&0xff));
+			}
+
+			return sb.toString();
+
+		} catch (final NoSuchAlgorithmException e) {
+			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
+			LOG.debug("Exception thrown: {}", e.getMessage(), e);
+			return longString;
+		}
 	}
 
 	public static File getHome()
