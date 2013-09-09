@@ -53,6 +53,7 @@ import org.n52.oxf.ows.OWSException;
 import org.n52.oxf.ows.OwsExceptionCode;
 import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
+import org.n52.oxf.sos.adapter.ISOSRequestBuilder;
 import org.n52.oxf.sos.adapter.ISOSRequestBuilder.Binding;
 import org.n52.oxf.sos.adapter.SOSAdapter;
 import org.n52.oxf.sos.adapter.wrapper.SOSWrapper;
@@ -312,7 +313,7 @@ public final class SensorObservationService {
 								getUnitsOfMeasurement(io.getSensorURI(),ios));
 						final String assignedSensorId = registerSensor(rs,values);
 						if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
-							LOG.error(String.format("Sensor '%s'[%s] could not be registered at SOS '%s'. Skipping insert obsevation for this and store it.",
+							LOG.error(String.format("Sensor '%s'[%s] could not be registered at SOS '%s'. Skipping insert observation for this and store it.",
 									io.getSensorName(),
 									io.getSensorURI(),
 									sosUrl.toExternalForm()));
@@ -433,7 +434,8 @@ public final class SensorObservationService {
 							(owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT) > -1
 									||
 									owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED) > -1
-									)) {
+									||
+									owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT) > -1)) {
 						return Configuration.SOS_OBSERVATION_ALREADY_CONTAINED;
 					}
 					buf = buf.append(String.format("ExceptionCode: '%s' because of '%s'\n",
@@ -542,6 +544,9 @@ public final class SensorObservationService {
 			else if (sosVersion.equals("2.0.0")) {
 				LOG.trace("insertSensor()");
 				final InsertSensorParameters insSensorParams = createInsertSensorParametersFromRS(rs);
+				if (sosBinding != null) {
+					insSensorParams.addParameterValue(ISOSRequestBuilder.BINDING, sosBinding.name());
+				}
 				final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
 				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 				LOG.debug("InsertSensorResponse parsed");
