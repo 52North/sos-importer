@@ -518,25 +518,30 @@ public final class Configuration {
 	}
 
 	/**
-	 * 
 	 * @param p {@link org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position}
 	 * @return {@link org.n52.sos.importer.feeder.model.Position}
 	 */
 	public Position getModelPositionXBPosition(
 			final org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p) {
 		LOG.trace("getPosition()");
-		Position result;
 		final String[] units = new String[3];
-		units[Position.ALT] = p.getAlt().getUnit();
-		units[Position.LAT] = p.getLat().getUnit();
-		units[Position.LONG] = p.getLong().getUnit();
 		final double[] values = new double[3];
-		values[Position.ALT] = p.getAlt().getFloatValue();
+		
+		if (p.isSetAlt()) {
+			units[Position.ALT] = p.getAlt().getUnit();
+			values[Position.ALT] = p.getAlt().getFloatValue();
+		} else {
+			units[Position.ALT] = Position.UNIT_NOT_SET;
+			values[Position.ALT] = Position.VALUE_NOT_SET;
+		}
+		units[Position.LAT] = p.getLat().getUnit();
 		values[Position.LAT] = p.getLat().getFloatValue();
+
+		units[Position.LONG] = p.getLong().getUnit();
 		values[Position.LONG] = p.getLong().getFloatValue();
+		
 		final int epsgCode = p.getEPSGCode();
-		result = new Position(values, units, epsgCode);
-		return result;
+		return new Position(values, units, epsgCode);
 	}
 
 	/**
@@ -664,30 +669,32 @@ public final class Configuration {
 	private Object[] parseAlt(final String alt) throws ParseException {
 		LOG.trace(String.format("parseAlt(%s)",
 				alt));
-		double value = 0.0;
-		String unit = "m";
+		double value = Position.VALUE_NOT_SET;
+		String unit = Position.UNIT_NOT_SET;
 
 		String number;
 		if (alt.contains("km")) {
 			unit = "km";
 			number = alt.replace("km", "");
-		} else if (alt.contains("mi")) {
+		} 
+		else if (alt.contains("mi")) {
 			unit = "mi";
 			number = alt.replace("mi", "");
-		} else if (alt.contains("m")) {
+		} 
+		else if (alt.contains("m")) {
 			unit = "m";
 			number = alt.replace("m", "");
-		} else if (alt.contains("ft")) {
+		}
+		else if (alt.contains("ft")) {
 			unit = "ft";
 			number = alt.replace("ft", "");
-		} else {
+		}
+		else {
 			number = alt;
 		}
-
 		value = parseToDouble(number);
 
-		final Object[] result = {value, unit};
-		return result;
+		return new Object[] {value, unit};
 	}
 
 	private Object[] parseLon(final String lon) throws ParseException {
