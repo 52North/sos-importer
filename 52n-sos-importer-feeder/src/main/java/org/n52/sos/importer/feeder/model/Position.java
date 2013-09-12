@@ -39,6 +39,10 @@ public final class Position {
 
 	public static final String DEFAULT_UNIT_LAT = null;
 
+	public static final String UNIT_NOT_SET = "UNIT_NOT_SET";
+
+	public static final double VALUE_NOT_SET = Double.NEGATIVE_INFINITY;
+
 	private final double[] values;
 	
 	private final String[] units;
@@ -50,7 +54,7 @@ public final class Position {
 	 * @param units order: long, lat, alt
 	 * @param epsgCode 
 	 */
-	public Position(double[] values, String[] units, int epsgCode) {
+	public Position(final double[] values, final String[] units, final int epsgCode) {
 		this.values = values;
 		this.units = units;
 		this.epsgCode = epsgCode;
