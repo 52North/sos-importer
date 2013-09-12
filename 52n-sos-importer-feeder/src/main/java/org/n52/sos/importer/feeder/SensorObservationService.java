@@ -42,7 +42,6 @@ import java.util.Set;
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
 import net.opengis.sos.x10.RegisterSensorResponseDocument;
-import net.opengis.sos.x20.InsertObservationResponseType;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 import org.apache.xmlbeans.XmlException;
@@ -414,16 +413,14 @@ public final class SensorObservationService {
 				}
 				else if (sosVersion.equals("2.0.0")) {
 					try {
-						final InsertObservationResponseType response = net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
 						LOG.debug("Observation inserted successfully.");
 						return "SOS 2.0 InsertObservation doesn't return the assigned id";
 					} catch (final XmlException e) {
-						// TODO Auto-generated catch block generated on 04.09.2013 around 16:33:33
 						LOG.error("Exception thrown: {}", e.getMessage(), e);
 					}
 				}
 			} catch (final ExceptionReport e) {
-				// TODO Auto-generated catch block generated on 20.06.2012 around 10:40:38
 				final Iterator<OWSException> iter = e.getExceptionsIterator();
 				StringBuffer buf = new StringBuffer();
 				while (iter.hasNext()) {
