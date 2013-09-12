@@ -484,13 +484,16 @@ public final class SensorObservationService {
 		} else {
 			eastingFirst = Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode());
 		}
-		final String pos = eastingFirst?
+		String pos = eastingFirst?
 				String.format("%s %s",
 				io.getLongitudeValue(),
 				io.getLatitudeValue()) :
 					String.format("%s %s",
 							io.getLatitudeValue(),
 							io.getLongitudeValue());
+		if (io.isSetAltitudeValue()) {
+			pos = String.format("% %", pos, io.getAltitudeValue());
+		}
 		obsParameter.addFoiPosition(pos);
 		obsParameter.addObservedProperty(io.getObservedPropertyURI());
 		obsParameter.addProcedure(io.getSensorURI());
