@@ -35,9 +35,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.FileHelper;
 import org.n52.sos.importer.feeder.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.JavaApiBugJDL6203387Exception;
+import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

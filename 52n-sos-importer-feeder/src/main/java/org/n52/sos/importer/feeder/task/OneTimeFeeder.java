@@ -41,9 +41,9 @@ import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
-import org.n52.sos.importer.feeder.FileHelper;
 import org.n52.sos.importer.feeder.SensorObservationService;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
+import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
