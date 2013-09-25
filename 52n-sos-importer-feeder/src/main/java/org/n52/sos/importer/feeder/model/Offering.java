@@ -21,9 +21,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.feeder.model.requests;
-
-import org.n52.sos.importer.feeder.model.Resource;
+package org.n52.sos.importer.feeder.model;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -31,7 +29,7 @@ import org.n52.sos.importer.feeder.model.Resource;
  */
 public class Offering extends Resource {
 
-	public Offering(String name, String uri) {
+	public Offering(final String name, final String uri) {
 		super(name, uri);
 	}
 
