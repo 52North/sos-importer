@@ -21,18 +21,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.exceptions;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
-public class InvalidColumnCountException extends IllegalArgumentException {
+public class JavaApiBugJDL6203387Exception extends IllegalArgumentException {
+
+	public JavaApiBugJDL6203387Exception(final String name) {
+		super(name);
+	}
 
 	private static final long serialVersionUID = 1L;
-
-	public InvalidColumnCountException(final String errorMsg) {
-		super(errorMsg);
-	}
 
 }

@@ -37,6 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 
 import org.n52.oxf.xml.NcNameResolver;
+import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
