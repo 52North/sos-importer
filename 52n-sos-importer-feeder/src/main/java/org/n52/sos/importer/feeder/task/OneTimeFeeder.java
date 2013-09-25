@@ -31,7 +31,7 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -195,7 +195,7 @@ public class OneTimeFeeder implements Runnable {
 
 					// SOS is available and transactional
 					// start reading data file line by line starting from flwd
-					final ArrayList<InsertObservation> failedInserts = sos.importData(dataFile);
+					final List<InsertObservation> failedInserts = sos.importData(dataFile);
 
 					LOG.debug("OneTimeFeeder: save read lines count: {}", sos.getLastLine());
 					// override counter file
@@ -233,7 +233,7 @@ public class OneTimeFeeder implements Runnable {
 	 * created configuration for this.
 	 */
 	private void saveFailedInsertObservations(
-			final ArrayList<InsertObservation> failedInserts) throws IOException {
+			final List<InsertObservation> failedInserts) throws IOException {
 		// TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
 		LOG.trace("saveFailedInsertObservations() <-- NOT YET IMPLEMENTED");
 //		// TODO save failed InsertObservations via ObjectOutputStream
