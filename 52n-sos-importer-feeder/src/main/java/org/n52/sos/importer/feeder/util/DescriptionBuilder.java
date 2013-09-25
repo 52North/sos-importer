@@ -28,18 +28,19 @@ import static org.n52.sos.importer.feeder.Configuration.*;
 import java.io.IOException;
 
 import org.apache.xmlbeans.XmlException;
+import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SensorDescriptionBuilder {
+public class DescriptionBuilder {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(SensorDescriptionBuilder.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
 
 	public String createSML(final RegisterSensor rs) throws XmlException, IOException {
 		LOG.trace("createSML()");
-		final org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder builder = new org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder();
+		final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
 		
 		final StringBuilder intendedApplication = new StringBuilder();
 		
@@ -64,7 +65,7 @@ public class SensorDescriptionBuilder {
 		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:offeringID",rs.getOfferingUri());
 		// set position data
 		builder.setPosition("sensorPosition",
-				org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder.EPSG_CODE_PREFIX + rs.getEpsgCode(),
+				SensorDescriptionBuilder.EPSG_CODE_PREFIX + rs.getEpsgCode(),
 				"SYSTEM_LOCATION",
 				rs.getLongitudeUnit(), rs.getLongitudeValue(),
 				rs.getLatitudeUnit(), rs.getLatitudeValue(),

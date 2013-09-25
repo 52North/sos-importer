@@ -77,7 +77,7 @@ import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
-import org.n52.sos.importer.feeder.util.SensorDescriptionBuilder;
+import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +106,7 @@ public final class SensorObservationService {
 	private int lastLine = 0;
 	private final Binding sosBinding;
 	private Map<String, String> offerings;
-	private final SensorDescriptionBuilder sensorDescBuilder;
+	private final DescriptionBuilder sensorDescBuilder;
 	
 	public SensorObservationService(final URL sosUrl, final String version, final String binding) throws ExceptionReport, OXFException {
 		if (LOG.isTraceEnabled()) {
@@ -117,7 +117,7 @@ public final class SensorObservationService {
 		sosBinding = getBinding(binding);
 		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
-		sensorDescBuilder = new SensorDescriptionBuilder();
+		sensorDescBuilder = new DescriptionBuilder();
 		failedInsertObservations = new LinkedList<InsertObservation>();
 		registeredSensors = new LinkedList<String>();
 		if (sosVersion.equals("2.0.0")) {
