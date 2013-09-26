@@ -37,12 +37,17 @@ import net.opengis.sensorML.x101.IdentificationDocument.Identification.Identifie
 import net.opengis.sensorML.x101.SensorMLDocument;
 import net.opengis.sensorML.x101.SystemType;
 import net.opengis.swe.x101.AnyScalarPropertyType;
+import net.opengis.swe.x101.DataComponentPropertyType;
+import net.opengis.swe.x101.DataRecordType;
+import net.opengis.swe.x101.EnvelopeType;
 import net.opengis.swe.x101.SimpleDataRecordType;
 import net.opengis.swe.x101.VectorType;
+import net.opengis.swe.x101.VectorType.Coordinate;
 
 import org.apache.xmlbeans.XmlException;
 import org.junit.Before;
 import org.junit.Test;
+import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -91,6 +96,7 @@ public class DescriptionBuilderTest {
 	@Before
 	public void createSensorML() throws XmlException, IOException {
 		final String createdSensorML = new DescriptionBuilder().createSML(rs);
+//		System.out.println(SensorMLDocument.Factory.parse(createdSensorML).xmlText(XmlUtil.PRETTYPRINT));
 		system = SystemType.Factory.parse(SensorMLDocument.Factory.parse(createdSensorML).getSensorML().getMemberArray(0).getProcess().newInputStream());
 	}
 	
@@ -172,21 +178,64 @@ public class DescriptionBuilderTest {
 	@Test public void
 	shouldSetOfferings()
 	{
-		Capabilities offering = null;
-		for (final Capabilities capabilities : system.getCapabilitiesArray()) {
-			if (capabilities.isSetName() && capabilities.getName().equalsIgnoreCase("offerings")) {
-				offering = capabilities;
-				break;
-			}
-		}
-		if (offering == null) {
-			fail("sml:capabilities element with name 'offerings' not found!");
-		}
-		final AnyScalarPropertyType type = ((SimpleDataRecordType)offering.getAbstractDataRecord()).getFieldArray(0);
-		assertThat(type.getName(),is(offeringName));
-		assertThat(type.isSetText(),is(true));
-		assertThat(type.getText().getDefinition(), is("urn:ogc:def:identifier:OGC:offeringID"));
-		assertThat(type.getText().getValue(), is(offeringUri));
+		final Capabilities offering = getCapabilitiesByName("offerings");
+		final AnyScalarPropertyType field = ((SimpleDataRecordType)offering.getAbstractDataRecord()).getFieldArray(0);
+		assertThat(field.getName(),is(offeringName));
+		assertThat(field.isSetText(),is(true));
+		assertThat(field.getText().getDefinition(), is("urn:ogc:def:identifier:OGC:offeringID"));
+		assertThat(field.getText().getValue(), is(offeringUri));
 	}
 
+	@Test public void
+	shouldSetObservedBBOX()
+			 throws XmlException, IOException {
+		final Capabilities observedBBOX = getCapabilitiesByName("observedBBOX");
+		final DataComponentPropertyType field = ((DataRecordType)observedBBOX.getAbstractDataRecord()).getFieldArray(0);
+		assertThat(field.getName(),is("observedBBOX"));
+		final EnvelopeType envelope = EnvelopeType.Factory.parse(field.getAbstractDataRecord().newInputStream());
+		assertThat(envelope.getDefinition(),is("urn:ogc:def:property:OGC:1.0:observedBBOX"));
+		
+		assertThat(envelope.isSetReferenceFrame(),is(true));
+		assertThat(envelope.getReferenceFrame(),is(SensorDescriptionBuilder.EPSG_CODE_PREFIX+4326));
+		final Coordinate[] lcCoords = envelope.getLowerCorner().getVector().getCoordinateArray();
+		
+		assertThat(lcCoords.length,is(2));
+		
+		assertThat(lcCoords[0].getName(),is("easting"));
+		assertThat(lcCoords[0].getQuantity().getAxisID(),is(equalToIgnoringCase("x")));
+		assertThat(lcCoords[0].getQuantity().getUom().getCode(),is(equalToIgnoringCase(degree)));
+		assertThat(lcCoords[0].getQuantity().getValue(),is(longitude));
+		
+		assertThat(lcCoords[1].getName(),is("northing"));
+		assertThat(lcCoords[1].getQuantity().getAxisID(),is(equalToIgnoringCase("y")));
+		assertThat(lcCoords[1].getQuantity().getUom().getCode(),is(equalToIgnoringCase(degree)));
+		assertThat(lcCoords[1].getQuantity().getValue(),is(latitude));
+		
+		final Coordinate[] ucCoords = envelope.getUpperCorner().getVector().getCoordinateArray();
+		
+		assertThat(ucCoords.length,is(2));
+		
+		assertThat(ucCoords[0].getName(),is("easting"));
+		assertThat(ucCoords[0].getQuantity().getAxisID(),is(equalToIgnoringCase("x")));
+		assertThat(ucCoords[0].getQuantity().getUom().getCode(),is(equalToIgnoringCase(degree)));
+		assertThat(ucCoords[0].getQuantity().getValue(),is(longitude));
+		
+		assertThat(ucCoords[1].getName(),is("northing"));
+		assertThat(ucCoords[1].getQuantity().getAxisID(),is(equalToIgnoringCase("y")));
+		assertThat(ucCoords[1].getQuantity().getUom().getCode(),is(equalToIgnoringCase(degree)));
+		assertThat(ucCoords[1].getQuantity().getValue(),is(latitude));
+	}
+	
+	// TODO test for valid time -> set by server
+	// TODO test for contact -> set by server
+	
+	private Capabilities getCapabilitiesByName(final String name) {
+		for (final Capabilities capabilities : system.getCapabilitiesArray()) {
+			if (capabilities.isSetName() && capabilities.getName().equalsIgnoreCase(name)) {
+				return capabilities;
+			}
+		}
+		fail("sml:capabilities element with name '" + name +"' not found!");
+		return null;
+	}
 }

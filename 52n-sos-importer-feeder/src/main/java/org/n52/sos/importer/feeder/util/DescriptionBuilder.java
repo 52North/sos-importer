@@ -55,17 +55,23 @@ public class DescriptionBuilder {
 		
 		// set capabilities - status
 		builder.setCapabilityCollectingStatus("status", true);
+		
 		builder.addFeatureOfInterest(rs.getFeatureOfInterestName(), rs.getFeatureOfInterestURI());
+		
 		builder.setCapabilityBbox(rs.getLongitudeUnit(),
 				rs.getLongitudeValue(), rs.getLatitudeUnit(),
 				rs.getLatitudeValue(), rs.getLongitudeUnit(),
 				rs.getLongitudeValue(), rs.getLatitudeUnit(),
-				rs.getLatitudeValue());
+				rs.getLatitudeValue(),
+				rs.getEpsgCode().equalsIgnoreCase(Integer.toString(4979))?
+						Integer.toString(4326):
+							rs.getEpsgCode());
 		
 		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:offeringID",rs.getOfferingUri());
+		
 		// set position data
 		builder.setPosition("sensorPosition",
-				SensorDescriptionBuilder.EPSG_CODE_PREFIX + rs.getEpsgCode(),
+				rs.getEpsgCode(),
 				"SYSTEM_LOCATION",
 				rs.getLongitudeUnit(), rs.getLongitudeValue(),
 				rs.getLatitudeUnit(), rs.getLatitudeValue(),
