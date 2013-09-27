@@ -146,6 +146,7 @@ public class Constants {
 	public static char THOUSANDS_SEPARATOR = ',';
 
 	private static String wms_url = "wms_url";
+	private static String wms_layer = "wms_layer";
 	
 	/**
 	 * TODO implement loading of language parameter from configuration file
@@ -164,9 +165,23 @@ public class Constants {
 			wmsUrl =  props.getProperty(wms_url);
 		}
 		
-		logger.debug(String.format("WMS url: %s", wmsUrl));
+		logger.debug("WMS url: '{}'", wmsUrl);
 		
 		return wmsUrl;
+	}
+	
+	public static String WMS_BACKGROUND_LAYER_NAME() {
+		final Properties props = load();
+		String wmsLayer = WMS_DEFAULT_BACKGROUND_LAYER_NAME;
+		if (props != null && 
+				props.getProperty(wms_layer) != null &&
+				!props.getProperty(wms_layer).equals("")) {
+			wmsLayer =  props.getProperty(wms_layer);
+		}
+		
+		logger.debug("WMS layer: '{}'", wmsLayer);
+		
+		return wmsLayer;
 	}
 
 	private static Properties load() {
