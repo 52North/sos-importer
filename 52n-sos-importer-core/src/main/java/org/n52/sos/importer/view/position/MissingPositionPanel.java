@@ -249,13 +249,12 @@ public class MissingPositionPanel extends JPanel{
 					rootLayer.getChildren(),
 					Constants.WMS_BACKGROUND_LAYER_NAME()); 
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Is layer null? %s; Name: %s",
-						(specifiedBackgroundLayer==null),
- 						(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():"")
-						));
-				logger.debug(String.format("Is WMS null? %s", (wms==null)));
-			}
+			logger.debug("Is layer null? '{}'; Name: '{}'; Title: '{}'",
+					(specifiedBackgroundLayer==null),
+					(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():""),
+					(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getTitle():"")
+					);
+			logger.debug("Is WMS null? {}", (wms==null));
 
 			final WMSLayer displayLayer = new WMSLayer( wms, specifiedBackgroundLayer );
 			mapContent.addLayer(displayLayer);
