@@ -247,15 +247,14 @@ public class MissingPositionPanel extends JPanel{
 			final Layer rootLayer = wms.getCapabilities().getLayer();
 			final Layer specifiedBackgroundLayer = getBackgroundLayerByName(
 					rootLayer.getChildren(),
-					Constants.WMS_DEFAULT_BACKGROUND_LAYER_NAME); 
+					Constants.WMS_BACKGROUND_LAYER_NAME()); 
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Is layer null? %s; Name: %s",
-						(specifiedBackgroundLayer==null),
- 						(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():"")
-						));
-				logger.debug(String.format("Is WMS null? %s", (wms==null)));
-			}
+			logger.debug("Is layer null? '{}'; Name: '{}'; Title: '{}'",
+					(specifiedBackgroundLayer==null),
+					(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getName():""),
+					(specifiedBackgroundLayer!=null?specifiedBackgroundLayer.getTitle():"")
+					);
+			logger.debug("Is WMS null? {}", (wms==null));
 
 			final WMSLayer displayLayer = new WMSLayer( wms, specifiedBackgroundLayer );
 			mapContent.addLayer(displayLayer);
@@ -304,7 +303,7 @@ public class MissingPositionPanel extends JPanel{
 	private Layer getBackgroundLayerByName(final Layer[] children,
 			final String wmsDefaultBackgroundLayerName) {
 		for (final Layer layer : children) {
-			if (layer.getName().equals(wmsDefaultBackgroundLayerName)) {
+			if (layer.getName().equals(wmsDefaultBackgroundLayerName) || layer.getTitle().equals(wmsDefaultBackgroundLayerName)) {
 				return layer;
 			}
 		}
