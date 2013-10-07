@@ -497,7 +497,7 @@ public final class SensorObservationService {
 							io.getLatitudeValue(),
 							io.getLongitudeValue());
 		if (io.isSetAltitudeValue()) {
-			pos = String.format("% %", pos, io.getAltitudeValue());
+			pos = String.format("%s %s", pos, io.getAltitudeValue());
 		}
 		obsParameter.addFoiPosition(pos);
 		obsParameter.addObservedProperty(io.getObservedPropertyURI());
