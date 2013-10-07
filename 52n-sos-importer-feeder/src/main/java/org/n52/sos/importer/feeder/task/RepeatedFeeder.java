@@ -66,6 +66,7 @@ public class RepeatedFeeder extends TimerTask{
 
 	@Override
 	public void run() {
+		LOG.trace("run()");
 		File datafile;
 		oneFeederLock.lock(); // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
 		try {
@@ -106,7 +107,17 @@ public class RepeatedFeeder extends TimerTask{
 				datafile = file;
 				// OneTimeFeeder with file override used not as thread
 				new OneTimeFeeder(configuration, datafile).run();
+				LOG.info("Finished feeding file {}. Next run in {} minute{}.",
+						datafile.getName(),
+						periodInMinutes,
+						periodInMinutes>1?"s":"");
 			}
+		}
+		catch (final InvalidColumnCountException iae) {
+			// Exception is already logged -> nothing to do
+		}
+		catch (final JavaApiBugJDL6203387Exception e) {
+			// Exception is already logged -> nothing to do
 		} catch (final Exception e) {
 			LOG.debug("Exception catched: {}", e.getMessage(),e);
 		} finally {

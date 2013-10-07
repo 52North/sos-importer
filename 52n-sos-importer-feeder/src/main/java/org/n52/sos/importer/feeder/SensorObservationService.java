@@ -208,7 +208,7 @@ public final class SensorObservationService {
 				 */
 				lastLine++;
 			} else {
-				LOG.debug(String.format("\n\n\t\tSkip CSV line #%d: %s\n\n",(lineCounter++)+1,Arrays.toString(values)));
+				LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter++)+1,Arrays.toString(values)));
 			}
 			skipCount--;
 		}
