@@ -67,7 +67,7 @@ public class Step6cWMSPanelTest extends JFrame {
 				public void eventDispatched(final AWTEvent e)
 			    {
 			        if (logger.isDebugEnabled() && e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
-						logger.debug("Exception:",e);
+						logger.debug("AWTEvent: {}",e);
 					}
 			    }
 			}, eventMask);

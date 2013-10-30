@@ -28,6 +28,7 @@ import static java.lang.Integer.parseInt;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.Timer;
 import java.util.jar.Attributes;
@@ -60,27 +61,23 @@ public final class Feeder {
 				final Configuration c = new Configuration(configFile);
 				// start application with valid configuration
 				// data file
-				if (args.length == 2) 
-				{ 
+				if (args.length == 2) { 
 					// Case: one time feeding with defined configuration
 					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
 				} 
-				else if (args.length == 4)
-				{ 
+				else if (args.length == 4) { 
 					// Case: one time feeding with file override or period with file from configuration
-					if (args[2].equals(ALLOWED_PARAMETERS[1])) 
-					{ 
+					if (isFileOverride(args[2])) { 
 						// Case: file override
 						new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
 						
 					} 
-					else if (args[2].equals(ALLOWED_PARAMETERS[2]))
-					{
+					else if (isTimePeriodSet(args[2]))	{
 						// Case: repeated feeding
 						repeatedFeeding(c,parseInt(args[3]));
 					}
-				} else if (args.length == 6) 
-				{ 
+				} 
+				else if (args.length == 6) { 
 					// Case: repeated feeding with file override
 					repeatedFeeding(c,new File(args[3]),parseInt(args[5]));
 				}
@@ -143,29 +140,44 @@ public final class Feeder {
 	 * 				specified form.
 	 */
 	private static boolean checkArgs(final String[] args) {
-		LOG.trace("checkArgs()");
+		LOG.trace("checkArgs({})",Arrays.toString(args));
 		if (args == null) {
 			LOG.error("no parameters defined. null received as args!");
 			return false;
 		} else if (args.length == 2) {
-			if (ALLOWED_PARAMETERS[0].equals(args[0])) {
+			if (isConfigFileSet(args[0])) {
 				return true;
 			}
 		} else if (args.length == 4) {
-			if (ALLOWED_PARAMETERS[0].equals(args[0]) && (
-					args[2].equals(ALLOWED_PARAMETERS[1]) || 
-					args[2].equals(ALLOWED_PARAMETERS[2]) ) ) {
+			if (isConfigFileSet(args[0]) && (
+					isFileOverride(args[2]) || 
+					isTimePeriodSet(args[2]) ) ) {
 				return true;
 			}
 		} else if (args.length == 6) {
 			if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
-					args[2].equals(ALLOWED_PARAMETERS[1]) &&
-					args[4].equals(ALLOWED_PARAMETERS[2])) {
+					isFileOverride(args[2]) &&
+					isTimePeriodSet(args[4])) {
 				return true;
 			}
 		}
 		LOG.error("Given parameters do not match programm specification. ");
 		return false;
+	}
+
+	private static boolean isConfigFileSet(final String parameter)
+	{
+		return ALLOWED_PARAMETERS[0].equals(parameter);
+	}
+
+	private static boolean isFileOverride(final String parameter)
+	{
+		return parameter.equals(ALLOWED_PARAMETERS[1]);
+	}
+
+	private static boolean isTimePeriodSet(final String parameter)
+	{
+		return parameter.equals(ALLOWED_PARAMETERS[2]);
 	}
 
 	/**
