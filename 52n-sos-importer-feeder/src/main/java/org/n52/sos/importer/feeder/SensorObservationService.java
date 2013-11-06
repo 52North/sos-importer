@@ -444,6 +444,9 @@ public final class SensorObservationService {
 							owsEx.getExceptionCode(),
 							Arrays.toString(owsEx.getExceptionTexts())));
 				}
+				// TODO improve logging here: 
+				// add logOwsEceptionReport static util method to OxF or
+				// some OER report logger which has unit tests
 				LOG.error(String.format("Exception thrown: %s\n%s",e.getMessage(),buf.toString()));
 				LOG.debug(e.getMessage(),e);
 			}
