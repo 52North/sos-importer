@@ -1,4 +1,4 @@
-This is the contribute.md of 52°North project [SOS-Importer](sos-importer). Great to have you here! Here are a few ways you can help!
+This is the contribute.md of 52°North project [SOS-Importer](https://wiki.52north.org/bin/view/SensorWeb/SosImporter). Great to have you here! Here are a few ways you can help!
 
 # Contribute.md
 
