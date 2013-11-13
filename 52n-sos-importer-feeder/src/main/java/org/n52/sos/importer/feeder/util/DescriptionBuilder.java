@@ -30,17 +30,30 @@ import java.io.IOException;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DescriptionBuilder {
 	
+	private final boolean shouldAddOfferingMetadataToOutputs;
+
+	public DescriptionBuilder(final boolean shouldAddOfferingMetadataToOutputs) {
+		this.shouldAddOfferingMetadataToOutputs = shouldAddOfferingMetadataToOutputs;
+	}
+	
+	public DescriptionBuilder() {
+		this(true);
+	}
+	
 	private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
 
 	public String createSML(final RegisterSensor rs) throws XmlException, IOException {
 		LOG.trace("createSML()");
 		final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
+		
+		builder.setAddOfferingMetadataToOutputs(shouldAddOfferingMetadataToOutputs);
 		
 		final StringBuilder intendedApplication = new StringBuilder();
 		
@@ -67,7 +80,7 @@ public class DescriptionBuilder {
 						Integer.toString(4326):
 							rs.getEpsgCode());
 		
-		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:offeringID",rs.getOfferingUri());
+		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:1.0:offeringID",rs.getOfferingUri());
 		
 		// set position data
 		builder.setPosition("sensorPosition",
@@ -114,6 +127,9 @@ public class DescriptionBuilder {
 		
 		// add all classifier
 		builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length()-2));
+		
+		// add validTime starting from now
+		builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(),"unknown");
 		
 		return builder.buildSensorDescription();
 	}

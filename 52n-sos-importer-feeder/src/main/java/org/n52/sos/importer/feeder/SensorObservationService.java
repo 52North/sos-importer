@@ -117,7 +117,11 @@ public final class SensorObservationService {
 		sosBinding = getBinding(binding);
 		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
-		sensorDescBuilder = new DescriptionBuilder();
+		if (sosVersion.equals("2.0.0")) {
+			sensorDescBuilder = new DescriptionBuilder(false);
+		} else {
+			sensorDescBuilder = new DescriptionBuilder();
+		}
 		failedInsertObservations = new LinkedList<InsertObservation>();
 		registeredSensors = new LinkedList<String>();
 		if (sosVersion.equals("2.0.0")) {

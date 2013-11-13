@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import net.opengis.gml.TimePeriodType;
 import net.opengis.sensorML.x101.CapabilitiesDocument.Capabilities;
 import net.opengis.sensorML.x101.IdentificationDocument.Identification.IdentifierList.Identifier;
 import net.opengis.sensorML.x101.SensorMLDocument;
@@ -45,6 +46,8 @@ import net.opengis.swe.x101.VectorType;
 import net.opengis.swe.x101.VectorType.Coordinate;
 
 import org.apache.xmlbeans.XmlException;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.junit.Before;
 import org.junit.Test;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
@@ -76,12 +79,12 @@ public class DescriptionBuilderTest {
 	private final String timeStamp = "2013-09-25T15:25:33+02:00";
 	private final int value = 52;
 	private final String featureName = "feature-name";
-	private final String feautreUri = "feature-uri";
+	private final String featureUri = "feature-uri";
 	private final String[] units = {degree,degree,meter};
 	private final double[] values = {longitude,latitude,altitude};
 	private final int epsgCode = 4979;
 	private final Position featurePosition = new Position(values, units, epsgCode);
-	private final FeatureOfInterest foi = new FeatureOfInterest(featureName, feautreUri, featurePosition);
+	private final FeatureOfInterest foi = new FeatureOfInterest(featureName, featureUri, featurePosition);
 	private final String mvType = "NUMERIC";
 	private final String sensorUri = "sensor-uri";
 	private final String sensorName = "sensor-name";
@@ -182,8 +185,19 @@ public class DescriptionBuilderTest {
 		final AnyScalarPropertyType field = ((SimpleDataRecordType)offering.getAbstractDataRecord()).getFieldArray(0);
 		assertThat(field.getName(),is(offeringName));
 		assertThat(field.isSetText(),is(true));
-		assertThat(field.getText().getDefinition(), is("urn:ogc:def:identifier:OGC:offeringID"));
+		assertThat(field.getText().getDefinition(), is("urn:ogc:def:identifier:OGC:1.0:offeringID"));
 		assertThat(field.getText().getValue(), is(offeringUri));
+	}
+	
+	@Test public void
+	shouldSetFeatureOfInterest()
+	{
+		final Capabilities features = getCapabilitiesByName("featuresOfInterest");
+		final DataComponentPropertyType field = ((DataRecordType)features.getAbstractDataRecord()).getFieldArray(0);
+		assertThat(field.getName(),is("featureOfInterestID"));
+		assertThat(field.isSetText(),is(true));
+		assertThat(field.getText().getDefinition(), is("http://www.opengis.net/def/featureOfInterest/identifier"));
+		assertThat(field.getText().getValue(),is(featureUri));
 	}
 
 	@Test public void
@@ -226,8 +240,19 @@ public class DescriptionBuilderTest {
 		assertThat(ucCoords[1].getQuantity().getValue(),is(latitude));
 	}
 	
-	// TODO test for valid time -> set by server
-	// TODO test for contact -> set by server
+	@Test public void
+	shouldSetValidTime()
+			throws XmlException, IOException {
+		final TimePeriodType validTime = system.getValidTime().getTimePeriod();
+		assertThat(validTime.getBeginPosition().getObjectValue(),is(notNullValue()));
+		final long durationMillis = new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(), System.currentTimeMillis()).toDurationMillis();
+		assertThat(durationMillis,is(lessThanOrEqualTo(2000l)));
+		assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),is(true));
+		assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),is("unknown"));
+		// test for valid time -> set by server
+	}
+
+	// test for contact -> set by server
 	
 	private Capabilities getCapabilitiesByName(final String name) {
 		for (final Capabilities capabilities : system.getCapabilitiesArray()) {
