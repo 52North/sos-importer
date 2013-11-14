@@ -197,7 +197,7 @@ public final class SensorObservationService {
 			 * marked for skipping are already skipped
 			 */
 			if (skipCount < 1 && isNotEmpty(values) && isSizeValid(dataFile, values)) {
-				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter+1,Arrays.toString(values)));
+				LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 				// A: collect all information
 				final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 				numOfObsTriedToInsert += ios.length;
