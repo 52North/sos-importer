@@ -23,6 +23,9 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
@@ -40,7 +43,7 @@ public class Timestamp {
 	
 	@Override
 	public String toString() {
-		StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
+		final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
 		if (year != Short.MIN_VALUE) {
 			ts.append(year);
 			if (month != Byte.MIN_VALUE) {
@@ -84,7 +87,7 @@ public class Timestamp {
 		return ts.toString();
 	}
 	
-	private String convertTimeZone(int timeZone) {
+	private String convertTimeZone(final int timeZone) {
 		if (timeZone >= 0) {
 			if (timeZone >= 10) {
 				return "+" + timeZone + ":00";
@@ -100,32 +103,46 @@ public class Timestamp {
 		}
 	}
 
-	public void setYear(short year) {
+	public void setYear(final short year) {
 		this.year = year;
 	}
 
-	public void setMonth(byte month) {
+	public void setMonth(final byte month) {
 		this.month = month;
 	}
 
-	public void setDay(byte day) {
+	public void setDay(final byte day) {
 		this.day = day;
 	}
 
-	public void setHour(byte hour) {
+	public void setHour(final byte hour) {
 		this.hour = hour;
 	}
 
-	public void setMinute(byte minute) {
+	public void setMinute(final byte minute) {
 		this.minute = minute;
 	}
 
-	public void setSeconds(byte seconds) {
+	public void setSeconds(final byte seconds) {
 		this.seconds = seconds;
 	}
 
-	public void setTimezone(byte timezone) {
+	public void setTimezone(final byte timezone) {
 		this.timezone = timezone;
+	}
+
+	public Timestamp set(final long dateToSet)
+	{
+		final Calendar cal = new GregorianCalendar();
+		cal.setTimeInMillis(dateToSet);
+		year = (short) cal.get(Calendar.YEAR);
+		month = (byte) (cal.get(Calendar.MONTH)+1);
+		day = (byte) cal.get(Calendar.DAY_OF_MONTH);
+		hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
+		minute = (byte) cal.get(Calendar.MINUTE);
+		seconds = (byte) cal.get(Calendar.SECOND);
+		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/3600000);
+		return this;
 	}
 
 }

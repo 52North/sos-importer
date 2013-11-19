@@ -117,7 +117,11 @@ public final class SensorObservationService {
 		sosBinding = getBinding(binding);
 		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
-		sensorDescBuilder = new DescriptionBuilder();
+		if (sosVersion.equals("2.0.0")) {
+			sensorDescBuilder = new DescriptionBuilder(false);
+		} else {
+			sensorDescBuilder = new DescriptionBuilder();
+		}
 		failedInsertObservations = new LinkedList<InsertObservation>();
 		registeredSensors = new LinkedList<String>();
 		if (sosVersion.equals("2.0.0")) {
@@ -193,7 +197,7 @@ public final class SensorObservationService {
 			 * marked for skipping are already skipped
 			 */
 			if (skipCount < 1 && isNotEmpty(values) && isSizeValid(dataFile, values)) {
-				LOG.debug(String.format("\n\n\t\tHandling CSV line #%d: %s\n\n",lineCounter+1,Arrays.toString(values)));
+				LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 				// A: collect all information
 				final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 				numOfObsTriedToInsert += ios.length;
@@ -399,9 +403,9 @@ public final class SensorObservationService {
 		try {
 			parameters = createParameterAssemblyFromIO(io);
 			try {
-				LOG.debug("\n\nBEFORE OXF - doOperation \"InsertObservation\"\n\n");
+				LOG.debug("\tBEFORE OXF - doOperation 'InsertObservation'");
 				opResult = sosWrapper.doInsertObservation(parameters);
-				LOG.debug("\n\nAFTER OXF - doOperation \"InsertObservation\"\n\n");
+				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
@@ -444,6 +448,9 @@ public final class SensorObservationService {
 							owsEx.getExceptionCode(),
 							Arrays.toString(owsEx.getExceptionTexts())));
 				}
+				// TODO improve logging here: 
+				// add logOwsEceptionReport static util method to OxF or
+				// some OER report logger which has unit tests
 				LOG.error(String.format("Exception thrown: %s\n%s",e.getMessage(),buf.toString()));
 				LOG.debug(e.getMessage(),e);
 			}
