@@ -403,9 +403,9 @@ public final class SensorObservationService {
 		try {
 			parameters = createParameterAssemblyFromIO(io);
 			try {
-				LOG.debug("\n\nBEFORE OXF - doOperation \"InsertObservation\"\n\n");
+				LOG.debug("\tBEFORE OXF - doOperation 'InsertObservation'");
 				opResult = sosWrapper.doInsertObservation(parameters);
-				LOG.debug("\n\nAFTER OXF - doOperation \"InsertObservation\"\n\n");
+				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
