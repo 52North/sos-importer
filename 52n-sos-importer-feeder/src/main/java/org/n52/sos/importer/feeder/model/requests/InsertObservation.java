@@ -130,7 +130,7 @@ public class InsertObservation {
 		return unitOfMeasurement;
 	}
 	
-	protected Offering getOffering() {
+	public Offering getOffering() {
 		return offering;
 	}
 	
