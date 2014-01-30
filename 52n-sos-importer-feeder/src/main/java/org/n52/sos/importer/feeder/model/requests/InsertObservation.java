@@ -138,9 +138,6 @@ public class InsertObservation {
 		return measuredValueType;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
