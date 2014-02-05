@@ -137,6 +137,11 @@
 				<version>${oxf.version}</version>
 			</dependency>
 			<dependency>
+                <groupId>org.n52.sensorweb</groupId>
+                <artifactId>oxf-third-party-ncname-resolver</artifactId>
+                <version>${oxf.version}</version>
+            </dependency>
+			<dependency>
 				<groupId>org.n52.sensorweb</groupId>
 				<artifactId>52n-oxf-xmlbeans</artifactId>
 				<version>${oxf.version}</version>
@@ -185,6 +190,12 @@
 			    <groupId>ch.qos.logback</groupId>
 			    <artifactId>logback-core</artifactId>
 			    <version>1.0.13</version>
+			</dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.2</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
