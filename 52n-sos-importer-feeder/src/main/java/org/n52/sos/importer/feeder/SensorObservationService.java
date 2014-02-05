@@ -293,6 +293,7 @@ public final class SensorObservationService {
 			final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId,values);
 			LOG.debug("ObservedProperty: {}", observedProperty);
 			final Offering offer = dataFile.getOffering(sensor);
+			LOG.debug("Offering: {}", offer);
 			return new InsertObservation(sensor,
 					foi,
 					value,
@@ -514,7 +515,7 @@ public final class SensorObservationService {
 			obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + io.getEpsgCode());
 			obsParameter.addPhenomenonTime(io.getTimeStamp());
 			obsParameter.addResultTime(io.getTimeStamp());
-			return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(io.getSensorURI()));
+			return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(io.getOffering().getUri()));
 		} 
 		
 		obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
