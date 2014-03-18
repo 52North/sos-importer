@@ -90,13 +90,13 @@ import au.com.bytecode.opencsv.CSVReader;
  *
  */
 public final class SensorObservationService {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(SensorObservationService.class);
 
 	private static final String SML_101_FORMAT_URI = "http://www.opengis.net/sensorML/1.0.1";
 
 	private static final String OM_200_SAMPLING_FEATURE = "http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint";
-	
+
 	private final URL sosUrl;
 	private final String sosVersion;
 	private final SOSWrapper sosWrapper;
@@ -107,7 +107,7 @@ public final class SensorObservationService {
 	private final Binding sosBinding;
 	private Map<String, String> offerings;
 	private final DescriptionBuilder sensorDescBuilder;
-	
+
 	public SensorObservationService(final URL sosUrl, final String version, final String binding) throws ExceptionReport, OXFException {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
@@ -129,8 +129,10 @@ public final class SensorObservationService {
 		}
 	}
 
-	private Binding getBinding(final String binding) throws OXFException
-	{
+	private Binding getBinding(final String binding) throws OXFException {
+		if (binding == null  || binding.isEmpty()) {
+			return null;
+		}
 		if (binding.equals(Binding.POX.name())) {
 			return Binding.POX;
 		}
@@ -143,10 +145,10 @@ public final class SensorObservationService {
 	public boolean isAvailable() {
 		return sosWrapper.getServiceDescriptor() != null;
 	}
-	
+
 	/**
 	 * Checks for <b>RegisterSensor</b> and <b>InsertObservation</b> operations.
-	 * 
+	 *
 	 * @return <code>true</code> if RegisterSensor and InsertObservation
 	 *         operations are listed in the capabilities of this SOS, <br />
 	 *         else <code>false</code>.
@@ -317,7 +319,7 @@ public final class SensorObservationService {
 				if (io != null) {
 					if (!isSensorRegistered(io.getSensorURI())) {
 						final RegisterSensor rs = new RegisterSensor(io,
-								getObservedProperties(io.getSensorURI(),ios), 
+								getObservedProperties(io.getSensorURI(),ios),
 								getMeasuredValueTypes(io.getSensorURI(),ios),
 								getUnitsOfMeasurement(io.getSensorURI(),ios));
 						final String assignedSensorId = registerSensor(rs,values);
@@ -329,7 +331,7 @@ public final class SensorObservationService {
 							failedInsertObservations.add(io);
 							continue insertObservationForALine;
 						} else {
-							LOG.debug(String.format("Sensor registered at SOS  '%s' with assigned id '%s'", 
+							LOG.debug(String.format("Sensor registered at SOS  '%s' with assigned id '%s'",
 									sosUrl.toExternalForm(),
 									assignedSensorId));
 							registeredSensors.add(assignedSensorId);
@@ -400,7 +402,7 @@ public final class SensorObservationService {
 		LOG.trace("insertObservation()");
 		OperationResult opResult = null;
 		org.n52.oxf.sos.request.InsertObservationParameters parameters = null;
-		
+
 		try {
 			parameters = createParameterAssemblyFromIO(io);
 			try {
@@ -449,13 +451,13 @@ public final class SensorObservationService {
 							owsEx.getExceptionCode(),
 							Arrays.toString(owsEx.getExceptionTexts())));
 				}
-				// TODO improve logging here: 
+				// TODO improve logging here:
 				// add logOwsEceptionReport static util method to OxF or
 				// some OER report logger which has unit tests
 				LOG.error(String.format("Exception thrown: %s\n%s",e.getMessage(),buf.toString()));
 				LOG.debug(e.getMessage(),e);
 			}
-			
+
 		} catch (final OXFException e) {
 			LOG.error(String.format("Problem with OXF. Exception thrown: %s",e.getMessage()),e);
 		}
@@ -464,10 +466,10 @@ public final class SensorObservationService {
 
 	private org.n52.oxf.sos.request.InsertObservationParameters createParameterAssemblyFromIO(
 			final InsertObservation io) throws OXFException {
-		
+
 		LOG.trace("createParameterBuilderFromIO()");
 		ObservationParameters obsParameter = null;
-		
+
 		if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
 			// set text
 			obsParameter = new TextObservationParameters();
@@ -516,8 +518,8 @@ public final class SensorObservationService {
 			obsParameter.addPhenomenonTime(io.getTimeStamp());
 			obsParameter.addResultTime(io.getTimeStamp());
 			return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(io.getOffering().getUri()));
-		} 
-		
+		}
+
 		obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
 		obsParameter.addSamplingTime(io.getTimeStamp());
 		return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
@@ -571,7 +573,7 @@ public final class SensorObservationService {
 			final Iterator<OWSException> iter = e.getExceptionsIterator();
 			while(iter.hasNext()) {
 				final OWSException owsEx = iter.next();
-				if (owsEx.getExceptionCode().equals(OwsExceptionCode.NoApplicableCode.name()) && 
+				if (owsEx.getExceptionCode().equals(OwsExceptionCode.NoApplicableCode.name()) &&
 						owsEx.getExceptionTexts() != null &&
 						owsEx.getExceptionTexts().length > 0) {
 					for (final String string : owsEx.getExceptionTexts()) {
@@ -594,7 +596,7 @@ public final class SensorObservationService {
 						}
 					}
 				}
-						
+
 			}
 			LOG.error(String.format("Exception thrown: %s",
 					e.getMessage()),
@@ -676,7 +678,7 @@ public final class SensorObservationService {
 	private RegisterSensorParameters createRegisterSensorParametersFromRS(
 			final RegisterSensor registerSensor) throws OXFException, XmlException, IOException {
 		LOG.trace("createParameterContainterFromRS()");
-		
+
 		// create SensorML
 		// create template --> within the 52N 1.0.0 SOS implementation this template is somehow ignored --> take first observed property to get values for template
 		ObservationTemplateBuilder observationTemplate;
@@ -691,14 +693,14 @@ public final class SensorObservationService {
 			observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(registerSensor.getUnitOfMeasurementCode(firstObservedProperty));
 		}
 		observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
-		
+
 		return new RegisterSensorParameters(sensorDescBuilder.createSML(registerSensor), observationTemplate.generateObservationTemplate());
 	}
-	
+
 	private boolean isSensorRegistered(final String sensorURI) {
 		LOG.trace(format("isSensorRegistered(%s)",sensorURI));
 		if (serviceDescriptor == null) {
-			LOG.error(String.format("Service descriptor not available for SOS '%s'", 
+			LOG.error(String.format("Service descriptor not available for SOS '%s'",
 					sosUrl));
 			return false;
 		}
@@ -715,7 +717,7 @@ public final class SensorObservationService {
 //				}
 //			}
 //		}
-	
+
 		// 1 check if offering is available
 		final SOSContents sosContent = (SOSContents) serviceDescriptor.getContents();
 		final String[] offeringIds = sosContent.getDataIdentificationIDArray();
