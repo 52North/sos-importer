@@ -37,6 +37,10 @@ public class TimestampTest {
 
 	private Timestamp timestamp;
 
+	private final int millisPerMinute = 1000 * 60;
+
+	private final int millisPerHour = millisPerMinute * 60;
+
 	@Before
 	public void createTimestamp() throws Exception
 	{
@@ -49,11 +53,12 @@ public class TimestampTest {
 
 		final TimeZone tz = TimeZone.getDefault();
 		String sign = "-";
-		if (tz.getRawOffset()>= 0) {
+		final int rawOffset = tz.getRawOffset();
+		if (rawOffset>= 0) {
 			sign = "+";
 		}
-		final int minutes = tz.getRawOffset() / (1000 * 60);
-		final int hours = tz.getRawOffset() / (1000 * 60 * 60);
+		final int hours = rawOffset / millisPerHour;
+		final int minutes = (rawOffset - (hours * millisPerHour)) / millisPerMinute;
 		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
 		final String hoursString = hours < 10? "0"+hours : Integer.toString(hours);
 
