@@ -68,7 +68,8 @@ public class RepeatedFeeder extends TimerTask{
 	public void run() {
 		LOG.trace("run()");
 		File datafile;
-		oneFeederLock.lock(); // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
+		 // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
+		oneFeederLock.lock();
 		try {
 			/*
 			 * save last feeded file incl. counter
