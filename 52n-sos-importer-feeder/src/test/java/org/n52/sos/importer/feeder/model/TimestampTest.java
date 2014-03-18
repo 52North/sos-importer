@@ -53,10 +53,11 @@ public class TimestampTest {
 
 		final TimeZone tz = TimeZone.getDefault();
 		String sign = "-";
-		final int rawOffset = tz.getRawOffset();
+		int rawOffset = tz.getRawOffset();
 		if (rawOffset>= 0) {
 			sign = "+";
 		}
+		rawOffset = Math.abs(rawOffset);
 		final int hours = rawOffset / millisPerHour;
 		final int minutes = (rawOffset - (hours * millisPerHour)) / millisPerMinute;
 		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
