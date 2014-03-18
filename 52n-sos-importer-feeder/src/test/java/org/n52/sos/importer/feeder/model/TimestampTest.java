@@ -26,10 +26,12 @@ package org.n52.sos.importer.feeder.model;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.TimeZone;
+
 import org.junit.Before;
 import org.junit.Test;
 /**
- * 
+ *
  */
 public class TimestampTest {
 
@@ -40,12 +42,23 @@ public class TimestampTest {
 	{
 		timestamp = new Timestamp();
 	}
-	
+
 	@Test public void
 	shouldSetAllValuesViaSetLong() {
 		timestamp.set(86401000);
-		
-		assertThat(timestamp.toString(),is("1970-01-02T01:00:01+01:00"));
+
+		final TimeZone tz = TimeZone.getDefault();
+		String sign = "-";
+		if (tz.getRawOffset()>= 0) {
+			sign = "+";
+		}
+		final int minutes = tz.getRawOffset() / (1000 * 60);
+		final int hours = tz.getRawOffset() / (1000 * 60 * 60);
+		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
+		final String hoursString = hours < 10? "0"+hours : Integer.toString(hours);
+
+		final String asExpected = String.format("1970-01-02T01:00:01%s%s:%s",sign, hoursString, minutesString);
+		assertThat(timestamp.toString(),is(asExpected));
 	}
 
 }
