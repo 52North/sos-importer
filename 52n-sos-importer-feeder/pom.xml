@@ -10,6 +10,12 @@
 	<name>Feeding Module</name>
 	<description>A commandline application which uses XML configurations created by the core module to import data into a SOS 1.0.0 instance</description>
 	<packaging>jar</packaging>
+	<licenses>
+		<license>
+			<name>GNU General Public License v2.0 only</name>
+			<url>http://www.spdx.org/licenses/GPL-2.0</url>
+		</license>
+	</licenses>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -24,16 +30,16 @@
 			<artifactId>httpcore</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-core</artifactId>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
@@ -44,8 +50,12 @@
 			<artifactId>xmlbeans</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.n52.sensorweb</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>52n-sos-importer-bindings</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.n52.sensorweb</groupId>
+			<artifactId>oxf-third-party-ncname-resolver</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.n52.sensorweb</groupId>
@@ -73,7 +83,7 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
-            <scope>test</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -90,9 +100,9 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-                    			<compilerArgument>-Xlint:all</compilerArgument>
-                    			<showWarnings>true</showWarnings>
-                    			<showDeprecation>true</showDeprecation>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -112,12 +122,21 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>maven-notice-plugin</artifactId>
+				<configuration>
+					<noticeTemplate>../src/main/resources/NOTICE.template</noticeTemplate>
+					<licenseMapping>
+						<param>../src/main/resources/notice-license-mappings.xml</param>
+					</licenseMapping>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
-					<!-- <descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs> -->
+					<!-- <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
+						</descriptorRefs> -->
 					<descriptors>
 						<descriptor>assembly.xml</descriptor>
 					</descriptors>
