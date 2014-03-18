@@ -61,6 +61,10 @@
 			<groupId>org.n52.sensorweb</groupId>
 			<artifactId>52n-oxf-xmlbeans</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.n52.sensorweb</groupId>
+            <artifactId>oxf-third-party-ncname-resolver</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
