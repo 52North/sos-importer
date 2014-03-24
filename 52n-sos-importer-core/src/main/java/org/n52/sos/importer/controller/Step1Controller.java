@@ -51,37 +51,37 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Step1Controller extends StepController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step1Controller.class);
-	
+
 	private Step1Panel step1Panel;
-	
+
 	private final Step1Model step1Model;
-	
+
 	private String tmpCSVFileContent;
-	
+
 	private int csvFileRowCount = -1;
-	
+
 	public Step1Controller() {
 		step1Model = new Step1Model();
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return Lang.l().step1Description();
 	}
-	
+
 	@Override
-	public void loadSettings() {	
+	public void loadSettings() {
 		//if (step1Panel == null) {
 			step1Panel = new Step1Panel(this);
-			
+
 			//disable "back" button
 			BackNextController.getInstance().setBackButtonVisible(false);
-			
+
 			final String csvFilePath = step1Model.getCSVFilePath();
 			step1Panel.setCSVFilePath(csvFilePath);
-			
+
 			if(step1Panel.getCSVFilePath() == null ||
 					step1Panel.getCSVFilePath().equals("")) {
 				BackNextController.getInstance().setNextButtonEnabled(false);
@@ -98,7 +98,7 @@ public class Step1Controller extends StepController {
 		step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
 		step1Panel.setRegexStatus(step1Model.isRegex());
 	}
-	
+
 	@Override
 	public void saveSettings() {
 		if (step1Panel != null) {
@@ -115,7 +115,7 @@ public class Step1Controller extends StepController {
 		// and complicates some method calls
 		step1Panel = null;
 	}
-	
+
 	public void browseButtonClicked() {
 		final JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter());
@@ -124,10 +124,10 @@ public class Step1Controller extends StepController {
 			checkInputFileValue();
 		}
 	}
-	
+
 	/*
 	 * Checks the validity of the next button enablement after switching the
-	 * feeding type cards. 
+	 * feeding type cards.
 	 */
 	public void checkInputFileValue() {
 		if (step1Panel.getCSVFilePath() != null &&
@@ -142,9 +142,9 @@ public class Step1Controller extends StepController {
 	private class CSVFileFilter extends FileFilter {
 		@Override
 	    public boolean accept(final File file) {
-	        return file.isDirectory() || 
+	        return file.isDirectory() ||
 	        	   file.getName().toLowerCase().endsWith(".csv");
-	    }	
+	    }
 		@Override
 	    public String getDescription() {
 	        return "CSV files";
@@ -163,7 +163,7 @@ public class Step1Controller extends StepController {
 
 	@Override
 	public boolean isFinished() {
-		
+
 		if (step1Panel != null &&  step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
 			final String filePath = step1Panel.getCSVFilePath();
 			if (filePath == null) {
@@ -180,10 +180,10 @@ public class Step1Controller extends StepController {
 					    "File missing",
 					    JOptionPane.WARNING_MESSAGE);
 				return false;
-			}	
-				
+			}
+
 			final File f = new File(filePath);
-			
+
 			if (!f.exists()) {
 				JOptionPane.showMessageDialog(null,
 					    "The specified file does not exist.",
@@ -191,7 +191,7 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			
+
 			if (!f.isFile()) {
 				JOptionPane.showMessageDialog(null,
 					    "Please specify a file, not a directory.",
@@ -199,7 +199,7 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-				
+
 			if (!f.canRead()) {
 				JOptionPane.showMessageDialog(null,
 					    "No reading access on the specified file.",
@@ -217,7 +217,7 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			
+
 			if (step1Panel.getFilenameSchema() == null || step1Panel.getFilenameSchema().equals("")) {
 				JOptionPane.showMessageDialog(null,
 					    "No file/file schema was specified.",
@@ -225,10 +225,10 @@ public class Step1Controller extends StepController {
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			
+
 			// ftp client
 			FTPClient client;
-			
+
 			// proxy
 			final String pHost = System.getProperty("proxyHost","proxy");
 			int pPort = -1;
@@ -245,18 +245,18 @@ public class Step1Controller extends StepController {
 			} else {
 				client = new FTPClient();
 			}
-			
+
 			// get first file
 			if(step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
 				final String csvFilePath = System.getProperty("user.home")
 						+ File.separator + ".SOSImporter" + File.separator + "tmp_"
 						+ step1Panel.getFilenameSchema();
-				
+
 				// if back button was used: delete old file
 				if (new File(csvFilePath).exists()) {
 					new File(csvFilePath).delete();
 				}
-				
+
 				try {
 					client.connect(step1Panel.getUrl());
 					final boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
@@ -277,7 +277,7 @@ public class Step1Controller extends StepController {
 		            } else {
 		            	logger.info("Step1Controller: cannot login!");
 		            }
-					
+
 					final File csv = new File(csvFilePath);
 					if (csv.length() != 0) {
 						step1Panel.setCSVFilePath(csvFilePath);
@@ -286,8 +286,8 @@ public class Step1Controller extends StepController {
 						csv.delete();
 						throw new IOException();
 					}
-					
-					
+
+
 				} catch (final SocketException e) {
 					System.err.println(e);
 					JOptionPane.showMessageDialog(null,
@@ -343,12 +343,12 @@ public class Step1Controller extends StepController {
 	public StepController getNext() {
 		return null;
 	}
-	
+
 	@Override
-	public StepController getNextStepController() {			
+	public StepController getNextStepController() {
 		final Step2Model s2m = new Step2Model(tmpCSVFileContent,csvFileRowCount);
 		tmpCSVFileContent = null;
-		
+
 		return new Step2Controller(s2m);
 	}
 
