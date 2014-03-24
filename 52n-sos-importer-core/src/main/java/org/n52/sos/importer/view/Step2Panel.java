@@ -56,7 +56,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * offers settings for parsing the CSV file and 
+ * offers settings for parsing the CSV file and
  * displays a preview of the CSV file
  * @author Raimund, Eike
  *
@@ -65,27 +65,27 @@ import org.slf4j.LoggerFactory;
  * To enable useHeader, search for USE_HEADER
  */
 public class Step2Panel extends JPanel {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step2Panel.class);
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private final EditableJComboBoxPanel columnSeparatorCombobox;
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
-	
-	private final JComboBox decimalSeparatorCombobox;
-	
+
+	private final JComboBox<String> decimalSeparatorCombobox;
+
 	private final JTextArea csvFileTextArea;
 	private int csvFileRowCount = 0;
-	
+
 	private final SpinnerNumberModel lineModel;
 	private final JSpinner firstDataJS;
 	private final JLabel firstDataJL;
-	
+
 	private final JLabel useHeaderJL;
 	private final JCheckBox useHeaderJCB;
-	
+
 	public Step2Panel(final int csvFileRowCount) {
 		super();
 		//
@@ -105,7 +105,7 @@ public class Step2Panel extends JPanel {
 			useHeaderJCB.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					logger.trace("useHeader state changed. is selected?" + 
+					logger.trace("useHeader state changed. is selected?" +
 							useHeaderJCB.isSelected());
 				}
 			});
@@ -122,7 +122,7 @@ public class Step2Panel extends JPanel {
 		 */
 		final String[] decimalSeparators = Constants.DECIMAL_SEPARATORS;
 		//
-		//		
+		//
 		//	CSV-setting panel
 		//
 		final JPanel csvSettingsPanel = new JPanel();
@@ -135,7 +135,7 @@ public class Step2Panel extends JPanel {
 		csvSettingsPanel.setLayout(gbl_csvSettingsPanel);
 		columnSeparatorCombobox = new EditableJComboBoxPanel(
 				items.getColumnSeparators(),
-				Lang.l().step2ColumnSeparator(), 
+				Lang.l().step2ColumnSeparator(),
 				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
 		final GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
 		gbc_columnSeparatorCombobox.fill = GridBagConstraints.BOTH;
@@ -200,7 +200,7 @@ public class Step2Panel extends JPanel {
 		gbc_firstLineWithDataJPanel.gridy = 3;
 		csvSettingsPanel.add(firstLineWithDataJPanel, gbc_firstLineWithDataJPanel);
 		final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-		decimalSeparatorCombobox = new JComboBox(decimalSeparators);
+		decimalSeparatorCombobox = new JComboBox<String>(decimalSeparators);
 		decimalSeparatorCombobox.setSelectedIndex(0);
 		final JPanel decimalSeparatorPanel = new JPanel();
 		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
@@ -217,7 +217,7 @@ public class Step2Panel extends JPanel {
 		//	CSV text area
 		//
 		csvFileTextArea = new JTextArea(20, 60);
-		csvFileTextArea.setEditable(false);	
+		csvFileTextArea.setEditable(false);
 		final JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
 		final JPanel csvDataPanel = new JPanel();
 		csvDataPanel.setBorder(new TitledBorder(null, Lang.l().step2DataPreviewLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -227,19 +227,19 @@ public class Step2Panel extends JPanel {
 		add(csvSettingsPanel);
 		add(csvDataPanel);
 	}
-	
+
 	public String getCommentIndicator() {
 		return (String) commentIndicatorCombobox.getSelectedItem();
 	}
-	
+
 	public void setCommentIndicator(final String commentIndicator) {
 		commentIndicatorCombobox.setSelectedItem(commentIndicator);
 	}
-	
+
 	public String getDecimalSeparator() {
 		return decimalSeparatorCombobox.getSelectedItem().toString();
 	}
-	
+
 	public void setDecimalSeparator(final String decimalSeparator) {
 		decimalSeparatorCombobox.setSelectedItem(decimalSeparator);
 	}
@@ -270,30 +270,32 @@ public class Step2Panel extends JPanel {
 
 	public void setCSVFileContent(final String content) {
 		// add line numbers to content
-		final StringTokenizer tok = new StringTokenizer(content,"\n");
-		final StringBuffer buf = new StringBuffer(content.length());
-		String tmp = "", contentWithNumbers;
-		int count = 0;
-		final int maxLevel = ("" + csvFileRowCount).length();
-		int levelOfCount = ("" + count).length();
-		while(tok.hasMoreTokens()) {
+		final String[] lines = content.split("\n");
+		int count = 0, levelOfCount = 1;
+		final int maxLevel = Integer.toString(csvFileRowCount).length();
+		// 2:= whitespace + Constants.RAW_DATA_SEPARATOR
+		final int bufferSize = content.length() + (lines.length * (maxLevel + 2));
+		final StringBuffer sb = new StringBuffer(bufferSize);
+		for (final String line : lines) {
+
 			for (int i = levelOfCount; i < maxLevel; i++) {
-				tmp = " " + tmp;
+				sb.append(" ");
 			}
-			tmp = tmp + count + Constants.RAW_DATA_SEPARATOR + " " + tok.nextToken() + "\n";
-			buf.append(tmp);
-			// 
+			sb.append(count)
+    			.append(Constants.RAW_DATA_SEPARATOR)
+    			.append(" ")
+    			.append(line)
+    			.append("\n");
+			//
 			//	preparation for next round
-			tmp = "";
 			count++;
-			levelOfCount = ("" + count).length();
+			levelOfCount = Integer.toString(count).length();
 		}
-		buf.trimToSize();
-		contentWithNumbers = buf.toString(); 
-		csvFileTextArea.setText(contentWithNumbers);
+		sb.trimToSize();
+		csvFileTextArea.setText(sb.toString());
 		csvFileTextArea.setCaretPosition(0);
 	}
-	
+
 	public void setCSVFileHighlight(final int number) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("setCSVFileHighlight()");
@@ -323,7 +325,7 @@ public class Step2Panel extends JPanel {
 	public void setFirstLineWithData(final int firstLineWithData) {
 		lineModel.setValue(firstLineWithData);
 	}
-	
+
 	public String getTextQualifier() {
 		return (String) textQualifierCombobox.getSelectedItem();
 	}
@@ -331,11 +333,11 @@ public class Step2Panel extends JPanel {
 	public void setTextQualifier(final String textQualifier) {
 		textQualifierCombobox.setSelectedItem(textQualifier);
 	}
-		
+
 	public boolean getUseHeader() {
 		return useHeaderJCB.isSelected();
 	}
-	
+
 	public void setUseHeader(final boolean useHeader) {
 		useHeaderJCB.setSelected(useHeader);
 	}
