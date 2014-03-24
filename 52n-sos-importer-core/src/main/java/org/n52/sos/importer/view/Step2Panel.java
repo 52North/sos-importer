@@ -270,27 +270,29 @@ public class Step2Panel extends JPanel {
 
 	public void setCSVFileContent(final String content) {
 		// add line numbers to content
-		final StringTokenizer tok = new StringTokenizer(content,"\n");
-		final StringBuffer buf = new StringBuffer(content.length());
-		String tmp = "", contentWithNumbers;
-		int count = 0;
-		final int maxLevel = ("" + csvFileRowCount).length();
-		int levelOfCount = ("" + count).length();
-		while(tok.hasMoreTokens()) {
+		final String[] lines = content.split("\n");
+		int count = 0, levelOfCount = 1;
+		final int maxLevel = Integer.toString(csvFileRowCount).length();
+		// 2:= whitespace + Constants.RAW_DATA_SEPARATOR
+		final int bufferSize = content.length() + (lines.length * (maxLevel + 2));
+		final StringBuffer sb = new StringBuffer(bufferSize);
+		for (final String line : lines) {
+
 			for (int i = levelOfCount; i < maxLevel; i++) {
-				tmp = " " + tmp;
+				sb.append(" ");
 			}
-			tmp = tmp + count + Constants.RAW_DATA_SEPARATOR + " " + tok.nextToken() + "\n";
-			buf.append(tmp);
-			// 
+			sb.append(count)
+    			.append(Constants.RAW_DATA_SEPARATOR)
+    			.append(" ")
+    			.append(line)
+    			.append("\n");
+			//
 			//	preparation for next round
-			tmp = "";
 			count++;
-			levelOfCount = ("" + count).length();
+			levelOfCount = Integer.toString(count).length();
 		}
-		buf.trimToSize();
-		contentWithNumbers = buf.toString(); 
-		csvFileTextArea.setText(contentWithNumbers);
+		sb.trimToSize();
+		csvFileTextArea.setText(sb.toString());
 		csvFileTextArea.setCaretPosition(0);
 	}
 
