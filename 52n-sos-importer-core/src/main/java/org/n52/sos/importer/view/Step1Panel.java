@@ -88,7 +88,7 @@ public class Step1Panel extends JPanel {
 	private final JTextField jtfFilenameSchema = new JTextField();
 	private final JPasswordField jpfPassword = new JPasswordField();
 	private final JCheckBox jcbRegex = new JCheckBox();
-	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
+	private final JComboBox<String> jcbChooseInputType = new JComboBox<String>(feedingTypes);
 	private final Step1Panel _this = this;
 	private final JPanel cardPanel = new JPanel(new CardLayout());
 
@@ -314,18 +314,18 @@ public class Step1Panel extends JPanel {
 	private JPanel initLanguagePanel() {
 		final JPanel panel = new JPanel();
 		final JLabel label = new JLabel(Lang.l().step1SelectLanguage());
-		final JComboBox jcb = new JComboBox(Lang.getAvailableLocales());
+		final JComboBox<Locale> jcb = new JComboBox<Locale>(Lang.getAvailableLocales());
 		jcb.setSelectedItem(Lang.getCurrentLocale());
 		jcb.setEditable(false);
 		//
 		jcb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final JComboBox cb = (JComboBox)e.getSource();
+				final JComboBox<?> cb = (JComboBox<?>)e.getSource();
 		        final Locale selectedLocale = (Locale)cb.getSelectedItem();
 		        Lang.setCurrentLocale(selectedLocale);
 		        ToolTips.loadSettings();
-		        // restart application drawing -> BUG 619 
+		        // restart application drawing -> BUG 619
 		        BackNextController.getInstance().restartCurrentStep();
 			}
 		});
