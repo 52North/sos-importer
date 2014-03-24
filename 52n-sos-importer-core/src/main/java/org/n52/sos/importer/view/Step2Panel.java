@@ -73,9 +73,9 @@ public class Step2Panel extends JPanel {
 	private final EditableJComboBoxPanel columnSeparatorCombobox;
 	private final EditableJComboBoxPanel commentIndicatorCombobox;
 	private final EditableJComboBoxPanel textQualifierCombobox;
-	
-	private final JComboBox decimalSeparatorCombobox;
-	
+
+	private final JComboBox<String> decimalSeparatorCombobox;
+
 	private final JTextArea csvFileTextArea;
 	private int csvFileRowCount = 0;
 
@@ -200,7 +200,7 @@ public class Step2Panel extends JPanel {
 		gbc_firstLineWithDataJPanel.gridy = 3;
 		csvSettingsPanel.add(firstLineWithDataJPanel, gbc_firstLineWithDataJPanel);
 		final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-		decimalSeparatorCombobox = new JComboBox(decimalSeparators);
+		decimalSeparatorCombobox = new JComboBox<String>(decimalSeparators);
 		decimalSeparatorCombobox.setSelectedIndex(0);
 		final JPanel decimalSeparatorPanel = new JPanel();
 		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
