@@ -539,6 +539,11 @@
 					<xs:documentation>If set to TRUE the LocaleFile.Path or RemoteFile.URL contains a regular expression needing special handling before retrieving the data file.</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="regExDateInfoInFileName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>If present, the contained regular expression will be applied to the file name of the datafile to extract date information.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="DecimalSeparator" default="." nillable="false">
