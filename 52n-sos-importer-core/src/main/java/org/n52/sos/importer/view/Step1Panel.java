@@ -70,16 +70,16 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class Step1Panel extends JPanel {
-	
+
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
-	
+
 	private final String[] feedingTypes = new String[]{Lang.l().step1FeedTypeCSV(), Lang.l().step1FeedTypeFTP()};
-	
+
 	// separation of type cases
 	public static final int CSV_FILE = 0;
 	public static final int FTP_FILE = 1;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step1Panel.class);
 	private final JTextField csvFileTextField = new JTextField(25);
 	private final JTextField jtfUrl = new JTextField();
@@ -91,29 +91,29 @@ public class Step1Panel extends JPanel {
 	private final JComboBox jcbChooseInputType = new JComboBox(feedingTypes);
 	private final Step1Panel _this = this;
 	private final JPanel cardPanel = new JPanel(new CardLayout());
-	
+
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
 
 	private static final ResourceBundle welcomeRes = ResourceBundle.getBundle(welcomeResBunName);
-	
+
 	public Step1Panel(final Step1Controller step1Controller) {
 		super();
 		final JScrollPane welcomePanel = initWelcomePanel();
 		final JPanel languagePanel = initLanguagePanel();
 		final JPanel csvPanel = initCsvPanel();
 		this.step1Controller = step1Controller;
-		
+
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		add(languagePanel);
 		add(csvPanel);
 		add(welcomePanel);
 	}
-	
+
 	private JPanel initCsvPanel() {
 		final JPanel csvPanel = new JPanel();
 		csvPanel.setBorder(BorderFactory.createTitledBorder(Lang.l().step1File()));
 		csvPanel.setLayout(new GridBagLayout());
-		
+
 		// one time feed
 		final JPanel oneTimeFeed = new JPanel();
 		oneTimeFeed.setLayout(new GridBagLayout());
@@ -127,7 +127,7 @@ public class Step1Panel extends JPanel {
 				step1Controller.browseButtonClicked();
 			}
 		});
-		
+
 		final GridBagConstraints gbcOneTimeFeed =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2,
 						2, 2, 2), 0, 0);
@@ -137,7 +137,7 @@ public class Step1Panel extends JPanel {
 		gbcOneTimeFeed.gridx = 2;
 		oneTimeFeed.add(browse, gbcOneTimeFeed);
 		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
-		
+
 		// repetitive feed
 		final RepetitiveFeedKeyListener keyListener = new RepetitiveFeedKeyListener();
 		final JPanel repetitiveFeed = new JPanel();
@@ -150,21 +150,21 @@ public class Step1Panel extends JPanel {
 		final JLabel jlRegexDesc = new JLabel(Lang.l().step1RegexDescription() + ":");
 		final JLabel jlDirectory = new JLabel(Lang.l().step1Directory() + ":");
 		final JLabel jlFileSchema = new JLabel(Lang.l().step1FileSchema() + ":");
-		
+
 		// this keylistener instantly checks whether the input data is sufficient
 		jtfUrl.addKeyListener(keyListener);
 		jtfUser.addKeyListener(keyListener);
-		jpfPassword.addKeyListener(keyListener); 
+		jpfPassword.addKeyListener(keyListener);
 		jtfDirectory.addKeyListener(keyListener);
 		jtfFilenameSchema.addKeyListener(keyListener);
-		
+
 		final GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 2, 1, 0, 0,
 				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
 		final GridBagConstraints gbcInput = new GridBagConstraints(3, 0, 2, 1, 1, 0,
 				GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2,
 						2, 2, 2), 0, 0);
-		
+
 		gbcLabel.gridy = gbcInput.gridy = 0;
 		repetitiveFeed.add(jlUrl, gbcLabel);
 		repetitiveFeed.add(jtfUrl, gbcInput);
@@ -174,7 +174,7 @@ public class Step1Panel extends JPanel {
 		gbcLabel.gridy = gbcInput.gridy = 2;
 		repetitiveFeed.add(jlPassword, gbcLabel);
 		repetitiveFeed.add(jpfPassword, gbcInput);
-		
+
 		gbcLabel.gridy = gbcInput.gridy = 3;
 		gbcLabel.gridwidth = 1;
 		repetitiveFeed.add(jlRegex, gbcLabel);
@@ -187,7 +187,7 @@ public class Step1Panel extends JPanel {
 		gbcLabel.anchor = GridBagConstraints.WEST;
 		gbcLabel.fill = GridBagConstraints.BOTH;
 		repetitiveFeed.add(jlRegexDesc, gbcInput);
-		
+
 		gbcLabel.gridy = gbcInput.gridy = 4;
 		repetitiveFeed.add(jlDirectory, gbcLabel);
 		repetitiveFeed.add(jtfDirectory, gbcInput);
@@ -198,7 +198,7 @@ public class Step1Panel extends JPanel {
 		// feeding type chooser section
 		cardPanel.add(oneTimeFeed, "onetime");
 		cardPanel.add(repetitiveFeed, "repetitive");
-		
+
 		jcbChooseInputType.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent ae) {
@@ -211,23 +211,23 @@ public class Step1Panel extends JPanel {
 				}
 			}
 		});
-		
+
 		final GridBagConstraints gbcChoose = new GridBagConstraints(0, 0, 1, 1, 1, 0,
 				GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(5,
 						5, 5, 5), 0, 0);
-		
+
 		csvPanel.add(jcbChooseInputType, gbcChoose);
 		gbcChoose.gridy = 1;
 		gbcChoose.fill = GridBagConstraints.HORIZONTAL;
 		csvPanel.add(cardPanel, gbcChoose);
-		
+
 		return csvPanel;
 	}
-	
+
 	public int getFeedingType() {
 		return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
 	}
-	
+
 	public void setFeedingType(final int feedingType) {
 		if (feedingType == CSV_FILE) {
 			((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
@@ -239,7 +239,7 @@ public class Step1Panel extends JPanel {
 			jcbChooseInputType.setSelectedIndex(1);
 		}
 	}
-	
+
 	public String getUrl() {
 		final String protocollCheck = "ftp://";
 		final String result = jtfUrl.getText();
@@ -248,21 +248,21 @@ public class Step1Panel extends JPanel {
 		}
 		return result;
 	}
-	
+
 	public void setUrl(final String url) {
 		jtfUrl.setText(url);
 		inputTyped();
 	}
-	
+
 	public String getUser() {
 		return jtfUser.getText();
 	}
-	
+
 	public void setUser(final String user) {
 		jtfUser.setText(user);
 		inputTyped();
 	}
-	
+
 	public String getPassword() {
 		String password = new String();
 		for (int i = 0; i < jpfPassword.getPassword().length; i++) {
@@ -270,12 +270,12 @@ public class Step1Panel extends JPanel {
 		}
 		return password;
 	}
-	
+
 	public void setPassword(final String password) {
 		jpfPassword.setText(password);
 		inputTyped();
 	}
-	
+
 	public boolean getRegexStatus() {
 		return jcbRegex.isSelected();
 	}
@@ -288,29 +288,29 @@ public class Step1Panel extends JPanel {
 	public String getDirectory() {
 		return jtfDirectory.getText();
 	}
-	
+
 	public void setDirectory(final String directory) {
 		jtfDirectory.setText(directory);
 		inputTyped();
 	}
-	
+
 	public String getFilenameSchema() {
 		return jtfFilenameSchema.getText();
 	}
-	
+
 	public void setFilenameSchema(final String filenameSchema) {
 		jtfFilenameSchema.setText(filenameSchema);
 		inputTyped();
 	}
-	
+
 	public void setCSVFilePath(final String filePath) {
 		csvFileTextField.setText(filePath);
 	}
-	
+
 	public String getCSVFilePath() {
 		return csvFileTextField.getText();
 	}
-	
+
 	private JPanel initLanguagePanel() {
 		final JPanel panel = new JPanel();
 		final JLabel label = new JLabel(Lang.l().step1SelectLanguage());
@@ -337,7 +337,7 @@ public class Step1Panel extends JPanel {
 	}
 
 	/**
-	 * This method reads the welcome message from a HTML file and presents it 
+	 * This method reads the welcome message from a HTML file and presents it
 	 * using a <code>JEditorPane</code>
 	 * {@link javax.swing.JEditorPane }
 	 */
@@ -387,7 +387,7 @@ public class Step1Panel extends JPanel {
 		}
 		return scrollPane;
 	}
-	
+
 	/*
 	 * Instantly checks whether the data, to recieve a file from a ftp server,
 	 * are complete. Only the server's url and a file name respectively a file
@@ -403,14 +403,14 @@ public class Step1Panel extends JPanel {
 			BackNextController.getInstance().setNextButtonEnabled(false);
 		}
 	}
-	
+
 	private class RepetitiveFeedKeyListener implements KeyListener {
 
 		@Override
 		public void keyPressed(final KeyEvent e) {
 		}
 
-		
+
 		@Override
 		public void keyReleased(final KeyEvent e) {
 			inputTyped();
@@ -419,6 +419,6 @@ public class Step1Panel extends JPanel {
 		@Override
 		public void keyTyped(final KeyEvent e) {
 		}
-		
+
 	}
 }
