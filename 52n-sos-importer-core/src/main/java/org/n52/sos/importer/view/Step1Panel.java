@@ -32,8 +32,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Locale;
@@ -404,20 +404,11 @@ public class Step1Panel extends JPanel {
 		}
 	}
 
-	private class RepetitiveFeedKeyListener implements KeyListener {
-
-		@Override
-		public void keyPressed(final KeyEvent e) {
-		}
-
+	private class RepetitiveFeedKeyListener extends KeyAdapter {
 
 		@Override
 		public void keyReleased(final KeyEvent e) {
 			inputTyped();
-		}
-
-		@Override
-		public void keyTyped(final KeyEvent e) {
 		}
 
 	}
