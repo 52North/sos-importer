@@ -28,87 +28,93 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 public class Step2Model implements StepModel {
 
 	private String csvFileContent;
-	
+
 	private String columnSeparator;
-	
+
 	private String commentIndicator;
-	
+
 	private String textQualifier;
-	
+
 	private char decimalSeparator;
-	
+
 	private int firstLineWithData;
-	
+
 	private int csvFileRowRount;
-	
+
 	private boolean useHeader;
-	
-	/**
-	 * @return the csvFileRowRount
-	 */
-	public int getCsvFileRowRount() {
-		return csvFileRowRount;
-	}
 
-	/**
-	 * @param csvFileRowRount the csvFileRowRount to set
-	 */
-	public void setCsvFileRowRount(int csvFileRowRount) {
-		this.csvFileRowRount = csvFileRowRount;
-	}
-
-	public Step2Model(String csvFileContent, int csvFileRowCount) {
+	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
-		
-		EditableComboBoxItems items = EditableComboBoxItems.getInstance();
+
+		final EditableComboBoxItems items = EditableComboBoxItems.getInstance();
 		columnSeparator = (String) items.getColumnSeparators().getElementAt(0);
 		commentIndicator = (String) items.getCommentIndicators().getElementAt(0);
 		textQualifier = (String) items.getTextQualifiers().getElementAt(0);
 		firstLineWithData = 0;
-		this.csvFileRowRount = csvFileRowCount;
+		csvFileRowRount = csvFileRowCount;
 	}
 
-	public String getColumnSeparator() { return columnSeparator; }
-	public void setColumnSeparator(String selectedColumnSeparator) {
-		this.columnSeparator = selectedColumnSeparator;
+	public int getCsvFileRowRount() {
+		return csvFileRowRount;
 	}
 
-	public String getCommentIndicator() { return commentIndicator; }
-	public void setCommentIndicator(String selectedCommentIndicator) {
-		this.commentIndicator = selectedCommentIndicator;
+	public void setCsvFileRowRount(final int csvFileRowRount) {
+		this.csvFileRowRount = csvFileRowRount;
 	}
 
-	public int getFirstLineWithData() {	return firstLineWithData; }
-	public void setFirstLineWithData(int firstLineWithData) {
+	public String getColumnSeparator() {
+		return columnSeparator;
+	}
+
+	public void setColumnSeparator(final String selectedColumnSeparator) {
+		columnSeparator = selectedColumnSeparator;
+	}
+
+	public String getCommentIndicator() {
+		return commentIndicator;
+	}
+
+	public void setCommentIndicator(final String selectedCommentIndicator) {
+		commentIndicator = selectedCommentIndicator;
+	}
+
+	public int getFirstLineWithData() {
+		return firstLineWithData;
+	}
+
+	public void setFirstLineWithData(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 	}
 
-	public String getTextQualifier() { return textQualifier; }
-	public void setTextQualifier(String selectedTextQualifier) {
-		this.textQualifier = selectedTextQualifier;
+	public String getTextQualifier() {
+		return textQualifier;
 	}
 
-	public String getCSVFileContent() {	return csvFileContent; }
-	public void setCSVFileContent(String cSVFileContent) {
+	public void setTextQualifier(final String selectedTextQualifier) {
+		textQualifier = selectedTextQualifier;
+	}
+
+	public String getCSVFileContent() {
+		return csvFileContent;
+	}
+
+	public void setCSVFileContent(final String cSVFileContent) {
 		csvFileContent = cSVFileContent;
 	}
 
-	public boolean getUseHeader() { return useHeader; }
-	public void setUseHeader(boolean useHeader) {
+	public boolean getUseHeader() {
+		return useHeader;
+	}
+
+	public void setUseHeader(final boolean useHeader) {
 		this.useHeader = useHeader;
 	}
 
-	/**
-	 * @return the decimalSeparator
-	 */
 	public char getDecimalSeparator() {
 		return decimalSeparator;
 	}
 
-	/**
-	 * @param decimalSeparator the decimalSeparator to set
-	 */
-	public void setDecimalSeparator(char decimalSeparator) {
+	public void setDecimalSeparator(final char decimalSeparator) {
 		this.decimalSeparator = decimalSeparator;
 	}
 }
