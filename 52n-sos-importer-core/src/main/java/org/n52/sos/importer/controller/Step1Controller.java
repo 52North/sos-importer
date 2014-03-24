@@ -327,13 +327,15 @@ public class Step1Controller extends StepController {
 			csvFileRowCount = 0;
 			//
 			while ((line = br.readLine()) != null) {
-				sb.append(line + "\n");
+				sb.append(line).append("\n");
 				csvFileRowCount++;
 			}
 			br.close();
 		} catch (final IOException ioe) {
-			logger.error("Problem while reading CSV file \"" + 
-					f.getAbsolutePath() + "\"",
+			logger.error(
+					new StringBuffer("Problem while reading CSV file \"")
+					.append(f.getAbsolutePath())
+					.append("\"").toString(),
 					ioe);
 		}
 		return tmpCSVFileContent = sb.toString();
