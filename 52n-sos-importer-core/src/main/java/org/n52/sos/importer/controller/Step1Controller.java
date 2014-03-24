@@ -305,16 +305,16 @@ public class Step1Controller extends StepController {
 				}
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Reads the given file line by line. Returns the content as 
-	 * <code>{@link java.Lang.l().l().String}</code> and sets the 
+	 * Reads the given file line by line. Returns the content as
+	 * <code>{@link java.lang.String}</code> and sets the
 	 * <code>csvFileRowCount</code> variable of this class.
 	 * @param f the <code>{@link java.io.File}</code> to read
-	 * @return a <code>{@link java.Lang.l().l().String}</code> containing the content 
+	 * @return a <code>{@link java.lang.String}</code> containing the content
 	 * 				of the given file
 	 */
 	private String readFile(final File f) {
