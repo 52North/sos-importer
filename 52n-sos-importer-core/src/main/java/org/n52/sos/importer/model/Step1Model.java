@@ -29,69 +29,78 @@ public class Step1Model implements StepModel{
 	private boolean regex;
 	private int feedingType;
 	private String csvFilePath = "";
-	
+	private String fileEncoding = "";
+
 	public int getFeedingType() {
 		return feedingType;
 	}
 
-	public void setFeedingType(int feedingType) {
+	public void setFeedingType(final int feedingType) {
 		this.feedingType = feedingType;
 	}
 
 	public String getUrl() {
 		return url;
 	}
-	
-	public void setUrl(String url) {
+
+	public void setUrl(final String url) {
 		this.url = url;
 	}
-	
+
 	public String getUser() {
 		return user;
 	}
-	
-	public void setUser(String user) {
+
+	public void setUser(final String user) {
 		this.user = user;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
-	public void setPassword(String password) {
+
+	public void setPassword(final String password) {
 		this.password = password;
 	}
-	
+
 	public boolean isRegex() {
 		return regex;
 	}
 
-	public void setRegex(boolean regex) {
+	public void setRegex(final boolean regex) {
 		this.regex = regex;
 	}
 
 	public String getDirectory() {
 		return directory;
 	}
-	
-	public void setDirectory(String directory) {
+
+	public void setDirectory(final String directory) {
 		this.directory = directory;
 	}
-	
+
 	public String getFilenameSchema() {
 		return filenameSchema;
 	}
-	
-	public void setFilenameSchema(String filenameSchema) {
+
+	public void setFilenameSchema(final String filenameSchema) {
 		this.filenameSchema = filenameSchema;
 	}
-	
-	public void setCSVFilePath(String csvFilePath) {
+
+	public void setCSVFilePath(final String csvFilePath) {
 		this.csvFilePath = csvFilePath;
 	}
 
 	public String getCSVFilePath() {
 		return csvFilePath;
 	}
-	
+
+	public String getFileEncoding() {
+		return fileEncoding;
+	}
+
+	public void setFileEncoding(final String fileEncoding) {
+		this.fileEncoding = fileEncoding;
+	}
+
 }

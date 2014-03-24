@@ -34,14 +34,14 @@ import org.n52.sos.importer.Constants;
  * This class contains all String used by the GUI in English
  */
 public class En extends Lang{
-	
+
 	private final static Locale locale = Locale.ENGLISH;
-	
+
 	@Override
 	public String altitude() {
 		return "Altitude / Height";
 	}
-	
+
 	@Override
 	public String and() {
 		return "and";
@@ -124,10 +124,10 @@ public class En extends Lang{
 	}
 
 	@Override
-	public String exitDialogQuestion() { 
+	public String exitDialogQuestion() {
 		return "Do you really want to exit?\n";
 	}
-	
+
 	@Override
 	public String exitDialogTitle() { return "Exit"; }
 
@@ -188,7 +188,7 @@ public class En extends Lang{
 	public String latitudeDialogDecimalValue() {
 		return "The " + latitudeNorthing() + " can only be a decimal number so far.";
 	}
-	
+
 	@Override
 	public String latitudeNorthing() {
 		return "Latitude / Northing";
@@ -218,7 +218,7 @@ public class En extends Lang{
 	public String minutes() {
 		return "Minutes";
 	}
-	
+
 	@Override
 	public String month() {
 		return "Month";
@@ -243,7 +243,7 @@ public class En extends Lang{
 	public String observation() {
 		return "Observation";
 	}
-	
+
 	@Override
 	public String observedProperty() {
 		return "Observed Property";
@@ -288,7 +288,7 @@ public class En extends Lang{
 	public String spaceString() {
 		return "Space";
 	}
-	
+
 	@Override
 	public String specificationVersion()
 	{
@@ -314,6 +314,11 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step1EncodingLabel() {
+		return "Please select the input file encoding";
+	}
+
+	@Override
 	public String step1FeedTypeCSV() {
 		return "One-Time-Feed from a local CSV file";
 	}
@@ -323,42 +328,42 @@ public class En extends Lang{
 		return "One-Time-Feed / Repetitive Feed from a FTP-Server";
 	}
 
+
 	@Override
 	public String step1File() {
 		return "CSV File";
 	}
-	
-	
+
 	@Override
 	public String step1FileSchema() {
 		return "File-Schema";
 	}
-	
+
 	@Override
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
-	
+
 	@Override
 	public String step1InstructionLabel() {
 		return "Please select the CSV file";
 	}
-	
+
 	@Override
 	public String step1Introduction() {
 		return "Introduction";
 	}
-	
+
 	@Override
 	public String step1Password() {
 		return "Password";
 	}
-	
+
 	@Override
 	public String step1Regex() {
 		return "<html>Regular<br/>expressions:</html>";
 	}
-	
+
 	@Override
 	public String step1RegexDescription() {
 		return "<html>Note: Choose this option to describe dynamic folder and file "
@@ -411,7 +416,7 @@ public class En extends Lang{
 	public String step2ParseHeader() {
 		return "Interpret Header";
 	}
-	
+
 	@Override
 	public String step2TextQualifier() {
 		return "Text qualifier";
@@ -449,17 +454,17 @@ public class En extends Lang{
 
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
-		return "The type for this column is \"" + 
-				step3ColTypeUndefined() + 
+		return "The type for this column is \"" +
+				step3ColTypeUndefined() +
 				"\".\nPlease select one.\nChoose \"" +
-				step3ColTypeDoNotExport() + 
+				step3ColTypeDoNotExport() +
 				"\" for skipping it.";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
-		return "Column Type is \"" + 
-				step3ColTypeUndefined() + 
+		return "Column Type is \"" +
+				step3ColTypeUndefined() +
 				"\"";
 	}
 
@@ -555,20 +560,25 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step4bInfoResourceAlreadySetText() {
+		return " already set for this ";
+	}
+
+	@Override
 	public String step4bModelDescription() {
-		return "Please click the " + 
+		return "Please click the " +
 			Constants.STRING_REPLACER +
 			" (not the title) containing " +
-			"the measured values for the marked " + 
-			Constants.STRING_REPLACER + 
+			"the measured values for the marked " +
+			Constants.STRING_REPLACER +
 			" " +
-			Constants.STRING_REPLACER + 
-			" that is marked. If several " + 
-			Constants.STRING_REPLACER + 
-			"s corespond to this " + 
-			Constants.STRING_REPLACER + 
+			Constants.STRING_REPLACER +
+			" that is marked. If several " +
+			Constants.STRING_REPLACER +
+			"s corespond to this " +
+			Constants.STRING_REPLACER +
 			" " +
-			Constants.STRING_REPLACER + 
+			Constants.STRING_REPLACER +
 			", click all of them with pressed CTRL key.";
 	}
 
@@ -615,10 +625,10 @@ public class En extends Lang{
 
 	@Override
 	public String step6bModelDescription() {
-		return "<html>What is the <u>" + 
-				Constants.STRING_REPLACER + 
-				"</u> for the marked " + measuredValue() + " " + 
-				Constants.STRING_REPLACER + 
+		return "<html>What is the <u>" +
+				Constants.STRING_REPLACER +
+				"</u> for the marked " + measuredValue() + " " +
+				Constants.STRING_REPLACER +
 				"?</html>";
 	}
 
@@ -689,8 +699,8 @@ public class En extends Lang{
 
 	@Override
 	public String step7ConfigDirNotDirOrWriteable(final String folder) {
-		return "The selected config file folder \n\"" + 
-				folder + 
+		return "The selected config file folder \n\"" +
+				folder +
 				"\"\nis not accessible for the application.";
 	}
 
@@ -766,8 +776,8 @@ public class En extends Lang{
 	public String step7SOSconnectionFailed(final String strURL,
 			final int responseCode) {
 		return "Could not connect to " + sos() + ": "
-        		+ strURL + 
-        		". HTTP Response Code: " 
+        		+ strURL +
+        		". HTTP Response Code: "
         		+ responseCode;
 	}
 
@@ -776,9 +786,9 @@ public class En extends Lang{
 			final String message,
 			final int readTimeoutSeconds,
 			final int connectTimeoutSeconds) {
-		return "Connection to " + sos() + 
+		return "Connection to " + sos() +
 				"\n\"" + strURL + "\"\n" +
-				"failed after " + connectTimeoutSeconds + " seconds connect and " + 
+				"failed after " + connectTimeoutSeconds + " seconds connect and " +
 				readTimeoutSeconds + " seconds read timeout.\n" +
 				"Reason: " + message;
 	}
@@ -846,7 +856,7 @@ public class En extends Lang{
 	public String step8InsertObservationLabel(final int i) {
 		return "Insert " + i + " Observations...";
 	}
-	
+
 	@Override
 	public String step8LogFile() {
 		return "Log File";
@@ -946,11 +956,6 @@ public class En extends Lang{
 	@Override
 	public String year() {
 		return "Year";
-	}
-
-	@Override
-	protected String step4bInfoResourceAlreadySetText() {
-		return " already set for this ";
 	}
 
 }

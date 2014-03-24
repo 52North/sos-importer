@@ -25,9 +25,10 @@ package org.n52.sos.importer.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.SocketException;
 
 import javax.swing.JFileChooser;
@@ -97,6 +98,7 @@ public class Step1Controller extends StepController {
 		step1Panel.setDirectory(step1Model.getDirectory());
 		step1Panel.setFilenameSchema(step1Model.getFilenameSchema());
 		step1Panel.setRegexStatus(step1Model.isRegex());
+		step1Panel.setFileEncoding(step1Model.getFileEncoding());
 	}
 
 	@Override
@@ -110,6 +112,7 @@ public class Step1Controller extends StepController {
 			step1Model.setDirectory(step1Panel.getDirectory());
 			step1Model.setFilenameSchema(step1Panel.getFilenameSchema());
 			step1Model.setRegex(step1Panel.getRegexStatus());
+			step1Model.setFileEncoding(step1Panel.getFileEncoding());
 		}
 		// why shall always the gui be recreated and repainted? - too expensive
 		// and complicates some method calls
@@ -182,9 +185,8 @@ public class Step1Controller extends StepController {
 				return false;
 			}
 
-			final File f = new File(filePath);
-
-			if (!f.exists()) {
+			final File dataFile = new File(filePath);
+			if (!dataFile.exists()) {
 				JOptionPane.showMessageDialog(null,
 					    "The specified file does not exist.",
 					    "Error",
@@ -192,7 +194,7 @@ public class Step1Controller extends StepController {
 				return false;
 			}
 
-			if (!f.isFile()) {
+			if (!dataFile.isFile()) {
 				JOptionPane.showMessageDialog(null,
 					    "Please specify a file, not a directory.",
 					    "Error",
@@ -200,14 +202,14 @@ public class Step1Controller extends StepController {
 				return false;
 			}
 
-			if (!f.canRead()) {
+			if (!dataFile.canRead()) {
 				JOptionPane.showMessageDialog(null,
 					    "No reading access on the specified file.",
 					    "Error",
 					    JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			readFile(f);
+			readFile(dataFile,step1Panel.getFileEncoding());
 		} else if (step1Panel != null && (step1Panel.getFeedingType() == Step1Panel.FTP_FILE)) {
 			// checks repetitive feed input data for validity
 			if (step1Panel.getUrl() == null || step1Panel.getUrl().equals("")) {
@@ -281,7 +283,7 @@ public class Step1Controller extends StepController {
 					final File csv = new File(csvFilePath);
 					if (csv.length() != 0) {
 						step1Panel.setCSVFilePath(csvFilePath);
-						readFile(new File(csvFilePath));
+						readFile(new File(csvFilePath),step1Panel.getFileEncoding());
 					} else {
 						csv.delete();
 						throw new IOException();
@@ -314,15 +316,15 @@ public class Step1Controller extends StepController {
 	 * <code>{@link java.lang.String}</code> and sets the
 	 * <code>csvFileRowCount</code> variable of this class.
 	 * @param f the <code>{@link java.io.File}</code> to read
+	 * @param encoding the name of charset encoding of the {@link File} f
 	 * @return a <code>{@link java.lang.String}</code> containing the content
 	 * 				of the given file
 	 */
-	private String readFile(final File f) {
+	private String readFile(final File f, final String encoding) {
 		logger.info("Read CSV file " + f.getAbsolutePath());
 		final StringBuilder sb = new StringBuilder();
-		try {
-			final FileReader fr = new FileReader(f);
-			final BufferedReader br = new BufferedReader(fr);
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), encoding))) {
+
 			String line;
 			csvFileRowCount = 0;
 			//

@@ -42,7 +42,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Step1ModelHandler implements ModelHandler<Step1Model> {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step1ModelHandler.class);
 
 	@Override
@@ -50,15 +50,14 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 		if (logger.isTraceEnabled()) {
 			logger.trace("handleModel()");
 		}
-		
+
 		DataFile dF = sosImportConf.getDataFile();
 		if (dF == null) {
 			dF = sosImportConf.addNewDataFile();
 		}
-		
+
 		if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
 			if (dF.getRemoteFile() != null) {
-				// TODO remove old
 				dF.setRemoteFile(null);
 			}
 			final LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
@@ -70,9 +69,12 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
 				logger.error(msg);
 				throw new NullPointerException(msg);
 			}
+			final String encoding = stepModel.getFileEncoding();
+			if (encoding != null && !encoding.isEmpty()) {
+				lF.setEncoding(encoding);
+			}
 		} else {
 			if (dF.getLocalFile() != null) {
-				// TODO remove old
 				dF.setLocalFile(null);
 			}
 			final RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();

@@ -15,39 +15,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * @author e.h.juerrens@52north.org
  *
  */
 public abstract class Lang {
-	
+
 	private static HashMap<Locale,Lang> availableLocales = new HashMap<Locale, Lang>();
-	
+
 	private static Locale currentLocale = Locale.ENGLISH;// <-- default language
-	
+
 	private static Lang instance = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(Lang.class);
-	
+
 	// Add default locale En
 	static {
 		Lang.availableLocales.put(Locale.ENGLISH, new En());
 		En.setCurrentLocale(Locale.ENGLISH);
 		Lang.availableLocales.put(Locale.GERMAN, new De());
 	}
-	
+
 	public static Locale[] getAvailableLocales() {
 		final Set <Locale> locales = availableLocales.keySet();
 		return locales.toArray(new Locale[locales.size()]);
 	}
-	
+
 	/**
 	 * @return the currentLocale
 	 */
 	public static Locale getCurrentLocale() {
 		return currentLocale;
 	}
-	
+
 	/**
 	 * @return An instance of the subclass of Lang implementing the defined
 	 * Locate.
@@ -74,7 +74,7 @@ public abstract class Lang {
 	/**
 	 * @return Altitude / Height
 	 */
-	public abstract String altitude(); 
+	public abstract String altitude();
 	/**
 	 * @return and
 	 */
@@ -96,7 +96,7 @@ public abstract class Lang {
 	 */
 	public abstract String column();
 	/**
-	 * 
+	 *
 	 * @return "Data Preview"
 	 */
 	public abstract String dataPreview();
@@ -109,12 +109,12 @@ public abstract class Lang {
 	 */
 	public abstract String day();
 	/**
-	 * 
+	 *
 	 * @return Delete the selected item from the list
 	 */
 	public abstract String editableComboBoxDeleteItemButton();
 	/**
-	 * 
+	 *
 	 * @return Add a new item to the list
 	 */
 	public abstract String editableComboBoxNewItemButton();
@@ -220,7 +220,7 @@ public abstract class Lang {
 	 */
 	public abstract String measuredValue();
 	/**
-	 * 
+	 *
 	 * @return "Metadata"
 	 */
 	public abstract String metadata();
@@ -253,7 +253,7 @@ public abstract class Lang {
 	 */
 	public abstract String observedProperty();
 	/**
-	 * 
+	 *
 	 * @return Offering
 	 */
 	public abstract String offering();
@@ -292,7 +292,7 @@ public abstract class Lang {
 	 */
 	public abstract String spaceString();
 	/**
-	 * 
+	 *
 	 * @return Specification Version
 	 */
 	public abstract String specificationVersion();
@@ -312,6 +312,10 @@ public abstract class Lang {
 	 * @return Remote Directory
 	 */
 	public abstract String step1Directory();
+	/**
+	 * @return Please select the input file encoding
+	 */
+	public abstract String step1EncodingLabel();
 	/**
 	 * @return CSV Feed Type
 	 */
@@ -333,12 +337,12 @@ public abstract class Lang {
 	 */
 	public abstract String step1FtpServer();
 	/**
-	 * 
+	 *
 	 * @return Please select the CSV file
 	 */
 	public abstract String step1InstructionLabel();
 	/**
-	 * 
+	 *
 	 * @return "Introduction"
 	 */
 	public abstract String step1Introduction();
@@ -486,7 +490,7 @@ public abstract class Lang {
 	 */
 	public abstract String step4aInfoDateAndTime();
 	/**
-	 * @param element 
+	 * @param element
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 */
@@ -504,9 +508,13 @@ public abstract class Lang {
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 * @see {@link org.n52.sos.importer.view.i18n.En.step4aInfoMeasuredValue()}
-	 * 
+	 *
 	 */
 	public abstract String step4bInfoNotMeasuredValue();
+	/**
+	 * @return " already set for this "
+	 */
+	public abstract String step4bInfoResourceAlreadySetText();
 	/**
 	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
 	 * @return
@@ -525,9 +533,9 @@ public abstract class Lang {
 		return res + step4bInfoResourceAlreadySetText() + measuredValue();
 	}
 	/**
-	 * 
-	 * List how to replace the 
-	 * {@link org.n52.sos.importer.Constants#STRING_REPLACER} 
+	 *
+	 * List how to replace the
+	 * {@link org.n52.sos.importer.Constants#STRING_REPLACER}
 	 * in the correct order:
 	 * <ol>
 	 * 	<li>The table element type of the measured values, maybe "column"</li>
@@ -540,11 +548,11 @@ public abstract class Lang {
 	 * @param tableElementType
 	 * @param tableElementType2
 	 * @param resourceType
-	 * @return Please click the <code>Constants.STRING_REPLACER</code> (not the title) 
-	 * containing the measured values for the marked 
-	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> that is 
-	 * marked. If several <code>Constants.STRING_REPLACER</code>s correspond to this 
-	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code>, click 
+	 * @return Please click the <code>Constants.STRING_REPLACER</code> (not the title)
+	 * containing the measured values for the marked
+	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> that is
+	 * marked. If several <code>Constants.STRING_REPLACER</code>s correspond to this
+	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code>, click
 	 * all of them with pressed CTRL key.
 	 */
 	public abstract String step4bModelDescription();
@@ -585,6 +593,7 @@ public abstract class Lang {
 	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
 	 */
 	public abstract String step6bModelDescription();
+
 	/**
 	 * @return Please select the columns to generate the name.<br />
 	 * 			\nMultiple columns could be selected.
@@ -594,13 +603,12 @@ public abstract class Lang {
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
-	
 	/**
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
 	/**
-	 * @return Please provide a URI or a prefix if using the name as part of the URI. 
+	 * @return Please provide a URI or a prefix if using the name as part of the URI.
 	 */
 	public abstract String step6bURIInstructions();
 	/**
@@ -612,12 +620,12 @@ public abstract class Lang {
 	 */
 	public abstract String step6cDescription();
 	/**
-	 * 
+	 *
 	 * @return Set Position
 	 */
 	public abstract String step6cInfoToolName();
 	/**
-	 * 
+	 *
 	 * @return Set the position by clicking on the map
 	 */
 	public abstract String step6cInfoToolTooltip();
@@ -641,11 +649,13 @@ public abstract class Lang {
 	 * @return No user input at all. Please fill in the required information.
 	 */
 	public abstract String step6NoUserInput();
+
 	/**
 	 * @return The selected config file folder <code>folder</code> is not
-	 * 			accessible for the application. 
+	 * 			accessible for the application.
 	 */
 	public abstract String step7ConfigDirNotDirOrWriteable(String folder);
+
 	/**
 	 * @return Choose configuration file export folder
 	 */
@@ -662,7 +672,7 @@ public abstract class Lang {
 	public abstract String step7ConfigFileLabel();
 
 	/**
-	 * 
+	 *
 	 * @return Configuration File
 	 */
 	public abstract String step7ConfigurationFile();
@@ -686,7 +696,7 @@ public abstract class Lang {
 	 * @return Please specify the offering name:
 	 */
 	public abstract String step7OfferingInputTextfieldLabel();
-	
+
 	/**
 	 * @return Please specify the offering name or select to generate it.
 	 */
@@ -705,7 +715,7 @@ public abstract class Lang {
 	public abstract String step7SaveConfig();
 
 	/**
-	 * 
+	 *
 	 * @return Please specify the binding.
 	 */
 	public abstract String step7SosBindingInstructions();
@@ -726,8 +736,8 @@ public abstract class Lang {
 	/**
 	 * @param strURL
 	 * @param message
-	 * @param readTimeoutSeconds 
-	 * @param connectTimeoutSeconds 
+	 * @param readTimeoutSeconds
+	 * @param connectTimeoutSeconds
 	 * @return Connection to Sensor Observation Service
 	 * 			\n<code>strURL</code>\n
 	 * 			failed after <code>connectTimeoutSeconds</code> seconds connect
@@ -735,18 +745,18 @@ public abstract class Lang {
 	 * 			Reason: <code>message</code>
 	 */
 	public abstract String step7SOSConnectionFailedException(String strURL,
-			String message, 
+			String message,
 			int readTimeoutSeconds,
 			int connectTimeoutSeconds);
 
 	/**
-	 * 
+	 *
 	 * @return	Please specify the SOS URL including the endpoint like this "http://www.example.com/52nSOS/sos" .
 	 */
 	public abstract String step7SosUrlInstructions();
 
 	/**
-	 * 
+	 *
 	 * @return Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.
 	 */
 	public abstract String step7SosVersionInstructions();
@@ -757,7 +767,7 @@ public abstract class Lang {
 	public abstract String step8ConfigFileButton();
 
 	/**
-	 * 
+	 *
 	 * @return "For taking a look at the generated configuration file, please click button."
 	 */
 	public abstract String step8ConfigurationFileInstructions();
@@ -768,7 +778,7 @@ public abstract class Lang {
 	public abstract String step8Description();
 
 	/**
-	 * 
+	 *
 	 * @return For importing the content of the data file one time, just click + step8DirectImportStartButton()
 	 */
 	public abstract String step8DirectImportInstructions();
@@ -779,8 +789,8 @@ public abstract class Lang {
 	public abstract String step8DirectImportLabel();
 
 	/**
-	 * 
-	 * @return Start Import 
+	 *
+	 * @return Start Import
 	 */
 	public abstract String step8DirectImportStartButton();
 
@@ -791,7 +801,7 @@ public abstract class Lang {
 	public abstract String step8ErrorLable(int i);
 
 	/**
-	 * 
+	 *
 	 * @param absolutePath
 	 * @return Could not find jar file!\nPlease place it there:\n\"expectedAbsolutePathToFeederJar\"
 	 */
@@ -809,18 +819,18 @@ public abstract class Lang {
 	public abstract String step8InsertObservationLabel(int i);
 
 	/**
-	 * 
+	 *
 	 * @return "Log File"
 	 */
 	public abstract String step8LogFile();
-	
+
 	/**
 	 * @return Check log file
 	 */
 	public abstract String step8LogFileButton();
 
 	/**
-	 * 
+	 *
 	 * @return "To check for additional information, please take a look at the log file created during the process."
 	 */
 	public abstract String step8LogFileInstructions();
@@ -840,7 +850,7 @@ public abstract class Lang {
 
 	/**
 	 * @param f The file which was used to save the XML model
-	 * @param excpetionText A short String describing the exception cause 
+	 * @param excpetionText A short String describing the exception cause
 	 * 						during saving process
 	 * @return The configuration could not be saved to file
 	 * 						<br />"<code>f</code>".
@@ -851,7 +861,7 @@ public abstract class Lang {
 	public abstract String step8SaveModelFailed(File f, String exceptionText);
 
 	/**
-	 * 
+	 *
 	 * @return "Start Import"
 	 */
 	public abstract String step8StartImportButton();
@@ -917,6 +927,4 @@ public abstract class Lang {
 	 * @return Year
 	 */
 	public abstract String year();
-
-	protected abstract String step4bInfoResourceAlreadySetText();
 }

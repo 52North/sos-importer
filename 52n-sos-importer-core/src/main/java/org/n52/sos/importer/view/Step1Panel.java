@@ -36,8 +36,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.SortedMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -71,6 +75,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step1Panel extends JPanel {
 
+	private static final String DEFAULT_FILE_ENCODING = "utf-8";
 	static final long serialVersionUID = 1L;
 	private final Step1Controller step1Controller;
 
@@ -91,6 +96,7 @@ public class Step1Panel extends JPanel {
 	private final JComboBox<String> jcbChooseInputType = new JComboBox<String>(feedingTypes);
 	private final Step1Panel _this = this;
 	private final JPanel cardPanel = new JPanel(new CardLayout());
+	private JComboBox<String> encodingCB;
 
 	private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
 
@@ -128,6 +134,12 @@ public class Step1Panel extends JPanel {
 			}
 		});
 
+		final JLabel encodingLabel = new JLabel(Lang.l().step1EncodingLabel());
+		encodingLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
+		final Set<String> charsets = getCharsets();
+		encodingCB = new JComboBox<String>(charsets.toArray(new String[charsets.size()]));
+		encodingCB.setSelectedIndex(getIndexOfEncoding(DEFAULT_FILE_ENCODING));
+
 		final GridBagConstraints gbcOneTimeFeed =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
 				GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2,
 						2, 2, 2), 0, 0);
@@ -136,6 +148,11 @@ public class Step1Panel extends JPanel {
 		oneTimeFeed.add(csvFileTextField, gbcOneTimeFeed);
 		gbcOneTimeFeed.gridx = 2;
 		oneTimeFeed.add(browse, gbcOneTimeFeed);
+		gbcOneTimeFeed.gridx = 0;
+		gbcOneTimeFeed.gridy = 2;
+		oneTimeFeed.add(encodingLabel, gbcOneTimeFeed);
+		gbcOneTimeFeed.gridx = 1;
+		oneTimeFeed.add(encodingCB, gbcOneTimeFeed);
 		csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
 
 		// repetitive feed
@@ -224,6 +241,29 @@ public class Step1Panel extends JPanel {
 		return csvPanel;
 	}
 
+	private Set<String> getCharsets() {
+		try {
+			final SortedMap<String, Charset> availableCharsets = Charset.availableCharsets();
+			return availableCharsets.keySet();
+		} catch (final Exception e) {
+			return Collections.singleton("UTF-8");
+		}
+	}
+
+	private int getIndexOfEncoding(String encodingName) {
+		int index = 0;
+		if (encodingName == null || encodingName.isEmpty()) {
+			encodingName = "UTF-8";
+		}
+		for (final String string : getCharsets()) {
+			if (string.equalsIgnoreCase(encodingName)) {
+				return index;
+			}
+			index++;
+		}
+		return 0;
+	}
+
 	public int getFeedingType() {
 		return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
 	}
@@ -309,6 +349,18 @@ public class Step1Panel extends JPanel {
 
 	public String getCSVFilePath() {
 		return csvFileTextField.getText();
+	}
+
+	public void setFileEncoding(final String encoding) {
+		try {
+			encodingCB.setSelectedIndex(getIndexOfEncoding(encoding));
+		} catch (final IllegalArgumentException iae) {
+			encodingCB.setSelectedIndex(getIndexOfEncoding(DEFAULT_FILE_ENCODING));
+		}
+	}
+
+	public String getFileEncoding() {
+		return (String) encodingCB.getSelectedItem();
 	}
 
 	private JPanel initLanguagePanel() {

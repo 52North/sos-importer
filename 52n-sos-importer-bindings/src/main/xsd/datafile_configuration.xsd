@@ -29,6 +29,11 @@
 			<xs:documentation>Character for separating element in content lines in CSV files. Length restriction set to 1 character.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:element name="Encoding" type="xs:string" default="UTF-8">
+		<xs:annotation>
+			<xs:documentation>Encoding of the datafile, e.g. "UTF-8"</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="EPSGCode">
 		<xs:annotation>
 			<xs:documentation>Integer identifying the used EPSG (between 0...</xs:documentation>
@@ -576,6 +581,7 @@
 			<xs:sequence>
 				<xs:element ref="Path"/>
 				<xs:element ref="RegularExpresssionForAllowedFileNames" minOccurs="0"/>
+				<xs:element ref="Encoding" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

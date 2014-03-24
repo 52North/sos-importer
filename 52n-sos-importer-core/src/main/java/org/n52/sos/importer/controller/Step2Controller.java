@@ -50,18 +50,18 @@ public class Step2Controller extends StepController {
 	private static final Logger logger = LoggerFactory.getLogger(Step2Controller.class);
 
 	private final Step2Model step2Model;
-	
+
 	private Step2Panel step2Panel;
-	
+
 	public Step2Controller(final Step2Model step2Model) {
 		this.step2Model = step2Model;
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return Lang.l().step2Description(); 
+		return Lang.l().step2Description();
 	}
-	
+
 	@Override
 	public boolean isFinished() {
 		final String columnSeparator = step2Panel.getColumnSeparator();
@@ -77,14 +77,14 @@ public class Step2Controller extends StepController {
 			return false;
 		}
 		final int firstLineWithData = step2Panel.getFirstLineWithData();
-		if (firstLineWithData < 0 || 
+		if (firstLineWithData < 0 ||
 				firstLineWithData > (step2Model.getCsvFileRowRount()-1)) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public StepController getNextStepController() {
 		final Object[][] content = parseCSVFile();
@@ -95,37 +95,37 @@ public class Step2Controller extends StepController {
 				step2Model.getFirstLineWithData(),
 				step2Model.getUseHeader());
 	}
-	
+
 	@Override
 	public void loadSettings() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("loadSettings()");
 		}
 		step2Panel = new Step2Panel(step2Model.getCsvFileRowRount());
-		
+
 		final String columnSeparator = step2Model.getColumnSeparator();
 		step2Panel.setColumnSeparator(columnSeparator);
-		
+
 		final String commentIndicator = step2Model.getCommentIndicator();
 		step2Panel.setCommentIndicator(commentIndicator);
-		
+
 		final String textQualifier = step2Model.getTextQualifier();
 		step2Panel.setTextQualifier(textQualifier);
-		
+
 		final int firstLineWithData = step2Model.getFirstLineWithData();
 		step2Panel.setFirstLineWithData(firstLineWithData);
-		
+
 		final String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
-		
+
 		final boolean useHeader = step2Model.getUseHeader();
 		step2Panel.setUseHeader(useHeader);
 		step2Panel.setCSVFileHighlight(firstLineWithData);
-		
+
 		final char decimalSeparator = step2Model.getDecimalSeparator();
 		step2Panel.setDecimalSeparator(decimalSeparator+"");
 	}
-	
+
 	@Override
 	public void saveSettings() {
 		if (logger.isTraceEnabled()) {
@@ -133,13 +133,13 @@ public class Step2Controller extends StepController {
 		}
 		final String columnSeparator = step2Panel.getColumnSeparator();
 		step2Model.setColumnSeparator(columnSeparator);
-		
+
 		final String commentIndicator = step2Panel.getCommentIndicator();
 		step2Model.setCommentIndicator(commentIndicator);
-		
+
 		final String textQualifier = step2Panel.getTextQualifier();
 		step2Model.setTextQualifier(textQualifier);
-		
+
 		final int firstLineWithData = step2Panel.getFirstLineWithData();
 		if(firstLineWithData < 0 || firstLineWithData > (step2Model.getCsvFileRowRount()-1)) {
 			logger.info("FirstLineWithData is to large. Set to 0");
@@ -147,13 +147,13 @@ public class Step2Controller extends StepController {
 		} else {
 			step2Model.setFirstLineWithData(firstLineWithData);
 		}
-		
+
 		final boolean useHeader = step2Panel.getUseHeader();
 		step2Model.setUseHeader(useHeader);
-		
+
 		final String csvFileContent = step2Panel.getCSVFileContent();
 		step2Model.setCSVFileContent(csvFileContent);
-		
+
 		final String decimalSeparator = step2Panel.getDecimalSeparator();
 		step2Model.setDecimalSeparator(decimalSeparator.charAt(0));
 		// Update global decimal separator
@@ -163,10 +163,10 @@ public class Step2Controller extends StepController {
 		} else {
 			Constants.THOUSANDS_SEPARATOR = '.';
 		}
-		
+
 		step2Panel = null;
 	}
-	
+
 	public String convertSpaceSeparatedText(final String text, final String separator) {
 		final StringBuilder replacedText = new StringBuilder();
 		final StringReader sr = new StringReader(text);
@@ -183,7 +183,7 @@ public class Step2Controller extends StepController {
 		}
 		return replacedText.toString();
 	}
-	
+
 	/**
 	 * replaces any whitespace in the text by the given separator
 	 * @param text
@@ -222,7 +222,7 @@ public class Step2Controller extends StepController {
 
 	@Override
 	public StepController getNext() { return null; }
-	
+
 	@Override
 	public boolean isStillValid() {
 		//TODO: check whether the CSV file has changed
@@ -242,32 +242,31 @@ public class Step2Controller extends StepController {
 		final String escape = step2Model.getTextQualifier();
 		final int firstLineWithData = step2Model.getFirstLineWithData();
 		final boolean useHeader = step2Model.getUseHeader();
-		
+
 		logger.info("Parse CSV file: " +
 				"column separator: '"    + separator         + "', " +
 				"comment indicator: '"   + quoteChar         + "', " +
 				"text qualifier: '"      + escape            + "', " +
-				"first line with data: " + firstLineWithData + "; "  +  
+				"first line with data: " + firstLineWithData + "; "  +
 				"use header? " + useHeader);
-		
-		try {	
+
 			if (separator.equals("Tab")) {
-				separator = "\t"; 
+				separator = "\t";
 			} else if (separator.equals(Constants.SPACE_STRING)) {
 				separator = ";";
 				csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
 			}
 			final StringReader sr = new StringReader(csvFileContent);
-			final CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0));
-			final List<String[]> lines = reader.readAll();
-			final int rows = lines.size();
-			final String[] firstLine = lines.get(0);
-			final int columns = firstLine.length;
-			content = new String[rows][columns];
-	
-			for (int i = 0; i < rows; i++) {
-				content[i] = lines.get(i);
-			}
+			try (CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0))){
+				final List<String[]> lines = reader.readAll();
+				final int rows = lines.size();
+				final String[] firstLine = lines.get(0);
+				final int columns = firstLine.length;
+				content = new String[rows][columns];
+
+				for (int i = 0; i < rows; i++) {
+					content[i] = lines.get(i);
+				}
 		} catch (final IOException e) {
 			logger.error("Error while parsing CSV file.", e);
 		}

@@ -33,14 +33,14 @@ import org.n52.sos.importer.Constants;
  * This class contains all String used by the GUI in German
  */
 public class De extends Lang{
-	
+
 	private final static Locale locale = Locale.GERMAN;
-	
+
 	@Override
 	public String altitude() {
 		return "Höhe";
 	}
-	
+
 	@Override
 	public String and() {
 		return "und";
@@ -121,9 +121,9 @@ public class De extends Lang{
 	public String example() {
 		return "Beispiel";
 	}
-	
+
 	@Override
-	public String exitDialogQuestion() { 
+	public String exitDialogQuestion() {
 		return "Wollen Sie das Programm wirklich beenden?\n";
 	}
 
@@ -184,7 +184,7 @@ public class De extends Lang{
 	public String latitudeDialogDecimalValue() {
 		return "Der " + latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
 	}
-	
+
 	@Override
 	public String latitudeNorthing() {
 		return "Breitengrad / Hochwert";
@@ -214,7 +214,7 @@ public class De extends Lang{
 	public String minutes() {
 		return "Minuten";
 	}
-	
+
 	@Override
 	public String month() {
 		return "Monat";
@@ -269,7 +269,7 @@ public class De extends Lang{
 	public String row() {
 		return "Zeile";
 	}
-	
+
 	@Override
 	public String seconds() {
 		return "Sekunden";
@@ -290,12 +290,12 @@ public class De extends Lang{
 	{
 		return "Spezifikations-Version";
 	}
-	
+
 	@Override
 	public String step() {
 		return "Schritt";
 	}
-	
+
 	@Override
 	public String step1BrowseButton() {
 		return "Auswählen";
@@ -312,6 +312,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step1EncodingLabel() {
+		return "Bitte die Enkodierung für die Datendatei angeben";
+	}
+
+	@Override
 	public String step1FeedTypeCSV() {
 		return "Einmaliger Import aus einer CSV Datei";
 	}
@@ -325,37 +330,37 @@ public class De extends Lang{
 	public String step1File() {
 		return "CSV-Datei";
 	}
-	
+
 	@Override
 	public String step1FileSchema() {
 		return "Dateinamen-Schema";
 	}
-	
+
 	@Override
 	public String step1FtpServer() {
 		return "FTP-Server";
 	}
-	
+
 	@Override
 	public String step1InstructionLabel() {
 		return "Bitte wählen Sie die CSV-Datei aus";
 	}
-	
+
 	@Override
 	public String step1Introduction() {
 		return "Erklärung";
 	}
-	
+
 	@Override
 	public String step1Password() {
 		return "Passwort";
 	}
-	
+
 	@Override
 	public String step1Regex() {
 		return "<html>Reguläre<br/>Ausdrücke:</html>";
 	}
-	
+
 	@Override
 	public String step1RegexDescription() {
 		return "<html>Hinweis: Wählen Sie diese Option, um "
@@ -446,21 +451,21 @@ public class De extends Lang{
 
 	@Override
 	public String step3aSelectedColTypeUndefinedMsg() {
-		return "Der Typ für die Spalte ist \"" + 
-				step3ColTypeUndefined() + 
+		return "Der Typ für die Spalte ist \"" +
+				step3ColTypeUndefined() +
 				"\".\n" +
 				"Bitte wählen Sie einen anderen Typ.\n" +
 				"Sollten Sie diese Spalte überspringen\n" +
 				"(= nicht exportieren) wollen, dann " +
 				"wählen Sie bitte als Typ \n\"" +
-				step3ColTypeDoNotExport() + 
+				step3ColTypeDoNotExport() +
 				"\".";
 	}
 
 	@Override
 	public String step3aSelectedColTypeUndefinedTitle() {
-		return "Spalten-Typ ist \"" + 
-				step3ColTypeUndefined() + 
+		return "Spalten-Typ ist \"" +
+				step3ColTypeUndefined() +
 				"\"";
 	}
 
@@ -556,16 +561,21 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step4bInfoResourceAlreadySetText() {
+		return " schon gesetzt für ";
+	}
+
+	@Override
 	public String step4bModelDescription() {
-		return "Bitte klicken Sie in die " + 
-				Constants.STRING_REPLACER + 
+		return "Bitte klicken Sie in die " +
+				Constants.STRING_REPLACER +
 			" (nicht auf die Titel), die die Messwerte enthält, die zu der " +
-			"hervorgehobenen " + 
+			"hervorgehobenen " +
 			Constants.STRING_REPLACER +
 			"-" +
-			Constants.STRING_REPLACER + 
+			Constants.STRING_REPLACER +
 			" gehört. Wenn mehrere Messwert-" +
-			Constants.STRING_REPLACER + 
+			Constants.STRING_REPLACER +
 			"n dazugehören, wählen Sie sie mit gedrückter Strg-Taste aus.";
 	}
 
@@ -611,10 +621,10 @@ public class De extends Lang{
 
 	@Override
 	public String step6bModelDescription() {
-		return "<html>Welche(r/s) <u>" + 
-				Constants.STRING_REPLACER + 
+		return "<html>Welche(r/s) <u>" +
+				Constants.STRING_REPLACER +
 				"</u> gehört zur markierten " + measuredValue() + "-" +
-				Constants.STRING_REPLACER + 
+				Constants.STRING_REPLACER +
 				"?</html>";
 	}
 
@@ -667,7 +677,7 @@ public class De extends Lang{
 	public String step6Generation() {
 		return "Erzeuge Bezeichner automatisch";
 	}
-	
+
 	@Override
 	public String step6ManualInput() {
 		return "Setze Bezeichner manuell";
@@ -685,7 +695,7 @@ public class De extends Lang{
 
 	@Override
 	public String step7ConfigDirNotDirOrWriteable(final String folder) {
-		return "Auf das Verzeichnis \n\"" + 
+		return "Auf das Verzeichnis \n\"" +
 				folder + "\"\n kann nicht zugegriffen werden";
 	}
 
@@ -752,7 +762,7 @@ public class De extends Lang{
 
 	@Override
 	public String step7SOSConncetionStart(final String strURL) {
-		return "Um mit dem Verbindungstest zu dem " + sos() + 
+		return "Um mit dem Verbindungstest zu dem " + sos() +
 				"\n\"" + strURL + "\"\n" +
 				"zu starten, wählen Sie JA.\n" +
 				"Falls Sie Einstellungen ändern möchten, dann wählen Sie NEIN.";
@@ -762,19 +772,19 @@ public class De extends Lang{
 	public String step7SOSconnectionFailed(final String strURL,
 			final int responseCode) {
 		return "Could not connect to " + sos() + ": "
-        		+ strURL + 
-        		". HTTP Response Code: " 
+        		+ strURL +
+        		". HTTP Response Code: "
         		+ responseCode;
 	}
 
 	@Override
 	public String step7SOSConnectionFailedException(final String strURL,
-			final String message, 
+			final String message,
 			final int readTimeoutSeconds,
 			final int connectTimeoutSeconds) {
-		return "Verbindung zu " + sos() + 
+		return "Verbindung zu " + sos() +
 				"\n\"" + strURL + "\"\n" +
-				"fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " + 
+				"fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " +
 				readTimeoutSeconds + " Sekunden Lese-Timeout.\n" +
 				"Grund: " + message;
 	}
@@ -786,7 +796,7 @@ public class De extends Lang{
 
 	@Override
 	public String step7SosVersionInstructions()
-	{ 
+	{
 		return "Bitte die Spezifikations-Version angeben, die durch die SOS-Instanz implementiert wird.";
 	}
 
@@ -812,8 +822,8 @@ public class De extends Lang{
 
 	@Override
 	public String step8DirectImportLabel() {
-		return "Registriere " + sensor() + 
-				"en und lade " + observation() + 
+		return "Registriere " + sensor() +
+				"en und lade " + observation() +
 				"en in den " + sos();
 	}
 
@@ -849,7 +859,7 @@ public class De extends Lang{
 	public String step8LogFile() {
 		return "Log-Datei";
 	}
-	
+
 	@Override
 	public String step8LogFileButton() {
 		return "Öffnen";
@@ -944,11 +954,6 @@ public class De extends Lang{
 	@Override
 	public String year() {
 		return "Jahr";
-	}
-
-	@Override
-	protected String step4bInfoResourceAlreadySetText() {
-		return " schon gesetzt für ";
 	}
 
 }
