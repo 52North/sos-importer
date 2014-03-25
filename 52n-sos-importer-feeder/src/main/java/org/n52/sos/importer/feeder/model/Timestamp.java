@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Timestamp {
-	
+
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
 	private byte day = Byte.MIN_VALUE;
@@ -38,9 +38,7 @@ public class Timestamp {
 	private byte minute = Byte.MIN_VALUE;
 	private byte seconds = Byte.MIN_VALUE;
 	private byte timezone = Byte.MIN_VALUE;
-	
-	
-	
+
 	@Override
 	public String toString() {
 		final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
@@ -79,14 +77,13 @@ public class Timestamp {
 		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
 			ts.append("00");
 		}
-		if (timezone != Byte.MIN_VALUE && 
+		if (timezone != Byte.MIN_VALUE &&
 				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
 			ts.append(convertTimeZone(timezone));
 		}
-		
 		return ts.toString();
 	}
-	
+
 	private String convertTimeZone(final int timeZone) {
 		if (timeZone >= 0) {
 			if (timeZone >= 10) {

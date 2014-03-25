@@ -64,16 +64,16 @@ import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
 
 /**
  * This class holds the configuration XML file and provides easy access to all
- * parameters. In addition, it validates the configuration during 
+ * parameters. In addition, it validates the configuration during
  * initialisation.
- * 
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public final class Configuration {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
-	
+
 	private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
 	private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
 	private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
@@ -134,7 +134,7 @@ public final class Configuration {
 	public Configuration(final String pathToFile) throws XmlException, IOException {
 		LOG.trace("Configuration({})",pathToFile);
 		configFile = new File(pathToFile);
-		final SosImportConfigurationDocument sosImportDoc = 
+		final SosImportConfigurationDocument sosImportDoc =
 				SosImportConfigurationDocument.Factory.parse(configFile);
 		// Create an XmlOptions instance and set the error listener.
 		final XmlOptions validateOptions = new XmlOptions();
@@ -167,16 +167,16 @@ public final class Configuration {
 
 	private boolean isRegularExpressionForLocalFileAvailable()
 	{
-		return importConf.getDataFile().isSetLocalFile() && 
+		return importConf.getDataFile().isSetLocalFile() &&
 				importConf.getDataFile().getLocalFile().isSetRegularExpresssionForAllowedFileNames() &&
 				importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames() != null &&
 				!importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames().isEmpty();
 	}
 
 	/**
-	 * Returns a File instance pointing to the data file defined in XML import 
+	 * Returns a File instance pointing to the data file defined in XML import
 	 * configuration.
-	 * @return a <b><code>new File</code></b> instance pointing to 
+	 * @return a <b><code>new File</code></b> instance pointing to
 	 * 			<code>DataFile.LocalFile.Path</code> or<br />
 	 * 			<b><code>null</code></b>, if element is not defined in config
 	 */
@@ -199,27 +199,27 @@ public final class Configuration {
 	/**
 	 * Returns a truth value according to the presence of the remote file
 	 * element in the xml document.
-	 * 
+	 *
 	 * @return true if it is a remote file
 	 */
 	public boolean isRemoteFile() {
 		return importConf.getDataFile().getRemoteFile() != null;
 	}
-	
+
 	/**
 	 * Returns the host name of the ftp server.
-	 * 
+	 *
 	 * @return ftp host
 	 */
 	public String getFtpHost() {
 		final String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
 		return splitString[0];
 	}
-	
+
 	/**
 	 * Returns a string, that indicates the path of subdirectories, where the
 	 * ftp file is located.
-	 * 
+	 *
 	 * @return subdirectory structure
 	 */
 	public String getFtpSubdirectory() {
@@ -235,13 +235,13 @@ public final class Configuration {
 		{
 			// TODO
 		}
-		
+
 		return result;
 	}
 
 	/**
 	 * Returns the name of the ftp file.
-	 * 
+	 *
 	 * @return ftp file name
 	 */
 	public String getFtpFile() {
@@ -263,11 +263,11 @@ public final class Configuration {
 		LOG.trace("isSosUrlRegex()");
 		return importConf.getDataFile().getReferenceIsARegularExpression();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
-	 * @throws MalformedURLException 
+	 * @throws MalformedURLException
 	 */
 	public URL getSosUrl() throws MalformedURLException {
 		LOG.trace("getSosUrl()");
@@ -281,11 +281,11 @@ public final class Configuration {
 	public String getUser() {
 		return importConf.getDataFile().getRemoteFile().getCredentials().getUserName();
 	}
-	
+
 	public String getPassword() {
 		return importConf.getDataFile().getRemoteFile().getCredentials().getPassword();
 	}
-		
+
 	/**
 	 * The number of the first line with data. Line counting starts at 0.
 	 * @return
@@ -321,7 +321,7 @@ public final class Configuration {
 	public int[] getMeasureValueColumnIds() {
 		LOG.trace("getMeasureValueColumnIds()");
 		final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-		final ArrayList<Integer> ids = new ArrayList<Integer>(); 
+		final ArrayList<Integer> ids = new ArrayList<Integer>();
 		for (final Column column : cols) {
 			if (column.getType().equals(Type.MEASURED_VALUE)){
 				if (LOG.isDebugEnabled()) {
@@ -387,7 +387,7 @@ public final class Configuration {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mvColumnId
 	 * @return
 	 */
@@ -403,14 +403,14 @@ public final class Configuration {
 				return column;
 			}
 		}
-		LOG.error(String.format("CsvMetadat.ColumnAssignments not set properly. Could not find Column for id %d.", 
+		LOG.error(String.format("CsvMetadat.ColumnAssignments not set properly. Could not find Column for id %d.",
 				mvColumnId));
 		return null;
 	}
 
 	/**
-	 * Returns the SensorType linked to the column, identified by the given id, 
-	 * by its RelatedSensor.IdRef element. If no sensor could be found 
+	 * Returns the SensorType linked to the column, identified by the given id,
+	 * by its RelatedSensor.IdRef element. If no sensor could be found
 	 * <code>null</code> is returned.
 	 * @param mvColumnId
 	 * @return
@@ -450,7 +450,7 @@ public final class Configuration {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mvColumnId
 	 * @return
 	 */
@@ -487,7 +487,7 @@ public final class Configuration {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param foiUri
 	 * @return
 	 */
@@ -495,19 +495,19 @@ public final class Configuration {
 		LOG.trace(String.format("getFoiPosition(%s)",
 				foiUri));
 		// get all elements from foi positions and compare the uri
-		if (importConf.getAdditionalMetadata() != null && 
+		if (importConf.getAdditionalMetadata() != null &&
 				importConf.getAdditionalMetadata().getFOIPositionArray() != null &&
 				importConf.getAdditionalMetadata().getFOIPositionArray().length > 0) {
 			final FOIPosition[] foiPos = importConf.getAdditionalMetadata().getFOIPositionArray();
 			for (final FOIPosition pos : foiPos) {
-				if (pos.getURI() != null && 
+				if (pos.getURI() != null &&
 						pos.getURI().getStringValue() != null &&
 						pos.getURI().getStringValue().equals(foiUri)){
 					// if element is found -> fill position
 					final org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p = pos.getPosition();
-					if (p.isSetAlt() && 
-							p.isSetEPSGCode() && 
-							p.isSetLat() && 
+					if (p.isSetAlt() &&
+							p.isSetEPSGCode() &&
+							p.isSetLat() &&
 							p.isSetLong()) {
 						return getModelPositionXBPosition(p);
 					}
@@ -526,7 +526,7 @@ public final class Configuration {
 		LOG.trace("getPosition()");
 		final String[] units = new String[3];
 		final double[] values = new double[3];
-		
+
 		if (p.isSetAlt()) {
 			units[Position.ALT] = p.getAlt().getUnit();
 			values[Position.ALT] = p.getAlt().getFloatValue();
@@ -539,13 +539,13 @@ public final class Configuration {
 
 		units[Position.LONG] = p.getLong().getUnit();
 		values[Position.LONG] = p.getLong().getFloatValue();
-		
+
 		final int epsgCode = p.getEPSGCode();
 		return new Position(values, units, epsgCode);
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mvColumnId
 	 * @return
 	 */
@@ -623,12 +623,12 @@ public final class Configuration {
 						posValues[Position.LAT] = (Double) latitude[0];
 						units[Position.LAT] = (String) latitude[1];
 					}
-					if (tokens.length > 1 && tokens[1] != null) { 
+					if (tokens.length > 1 && tokens[1] != null) {
 						longitude = parseLon((String)tokens[1]);
 						posValues[Position.LONG] = (Double) longitude[0];
 						units[Position.LONG] = (String) longitude[1];
 					}
-					if (tokens.length > 2 && tokens[2] != null) { 
+					if (tokens.length > 2 && tokens[2] != null) {
 						height = parseAlt((String)tokens[2]);
 						posValues[Position.ALT] = (Double) height[0];
 						units[Position.ALT] = (String) height[1];
@@ -676,11 +676,11 @@ public final class Configuration {
 		if (alt.contains("km")) {
 			unit = "km";
 			number = alt.replace("km", "");
-		} 
+		}
 		else if (alt.contains("mi")) {
 			unit = "mi";
 			number = alt.replace("mi", "");
-		} 
+		}
 		else if (alt.contains("m")) {
 			unit = "m";
 			number = alt.replace("m", "");
@@ -715,7 +715,7 @@ public final class Configuration {
 		} else {
 			number = lon;
 		}
-		value = parseToDouble(number);			
+		value = parseToDouble(number);
 
 		if (unit.equals("")) {
 			if (value <= 180.0 && value >= -180.0) {
@@ -748,7 +748,7 @@ public final class Configuration {
 		} else {
 			number = lat;
 		}
-		value = parseToDouble(number);			
+		value = parseToDouble(number);
 
 		if (unit.equals("")) {
 			if (value <= 90.0 && value >= -90.0) {
@@ -796,7 +796,7 @@ public final class Configuration {
 	/**
 	 * Returns all columns of the corresponding <code>group</code>
 	 * @param group a <code>{@link java.lang.String String}</code> as group identifier
-	 * @return a <code>Column[]</code> having all the group id 
+	 * @return a <code>Column[]</code> having all the group id
 	 * 			<code>group</code> <b>or</or><br />
 	 */
 	public Column[] getAllColumnsForGroup(final String group, final Enum t) {
@@ -805,14 +805,14 @@ public final class Configuration {
 		final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
 		final ArrayList<Column> tmpResultSet = new ArrayList<Column>(allCols.length);
 		for (final Column col : allCols) {
-			if (col.getType() != null && 
+			if (col.getType() != null &&
 					col.getType().equals(t) ) {
 				// we have a position or dateTime
 				// check the Metadata kvps
 				if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
 					findGroup:
 						for (final Metadata meta : col.getMetadataArray()) {
-							if (meta.getKey().equals(Key.GROUP) && 
+							if (meta.getKey().equals(Key.GROUP) &&
 									meta.getValue().equals(group)) {
 								tmpResultSet.add(col);
 								break findGroup;
@@ -828,7 +828,7 @@ public final class Configuration {
 	}
 
 	/**
-	 * Returns the group id of the first date time group found in 
+	 * Returns the group id of the first date time group found in
 	 * <code>CsvMetadata.ColumnAssignments.Column[]</code>
 	 * @return a <code>{@link java.lang.String String}</code>
 	 */
@@ -856,9 +856,9 @@ public final class Configuration {
 	}
 
 	/**
-	 * Returns the uom with the given id or <code>null</code> 
+	 * Returns the uom with the given id or <code>null</code>
 	 * @param idRef
-	 * @return <code>UnitOfMeasurementType</code> instance with 
+	 * @return <code>UnitOfMeasurementType</code> instance with
 	 * 				<code>id == idRef</code>,<br />or <code>null</code>
 	 */
 	public UnitOfMeasurementType getUomById(final String idRef) {
@@ -893,7 +893,7 @@ public final class Configuration {
 	}
 
 	/**
-	 * Returns the op with the given id or <code>null</code> 
+	 * Returns the op with the given id or <code>null</code>
 	 * @param idRef
 	 * @return
 	 */
@@ -1024,14 +1024,12 @@ public final class Configuration {
 		return (getMeasureValueColumnIds().length == 1);
 	}
 
-	public String getSosVersion()
-	{
+	public String getSosVersion() {
 		LOG.trace("getSosVersion()");
 		return importConf.getSosMetadata().getVersion();
 	}
-	
-	public String getSosBinding()
-	{
+
+	public String getSosBinding() {
 		LOG.trace("getSosBinding()");
 		if (importConf.getSosMetadata().isSetBinding())
 		{
@@ -1041,13 +1039,11 @@ public final class Configuration {
 		return null;
 	}
 
-	public int getExpectedColumnCount()
-	{
+	public int getExpectedColumnCount() {
 		return importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray();
 	}
 
-	public Pattern getLocaleFilePattern()
-	{
+	public Pattern getLocaleFilePattern() {
 		return localeFilePattern;
 	}
 

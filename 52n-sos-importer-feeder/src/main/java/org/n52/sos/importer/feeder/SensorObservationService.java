@@ -525,8 +525,7 @@ public final class SensorObservationService {
 		return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
 	}
 
-	private String getOfferingForSensor(final InsertObservation io)
-	{
+	private String getOfferingForSensor(final InsertObservation io)	{
 		if (offerings != null && offerings.containsKey(io.getSensorURI())){
 			return offerings.get(io.getSensorURI());
 		}

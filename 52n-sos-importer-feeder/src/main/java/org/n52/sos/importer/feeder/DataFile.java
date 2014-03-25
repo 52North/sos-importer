@@ -66,27 +66,27 @@ import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * Class holds the datafile and provides easy to use interfaces to get certain 
+ * Class holds the datafile and provides easy to use interfaces to get certain
  * required resources.
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public class DataFile {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(DataFile.class);
-	
+
 	private final Configuration configuration;
-	
+
 	private final File file;
-	
+
 	public DataFile(final Configuration configuration, final File file) {
 		this.configuration = configuration;
 		this.file = file;
 	}
 
 	/**
-	 * Checks if the file is available and can be read. All errors like not 
-	 * available, not a file, and not readable are logged to 
+	 * Checks if the file is available and can be read. All errors like not
+	 * available, not a file, and not readable are logged to
 	 * <code>LOG.error()</code>.
 	 * @return <code>true</code>, if the Datafile is a file and can be read,<br />
 	 * 			else <code>false</code>.
@@ -126,11 +126,11 @@ public class DataFile {
 				if (
 						(
         					fnfe.getMessage().indexOf("Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird")>=0
-        					|| 
+        					||
         					fnfe.getMessage().indexOf("The process cannot access the file because it is being used by another process")>=0
-						)	
+						)
 					&&
-						fnfe.getMessage().indexOf(file.getName()) >=0) 
+						fnfe.getMessage().indexOf(file.getName()) >=0)
 				{
 					return true;
 				}
@@ -138,7 +138,7 @@ public class DataFile {
 		}
 		return false;
 	}
-	
+
 	private boolean isWindows() {
 		return System.getProperty("os.name").indexOf("Windows")>=0||System.getProperty("os.name").indexOf("windows")>=0;
 	}
@@ -147,14 +147,14 @@ public class DataFile {
 	 * Returns a CSVReader instance for the current DataFile using the configuration
 	 * including the defined values for: first line with data, separator, escape, and text qualifier.
 	 * @return a <code>CSVReader</code> instance
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public CSVReader getCSVReader() throws FileNotFoundException {
 		LOG.trace("getCSVReader()");
 		final FileReader fr = new FileReader(file);
 		final BufferedReader br = new BufferedReader(fr);
 		final int flwd = configuration.getFirstLineWithData();
-		final char separator = configuration.getCsvSeparator(), 
+		final char separator = configuration.getCsvSeparator(),
 				quotechar = configuration.getCsvQuoteChar(),
 				escape = configuration.getCsvEscape();
 		final CSVReader cr = new CSVReader(br, separator, quotechar, escape, flwd);
@@ -176,7 +176,7 @@ public class DataFile {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mvColumnId
 	 * @param values
 	 * @return
@@ -190,7 +190,7 @@ public class DataFile {
 		} else {
 			return sensor;
 		}
-		// else build sensor from manual or generated resource 
+		// else build sensor from manual or generated resource
 		SensorType sensorType = configuration.getRelatedSensor(mvColumnId);
 		// Case: one mv column => no related sensor element => check for one single sensor in additional metadata
 		if (sensorType == null && configuration.isOneMvColumn()) {
@@ -215,15 +215,15 @@ public class DataFile {
 						mRT.getURI().getStringValue());
 			}
 		}
-		return sensor; 
+		return sensor;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mvColumnId
 	 * @param values
 	 * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
 		LOG.trace(String.format("getFoiForColumn(%d,%s)",
@@ -237,12 +237,12 @@ public class DataFile {
 		} else {
 			return foi;
 		}
-		// else build foi from manual or generated resource 
+		// else build foi from manual or generated resource
 		final FeatureOfInterestType foiT = configuration.getRelatedFoi(mvColumnId);
 		if (foiT != null && foiT.getResource() != null) {
 			// generated sensor
 			if (foiT.getResource() instanceof GeneratedSpatialResourceType) {
-				final GeneratedSpatialResourceType gSRT = 
+				final GeneratedSpatialResourceType gSRT =
 						(GeneratedSpatialResourceType) foiT.getResource();
 				final String[] a = getUriAndNameFromGeneratedResourceType(
 						gSRT.isSetConcatString()?gSRT.getConcatString():null, // concatstring
@@ -263,15 +263,15 @@ public class DataFile {
 			}
 		}
 		if (!NcNameResolver.isNCName(foi.getName())){
-			final String[] a = createCleanNCName(foi); 
+			final String[] a = createCleanNCName(foi);
 			foi.setName(a[0]);
 			if (!a[0].equals(a[1])) {
-				LOG.debug(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'", 
+				LOG.debug(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'",
 						a[1],
 						a[0]));
 			}
 		}
-		return foi; 
+		return foi;
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class DataFile {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mVColumn
 	 * @param values
 	 * @return
@@ -353,10 +353,11 @@ public class DataFile {
 	 * @param mVColumn
 	 * @param values
 	 * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
+		// TODO implement new feature here: extract date info from file name
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
 		final Column col = configuration.getColumnById(mVColumn);
 		String group = null;
@@ -375,7 +376,7 @@ public class DataFile {
 				final int[] fields = getGregorianCalendarFields(pattern);
 				for (final int field : fields) {
 					// parse values
-					final short value = 
+					final short value =
 							parseTimestampComponent(values[column.getNumber()],
 									pattern,
 									field);
@@ -426,7 +427,7 @@ public class DataFile {
 	 * Case A.1.2: Related UOM resource is generated<br />
 	 * 			-> generate name and return its value<br />
 	 * <br />
-	 * 
+	 *
 	 * Case A.2: RelatedUnitOfMeasurement is a number<br />
 	 * 			-> get information from the column<br />
 	 * 			-> return values[number]<br />
@@ -435,34 +436,34 @@ public class DataFile {
 	 * 			-> Check for column with Type == "UOM"<br />
 	 * 			-> get number of this column<br />
 	 * 			-> return values[number]<br />
-	 * 
+	 *
 	 * @param mVColumnId
 	 * @param values
 	 * @return
-	 * 			
+	 *
 	 */
 	public UnitOfMeasurement getUnitOfMeasurement(final int mVColumnId, final String[] values) {
 		LOG.trace("getUnitOfMeasurement()");
 		final Column mvColumn = configuration.getColumnById(mVColumnId);
-		
+
 		// Case A*
 		if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
 				mvColumn.getRelatedUnitOfMeasurementArray().length > 0) {
-			final RelatedUnitOfMeasurement relUom = 
+			final RelatedUnitOfMeasurement relUom =
 					mvColumn.getRelatedUnitOfMeasurementArray(0);
-		
+
 			// Case A.1.*: idRef
 			if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
 				final UnitOfMeasurementType uom = configuration.getUomById(relUom.getIdRef());
 				if (uom != null) {
-			
+
 					// Case A.1.1
 					if (uom.getResource() instanceof ManualResourceType) {
 						final ManualResourceType uomMRT =
 								(ManualResourceType) uom.getResource();
 						return new UnitOfMeasurement(uomMRT.getName(), uomMRT.getURI().getStringValue());
 					}
-					
+
 					// Case A.1.2
 					if (uom.getResource() instanceof GeneratedResourceType) {
 						final GeneratedResourceType uomGRT =
@@ -478,19 +479,19 @@ public class DataFile {
 					}
 				}
 			}
-			
+
 			// Case A.2: number
 			if (relUom.isSetNumber() && !relUom.isSetIdRef()) {
 				return new UnitOfMeasurement(values[relUom.getNumber()],values[relUom.getNumber()]);
 			}
 		}
-		
+
 		// Case B: Information stored in another column
 		final int uomColumnId = configuration.getColumnIdForUom(mVColumnId);
 		if (uomColumnId > -1) {
 			return new UnitOfMeasurement(values[uomColumnId],values[uomColumnId]);
 		}
-		
+
 		// no UOM found
 		return null;
 	}
@@ -506,7 +507,7 @@ public class DataFile {
 	 * Case A.1.2: RelatedObserverdProperty resource is generated<br />
 	 * 			-> generate name and return its value<br />
 	 * <br />
-	 * 
+	 *
 	 * Case A.2: RelatedObserverdProperty is a number<br />
 	 * 			-> get information from the column<br />
 	 * 			-> return values[number]<br />
@@ -515,35 +516,35 @@ public class DataFile {
 	 * 			-> Check for column with Type == "UOM"<br />
 	 * 			-> get number of this column<br />
 	 * 			-> return values[number]<br />
-	 * 
+	 *
 	 * @param mVColumnId
 	 * @param values
 	 * @return
-	 * 			
+	 *
 	 */
 	public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
 		LOG.trace("getObservedProperty()");
 		final Column mvColumn = configuration.getColumnById(mVColumnId);
-		
+
 		// Case A*
 		if (mvColumn.getRelatedObservedPropertyArray() != null &&
 				mvColumn.getRelatedObservedPropertyArray().length > 0) {
-			final RelatedObservedProperty relOp = 
+			final RelatedObservedProperty relOp =
 					mvColumn.getRelatedObservedPropertyArray(0);
-		
+
 			// Case A.1.*: idRef
 			if (relOp.isSetIdRef() && !relOp.isSetNumber()) {
 				final ObservedPropertyType op = configuration.getObsPropById(relOp.getIdRef());
 				if (op != null) {
-			
+
 					// Case A.1.1
 					if (op.getResource() instanceof ManualResourceType) {
 						final ManualResourceType opMRT =
 								(ManualResourceType) op.getResource();
 						return new ObservedProperty(opMRT.getName(),opMRT.getURI().getStringValue());
-								
+
 					}
-					
+
 					// Case A.1.2
 					if (op.getResource() instanceof GeneratedResourceType) {
 						final GeneratedResourceType opGRT =
@@ -559,19 +560,19 @@ public class DataFile {
 					}
 				}
 			}
-			
+
 			// Case A.2: number
 			if (relOp.isSetNumber() && !relOp.isSetIdRef()) {
 				return new ObservedProperty(values[relOp.getNumber()],values[relOp.getNumber()]);
 			}
 		}
-		
+
 		// Case B: Information stored in another column
 		final int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
 		if (opColumnId > -1) {
 			return new ObservedProperty(values[opColumnId],values[opColumnId]);
 		}
-		
+
 		// no OP found
 		return null;
 	}
@@ -579,10 +580,10 @@ public class DataFile {
 	public Offering getOffering(final Sensor s) {
 		final Offering off = configuration.getOffering(s);
 		if (!NcNameResolver.isNCName(off.getName())) {
-			final String[] a = createCleanNCName(off); 
+			final String[] a = createCleanNCName(off);
 			off.setName(a[0]);
 			if (!a[0].equals(a[1])) {
-				LOG.debug(String.format("Offering name changed to match NCName production: '%s' to '%s'", 
+				LOG.debug(String.format("Offering name changed to match NCName production: '%s' to '%s'",
 						a[1],
 						a[0]));
 			}
@@ -596,7 +597,7 @@ public class DataFile {
 	public String getFileName() {
 		return file.getName();
 	}
-	
+
 	public String getCanonicalPath() throws IOException {
 		return file.getCanonicalPath();
 	}
@@ -662,7 +663,7 @@ public class DataFile {
 			return s;
 		}
 	}
-	
+
 	private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) {
 		LOG.trace(String.format("getFoiColumn(%d,%s)",
 					mvColumnId,
@@ -688,18 +689,18 @@ public class DataFile {
 					p.xmlText(),
 					Arrays.toString(values)));
 		// Case A: Position is in configuration
-		if (!p.isSetGroup() && 
-				//p.isSetAlt() && 
-				p.isSetEPSGCode() && 
-				p.isSetLat() && 
+		if (!p.isSetGroup() &&
+				//p.isSetAlt() &&
+				p.isSetEPSGCode() &&
+				p.isSetLat() &&
 				p.isSetLong()) {
 			return configuration.getModelPositionXBPosition(p);
 		}
 		// Case B: Position is in data file (and configuration [missing values])
-		else if (p.isSetGroup() && 
-				//!p.isSetAlt() && 
-				!p.isSetEPSGCode() && 
-				!p.isSetLat() && 
+		else if (p.isSetGroup() &&
+				//!p.isSetAlt() &&
+				!p.isSetEPSGCode() &&
+				!p.isSetLat() &&
 				!p.isSetLong()) {
 			return configuration.getPosition(p.getGroup(),values);
 		}
@@ -715,12 +716,12 @@ public class DataFile {
 					field));
 		Date date = null;
 		final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-		
+
 		date = sdf.parse(timestampPart);
-		
+
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(date);
-		
+
 		return new Integer(gc.get(field)).shortValue();
 	}
 
@@ -731,19 +732,19 @@ public class DataFile {
 		if (pattern.indexOf("y") != -1) {
     		fields.add(GregorianCalendar.YEAR);
 		}
-    	if (pattern.indexOf("M") != -1 || 
-    			pattern.indexOf("w") != -1 || 
-    			pattern.indexOf("D") != -1) { 
+    	if (pattern.indexOf("M") != -1 ||
+    			pattern.indexOf("w") != -1 ||
+    			pattern.indexOf("D") != -1) {
     		fields.add(GregorianCalendar.MONTH);
     	}
-    	if (pattern.indexOf("d") != -1 || 
+    	if (pattern.indexOf("d") != -1 ||
     			(pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
     		fields.add(GregorianCalendar.DAY_OF_MONTH);
     	}
-    	if (pattern.indexOf("H") != -1 || 
-    			pattern.indexOf("k") != -1 || 
-    			((pattern.indexOf("K") != -1 || 
-    			(pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) { 
+    	if (pattern.indexOf("H") != -1 ||
+    			pattern.indexOf("k") != -1 ||
+    			((pattern.indexOf("K") != -1 ||
+    			(pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
     		fields.add(GregorianCalendar.HOUR_OF_DAY);
     	}
     	if (pattern.indexOf("m") != -1) {

@@ -536,7 +536,11 @@
 			</xs:choice>
 			<xs:attribute name="referenceIsARegularExpression" type="xs:boolean" use="required">
 				<xs:annotation>
-					<xs:documentation>If set to TRUE the LocaleFile.Path or RemoteFile.URL contains a regular expression needing special handling before retrieving the data file.</xs:documentation>
+					<xs:documentation>
+					    If set to TRUE the LocaleFile.Path or RemoteFile.URL
+					    contains a regular expression needing special handling
+					    before retrieving the data file.
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="regExDateInfoInFileName" type="xs:string">
