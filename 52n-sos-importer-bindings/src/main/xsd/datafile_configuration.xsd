@@ -566,6 +566,14 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="headerLine" type="xs:integer">
+			    <xs:annotation>
+			        <xs:documentation>
+			            Identifies the header line. MUST be set in the case of
+			            having the header line repeatedly in the data file.
+			        </xs:documentation>
+			    </xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="DecimalSeparator" default="." nillable="false">
