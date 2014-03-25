@@ -409,6 +409,7 @@ public class DataFile {
 					}
 				}
 				ts = configuration.getAddtionalTimestampValuesFromColumn(ts,column);
+				ts = configuration.getAdditionalTimestampValuesFromConfig(ts,file.getName());
 			}
 			// create timestamp string via toString()
 			return ts;

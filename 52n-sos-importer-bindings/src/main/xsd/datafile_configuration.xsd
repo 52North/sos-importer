@@ -545,7 +545,25 @@
 			</xs:attribute>
 			<xs:attribute name="regExDateInfoInFileName" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>If present, the contained regular expression will be applied to the file name of the datafile to extract date information.</xs:documentation>
+					<xs:documentation>
+					    If present, the contained regular expression will be
+					    applied to the file name of the datafile to extract
+					    date information in combination with the
+					    "dateInfoPattern". Hence, this pattern is used to
+					    extract the date string and the dateInfoPattern is used
+					    to convert this date string into valid date information.
+					    The pattern MUST contain one group that holds all date
+					    information!
+				    </xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="dateInfoPattern" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>
+					   MUST be set, if regExDateInfoInFileName is set, for 
+					   converting the date string into valid date information.
+					   Supported pattern elements: y, M, d, H, m, s, z, Z
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>

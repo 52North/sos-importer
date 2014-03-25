@@ -31,10 +31,14 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.xml.namespace.QName;
 
@@ -158,7 +162,6 @@ public final class Configuration {
 			throw new XmlException(msg, null, errorList);
 		} else {
 			importConf = sosImportDoc.getSosImportConfiguration();
-			// TODO validate and save locale file name pattern if available
 			setLocaleFilePattern();
 		}
 	}
@@ -1061,6 +1064,73 @@ public final class Configuration {
 
 	public Pattern getLocaleFilePattern() {
 		return localeFilePattern;
+	}
+
+	/**
+	 * @param ts the {@link Timestamp} to enrich
+	 * @param fileName the filename that might contain additional information
+	 * 			for the {@link Timestamp}
+	 * @return the {@link Timestamp} enriched or not
+	 * @throws ParseException in the case the filename could not be parsed using
+	 * 			the Datafile attributes "regExDateInfoInFileName" and
+	 * 			"DateInfoPattern".
+	 * @throws PatternSyntaxException in the case of not being able to parse the
+	 * 			value of the Datafile attribute "regExDateInfoInFileName".
+	 * @thorws IndexOutOfBoundsException in the case of no group is found using
+	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
+	 */
+	public Timestamp getAdditionalTimestampValuesFromConfig(
+			final Timestamp ts,
+			final String fileName)
+					throws ParseException {
+		if (ts == null || fileName == null || fileName.isEmpty()) {
+			return ts;
+		}
+		if (isDateInfoExtractionSetupValid()) {
+			final String regex = importConf.getDataFile().getRegExDateInfoInFileName();
+			final Pattern pattern = Pattern.compile(regex);
+			final Matcher matcher = pattern.matcher(fileName);
+			if (matcher.matches()) {
+				final String dateInfoPattern = importConf.getDataFile().getDateInfoPattern();
+				final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
+				final String dateInformation = matcher.group(1);
+				final GregorianCalendar cal = new GregorianCalendar();
+				cal.setTime(sdf.parse(dateInformation));
+
+				if (dateInfoPattern.indexOf("y") > -1) {
+					ts.setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
+				}
+				if (dateInfoPattern.indexOf("M") > -1) {
+					ts.setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+				}
+				if (dateInfoPattern.indexOf("d") > -1) {
+					ts.setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
+				}
+				if (dateInfoPattern.indexOf("H") > -1) {
+					ts.setHour(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.HOUR_OF_DAY))));
+				}
+				if (dateInfoPattern.indexOf("m") > -1) {
+					ts.setMinute(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MINUTE))));
+				}
+				if (dateInfoPattern.indexOf("s") > -1) {
+					ts.setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
+				}
+				if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
+					ts.setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
+				}
+			}
+		}
+		return ts;
+	}
+
+	private boolean isDateInfoExtractionSetupValid() {
+		return importConf.getDataFile().isSetRegExDateInfoInFileName() &&
+				importConf.getDataFile().isSetRegExDateInfoInFileName() &&
+				!importConf.getDataFile().getRegExDateInfoInFileName().isEmpty() &&
+				importConf.getDataFile().isSetDateInfoPattern() &&
+				importConf.getDataFile().getRegExDateInfoInFileName().indexOf("(") >= 0 &&
+				importConf.getDataFile().getRegExDateInfoInFileName().indexOf(")") > 1 &&
+				!importConf.getDataFile().getDateInfoPattern().isEmpty();
 	}
 
 }
