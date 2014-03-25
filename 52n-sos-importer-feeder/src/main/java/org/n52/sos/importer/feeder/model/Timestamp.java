@@ -41,7 +41,8 @@ public class Timestamp {
 
 	@Override
 	public String toString() {
-		final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
+		// yyyy-mm-ddThh:mm:ss+hh:mm+zz:zz => 31 chars
+		final StringBuffer ts = new StringBuffer(31);
 		if (year != Short.MIN_VALUE) {
 			ts.append(year);
 			if (month != Byte.MIN_VALUE) {
