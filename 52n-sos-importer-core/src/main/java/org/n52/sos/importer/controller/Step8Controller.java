@@ -46,11 +46,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Assembles all information from previous steps, 
+ * Assembles all information from previous steps,
  * fills XML template files with it and uploads
  * them to the Sensor Observation Service,
  * displays the configuration,
- * and the log file 
+ * and the log file
  * depending on the options from step 7.
  * @author Raimund
  * @author e.h.juerrens@52north.org
@@ -61,19 +61,19 @@ public class Step8Controller extends StepController {
 	private static final Logger logger = LoggerFactory.getLogger(Step8Controller.class);
 
 	private Step8Panel step8Panel;
-	
+
 	private final Step7Model step7Model;
-	
+
 	public Step8Controller(final Step7Model step7Model) {
 		this.step7Model = step7Model;
 	}
-	
+
 	@Override
-	public void loadSettings() {		
+	public void loadSettings() {
 		step8Panel = new Step8Panel(step7Model,this);
 		BackNextController.getInstance().changeNextToFinish();
 		File logFile = null;
-		
+
 		// FIXME get path to log file
 		/*
 		final Logger rL = Logger.getRootLogger();
@@ -91,29 +91,27 @@ public class Step8Controller extends StepController {
 		logFile = new File("logs/sos-importer-core.log");
 		step8Panel.setLogFileURI(logFile.toURI());
 		logger.info("Log saved to file: " + logFile.getAbsolutePath());
-		
+
 		// save model always
 		try {
 			if (MainController.getInstance().saveModel(step7Model.getConfigFile())) {
-				if (logger.isInfoEnabled()) {
-					logger.info("Configuration saved to file: " + step7Model.getConfigFile().getAbsolutePath());
-				}
+				logger.info("Configuration saved to file: '{}'", step7Model.getConfigFile().getAbsolutePath());
 			} else {
 				logger.error("File could not be saved. See log file!");
-				JOptionPane.showMessageDialog(step8Panel, 
-						Lang.l().step8SaveModelFailed(step7Model.getConfigFile()), 
-						Lang.l().errorDialogTitle(), 
+				JOptionPane.showMessageDialog(step8Panel,
+						Lang.l().step8SaveModelFailed(step7Model.getConfigFile()),
+						Lang.l().errorDialogTitle(),
 						JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (final IOException e) {
-			logger.error("Exception thrown: " + e.getMessage(), e);
-			JOptionPane.showMessageDialog(step8Panel, 
-					Lang.l().step8SaveModelFailed(logFile,e.getLocalizedMessage()), 
-					Lang.l().errorDialogTitle(), 
+			logger.error(new StringBuffer("Exception thrown: ").append(e.getMessage()).toString(), e);
+			JOptionPane.showMessageDialog(step8Panel,
+					Lang.l().step8SaveModelFailed(logFile,e.getLocalizedMessage()),
+					Lang.l().errorDialogTitle(),
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	@Override
 	public void saveSettings() {}
 
@@ -146,7 +144,7 @@ public class Step8Controller extends StepController {
 	public StepController getNext() {
 		return null;
 	}
- 
+
 	@Override
 	public void back() {
 		BackNextController.getInstance().changeFinishToNext();
@@ -156,7 +154,7 @@ public class Step8Controller extends StepController {
 	public StepModel getModel() {
 		return step7Model;
 	}
-	
+
 	public void directImport() {
 		final StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
 		pathToJavaExecutable.append(File.separator);
@@ -167,11 +165,11 @@ public class Step8Controller extends StepController {
 		if (! jvm.exists() && System.getProperty("os.name").indexOf("Windows") != -1) {
 			pathToJavaExecutable.append(".exe");
 		}
-		
+
 		String pathToFeederJar = System.getProperty("user.dir") + File.separator;
 		pathToFeederJar = searchForFeederJarWithDefaultFileNameStart(pathToFeederJar);
 		final File feederJar = new File(pathToFeederJar.toString());
-		
+
 		if (!feederJar.exists()) {
 			JOptionPane.showMessageDialog(step8Panel,
 					Lang.l().step8FeederJarNotFound(feederJar.getAbsolutePath()),
@@ -190,7 +188,7 @@ public class Step8Controller extends StepController {
 			directImporter.execute();
 		}
 	}
-	
+
 	private String searchForFeederJarWithDefaultFileNameStart(
 			final String pathToDirectoryWithFeederJar) {
 		if (logger.isTraceEnabled()) {
@@ -212,7 +210,7 @@ public class Step8Controller extends StepController {
 			}
 			else {
 				final int userChoice = JOptionPane.showConfirmDialog(step8Panel,
-						Lang.l().step8FeederJarNotFoundSelectByUser(pathToDirectoryWithFeederJar), 
+						Lang.l().step8FeederJarNotFoundSelectByUser(pathToDirectoryWithFeederJar),
 						Lang.l().errorDialogTitle(), JOptionPane.YES_NO_OPTION);
 				if (userChoice == JOptionPane.YES_OPTION)
 				{
