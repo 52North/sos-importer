@@ -159,10 +159,26 @@ public final class Configuration {
 		} else {
 			importConf = sosImportDoc.getSosImportConfiguration();
 			// TODO validate and save locale file name pattern if available
-			if (isRegularExpressionForLocalFileAvailable()) {
-				localeFilePattern  = Pattern.compile(importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames());
-			}
+			setLocaleFilePattern();
 		}
+	}
+
+	private void setLocaleFilePattern() {
+		if (isRegularExpressionForLocalFileAvailable()) {
+			localeFilePattern  = Pattern.compile(importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames());
+		}
+	}
+
+	/**
+	 * For testing only!
+	 */
+	protected Configuration(final SosImportConfiguration importConf) {
+		if (importConf == null) {
+			throw new IllegalArgumentException("SosImportConfiguration MUST NOT be null or INVALID");
+		}
+		this.importConf = importConf;
+		configFile = null;
+		setLocaleFilePattern();
 	}
 
 	private boolean isRegularExpressionForLocalFileAvailable()
