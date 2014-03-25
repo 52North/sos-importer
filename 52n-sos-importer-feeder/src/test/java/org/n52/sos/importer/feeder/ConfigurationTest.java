@@ -55,7 +55,7 @@ public class ConfigurationTest {
 		importConf.getDataFile().setDateInfoPattern("yyyyMMdd");
 		final Configuration configuration = new Configuration(importConf);
 
-		final Timestamp updatedTS = configuration.getAdditionalTimestampValuesFromConfig(ts, fileName);
+		final Timestamp updatedTS = configuration.enrichTimestampByFilename(ts, fileName);
 
 		assertThat(ts, is(updatedTS));
 		assertThat(updatedTS.toString(), is("2014-06-15"));
@@ -65,9 +65,9 @@ public class ConfigurationTest {
 	public final void shouldReturnSameValueIfTimestampIsNullOrFilenameIsInvalid() throws ParseException {
 		Timestamp ts = new Timestamp();
 		final Configuration configuration = new Configuration(importConf);
-		ts = configuration.getAdditionalTimestampValuesFromConfig(ts, null);
-		final Timestamp ts2 = configuration.getAdditionalTimestampValuesFromConfig(ts, "");
-		final Timestamp ts3 = configuration.getAdditionalTimestampValuesFromConfig(null, null);
+		ts = configuration.enrichTimestampByFilename(ts, null);
+		final Timestamp ts2 = configuration.enrichTimestampByFilename(ts, "");
+		final Timestamp ts3 = configuration.enrichTimestampByFilename(null, null);
 
 		assertThat(ts.toString(), is(""));
 		assertThat(ts2.toString(), is(""));

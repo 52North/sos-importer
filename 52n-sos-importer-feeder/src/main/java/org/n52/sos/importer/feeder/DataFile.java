@@ -408,8 +408,8 @@ public class DataFile {
 						break;
 					}
 				}
-				ts = configuration.getAddtionalTimestampValuesFromColumn(ts,column);
-				ts = configuration.getAdditionalTimestampValuesFromConfig(ts,file.getName());
+				ts = configuration.enrichTimestampWithColumnMetadata(ts,column);
+				ts = configuration.enrichTimestampByFilename(ts,file.getName());
 			}
 			// create timestamp string via toString()
 			return ts;

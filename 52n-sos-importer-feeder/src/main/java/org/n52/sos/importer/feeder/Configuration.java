@@ -978,7 +978,7 @@ public final class Configuration {
 	 * <li>TIME_YEAR</li>
 	 * <li>TIME_ZONE</li></ul>
 	 */
-	public Timestamp getAddtionalTimestampValuesFromColumn(final Timestamp ts,
+	public Timestamp enrichTimestampWithColumnMetadata(final Timestamp ts,
 			final Column col) {
 		if (col.getMetadataArray() != null) {
 			for (final Metadata m : col.getMetadataArray()) {
@@ -1079,7 +1079,7 @@ public final class Configuration {
 	 * @thorws IndexOutOfBoundsException in the case of no group is found using
 	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
 	 */
-	public Timestamp getAdditionalTimestampValuesFromConfig(
+	public Timestamp enrichTimestampByFilename(
 			final Timestamp ts,
 			final String fileName)
 					throws ParseException {
