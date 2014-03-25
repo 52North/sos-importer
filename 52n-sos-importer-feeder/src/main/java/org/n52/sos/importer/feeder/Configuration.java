@@ -1133,4 +1133,31 @@ public final class Configuration {
 				!importConf.getDataFile().getDateInfoPattern().isEmpty();
 	}
 
+	/**
+	 * @return number of the line that contains the header information for the
+	 * 			first time, or<br />
+	 * 			<b>-1</b> if the optional attribute "headerLine" is not
+	 * 			set in DataFile element
+	 */
+	public int getHeaderLine() {
+		if (importConf.getDataFile().isSetHeaderLine()) {
+			return importConf.getDataFile().getHeaderLine().intValue();
+		}
+		return -1;
+	}
+
+	/**
+	 * @return Name of the data file encoding, or <br />
+	 * 			if not set, "UTF-8"
+	 */
+	public String getDataFileEncoding() {
+		if (importConf.getDataFile().isSetLocalFile() &&
+				importConf.getDataFile().getLocalFile().isSetEncoding() &&
+				!importConf.getDataFile().getLocalFile().getEncoding().isEmpty()) {
+			return importConf.getDataFile().getLocalFile().getEncoding();
+		}
+		LOG.debug("Using default encoding 'UTF-8'");
+		return "UTF-8";
+	}
+
 }

@@ -796,4 +796,16 @@ public class DataFile {
 	{
 		return configuration.getExpectedColumnCount();
 	}
+
+	public int getHeaderLine() {
+		return configuration.getHeaderLine();
+	}
+
+	public String getEncoding() {
+		return configuration.getDataFileEncoding();
+	}
+
+	public char getSeparatorChar() {
+		return configuration.getCsvSeparator();
+	}
 }
