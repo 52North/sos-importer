@@ -120,7 +120,11 @@ public final class SensorObservationService {
 		this.sosUrl = sosUrl;
 		sosVersion = version;
 		sosBinding = getBinding(binding);
-		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
+		if (sosBinding == null) {
+			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
+		} else {
+			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
+		}
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
 		if (sosVersion.equals("2.0.0")) {
 			sensorDescBuilder = new DescriptionBuilder(false);
