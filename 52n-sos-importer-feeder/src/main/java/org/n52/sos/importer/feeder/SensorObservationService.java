@@ -74,6 +74,7 @@ import org.n52.oxf.sos.observation.ObservationParameters;
 import org.n52.oxf.sos.observation.TextObservationParameters;
 import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.oxf.sos.request.v200.InsertSensorParameters;
+import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -115,11 +116,17 @@ public final class SensorObservationService {
 
 	private String[] headerLine;
 
-	public SensorObservationService(final URL sosUrl, final String version, final String binding) throws ExceptionReport, OXFException {
+	private final ImportStrategy importStrategy;
+
+	public SensorObservationService(final URL sosUrl,
+			final String version,
+			final String binding,
+			final ImportStrategy importStrategy) throws ExceptionReport, OXFException {
 		LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
 		this.sosUrl = sosUrl;
 		sosVersion = version;
 		sosBinding = getBinding(binding);
+		this.importStrategy = importStrategy;
 		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
 		if (sosVersion.equals("2.0.0")) {

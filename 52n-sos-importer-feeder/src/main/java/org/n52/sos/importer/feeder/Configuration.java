@@ -133,7 +133,7 @@ public final class Configuration {
 
 	public enum ImportStrategy {
 		/**
-		 * Each value will be inserted as single observation into the sos
+		 * Each value will be inserted as single observation into the SOS.
 		 */
 		SingleObservation,
 		/**
@@ -1173,6 +1173,27 @@ public final class Configuration {
 		}
 		LOG.debug("Using default encoding 'UTF-8'");
 		return "UTF-8";
+	}
+
+	/**
+	 * @return The {@link ImportStrategy} that could be configured in
+	 * 		<code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
+	 * 		<br />Default if nothing matching is found: {@link ImportStrategy#SingleObservation}
+	 */
+	public ImportStrategy getImportStrategy() {
+		if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
+			for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
+				final Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
+				if (metadata.getKey().equals(Key.IMPORT_STRATEGY)) {
+					if (metadata.getValue().equalsIgnoreCase(ImportStrategy.SweArrayObservationWithSplitExtension.name())) {
+						return ImportStrategy.SweArrayObservationWithSplitExtension;
+					} else {
+						return ImportStrategy.SingleObservation;
+					}
+				}
+			}
+		}
+		return ImportStrategy.SingleObservation;
 	}
 
 }
