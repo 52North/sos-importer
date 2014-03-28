@@ -111,8 +111,11 @@ public class TimeSeries {
 
 	public InsertObservationParameters getSweArrayObservation() {
 		// TODO Auto-generated method "getSweArrayObservation" stub generated on 28.03.2014 around 12:49:28 by eike
-		// TODO continue implementatin here!
-    	// baue OM_SWEArrayObservation
+		// TODO continue implementation here!
+		// add extension
+		// add offering from InsertObservation
+    	// add OM_SWEArrayObservation
+			// OM_Observation
     		// observation type
     		// phentime
     		// temporal bbox for result time
