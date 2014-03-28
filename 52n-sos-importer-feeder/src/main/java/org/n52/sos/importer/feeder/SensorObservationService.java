@@ -129,7 +129,11 @@ public final class SensorObservationService {
 		sosVersion = version;
 		sosBinding = getBinding(binding);
 		this.importStrategy = importStrategy;
-		sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
+		if (sosBinding == null) {
+			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
+		} else {
+			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion,sosBinding);
+		}
 		serviceDescriptor = sosWrapper.getServiceDescriptor();
 		if (sosVersion.equals("2.0.0")) {
 			sensorDescBuilder = new DescriptionBuilder(false);
@@ -153,7 +157,10 @@ public final class SensorObservationService {
 		if (binding.equals(Binding.SOAP.name())) {
 			return Binding.SOAP;
 		}
-		throw new OXFException(String.format("Binding not supported by this implementation: %s",binding));
+		throw new OXFException(String.format("Binding not supported by this implementation: %s. Use '%s' or '%s'.",
+				binding,
+				Binding.POX.name(),
+				Binding.SOAP.name()));
 	}
 
 	public boolean isAvailable() {
