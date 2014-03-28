@@ -474,6 +474,7 @@ public final class SensorObservationService {
 				while (iter.hasNext()) {
 					final OWSException owsEx = iter.next();
 					// check for observation already contained exception
+					// TODO update to latest 52nSOS 4.0x message
 					if (owsEx.getExceptionCode().equals(Configuration.SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
 							owsEx.getExceptionTexts().length > 0 &&
 							(owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT) > -1
