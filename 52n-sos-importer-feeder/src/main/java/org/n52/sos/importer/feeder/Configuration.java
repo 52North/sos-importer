@@ -130,6 +130,21 @@ public final class Configuration {
 		EPSG_EASTING_FIRST_MAP.put("21037",true);
 
 	}
+
+	public enum ImportStrategy {
+		/**
+		 * Each value will be inserted as single observation into the sos
+		 */
+		SingleObservation,
+		/**
+		 * The file will be read at once. For each identified timeseries
+		 * an OM_SWEArrayObservation will be created and inserted into the
+		 * SOS using the "SplitDataArrayIntoObservations" of the 52North
+		 * implementation.
+		 */
+		SweArrayObservationWithSplitExtension;
+	}
+
 	private SosImportConfiguration importConf;
 	private final File configFile;
 
