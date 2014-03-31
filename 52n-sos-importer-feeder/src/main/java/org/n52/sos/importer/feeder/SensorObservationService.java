@@ -82,6 +82,7 @@ import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
@@ -359,7 +360,7 @@ public final class SensorObservationService {
 		LOG.debug("Value: {}", value.toString());
 		// TODO implement using different templates in later version depending on the class of value
 		// TIMESTAMP
-		final String timeStamp = dataFile.getTimeStamp(mVColumnId,values).toString();
+		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId,values);
 		LOG.debug("Timestamp: {}", timeStamp);
 		// UOM CODE
 		final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId,values);
@@ -410,7 +411,7 @@ public final class SensorObservationService {
 				}
 			}
 			// insert observation
-			final String observationId = insertSweArrayObservation(timeSeries.getSweArrayObservation());
+			final String observationId = insertSweArrayObservation(timeSeries.getSweArrayObservation(sosVersion));
 			if (observationId == null || observationId.equalsIgnoreCase("")) {
 				LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
 						timeSeries.getSensorName(),
@@ -685,13 +686,13 @@ public final class SensorObservationService {
 
 		if (sosVersion.equalsIgnoreCase("2.0.0")) {
 			obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + io.getEpsgCode());
-			obsParameter.addPhenomenonTime(io.getTimeStamp());
-			obsParameter.addResultTime(io.getTimeStamp());
+			obsParameter.addPhenomenonTime(io.getTimeStamp().toString());
+			obsParameter.addResultTime(io.getTimeStamp().toString());
 			return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(io.getOffering().getUri()));
 		}
 
 		obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
-		obsParameter.addSamplingTime(io.getTimeStamp());
+		obsParameter.addSamplingTime(io.getTimeStamp().toString());
 		return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
 	}
 
