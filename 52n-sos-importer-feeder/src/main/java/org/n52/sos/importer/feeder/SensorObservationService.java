@@ -122,6 +122,10 @@ public final class SensorObservationService {
 
 	private final ImportStrategy importStrategy;
 
+	// TODO add to configuration and increase default value to 1000
+	// Identified on localhost on development system
+	private final int hunkSize = 12500;
+
 	public SensorObservationService(final URL sosUrl,
 			final String version,
 			final String binding,
@@ -241,8 +245,9 @@ public final class SensorObservationService {
 			break;
 
 		case SweArrayObservationWithSplitExtension:
-			final TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			startReadingFile = System.currentTimeMillis();
+			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
+			int currentHunk = 0;
 			while ((values = cr.readNext()) != null) {
 				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
@@ -250,14 +255,23 @@ public final class SensorObservationService {
 					timeSeriesRepository.addObservations(ios);
 					numOfObsTriedToInsert += ios.length;
 					LOG.debug(Feeder.heapSizeInformation());
+					if (currentHunk == hunkSize) {
+						currentHunk = 0;
+						insertTimeSeries(timeSeriesRepository);
+						timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
+					} else {
+						currentHunk++;
+					}
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
 				lastLine++;
 				lineCounter++;
 			}
+			if (!timeSeriesRepository.isEmpty()) {
+				insertTimeSeries(timeSeriesRepository);
+			}
 			final long finishedReadingFile = System.currentTimeMillis();
-			insertTimeSeries(timeSeriesRepository);
 			finishedImportData = System.currentTimeMillis();
 			LOG.debug("Timing:\nStart File: {}\nFinished File/Start importing: {}\nFinished importing: {}",
 					new Date(startReadingFile).toString(),

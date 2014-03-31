@@ -293,4 +293,11 @@ public class TimeSeries {
 				timeseries.getFirst().getFeatureOfInterestURI());
 	}
 
+	/**
+	 * @return <code>true</code>, if this time series contains no {@link InsertObservation} objects.
+	 */
+	public boolean isEmpty() {
+		return timeseries.isEmpty();
+	}
+
 }

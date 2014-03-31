@@ -108,4 +108,16 @@ public class TimeSeriesRepository {
 		return observedProperties;
 	}
 
+	/**
+	 * @return <code>true</code>, in the case of containing only empty time series
+	 */
+	public boolean isEmpty() {
+		for (final TimeSeries timeSeries : getTimeSeries()) {
+			if (!timeSeries.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }
