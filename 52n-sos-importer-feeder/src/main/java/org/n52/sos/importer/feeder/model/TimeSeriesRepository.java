@@ -43,6 +43,9 @@ public class TimeSeriesRepository {
 
 	public TimeSeriesRepository(final int numberOfTimeSeries) {
 		repo = new Vector<TimeSeries>(numberOfTimeSeries);
+		for (int i = 0; i < numberOfTimeSeries; i++) {
+			repo.add(i, new TimeSeries());
+		}
 	}
 
 	/**
@@ -54,9 +57,6 @@ public class TimeSeriesRepository {
 		}
 		if (ios != null) {
 			for (int i = 0; i < ios.length; i++) {
-				if (repo.get(i) == null) {
-					repo.add(i, new TimeSeries());
-				}
 				repo.get(i).addObservation(ios[i]);
 			}
 		}
