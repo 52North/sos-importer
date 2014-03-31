@@ -26,6 +26,7 @@ package org.n52.sos.importer.feeder.model;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.junit.Before;
@@ -65,6 +66,16 @@ public class TimestampTest {
 
 		final String asExpected = String.format("1970-01-02T01:00:01%s%s:%s",sign, hoursString, minutesString);
 		assertThat(timestamp.toString(),is(asExpected));
+	}
+
+	@Test public void
+	shouldCreateDateFromTimestamp() {
+		// Timestamp is not storing milliseconds now => remove them
+		final long time = (System.currentTimeMillis() / 1000) * 1000;
+		final Date dateFromTimestamp = timestamp.set(time).toDate();
+		final Date dateFromSystem = new Date(time);
+		assertThat(dateFromTimestamp.compareTo(dateFromSystem), is(0));
+
 	}
 
 }
