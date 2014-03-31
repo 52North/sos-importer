@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -218,6 +219,7 @@ public final class SensorObservationService {
 		skipAlreadyReadLines(cr, lineCounter);
 		switch (importStrategy) {
 		case SingleObservation:
+			long startReadingFile = System.currentTimeMillis();
 			// for each line
 			while ((values = cr.readNext()) != null) {
 				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
@@ -232,10 +234,15 @@ public final class SensorObservationService {
 				lastLine++;
 				lineCounter++;
 			}
+			long finishedImportData = System.currentTimeMillis();
+			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
+					new Date(startReadingFile).toString(),
+					new Date(finishedImportData).toString());
 			break;
 
 		case SweArrayObservationWithSplitExtension:
 			final TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
+			startReadingFile = System.currentTimeMillis();
 			while ((values = cr.readNext()) != null) {
 				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
@@ -249,7 +256,13 @@ public final class SensorObservationService {
 				lastLine++;
 				lineCounter++;
 			}
+			final long finishedReadingFile = System.currentTimeMillis();
 			insertTimeSeries(timeSeriesRepository);
+			finishedImportData = System.currentTimeMillis();
+			LOG.debug("Timing:\nStart File: {}\nFinished File/Start importing: {}\nFinished importing: {}",
+					new Date(startReadingFile).toString(),
+					new Date(finishedReadingFile).toString(),
+					new Date(finishedImportData).toString());
 		}
 
 		final int newFailedObservationsCount = failedInsertObservations.size()-failedObservationsBefore;
