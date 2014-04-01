@@ -433,7 +433,7 @@ public final class SensorObservationService {
 					//failedInsertObservations.add(io);
 					continue insertObservationForATimeSeries;
 				} else {
-					LOG.debug(String.format("Sensor registered at SOS  '%s' with assigned id '%s'",
+					LOG.info(String.format("Sensor registered at SOS  '%s' with assigned id '%s'",
 							sosUrl.toExternalForm(),
 							assignedSensorId));
 					registeredSensors.add(assignedSensorId);
