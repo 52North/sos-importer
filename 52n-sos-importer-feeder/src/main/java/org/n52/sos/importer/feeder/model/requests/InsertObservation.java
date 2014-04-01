@@ -28,6 +28,7 @@ import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 
 /**
@@ -35,25 +36,25 @@ import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class InsertObservation {
-	
+
 	private final Object resultValue;
-	private final String timeStamp;
+	private final Timestamp timeStamp;
 	private final Sensor sensor;
 	private final ObservedProperty observedProperty;
 	private final FeatureOfInterest featureOfInterest;
 	private final UnitOfMeasurement unitOfMeasurement;
 	private final Offering offering;
 	private final String measuredValueType;
-	
+
 	public InsertObservation(final Sensor sensor,
 			final FeatureOfInterest foi,
 			final Object value,
-			final String timeStamp,
+			final Timestamp timeStamp,
 			final UnitOfMeasurement uom,
 			final ObservedProperty obsProp,
 			final Offering off,
 			final String mvType) {
-		featureOfInterest = foi; 
+		featureOfInterest = foi;
 		this.sensor = sensor;
 		observedProperty = obsProp;
 		this.timeStamp = timeStamp;
@@ -62,7 +63,7 @@ public class InsertObservation {
 		offering = off;
 		measuredValueType = mvType;
 	}
-	
+
 	public String getSensorName() {
 		return sensor.getName();
 	}
@@ -91,7 +92,7 @@ public class InsertObservation {
 		return resultValue;
 	}
 
-	public String getTimeStamp() {
+	public Timestamp getTimeStamp() {
 		return timeStamp;
 	}
 
@@ -106,12 +107,12 @@ public class InsertObservation {
 	public double getLongitudeValue() {
 		return featureOfInterest.getPosition().getLongitude();
 	}
-	
+
 	public double getAltitudeValue()
 	{
 		return featureOfInterest.getPosition().getAltitude();
 	}
-	
+
 
 	public boolean isSetAltitudeValue()
 	{
@@ -129,11 +130,11 @@ public class InsertObservation {
 	protected UnitOfMeasurement getUnitOfMeasurment() {
 		return unitOfMeasurement;
 	}
-	
+
 	public Offering getOffering() {
 		return offering;
 	}
-	
+
 	public String getMeasuredValueType() {
 		return measuredValueType;
 	}

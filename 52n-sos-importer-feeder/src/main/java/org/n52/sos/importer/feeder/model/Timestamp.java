@@ -23,7 +23,10 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -141,6 +144,29 @@ public class Timestamp {
 		seconds = (byte) cal.get(Calendar.SECOND);
 		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/3600000);
 		return this;
+	}
+
+
+	protected Date toDate() {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX").parse(toString());
+		} catch (final ParseException e) {
+			throw new RuntimeException("Could not execute toDate()",e);
+		}
+	}
+
+	public boolean after(final Timestamp timeStamp) {
+		if (timeStamp == null) {
+			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
+		}
+		return toDate().after(timeStamp.toDate());
+	}
+
+	public boolean before(final Timestamp timeStamp) {
+		if (timeStamp == null) {
+			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
+		}
+		return toDate().before(timeStamp.toDate());
 	}
 
 }

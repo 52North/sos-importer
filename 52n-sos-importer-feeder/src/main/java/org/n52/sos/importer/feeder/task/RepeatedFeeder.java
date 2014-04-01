@@ -25,6 +25,7 @@ package org.n52.sos.importer.feeder.task;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -46,18 +47,18 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class RepeatedFeeder extends TimerTask{
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
 
 	private final Configuration configuration;
 	private final File file;
 
 	private final int periodInMinutes;
-	
+
 	final private static Lock oneFeederLock = new ReentrantLock(true);
-	
+
 	private static File lastUsedDateFile;
-	
+
 	public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
 		configuration = c;
 		file = f;
@@ -96,7 +97,7 @@ public class RepeatedFeeder extends TimerTask{
 								fileToFeed.getName(),
 								periodInMinutes,
 								periodInMinutes>1?"s":"");
-					} 
+					}
 					catch (final InvalidColumnCountException iae) {
 						// Exception is already logged -> nothing to do
 					}
@@ -155,7 +156,7 @@ public class RepeatedFeeder extends TimerTask{
 			LOG.error("No file found in directory '{}'",file.getAbsolutePath());
 		}
 	}
-	
+
 	private void saveLastFeedFile()
 	{
 		final Properties prop = new Properties();
@@ -171,8 +172,16 @@ public class RepeatedFeeder extends TimerTask{
 	private void getLastFeedFile()
 	{
 		final Properties prop = new Properties();
+		String lastFeedFilePropertiesPath = "";
 		try {
-			prop.load(new FileReader(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"));
+			lastFeedFilePropertiesPath = new StringBuffer(FileHelper.getHome().getAbsolutePath())
+				.append(File.separator)
+				.append(FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()))
+				.append(".properties")
+				.toString();
+			prop.load(new FileReader(lastFeedFilePropertiesPath));
+		} catch (final FileNotFoundException fnfe) {
+			LOG.debug(String.format("Last feed file properties not found: %s",lastFeedFilePropertiesPath));
 		} catch (final IOException e) {
 			LOG.debug("Exception thrown: {}", e.getMessage(), e); // only on DEBUG because it is not a problem if this file does not exist
 		}

@@ -40,6 +40,7 @@ import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.SensorObservationService;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
@@ -58,13 +59,13 @@ public class OneTimeFeeder implements Runnable {
 	private final Configuration config;
 
 	private DataFile dataFile;
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
 
 	public OneTimeFeeder(final Configuration config) {
 		this.config = config;
 	}
-	
+
 	public OneTimeFeeder(final Configuration config, final File datafile) {
 		this.config = config;
 		dataFile = new DataFile(config, datafile);
@@ -136,10 +137,10 @@ public class OneTimeFeeder implements Runnable {
 			LOG.error("The file you specified cannot be obtained.");
 			return null;
 		}
-		
+
 		return new DataFile(config, dataFile);
 	}
-	
+
 	@Override
 	public void run() {
 		LOG.trace("run()");
@@ -159,9 +160,10 @@ public class OneTimeFeeder implements Runnable {
 				final URL sosURL = config.getSosUrl();
 				final String sosVersion = config.getSosVersion();
 				final String sosBinding = config.getSosBinding();
+				final ImportStrategy importStrategy = config.getImportStrategy();
 				SensorObservationService sos = null;
 				try {
-					sos = new SensorObservationService(sosURL,sosVersion,sosBinding);
+					sos = new SensorObservationService(sosURL,sosVersion,sosBinding, importStrategy);
 				} catch (final ExceptionReport er) {
 					LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", er);
 				} catch (final OXFException oxfe) {
@@ -181,7 +183,7 @@ public class OneTimeFeeder implements Runnable {
 					} else {
 						fileName = config.getConfigFile().getCanonicalPath() +
 								"_" +
-								dataFile.getCanonicalPath() + 
+								dataFile.getCanonicalPath() +
 								"_counter";
 					}
 					counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
@@ -208,7 +210,7 @@ public class OneTimeFeeder implements Runnable {
 					LOG.info("Feeding data from file {} to SOS instance finished.",dataFile.getFileName());
 				}
 			} catch (final MalformedURLException mue) {
-				LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}", 
+				LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
 						config.getFileName(),
 						mue.getMessage());
 				LOG.debug("Exception Stack Trace:", mue);
@@ -218,7 +220,7 @@ public class OneTimeFeeder implements Runnable {
 				log(e);
 			} catch (final XmlException e) {
 				log(e);
-			} 
+			}
 		}
 	}
 
@@ -239,7 +241,7 @@ public class OneTimeFeeder implements Runnable {
 //		// TODO save failed InsertObservations via ObjectOutputStream
 //		final String fileName = config.getConfigFile().getCanonicalPath() +
 //		"_" +
-//		dataFile.getCanonicalPath() + 
+//		dataFile.getCanonicalPath() +
 //		"_failedObservations";
 //		// TODO define name of outputfile
 	}

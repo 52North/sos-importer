@@ -97,6 +97,7 @@
 				<xs:enumeration value="POSITION_EPSG_CODE"/>
 				<xs:enumeration value="POSITION_LATITUDE"/>
 				<xs:enumeration value="POSITION_LONGITUDE"/>
+				<xs:enumeration value="IMPORT_STRATEGY"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -202,7 +203,9 @@
 	</xs:element>
 	<xs:element name="Value">
 		<xs:annotation>
-			<xs:documentation>The value of a key-value-pair. Potential values: TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).</xs:documentation>
+			<xs:documentation>
+				The value of a key-value-pair. Potential values: 
+					TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).</xs:documentation>
 		</xs:annotation>
 		<xs:simpleType>
 			<xs:restriction base="xs:string"/>
@@ -567,12 +570,12 @@
 				</xs:annotation>
 			</xs:attribute>
 			<xs:attribute name="headerLine" type="xs:integer">
-			    <xs:annotation>
-			        <xs:documentation>
+				<xs:annotation>
+					<xs:documentation>
 			            Identifies the header line. MUST be set in the case of
 			            having the header line repeatedly in the data file.
 			        </xs:documentation>
-			    </xs:annotation>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -639,7 +642,16 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="Key"/>
-				<xs:element ref="Value"/>
+				<xs:element ref="Value">
+					<xs:annotation>
+						<xs:documentation>
+							The value of a key-value-pair. Potential values: 
+								TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT
+								TYPE->DATE_TIME: COMBINATION | UNIX_TIME
+								IMPORT_STRATEGY->SingleObservation | SweArrayObservationWithSplitExtension
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
