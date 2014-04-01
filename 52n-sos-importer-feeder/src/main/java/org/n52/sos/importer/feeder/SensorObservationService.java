@@ -122,9 +122,11 @@ public final class SensorObservationService {
 
 	private final ImportStrategy importStrategy;
 
-	// TODO add to configuration and increase default value to 1000
+	// TODO add to configuration
 	// Identified on localhost on development system
-	private final int hunkSize = 12500;
+	// Default value: 5000
+	// Max possible value: 12500
+	private final int hunkSize = 5000;
 
 	public SensorObservationService(final URL sosUrl,
 			final String version,
