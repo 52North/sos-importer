@@ -77,35 +77,6 @@
     </dependencies>
     <build>
         <plugins>
-<!-- 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.3.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>org.n52.sos.importer.Start</Main-Class>
-                                        <build-time>${timestamp}</build-time>
-                                        <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                                        <n52-oxf-version>${oxf.version}</n52-oxf-version>
-                                        <geotools-version>${geotools.version}</geotools-version>
-                                    </manifestEntries>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
--->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -114,7 +85,7 @@
                     <source>1.7</source>
                     <target>1.7</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
-                                <showWarnings>true</showWarnings>
+                    <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
@@ -148,13 +119,13 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <!-- <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>-->
+<!--                     <descriptorRefs> -->
+<!--                         <descriptorRef>jar-with-dependencies</descriptorRef> -->
+<!--                     </descriptorRefs> -->
                     <descriptors>
                         <descriptor>assembly.xml</descriptor>
                     </descriptors>
-                    <finalName>${project.artifactId}-${project.version}</finalName>
+                    <finalName>${project.artifactId}</finalName>
                     <archive>
                         <index>false</index>
                         <manifest>

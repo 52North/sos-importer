@@ -222,62 +222,6 @@
            </plugins>
        </pluginManagement>
     </build>
-<!-- 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
-                    <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.mycila.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <version>1.9.0</version>
-                    <configuration>
-                        <header>src/main/resources/52n_license_header.txt</header>
-                        <includes>
-                            <include>**/*.java</include>
-                        </includes>
-                        <strictCheck>true</strictCheck>
-                        <properties>
-                            <year>${year}</year>
-                        </properties>
-                        <encoding>${project.build.sourceEncoding}}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <configuration>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                        <finalName>${project.artifactId}-${project.version}</finalName>
-                        <archive>
-                            <index>false</index>
-                            <manifest>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                <addClasspath>true</addClasspath>
-                                <mainClass>org.n52.sos.importer.Start</mainClass>
-                            </manifest>
-                            <manifestEntries>
-                                <build-time>${timestamp}</build-time>
-                                <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                                <n52-oxf-version>${oxf.version}</n52-oxf-version>
-                                <geotools-version>${geotools.version}</geotools-version>
-                            </manifestEntries>
-                        </archive>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
- -->
     <repositories>
         <repository>
             <id>n52-releases</id>
@@ -290,7 +234,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
         <repository>
             <id>n52-snapshots</id>
             <name>52n Snapshots</name>
@@ -310,7 +253,7 @@
     <profiles>
         <profile>
             <id>release</id>
-            <!-- a profile wich shall be activated if a release is performed -->
+            <!-- a profile which shall be activated if a release is performed -->
             <build>
                 <plugins>
                     <plugin>
@@ -321,7 +264,6 @@
                                 release fails on perform -->
                             <preparationGoals>clean</preparationGoals>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <tagBase>https://svn.52north.org/svn/swe/incubation/SOS-importer/tags</tagBase>
                             <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
                         </configuration>
                     </plugin>
