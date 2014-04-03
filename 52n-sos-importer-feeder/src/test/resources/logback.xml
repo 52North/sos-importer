@@ -39,10 +39,10 @@
 		</encoder>
 	</appender>
 
-	<logger name="org.n52" level="TRACE" />
+	<logger name="org.n52" level="INFO" />
 
 	<root level="INFO">
 		<appender-ref ref="FILE" />
-		<appender-ref ref="STDOUT" />
+<!-- 		<appender-ref ref="STDOUT" /> -->
 	</root>
 </configuration>

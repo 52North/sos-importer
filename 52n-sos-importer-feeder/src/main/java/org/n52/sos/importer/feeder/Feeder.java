@@ -61,38 +61,38 @@ public final class Feeder {
 				final Configuration c = new Configuration(configFile);
 				// start application with valid configuration
 				// data file
-				if (args.length == 2) { 
+				if (args.length == 2) {
 					// Case: one time feeding with defined configuration
 					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
-				} 
-				else if (args.length == 4) { 
+				}
+				else if (args.length == 4) {
 					// Case: one time feeding with file override or period with file from configuration
-					if (isFileOverride(args[2])) { 
+					if (isFileOverride(args[2])) {
 						// Case: file override
 						new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
-						
-					} 
+
+					}
 					else if (isTimePeriodSet(args[2]))	{
 						// Case: repeated feeding
 						repeatedFeeding(c,parseInt(args[3]));
 					}
-				} 
-				else if (args.length == 6) { 
+				}
+				else if (args.length == 6) {
 					// Case: repeated feeding with file override
 					repeatedFeeding(c,new File(args[3]),parseInt(args[5]));
 				}
-			} 
+			}
 			catch (final XmlException e)
 			{
-				final String errorMsg = 
+				final String errorMsg =
 						String.format("Configuration file '%s' could not be " +
 								"parsed. Exception thrown: %s",
 								configFile,
 								e.getMessage());
 				LOG.error(errorMsg);
 				LOG.debug("", e);
-			} 
-			catch (final IOException e) 
+			}
+			catch (final IOException e)
 			{
 				LOG.error("Exception thrown: {}", e.getMessage());
 				LOG.debug("", e);
@@ -102,7 +102,7 @@ public final class Feeder {
 				LOG.error("Given parameters could not be parsed! -p must be a number.");
 				LOG.debug("Exception Stack Trace:",iae);
 			}
-		} 
+		}
 		else {
 			showUsage();
 		}
@@ -123,20 +123,21 @@ public final class Feeder {
 	 */
 	private static void showUsage() {
 		LOG.trace("showUsage()");
-		LOG.info("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n" +
-				"options and arguments:\n" + 
-				"-c file	 : read the config file and start the import process\n" +
-				"-d datafile : OPTIONAL override of the datafile defined in config file\n" +
-				"-p period   : OPTIONAL time period in minutes for repeated feeding");
+		System.out.println(new StringBuffer("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
+				.append("options and arguments:\n")
+				.append("-c file	 : read the config file and start the import process\n")
+				.append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
+				.append("-p period   : OPTIONAL time period in minutes for repeated feeding")
+				.toString());
 	}
 
 	/**
-	 * This method validates the input parameters from the user. If something 
+	 * This method validates the input parameters from the user. If something
 	 * wrong, it will be logged.
 	 * @param args the parameters given by the user
 	 * @return <b>true</b> if the parameters are valid and the programm has all
 	 * 				required information.<br />
-	 * 			<b>false</b> if parameters are missing or not usable in the 
+	 * 			<b>false</b> if parameters are missing or not usable in the
 	 * 				specified form.
 	 */
 	private static boolean checkArgs(final String[] args) {
@@ -150,7 +151,7 @@ public final class Feeder {
 			}
 		} else if (args.length == 4) {
 			if (isConfigFileSet(args[0]) && (
-					isFileOverride(args[2]) || 
+					isFileOverride(args[2]) ||
 					isTimePeriodSet(args[2]) ) ) {
 				return true;
 			}
@@ -181,7 +182,7 @@ public final class Feeder {
 	}
 
 	/**
-	 * Method print all available information from the jar's manifest file. 
+	 * Method print all available information from the jar's manifest file.
 	 */
 	private static void logApplicationMetadata() {
 		LOG.trace("logApplicationMetadata()");
