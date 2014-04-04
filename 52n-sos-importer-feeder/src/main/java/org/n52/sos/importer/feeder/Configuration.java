@@ -1196,4 +1196,23 @@ public final class Configuration {
 		return ImportStrategy.SingleObservation;
 	}
 
+	public int getHunkSize() {
+		if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
+			for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
+				final Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
+				if (metadata.getKey().equals(Key.HUNK_SIZE)) {
+					try {
+						return Integer.parseInt(metadata.getValue());
+					} catch (final NumberFormatException nfe) {
+						LOG.error(
+								String.format("Value of metadata element with key '%s' could not be parsed to int: '%s'. Ignoring it.",
+										Key.HUNK_SIZE.toString()),
+								nfe);
+					}
+				}
+			}
+		}
+		return -1;
+	}
+
 }

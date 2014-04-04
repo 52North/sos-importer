@@ -122,16 +122,16 @@ public final class SensorObservationService {
 
 	private final ImportStrategy importStrategy;
 
-	// TODO add to configuration
 	// Identified on localhost on development system
 	// Default value: 5000
 	// Max possible value: 12500
-	private final int hunkSize = 5000;
+	private int hunkSize = 5000;
 
 	public SensorObservationService(final URL sosUrl,
 			final String version,
 			final String binding,
-			final ImportStrategy importStrategy) throws ExceptionReport, OXFException {
+			final ImportStrategy importStrategy,
+			final int hunkSize) throws ExceptionReport, OXFException {
 		LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
 		this.sosUrl = sosUrl;
 		sosVersion = version;
@@ -152,6 +152,9 @@ public final class SensorObservationService {
 		registeredSensors = new LinkedList<String>();
 		if (sosVersion.equals("2.0.0")) {
 			offerings = new HashMap<String, String>();
+		}
+		if (hunkSize > 0) {
+			this.hunkSize = hunkSize;
 		}
 	}
 
@@ -247,6 +250,7 @@ public final class SensorObservationService {
 			break;
 
 		case SweArrayObservationWithSplitExtension:
+			LOG.debug("Using hunkSize '{}'",hunkSize);
 			startReadingFile = System.currentTimeMillis();
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;

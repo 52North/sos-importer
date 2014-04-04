@@ -98,6 +98,7 @@
 				<xs:enumeration value="POSITION_LATITUDE"/>
 				<xs:enumeration value="POSITION_LONGITUDE"/>
 				<xs:enumeration value="IMPORT_STRATEGY"/>
+				<xs:enumeration value="HUNK_SIZE"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -649,6 +650,8 @@
 								TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT
 								TYPE->DATE_TIME: COMBINATION | UNIX_TIME
 								IMPORT_STRATEGY->SingleObservation | SweArrayObservationWithSplitExtension
+								HUNK_SIZE->Integer value defining the number of rows that should be combined
+								        in one SWEArrayObservation.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>

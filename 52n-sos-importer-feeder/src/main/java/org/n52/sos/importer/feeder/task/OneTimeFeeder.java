@@ -161,9 +161,14 @@ public class OneTimeFeeder implements Runnable {
 				final String sosVersion = config.getSosVersion();
 				final String sosBinding = config.getSosBinding();
 				final ImportStrategy importStrategy = config.getImportStrategy();
+				final int hunkSize = config.getHunkSize();
 				SensorObservationService sos = null;
 				try {
-					sos = new SensorObservationService(sosURL,sosVersion,sosBinding, importStrategy);
+					sos = new SensorObservationService(sosURL,
+							sosVersion,
+							sosBinding,
+							importStrategy,
+							hunkSize);
 				} catch (final ExceptionReport er) {
 					LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", er);
 				} catch (final OXFException oxfe) {

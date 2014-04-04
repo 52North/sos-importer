@@ -16,6 +16,8 @@ Features:
         of the 52North SOS implementation. Hence, this strategy works
         only in combination with 52North implementation. Other impl.
         might work, too, but not as expected.
+        Hunksize and import strategy are both optional 
+        <AdditionalMetadata><Metadata> elements.
  
 Changes:
 --------
