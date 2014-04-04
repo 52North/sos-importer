@@ -41,10 +41,10 @@
 
 	<logger name="org.n52.sos.importer.feeder.Configuration" level="INFO" />
 	<logger name="org.n52.sos.importer.feeder.DataFile" level="INFO" />
-	<logger name="org.n52" level="INFO" />
+	<logger name="org.n52" level="DEBUG" />
 
 	<root level="INFO">
 		<appender-ref ref="FILE" />
-<!-- 		<appender-ref ref="STDOUT" /> -->
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
