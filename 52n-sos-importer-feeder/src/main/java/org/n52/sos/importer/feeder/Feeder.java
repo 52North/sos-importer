@@ -123,7 +123,7 @@ public final class Feeder {
 	 */
 	private static void showUsage() {
 		LOG.trace("showUsage()");
-		System.out.println(new StringBuffer("\nusage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
+		System.out.println(new StringBuffer("usage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
 				.append("options and arguments:\n")
 				.append("-c file	 : read the config file and start the import process\n")
 				.append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
