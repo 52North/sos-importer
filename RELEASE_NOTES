@@ -12,12 +12,15 @@ Features:
    * SingleObservation: Default strategy 
    * SweArrayObservationWithSplitExtension: 
         Reads hunksize# lines and imports each time series using an 
-        SWEArrayObservation in combination with the SplitExtension
-        of the 52North SOS implementation. Hence, this strategy works
-        only in combination with 52North implementation. Other impl.
-        might work, too, but not as expected.
-        Hunksize and import strategy are both optional 
+        SWEArrayObservation in combination with the SplitExtension of the 
+        52North SOS implementation. Hence, this strategy works only in 
+        combination with 52North implementation. Other impl. might work, too,
+        but not as expected. Hunksize and import strategy are both optional 
         <AdditionalMetadata><Metadata> elements.
+ * Support for date information extraction from file name using two new 
+   OPTIONAL attributes in element <DataFile>:
+   * "regExDateInfoInFileName" for extracting date information from file names.
+   * "dateInfoPattern" for parsing the date information into a java.util.Date.
  
 Changes:
 --------
