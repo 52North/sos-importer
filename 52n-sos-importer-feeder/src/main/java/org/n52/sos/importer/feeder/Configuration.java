@@ -31,14 +31,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import javax.xml.namespace.QName;
 
@@ -48,7 +44,6 @@ import org.apache.xmlbeans.XmlOptions;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
-import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
@@ -983,54 +978,6 @@ public final class Configuration {
 		return String.format("Configuration [file=%s]", configFile);
 	}
 
-	/**
-	 * Checks for <code>Column.Metadata[]</code> and updates and returns the given {@link Timestamp}. Allowed keys are:
-	 * <ul><li>TIME_DAY</li>
-	 * <li>TIME_HOUR</li>
-	 * <li>TIME_MINUTE</li>
-	 * <li>TIME_MONTH</li>
-	 * <li>TIME_SECOND</li>
-	 * <li>TIME_YEAR</li>
-	 * <li>TIME_ZONE</li></ul>
-	 */
-	public Timestamp enrichTimestampWithColumnMetadata(final Timestamp ts,
-			final Column col) {
-		if (col.getMetadataArray() != null) {
-			for (final Metadata m : col.getMetadataArray()) {
-				if (m.getKey().equals(Key.TIME_ZONE)) {
-					ts.setTimezone( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_YEAR)) {
-					ts.setYear( Short.parseShort( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_MONTH)) {
-					ts.setMonth( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_DAY)) {
-					ts.setDay( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_HOUR)) {
-					ts.setHour( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_MINUTE)) {
-					ts.setMinute( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-				if (m.getKey().equals(Key.TIME_SECOND)) {
-					ts.setSeconds( Byte.parseByte( m.getValue() ) );
-					continue;
-				}
-
-			}
-		}
-		return ts;
-	}
-
 	public String getType(final int mVColumnId) {
 		for (final Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
 			if (col.getNumber() == mVColumnId) {
@@ -1081,72 +1028,23 @@ public final class Configuration {
 		return localeFilePattern;
 	}
 
-	/**
-	 * @param ts the {@link Timestamp} to enrich
-	 * @param fileName the filename that might contain additional information
-	 * 			for the {@link Timestamp}
-	 * @return the {@link Timestamp} enriched or not
-	 * @throws ParseException in the case the filename could not be parsed using
-	 * 			the Datafile attributes "regExDateInfoInFileName" and
-	 * 			"DateInfoPattern".
-	 * @throws PatternSyntaxException in the case of not being able to parse the
-	 * 			value of the Datafile attribute "regExDateInfoInFileName".
-	 * @thorws IndexOutOfBoundsException in the case of no group is found using
-	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
-	 */
-	public Timestamp enrichTimestampByFilename(
-			final Timestamp ts,
-			final String fileName)
-					throws ParseException {
-		if (ts == null || fileName == null || fileName.isEmpty()) {
-			return ts;
-		}
-		LOG.trace("enrichTimestampByFilename('{}','{}'",ts, fileName);
-		if (isDateInfoExtractionSetupValid()) {
-			final String regex = importConf.getDataFile().getRegExDateInfoInFileName();
-			final Pattern pattern = Pattern.compile(regex);
-			final Matcher matcher = pattern.matcher(fileName);
-			if (matcher.matches()) {
-				final String dateInfoPattern = importConf.getDataFile().getDateInfoPattern();
-				final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
-				final String dateInformation = matcher.group(1);
-				final GregorianCalendar cal = new GregorianCalendar();
-				cal.setTime(sdf.parse(dateInformation));
-
-				if (dateInfoPattern.indexOf("y") > -1) {
-					ts.setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
-				}
-				if (dateInfoPattern.indexOf("M") > -1) {
-					ts.setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
-				}
-				if (dateInfoPattern.indexOf("d") > -1) {
-					ts.setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
-				}
-				if (dateInfoPattern.indexOf("H") > -1) {
-					ts.setHour(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.HOUR_OF_DAY))));
-				}
-				if (dateInfoPattern.indexOf("m") > -1) {
-					ts.setMinute(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MINUTE))));
-				}
-				if (dateInfoPattern.indexOf("s") > -1) {
-					ts.setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
-				}
-				if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
-					ts.setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
-				}
-			}
-		}
-		return ts;
+	public String getRegExDateInfoInFileName() {
+		return importConf.getDataFile().getRegExDateInfoInFileName();
 	}
 
-	private boolean isDateInfoExtractionSetupValid() {
+	public String getDateInfoPattern() {
+		return importConf.getDataFile().getDateInfoPattern();
+	}
+
+	public boolean isDateInfoExtractionSetupValid() {
 		return importConf.getDataFile().isSetRegExDateInfoInFileName() &&
 				importConf.getDataFile().isSetRegExDateInfoInFileName() &&
-				!importConf.getDataFile().getRegExDateInfoInFileName().isEmpty() &&
+				!getRegExDateInfoInFileName().isEmpty() &&
 				importConf.getDataFile().isSetDateInfoPattern() &&
-				importConf.getDataFile().getRegExDateInfoInFileName().indexOf("(") >= 0 &&
-				importConf.getDataFile().getRegExDateInfoInFileName().indexOf(")") > 1 &&
-				!importConf.getDataFile().getDateInfoPattern().isEmpty();
+				getRegExDateInfoInFileName().indexOf("(") >= 0 &&
+				getRegExDateInfoInFileName().indexOf(")") > 1 &&
+				!getDateInfoPattern().isEmpty();
+	}
 	}
 
 	/**
