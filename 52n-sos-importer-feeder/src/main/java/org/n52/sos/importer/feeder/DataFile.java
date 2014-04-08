@@ -415,6 +415,8 @@ public class DataFile {
 					configuration.getRegExDateInfoInFileName(),
 					configuration.getDateInfoPattern());
 			}
+			if (configuration.isUseDateInfoFromFileModificationSet()) {
+				ts.enrichByFileModificationDate(file.lastModified(), configuration.getLastModifiedDelta());
 			}
 			return ts;
 		}

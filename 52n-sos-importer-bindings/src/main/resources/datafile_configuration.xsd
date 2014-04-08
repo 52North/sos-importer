@@ -547,6 +547,29 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="useDateFromLastModifiedDate" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>
+			            If set to TRUE the last modified date of the datafile
+			            will be used as date value for the observation of this
+			            data file.
+			        </xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="lastModifiedDelta">
+				<xs:annotation>
+					<xs:documentation>
+			            If available and "useDateFromLastModifiedDate" is set
+			            to TRUE, the date value will be set to n days before
+			            last modified date.
+			        </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
 			<xs:attribute name="regExDateInfoInFileName" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>

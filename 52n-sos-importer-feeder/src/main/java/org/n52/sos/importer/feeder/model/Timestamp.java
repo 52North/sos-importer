@@ -199,6 +199,24 @@ public class Timestamp {
 		return toDate().before(timeStamp.toDate());
 	}
 
+	/**
+	 * @param lastModified long
+	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
+	 */
+	public Timestamp enrichByFileModificationDate(final long lastModified,
+			final int lastModifiedDelta) {
+		final GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(new Date(lastModified));
+		int dayInt = cal.get(GregorianCalendar.DAY_OF_MONTH);
+		if (lastModifiedDelta > 0) {
+			dayInt -= lastModifiedDelta;
+		}
+		setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
+		setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+		setDay(Byte.parseByte(Integer.toString(dayInt)));
+		return this;
+	}
+
 	public void setYear(final short year) {
 		this.year = year;
 	}

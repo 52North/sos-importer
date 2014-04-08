@@ -1045,6 +1045,21 @@ public final class Configuration {
 				getRegExDateInfoInFileName().indexOf(")") > 1 &&
 				!getDateInfoPattern().isEmpty();
 	}
+
+	public boolean isUseDateInfoFromFileModificationSet() {
+		return importConf.getDataFile().isSetUseDateFromLastModifiedDate() &&
+				importConf.getDataFile().getUseDateFromLastModifiedDate();
+	}
+
+	/**
+	 * @return The configured value <b>> 0</b>, if it is set<br />
+	 * 			else <b>-1</b>.
+	 */
+	public int getLastModifiedDelta() {
+		if (importConf.getDataFile().isSetLastModifiedDelta()) {
+			return importConf.getDataFile().getLastModifiedDelta();
+		}
+		return -1;
 	}
 
 	/**

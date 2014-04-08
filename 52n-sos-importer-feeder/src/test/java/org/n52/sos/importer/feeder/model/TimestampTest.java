@@ -115,6 +115,27 @@ public class TimestampTest {
 		assertThat(ts.toString(), is(""));
 	}
 
+	@Test
+	public final void shouldEnrichWithLastModificationDate() {
+		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		timestamp.enrichByFileModificationDate(lastModified, -1);
+		final Timestamp expected = new Timestamp().set(lastModified);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	@Test
+	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
+		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		final int lastModifiedDelta = 2;
+		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		final Timestamp expected = new Timestamp().set(lastModified);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat((byte)(timestamp.getDay() + lastModifiedDelta), is(expected.getDay()));
+	}
+
 	private long getCurrentTimeMillisTimestampCompatible() {
 		// Timestamp is not storing milliseconds now => remove them
 		return (System.currentTimeMillis() / 1000) * 1000;
