@@ -357,7 +357,6 @@ public class DataFile {
 	 */
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
-		// TODO implement new feature here: extract date info from file name
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
 		final Column col = configuration.getColumnById(mVColumn);
 		String group = null;

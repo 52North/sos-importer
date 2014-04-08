@@ -1101,6 +1101,7 @@ public final class Configuration {
 		if (ts == null || fileName == null || fileName.isEmpty()) {
 			return ts;
 		}
+		LOG.trace("enrichTimestampByFilename('{}','{}'",ts, fileName);
 		if (isDateInfoExtractionSetupValid()) {
 			final String regex = importConf.getDataFile().getRegExDateInfoInFileName();
 			final Pattern pattern = Pattern.compile(regex);
