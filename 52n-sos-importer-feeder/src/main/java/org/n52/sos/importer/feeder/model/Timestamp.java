@@ -217,6 +217,10 @@ public class Timestamp {
 		return this;
 	}
 
+	public void applyDayDelta(final int daysToAdd) {
+		set(toDate().getTime() + (daysToAdd * millisPerDay));
+	}
+
 	public Timestamp enrichDateByOtherTimestamp(final Timestamp other) {
 		if (other != null) {
 			setYear(other.getYear());

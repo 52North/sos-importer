@@ -32,9 +32,7 @@ import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
-/**
- *
- */
+
 public class TimestampTest {
 
 	private static final int millisPerDay = 1000 * 60 * 60 * 24;
@@ -161,6 +159,21 @@ public class TimestampTest {
 		assertThat(timestamp.getYear(), is(other.getYear()));
 		assertThat(timestamp.getMonth(), is(other.getMonth()));
 		assertThat(timestamp.getDay(), is(other.getDay()));
+	}
+
+	@Test public void
+	shouldAddDayDelta() {
+		timestamp.set(0).applyDayDelta(2);
+
+		assertThat(timestamp.getYear(), is((short)1970));
+		assertThat(timestamp.getMonth(), is((byte)1));
+		assertThat(timestamp.getDay(), is((byte)3));
+
+		timestamp.set(0).applyDayDelta(-2);
+
+		assertThat(timestamp.getYear(), is((short)1969));
+		assertThat(timestamp.getMonth(), is((byte)12));
+		assertThat(timestamp.getDay(), is((byte)30));
 	}
 
 	private long getCurrentTimeMillisTimestampCompatible() {
