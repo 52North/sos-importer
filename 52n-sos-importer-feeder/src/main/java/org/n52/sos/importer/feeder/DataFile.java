@@ -368,7 +368,7 @@ public class DataFile {
 		final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
 			// get value from each column
-			Timestamp ts = new Timestamp();
+			final Timestamp ts = new Timestamp();
 			for (final Column column : cols) {
 				// get pattern and fields
 				final String pattern = getParsePattern(column);
@@ -407,13 +407,66 @@ public class DataFile {
 						break;
 					}
 				}
-				ts = configuration.enrichTimestampWithColumnMetadata(ts,column);
-				ts = configuration.enrichTimestampByFilename(ts,file.getName());
+				enrichTimestampWithColumnMetadata(ts,column);
 			}
-			// create timestamp string via toString()
+			if (configuration.isDateInfoExtractionSetupValid()) {
+				ts.enrichByFilename(
+					file.getName(),
+					configuration.getRegExDateInfoInFileName(),
+					configuration.getDateInfoPattern());
+			}
+			if (configuration.isUseDateInfoFromFileModificationSet()) {
+				ts.enrichByFileModificationDate(file.lastModified(), configuration.getLastModifiedDelta());
+			}
 			return ts;
 		}
 		return null;
+	}
+
+	/**
+	 * Checks for <code>Column.Metadata[]</code> and updates and returns the given {@link Timestamp}. Allowed keys are:
+	 * <ul><li>TIME_DAY</li>
+	 * <li>TIME_HOUR</li>
+	 * <li>TIME_MINUTE</li>
+	 * <li>TIME_MONTH</li>
+	 * <li>TIME_SECOND</li>
+	 * <li>TIME_YEAR</li>
+	 * <li>TIME_ZONE</li></ul>
+	 */
+	private void enrichTimestampWithColumnMetadata(final Timestamp ts,
+			final Column col) {
+		if (col.getMetadataArray() != null) {
+			for (final Metadata m : col.getMetadataArray()) {
+				if (m.getKey().equals(Key.TIME_ZONE)) {
+					ts.setTimezone( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_YEAR)) {
+					ts.setYear( Short.parseShort( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_MONTH)) {
+					ts.setMonth( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_DAY)) {
+					ts.setDay( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_HOUR)) {
+					ts.setHour( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_MINUTE)) {
+					ts.setMinute( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+				if (m.getKey().equals(Key.TIME_SECOND)) {
+					ts.setSeconds( Byte.parseByte( m.getValue() ) );
+					continue;
+				}
+			}
+		}
 	}
 
 	/**

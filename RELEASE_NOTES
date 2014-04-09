@@ -21,6 +21,11 @@ Features:
    OPTIONAL attributes in element <DataFile>:
    * "regExDateInfoInFileName" for extracting date information from file names.
    * "dateInfoPattern" for parsing the date information into a java.util.Date.
+ * Date information extraction from last modified date using two new OPTIONAL
+   attributes:
+   * "useDateFromLastModifiedDate" for enabling this feature
+   * "lastModifiedDelta" for moving the date n days back (this attribute is 
+     OPTIONAL for this feature, too.)
  
 Changes:
 --------

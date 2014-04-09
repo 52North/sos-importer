@@ -28,12 +28,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Timestamp {
 
+	private static final String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssX";
+	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
 	private byte day = Byte.MIN_VALUE;
@@ -104,6 +109,114 @@ public class Timestamp {
 		}
 	}
 
+	public Timestamp set(final long dateToSet) {
+		final Calendar cal = new GregorianCalendar();
+		cal.setTimeInMillis(dateToSet);
+		year = (short) cal.get(Calendar.YEAR);
+		month = (byte) (cal.get(Calendar.MONTH)+1);
+		day = (byte) cal.get(Calendar.DAY_OF_MONTH);
+		hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
+		minute = (byte) cal.get(Calendar.MINUTE);
+		seconds = (byte) cal.get(Calendar.SECOND);
+		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/3600000);
+		return this;
+	}
+
+	/**
+	 * @param fileName the filename that might contain additional information
+	 * 			for the {@link Timestamp}
+	 * @param regExToExtractFileInfo
+	 * @param dateInfoPattern
+	 * @throws ParseException in the case the filename could not be parsed using
+	 * 			the Datafile attributes "regExDateInfoInFileName" and
+	 * 			"DateInfoPattern".
+	 * @throws PatternSyntaxException in the case of not being able to parse the
+	 * 			value of the Datafile attribute "regExDateInfoInFileName".
+	 * @throws IndexOutOfBoundsException in the case of no group is found using
+	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
+	 */
+	public Timestamp enrichByFilename(
+			final String fileName,
+			final String regExToExtractFileInfo,
+			final String dateInfoPattern)
+					throws ParseException {
+		if (fileName == null || fileName.isEmpty() ||
+				regExToExtractFileInfo == null || regExToExtractFileInfo.isEmpty() ||
+				dateInfoPattern == null || dateInfoPattern.isEmpty()) {
+			return this;
+		}
+		final Pattern pattern = Pattern.compile(regExToExtractFileInfo);
+		final Matcher matcher = pattern.matcher(fileName);
+		if (matcher.matches()) {
+			final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
+			final String dateInformation = matcher.group(1);
+			final GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(sdf.parse(dateInformation));
+
+			if (dateInfoPattern.indexOf("y") > -1) {
+				setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
+			}
+			if (dateInfoPattern.indexOf("M") > -1) {
+				setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+			}
+			if (dateInfoPattern.indexOf("d") > -1) {
+				setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
+			}
+			if (dateInfoPattern.indexOf("H") > -1) {
+				setHour(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.HOUR_OF_DAY))));
+			}
+			if (dateInfoPattern.indexOf("m") > -1) {
+				setMinute(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MINUTE))));
+			}
+			if (dateInfoPattern.indexOf("s") > -1) {
+				setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
+			}
+			if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
+				setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
+			}
+		}
+		return this;
+	}
+
+	protected Date toDate() {
+		try {
+			return new SimpleDateFormat(DEFAULT_PATTERN).parse(toString());
+		} catch (final ParseException e) {
+			throw new RuntimeException("Could not execute toDate()",e);
+		}
+	}
+
+	public boolean after(final Timestamp timeStamp) {
+		if (timeStamp == null) {
+			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
+		}
+		return toDate().after(timeStamp.toDate());
+	}
+
+	public boolean before(final Timestamp timeStamp) {
+		if (timeStamp == null) {
+			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
+		}
+		return toDate().before(timeStamp.toDate());
+	}
+
+	/**
+	 * @param lastModified long
+	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
+	 */
+	public Timestamp enrichByFileModificationDate(long lastModified,
+			final int lastModifiedDelta) {
+		final GregorianCalendar cal = new GregorianCalendar();
+		if (lastModifiedDelta > 0) {
+			lastModified = lastModified - (lastModifiedDelta * millisPerDay);
+		}
+		cal.setTime(new Date(lastModified));
+		setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
+		setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+		setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
+		return this;
+	}
+
 	public void setYear(final short year) {
 		this.year = year;
 	}
@@ -132,41 +245,31 @@ public class Timestamp {
 		this.timezone = timezone;
 	}
 
-	public Timestamp set(final long dateToSet)
-	{
-		final Calendar cal = new GregorianCalendar();
-		cal.setTimeInMillis(dateToSet);
-		year = (short) cal.get(Calendar.YEAR);
-		month = (byte) (cal.get(Calendar.MONTH)+1);
-		day = (byte) cal.get(Calendar.DAY_OF_MONTH);
-		hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
-		minute = (byte) cal.get(Calendar.MINUTE);
-		seconds = (byte) cal.get(Calendar.SECOND);
-		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/3600000);
-		return this;
+	public short getYear() {
+		return year;
 	}
 
-
-	protected Date toDate() {
-		try {
-			return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX").parse(toString());
-		} catch (final ParseException e) {
-			throw new RuntimeException("Could not execute toDate()",e);
-		}
+	public byte getMonth() {
+		return month;
 	}
 
-	public boolean after(final Timestamp timeStamp) {
-		if (timeStamp == null) {
-			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-		}
-		return toDate().after(timeStamp.toDate());
+	public byte getDay() {
+		return day;
 	}
 
-	public boolean before(final Timestamp timeStamp) {
-		if (timeStamp == null) {
-			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-		}
-		return toDate().before(timeStamp.toDate());
+	public byte getHour() {
+		return hour;
 	}
 
+	public byte getMinute() {
+		return minute;
+	}
+
+	public byte getSeconds() {
+		return seconds;
+	}
+
+	public byte getTimezone() {
+		return timezone;
+	}
 }

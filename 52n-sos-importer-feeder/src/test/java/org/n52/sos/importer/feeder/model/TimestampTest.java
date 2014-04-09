@@ -26,6 +26,7 @@ package org.n52.sos.importer.feeder.model;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -35,6 +36,8 @@ import org.junit.Test;
  *
  */
 public class TimestampTest {
+
+	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 
 	private Timestamp timestamp;
 
@@ -70,12 +73,86 @@ public class TimestampTest {
 
 	@Test public void
 	shouldCreateDateFromTimestamp() {
-		// Timestamp is not storing milliseconds now => remove them
-		final long time = (System.currentTimeMillis() / 1000) * 1000;
+		final long time = getCurrentTimeMillisTimestampCompatible();
 		final Date dateFromTimestamp = timestamp.set(time).toDate();
 		final Date dateFromSystem = new Date(time);
 		assertThat(dateFromTimestamp.compareTo(dateFromSystem), is(0));
 
 	}
 
+	@Test
+	public final void shouldGetAdditionalTimestampValuesFromFileName() throws ParseException {
+		final String fileName = "test-sensor_20140615.csv";
+		final Timestamp ts = new Timestamp();
+
+		ts.enrichByFilename(fileName,"test-sensor_(\\d{8})\\.csv","yyyyMMdd");
+
+		assertThat(ts.toString(), is("2014-06-15"));
+	}
+
+	@Test
+	public final void shouldReturnSameValueIfParametersAreInvalid() throws ParseException {
+		Timestamp ts = new Timestamp();
+		ts.enrichByFilename(null, null, null);
+		assertThat(ts.toString(), is(""));
+
+		ts = new Timestamp();
+		ts.enrichByFilename("", null, null);
+		assertThat(ts.toString(), is(""));
+
+		ts = new Timestamp();
+		ts.enrichByFilename("-", null, null);
+		assertThat(ts.toString(), is(""));
+
+		ts = new Timestamp();
+		ts.enrichByFilename("-", "", null);
+		assertThat(ts.toString(), is(""));
+
+		ts = new Timestamp();
+		ts.enrichByFilename("-", "-", null);
+		assertThat(ts.toString(), is(""));
+
+		ts = new Timestamp();
+		ts.enrichByFilename("-", "-", "");
+		assertThat(ts.toString(), is(""));
+	}
+
+	@Test
+	public final void shouldEnrichWithLastModificationDate() {
+		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		timestamp.enrichByFileModificationDate(lastModified, -1);
+		final Timestamp expected = new Timestamp().set(lastModified);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	@Test
+	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
+		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		final int lastModifiedDelta = 2;
+		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+		final Timestamp expected = new Timestamp().set(expectedMillis);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	@Test
+	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
+		final long lastModified = 0;
+		final int lastModifiedDelta = 2;
+		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		final Timestamp expected = new Timestamp().set(expectedMillis);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	private long getCurrentTimeMillisTimestampCompatible() {
+		// Timestamp is not storing milliseconds now => remove them
+		return (System.currentTimeMillis() / 1000) * 1000;
+	}
 }
