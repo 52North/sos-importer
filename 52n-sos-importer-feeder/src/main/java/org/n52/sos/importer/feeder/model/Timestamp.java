@@ -37,7 +37,6 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
-	private static final String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssX";
 	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
@@ -49,7 +48,7 @@ public class Timestamp {
 
 	@Override
 	public String toString() {
-		// yyyy-mm-ddThh:mm:ss+hh:mm+zz:zz => 31 chars
+		// yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
 		final StringBuffer ts = new StringBuffer(31);
 		if (year != Short.MIN_VALUE) {
 			ts.append(year);
@@ -179,11 +178,61 @@ public class Timestamp {
 	}
 
 	protected Date toDate() {
+		final String datePattern = getDatePattern();
 		try {
-			return new SimpleDateFormat(DEFAULT_PATTERN).parse(toString());
+			return new SimpleDateFormat(datePattern).parse(toString());
 		} catch (final ParseException e) {
 			throw new RuntimeException("Could not execute toDate()",e);
 		}
+	}
+
+	private String getDatePattern() {
+		// "yyyy-MM-dd'T'HH:mm:ssX";
+		final StringBuffer ts = new StringBuffer(31);
+		if (year != Short.MIN_VALUE) {
+			ts.append("yyyy");
+			if (month != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (month != Byte.MIN_VALUE) {
+			ts.append("MM");
+			if (day != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (day != Byte.MIN_VALUE) {
+			ts.append("dd");
+		}
+		if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
+				&& (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append("'T'");
+		}
+		if (hour != Byte.MIN_VALUE) {
+			ts.append("HH");
+			if (minute != Byte.MIN_VALUE) {
+				ts.append(":");
+			}
+		}
+		if (minute != Byte.MIN_VALUE) {
+			ts.append("mm:");
+		} else if (hour != Byte.MIN_VALUE) {
+			ts.append("mm:");
+		}
+		if (seconds != Byte.MIN_VALUE ) {
+			ts.append("ss");
+		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
+			ts.append("ss");
+		}
+		if (timezone != Byte.MIN_VALUE &&
+				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append("X");
+		}
+		final String datePattern = ts.toString();
+		if (datePattern.isEmpty()) {
+			return "yyyy-MM-dd'T'HH:mm:ssX";
+		}
+		return datePattern;
 	}
 
 	public boolean after(final Timestamp timeStamp) {
