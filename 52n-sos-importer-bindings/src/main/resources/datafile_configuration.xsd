@@ -7,7 +7,7 @@
             
     -->
     <xs:annotation>
-        <xs:documentation>TODO enter docuementation here.</xs:documentation>
+        <xs:documentation>TODO enter documentation here.</xs:documentation>
     </xs:annotation>
     <xs:element name="CommentIndicator">
         <xs:annotation>
@@ -676,7 +676,11 @@
     </xs:element>
     <xs:element name="DecimalSeparator" default="." nillable="false">
         <xs:annotation>
-            <xs:documentation>The decimal mark delimits the decimal places of a numeric value. For example, '.' would be the decimal separator for the numeric value "1234.56".</xs:documentation>
+            <xs:documentation>
+                The decimal mark delimits the decimal places of a numeric value.
+                For example, '.' would be the decimal separator for the numeric
+                value "1234.56".
+            </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
