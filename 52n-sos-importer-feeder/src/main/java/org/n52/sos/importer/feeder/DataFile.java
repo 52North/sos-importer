@@ -409,7 +409,7 @@ public class DataFile {
 				}
 				enrichTimestampWithColumnMetadata(ts,column);
 			}
-			if (configuration.isDateInfoExtractionSetupValid()) {
+			if (configuration.isDateInfoExtractionFromFileNameSetupValid()) {
 				ts.enrichByFilename(
 					file.getName(),
 					configuration.getRegExDateInfoInFileName(),

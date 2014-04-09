@@ -1036,7 +1036,7 @@ public final class Configuration {
 		return importConf.getDataFile().getDateInfoPattern();
 	}
 
-	public boolean isDateInfoExtractionSetupValid() {
+	public boolean isDateInfoExtractionFromFileNameSetupValid() {
 		return importConf.getDataFile().isSetRegExDateInfoInFileName() &&
 				importConf.getDataFile().isSetRegExDateInfoInFileName() &&
 				!getRegExDateInfoInFileName().isEmpty() &&
