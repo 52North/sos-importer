@@ -608,6 +608,70 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
+            <xs:attribute name="sampleIdRegEx" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Identifies the beginning of an new sample in the data
+                        file. Requires the presence of the following 
+                        attributes:
+                        * sampleDateOffset
+                        * sampleDateExtractionRegEx
+                        * sampleDatePattern
+                        * sampleDataOffset
+                        A "sample" is a single sampling run having additional
+                        metadata like date information which is not contained 
+                        in the lines.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="sampleDateOffset">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines the offset in lines between the first line of
+                        a sample and the line containing the date information.
+                        Requires:
+                        * sampleDateExtractionRegEx 
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="sampleDateExtractionRegEx" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Regular expression to extract the date information from
+                        the line containing the date information of the current
+                        sample. The expression MUST result in ONE group. This 
+                        group will be parsed to a java.util.Date using:
+                        * sampleDatePattern
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="sampleDatePattern" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines the pattern used to parse the date information
+                        of the current pattern. Requires:
+                        * sampleDateExtractionRegEx
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="sampleDataOffset">
+                <xs:annotation>
+                    <xs:documentation>
+                        Defines the offset in lines from sample beginning till
+                        the first lines with data.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="DecimalSeparator" default="." nillable="false">
