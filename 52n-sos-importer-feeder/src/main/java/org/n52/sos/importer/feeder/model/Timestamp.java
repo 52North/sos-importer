@@ -123,7 +123,7 @@ public class Timestamp {
 	}
 
 	/**
-	 * @param fileName the filename that might contain additional information
+	 * @param timestampInformation the filename that might contain additional information
 	 * 			for the {@link Timestamp}
 	 * @param regExToExtractFileInfo
 	 * @param dateInfoPattern
@@ -135,19 +135,19 @@ public class Timestamp {
 	 * @throws IndexOutOfBoundsException in the case of no group is found using
 	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
 	 */
-	public Timestamp enrichByFilename(
-			final String fileName,
+	public Timestamp enrichByString(
+			final String timestampInformation,
 			final String regExToExtractFileInfo,
 			final String dateInfoPattern)
 					throws ParseException {
-		if (fileName == null || fileName.isEmpty() ||
+		if (timestampInformation == null || timestampInformation.isEmpty() ||
 				regExToExtractFileInfo == null || regExToExtractFileInfo.isEmpty() ||
 				dateInfoPattern == null || dateInfoPattern.isEmpty()) {
 			return this;
 		}
 		final Pattern pattern = Pattern.compile(regExToExtractFileInfo);
-		final Matcher matcher = pattern.matcher(fileName);
-		if (matcher.matches()) {
+		final Matcher matcher = pattern.matcher(timestampInformation);
+		if (matcher.matches() && matcher.groupCount() == 1) {
 			final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
 			final String dateInformation = matcher.group(1);
 			final GregorianCalendar cal = new GregorianCalendar();
@@ -217,6 +217,15 @@ public class Timestamp {
 		return this;
 	}
 
+	public Timestamp enrichDateByOtherTimestamp(final Timestamp other) {
+		if (other != null) {
+			setYear(other.getYear());
+			setMonth(other.getMonth());
+			setDay(other.getDay());
+		}
+		return this;
+	}
+
 	public void setYear(final short year) {
 		this.year = year;
 	}
@@ -272,4 +281,5 @@ public class Timestamp {
 	public byte getTimezone() {
 		return timezone;
 	}
+
 }
