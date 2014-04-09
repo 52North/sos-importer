@@ -38,6 +38,7 @@ import java.util.regex.PatternSyntaxException;
 public class Timestamp {
 
 	private static final String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssX";
+	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
 	private byte day = Byte.MIN_VALUE;
@@ -203,17 +204,16 @@ public class Timestamp {
 	 * @param lastModified long
 	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
 	 */
-	public Timestamp enrichByFileModificationDate(final long lastModified,
+	public Timestamp enrichByFileModificationDate(long lastModified,
 			final int lastModifiedDelta) {
 		final GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(new Date(lastModified));
-		int dayInt = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		if (lastModifiedDelta > 0) {
-			dayInt -= lastModifiedDelta;
+			lastModified = lastModified - (lastModifiedDelta * millisPerDay);
 		}
+		cal.setTime(new Date(lastModified));
 		setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
 		setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
-		setDay(Byte.parseByte(Integer.toString(dayInt)));
+		setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
 		return this;
 	}
 

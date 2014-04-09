@@ -37,6 +37,8 @@ import org.junit.Test;
  */
 public class TimestampTest {
 
+	private static final int millisPerDay = 1000 * 60 * 60 * 24;
+
 	private Timestamp timestamp;
 
 	private final int millisPerMinute = 1000 * 60;
@@ -130,10 +132,23 @@ public class TimestampTest {
 		final long lastModified = getCurrentTimeMillisTimestampCompatible();
 		final int lastModifiedDelta = 2;
 		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
-		final Timestamp expected = new Timestamp().set(lastModified);
+		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+		final Timestamp expected = new Timestamp().set(expectedMillis);
 		assertThat(timestamp.getYear(), is(expected.getYear()));
 		assertThat(timestamp.getMonth(), is(expected.getMonth()));
-		assertThat((byte)(timestamp.getDay() + lastModifiedDelta), is(expected.getDay()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	@Test
+	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
+		final long lastModified = 0;
+		final int lastModifiedDelta = 2;
+		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		final Timestamp expected = new Timestamp().set(expectedMillis);
+		assertThat(timestamp.getYear(), is(expected.getYear()));
+		assertThat(timestamp.getMonth(), is(expected.getMonth()));
+		assertThat(timestamp.getDay(), is(expected.getDay()));
 	}
 
 	private long getCurrentTimeMillisTimestampCompatible() {
