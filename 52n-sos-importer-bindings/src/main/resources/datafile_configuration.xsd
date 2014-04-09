@@ -535,11 +535,16 @@
         </xs:annotation>
         <xs:complexType>
             <xs:choice>
-                <xs:element ref="LocalFile" />
-                <xs:element ref="RemoteFile" />
+                <xs:sequence>
+                    <xs:element ref="LocalFile"/>
+                    <xs:element ref="IgnoreLineRegEx" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="RemoteFile"/>
+                    <xs:element ref="IgnoreLineRegEx" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
             </xs:choice>
-            <xs:attribute name="referenceIsARegularExpression"
-                type="xs:boolean" use="required">
+            <xs:attribute name="referenceIsARegularExpression" type="xs:boolean" use="required">
                 <xs:annotation>
                     <xs:documentation>
                         If set to TRUE the LocaleFile.Path or
@@ -549,8 +554,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="useDateFromLastModifiedDate"
-                type="xs:boolean">
+            <xs:attribute name="useDateFromLastModifiedDate" type="xs:boolean">
                 <xs:annotation>
                     <xs:documentation>
                         If set to TRUE the last modified date of the
@@ -569,12 +573,11 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute name="regExDateInfoInFileName"
-                type="xs:string">
+            <xs:attribute name="regExDateInfoInFileName" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         If present, the contained regular expression
@@ -635,7 +638,7 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -668,7 +671,7 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -681,7 +684,7 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -717,6 +720,19 @@
         <xs:simpleType>
             <xs:restriction base="xs:string">
                 <xs:length value="1"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="IgnoreLineRegEx">
+        <xs:annotation>
+            <xs:documentation>
+                A regular expression identifying lines that can be ignored during the 
+                import process.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1" fixed="false"/>
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
