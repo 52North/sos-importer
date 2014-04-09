@@ -608,7 +608,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="sampleIdRegEx" type="xs:string">
+            <xs:attribute name="sampleStartRegEx" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         Identifies the beginning of an new sample in the data
