@@ -888,6 +888,27 @@
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
+            <xs:attribute name="insertSweArrayObservationTimeoutBuffer">
+                <xs:annotation>
+                    <xs:documentation>
+                        An additional timeout buffer for connect and socket 
+                        timeout when using import strategy 
+                        "SweArrayObservationWithSplitExtension". Scale is in
+                        milliseconds, e.g. 1000 => 1s more connect and socket
+                        timeout.
+                        The size of this value is related to the set-up of the
+                        SOS server, importer, and the HUNK_SIZE value.
+                        The current OX-F SimpleHttpClient implementation uses
+                        a default value of 5s, hence setting this to 25,000 
+                        results in 30s connection and socket timeout.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <!--
