@@ -130,6 +130,8 @@ public final class SensorObservationService {
 
 	private final Configuration config;
 
+	private int lineCounter;
+
 	private final int[] ignoredColumns;
 
 	private Pattern[] ignorePatterns;
@@ -219,7 +221,7 @@ public final class SensorObservationService {
 		// 0 Get line
 		final CSVReader cr = dataFile.getCSVReader();
 		String[] values;
-		int lineCounter = dataFile.getFirstLineWithData();
+		lineCounter = dataFile.getFirstLineWithData();
 		if (dataFile.getHeaderLine() > -1 && headerLine == null) {
 			headerLine = readHeaderLine(dataFile);
 		}
@@ -239,7 +241,7 @@ public final class SensorObservationService {
 			while ((values = cr.readNext()) != null) {
 				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
-					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					numOfObsTriedToInsert += ios.length;
 					insertObservationsForOneLine(ios,values,dataFile);
 					LOG.debug(Feeder.heapSizeInformation());
@@ -263,7 +265,7 @@ public final class SensorObservationService {
 			while ((values = cr.readNext()) != null) {
 				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
-					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					timeSeriesRepository.addObservations(ios);
 					numOfObsTriedToInsert += ios.length;
 					LOG.debug(Feeder.heapSizeInformation());
@@ -313,10 +315,9 @@ public final class SensorObservationService {
 			int skipCount) throws IOException {
 		// get the number of lines to skip (coming from already read lines)
 		String[] values;
-		int skipCount = lastLine;
 		while (skipCount > 0) {
 			values = cr.readNext();
-			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),restoreLine(values)));
 			skipCount--;
 			lineCounter++;
 		}
@@ -380,8 +381,7 @@ public final class SensorObservationService {
 
 	private InsertObservation[] getInsertObservations(final String[] values,
 			final int[] mVColumns,
-			final DataFile df,
-			final int currentLine){
+			final DataFile df){
 		LOG.trace("getInsertObservations()");
 		if (mVColumns == null || mVColumns.length == 0) {
 			LOG.error("Method called with bad arguments: values: {}, mVColumns: {}", Arrays.toString(values), Arrays.toString(mVColumns));
