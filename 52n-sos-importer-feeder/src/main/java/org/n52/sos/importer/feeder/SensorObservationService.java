@@ -330,11 +330,9 @@ public final class SensorObservationService {
 			if (!timeSeriesRepository.isEmpty()) {
 				insertTimeSeries(timeSeriesRepository);
 			}
-			final long finishedReadingFile = System.currentTimeMillis();
 			finishedImportData = System.currentTimeMillis();
-			LOG.debug("Timing:\nStart File: {}\nFinished File/Start importing: {}\nFinished importing: {}",
+			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
 					new Date(startReadingFile).toString(),
-					new Date(finishedReadingFile).toString(),
 					new Date(finishedImportData).toString());
 		}
 
