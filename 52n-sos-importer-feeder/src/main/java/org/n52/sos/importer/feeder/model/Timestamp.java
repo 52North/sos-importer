@@ -134,7 +134,7 @@ public class Timestamp {
 	 * @throws IndexOutOfBoundsException in the case of no group is found using
 	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
 	 */
-	public Timestamp enrichByString(
+	public Timestamp enrich(
 			final String timestampInformation,
 			final String regExToExtractFileInfo,
 			final String dateInfoPattern)
@@ -253,7 +253,7 @@ public class Timestamp {
 	 * @param lastModified long
 	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
 	 */
-	public Timestamp enrichByFileModificationDate(long lastModified,
+	public Timestamp enrich(long lastModified,
 			final int lastModifiedDelta) {
 		final GregorianCalendar cal = new GregorianCalendar();
 		if (lastModifiedDelta > 0) {
@@ -270,7 +270,7 @@ public class Timestamp {
 		set(toDate().getTime() + (daysToAdd * millisPerDay));
 	}
 
-	public Timestamp enrichDateByOtherTimestamp(final Timestamp other) {
+	public Timestamp enrich(final Timestamp other) {
 		if (other != null) {
 			setYear(other.getYear());
 			setMonth(other.getMonth());
