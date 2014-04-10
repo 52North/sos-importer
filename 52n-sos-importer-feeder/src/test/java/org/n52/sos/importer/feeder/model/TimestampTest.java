@@ -176,6 +176,19 @@ public class TimestampTest {
 		assertThat(timestamp.getDay(), is((byte)30));
 	}
 
+	@Test public void
+	shouldWorkWithoutTimezonesAddDayDelta() throws ParseException {
+		timestamp.enrich(new Timestamp().enrich("1970-01-01", "(\\d{4}-\\d{2}-\\d{2})", "yyyy-MM-dd").applyDayDelta(1));
+
+		assertThat(timestamp.getYear(), is((short)1970));
+		assertThat(timestamp.getMonth(), is((byte)1));
+		assertThat(timestamp.getDay(), is((byte)2));
+		assertThat(timestamp.getSeconds(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getMinute(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getHour(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getTimezone(), is(Byte.MIN_VALUE));
+	}
+
 	private long getCurrentTimeMillisTimestampCompatible() {
 		// Timestamp is not storing milliseconds now => remove them
 		return (System.currentTimeMillis() / 1000) * 1000;

@@ -266,8 +266,12 @@ public class Timestamp {
 		return this;
 	}
 
-	public void applyDayDelta(final int daysToAdd) {
-		set(toDate().getTime() + (daysToAdd * millisPerDay));
+	public Timestamp applyDayDelta(final int daysToAdd) {
+		final Timestamp tmp = new Timestamp().set(toDate().getTime() + (daysToAdd * millisPerDay));
+		setYear(tmp.getYear());
+		setMonth(tmp.getMonth());
+		setDay(tmp.getDay());
+		return this;
 	}
 
 	public Timestamp enrich(final Timestamp other) {
