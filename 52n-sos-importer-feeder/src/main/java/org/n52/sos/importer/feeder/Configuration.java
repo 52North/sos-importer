@@ -353,9 +353,28 @@ public final class Configuration {
         final ArrayList<Integer> ids = new ArrayList<Integer>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)){
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("Found measured value column: %d", column.getNumber()));
-                }
+            	LOG.debug("Found measured value column: {}", column.getNumber());
+                ids.add(column.getNumber());
+            }
+        }
+        ids.trimToSize();
+        if (ids.size() > 0) {
+            final int[] result = new int[ids.size()];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = ids.get(i);
+            }
+            return result;
+        }
+        return null;
+    }
+
+    public int[] getIgnoredColumnIds() {
+    	LOG.trace("getIgnoredColumnIds()");
+        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        for (final Column column : cols) {
+            if (column.getType().equals(Type.DO_NOT_EXPORT)){
+            	LOG.debug("Found ignored column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
         }

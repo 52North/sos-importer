@@ -128,6 +128,7 @@ public final class SensorObservationService {
 
 	private final Configuration config;
 
+	private final int[] ignoredColumns;
 
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
@@ -135,6 +136,7 @@ public final class SensorObservationService {
 		sosUrl = config.getSosUrl();
 		sosVersion = config.getSosVersion();
 		sosBinding = getBinding(config.getSosBinding());
+		ignoredColumns = config.getIgnoredColumnIds();
 		if (sosBinding == null) {
 			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
 		} else {
@@ -335,16 +337,25 @@ public final class SensorObservationService {
 		return true;
 	}
 
-	private boolean isNotEmpty(final String[] values)
-	{
+	private boolean isNotEmpty(final String[] values) {
 		if (values != null && values.length > 0) {
-			for (final String value : values) {
-				if (value == null || value.isEmpty()) {
+			for (int i = 0; i < values.length; i++) {
+				final String value = values[i];
+				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
 					LOG.error("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
 					return false;
 				}
 			}
 			return true;
+		}
+		return false;
+	}
+
+	private boolean isColumnIgnored(final int i) {
+		for (final int ignoredColumn : ignoredColumns) {
+			if (i == ignoredColumn) {
+				return true;
+			}
 		}
 		return false;
 	}
