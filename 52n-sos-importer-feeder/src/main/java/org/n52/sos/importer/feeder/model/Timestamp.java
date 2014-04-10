@@ -34,6 +34,8 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ *
+ * TODO switch to Joda time or java 8 to get time zone problems fixed
  */
 public class Timestamp {
 
