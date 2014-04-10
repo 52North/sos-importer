@@ -34,10 +34,11 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ *
+ * TODO switch to Joda time or java 8 to get time zone problems fixed
  */
 public class Timestamp {
 
-	private static final String DEFAULT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssX";
 	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
@@ -49,7 +50,7 @@ public class Timestamp {
 
 	@Override
 	public String toString() {
-		// yyyy-mm-ddThh:mm:ss+hh:mm+zz:zz => 31 chars
+		// yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
 		final StringBuffer ts = new StringBuffer(31);
 		if (year != Short.MIN_VALUE) {
 			ts.append(year);
@@ -123,7 +124,7 @@ public class Timestamp {
 	}
 
 	/**
-	 * @param fileName the filename that might contain additional information
+	 * @param timestampInformation the filename that might contain additional information
 	 * 			for the {@link Timestamp}
 	 * @param regExToExtractFileInfo
 	 * @param dateInfoPattern
@@ -135,19 +136,19 @@ public class Timestamp {
 	 * @throws IndexOutOfBoundsException in the case of no group is found using
 	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
 	 */
-	public Timestamp enrichByFilename(
-			final String fileName,
+	public Timestamp enrich(
+			final String timestampInformation,
 			final String regExToExtractFileInfo,
 			final String dateInfoPattern)
 					throws ParseException {
-		if (fileName == null || fileName.isEmpty() ||
+		if (timestampInformation == null || timestampInformation.isEmpty() ||
 				regExToExtractFileInfo == null || regExToExtractFileInfo.isEmpty() ||
 				dateInfoPattern == null || dateInfoPattern.isEmpty()) {
 			return this;
 		}
 		final Pattern pattern = Pattern.compile(regExToExtractFileInfo);
-		final Matcher matcher = pattern.matcher(fileName);
-		if (matcher.matches()) {
+		final Matcher matcher = pattern.matcher(timestampInformation);
+		if (matcher.matches() && matcher.groupCount() == 1) {
 			final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
 			final String dateInformation = matcher.group(1);
 			final GregorianCalendar cal = new GregorianCalendar();
@@ -179,11 +180,61 @@ public class Timestamp {
 	}
 
 	protected Date toDate() {
+		final String datePattern = getDatePattern();
 		try {
-			return new SimpleDateFormat(DEFAULT_PATTERN).parse(toString());
+			return new SimpleDateFormat(datePattern).parse(toString());
 		} catch (final ParseException e) {
 			throw new RuntimeException("Could not execute toDate()",e);
 		}
+	}
+
+	private String getDatePattern() {
+		// "yyyy-MM-dd'T'HH:mm:ssX";
+		final StringBuffer ts = new StringBuffer(31);
+		if (year != Short.MIN_VALUE) {
+			ts.append("yyyy");
+			if (month != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (month != Byte.MIN_VALUE) {
+			ts.append("MM");
+			if (day != Byte.MIN_VALUE) {
+				ts.append("-");
+			}
+		}
+		if (day != Byte.MIN_VALUE) {
+			ts.append("dd");
+		}
+		if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
+				&& (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append("'T'");
+		}
+		if (hour != Byte.MIN_VALUE) {
+			ts.append("HH");
+			if (minute != Byte.MIN_VALUE) {
+				ts.append(":");
+			}
+		}
+		if (minute != Byte.MIN_VALUE) {
+			ts.append("mm:");
+		} else if (hour != Byte.MIN_VALUE) {
+			ts.append("mm:");
+		}
+		if (seconds != Byte.MIN_VALUE ) {
+			ts.append("ss");
+		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
+			ts.append("ss");
+		}
+		if (timezone != Byte.MIN_VALUE &&
+				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+			ts.append("X");
+		}
+		final String datePattern = ts.toString();
+		if (datePattern.isEmpty()) {
+			return "yyyy-MM-dd'T'HH:mm:ssX";
+		}
+		return datePattern;
 	}
 
 	public boolean after(final Timestamp timeStamp) {
@@ -204,7 +255,7 @@ public class Timestamp {
 	 * @param lastModified long
 	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
 	 */
-	public Timestamp enrichByFileModificationDate(long lastModified,
+	public Timestamp enrich(long lastModified,
 			final int lastModifiedDelta) {
 		final GregorianCalendar cal = new GregorianCalendar();
 		if (lastModifiedDelta > 0) {
@@ -214,6 +265,41 @@ public class Timestamp {
 		setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
 		setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
 		setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
+		return this;
+	}
+
+	public Timestamp applyDayDelta(final int daysToAdd) {
+		final Timestamp tmp = new Timestamp().set(toDate().getTime() + (daysToAdd * millisPerDay));
+		setYear(tmp.getYear());
+		setMonth(tmp.getMonth());
+		setDay(tmp.getDay());
+		return this;
+	}
+
+	public Timestamp enrich(final Timestamp other) {
+		if (other != null) {
+			if (other.getYear() > Short.MIN_VALUE) {
+				setYear(other.getYear());
+			}
+			if (other.getMonth() > Byte.MIN_VALUE) {
+				setMonth(other.getMonth());
+			}
+			if (other.getDay() > Byte.MIN_VALUE) {
+				setDay(other.getDay());
+			}
+			if (other.getHour() > Byte.MIN_VALUE) {
+				setHour(other.getHour());
+			}
+			if (other.getMinute() > Byte.MIN_VALUE) {
+				setMinute(other.getMinute());
+			}
+			if (other.getSeconds() > Byte.MIN_VALUE) {
+				setSeconds(other.getSeconds());
+			}
+			if (other.getTimezone() > Byte.MIN_VALUE) {
+				setTimezone(other.getTimezone());
+			}
+		}
 		return this;
 	}
 
@@ -272,4 +358,5 @@ public class Timestamp {
 	public byte getTimezone() {
 		return timezone;
 	}
+
 }

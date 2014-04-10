@@ -53,9 +53,9 @@ import org.slf4j.LoggerFactory;
  * TODO move to shared module all constants that need to be shared!
  */
 public class Constants {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Constants.class);
-	
+
 	public static final String BOOLEAN = "BOOLEAN";
 	public static final String COMBINATION = "COMBINATION";
 	public static final String COUNT = "COUNT";
@@ -65,14 +65,14 @@ public class Constants {
 	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN = 238;
 	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_RED = 238;
 	public static final Color DEFAULT_COLOR_BACKGROUND = Color.getHSBColor(
-			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
-					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED,
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[0],
-			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
-					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED,
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[1],
-			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED, 
-					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN, 
+			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED,
+					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[2]);
 	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
 	public static final Font DEFAULT_LABEL_FONT_BOLD =  new Font("SansSerif", Font.BOLD, 12);
@@ -89,7 +89,7 @@ public class Constants {
 	public static final String XML_SCHEMA_PREFIX = "xsi";
 	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
 	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
-	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd";
+	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd";
 	public static final String UNICODE_OFFERING_PREFIX = "_offering-";
 	public final static String SEPARATOR_STRING = "SEP";
 	public static final String SPACE_STRING = Lang.l().spaceString();
@@ -124,20 +124,20 @@ public class Constants {
 	public static final String WMS_VIEW_SELECT_TOOL_ICON_PNG_PATH = "/org/n52/sos/importer/view/position/noxin_crosshairs.png";
 	public static final String WMS_DEFAULT_URL = "http://osmtud.dyndns.org/wms/wms/";
 	public static final String WMS_GET_CAPABILITIES_REQUEST = "?VERSION=1.1.0&REQUEST=GetCapabilities";
-	
+
 	private static final String WMS_EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 	private static final String WMS_INTERNAL_FILE_PATH = "/org/n52/sos/importer/view/position/";
 	private static final String WMS_FILE_NAME = "wms.properties";
 
 	public static final String DEFAULT_FEEDER_JAR_NAME_START = "52n-sos-importer-feeder-";
-	
+
 	public final static int DIALOG_WIDTH = 800;
-	
+
 	public final static int DIALOG_HEIGHT = 600;
 
 	public static final String WMS_DEFAULT_BACKGROUND_LAYER_NAME = "OSMBackground";
 
-	
+
 	/*
 	 * CHANGEABLE VALUES
 	 */
@@ -147,7 +147,7 @@ public class Constants {
 
 	private static String wms_url = "wms_url";
 	private static String wms_layer = "wms_layer";
-	
+
 	/**
 	 * TODO implement loading of language parameter from configuration file
 	 * @return {@link org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
@@ -159,28 +159,28 @@ public class Constants {
 	public static String WMS_URL() {
 		final Properties props = load();
 		String wmsUrl = WMS_DEFAULT_URL;
-		if (props != null && 
+		if (props != null &&
 				props.getProperty(wms_url) != null &&
 				!props.getProperty(wms_url).equals("")) {
 			wmsUrl =  props.getProperty(wms_url);
 		}
-		
+
 		logger.debug("WMS url: '{}'", wmsUrl);
-		
+
 		return wmsUrl;
 	}
-	
+
 	public static String WMS_BACKGROUND_LAYER_NAME() {
 		final Properties props = load();
 		String wmsLayer = WMS_DEFAULT_BACKGROUND_LAYER_NAME;
-		if (props != null && 
+		if (props != null &&
 				props.getProperty(wms_layer) != null &&
 				!props.getProperty(wms_layer).equals("")) {
 			wmsLayer =  props.getProperty(wms_layer);
 		}
-		
+
 		logger.debug("WMS layer: '{}'", wmsLayer);
-		
+
 		return wmsLayer;
 	}
 
@@ -200,7 +200,7 @@ public class Constants {
 				logger.info("Load default settings from jar file");
 				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
 				is = Constants.class.getClass().getResourceAsStream(filePath);
-			} else {		
+			} else {
 				logger.info("Load settings from " + file);
 				is = new FileInputStream(file);
 			}
@@ -228,21 +228,21 @@ public class Constants {
 		final File folder = new File(WMS_EXTERNAL_FILE_PATH);
 		final Properties props = load();
 		if (!folder.exists()) {
-			
-			final boolean successful = folder.mkdir();	
+
+			final boolean successful = folder.mkdir();
 			if (!successful) {
 				logger.warn("WMS properties could not be saved.");
 				logger.warn("No writing permissions at " + folder);
 				return;
-			} 
+			}
 		}
-		
+
 		final File file = new File(WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME);
-		
+
 		try { //save properties
 			final OutputStream os = new FileOutputStream(file);
-			props.store(os, null); 
-			logger.info("Save settings at " + file.getAbsolutePath());	
+			props.store(os, null);
+			logger.info("Save settings at " + file.getAbsolutePath());
 		} catch (final IOException e) {
 			logger.error("WMS properties could not be saved.", e);
 		}

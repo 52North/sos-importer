@@ -409,14 +409,14 @@ public class DataFile {
 				}
 				enrichTimestampWithColumnMetadata(ts,column);
 			}
-			if (configuration.isDateInfoExtractionSetupValid()) {
-				ts.enrichByFilename(
+			if (configuration.isDateInfoExtractionFromFileNameSetupValid()) {
+				ts.enrich(
 					file.getName(),
 					configuration.getRegExDateInfoInFileName(),
 					configuration.getDateInfoPattern());
 			}
 			if (configuration.isUseDateInfoFromFileModificationSet()) {
-				ts.enrichByFileModificationDate(file.lastModified(), configuration.getLastModifiedDelta());
+				ts.enrich(file.lastModified(), configuration.getLastModifiedDelta());
 			}
 			return ts;
 		}

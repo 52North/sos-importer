@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
@@ -120,23 +123,63 @@ public final class SensorObservationService {
 
 	private String[] headerLine;
 
-	private final ImportStrategy importStrategy;
+	private boolean isSampleBasedDataFile = false;
 
 	// Identified on localhost on development system
 	// Default value: 5000
 	// Max possible value: 12500
 	private int hunkSize = 5000;
 
-	public SensorObservationService(final URL sosUrl,
-			final String version,
-			final String binding,
-			final ImportStrategy importStrategy,
-			final int hunkSize) throws ExceptionReport, OXFException {
-		LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
-		this.sosUrl = sosUrl;
-		sosVersion = version;
-		sosBinding = getBinding(binding);
-		this.importStrategy = importStrategy;
+	private final Configuration config;
+
+	// stores the Timestamp of the last insertObservations
+	// (required for handling sample based files)
+	private Timestamp lastTimestamp = null;
+
+	// The date information of the current sample
+	private Timestamp sampleDate;
+
+	private Pattern sampleIdPattern;
+
+	private Pattern sampleSizePattern;
+
+	private boolean isInSample;
+
+	private int sampleSize;
+
+	private int sampleSizeOffset;
+
+	private int sampleDateOffset;
+
+	private int sampleOffsetDifference;
+
+	private int sampleDataOffset;
+
+	private int lineCounter;
+
+	private final int[] ignoredColumns;
+
+	private Pattern[] ignorePatterns;
+
+	// adding 25s
+	private int sweArrayObservationTimeOutBuffer = 25000;
+
+	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
+		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
+		this.config = config;
+		sosUrl = config.getSosUrl();
+		sosVersion = config.getSosVersion();
+		sosBinding = getBinding(config.getSosBinding());
+		isSampleBasedDataFile = config.isSamplingFile();
+		ignoredColumns = config.getIgnoredColumnIds();
+		if (isSampleBasedDataFile) {
+			sampleIdPattern = Pattern.compile(config.getSampleStartRegEx());
+			sampleSizePattern = Pattern.compile(config.getSampleSizeRegEx());
+			sampleSizeOffset = config.getSampleSizeOffset();
+			sampleDateOffset = config.getSampleDateOffset();
+			sampleOffsetDifference = Math.abs(sampleDateOffset - sampleSizeOffset);
+			sampleDataOffset = config.getSampleDataOffset();
+		}
 		if (sosBinding == null) {
 			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
 		} else {
@@ -153,8 +196,19 @@ public final class SensorObservationService {
 		if (sosVersion.equals("2.0.0")) {
 			offerings = new HashMap<String, String>();
 		}
-		if (hunkSize > 0) {
-			this.hunkSize = hunkSize;
+		if (config.getHunkSize() > 0) {
+			hunkSize = config.getHunkSize();
+		}
+		if (config.isIgnoreLineRegExSet()) {
+			ignorePatterns = config.getIgnoreLineRegExPatterns();
+		}
+		if (config.isInsertSweArrayObservationTimeoutBufferSet()) {
+				sweArrayObservationTimeOutBuffer = config.getInsertSweArrayObservationTimeoutBuffer();
+		}
+		if (isSampleBasedDataFile && config.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
+			LOG.info("Using {}ms timeout buffer during insert observation requests. "
+					+ "Change <SosImportConfiguration><SosMetadata insertSweArrayObservationTimeoutBuffer> if required.",
+					sweArrayObservationTimeOutBuffer);
 		}
 	}
 
@@ -193,8 +247,7 @@ public final class SensorObservationService {
 		}
 		final OperationsMetadata opMeta = serviceDescriptor.getOperationsMetadata();
 		LOG.debug(String.format("OperationsMetadata found: %s", opMeta));
-		// check for RegisterSensor and InsertObservationOperation
-		// TODO implement version specific
+		// check for (Insert|Register)Sensor and InsertObservationOperation
 		if ((opMeta.getOperationByName(SOSAdapter.REGISTER_SENSOR) != null ||
 				opMeta.getOperationByName(SOSAdapter.INSERT_SENSOR) != null)
 				&&
@@ -208,12 +261,12 @@ public final class SensorObservationService {
 		return false;
 	}
 
-	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException {
+	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
 		LOG.trace("importData()");
 		// 0 Get line
 		final CSVReader cr = dataFile.getCSVReader();
 		String[] values;
-		int lineCounter = dataFile.getFirstLineWithData();
+		lineCounter = dataFile.getFirstLineWithData();
 		if (dataFile.getHeaderLine() > -1 && headerLine == null) {
 			headerLine = readHeaderLine(dataFile);
 		}
@@ -225,23 +278,25 @@ public final class SensorObservationService {
 			LOG.error("No measured value columns found in configuration");
 			return null;
 		}
-		skipAlreadyReadLines(cr, lineCounter);
-		switch (importStrategy) {
+		skipLines(cr, lastLine);
+		switch (config.getImportStrategy()) {
 		case SingleObservation:
 			long startReadingFile = System.currentTimeMillis();
 			// for each line
 			while ((values = cr.readNext()) != null) {
-				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
-					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					numOfObsTriedToInsert += ios.length;
 					insertObservationsForOneLine(ios,values,dataFile);
 					LOG.debug(Feeder.heapSizeInformation());
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
-				lastLine++;
 				lineCounter++;
+				if (lineCounter % 10000 == 0) {
+					LOG.info("Processed line {}.",lineCounter);
+				}
 			}
 			long finishedImportData = System.currentTimeMillis();
 			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
@@ -254,10 +309,20 @@ public final class SensorObservationService {
 			startReadingFile = System.currentTimeMillis();
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;
+			int sampleStartLine = lineCounter;
 			while ((values = cr.readNext()) != null) {
-				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				// if it is a sample based file, I need to get the following information
+				// * date information (depends on last timestamp because of
+				if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
+					sampleStartLine = lineCounter;
+					getSampleMetaData(cr);
+					isInSample = true;
+					skipLines(cr, sampleDataOffset-1-(lineCounter-sampleStartLine));
+					continue;
+				}
+				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
-					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
+					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					timeSeriesRepository.addObservations(ios);
 					numOfObsTriedToInsert += ios.length;
 					LOG.debug(Feeder.heapSizeInformation());
@@ -271,17 +336,31 @@ public final class SensorObservationService {
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
-				lastLine++;
 				lineCounter++;
+				if (lineCounter % 10000 == 0) {
+					LOG.info("Processed line {}.",lineCounter);
+				}
+				if (isSampleBasedDataFile) {
+					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
+						isSampleBasedDataFile,
+						isInSample,
+						lineCounter,
+						sampleStartLine,
+						sampleSize,
+						sampleDataOffset);
+				}
+				if (isSampleBasedDataFile && isInSample && isSampleEndReached(sampleStartLine)) {
+					isInSample = false;
+					LOG.debug("Current sample left");
+				}
 			}
 			if (!timeSeriesRepository.isEmpty()) {
 				insertTimeSeries(timeSeriesRepository);
 			}
-			final long finishedReadingFile = System.currentTimeMillis();
+			lastLine = lineCounter+1;
 			finishedImportData = System.currentTimeMillis();
-			LOG.debug("Timing:\nStart File: {}\nFinished File/Start importing: {}\nFinished importing: {}",
+			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
 					new Date(startReadingFile).toString(),
-					new Date(finishedReadingFile).toString(),
 					new Date(finishedImportData).toString());
 		}
 
@@ -291,14 +370,83 @@ public final class SensorObservationService {
 		return failedInsertObservations;
 	}
 
-	private void skipAlreadyReadLines(final CSVReader cr,
-			int lineCounter) throws IOException {
+	private boolean isLineIgnorable(final String[] values) {
+		if (ignorePatterns == null || ignorePatterns.length > 0) {
+			final String line = restoreLine(values);
+			for (final Pattern pattern : ignorePatterns) {
+				if (pattern.matcher(line).matches()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void getSampleMetaData(final CSVReader cr) throws IOException, ParseException {
+		if (sampleDateOffset < sampleSizeOffset) {
+			skipLines(cr,sampleDateOffset-1);
+			sampleDate = parseSampleDate(cr.readNext());
+			lineCounter++;
+			skipLines(cr,sampleOffsetDifference-1);
+			sampleSize = parseSampleSize(cr.readNext());
+			lineCounter++;
+		} else {
+			skipLines(cr,sampleSizeOffset-1);
+			sampleSize = parseSampleSize(cr.readNext());
+			lineCounter++;
+			skipLines(cr,sampleOffsetDifference-1);
+			sampleDate = parseSampleDate(cr.readNext());
+			lineCounter++;
+		}
+
+	}
+
+	private int parseSampleSize(final String[] values) throws ParseException {
+		final String lineToParse = restoreLine(values);
+		final Matcher matcher = sampleSizePattern.matcher(lineToParse);
+		if (matcher.matches() && matcher.groupCount() == 1) {
+			final String dateInformation = matcher.group(1);
+			return Integer.parseInt(dateInformation);
+			// TODO handle NumberformatException
+		}
+		throw new ParseException(String.format("Could not extract sampleSize from '%s' using regular expression '%s' (Offset is always 42).",
+				lineToParse,
+				sampleSizePattern.pattern()),42);
+	}
+
+	private String restoreLine(final String[] values) {
+		final StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < values.length; i++) {
+			sb.append(values[i]);
+			if (i != values.length-1) {
+				sb.append(config.getCsvSeparator());
+			}
+		}
+		return sb.toString();
+	}
+
+	private Timestamp parseSampleDate(final String[] values) throws ParseException {
+		final String dateInfoPattern = config.getSampleDatePattern();
+		final String regExToExtractDateInfo = config.getSampleDateExtractionRegEx();
+		final String timestampInformation = restoreLine(values);
+		return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
+	}
+
+	public boolean isSampleEndReached(final int sampleStartLine) {
+		return sampleStartLine + sampleSize + sampleDataOffset - 1 == lineCounter;
+	}
+
+	private boolean isSampleStart(final String[] values) {
+		return sampleIdPattern.matcher(restoreLine(values)).matches();
+	}
+
+	private void skipLines(final CSVReader cr,
+			int skipCount) throws IOException {
 		// get the number of lines to skip (coming from already read lines)
 		String[] values;
-		int skipCount = lastLine;
 		while (skipCount > 0) {
 			values = cr.readNext();
-			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),restoreLine(values)));
 			skipCount--;
 			lineCounter++;
 		}
@@ -337,12 +485,12 @@ public final class SensorObservationService {
 		return true;
 	}
 
-	private boolean isNotEmpty(final String[] values)
-	{
+	private boolean isNotEmpty(final String[] values) {
 		if (values != null && values.length > 0) {
-			for (final String value : values) {
-				if (value == null || value.isEmpty()) {
-					LOG.error("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
+			for (int i = 0; i < values.length; i++) {
+				final String value = values[i];
+				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
+					LOG.debug("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
 					return false;
 				}
 			}
@@ -351,10 +499,18 @@ public final class SensorObservationService {
 		return false;
 	}
 
+	private boolean isColumnIgnored(final int i) {
+		for (final int ignoredColumn : ignoredColumns) {
+			if (i == ignoredColumn) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private InsertObservation[] getInsertObservations(final String[] values,
 			final int[] mVColumns,
-			final DataFile df,
-			final int currentLine){
+			final DataFile df){
 		LOG.trace("getInsertObservations()");
 		if (mVColumns == null || mVColumns.length == 0) {
 			LOG.error("Method called with bad arguments: values: {}, mVColumns: {}", Arrays.toString(values), Arrays.toString(mVColumns));
@@ -394,6 +550,13 @@ public final class SensorObservationService {
 		// TODO implement using different templates in later version depending on the class of value
 		// TIMESTAMP
 		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId,values);
+		if (isSampleBasedDataFile) {
+			if (lastTimestamp != null && timeStamp.before(lastTimestamp)) {
+				sampleDate.applyDayDelta(1);
+			}
+			lastTimestamp = new Timestamp().enrich(timeStamp);
+			timeStamp.enrich(sampleDate);
+		}
 		LOG.debug("Timestamp: {}", timeStamp);
 		// UOM CODE
 		final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId,values);
@@ -546,7 +709,13 @@ public final class SensorObservationService {
 
 		try {
 			try {
+				final int connectionTimeout = sosWrapper.getConnectionTimeout();
+				final int readTimeout = sosWrapper.getReadTimeout();
+				sosWrapper.setConnectionTimeOut(connectionTimeout + sweArrayObservationTimeOutBuffer);
+				sosWrapper.setReadTimeout(readTimeout + sweArrayObservationTimeOutBuffer);
 				opResult = sosWrapper.doInsertObservation(sweArrayObservation);
+				sosWrapper.setConnectionTimeOut(connectionTimeout);
+				sosWrapper.setReadTimeout(readTimeout);
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();

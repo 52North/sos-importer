@@ -32,9 +32,7 @@ import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
-/**
- *
- */
+
 public class TimestampTest {
 
 	private static final int millisPerDay = 1000 * 60 * 60 * 24;
@@ -80,58 +78,60 @@ public class TimestampTest {
 
 	}
 
-	@Test
-	public final void shouldGetAdditionalTimestampValuesFromFileName() throws ParseException {
+	@Test public final void
+	shouldGetAdditionalTimestampValuesFromFileName()
+			throws ParseException {
 		final String fileName = "test-sensor_20140615.csv";
 		final Timestamp ts = new Timestamp();
 
-		ts.enrichByFilename(fileName,"test-sensor_(\\d{8})\\.csv","yyyyMMdd");
+		ts.enrich(fileName,"test-sensor_(\\d{8})\\.csv","yyyyMMdd");
 
 		assertThat(ts.toString(), is("2014-06-15"));
 	}
 
-	@Test
-	public final void shouldReturnSameValueIfParametersAreInvalid() throws ParseException {
+	@Test public final void
+	shouldReturnSameValueIfParametersAreInvalid()
+			throws ParseException {
 		Timestamp ts = new Timestamp();
-		ts.enrichByFilename(null, null, null);
+		ts.enrich(null, null, null);
 		assertThat(ts.toString(), is(""));
 
 		ts = new Timestamp();
-		ts.enrichByFilename("", null, null);
+		ts.enrich("", null, null);
 		assertThat(ts.toString(), is(""));
 
 		ts = new Timestamp();
-		ts.enrichByFilename("-", null, null);
+		ts.enrich("-", null, null);
 		assertThat(ts.toString(), is(""));
 
 		ts = new Timestamp();
-		ts.enrichByFilename("-", "", null);
+		ts.enrich("-", "", null);
 		assertThat(ts.toString(), is(""));
 
 		ts = new Timestamp();
-		ts.enrichByFilename("-", "-", null);
+		ts.enrich("-", "-", null);
 		assertThat(ts.toString(), is(""));
 
 		ts = new Timestamp();
-		ts.enrichByFilename("-", "-", "");
+		ts.enrich("-", "-", "");
 		assertThat(ts.toString(), is(""));
 	}
 
-	@Test
-	public final void shouldEnrichWithLastModificationDate() {
+	@Test public final void
+	shouldEnrichWithLastModificationDate() {
 		final long lastModified = getCurrentTimeMillisTimestampCompatible();
-		timestamp.enrichByFileModificationDate(lastModified, -1);
+		timestamp.enrich(lastModified, -1);
 		final Timestamp expected = new Timestamp().set(lastModified);
 		assertThat(timestamp.getYear(), is(expected.getYear()));
 		assertThat(timestamp.getMonth(), is(expected.getMonth()));
 		assertThat(timestamp.getDay(), is(expected.getDay()));
 	}
 
-	@Test
-	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
+	@Test public final void
+	shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
 		final long lastModified = getCurrentTimeMillisTimestampCompatible();
 		final int lastModifiedDelta = 2;
-		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		timestamp.enrich(lastModified, lastModifiedDelta);
 		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
 		final Timestamp expected = new Timestamp().set(expectedMillis);
 		assertThat(timestamp.getYear(), is(expected.getYear()));
@@ -139,16 +139,54 @@ public class TimestampTest {
 		assertThat(timestamp.getDay(), is(expected.getDay()));
 	}
 
-	@Test
-	public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
+	@Test public final void
+	shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
 		final long lastModified = 0;
 		final int lastModifiedDelta = 2;
 		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
-		timestamp.enrichByFileModificationDate(lastModified, lastModifiedDelta);
+		timestamp.enrich(lastModified, lastModifiedDelta);
 		final Timestamp expected = new Timestamp().set(expectedMillis);
 		assertThat(timestamp.getYear(), is(expected.getYear()));
 		assertThat(timestamp.getMonth(), is(expected.getMonth()));
 		assertThat(timestamp.getDay(), is(expected.getDay()));
+	}
+
+	@Test public final void
+	shouldEnrichDateInformationFromOtherTimeStamp() {
+		final Timestamp other = new Timestamp().set(getCurrentTimeMillisTimestampCompatible());
+		timestamp.set(0).enrich(other);
+
+		assertThat(timestamp.getYear(), is(other.getYear()));
+		assertThat(timestamp.getMonth(), is(other.getMonth()));
+		assertThat(timestamp.getDay(), is(other.getDay()));
+	}
+
+	@Test public void
+	shouldAddDayDelta() {
+		timestamp.set(0).applyDayDelta(2);
+
+		assertThat(timestamp.getYear(), is((short)1970));
+		assertThat(timestamp.getMonth(), is((byte)1));
+		assertThat(timestamp.getDay(), is((byte)3));
+
+		timestamp.set(0).applyDayDelta(-2);
+
+		assertThat(timestamp.getYear(), is((short)1969));
+		assertThat(timestamp.getMonth(), is((byte)12));
+		assertThat(timestamp.getDay(), is((byte)30));
+	}
+
+	@Test public void
+	shouldWorkWithoutTimezonesAddDayDelta() throws ParseException {
+		timestamp.enrich(new Timestamp().enrich("1970-01-01", "(\\d{4}-\\d{2}-\\d{2})", "yyyy-MM-dd").applyDayDelta(1));
+
+		assertThat(timestamp.getYear(), is((short)1970));
+		assertThat(timestamp.getMonth(), is((byte)1));
+		assertThat(timestamp.getDay(), is((byte)2));
+		assertThat(timestamp.getSeconds(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getMinute(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getHour(), is(Byte.MIN_VALUE));
+		assertThat(timestamp.getTimezone(), is(Byte.MIN_VALUE));
 	}
 
 	private long getCurrentTimeMillisTimestampCompatible() {

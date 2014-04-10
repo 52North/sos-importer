@@ -26,6 +26,42 @@ Features:
    * "useDateFromLastModifiedDate" for enabling this feature
    * "lastModifiedDelta" for moving the date n days back (this attribute is 
      OPTIONAL for this feature, too.)
+ * Ignore lines with regular expressions feature:
+   0..infinity <IgnoreLineRegEx> elements can be added to the <DataFile> element.
+   Each element will be used as regular expression and applied to each line of 
+   the data file before parsing. 
+ * Handling of data files containing several sample runs. A sample run contains
+   additional metadata like its size (number of performed measurements) and a 
+   date.
+   The required attributes are:
+   * "sampleStartRegEx"  - the start of a new sample (MUST match the whole 
+                           line).
+   * "sampleDateOffset"  - the offset of the line containing the date of the 
+                           sample from the start line.
+   * "sampleDateExtractionRegEx" - the regular expression to extract the date
+                                   information from the line containing the 
+                                   date information of the current sample. The 
+                                   expression MUST result in ONE group. This
+                                   group will be parsed to a java.util.Date
+                                   using "sampleDatePattern" attribute.
+   * "sampleDatePattern" - the pattern used to parse the date information of
+                           the current pattern.
+   * "sampleDataOffset"  - the offset in lines from sample beginning till the
+                           first lines with data.
+   * "sampleSizeOffset"  - the offset in lines from sample beginning till the
+                           line containing the sample size in lines with data.
+   * "sampleSizeRegEx"   - the regular expression to extract the sample size. 
+                           The regular expression MUST result in ONE group 
+                           which contains an integer value.
+ * Setting of timeout buffer for the insertion of SweArrayObservations:
+   With the attribute "insertSweArrayObservationTimeoutBuffer" of <SosMetadata"
+   it is possible to define an additional timeout buffer for connect and socket 
+   timeout when using import strategy "SweArrayObservationWithSplitExtension".
+   Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.
+   The size of this value is related to the set-up of the SOS server, importer,
+   and the HUNK_SIZE value.
+   The current OX-F SimpleHttpClient implementation uses a default value of 5s,
+   hence setting this to 25,000 results in 30s connection and socket timeout.
  
 Changes:
 --------
