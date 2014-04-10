@@ -281,7 +281,6 @@ public final class SensorObservationService {
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
-				lastLine++;
 				lineCounter++;
 			}
 			long finishedImportData = System.currentTimeMillis();
@@ -295,7 +294,7 @@ public final class SensorObservationService {
 			startReadingFile = System.currentTimeMillis();
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;
-			final int sampleStartLine = 0;
+			final int sampleStartLine = lineCounter;
 			while ((values = cr.readNext()) != null) {
 				// if it is a sample based file, I need to get the following information
 				// * date information (depends on last timestamp because of
@@ -321,7 +320,6 @@ public final class SensorObservationService {
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
-				lastLine++;
 				lineCounter++;
 				if (isSampleBasedDataFile && isInSample && isSampleEndReached(lineCounter, sampleStartLine, sampleSize)) {
 					isInSample = false;
@@ -330,6 +328,7 @@ public final class SensorObservationService {
 			if (!timeSeriesRepository.isEmpty()) {
 				insertTimeSeries(timeSeriesRepository);
 			}
+			lastLine = lineCounter+1;
 			finishedImportData = System.currentTimeMillis();
 			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
 					new Date(startReadingFile).toString(),
