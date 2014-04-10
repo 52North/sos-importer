@@ -78,6 +78,7 @@ import org.n52.oxf.sos.observation.ObservationParameters;
 import org.n52.oxf.sos.observation.TextObservationParameters;
 import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.oxf.sos.request.v200.InsertSensorParameters;
+import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -160,6 +161,9 @@ public final class SensorObservationService {
 
 	private Pattern[] ignorePatterns;
 
+	// adding 25s
+	private int sweArrayObservationTimeOutBuffer = 25000;
+
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
 		this.config = config;
@@ -197,6 +201,14 @@ public final class SensorObservationService {
 		}
 		if (config.isIgnoreLineRegExSet()) {
 			ignorePatterns = config.getIgnoreLineRegExPatterns();
+		}
+		if (config.isInsertSweArrayObservationTimeoutBufferSet()) {
+				sweArrayObservationTimeOutBuffer = config.getInsertSweArrayObservationTimeoutBuffer();
+		}
+		if (isSampleBasedDataFile && config.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
+			LOG.info("Using {}ms timeout buffer during insert observation requests. "
+					+ "Change <SosImportConfiguration><SosMetadata insertSweArrayObservationTimeoutBuffer> if required.",
+					sweArrayObservationTimeOutBuffer);
 		}
 	}
 
@@ -697,7 +709,13 @@ public final class SensorObservationService {
 
 		try {
 			try {
+				final int connectionTimeout = sosWrapper.getConnectionTimeout();
+				final int readTimeout = sosWrapper.getReadTimeout();
+				sosWrapper.setConnectionTimeOut(connectionTimeout + sweArrayObservationTimeOutBuffer);
+				sosWrapper.setReadTimeout(readTimeout + sweArrayObservationTimeOutBuffer);
 				opResult = sosWrapper.doInsertObservation(sweArrayObservation);
+				sosWrapper.setConnectionTimeOut(connectionTimeout);
+				sosWrapper.setReadTimeout(readTimeout);
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();

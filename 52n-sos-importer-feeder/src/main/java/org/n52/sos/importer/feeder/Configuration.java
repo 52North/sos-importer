@@ -1251,6 +1251,17 @@ public final class Configuration {
 		return patterns.toArray(new Pattern[patterns.size()]);
 	}
 
+	public boolean isInsertSweArrayObservationTimeoutBufferSet() {
+		return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
+	}
+
+	public int getInsertSweArrayObservationTimeoutBuffer() {
+		if (isInsertSweArrayObservationTimeoutBufferSet()) {
+			return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
+		}
+		throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
+	}
+
 
 
 }
