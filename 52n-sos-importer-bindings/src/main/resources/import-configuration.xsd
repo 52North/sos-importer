@@ -860,20 +860,31 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="URL"/>
+                <xs:element ref="URL" />
                 <xs:element ref="Offering">
                     <xs:annotation>
-                        <xs:documentation>Offering in the SOS which is used for the import. Might be generated from sensor id.</xs:documentation>
+                        <xs:documentation>
+                            Offering in the SOS which is used for the
+                            import. Might be generated from sensor id.
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element name="Version" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>Indicates the specification version implemented by the SOS instance. E.g. 1.0.0, 2.0.0.</xs:documentation>
+                        <xs:documentation>
+                            Indicates the specification version
+                            implemented by the SOS instance. E.g. 1.0.0,
+                            2.0.0.
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="Binding" type="xs:string" minOccurs="0">
+                <xs:element name="Binding" type="xs:string"
+                    minOccurs="0">
                     <xs:annotation>
-                        <xs:documentation>If version 2.0.0 is used, the binding has to be defined, e.g. SOAP, POX binding.</xs:documentation>
+                        <xs:documentation>
+                            If version 2.0.0 is used, the binding has to
+                            be defined, e.g. SOAP, POX binding.
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
