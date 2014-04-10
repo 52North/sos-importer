@@ -294,11 +294,12 @@ public final class SensorObservationService {
 			startReadingFile = System.currentTimeMillis();
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;
-			final int sampleStartLine = lineCounter;
+			int sampleStartLine = lineCounter;
 			while ((values = cr.readNext()) != null) {
 				// if it is a sample based file, I need to get the following information
 				// * date information (depends on last timestamp because of
 				if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
+					sampleStartLine = lineCounter;
 					getSampleMetaData(cr);
 					isInSample = true;
 					skipLines(cr, sampleDataOffset-1-(lineCounter-sampleStartLine));
@@ -321,8 +322,18 @@ public final class SensorObservationService {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
 				lineCounter++;
-				if (isSampleBasedDataFile && isInSample && isSampleEndReached(lineCounter, sampleStartLine, sampleSize)) {
+				if (isSampleBasedDataFile) {
+					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
+						isSampleBasedDataFile,
+						isInSample,
+						lineCounter,
+						sampleStartLine,
+						sampleSize,
+						sampleDataOffset);
+				}
+				if (isSampleBasedDataFile && isInSample && isSampleEndReached(sampleStartLine)) {
 					isInSample = false;
+					LOG.debug("Current sample left");
 				}
 			}
 			if (!timeSeriesRepository.isEmpty()) {
@@ -403,10 +414,8 @@ public final class SensorObservationService {
 		return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
 	}
 
-	public boolean isSampleEndReached(final int lineCounter,
-			final int sampleStartLine,
-			final int sampleSize) {
-		return sampleStartLine + sampleSize == lineCounter;
+	public boolean isSampleEndReached(final int sampleStartLine) {
+		return sampleStartLine + sampleSize + sampleDataOffset - 1 == lineCounter;
 	}
 
 	private boolean isSampleStart(final String[] values) {
