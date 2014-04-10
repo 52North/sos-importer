@@ -632,8 +632,6 @@
                     <xs:documentation>
                         Defines the offset in lines between the first line of
                         a sample and the line containing the date information.
-                        Requires:
-                        * sampleDateExtractionRegEx 
                     </xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>
@@ -648,8 +646,8 @@
                         Regular expression to extract the date information from
                         the line containing the date information of the current
                         sample. The expression MUST result in ONE group. This 
-                        group will be parsed to a java.util.Date using:
-                        * sampleDatePattern
+                        group will be parsed to a java.util.Date using 
+                        "sampleDatePattern" attribute.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
@@ -657,8 +655,7 @@
                 <xs:annotation>
                     <xs:documentation>
                         Defines the pattern used to parse the date information
-                        of the current pattern. Requires:
-                        * sampleDateExtractionRegEx
+                        of the current pattern.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>

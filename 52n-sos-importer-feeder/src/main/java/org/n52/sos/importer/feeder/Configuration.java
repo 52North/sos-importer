@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -1069,6 +1070,88 @@ public final class Configuration {
         return importConf.getDataFile().isSetUseDateFromLastModifiedDate() &&
                 importConf.getDataFile().getUseDateFromLastModifiedDate();
     }
+
+    /**
+     * @return <code>true</code>, if all required attributes are available for
+     * 			importing sample based files,<br />
+     * 			else <code>false</code>.
+     */
+    public boolean isSamplingFile() {
+        return importConf.getDataFile().isSetSampleStartRegEx() &&
+                !importConf.getDataFile().getSampleStartRegEx().isEmpty() &&
+                importConf.getDataFile().isSetSampleDateOffset() &&
+                importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
+                !importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
+                importConf.getDataFile().getSampleDateExtractionRegEx().indexOf("(") >= 0 &&
+                importConf.getDataFile().getSampleDateExtractionRegEx().indexOf(")") > 1 &&
+                importConf.getDataFile().isSetSampleDatePattern() &&
+                !importConf.getDataFile().getSampleDatePattern().isEmpty() &&
+                importConf.getDataFile().isSetSampleDataOffset() &&
+                importConf.getDataFile().isSetSampleSizeOffset() &&
+                importConf.getDataFile().isSetSampleSizeRegEx() &&
+                !importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
+                importConf.getDataFile().getSampleSizeRegEx().indexOf("(") >= 0 &&
+                importConf.getDataFile().getSampleSizeRegEx().indexOf(")") > 1;
+    }
+
+    public String getSampleStartRegEx() {
+    	if (importConf.getDataFile().isSetSampleStartRegEx() &&
+                !importConf.getDataFile().getSampleStartRegEx().isEmpty()) {
+    		return importConf.getDataFile().getSampleStartRegEx();
+    	}
+    	throw new IllegalArgumentException("Attribute 'sampleIdRegEx' of <DataFile> not set.");
+	}
+
+	public String getSampleSizeRegEx() {
+		if (importConf.getDataFile().isSetSampleSizeRegEx() &&
+				!importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
+                importConf.getDataFile().getSampleSizeRegEx().indexOf("(") >= 0 &&
+                importConf.getDataFile().getSampleSizeRegEx().indexOf(")") > 1) {
+			return importConf.getDataFile().getSampleSizeRegEx();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleSizeRegEx' of <DataFile> not set.");
+	}
+
+	public int getSampleSizeOffset() {
+		if (importConf.getDataFile().isSetSampleSizeOffset()) {
+			return importConf.getDataFile().getSampleSizeOffset();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleSizeOffset' of <DataFile> not set.");
+	}
+
+	public int getSampleDateOffset() {
+		if (importConf.getDataFile().isSetSampleDateOffset()) {
+			return importConf.getDataFile().getSampleDateOffset();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleDateOffset' of <DataFile> not set.");
+	}
+
+	public int getSampleDataOffset() {
+		if (importConf.getDataFile().isSetSampleDataOffset()) {
+			return importConf.getDataFile().getSampleDataOffset();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleDataOffset' of <DataFile> not set.");
+	}
+
+
+	public String getSampleDatePattern() {
+		if (importConf.getDataFile().isSetSampleDatePattern() &&
+				!importConf.getDataFile().getSampleDatePattern().isEmpty()) {
+			return importConf.getDataFile().getSampleDatePattern();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleDateInfoPattern' of <DataFile> not set.");
+	}
+
+	public String getSampleDateExtractionRegEx() {
+		if (importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
+				!importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
+                importConf.getDataFile().getSampleDateExtractionRegEx().indexOf("(") >= 0 &&
+                importConf.getDataFile().getSampleDateExtractionRegEx().indexOf(")") > 1) {
+			return importConf.getDataFile().getSampleDateExtractionRegEx();
+		}
+		throw new IllegalArgumentException("Attribute 'sampleDateExtractionRegEx' of <DataFile> not set.");
+	}
+
 
     /**
      * @return The configured value <b>> 0</b>, if it is set<br />

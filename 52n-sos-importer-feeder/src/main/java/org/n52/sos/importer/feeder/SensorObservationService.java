@@ -122,6 +122,7 @@ public final class SensorObservationService {
 
 	private String[] headerLine;
 
+	private boolean isSampleBasedDataFile = false;
 
 	// Identified on localhost on development system
 	// Default value: 5000
@@ -129,6 +130,29 @@ public final class SensorObservationService {
 	private int hunkSize = 5000;
 
 	private final Configuration config;
+
+	// stores the Timestamp of the last insertObservations
+	// (required for handling sample based files)
+	private Timestamp lastTimestamp = null;
+
+	// The date information of the current sample
+	private Timestamp sampleDate;
+
+	private Pattern sampleIdPattern;
+
+	private Pattern sampleSizePattern;
+
+	private boolean isInSample;
+
+	private int sampleSize;
+
+	private int sampleSizeOffset;
+
+	private int sampleDateOffset;
+
+	private int sampleOffsetDifference;
+
+	private int sampleDataOffset;
 
 	private int lineCounter;
 
@@ -142,7 +166,16 @@ public final class SensorObservationService {
 		sosUrl = config.getSosUrl();
 		sosVersion = config.getSosVersion();
 		sosBinding = getBinding(config.getSosBinding());
+		isSampleBasedDataFile = config.isSamplingFile();
 		ignoredColumns = config.getIgnoredColumnIds();
+		if (isSampleBasedDataFile) {
+			sampleIdPattern = Pattern.compile(config.getSampleStartRegEx());
+			sampleSizePattern = Pattern.compile(config.getSampleSizeRegEx());
+			sampleSizeOffset = config.getSampleSizeOffset();
+			sampleDateOffset = config.getSampleDateOffset();
+			sampleOffsetDifference = Math.abs(sampleDateOffset - sampleSizeOffset);
+			sampleDataOffset = config.getSampleDataOffset();
+		}
 		if (sosBinding == null) {
 			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
 		} else {
@@ -216,7 +249,7 @@ public final class SensorObservationService {
 		return false;
 	}
 
-	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException {
+	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
 		LOG.trace("importData()");
 		// 0 Get line
 		final CSVReader cr = dataFile.getCSVReader();
@@ -262,7 +295,16 @@ public final class SensorObservationService {
 			startReadingFile = System.currentTimeMillis();
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;
+			final int sampleStartLine = 0;
 			while ((values = cr.readNext()) != null) {
+				// if it is a sample based file, I need to get the following information
+				// * date information (depends on last timestamp because of
+				if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
+					getSampleMetaData(cr);
+					isInSample = true;
+					skipLines(cr, sampleDataOffset-1-(lineCounter-sampleStartLine));
+					continue;
+				}
 				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
@@ -281,6 +323,9 @@ public final class SensorObservationService {
 				}
 				lastLine++;
 				lineCounter++;
+				if (isSampleBasedDataFile && isInSample && isSampleEndReached(lineCounter, sampleStartLine, sampleSize)) {
+					isInSample = false;
+				}
 			}
 			if (!timeSeriesRepository.isEmpty()) {
 				insertTimeSeries(timeSeriesRepository);
@@ -309,6 +354,66 @@ public final class SensorObservationService {
 			}
 		}
 		return false;
+	}
+
+	private void getSampleMetaData(final CSVReader cr) throws IOException, ParseException {
+		if (sampleDateOffset < sampleSizeOffset) {
+			skipLines(cr,sampleDateOffset-1);
+			sampleDate = parseSampleDate(cr.readNext());
+			lineCounter++;
+			skipLines(cr,sampleOffsetDifference-1);
+			sampleSize = parseSampleSize(cr.readNext());
+			lineCounter++;
+		} else {
+			skipLines(cr,sampleSizeOffset-1);
+			sampleSize = parseSampleSize(cr.readNext());
+			lineCounter++;
+			skipLines(cr,sampleOffsetDifference-1);
+			sampleDate = parseSampleDate(cr.readNext());
+			lineCounter++;
+		}
+
+	}
+
+	private int parseSampleSize(final String[] values) throws ParseException {
+		final String lineToParse = restoreLine(values);
+		final Matcher matcher = sampleSizePattern.matcher(lineToParse);
+		if (matcher.matches() && matcher.groupCount() == 1) {
+			final String dateInformation = matcher.group(1);
+			return Integer.parseInt(dateInformation);
+			// TODO handle NumberformatException
+		}
+		throw new ParseException(String.format("Could not extract sampleSize from '%s' using regular expression '%s' (Offset is always 42).",
+				lineToParse,
+				sampleSizePattern.pattern()),42);
+	}
+
+	private String restoreLine(final String[] values) {
+		final StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < values.length; i++) {
+			sb.append(values[i]);
+			if (i != values.length-1) {
+				sb.append(config.getCsvSeparator());
+			}
+		}
+		return sb.toString();
+	}
+
+	private Timestamp parseSampleDate(final String[] values) throws ParseException {
+		final String dateInfoPattern = config.getSampleDatePattern();
+		final String regExToExtractDateInfo = config.getSampleDateExtractionRegEx();
+		final String timestampInformation = restoreLine(values);
+		return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
+	}
+
+	public boolean isSampleEndReached(final int lineCounter,
+			final int sampleStartLine,
+			final int sampleSize) {
+		return sampleStartLine + sampleSize == lineCounter;
+	}
+
+	private boolean isSampleStart(final String[] values) {
+		return sampleIdPattern.matcher(restoreLine(values)).matches();
 	}
 
 	private void skipLines(final CSVReader cr,
@@ -421,6 +526,13 @@ public final class SensorObservationService {
 		// TODO implement using different templates in later version depending on the class of value
 		// TIMESTAMP
 		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId,values);
+		if (isSampleBasedDataFile) {
+			if (lastTimestamp != null && timeStamp.before(lastTimestamp)) {
+				sampleDate.applyDayDelta(1);
+			}
+			lastTimestamp = new Timestamp().enrich(timeStamp);
+			timeStamp.enrich(sampleDate);
+		}
 		LOG.debug("Timestamp: {}", timeStamp);
 		// UOM CODE
 		final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId,values);
