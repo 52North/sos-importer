@@ -33,7 +33,7 @@
                 <configuration>
                     <schemaDirectory>src/main/resources</schemaDirectory>
                     <sourceSchemas>
-                        <sourceSchema>datafile_configuration.xsd</sourceSchema>
+                        <sourceSchema>import-configuration.xsd</sourceSchema>
                     </sourceSchemas>
                     <sourceGenerationDirectory>
                         target/generated/xmlbeans
