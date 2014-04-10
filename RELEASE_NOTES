@@ -53,6 +53,15 @@ Features:
    * "sampleSizeRegEx"   - the regular expression to extract the sample size. 
                            The regular expression MUST result in ONE group 
                            which contains an integer value.
+ * Setting of timeout buffer for the insertion of SweArrayObservations:
+   With the attribute "insertSweArrayObservationTimeoutBuffer" of <SosMetadata"
+   it is possible to define an additional timeout buffer for connect and socket 
+   timeout when using import strategy "SweArrayObservationWithSplitExtension".
+   Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.
+   The size of this value is related to the set-up of the SOS server, importer,
+   and the HUNK_SIZE value.
+   The current OX-F SimpleHttpClient implementation uses a default value of 5s,
+   hence setting this to 25,000 results in 30s connection and socket timeout.
  
 Changes:
 --------
