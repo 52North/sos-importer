@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.SocketException;
-import java.net.URL;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,7 +40,6 @@ import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.SensorObservationService;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
@@ -157,18 +156,10 @@ public class OneTimeFeeder implements Runnable {
 		if (dataFile.isAvailable()) {
 			try {
 				// check SOS
-				final URL sosURL = config.getSosUrl();
-				final String sosVersion = config.getSosVersion();
-				final String sosBinding = config.getSosBinding();
-				final ImportStrategy importStrategy = config.getImportStrategy();
-				final int hunkSize = config.getHunkSize();
 				SensorObservationService sos = null;
+				final String sosURL = config.getSosUrl().toString();
 				try {
-					sos = new SensorObservationService(sosURL,
-							sosVersion,
-							sosBinding,
-							importStrategy,
-							hunkSize);
+					sos = new SensorObservationService(config);
 				} catch (final ExceptionReport er) {
 					LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", er);
 				} catch (final OXFException oxfe) {
@@ -224,6 +215,10 @@ public class OneTimeFeeder implements Runnable {
 			} catch (final OXFException e) {
 				log(e);
 			} catch (final XmlException e) {
+				log(e);
+			} catch (final ParseException e) {
+				log(e);
+			} catch (final IllegalArgumentException e) {
 				log(e);
 			}
 		}

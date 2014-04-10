@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -75,7 +76,6 @@ import org.n52.oxf.sos.observation.ObservationParameters;
 import org.n52.oxf.sos.observation.TextObservationParameters;
 import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.oxf.sos.request.v200.InsertSensorParameters;
-import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -120,23 +120,21 @@ public final class SensorObservationService {
 
 	private String[] headerLine;
 
-	private final ImportStrategy importStrategy;
 
 	// Identified on localhost on development system
 	// Default value: 5000
 	// Max possible value: 12500
 	private int hunkSize = 5000;
 
-	public SensorObservationService(final URL sosUrl,
-			final String version,
-			final String binding,
-			final ImportStrategy importStrategy,
-			final int hunkSize) throws ExceptionReport, OXFException {
-		LOG.trace(String.format("SensorObservationService(%s)", sosUrl));
-		this.sosUrl = sosUrl;
-		sosVersion = version;
-		sosBinding = getBinding(binding);
-		this.importStrategy = importStrategy;
+	private final Configuration config;
+
+
+	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
+		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
+		this.config = config;
+		sosUrl = config.getSosUrl();
+		sosVersion = config.getSosVersion();
+		sosBinding = getBinding(config.getSosBinding());
 		if (sosBinding == null) {
 			sosWrapper = SosWrapperFactory.newInstance(sosUrl.toString(),sosVersion);
 		} else {
@@ -153,8 +151,9 @@ public final class SensorObservationService {
 		if (sosVersion.equals("2.0.0")) {
 			offerings = new HashMap<String, String>();
 		}
-		if (hunkSize > 0) {
-			this.hunkSize = hunkSize;
+		if (config.getHunkSize() > 0) {
+			hunkSize = config.getHunkSize();
+		}
 		}
 	}
 
@@ -193,8 +192,7 @@ public final class SensorObservationService {
 		}
 		final OperationsMetadata opMeta = serviceDescriptor.getOperationsMetadata();
 		LOG.debug(String.format("OperationsMetadata found: %s", opMeta));
-		// check for RegisterSensor and InsertObservationOperation
-		// TODO implement version specific
+		// check for (Insert|Register)Sensor and InsertObservationOperation
 		if ((opMeta.getOperationByName(SOSAdapter.REGISTER_SENSOR) != null ||
 				opMeta.getOperationByName(SOSAdapter.INSERT_SENSOR) != null)
 				&&
