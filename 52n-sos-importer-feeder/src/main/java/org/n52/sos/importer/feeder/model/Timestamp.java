@@ -276,9 +276,27 @@ public class Timestamp {
 
 	public Timestamp enrich(final Timestamp other) {
 		if (other != null) {
-			setYear(other.getYear());
-			setMonth(other.getMonth());
-			setDay(other.getDay());
+			if (other.getYear() > Short.MIN_VALUE) {
+				setYear(other.getYear());
+			}
+			if (other.getMonth() > Byte.MIN_VALUE) {
+				setMonth(other.getMonth());
+			}
+			if (other.getDay() > Byte.MIN_VALUE) {
+				setDay(other.getDay());
+			}
+			if (other.getHour() > Byte.MIN_VALUE) {
+				setHour(other.getHour());
+			}
+			if (other.getMinute() > Byte.MIN_VALUE) {
+				setMinute(other.getMinute());
+			}
+			if (other.getSeconds() > Byte.MIN_VALUE) {
+				setSeconds(other.getSeconds());
+			}
+			if (other.getTimezone() > Byte.MIN_VALUE) {
+				setTimezone(other.getTimezone());
+			}
 		}
 		return this;
 	}
