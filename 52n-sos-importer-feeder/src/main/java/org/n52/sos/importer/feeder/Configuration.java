@@ -1148,4 +1148,26 @@ public final class Configuration {
         return -1;
     }
 
+
+    public boolean isIgnoreLineRegExSet() {
+    	return importConf.getDataFile().getIgnoreLineRegExArray() != null &&
+    			importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
+	}
+
+	public Pattern[] getIgnoreLineRegExPatterns() {
+		if (!isIgnoreLineRegExSet()) {
+			return new Pattern[0];
+		}
+		final String[] ignoreLineRegExArray = importConf.getDataFile().getIgnoreLineRegExArray();
+		final LinkedList<Pattern> patterns = new LinkedList<>();
+		for (final String regEx : ignoreLineRegExArray) {
+			if (regEx != null && !regEx.isEmpty()) {
+				patterns.add(Pattern.compile(regEx));
+			}
+		}
+		return patterns.toArray(new Pattern[patterns.size()]);
+	}
+
+
+
 }

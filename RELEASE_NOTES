@@ -26,6 +26,10 @@ Features:
    * "useDateFromLastModifiedDate" for enabling this feature
    * "lastModifiedDelta" for moving the date n days back (this attribute is 
      OPTIONAL for this feature, too.)
+ * Ignore lines with regular expressions feature:
+   0..infinity <IgnoreLineRegEx> elements can be added to the <DataFile> element.
+   Each element will be used as regular expression and applied to each line of 
+   the data file before parsing. 
  
 Changes:
 --------

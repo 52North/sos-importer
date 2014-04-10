@@ -47,6 +47,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
@@ -130,6 +132,8 @@ public final class SensorObservationService {
 
 	private final int[] ignoredColumns;
 
+	private Pattern[] ignorePatterns;
+
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
 		this.config = config;
@@ -156,6 +160,8 @@ public final class SensorObservationService {
 		if (config.getHunkSize() > 0) {
 			hunkSize = config.getHunkSize();
 		}
+		if (config.isIgnoreLineRegExSet()) {
+			ignorePatterns = config.getIgnoreLineRegExPatterns();
 		}
 	}
 
@@ -225,13 +231,13 @@ public final class SensorObservationService {
 			LOG.error("No measured value columns found in configuration");
 			return null;
 		}
-		skipAlreadyReadLines(cr, lineCounter);
-		switch (importStrategy) {
+		skipLines(cr, lastLine);
+		switch (config.getImportStrategy()) {
 		case SingleObservation:
 			long startReadingFile = System.currentTimeMillis();
 			// for each line
 			while ((values = cr.readNext()) != null) {
-				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 					numOfObsTriedToInsert += ios.length;
@@ -255,7 +261,7 @@ public final class SensorObservationService {
 			TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
 			int currentHunk = 0;
 			while ((values = cr.readNext()) != null) {
-				if (isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile,lineCounter);
 					timeSeriesRepository.addObservations(ios);
@@ -291,8 +297,20 @@ public final class SensorObservationService {
 		return failedInsertObservations;
 	}
 
-	private void skipAlreadyReadLines(final CSVReader cr,
-			int lineCounter) throws IOException {
+	private boolean isLineIgnorable(final String[] values) {
+		if (ignorePatterns == null || ignorePatterns.length > 0) {
+			final String line = restoreLine(values);
+			for (final Pattern pattern : ignorePatterns) {
+				if (pattern.matcher(line).matches()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void skipLines(final CSVReader cr,
+			int skipCount) throws IOException {
 		// get the number of lines to skip (coming from already read lines)
 		String[] values;
 		int skipCount = lastLine;
