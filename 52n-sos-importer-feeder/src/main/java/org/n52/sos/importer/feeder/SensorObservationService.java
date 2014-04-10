@@ -282,6 +282,9 @@ public final class SensorObservationService {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
 				lineCounter++;
+				if (lineCounter % 10000 == 0) {
+					LOG.info("Processed line {}.",lineCounter);
+				}
 			}
 			long finishedImportData = System.currentTimeMillis();
 			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
@@ -322,6 +325,9 @@ public final class SensorObservationService {
 					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
 				}
 				lineCounter++;
+				if (lineCounter % 10000 == 0) {
+					LOG.info("Processed line {}.",lineCounter);
+				}
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
 						isSampleBasedDataFile,
@@ -472,7 +478,7 @@ public final class SensorObservationService {
 			for (int i = 0; i < values.length; i++) {
 				final String value = values[i];
 				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
-					LOG.error("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
+					LOG.debug("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
 					return false;
 				}
 			}
