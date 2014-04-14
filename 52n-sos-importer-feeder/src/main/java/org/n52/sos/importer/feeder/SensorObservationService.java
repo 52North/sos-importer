@@ -205,7 +205,7 @@ public final class SensorObservationService {
 		if (config.isInsertSweArrayObservationTimeoutBufferSet()) {
 				sweArrayObservationTimeOutBuffer = config.getInsertSweArrayObservationTimeoutBuffer();
 		}
-		if (isSampleBasedDataFile && config.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
+		if (config.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
 			LOG.info("Using {}ms timeout buffer during insert observation requests. "
 					+ "Change <SosImportConfiguration><SosMetadata insertSweArrayObservationTimeoutBuffer> if required.",
 					sweArrayObservationTimeOutBuffer);
