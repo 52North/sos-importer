@@ -76,6 +76,7 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 			final DataFile dataFile = sosImportConf.getDataFile();
 			dataFile.setSampleStartRegEx(stepModel.getSampleBasedStartRegEx());
 			dataFile.setSampleDateOffset(stepModel.getSampleBasedDateOffset());
+			dataFile.setSampleDateExtractionRegEx(stepModel.getSampleBasedDateExtractionRegEx());
 		}
 	}
 

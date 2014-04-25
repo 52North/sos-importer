@@ -85,7 +85,9 @@ public class Step2Controller extends StepController {
 		if(step2Model.isSampleBased() &&
 				(step2Model.getSampleBasedStartRegEx() == null ||
 				step2Model.getSampleBasedStartRegEx().isEmpty() ||
-				step2Model.getSampleBasedDateOffset() < 1)) {
+				step2Model.getSampleBasedDateOffset() < 1 ||
+				step2Model.getSampleBasedDateExtractionRegEx() == null ||
+				step2Model.getSampleBasedDateExtractionRegEx().isEmpty())) {
 			return false;
 		}
 
@@ -136,6 +138,7 @@ public class Step2Controller extends StepController {
 			step2Panel.setSampleBased(true);
 			step2Panel.setSampleBasedStartRegEx(step2Model.getSampleBasedStartRegEx());
 			step2Panel.setSampleBasedDateOffset(step2Model.getSampleBasedDateOffset());
+			step2Panel.setSampleBasedDateExtractionRegEx(step2Model.getSampleBasedDateExtractionRegEx());
 		}
 	}
 
@@ -181,6 +184,7 @@ public class Step2Controller extends StepController {
 			step2Model.setSampleBased(true);
 			step2Model.setSampleBasedStartRegEx(step2Panel.getSampleBasedStartRegEx());
 			step2Model.setSampleBasedDateOffset(step2Panel.getSampleBasedDateOffset());
+			step2Model.setSampleBasedDateExtractionRegEx(step2Panel.getSampleBasedDateExtractionRegEx());
 		}
 
 		step2Panel = null;

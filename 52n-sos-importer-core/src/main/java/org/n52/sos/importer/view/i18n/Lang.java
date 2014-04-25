@@ -401,10 +401,22 @@ public abstract class Lang {
 	public abstract String step2ParseHeader();
 
 	/**
+	 * @return Regular Expression "Date Extraction"
+	 */
+	public abstract String step2SampleBasedDateExtractionRegExLabel();
+
+	/**
+	 * @return The regular expression to extract the date information from the
+	 * 				line containing the date information of the current sample.
+	 * 				The expression MUST result in ONE group. This group will be
+	 * 				parsed to a {@link java.util.Date} using
+	 * 				"sampleDatePattern" attribute.
+	 */
+	public abstract String step2SampleBasedDateExtractionRegExTooltip();
+	/**
 	 * @return Offset date information
 	 */
 	public abstract String step2SampleBasedDateOffsetLabel();
-
 	/**
 	 *
 	 * @return The offset of the line containing the date of the
@@ -596,6 +608,7 @@ public abstract class Lang {
 	 * @return Step 5c: Complete position data
 	 */
 	public abstract String step5cDescription();
+
 	/**
 	 * @return Complete missing information for the marked position.
 	 */
@@ -604,7 +617,6 @@ public abstract class Lang {
 	 * @return Step 6a: Add missing dates and times
 	 */
 	public abstract String step6aDescription();
-
 	/**
 	 * @return <html>What is the <u>Date & Time</u> for all measured values?</html>
 	 */
@@ -652,11 +664,13 @@ public abstract class Lang {
 	 * @return Set Position
 	 */
 	public abstract String step6cInfoToolName();
+
 	/**
 	 *
 	 * @return Set the position by clicking on the map
 	 */
 	public abstract String step6cInfoToolTooltip();
+
 	/**
 	 * @return What is the position of
 	 */

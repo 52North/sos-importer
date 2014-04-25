@@ -424,6 +424,21 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedDateExtractionRegExLabel() {
+		return "Regular Expression \"Date Extraction\"";
+	}
+
+	@Override
+	public String step2SampleBasedDateExtractionRegExTooltip() {
+		return new StringBuffer("The regular expression to extract the date\n")
+			.append("information from the line containing the date\n")
+			.append("information of the current sample. The expression MUST\n")
+			.append("result in ONE group. This group will be parsed to a\n")
+			.append("java.util.Date using \"sampleDatePattern\" attribute.")
+			.toString();
+	}
+
+	@Override
 	public String step2SampleBasedDateOffsetLabel() {
 		return "Offset date information";
 	}

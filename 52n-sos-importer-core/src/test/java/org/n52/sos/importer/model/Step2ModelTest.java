@@ -72,4 +72,15 @@ public class Step2ModelTest {
 	public void shouldReturnZeroAsDefaultValueForSampleBasedDateOffset() {
 		assertThat(model.getSampleBasedDateOffset(), is(0));
 	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet() {
+		final String sampleBasedDateExtractionRegEx = "test-regex";
+		assertThat(model.setSampleBasedDateExtractionRegEx(sampleBasedDateExtractionRegEx).getSampleBasedDateExtractionRegEx(), is(sampleBasedDateExtractionRegEx));
+	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
+		assertThat(model.getSampleBasedDateExtractionRegEx(), is(""));
+	}
 }

@@ -97,6 +97,10 @@ public class Step2Panel extends JPanel {
 	private JSpinner dateOffset;
 	private SpinnerNumberModel dateOffsetModel;
 
+	private JTextField dateExtractionRegExTF;
+
+	private JPanel dateExtractionRegExPanel;
+
 	public Step2Panel(final int csvFileRowCount) {
 		super();
 		this.csvFileRowCount = csvFileRowCount;
@@ -133,8 +137,21 @@ public class Step2Panel extends JPanel {
 			int gridY,
 			final int max) {
 		addIsSampleBased(csvSettingsPanel, gridY++);
-		addSampleStartRegEx(csvSettingsPanel, gridY++);
-		addSampleDateOffset(csvSettingsPanel, gridY++, max);
+		addStartRegEx(csvSettingsPanel, gridY++);
+		addDateOffset(csvSettingsPanel, gridY++, max);
+		addDateExtractionRegEx(csvSettingsPanel, gridY++);
+	}
+
+	private void addDateExtractionRegEx(final JPanel csvSettingsPanel,
+			final int gridY) {
+		dateExtractionRegExTF = new JTextField(28);
+		dateExtractionRegExPanel = new JPanel();
+		dateExtractionRegExPanel.setToolTipText(Lang.l().step2SampleBasedDateExtractionRegExTooltip());
+		dateExtractionRegExPanel.setLayout(new GridLayout(2, 1));
+		dateExtractionRegExPanel.add(new JLabel(Lang.l().step2SampleBasedDateExtractionRegExLabel() + ":"));
+		dateExtractionRegExPanel.add(dateExtractionRegExTF);
+		dateExtractionRegExPanel.setVisible(false);
+		csvSettingsPanel.add(dateExtractionRegExPanel, simpleConstraints(gridY));
 	}
 
 	private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
@@ -163,13 +180,14 @@ public class Step2Panel extends JPanel {
 			private void setEnabled(final boolean state) {
 				startRegExPanel.setVisible(state);
 				dateOffsetPanel.setVisible(state);
+				dateExtractionRegExPanel.setVisible(state);
 				firstDataJS.setEnabled(!state);
 			}
 		});
 		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
 	}
 
-	private void addSampleStartRegEx(final JPanel csvSettingsPanel,
+	private void addStartRegEx(final JPanel csvSettingsPanel,
 			final int gridY) {
 		startRegExTF = new JTextField(28);
 		startRegExPanel = new JPanel();
@@ -181,7 +199,7 @@ public class Step2Panel extends JPanel {
 		csvSettingsPanel.add(startRegExPanel, simpleConstraints(gridY));
 	}
 
-	private void addSampleDateOffset(final JPanel csvSettingsPanel,
+	private void addDateOffset(final JPanel csvSettingsPanel,
 			final int gridY,
 			final int max) {
 		dateOffsetModel = new SpinnerNumberModel(1, 1, max, 1);
@@ -488,4 +506,14 @@ public class Step2Panel extends JPanel {
 		dateOffsetModel.setValue(dateOffset);
 		return this;
 	}
+
+	public String getSampleBasedDateExtractionRegEx() {
+		return dateExtractionRegExTF.getText();
+	}
+
+	public Step2Panel setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
+		dateExtractionRegExTF.setText(sampleBasedDateExtractionRegEx);
+		return this;
+	}
+
 }

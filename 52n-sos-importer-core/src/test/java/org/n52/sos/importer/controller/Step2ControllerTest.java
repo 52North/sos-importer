@@ -68,6 +68,20 @@ public class Step2ControllerTest {
 	}
 
 	@Test
+	public void shouldReturnFalseIfDateExtractionRegExIsMissingAndSampleBasedIsTrue() {
+		((Step2Model)controller.getModel())
+			.setColumnSeparator(",")
+			.setCommentIndicator("#")
+			.setDecimalSeparator('.')
+			.setTextQualifier("\"")
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx("test-regex")
+			.setSampleBasedDateOffset(5);
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(false));
+	}
+
+	@Test
 	public void shouldReturnTrueIfSampleBasedValuesAreSet() {
 		((Step2Model)controller.getModel())
 		.setColumnSeparator(",")
@@ -76,7 +90,8 @@ public class Step2ControllerTest {
 		.setTextQualifier("\"")
 		.setSampleBased(true)
 		.setSampleBasedStartRegEx("test-regex")
-		.setSampleBasedDateOffset(5);
+		.setSampleBasedDateOffset(5)
+		.setSampleBasedDateExtractionRegEx("test-regex2");
 		// TODO extend with other sample based parameters
 	controller.loadSettings();
 	assertThat(controller.isFinished(), is(true));
