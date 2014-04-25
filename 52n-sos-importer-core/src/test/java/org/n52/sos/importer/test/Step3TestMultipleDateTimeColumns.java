@@ -30,17 +30,16 @@ import org.n52.sos.importer.controller.TableController;
 
 public class Step3TestMultipleDateTimeColumns {
 
-	public static void main(String[] args) {
-		MainController f = MainController.getInstance();
-		Object[][] o = TestData.EXAMPLE_TABLE_MULTIPLE_DATE_TIME;
+	public static void main(final String[] args) {
+		final MainController f = MainController.getInstance();
 		Constants.DECIMAL_SEPARATOR = '.';
 		Constants.THOUSANDS_SEPARATOR = ',';
-		TableController tc = TableController.getInstance();
-		tc.setContent(o); 
-		int markedColumn = 0;
-		int firstLineWithData = 1;
-		boolean useHeader = false;
-		Step3Controller s3C = new Step3Controller(markedColumn,
+		final TableController tc = TableController.getInstance();
+		tc.setContent(TestData.EXAMPLE_TABLE_MULTIPLE_DATE_TIME);
+		final int markedColumn = 0;
+		final int firstLineWithData = 1;
+		final boolean useHeader = false;
+		final Step3Controller s3C = new Step3Controller(markedColumn,
 				firstLineWithData,
 				useHeader);
 		//

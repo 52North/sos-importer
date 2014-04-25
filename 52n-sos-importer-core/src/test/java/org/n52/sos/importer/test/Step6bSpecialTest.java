@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Step6bSpecialTest {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTest.class);
 
 	public static void main(final String[] args) throws URISyntaxException {
@@ -53,8 +53,7 @@ public class Step6bSpecialTest {
 		}
 		final MainController mC = MainController.getInstance();
 		final TableController tc = TableController.getInstance();
-		final ModelStore ms = ModelStore.getInstance(); 
-		final Object[][] o = TestData.EXAMPLE_TABLE_NO_FOI;
+		final ModelStore ms = ModelStore.getInstance();
 		final int firstLineWithData = 1;
 		int i = 0;
 		MeasuredValue mv;
@@ -73,7 +72,7 @@ public class Step6bSpecialTest {
 		obsProp = TestData.EXAMPLE_OBS_PROP;
 		s6bSM = new Step6bSpecialModel(foi, obsProp);
 		markedColumn = new Column(4,firstLineWithData );
-		tc.setContent(o);
+		tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI);
 		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
 		tc.setColumnHeading(++i, Lang.l().sensor());
 		tc.setColumnHeading(++i, Lang.l().observedProperty());
@@ -86,7 +85,7 @@ public class Step6bSpecialTest {
 		mv.setTableElement(markedColumn);
 		ms.add(mv);
 		/*
-		 * Set-Up Column metadata 
+		 * Set-Up Column metadata
 		 */
 		s3M = new Step3Model(4, firstLineWithData, false);
 		selection = new ArrayList<String>(1);

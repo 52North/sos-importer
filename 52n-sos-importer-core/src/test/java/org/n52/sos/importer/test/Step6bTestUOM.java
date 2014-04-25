@@ -42,19 +42,19 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bTestUOM {
 
-	public static void main(String[] args) {
-		MainController mC = MainController.getInstance();
-		TableController tc = TableController.getInstance();
-		ModelStore ms = ModelStore.getInstance(); 
-		Object[][] o = TestData.EXAMPLE_TABLE_NO_UOM;
-		int firstLineWithData = 1, i = 0;
+	public static void main(final String[] args) {
+		final MainController mC = MainController.getInstance();
+		final TableController tc = TableController.getInstance();
+		final ModelStore ms = ModelStore.getInstance();
+		final int firstLineWithData = 1;
+		int i = 0;
 		Step6bModel s6bM;
 		MeasuredValue mv;
 		Column markedColumn;
 		Constants.GUI_DEBUG = false;
 		//
 		markedColumn = new Column(4,firstLineWithData );
-		tc.setContent(o);
+		tc.setContent(TestData.EXAMPLE_TABLE_NO_UOM);
 		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
 		tc.setColumnHeading(++i, Lang.l().sensor());
 		tc.setColumnHeading(++i, Lang.l().observedProperty());
@@ -68,10 +68,10 @@ public class Step6bTestUOM {
 		ms.add(TestData.EXAMPLE_FOI);
 		s6bM = new Step6bModel(mv, new UnitOfMeasurement());
 		/*
-		 * Set-Up Column metadata 
+		 * Set-Up Column metadata
 		 */
-		Step3Model s3M = new Step3Model(4, firstLineWithData, false);
-		List<String> selection = new ArrayList<String>(1);
+		final Step3Model s3M = new Step3Model(4, firstLineWithData, false);
+		final List<String> selection = new ArrayList<String>(1);
 		selection.add(Lang.l().step3ColTypeMeasuredValue());
 		selection.add(Lang.l().step3MeasuredValNumericValue());
 		selection.add(".SEP,");
@@ -80,7 +80,7 @@ public class Step6bTestUOM {
 		mC.updateModel();
 		mC.removeProvider(s3M);
 		// add observed property to Modelstore
-		ObservedProperty op = new ObservedProperty();
+		final ObservedProperty op = new ObservedProperty();
 		op.setTableElement(new Column(2,firstLineWithData));
 		ms.add(op);
 		//

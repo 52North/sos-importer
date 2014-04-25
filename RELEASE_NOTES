@@ -75,6 +75,7 @@ Bugfixes:
  * #06: Hardcoded time zone in test 
  * #10: NPE during feeding if binding value is not set
  * #11: BadLocationException in the case of having empty lines in csv file
+ * #20: Current GUI is broken when using sample based files with minor inconsistencies
 
 Release Notes for SOS-Importer 0.3.0
 ====================================

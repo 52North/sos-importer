@@ -40,45 +40,39 @@ import org.n52.sos.importer.model.table.Column;
 
 public class Step6bTestObservedProperty {
 
-	public static void main(String[] args) {		
-		MainController f = MainController.getInstance();
-		Object[][] o = {
-				{"Datum", "Station", "Komp", "Wert/myg/m3"},
-				{"01.01.03", "Klinthal", "PM10", "-999"}, 
-				{"02.01.03", "Klinthal", "PM10", "-999"}, 
-				{"03.01.03", "Zwickau", "PM10", "-999"}, 
-				{"04.01.03", "Zwickau", "PM12", "-999"}};
-		TableController.getInstance().setContent(o);
+	public static void main(final String[] args) {
+		final MainController f = MainController.getInstance();
+		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
 		Constants.GUI_DEBUG = false;
-		
-		DateAndTime dtm1 = new DateAndTime();
+
+		final DateAndTime dtm1 = new DateAndTime();
 		dtm1.setGroup("1");
-		DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-		int firstLineWithData = 0;
+		final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
+		final int firstLineWithData = 0;
 		dtc1.assignPattern("dd.MM.yy", new Column(0,firstLineWithData ));
 		dtm1.setHour(new Hour(0));
 		dtm1.setMinute(new Minute(0));
 		dtm1.setSecond(new Second(0));
 		dtm1.setTimeZone(new TimeZone(1));
 		ModelStore.getInstance().add(dtm1);
-		
-		FeatureOfInterest foi = new FeatureOfInterest();
+
+		final FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setTableElement(new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(foi);
-		
+
 		//ObservedProperty op = new ObservedProperty();
 		//op.setTableElement(new Column(2));
 		//ModelStore.getInstance().add(op);
-		
-		NumericValue nv = new NumericValue();
+
+		final NumericValue nv = new NumericValue();
 		nv.setTableElement(new Column(3,firstLineWithData));
 		nv.setDateAndTime(dtm1);
 		nv.setFeatureOfInterest(foi);
 		//nv.setObservedProperty(op);
 		ModelStore.getInstance().add(nv);
 
-		Step6bController s6c = new Step6bController(firstLineWithData);
-		s6c.isNecessary(); 
+		final Step6bController s6c = new Step6bController(firstLineWithData);
+		s6c.isNecessary();
 		f.setStepController(s6c);
 	}
 }

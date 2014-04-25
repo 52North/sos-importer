@@ -32,12 +32,11 @@ public class Step3TestManyManyColumns {
 
 	public static void main(final String[] args) {
 		final MainController f = MainController.getInstance();
-		final Object[][] o = TestData.EXAMPLE_TABLE_MANY_MANY_COLUMNS;
 		Constants.DECIMAL_SEPARATOR = '.';
 		Constants.THOUSANDS_SEPARATOR = ',';
 		Constants.GUI_DEBUG = false;
 		final TableController tc = TableController.getInstance();
-		tc.setContent(o); 
+		tc.setContent(TestData.EXAMPLE_TABLE_MANY_MANY_COLUMNS);
 		final int markedColumn = 0;
 		final int firstLineWithData = 1;
 		final boolean useHeader = false;

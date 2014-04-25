@@ -46,65 +46,64 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6cTestGeneratedFoi {
-	
-	public static void main(String[] args) {
-		MainController mC = MainController.getInstance();
-		
-		Object[][] o = {{"01/06/2010 00:00", "12.12", "23.123"},{"01/06/2010 01:00", "323.123", "432.123"}};
-		TableController.getInstance().setContent(o); 
-		int firstLineWithData = 0;
-		DateAndTime dtm = new DateAndTime();
-		DateAndTimeController dtc = new DateAndTimeController(dtm);
+
+	public static void main(final String[] args) {
+		final MainController mC = MainController.getInstance();
+
+		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
+		final int firstLineWithData = 0;
+		final DateAndTime dtm = new DateAndTime();
+		final DateAndTimeController dtc = new DateAndTimeController(dtm);
 		dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
 		dtm.setSecond(new Second(0));
 		dtm.setTimeZone(new TimeZone(1));
 
-		ObservedProperty op = new ObservedProperty();
+		final ObservedProperty op = new ObservedProperty();
 		op.setName("Temperature");
-		
-		UnitOfMeasurement uom = new UnitOfMeasurement();
+
+		final UnitOfMeasurement uom = new UnitOfMeasurement();
 		uom.setName("Degree Celsius");
-		
-		Column c1 = new Column(1,firstLineWithData),
+
+		final Column c1 = new Column(1,firstLineWithData),
 				c2 = new Column(2,firstLineWithData);
-		Column[] cols = {c1,c2};
-		
-		FeatureOfInterest foi = new FeatureOfInterest();
+		final Column[] cols = {c1,c2};
+
+		final FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setGenerated(true);
 		foi.setConcatString("/");
 		foi.setUseNameAfterPrefixAsURI(true);
 		foi.setRelatedCols(cols);
 		foi.setUriPrefix("http://example.com/");
-		
-		Sensor sn = new Sensor();
+
+		final Sensor sn = new Sensor();
 		sn.setName("Thermometer xy");
-		
-		NumericValue nv1 = new NumericValue();
+
+		final NumericValue nv1 = new NumericValue();
 		nv1.setTableElement(c1);
 		nv1.setDateAndTime(dtm);
 		nv1.setObservedProperty(op);
 		nv1.setFeatureOfInterest(foi);
 		nv1.setSensor(sn);
 		nv1.setUnitOfMeasurement(uom);
-		
-		NumericValue nv2 = new NumericValue();
+
+		final NumericValue nv2 = new NumericValue();
 		nv2.setTableElement(c2);
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
 		nv2.setSensor(sn);
-		nv2.setUnitOfMeasurement(uom);	
-		
-		
+		nv2.setUnitOfMeasurement(uom);
+
+
 		ModelStore.getInstance().add(nv1);
 		ModelStore.getInstance().add(nv2);
 		ModelStore.getInstance().add(foi);
-		
+
 		/*
-		 * Set-Up Column metadata 
+		 * Set-Up Column metadata
 		 */
-		Step3Model s3M = new Step3Model(1, firstLineWithData, false);
-		List<String> selection = new ArrayList<String>(1);
+		final Step3Model s3M = new Step3Model(1, firstLineWithData, false);
+		final List<String> selection = new ArrayList<String>(1);
 		selection.add(Lang.l().step3ColTypeMeasuredValue());
 		selection.add(Lang.l().step3MeasuredValNumericValue());
 		selection.add(".SEP,");
@@ -112,12 +111,12 @@ public class Step6cTestGeneratedFoi {
 		mC.registerProvider(s3M);
 		mC.updateModel();
 		mC.removeProvider(s3M);
-		Step6bModel s6bM = new Step6bModel(nv1,foi);
+		final Step6bModel s6bM = new Step6bModel(nv1,foi);
 		mC.registerProvider(s6bM);
 		mC.updateModel();
 		mC.removeProvider(s6bM);
 
-		Step6cModel step7Model = new Step6cModel(foi);
+		final Step6cModel step7Model = new Step6cModel(foi);
 		mC.setStepController(new Step6cController(step7Model));
 	}
 

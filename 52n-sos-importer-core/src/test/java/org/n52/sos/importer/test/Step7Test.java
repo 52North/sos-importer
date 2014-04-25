@@ -48,26 +48,23 @@ import org.n52.sos.importer.model.table.Column;
 
 public class Step7Test {
 	public static void main(final String[] args) {
-		final Object[][] o = {
-				{"01/06/2010", "11:45", "12,12", "23,123"},
-				{"01/06/2010", "23:45", "323,123", "432,123"}};
-		TableController.getInstance().setContent(o); 
+		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
 		final int firstLineWithData = 0;
-		
+
 		final DateAndTime dtm1 = new DateAndTime();
 		dtm1.setGroup("1");
 		final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
 		dtc1.assignPattern("dd/MM/yyyy", new Column(0,firstLineWithData));
 		ModelStore.getInstance().add(dtm1);
-		
+
 		final DateAndTime dtm2 = new DateAndTime();
 		dtm2.setGroup("1");
 		final DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
 		dtc2.assignPattern("HH:mm", new Column(1,firstLineWithData));
 		ModelStore.getInstance().add(dtm2);
-		
+
 		dtc2.mergeDateAndTimes();
-		
+
 		final DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
 		dtm.setSecond(new Second(0));
 		dtm.setTimeZone(new TimeZone(0));
@@ -82,7 +79,7 @@ public class Step7Test {
 		p.setLongitude(lon);
 		p.setHeight(h);
 		p.setEPSGCode(epsgCode);
-		
+
 		final ObservedProperty op = new ObservedProperty();
 		op.setName("Temperature");
 		final UnitOfMeasurement uom = new UnitOfMeasurement();
@@ -91,7 +88,7 @@ public class Step7Test {
 		foi.setName("Weatherstation Muenster");
 		final Sensor sn = new Sensor();
 		sn.setName("Thermometer 1");
-		
+
 		final Sensor sn2 = new Sensor();
 		sn2.setName("Thermometer 2");
 		try {
@@ -99,7 +96,7 @@ public class Step7Test {
 		} catch (final URISyntaxException e) {
 			e.printStackTrace();
 		}
-		
+
 		final NumericValue nv1 = new NumericValue();
 		nv1.setTableElement(new Column(1,firstLineWithData));
 		nv1.setDateAndTime(dtm);
@@ -107,23 +104,23 @@ public class Step7Test {
 		nv1.setFeatureOfInterest(foi);
 		nv1.setSensor(sn);
 		nv1.setUnitOfMeasurement(uom);
-		
+
 		final NumericValue nv2 = new NumericValue();
 		nv2.setTableElement(new Column(2,firstLineWithData));
 		nv2.setDateAndTime(dtm);
 		nv2.setObservedProperty(op);
 		nv2.setFeatureOfInterest(foi);
 		nv2.setSensor(sn2);
-		nv2.setUnitOfMeasurement(uom);	
-		
+		nv2.setUnitOfMeasurement(uom);
+
 		foi.setPosition(p);
-		
+
 		ModelStore.getInstance().add(nv1);
 		ModelStore.getInstance().add(nv2);
 		ModelStore.getInstance().add(foi);
-		
+
 		final MainController f = MainController.getInstance();
-		
+
 		f.setStepController(new Step7Controller());
 	}
 }
