@@ -37,8 +37,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
 public class Step7ModelHandlerTest {
 
 	@Test
-	public void should_add_binding_if_set_in_model()
-	{
+	public void shouldAddBindingIfSetInModel() {
 		final String binding = "test-binding";
 		final Step7Model stepModel = new Step7Model(null, null, false, null, null, binding);
 		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
@@ -49,8 +48,7 @@ public class Step7ModelHandlerTest {
 	}
 
 	@Test
-	public void should_not_add_binding_if_empty_or_null()
-	{
+	public void shouldNotAddBindingIfEmptyOrNull() {
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "");
 		final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
@@ -64,8 +62,7 @@ public class Step7ModelHandlerTest {
 	}
 
 	@Test
-	public void should_add_version_if_set_in_model()
-	{
+	public void shouldAddVersionIfSetInModel() {
 		final String version = "test-version";
 		final Step7Model stepModel = new Step7Model(null, null, false, null, version, null);
 		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
@@ -75,8 +72,7 @@ public class Step7ModelHandlerTest {
 	}
 
 	@Test
-	public void should_not_add_version_if_empty_or_null()
-	{
+	public void shouldNotAddVersionIfEmptyOrNull() {
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "",null);
 		final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
