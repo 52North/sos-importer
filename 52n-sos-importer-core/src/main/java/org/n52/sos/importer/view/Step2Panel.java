@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.view;
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -70,102 +71,110 @@ public class Step2Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final EditableJComboBoxPanel columnSeparatorCombobox;
-	private final EditableJComboBoxPanel commentIndicatorCombobox;
-	private final EditableJComboBoxPanel textQualifierCombobox;
+	private EditableJComboBoxPanel columnSeparatorCombobox;
+	private EditableJComboBoxPanel commentIndicatorCombobox;
+	private EditableJComboBoxPanel textQualifierCombobox;
 
-	private final JComboBox<String> decimalSeparatorCombobox;
+	private JComboBox<String> decimalSeparatorCombobox;
 
-	private final JTextArea csvFileTextArea;
+	private JTextArea csvFileTextArea;
 	private int csvFileRowCount = 0;
 
-	private final SpinnerNumberModel lineModel;
-	private final JSpinner firstDataJS;
-	private final JLabel firstDataJL;
+	private SpinnerNumberModel lineModel;
+	private JSpinner firstDataJS;
+	private JLabel firstDataJL;
 
-	private final JLabel useHeaderJL;
-	private final JCheckBox useHeaderJCB;
+	private JLabel useHeaderJL;
+	private JCheckBox useHeaderJCB;
 
 	private int firstLineWithDataTmp = -1;
-	private final JCheckBox isSampleBasedCheckBox;
+	private JCheckBox isSampleBasedCheckBox;
 
 	public Step2Panel(final int csvFileRowCount) {
 		super();
-		//
 		this.csvFileRowCount = csvFileRowCount;
-		//
-		final EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-		//
-		// FirstLineWithData
-		//
-		lineModel = new SpinnerNumberModel(0, 0, this.csvFileRowCount-1, 1);
-		//
-		//	useHeader Checkbox
-		//
-		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
-		useHeaderJCB = new JCheckBox();
-		if (logger.isTraceEnabled()) {
-			useHeaderJCB.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					logger.trace("useHeader state changed. is selected?" +
-							useHeaderJCB.isSelected());
-				}
-			});
-		}
-		useHeaderJCB.setSelected(false);
-		// will be enabled if firstLineWithdata is set to > 0
-		useHeaderJCB.setEnabled(false);
-		final JPanel useHeaderPanel = new JPanel();
-		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		useHeaderPanel.add(useHeaderJL);
-		useHeaderPanel.add(useHeaderJCB);
-		/*
-		 * Decimal Separator
-		 */
-		final String[] decimalSeparators = Constants.DECIMAL_SEPARATORS;
-		//
-		//
-		//	CSV-setting panel
-		//
+
 		final JPanel csvSettingsPanel = new JPanel();
-		csvSettingsPanel.setBorder(new TitledBorder(null, Lang.l().metadata(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		final GridBagLayout gbl_csvSettingsPanel = new GridBagLayout();
-		gbl_csvSettingsPanel.columnWidths = new int[]{239, 0};
-		gbl_csvSettingsPanel.rowHeights = new int[]{25, 25, 25, 25, 25, 0};
-		gbl_csvSettingsPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_csvSettingsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		csvSettingsPanel.setLayout(gbl_csvSettingsPanel);
-		columnSeparatorCombobox = new EditableJComboBoxPanel(
-				items.getColumnSeparators(),
-				Lang.l().step2ColumnSeparator(),
-				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
-		final GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
-		gbc_columnSeparatorCombobox.fill = GridBagConstraints.BOTH;
-		gbc_columnSeparatorCombobox.insets = new Insets(0, 0, 5, 0);
-		gbc_columnSeparatorCombobox.gridx = 0;
-		gbc_columnSeparatorCombobox.gridy = 0;
-		csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
-		commentIndicatorCombobox = new EditableJComboBoxPanel(
-				items.getCommentIndicators(),
-				Lang.l().step2CommentIndicator(),
-				ToolTips.get(ToolTips.COMMENT_INDICATOR));
-		final GridBagConstraints gbc_commentIndicatorCombobox = new GridBagConstraints();
-		gbc_commentIndicatorCombobox.fill = GridBagConstraints.BOTH;
-		gbc_commentIndicatorCombobox.insets = new Insets(0, 0, 5, 0);
-		gbc_commentIndicatorCombobox.gridx = 0;
-		gbc_commentIndicatorCombobox.gridy = 1;
-		csvSettingsPanel.add(commentIndicatorCombobox, gbc_commentIndicatorCombobox);
-		textQualifierCombobox = new EditableJComboBoxPanel(
-				items.getTextQualifiers(),
-				Lang.l().step2TextQualifier(),
-				ToolTips.get(ToolTips.TEXT_QUALIFIER));
-		final GridBagConstraints gbc_textQualifierCombobox = new GridBagConstraints();
-		gbc_textQualifierCombobox.fill = GridBagConstraints.BOTH;
-		gbc_textQualifierCombobox.insets = new Insets(0, 0, 5, 0);
-		gbc_textQualifierCombobox.gridx = 0;
-		gbc_textQualifierCombobox.gridy = 2;
-		csvSettingsPanel.add(textQualifierCombobox, gbc_textQualifierCombobox);
+		setupStyle(csvSettingsPanel);
+		final EditableComboBoxItems items = EditableComboBoxItems.getInstance();
+		int gridY = 0;
+		addColumnSeparator(csvSettingsPanel, items, gridY);
+		addCommentIndicator(csvSettingsPanel, items, gridY++);
+		addTextQualifier(csvSettingsPanel, items, gridY++);
+		addFirstLineWithData(csvFileRowCount, csvSettingsPanel, gridY++);
+		addDecimalSeparator(csvSettingsPanel, gridY++);
+		// USE_HEADER uncomment next line to enable again
+		addUseHeaderCheckbox(csvSettingsPanel, gridY++);
+		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
+		final JPanel csvDataPanel = new JPanel();
+		addCsvDataPanel(csvDataPanel);
+
+		add(csvSettingsPanel);
+		add(csvDataPanel);
+	}
+
+	private void addCsvDataPanel(final JPanel csvDataPanel) {
+		csvFileTextArea = new JTextArea(20, 60);
+		csvFileTextArea.setEditable(false);
+		final JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
+		csvDataPanel.setBorder(new TitledBorder(null, Lang.l().step2DataPreviewLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		csvDataPanel.setLayout(new BorderLayout(0, 0));
+		csvDataPanel.add(scrollPane);
+		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+	}
+
+	private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel, int gridY) {
+		addIsSampleBased(csvSettingsPanel, gridY);
+	}
+
+	private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
+		// isSampleBasedFile
+		isSampleBasedCheckBox = new JCheckBox();
+		final JPanel isSampleBasedFilePanel = new JPanel();
+		isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
+		isSampleBasedFilePanel.add(isSampleBasedCheckBox);
+		isSampleBasedCheckBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (isSampleBasedCheckBox.isSelected()) {
+					// TODO activateSampleBasedGuiElements
+					firstDataJS.setEnabled(false);
+					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
+					firstDataJS.setValue(0);
+				} else {
+					// TODO disable all sample based elements
+					firstDataJS.setValue(firstLineWithDataTmp);
+					firstDataJS.setEnabled(true);
+				}
+			}
+		});
+		final GridBagConstraints gbc_isSampleBasedFilePanel = new GridBagConstraints();
+		gbc_isSampleBasedFilePanel.fill = GridBagConstraints.BOTH;
+		gbc_isSampleBasedFilePanel.gridx = 0;
+		gbc_isSampleBasedFilePanel.gridy = gridY;
+		csvSettingsPanel.add(isSampleBasedFilePanel, gbc_isSampleBasedFilePanel);
+	}
+
+	private void addDecimalSeparator(final JPanel csvSettingsPanel, final int gridY) {
+		final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
+		decimalSeparatorCombobox = new JComboBox<String>(Constants.DECIMAL_SEPARATORS);
+		decimalSeparatorCombobox.setSelectedIndex(0);
+		final JPanel decimalSeparatorPanel = new JPanel();
+		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
+		decimalSeparatorPanel.add(decimalSeparatorLabel);
+		decimalSeparatorPanel.add(decimalSeparatorCombobox);
+		final GridBagConstraints gbc_decimalSeparatorPanel = new GridBagConstraints();
+		gbc_decimalSeparatorPanel.fill = GridBagConstraints.BOTH;
+		gbc_decimalSeparatorPanel.gridx = 0;
+		gbc_decimalSeparatorPanel.gridy = gridY;
+		csvSettingsPanel.add(decimalSeparatorPanel, gbc_decimalSeparatorPanel);
+	}
+
+	private void addFirstLineWithData(final int csvFileRowCount,
+			final JPanel csvSettingsPanel, final int gridY) {
+		lineModel = new SpinnerNumberModel(0, 0, csvFileRowCount-1, 1);
 		firstDataJS = new JSpinner(lineModel);
 		// Highlight the current selected line in the file preview
 		firstDataJS.addChangeListener(new ChangeListener() {
@@ -200,62 +209,88 @@ public class Step2Panel extends JPanel {
 		gbc_firstLineWithDataJPanel.fill = GridBagConstraints.BOTH;
 		gbc_firstLineWithDataJPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_firstLineWithDataJPanel.gridx = 0;
-		gbc_firstLineWithDataJPanel.gridy = 3;
+		gbc_firstLineWithDataJPanel.gridy = gridY;
 		csvSettingsPanel.add(firstLineWithDataJPanel, gbc_firstLineWithDataJPanel);
-		final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-		decimalSeparatorCombobox = new JComboBox<String>(decimalSeparators);
-		decimalSeparatorCombobox.setSelectedIndex(0);
-		final JPanel decimalSeparatorPanel = new JPanel();
-		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
-		decimalSeparatorPanel.add(decimalSeparatorLabel);
-		decimalSeparatorPanel.add(decimalSeparatorCombobox);
-		// USE_HEADER uncomment next line to enable again
-		// csvSettingsPanel.add(useHeaderPanel);
-		final GridBagConstraints gbc_decimalSeparatorPanel = new GridBagConstraints();
-		gbc_decimalSeparatorPanel.fill = GridBagConstraints.BOTH;
-		gbc_decimalSeparatorPanel.gridx = 0;
-		gbc_decimalSeparatorPanel.gridy = 4;
-		csvSettingsPanel.add(decimalSeparatorPanel, gbc_decimalSeparatorPanel);
-		// isSampleBasedFile
-		isSampleBasedCheckBox = new JCheckBox();
-		final JPanel isSampleBasedFilePanel = new JPanel();
-		isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
-		isSampleBasedFilePanel.add(isSampleBasedCheckBox);
-		isSampleBasedCheckBox.addActionListener(new ActionListener() {
+	}
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (isSampleBasedCheckBox.isSelected()) {
-					// TODO activateSampleBasedGuiElements
-					firstDataJS.setEnabled(false);
-					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
-					firstDataJS.setValue(0);
-				} else {
-					// TODO disable all sample based elements
-					firstDataJS.setValue(firstLineWithDataTmp);
-					firstDataJS.setEnabled(true);
+	private void addTextQualifier(final JPanel csvSettingsPanel,
+			final EditableComboBoxItems items, final int gridY) {
+		textQualifierCombobox = new EditableJComboBoxPanel(
+				items.getTextQualifiers(),
+				Lang.l().step2TextQualifier(),
+				ToolTips.get(ToolTips.TEXT_QUALIFIER));
+		final GridBagConstraints gbc_textQualifierCombobox = new GridBagConstraints();
+		gbc_textQualifierCombobox.fill = GridBagConstraints.BOTH;
+		gbc_textQualifierCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_textQualifierCombobox.gridx = 0;
+		gbc_textQualifierCombobox.gridy = gridY;
+		csvSettingsPanel.add(textQualifierCombobox, gbc_textQualifierCombobox);
+	}
+
+	private void addCommentIndicator(final JPanel csvSettingsPanel,
+			final EditableComboBoxItems items, final int gridY) {
+		commentIndicatorCombobox = new EditableJComboBoxPanel(
+				items.getCommentIndicators(),
+				Lang.l().step2CommentIndicator(),
+				ToolTips.get(ToolTips.COMMENT_INDICATOR));
+		final GridBagConstraints gbc_commentIndicatorCombobox = new GridBagConstraints();
+		gbc_commentIndicatorCombobox.fill = GridBagConstraints.BOTH;
+		gbc_commentIndicatorCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_commentIndicatorCombobox.gridx = 0;
+		gbc_commentIndicatorCombobox.gridy = gridY;
+		csvSettingsPanel.add(commentIndicatorCombobox, gbc_commentIndicatorCombobox);
+	}
+
+	private void setupStyle(final JPanel csvSettingsPanel) {
+		csvSettingsPanel.setBorder(new TitledBorder(null, Lang.l().metadata(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		final GridBagLayout gbl_csvSettingsPanel = new GridBagLayout();
+		gbl_csvSettingsPanel.columnWidths = new int[]{239, 0};
+		gbl_csvSettingsPanel.rowHeights = new int[]{25, 25, 25, 25, 25, 0};
+		gbl_csvSettingsPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_csvSettingsPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		csvSettingsPanel.setLayout(gbl_csvSettingsPanel);
+	}
+
+	private void addColumnSeparator(final JPanel csvSettingsPanel,
+			final EditableComboBoxItems items,
+			final int gridY) {
+		columnSeparatorCombobox = new EditableJComboBoxPanel(
+				items.getColumnSeparators(),
+				Lang.l().step2ColumnSeparator(),
+				ToolTips.get(ToolTips.COLUMN_SEPARATOR));
+		final GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
+		gbc_columnSeparatorCombobox.fill = GridBagConstraints.BOTH;
+		gbc_columnSeparatorCombobox.insets = new Insets(0, 0, 5, 0);
+		gbc_columnSeparatorCombobox.gridx = 0;
+		gbc_columnSeparatorCombobox.gridy = gridY;
+		csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
+	}
+
+	private void addUseHeaderCheckbox(final Container csvSettingsPanel, final int gridY) {
+		useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
+		useHeaderJCB = new JCheckBox();
+		if (logger.isTraceEnabled()) {
+			useHeaderJCB.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					logger.trace("useHeader state changed. is selected?" +
+							useHeaderJCB.isSelected());
 				}
-			}
-		});
-		final GridBagConstraints gbc_isSampleBasedFilePanel = new GridBagConstraints();
-		gbc_isSampleBasedFilePanel.fill = GridBagConstraints.BOTH;
-		gbc_isSampleBasedFilePanel.gridx = 0;
-		gbc_isSampleBasedFilePanel.gridy = 5;
-		csvSettingsPanel.add(isSampleBasedFilePanel, gbc_isSampleBasedFilePanel);
-		//
-		//	CSV text area
-		//
-		csvFileTextArea = new JTextArea(20, 60);
-		csvFileTextArea.setEditable(false);
-		final JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
-		final JPanel csvDataPanel = new JPanel();
-		csvDataPanel.setBorder(new TitledBorder(null, Lang.l().step2DataPreviewLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		csvDataPanel.setLayout(new BorderLayout(0, 0));
-		csvDataPanel.add(scrollPane);
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		add(csvSettingsPanel);
-		add(csvDataPanel);
+			});
+		}
+		useHeaderJCB.setSelected(false);
+		// will be enabled if firstLineWithdata is set to > 0
+		useHeaderJCB.setEnabled(false);
+		final JPanel useHeaderPanel = new JPanel();
+		useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		useHeaderPanel.add(useHeaderJL);
+		useHeaderPanel.add(useHeaderJCB);
+		final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
+		gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
+		gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_useHeaderPanel.gridx = 0;
+		gbc_useHeaderPanel.gridy = gridY;
+		csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
 	}
 
 	public String getCommentIndicator() {
