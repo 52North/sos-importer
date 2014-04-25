@@ -31,13 +31,11 @@ import org.junit.Test;
 import org.n52.sos.importer.model.Step7Model;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
-
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
  */
 public class Step7ModelHandlerTest {
-	
+
 	@Test
 	public void should_add_binding_if_set_in_model()
 	{
@@ -45,26 +43,26 @@ public class Step7ModelHandlerTest {
 		final Step7Model stepModel = new Step7Model(null, null, false, null, null, binding);
 		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModel, importConf);
-		
+
 		assertThat(importConf.getSosMetadata().isSetBinding(), is(TRUE));
 		assertThat(importConf.getSosMetadata().getBinding(), is(binding));
 	}
-	
+
 	@Test
 	public void should_not_add_binding_if_empty_or_null()
 	{
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "");
 		final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
-		
+
 		final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null);
 		final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
-		
+
 		assertThat(importConfEmpty.getSosMetadata().isSetBinding(), is(FALSE));
 		assertThat(importConfNull.getSosMetadata().isSetBinding(), is(FALSE));
 	}
-	
+
 	@Test
 	public void should_add_version_if_set_in_model()
 	{
@@ -72,21 +70,21 @@ public class Step7ModelHandlerTest {
 		final Step7Model stepModel = new Step7Model(null, null, false, null, version, null);
 		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModel, importConf);
-		
+
 		assertThat(importConf.getSosMetadata().getVersion(), is(version));
 	}
-	
+
 	@Test
 	public void should_not_add_version_if_empty_or_null()
 	{
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "",null);
 		final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
-		
+
 		final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null);
 		final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
 		new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
-		
+
 		assertThat(importConfEmpty.getSosMetadata().getVersion(), is(nullValue()));
 		assertThat(importConfNull.getSosMetadata().getVersion(), is(nullValue()));
 	}
