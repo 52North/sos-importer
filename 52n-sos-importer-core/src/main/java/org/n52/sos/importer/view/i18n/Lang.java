@@ -391,20 +391,41 @@ public abstract class Lang {
 	 */
 	public abstract String step2FirstLineWithData();
 	/**
-	 * @return Interpret Header
-	 */
-	public abstract String step2ParseHeader();
-	/**
-	 * @return Text qualifier
-	 */
-	public abstract String step2TextQualifier();
-
-	/**
 	 *
 	 * @return Is data file sample based
 	 */
 	public abstract String step2IsSampleBased();
+	/**
+	 * @return Interpret Header
+	 */
+	public abstract String step2ParseHeader();
 
+	/**
+	 * @return Offset date information
+	 */
+	public abstract String step2SampleBasedDateOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset of the line containing the date of the
+     *                      sample from the start line.
+	 */
+	public abstract String step2SampleBasedDateOffsetToolTip();
+	/**
+	 *
+	 * @return Regular Expression "Sample Start"
+	 */
+	public abstract String step2SampleBasedStartRegExLabel();
+	/**
+	 *
+	 * @return Used to identify the start of a new sample.\n
+	 * 							MUST match the whole line.
+	 */
+	public abstract String step2SampleBasedStartRegExTooltip();
+	/**
+	 * @return Text qualifier
+	 */
+	public abstract String step2TextQualifier();
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */
@@ -583,6 +604,7 @@ public abstract class Lang {
 	 * @return Step 6a: Add missing dates and times
 	 */
 	public abstract String step6aDescription();
+
 	/**
 	 * @return <html>What is the <u>Date & Time</u> for all measured values?</html>
 	 */
@@ -600,7 +622,6 @@ public abstract class Lang {
 	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
 	 */
 	public abstract String step6bModelDescription();
-
 	/**
 	 * @return Please select the columns to generate the name.<br />
 	 * 			\nMultiple columns could be selected.
@@ -640,18 +661,22 @@ public abstract class Lang {
 	 * @return What is the position of
 	 */
 	public abstract String step6cModelDescription();
+
 	/**
 	 * @return Automatically Generate Identifier
 	 */
 	public abstract String step6Generation();
+
 	/**
 	 * @return Set Identifier Manually
 	 */
 	public abstract String step6ManualInput();
+
 	/**
 	 * @return Some User Input is missing. Please enter the required information.
 	 */
 	public abstract String step6MissingUserInput();
+
 	/**
 	 * @return No user input at all. Please fill in the required information.
 	 */
@@ -934,17 +959,4 @@ public abstract class Lang {
 	 * @return Year
 	 */
 	public abstract String year();
-
-	/**
-	 *
-	 * @return Regular Expression "Sample Start"
-	 */
-	public abstract String step2SampleBasedStartRegExLabel();
-
-	/**
-	 *
-	 * @return Used to identify the start of a new sample.\n
-	 * 							MUST match the whole line.
-	 */
-	public abstract String step2SampleBasedStartRegExTooltip();
 }

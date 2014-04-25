@@ -93,6 +93,9 @@ public class Step2Panel extends JPanel {
 	private JCheckBox isSampleBasedCheckBox;
 	private JPanel startRegExPanel;
 	private JTextField startRegExTF;
+	private JPanel dateOffsetPanel;
+	private JSpinner dateOffset;
+	private SpinnerNumberModel dateOffsetModel;
 
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -108,7 +111,7 @@ public class Step2Panel extends JPanel {
 		addFirstLineWithData(csvFileRowCount, csvSettingsPanel, gridY++);
 		addDecimalSeparator(csvSettingsPanel, gridY++);
 		addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
-		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
+		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++, csvFileRowCount);
 		final JPanel csvDataPanel = new JPanel();
 		addCsvDataPanel(csvDataPanel);
 
@@ -126,9 +129,44 @@ public class Step2Panel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 	}
 
-	private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel, int gridY) {
+	private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel,
+			int gridY,
+			final int max) {
 		addIsSampleBased(csvSettingsPanel, gridY++);
 		addSampleStartRegEx(csvSettingsPanel, gridY++);
+		addSampleDateOffset(csvSettingsPanel, gridY++, max);
+	}
+
+	private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
+		// isSampleBasedFile
+		isSampleBasedCheckBox = new JCheckBox();
+		final JPanel isSampleBasedFilePanel = new JPanel();
+		isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
+		isSampleBasedFilePanel.add(isSampleBasedCheckBox);
+		isSampleBasedCheckBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (isSampleBasedCheckBox.isSelected()) {
+					// TODO activateSampleBasedGuiElements
+					setEnabled(true);
+					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
+					firstDataJS.setValue(0);
+				} else {
+					// TODO disable all sample based elements
+					setEnabled(false);
+					firstDataJS.setValue(firstLineWithDataTmp);
+				}
+			}
+
+			private void setEnabled(final boolean state) {
+				startRegExPanel.setVisible(state);
+				dateOffsetPanel.setVisible(state);
+				firstDataJS.setEnabled(!state);
+			}
+		});
+		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
 	}
 
 	private void addSampleStartRegEx(final JPanel csvSettingsPanel,
@@ -143,35 +181,29 @@ public class Step2Panel extends JPanel {
 		csvSettingsPanel.add(startRegExPanel, simpleConstraints(gridY));
 	}
 
-	private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
-		// isSampleBasedFile
-		isSampleBasedCheckBox = new JCheckBox();
-		final JPanel isSampleBasedFilePanel = new JPanel();
-		isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
-		isSampleBasedFilePanel.add(isSampleBasedCheckBox);
-		isSampleBasedCheckBox.addActionListener(new ActionListener() {
-
+	private void addSampleDateOffset(final JPanel csvSettingsPanel,
+			final int gridY,
+			final int max) {
+		dateOffsetModel = new SpinnerNumberModel(1, 1, max, 1);
+		dateOffsetModel.addChangeListener(new ChangeListener() {
 			@Override
-			public void actionPerformed(final ActionEvent e) {
- 				if (isSampleBasedCheckBox.isSelected()) {
-					// TODO activateSampleBasedGuiElements
-					setEnabled(true);
-					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
-					firstDataJS.setValue(0);
-				} else {
-					// TODO disable all sample based elements
-					setEnabled(false);
-					firstDataJS.setValue(firstLineWithDataTmp);
+			public void stateChanged(final ChangeEvent e) {
+				final int number = dateOffsetModel.getNumber().intValue();
+				if(number < 0) {
+					dateOffsetModel.setValue(0);
+				} else if (number > (csvFileRowCount-1)){
+					dateOffsetModel.setValue((csvFileRowCount-1));
 				}
 			}
-
-			private void setEnabled(final boolean state) {
-				startRegExPanel.setVisible(state);
-				firstDataJS.setEnabled(!state);
-			}
 		});
-		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
+		dateOffset = new JSpinner(dateOffsetModel);
+		dateOffsetPanel = new JPanel();
+		dateOffsetPanel.setToolTipText(Lang.l().step2SampleBasedDateOffsetToolTip());
+		dateOffsetPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		dateOffsetPanel.add(new JLabel(Lang.l().step2SampleBasedDateOffsetLabel() + ":"));
+		dateOffsetPanel.add(dateOffset);
+		dateOffsetPanel.setVisible(false);
+		csvSettingsPanel.add(dateOffsetPanel, simpleConstraints(gridY));
 	}
 
 	private GridBagConstraints simpleConstraints(final int gridY) {
@@ -445,6 +477,15 @@ public class Step2Panel extends JPanel {
 
 	public Step2Panel setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
 		startRegExTF.setText(sampleBasedStartRegEx);
+		return this;
+	}
+
+	public int getSampleBasedDateOffset() {
+		return dateOffsetModel.getNumber().intValue();
+	}
+
+	public Step2Panel setSampleBasedDateOffset(final int dateOffset) {
+		dateOffsetModel.setValue(dateOffset);
 		return this;
 	}
 }

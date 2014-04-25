@@ -36,7 +36,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
 public class Step2ModelHandlerTest {
 
 	@Test
-	public void shouldAddVersionIfSetInModel() {
+	public void shouldSetSampleBasedStartRegEx() {
 		final String sampleBasedStartRegEx = "test-regex";
 		final Step2Model stepModel = new Step2Model("",2)
 			.setSampleBased(true)
@@ -46,6 +46,20 @@ public class Step2ModelHandlerTest {
 
 		assertThat(importConf.getDataFile().isSetSampleStartRegEx(), is(true));
 		assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
+	}
+
+	@Test
+	public void shouldSetSampleBasedDateOffset() {
+		final int dateOffset = 25;
+		final Step2Model stepModel = new Step2Model("",2)
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx("test-regex")
+			.setSampleBasedDateOffset(dateOffset);
+		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+		new Step2ModelHandler().handleModel(stepModel, importConf);
+
+		assertThat(importConf.getDataFile().isSetSampleDateOffset(), is(true));
+		assertThat(importConf.getDataFile().getSampleDateOffset(), is(dateOffset));
 	}
 
 }

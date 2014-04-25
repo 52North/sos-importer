@@ -34,11 +34,13 @@ import org.junit.Test;
  */
 public class Step2PanelTest {
 
+	private static final int MAX_ROWS = 30;
+
 	private Step2Panel panel;
 
 	@Before
 	public void init() {
-		panel = new Step2Panel(1);
+		panel = new Step2Panel(MAX_ROWS);
 	}
 
 	@Test
@@ -60,5 +62,16 @@ public class Step2PanelTest {
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
 		assertThat(panel.getSampleBasedStartRegEx(), is(""));
+	}
+
+	@Test
+	public void shouldReturnValueIfIsSampleBasedStartRegExIsSet() {
+		final int dateOffset = MAX_ROWS-5;
+		assertThat(panel.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
+	}
+
+	@Test
+	public void shouldReturnOneAsDefaultValueForSampleBasedStartRegEx() {
+		assertThat(panel.getSampleBasedDateOffset(), is(1));
 	}
 }

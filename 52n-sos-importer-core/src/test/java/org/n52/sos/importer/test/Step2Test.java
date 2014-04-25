@@ -34,7 +34,7 @@ public class Step2Test {
 		final MainController f = MainController.getInstance();
 		final TableController tc = TableController.getInstance();
 		tc.setContent(TestData.EXAMPLE_TABLE);
-		final Step2Model s2M = new Step2Model("line 1\nline2", 2);
+		final Step2Model s2M = new Step2Model("line 1\nline2\nline3\nlin4\nline5\nline6", 6);
 		final Step2Controller s2C = new Step2Controller(
 				s2M);
 		//

@@ -47,6 +47,8 @@ public class Step2Model implements StepModel {
 
 	private String sampleBasedStartRegEx = "";
 
+	private int dateOffset = 0;
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -146,5 +148,14 @@ public class Step2Model implements StepModel {
 
 	public String getSampleBasedStartRegEx() {
 		return sampleBasedStartRegEx;
+	}
+
+	public Step2Model setSampleBasedDateOffset(final int dateOffset) {
+		this.dateOffset = dateOffset;
+		return this;
+	}
+
+	public int getSampleBasedDateOffset() {
+		return dateOffset;
 	}
 }

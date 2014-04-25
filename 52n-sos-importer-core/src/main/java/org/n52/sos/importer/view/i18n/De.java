@@ -33,7 +33,7 @@ import org.n52.sos.importer.Constants;
  *
  * @author e.h.juerrens@52north.org
  */
-public class De extends Lang{
+public class De extends Lang {
 
 	private final static Locale locale = Locale.GERMAN;
 
@@ -418,6 +418,16 @@ public class De extends Lang{
 	@Override
 	public String step2ParseHeader() {
 		return "Kopfzeile auswerten";
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetLabel() {
+		return "Zeilenabstand 'Datumsinformation'";
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetToolTip() {
+		return "Der Abstand zwischen dem Start einer Messreihe und der Zeile mit den Datumsinformationen";
 	}
 
 	@Override
