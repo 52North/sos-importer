@@ -45,7 +45,7 @@ Features:
                                    group will be parsed to a java.util.Date
                                    using "sampleDatePattern" attribute.
    * "sampleDatePattern" - the pattern used to parse the date information of
-                           the current pattern.
+                           the current sample.
    * "sampleDataOffset"  - the offset in lines from sample beginning till the
                            first lines with data.
    * "sampleSizeOffset"  - the offset in lines from sample beginning till the

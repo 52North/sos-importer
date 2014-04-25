@@ -655,7 +655,7 @@
                 <xs:annotation>
                     <xs:documentation>
                         Defines the pattern used to parse the date information
-                        of the current pattern.
+                        of the current sample.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
