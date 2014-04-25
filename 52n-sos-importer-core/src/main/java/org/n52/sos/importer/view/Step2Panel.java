@@ -86,6 +86,9 @@ public class Step2Panel extends JPanel {
 	private final JLabel useHeaderJL;
 	private final JCheckBox useHeaderJCB;
 
+	private int firstLineWithDataTmp = -1;
+	private final JCheckBox isSampleBasedCheckBox;
+
 	public Step2Panel(final int csvFileRowCount) {
 		super();
 		//
@@ -213,6 +216,33 @@ public class Step2Panel extends JPanel {
 		gbc_decimalSeparatorPanel.gridx = 0;
 		gbc_decimalSeparatorPanel.gridy = 4;
 		csvSettingsPanel.add(decimalSeparatorPanel, gbc_decimalSeparatorPanel);
+		// isSampleBasedFile
+		isSampleBasedCheckBox = new JCheckBox();
+		final JPanel isSampleBasedFilePanel = new JPanel();
+		isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
+		isSampleBasedFilePanel.add(isSampleBasedCheckBox);
+		isSampleBasedCheckBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (isSampleBasedCheckBox.isSelected()) {
+					// TODO activateSampleBasedGuiElements
+					firstDataJS.setEnabled(false);
+					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
+					firstDataJS.setValue(0);
+				} else {
+					// TODO disable all sample based elements
+					firstDataJS.setValue(firstLineWithDataTmp);
+					firstDataJS.setEnabled(true);
+				}
+			}
+		});
+		final GridBagConstraints gbc_isSampleBasedFilePanel = new GridBagConstraints();
+		gbc_isSampleBasedFilePanel.fill = GridBagConstraints.BOTH;
+		gbc_isSampleBasedFilePanel.gridx = 0;
+		gbc_isSampleBasedFilePanel.gridy = 5;
+		csvSettingsPanel.add(isSampleBasedFilePanel, gbc_isSampleBasedFilePanel);
 		//
 		//	CSV text area
 		//
@@ -340,5 +370,14 @@ public class Step2Panel extends JPanel {
 
 	public void setUseHeader(final boolean useHeader) {
 		useHeaderJCB.setSelected(useHeader);
+	}
+
+	public Step2Panel setSampleBased(final boolean isSampleBased) {
+		isSampleBasedCheckBox.setSelected(isSampleBased);
+		return this;
+	}
+
+	public boolean isSampleBased() {
+		return isSampleBasedCheckBox.isSelected();
 	}
 }

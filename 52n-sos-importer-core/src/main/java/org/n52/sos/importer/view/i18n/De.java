@@ -410,6 +410,11 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step2IsSampleBased() {
+		return "Besteht die Datei aus Messreihen";
+	}
+
+	@Override
 	public String step2ParseHeader() {
 		return "Kopfzeile auswerten";
 	}

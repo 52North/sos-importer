@@ -398,6 +398,13 @@ public abstract class Lang {
 	 * @return Text qualifier
 	 */
 	public abstract String step2TextQualifier();
+
+	/**
+	 *
+	 * @return Is data file sample based
+	 */
+	public abstract String step2IsSampleBased();
+
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */

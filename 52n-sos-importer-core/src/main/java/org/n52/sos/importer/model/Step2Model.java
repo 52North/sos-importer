@@ -43,6 +43,8 @@ public class Step2Model implements StepModel {
 
 	private boolean useHeader;
 
+	private boolean isSampleBased;
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -116,5 +118,14 @@ public class Step2Model implements StepModel {
 
 	public void setDecimalSeparator(final char decimalSeparator) {
 		this.decimalSeparator = decimalSeparator;
+	}
+
+	public boolean isSampleBased() {
+		return isSampleBased;
+	}
+
+	public Step2Model setSampleBased(final boolean isSampleBased) {
+		this.isSampleBased = isSampleBased;
+		return this;
 	}
 }

@@ -413,6 +413,11 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step2IsSampleBased() {
+		return "Is data file sample based";
+	}
+
+	@Override
 	public String step2ParseHeader() {
 		return "Interpret Header";
 	}

@@ -124,6 +124,10 @@ public class Step2Controller extends StepController {
 
 		final char decimalSeparator = step2Model.getDecimalSeparator();
 		step2Panel.setDecimalSeparator(decimalSeparator+"");
+
+		if (step2Model.isSampleBased()) {
+			step2Panel.setSampleBased(true);
+		}
 	}
 
 	@Override
@@ -162,6 +166,10 @@ public class Step2Controller extends StepController {
 			Constants.THOUSANDS_SEPARATOR = ',';
 		} else {
 			Constants.THOUSANDS_SEPARATOR = '.';
+		}
+
+		if (step2Panel.isSampleBased()) {
+			step2Model.setSampleBased(true);
 		}
 
 		step2Panel = null;

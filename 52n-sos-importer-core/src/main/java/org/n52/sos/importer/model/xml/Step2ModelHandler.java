@@ -40,7 +40,7 @@ import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.So
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Step2ModelHandler implements ModelHandler<Step2Model> {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step2ModelHandler.class);
 
 	@Override
@@ -67,6 +67,9 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 		p.setCommentIndicator(stepModel.getCommentIndicator());
 		p.setColumnSeparator(stepModel.getColumnSeparator());
 		p.setTextIndicator(stepModel.getTextQualifier());
+		if (stepModel.isSampleBased()) {
+			// add other sampling parameters
+		}
 	}
 
 }
