@@ -26,11 +26,11 @@ package org.n52.sos.importer.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.model.CsvData;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step2Panel;
@@ -87,7 +87,7 @@ public class Step2Controller extends StepController {
 
 	@Override
 	public StepController getNextStepController() {
-		final Object[][] content = parseCSVFile();
+		final CsvData content = parseCSVFile();
 		TableController.getInstance().setContent(content);
 		TableController.getInstance().setFirstLineWithData(
 				step2Model.getFirstLineWithData());
@@ -234,8 +234,8 @@ public class Step2Controller extends StepController {
 		return step2Model;
 	}
 
-	private Object[][] parseCSVFile() {
-		Object[][] content = null;
+	private CsvData parseCSVFile() {
+		final CsvData content = new CsvData();
 		String csvFileContent = step2Model.getCSVFileContent();
 		String separator = step2Model.getColumnSeparator();
 		final String quoteChar = step2Model.getCommentIndicator();
@@ -258,16 +258,8 @@ public class Step2Controller extends StepController {
 			}
 			final StringReader sr = new StringReader(csvFileContent);
 			try (CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0))){
-				final List<String[]> lines = reader.readAll();
-				final int rows = lines.size();
-				final String[] firstLine = lines.get(0);
-				final int columns = firstLine.length;
-				content = new String[rows][columns];
-
-				for (int i = 0; i < rows; i++) {
-					content[i] = lines.get(i);
-				}
-		} catch (final IOException e) {
+				content.setLines(reader.readAll());
+			} catch (final IOException e) {
 			logger.error("Error while parsing CSV file.", e);
 		}
 		return content;

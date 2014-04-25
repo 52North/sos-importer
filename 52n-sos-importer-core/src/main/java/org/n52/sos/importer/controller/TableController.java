@@ -37,6 +37,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import org.n52.sos.importer.model.CsvData;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.Row;
@@ -49,84 +50,86 @@ import org.n52.sos.importer.view.i18n.Lang;
  *
  */
 public class TableController {
-	
+
 	private static TableController instance = null;
-	
+
 	public static final int COLUMNS = 1;
 	public static final int ROWS = 2;
 	public static final int CELLS = 3;
-	
-	private TablePanel tableView;
-	
-	private JTable table;
-	
+
+	private final TablePanel tableView;
+
+	private final JTable table;
+
 	private SingleSelectionListener singleSelectionListener;
-	
+
 	private MultipleSelectionListener multipleSelectionListener;
-	
-	private ColoredTableCellRenderer tableMarker;
-	
+
+	private final ColoredTableCellRenderer tableMarker;
+
 	private int tableSelectionMode;
-	
+
 	private int orientation = COLUMNS;
-	
+
 	private static int firstLineWithData = -1;
-	
+
 	private final Color markingColor = Color.lightGray;
 
-	private TableController(int firstLineWithData) {
+	private TableController(final int firstLineWithData) {
 		TableController.firstLineWithData = firstLineWithData;
-		this.tableView = TablePanel.getInstance();
-		this.table = tableView.getTable();
-		this.tableMarker = new ColoredTableCellRenderer();
+		tableView = TablePanel.getInstance();
+		table = tableView.getTable();
+		tableMarker = new ColoredTableCellRenderer();
 		//
 		table.setDefaultRenderer(Object.class, null);
 		table.setDefaultRenderer(Object.class, tableMarker);
 		table.getSelectionModel().addListSelectionListener(new RowSelectionListener());
 		table.getColumnModel().getSelectionModel()
 		    .addListSelectionListener(new ColumnSelectionListener());
-		this.allowMultipleSelection();
+		allowMultipleSelection();
 	}
 
 	public static TableController getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new TableController(-1);
+		}
 		return instance;
-	}	
-	
-	public void setContent(Object[][] content) {
-		DefaultTableModel dtm = new EditableTableModel(false);
+	}
 
-		int rows = content.length;
-		int columns = content[0].length;
+	public void setContent(final CsvData content) {
+		final DefaultTableModel dtm = new EditableTableModel(false);
+
+		final int rows = content.getRowCount();
+		final int columns = content.getColumnCount();
 		dtm.setColumnCount(columns);
-		
-		String[] columnIdentifiers = new String[columns];
-		for (int i = 0; i < columnIdentifiers.length; i++)
+
+		final String[] columnIdentifiers = new String[columns];
+		for (int i = 0; i < columnIdentifiers.length; i++) {
 			columnIdentifiers[i] = "n/a";
+		}
 		dtm.setColumnIdentifiers(columnIdentifiers);
 
 		for (int i = 0; i < rows; i++) {
-			dtm.addRow(content[i]);
+			dtm.addRow(content.getLine(i));
 		}
 		table.setModel(dtm);
 	}
-	
-	public void setColumnHeading(int column, String heading) {
+
+	public void setColumnHeading(final int column, final String heading) {
 		table.getColumnModel().getColumn(column).setHeaderValue(heading);
 	}
-	
+
 	public void allowSingleSelection() {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
-	
+
 	public void allowMultipleSelection() {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
-	
-	public void setTableSelectionMode(int tableSelectionMode) {
+
+	public void setTableSelectionMode(final int tableSelectionMode) {
 		this.tableSelectionMode = tableSelectionMode;
-		
+
 		switch(tableSelectionMode) {
 		case ROWS:
 			table.setColumnSelectionAllowed(false);
@@ -148,153 +151,158 @@ public class TableController {
 			break;
 		}
 	}
-	
+
 	public int getTableSelectionMode() {
 		return tableSelectionMode;
 	}
 
-	public void selectColumn(int number) {
+	public void selectColumn(final int number) {
 		table.addColumnSelectionInterval(number, number);
 	}
-	
-	public void selectRow(int number) {
+
+	public void selectRow(final int number) {
 		table.addRowSelectionInterval(number, number);
 	}
-	
-	public void deselectColumn(int number) {
+
+	public void deselectColumn(final int number) {
 		table.removeColumnSelectionInterval(number, number);
 	}
-	
-	public void deselectRow(int number) {
+
+	public void deselectRow(final int number) {
 		table.removeRowSelectionInterval(number, number);
 	}
-	
+
 	public void deselectAllColumns() {
-		int columns = table.getColumnCount() - 1;
+		final int columns = table.getColumnCount() - 1;
 		table.removeColumnSelectionInterval(0, columns);
 	}
-	
+
 	public void deselectAllRows() {
-		int rows = table.getRowCount() - 1;
+		final int rows = table.getRowCount() - 1;
 		table.removeColumnSelectionInterval(0, rows);
 	}
-	
+
 	public void turnSelectionOff() {
 		table.setRowSelectionAllowed(false);
 		table.setColumnSelectionAllowed(false);
 		table.setCellSelectionEnabled(false);
 		table.setFocusable(false);
 	}
-	
+
 	public void turnSelectionOn() {
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
 		table.setCellSelectionEnabled(true);
 		table.setFocusable(true);
 	}
-	
+
 	public int[] getSelectedColumns() {
 		return table.getSelectedColumns();
 	}
-	
+
 	public int getSelectedColumn() {
 		return table.getSelectedColumn();
 	}
-	
+
 	public int[] getSelectedRows() {
 		return table.getSelectedRows();
 	}
-	
+
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
-	
+
 	public List<String> getMarkedValues() {
-		ArrayList<String> values = new ArrayList<String>();
-		
+		final ArrayList<String> values = new ArrayList<String>();
+
 		switch(tableSelectionMode) {
-		case COLUMNS:	
-			int rowCount = table.getRowCount();
-			
-			for (Column c: tableMarker.getColumns())
-				for (int i = 0; i < rowCount; i++)
+		case COLUMNS:
+			final int rowCount = table.getRowCount();
+
+			for (final Column c: tableMarker.getColumns()) {
+				for (int i = 0; i < rowCount; i++) {
 					values.add((String)table.getValueAt(i, c.getNumber()));
-		
+				}
+			}
+
 			break;
-		case ROWS:		
-			int columnCount = table.getColumnCount();
-			
-			for (Row r: tableMarker.getRows())
-				for (int i = 0; i < columnCount; i++)
+		case ROWS:
+			final int columnCount = table.getColumnCount();
+
+			for (final Row r: tableMarker.getRows()) {
+				for (int i = 0; i < columnCount; i++) {
 					values.add((String)table.getValueAt(r.getNumber(), i));
+				}
+			}
 
 			break;
 		case CELLS:
-			for (Cell c: tableMarker.getCells())
+			for (final Cell c: tableMarker.getCells()) {
 				values.add(getValueAt(c));
+			}
 			break;
 		}
 		return values;
 	}
-	
+
 	public String getSelectedCellValue() {
-		int column = table.getSelectedColumn();
-		int row = table.getSelectedRow();
+		final int column = table.getSelectedColumn();
+		final int row = table.getSelectedRow();
 		return (String)table.getValueAt(row, column);
 	}
-	
-	public String getValueAt(Cell c) {
+
+	public String getValueAt(final Cell c) {
 		return (String) table.getValueAt(c.getRow(), c.getColumn());
 	}
-	
-	public String getValueAt(int row, int column) {
+
+	public String getValueAt(final int row, final int column) {
 		return (String) table.getValueAt(row, column);
 	}
-	
+
 	public int getRowCount() {
 		return table.getRowCount();
 	}
-	
+
 	public int getColumnCount() {
 		return table.getColumnCount();
 	}
-	
-	public void mark(Column c) {
+
+	public void mark(final Column c) {
 		tableMarker.addColumn(c);
 	}
-	
-	public void mark(Row r) {
+
+	public void mark(final Row r) {
 		tableMarker.addRow(r);
 	}
-	
-	public void mark(Cell c) {
+
+	public void mark(final Cell c) {
 		tableMarker.addCell(c);
 	}
-	
+
 	public void clearMarkedTableElements() {
 		tableMarker.removeTableElements();
 	}
 
-	public void addSingleSelectionListener(SingleSelectionListener singleSelectionListener) {
+	public void addSingleSelectionListener(final SingleSelectionListener singleSelectionListener) {
 		this.singleSelectionListener = singleSelectionListener;
-	}	
-	
-	public void addMultipleSelectionListener(MultipleSelectionListener multipleSelectionListener) {
+	}
+
+	public void addMultipleSelectionListener(final MultipleSelectionListener multipleSelectionListener) {
 		this.multipleSelectionListener = multipleSelectionListener;
 	}
-	
+
 	public void removeMultipleSelectionListener() {
-		this.multipleSelectionListener = null;
+		multipleSelectionListener = null;
 	}
-	
-	public void setOrientation(int orientation) {
+
+	public void setOrientation(final int orientation) {
 		this.orientation = orientation;
 	}
 
 	public int getOrientation() {
 		return orientation;
-	}	
-	
+	}
+
 	public String getOrientationString() {
 		switch(orientation) {
 			case COLUMNS: return Lang.l().column(); //"column";
@@ -304,120 +312,123 @@ public class TableController {
 	}
 
 	private class ColoredTableCellRenderer extends DefaultTableCellRenderer {
-    
+
 		private static final long serialVersionUID = 1L;
-		
-		private HashSet<Column> columns;
-		
-		private HashSet<Row> rows;
-		
-		private HashSet<Cell> cells;
-		
+
+		private final HashSet<Column> columns;
+
+		private final HashSet<Row> rows;
+
+		private final HashSet<Cell> cells;
+
 		public ColoredTableCellRenderer() {
 			columns = new HashSet<Column>();
 			rows = new HashSet<Row>();
 			cells = new HashSet<Cell>();
 		}
-		
-		public void addColumn(Column c) {
+
+		public void addColumn(final Column c) {
 			columns.add(c);
 		}
-		
+
 		public HashSet<Column> getColumns() {
 			return columns;
 		}
-		
-		public void addRow(Row r) {
+
+		public void addRow(final Row r) {
 			rows.add(r);
 		}
-		
+
 		public HashSet<Row> getRows() {
 			return rows;
 		}
-		
-		public void addCell(Cell c) {
+
+		public void addCell(final Cell c) {
 			cells.add(c);
 		}
-		
+
 		public HashSet<Cell> getCells() {
 			return cells;
 		}
-		
+
 		public void removeTableElements() {
 			columns.clear();
 			rows.clear();
 			cells.clear();
 		}
-		
+
 		@Override
-		public Component getTableCellRendererComponent (JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+		public Component getTableCellRendererComponent (final JTable table, final Object value, final boolean selected, final boolean focused, final int row, final int column) {
 			setEnabled(table == null || table.isEnabled());
-			
-	        if (rows.contains(new Row(row)) || 
+
+	        if (rows.contains(new Row(row)) ||
 	        	columns.contains(new Column(column,firstLineWithData)) ||
 	        	cells.contains(new Cell(row, column))) {
         		setBackground(markingColor);
-	        }
-	        else setBackground(null);
-	        
+	        } else {
+				setBackground(null);
+			}
+
 	        super.getTableCellRendererComponent(table, value, selected, focused, row, column);
 	        return this;
 		}
 	}
-	
+
 	private class EditableTableModel extends DefaultTableModel {
-		
+
 		private static final long serialVersionUID = 1L;
 
-		private boolean editable;
-		
-		public EditableTableModel(boolean editable) {
+		private final boolean editable;
+
+		public EditableTableModel(final boolean editable) {
 			super();
 			this.editable = editable;
 		}
-	
+
 		@Override
-		public boolean isCellEditable(int row, int column) {
+		public boolean isCellEditable(final int row, final int column) {
 	        return editable;
 	    }
 	}
-	
+
 	private class ColumnSelectionListener implements ListSelectionListener {
 
 		@Override
-		public void valueChanged(ListSelectionEvent arg0) {
+		public void valueChanged(final ListSelectionEvent arg0) {
 			if (table.getColumnSelectionAllowed() && arg0.getValueIsAdjusting()) {
 				if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.SINGLE_SELECTION &&
-						singleSelectionListener != null) 
+						singleSelectionListener != null) {
 					singleSelectionListener.columnSelectionChanged(table.getSelectedColumn());
-				else if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION &&
-						multipleSelectionListener != null) 
+				} else if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION &&
+						multipleSelectionListener != null) {
 					multipleSelectionListener.columnSelectionChanged(table.getSelectedColumns());
+				}
 			}
 		}
 	}
-	
+
 	private class RowSelectionListener implements ListSelectionListener {
 
 		@Override
-		public void valueChanged(ListSelectionEvent arg0) {
+		public void valueChanged(final ListSelectionEvent arg0) {
 			if (table.getRowSelectionAllowed() && arg0.getValueIsAdjusting()) {
 				if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.SINGLE_SELECTION &&
-						singleSelectionListener != null) 
+						singleSelectionListener != null) {
 					singleSelectionListener.rowSelectionChanged(table.getSelectedRow());
-				else if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION &&
-						multipleSelectionListener != null) 
+				} else if (table.getSelectionModel().getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION &&
+						multipleSelectionListener != null) {
 					multipleSelectionListener.rowSelectionChanged(table.getSelectedRows());
+				}
 			}
 		}
 	}
-	
+
 	public interface SingleSelectionListener {
 		public void columnSelectionChanged(int selectedColumn);
 
 		public void rowSelectionChanged(int selectedRow);
 	}
-	
+
 	public interface MultipleSelectionListener {
 		public void columnSelectionChanged(int[] selectedColumns);
 
@@ -434,26 +445,26 @@ public class TableController {
 	/**
 	 * @param firstLineWithData the firstLineWithData to set
 	 */
-	public void setFirstLineWithData(int firstLineWithData) {
+	public void setFirstLineWithData(final int firstLineWithData) {
 		TableController.firstLineWithData = firstLineWithData;
 	}
-	
+
 	public String[] getAllColumnHeadings(){
-		return this.getColumnHeadingsFiltered(null,false);
+		return getColumnHeadingsFiltered(null,false);
 	}
-	
+
 	public String[] getUsedColumnHeadings() {
-		return this.getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),false);
+		return getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),false);
 	}
-	
-	public String[] getColumnHeadingsFiltered(String typeToLeaveOut, boolean withColId) {
-		int colCount = this.table.getColumnCount();
-		TableColumnModel tcm = this.table.getColumnModel();
-		// Check for null and empty strings 
-		boolean filter = (typeToLeaveOut == null? false:
+
+	public String[] getColumnHeadingsFiltered(final String typeToLeaveOut, final boolean withColId) {
+		final int colCount = table.getColumnCount();
+		final TableColumnModel tcm = table.getColumnModel();
+		// Check for null and empty strings
+		final boolean filter = (typeToLeaveOut == null? false:
 				typeToLeaveOut.equalsIgnoreCase("")? false : true
 				);
-		ArrayList<String> headings = new ArrayList<String>(colCount);
+		final ArrayList<String> headings = new ArrayList<String>(colCount);
 		if (!filter) {
 			for (int i = 0; i < colCount; i++) {
 				String tmp = tcm.getColumn(i).getHeaderValue().toString();
@@ -473,11 +484,11 @@ public class TableController {
 				}
 			}
 		}
-		headings.trimToSize();		
+		headings.trimToSize();
 		return headings.toArray(new String[headings.size()]);
 	}
 
 	public String[] getUsedColumnHeadingsWithId() {
-		return this.getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),true);
+		return getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),true);
 	}
 }
