@@ -64,8 +64,13 @@ public class TimestampTest {
 		final int minutes = (rawOffset - (hours * millisPerHour)) / millisPerMinute;
 		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
 		final String hoursString = hours < 10? "0"+hours : Integer.toString(hours);
+		final int minutesTime = Integer.parseInt(minutesString)+1;
+		final String timeMinutesString = minutesTime < 10? "0"+minutesTime : Integer.toString(minutesTime);
+		final String asExpected = String.format("1970-01-02T%s:00:%s%s%s:%s",
+				hoursString,
+				timeMinutesString,
+				sign, hoursString, minutesString);
 
-		final String asExpected = String.format("1970-01-02T01:00:01%s%s:%s",sign, hoursString, minutesString);
 		assertThat(timestamp.toString(),is(asExpected));
 	}
 
