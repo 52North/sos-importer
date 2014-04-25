@@ -449,6 +449,16 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedDatePatternLabel() {
+		return "Parse Pattern \"Date Information\"";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternTooltip() {
+		return "The pattern used to parse the date information of the current sample.";
+	}
+
+	@Override
 	public String step2SampleBasedStartRegExLabel() {
 		return "Regular Expression \"Sample Start\"";
 	}

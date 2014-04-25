@@ -83,4 +83,15 @@ public class Step2ModelTest {
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
 		assertThat(model.getSampleBasedDateExtractionRegEx(), is(""));
 	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
+		final String datePattern = "test-regex";
+		assertThat(model.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
+	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
+		assertThat(model.getSampleBasedDatePattern(), is(""));
+	}
 }

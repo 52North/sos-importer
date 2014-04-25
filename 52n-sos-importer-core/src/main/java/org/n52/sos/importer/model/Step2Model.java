@@ -51,6 +51,8 @@ public class Step2Model implements StepModel {
 
 	private String sampleBasedDateExtractionRegEx = "";
 
+	private String sampleBasedDatePattern = "";
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -168,6 +170,15 @@ public class Step2Model implements StepModel {
 
 	public String getSampleBasedDateExtractionRegEx() {
 		return sampleBasedDateExtractionRegEx;
+	}
+
+	public Step2Model setSampleBasedDatePattern(final String sampleBasedDateDatePattern) {
+		sampleBasedDatePattern  = sampleBasedDateDatePattern;
+		return this;
+	}
+
+	public String getSampleBasedDatePattern() {
+		return sampleBasedDatePattern;
 	}
 
 }

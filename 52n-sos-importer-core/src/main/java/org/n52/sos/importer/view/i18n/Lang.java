@@ -413,35 +413,53 @@ public abstract class Lang {
 	 * 				"sampleDatePattern" attribute.
 	 */
 	public abstract String step2SampleBasedDateExtractionRegExTooltip();
+
 	/**
 	 * @return Offset date information
 	 */
 	public abstract String step2SampleBasedDateOffsetLabel();
+
 	/**
 	 *
 	 * @return The offset of the line containing the date of the
      *                      sample from the start line.
 	 */
 	public abstract String step2SampleBasedDateOffsetToolTip();
+
+	/**
+	 * @return Parse Pattern "Date Information"
+	 */
+	public abstract String step2SampleBasedDatePatternLabel();
+
+	/**
+	 * @return The pattern used to parse the date information of the
+	 * 			current sample.
+	 */
+	public abstract String step2SampleBasedDatePatternTooltip();
+
 	/**
 	 *
 	 * @return Regular Expression "Sample Start"
 	 */
 	public abstract String step2SampleBasedStartRegExLabel();
+
 	/**
 	 *
 	 * @return Used to identify the start of a new sample.\n
 	 * 							MUST match the whole line.
 	 */
 	public abstract String step2SampleBasedStartRegExTooltip();
+
 	/**
 	 * @return Text qualifier
 	 */
 	public abstract String step2TextQualifier();
+
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */
 	public abstract String step3aDescription();
+
 	/**
 	 * @return You have to specify at least one measured value column.
 	 */
@@ -600,6 +618,7 @@ public abstract class Lang {
 	 * @return Step 5a: Complete time data
 	 */
 	public abstract String step5aDescription();
+
 	/**
 	 * @return Complete missing information for the marked date and time.
 	 */
@@ -608,7 +627,6 @@ public abstract class Lang {
 	 * @return Step 5c: Complete position data
 	 */
 	public abstract String step5cDescription();
-
 	/**
 	 * @return Complete missing information for the marked position.
 	 */
@@ -655,10 +673,12 @@ public abstract class Lang {
 	 * @return Use Name after prefix?
 	 */
 	public abstract String step6bUseNameAfterPrefix();
+
 	/**
 	 * @return Step 6c: Add missing positions
 	 */
 	public abstract String step6cDescription();
+
 	/**
 	 *
 	 * @return Set Position

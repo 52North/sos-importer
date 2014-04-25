@@ -87,4 +87,15 @@ public class Step2PanelTest {
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
 		assertThat(panel.getSampleBasedDateExtractionRegEx(), is(""));
 	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
+		final String datePattern = "test-regex";
+		assertThat(panel.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
+	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
+		assertThat(panel.getSampleBasedDatePattern(), is(""));
+	}
 }

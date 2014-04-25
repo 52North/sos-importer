@@ -77,6 +77,7 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 			dataFile.setSampleStartRegEx(stepModel.getSampleBasedStartRegEx());
 			dataFile.setSampleDateOffset(stepModel.getSampleBasedDateOffset());
 			dataFile.setSampleDateExtractionRegEx(stepModel.getSampleBasedDateExtractionRegEx());
+			dataFile.setSampleDatePattern(stepModel.getSampleBasedDatePattern());
 		}
 	}
 

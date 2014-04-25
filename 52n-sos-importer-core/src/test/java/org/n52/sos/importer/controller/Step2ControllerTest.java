@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step2Model;
 
-/**
+/*
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Step2ControllerTest {
@@ -82,19 +82,35 @@ public class Step2ControllerTest {
 	}
 
 	@Test
+	public void shouldReturnFalseIfDatePatternIsMissingAndSampleBasedIsTrue() {
+		((Step2Model)controller.getModel())
+			.setColumnSeparator(",")
+			.setCommentIndicator("#")
+			.setDecimalSeparator('.')
+			.setTextQualifier("\"")
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx("test-regex")
+			.setSampleBasedDateOffset(5)
+			.setSampleBasedDateExtractionRegEx("test-regex-2");
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(false));
+	}
+
+	@Test
 	public void shouldReturnTrueIfSampleBasedValuesAreSet() {
 		((Step2Model)controller.getModel())
-		.setColumnSeparator(",")
-		.setCommentIndicator("#")
-		.setDecimalSeparator('.')
-		.setTextQualifier("\"")
-		.setSampleBased(true)
-		.setSampleBasedStartRegEx("test-regex")
-		.setSampleBasedDateOffset(5)
-		.setSampleBasedDateExtractionRegEx("test-regex2");
+    		.setColumnSeparator(",")
+    		.setCommentIndicator("#")
+    		.setDecimalSeparator('.')
+    		.setTextQualifier("\"")
+    		.setSampleBased(true)
+    		.setSampleBasedStartRegEx("test-regex")
+    		.setSampleBasedDateOffset(5)
+    		.setSampleBasedDateExtractionRegEx("test-regex2")
+    		.setSampleBasedDatePattern("date-pattern");
 		// TODO extend with other sample based parameters
-	controller.loadSettings();
-	assertThat(controller.isFinished(), is(true));
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(true));
 	}
 
 }

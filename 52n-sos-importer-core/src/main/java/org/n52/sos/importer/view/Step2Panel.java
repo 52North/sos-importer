@@ -96,10 +96,10 @@ public class Step2Panel extends JPanel {
 	private JPanel dateOffsetPanel;
 	private JSpinner dateOffset;
 	private SpinnerNumberModel dateOffsetModel;
-
 	private JTextField dateExtractionRegExTF;
-
 	private JPanel dateExtractionRegExPanel;
+	private JTextField datePatternTF;
+	private JPanel datePatternPanel;
 
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -140,6 +140,19 @@ public class Step2Panel extends JPanel {
 		addStartRegEx(csvSettingsPanel, gridY++);
 		addDateOffset(csvSettingsPanel, gridY++, max);
 		addDateExtractionRegEx(csvSettingsPanel, gridY++);
+		addDatePattern(csvSettingsPanel, gridY++);
+	}
+
+	private void addDatePattern(final JPanel csvSettingsPanel,
+			final int gridY) {
+		datePatternTF = new JTextField(28);
+		datePatternPanel = new JPanel();
+		datePatternPanel.setToolTipText(Lang.l().step2SampleBasedDatePatternTooltip());
+		datePatternPanel.setLayout(new GridLayout(2, 1));
+		datePatternPanel.add(new JLabel(Lang.l().step2SampleBasedDatePatternLabel() + ":"));
+		datePatternPanel.add(datePatternTF);
+		datePatternPanel.setVisible(false);
+		csvSettingsPanel.add(datePatternPanel, simpleConstraints(gridY));
 	}
 
 	private void addDateExtractionRegEx(final JPanel csvSettingsPanel,
@@ -167,24 +180,26 @@ public class Step2Panel extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				if (isSampleBasedCheckBox.isSelected()) {
 					// TODO activateSampleBasedGuiElements
-					setEnabled(true);
+					setSampleBasedElementsEnabled(true);
 					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
 					firstDataJS.setValue(0);
 				} else {
 					// TODO disable all sample based elements
-					setEnabled(false);
+					setSampleBasedElementsEnabled(false);
 					firstDataJS.setValue(firstLineWithDataTmp);
 				}
 			}
 
-			private void setEnabled(final boolean state) {
-				startRegExPanel.setVisible(state);
-				dateOffsetPanel.setVisible(state);
-				dateExtractionRegExPanel.setVisible(state);
-				firstDataJS.setEnabled(!state);
-			}
 		});
 		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
+	}
+
+	private void setSampleBasedElementsEnabled(final boolean state) {
+		startRegExPanel.setVisible(state);
+		dateOffsetPanel.setVisible(state);
+		dateExtractionRegExPanel.setVisible(state);
+		datePatternPanel.setVisible(state);
+		firstDataJS.setEnabled(!state);
 	}
 
 	private void addStartRegEx(final JPanel csvSettingsPanel,
@@ -482,6 +497,7 @@ public class Step2Panel extends JPanel {
 
 	public Step2Panel setSampleBased(final boolean isSampleBased) {
 		isSampleBasedCheckBox.setSelected(isSampleBased);
+		setSampleBasedElementsEnabled(isSampleBased);
 		return this;
 	}
 
@@ -513,6 +529,15 @@ public class Step2Panel extends JPanel {
 
 	public Step2Panel setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
 		dateExtractionRegExTF.setText(sampleBasedDateExtractionRegEx);
+		return this;
+	}
+
+	public String getSampleBasedDatePattern() {
+		return datePatternTF.getText();
+	}
+
+	public Step2Panel setSampleBasedDatePattern(final String sampleBasedDatePattern) {
+		datePatternTF.setText(sampleBasedDatePattern);
 		return this;
 	}
 

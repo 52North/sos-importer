@@ -448,6 +448,16 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedDatePatternLabel() {
+		return "Analyse Muster \"Datumsinformationen\"";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternTooltip() {
+		return "Muster, das zur Interpretation der Datumsinformationen für die aktuelle Messreihe verwendet wird.";
+	}
+
+	@Override
 	public String step2SampleBasedStartRegExLabel() {
 		return "Regulärer Ausdruck \"Beginn der Messreihe\"";
 	}
