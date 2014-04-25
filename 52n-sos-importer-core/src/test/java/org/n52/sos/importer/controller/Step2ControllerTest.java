@@ -21,44 +21,51 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.model;
+package org.n52.sos.importer.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.n52.sos.importer.model.Step2Model;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public class Step2ModelTest {
+public class Step2ControllerTest {
 
-	private Step2Model model;
+	private Step2Controller controller;
 
 	@Before
 	public void init() {
-		model = new Step2Model("", 0);
+		controller = new Step2Controller(new Step2Model("", 1));
 	}
 
 	@Test
-	public void shouldReturnTrueIfIsSampleBasedIsSet() {
-		assertThat(model.setSampleBased(true).isSampleBased(), is(true));
+	public void shouldReturnFalseIfStartRegExIsMissingAndSampleBasedIsTrue() {
+		((Step2Model)controller.getModel())
+			.setColumnSeparator(",")
+			.setCommentIndicator("#")
+			.setDecimalSeparator('.')
+			.setTextQualifier("\"")
+			.setSampleBased(true);
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(false));
 	}
 
 	@Test
-	public void shouldReturnFalseAsDefaultValueForSampleBased() {
-		assertThat(model.isSampleBased(), is(false));
+	public void shouldReturnTrueIfSampleBasedValuesAreSet() {
+		((Step2Model)controller.getModel())
+		.setColumnSeparator(",")
+		.setCommentIndicator("#")
+		.setDecimalSeparator('.')
+		.setTextQualifier("\"")
+		.setSampleBased(true)
+		.setSampleBasedStartRegEx("test-regex");
+		// TODO extend with other sample based parameters
+	controller.loadSettings();
+	assertThat(controller.isFinished(), is(true));
 	}
 
-	@Test
-	public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
-		final String sampleBasedStartRegEx = "test-regex";
-		assertThat(model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
-	}
-
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
-		assertThat(model.getSampleBasedStartRegEx(), is(""));
-	}
 }

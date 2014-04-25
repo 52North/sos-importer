@@ -45,6 +45,8 @@ public class Step2Model implements StepModel {
 
 	private boolean isSampleBased;
 
+	private String sampleBasedStartRegEx = "";
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -60,64 +62,72 @@ public class Step2Model implements StepModel {
 		return csvFileRowRount;
 	}
 
-	public void setCsvFileRowRount(final int csvFileRowRount) {
+	public Step2Model setCsvFileRowRount(final int csvFileRowRount) {
 		this.csvFileRowRount = csvFileRowRount;
+		return this;
 	}
 
 	public String getColumnSeparator() {
 		return columnSeparator;
 	}
 
-	public void setColumnSeparator(final String selectedColumnSeparator) {
+	public Step2Model setColumnSeparator(final String selectedColumnSeparator) {
 		columnSeparator = selectedColumnSeparator;
+		return this;
 	}
 
 	public String getCommentIndicator() {
 		return commentIndicator;
 	}
 
-	public void setCommentIndicator(final String selectedCommentIndicator) {
+	public Step2Model setCommentIndicator(final String selectedCommentIndicator) {
 		commentIndicator = selectedCommentIndicator;
+		return this;
 	}
 
 	public int getFirstLineWithData() {
 		return firstLineWithData;
 	}
 
-	public void setFirstLineWithData(final int firstLineWithData) {
+	public Step2Model setFirstLineWithData(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
+		return this;
 	}
 
 	public String getTextQualifier() {
 		return textQualifier;
 	}
 
-	public void setTextQualifier(final String selectedTextQualifier) {
+	public Step2Model setTextQualifier(final String selectedTextQualifier) {
 		textQualifier = selectedTextQualifier;
+		return this;
 	}
 
 	public String getCSVFileContent() {
 		return csvFileContent;
 	}
 
-	public void setCSVFileContent(final String cSVFileContent) {
+	public Step2Model setCSVFileContent(final String cSVFileContent) {
 		csvFileContent = cSVFileContent;
+		return this;
 	}
 
-	public boolean getUseHeader() {
+	public boolean isUseHeader() {
 		return useHeader;
 	}
 
-	public void setUseHeader(final boolean useHeader) {
+	public Step2Model setUseHeader(final boolean useHeader) {
 		this.useHeader = useHeader;
+		return this;
 	}
 
 	public char getDecimalSeparator() {
 		return decimalSeparator;
 	}
 
-	public void setDecimalSeparator(final char decimalSeparator) {
+	public Step2Model setDecimalSeparator(final char decimalSeparator) {
 		this.decimalSeparator = decimalSeparator;
+		return this;
 	}
 
 	public boolean isSampleBased() {
@@ -127,5 +137,14 @@ public class Step2Model implements StepModel {
 	public Step2Model setSampleBased(final boolean isSampleBased) {
 		this.isSampleBased = isSampleBased;
 		return this;
+	}
+
+	public Step2Model setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
+		this.sampleBasedStartRegEx = sampleBasedStartRegEx;
+		return this;
+	}
+
+	public String getSampleBasedStartRegEx() {
+		return sampleBasedStartRegEx;
 	}
 }

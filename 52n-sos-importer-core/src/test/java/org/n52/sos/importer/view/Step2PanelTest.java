@@ -26,6 +26,7 @@ package org.n52.sos.importer.view;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,13 +34,31 @@ import org.junit.Test;
  */
 public class Step2PanelTest {
 
+	private Step2Panel panel;
+
+	@Before
+	public void init() {
+		panel = new Step2Panel(1);
+	}
+
 	@Test
 	public void shouldReturnTrueIfIsSampleBasedIsSet() {
-		assertThat(new Step2Panel(1).setSampleBased(true).isSampleBased(), is(true));
+		assertThat(panel.setSampleBased(true).isSampleBased(), is(true));
 	}
 
 	@Test
 	public void shouldReturnFalseAsDefaultValueForSampleBased() {
-		assertThat(new Step2Panel(1).isSampleBased(), is(false));
+		assertThat(panel.isSampleBased(), is(false));
+	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
+		final String sampleBasedStartRegEx = "test-regex";
+		assertThat(panel.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
+	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
+		assertThat(panel.getSampleBasedStartRegEx(), is(""));
 	}
 }

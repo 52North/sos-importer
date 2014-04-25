@@ -30,10 +30,11 @@ import java.util.Locale;
 import org.n52.sos.importer.Constants;
 
 /**
- * @author e.h.juerrens@52north.org
  * This class contains all String used by the GUI in English
+ *
+ * @author e.h.juerrens@52north.org
  */
-public class En extends Lang{
+public class En extends Lang {
 
 	private final static Locale locale = Locale.ENGLISH;
 
@@ -420,6 +421,16 @@ public class En extends Lang{
 	@Override
 	public String step2ParseHeader() {
 		return "Interpret Header";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExLabel() {
+		return "Regular Expression \"Sample Start\"";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExTooltip() {
+		return "Used to identify the start of a new sample.\nMUST match the whole line.";
 	}
 
 	@Override

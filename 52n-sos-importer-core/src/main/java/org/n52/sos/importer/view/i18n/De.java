@@ -29,8 +29,9 @@ import java.util.Locale;
 import org.n52.sos.importer.Constants;
 
 /**
- * @author e.h.juerrens@52north.org
  * This class contains all String used by the GUI in German
+ *
+ * @author e.h.juerrens@52north.org
  */
 public class De extends Lang{
 
@@ -417,6 +418,16 @@ public class De extends Lang{
 	@Override
 	public String step2ParseHeader() {
 		return "Kopfzeile auswerten";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExLabel() {
+		return "Regulärer Ausdruck \"Beginn der Messreihe\"";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExTooltip() {
+		return "Wird benutzt um den Start einer Messreihe zu finden.\nMuss für die gesamte Zeile passen";
 	}
 
 	@Override

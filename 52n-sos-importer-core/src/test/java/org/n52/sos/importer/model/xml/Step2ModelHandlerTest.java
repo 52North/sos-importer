@@ -21,44 +21,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.model;
+package org.n52.sos.importer.model.xml;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.n52.sos.importer.model.Step2Model;
+import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public class Step2ModelTest {
-
-	private Step2Model model;
-
-	@Before
-	public void init() {
-		model = new Step2Model("", 0);
-	}
+public class Step2ModelHandlerTest {
 
 	@Test
-	public void shouldReturnTrueIfIsSampleBasedIsSet() {
-		assertThat(model.setSampleBased(true).isSampleBased(), is(true));
-	}
-
-	@Test
-	public void shouldReturnFalseAsDefaultValueForSampleBased() {
-		assertThat(model.isSampleBased(), is(false));
-	}
-
-	@Test
-	public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
+	public void shouldAddVersionIfSetInModel() {
 		final String sampleBasedStartRegEx = "test-regex";
-		assertThat(model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
+		final Step2Model stepModel = new Step2Model("",2)
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx(sampleBasedStartRegEx);
+		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+		new Step2ModelHandler().handleModel(stepModel, importConf);
+
+		assertThat(importConf.getDataFile().isSetSampleStartRegEx(), is(true));
+		assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
 	}
 
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
-		assertThat(model.getSampleBasedStartRegEx(), is(""));
-	}
 }

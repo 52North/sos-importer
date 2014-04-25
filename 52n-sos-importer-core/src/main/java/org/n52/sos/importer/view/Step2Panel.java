@@ -27,6 +27,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -89,6 +91,8 @@ public class Step2Panel extends JPanel {
 
 	private int firstLineWithDataTmp = -1;
 	private JCheckBox isSampleBasedCheckBox;
+	private JPanel startRegExPanel;
+	private JTextField startRegExTF;
 
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -103,8 +107,7 @@ public class Step2Panel extends JPanel {
 		addTextQualifier(csvSettingsPanel, items, gridY++);
 		addFirstLineWithData(csvFileRowCount, csvSettingsPanel, gridY++);
 		addDecimalSeparator(csvSettingsPanel, gridY++);
-		// USE_HEADER uncomment next line to enable again
-		addUseHeaderCheckbox(csvSettingsPanel, gridY++);
+		addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
 		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
 		final JPanel csvDataPanel = new JPanel();
 		addCsvDataPanel(csvDataPanel);
@@ -124,7 +127,20 @@ public class Step2Panel extends JPanel {
 	}
 
 	private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel, int gridY) {
-		addIsSampleBased(csvSettingsPanel, gridY);
+		addIsSampleBased(csvSettingsPanel, gridY++);
+		addSampleStartRegEx(csvSettingsPanel, gridY++);
+	}
+
+	private void addSampleStartRegEx(final JPanel csvSettingsPanel,
+			final int gridY) {
+		startRegExTF = new JTextField(28);
+		startRegExPanel = new JPanel();
+		startRegExPanel.setToolTipText(Lang.l().step2SampleBasedStartRegExTooltip());
+		startRegExPanel.setLayout(new GridLayout(2, 1));
+		startRegExPanel.add(new JLabel(Lang.l().step2SampleBasedStartRegExLabel() + ":"));
+		startRegExPanel.add(startRegExTF);
+		startRegExPanel.setVisible(false);
+		csvSettingsPanel.add(startRegExPanel, simpleConstraints(gridY));
 	}
 
 	private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
@@ -138,23 +154,33 @@ public class Step2Panel extends JPanel {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				if (isSampleBasedCheckBox.isSelected()) {
+ 				if (isSampleBasedCheckBox.isSelected()) {
 					// TODO activateSampleBasedGuiElements
-					firstDataJS.setEnabled(false);
+					setEnabled(true);
 					firstLineWithDataTmp = Integer.parseInt(firstDataJS.getValue().toString());
 					firstDataJS.setValue(0);
 				} else {
 					// TODO disable all sample based elements
+					setEnabled(false);
 					firstDataJS.setValue(firstLineWithDataTmp);
-					firstDataJS.setEnabled(true);
 				}
 			}
+
+			private void setEnabled(final boolean state) {
+				startRegExPanel.setVisible(state);
+				firstDataJS.setEnabled(!state);
+			}
 		});
-		final GridBagConstraints gbc_isSampleBasedFilePanel = new GridBagConstraints();
-		gbc_isSampleBasedFilePanel.fill = GridBagConstraints.BOTH;
-		gbc_isSampleBasedFilePanel.gridx = 0;
-		gbc_isSampleBasedFilePanel.gridy = gridY;
-		csvSettingsPanel.add(isSampleBasedFilePanel, gbc_isSampleBasedFilePanel);
+		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
+	}
+
+	private GridBagConstraints simpleConstraints(final int gridY) {
+		final GridBagConstraints simpleConstraints = new GridBagConstraints();
+		simpleConstraints.fill = GridBagConstraints.HORIZONTAL;
+		simpleConstraints.anchor = GridBagConstraints.NORTHWEST;
+		simpleConstraints.gridx = 0;
+		simpleConstraints.gridy = gridY;
+		return simpleConstraints;
 	}
 
 	private void addDecimalSeparator(final JPanel csvSettingsPanel, final int gridY) {
@@ -165,11 +191,7 @@ public class Step2Panel extends JPanel {
 		decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 		decimalSeparatorPanel.add(decimalSeparatorLabel);
 		decimalSeparatorPanel.add(decimalSeparatorCombobox);
-		final GridBagConstraints gbc_decimalSeparatorPanel = new GridBagConstraints();
-		gbc_decimalSeparatorPanel.fill = GridBagConstraints.BOTH;
-		gbc_decimalSeparatorPanel.gridx = 0;
-		gbc_decimalSeparatorPanel.gridy = gridY;
-		csvSettingsPanel.add(decimalSeparatorPanel, gbc_decimalSeparatorPanel);
+		csvSettingsPanel.add(decimalSeparatorPanel, simpleConstraints(gridY));
 	}
 
 	private void addFirstLineWithData(final int csvFileRowCount,
@@ -290,7 +312,8 @@ public class Step2Panel extends JPanel {
 		gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_useHeaderPanel.gridx = 0;
 		gbc_useHeaderPanel.gridy = gridY;
-		csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
+		// TODO uncomment to enable useHeader
+		// csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
 	}
 
 	public String getCommentIndicator() {
@@ -414,5 +437,14 @@ public class Step2Panel extends JPanel {
 
 	public boolean isSampleBased() {
 		return isSampleBasedCheckBox.isSelected();
+	}
+
+	public String getSampleBasedStartRegEx() {
+		return startRegExTF.getText();
+	}
+
+	public Step2Panel setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
+		startRegExTF.setText(sampleBasedStartRegEx);
+		return this;
 	}
 }

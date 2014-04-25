@@ -82,6 +82,12 @@ public class Step2Controller extends StepController {
 			return false;
 		}
 
+		if(step2Model.isSampleBased() &&
+				(step2Model.getSampleBasedStartRegEx() == null ||
+				step2Model.getSampleBasedStartRegEx().isEmpty())) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -93,7 +99,7 @@ public class Step2Controller extends StepController {
 				step2Model.getFirstLineWithData());
 		return new Step3Controller(0,
 				step2Model.getFirstLineWithData(),
-				step2Model.getUseHeader());
+				step2Model.isUseHeader());
 	}
 
 	@Override
@@ -118,7 +124,7 @@ public class Step2Controller extends StepController {
 		final String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
 
-		final boolean useHeader = step2Model.getUseHeader();
+		final boolean useHeader = step2Model.isUseHeader();
 		step2Panel.setUseHeader(useHeader);
 		step2Panel.setCSVFileHighlight(firstLineWithData);
 
@@ -127,6 +133,7 @@ public class Step2Controller extends StepController {
 
 		if (step2Model.isSampleBased()) {
 			step2Panel.setSampleBased(true);
+			step2Panel.setSampleBasedStartRegEx(step2Model.getSampleBasedStartRegEx());
 		}
 	}
 
@@ -170,6 +177,7 @@ public class Step2Controller extends StepController {
 
 		if (step2Panel.isSampleBased()) {
 			step2Model.setSampleBased(true);
+			step2Model.setSampleBasedStartRegEx(step2Panel.getSampleBasedStartRegEx());
 		}
 
 		step2Panel = null;
@@ -249,7 +257,7 @@ public class Step2Controller extends StepController {
 		final String quoteChar = step2Model.getCommentIndicator();
 		final String escape = step2Model.getTextQualifier();
 		final int firstLineWithData = step2Model.getFirstLineWithData();
-		final boolean useHeader = step2Model.getUseHeader();
+		final boolean useHeader = step2Model.isUseHeader();
 
 		logger.info("Parse CSV file: " +
 				"column separator: '"    + separator         + "', " +

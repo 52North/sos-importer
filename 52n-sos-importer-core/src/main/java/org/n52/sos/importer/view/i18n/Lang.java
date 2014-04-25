@@ -934,4 +934,17 @@ public abstract class Lang {
 	 * @return Year
 	 */
 	public abstract String year();
+
+	/**
+	 *
+	 * @return Regular Expression "Sample Start"
+	 */
+	public abstract String step2SampleBasedStartRegExLabel();
+
+	/**
+	 *
+	 * @return Used to identify the start of a new sample.\n
+	 * 							MUST match the whole line.
+	 */
+	public abstract String step2SampleBasedStartRegExTooltip();
 }
