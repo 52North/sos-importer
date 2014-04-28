@@ -94,4 +94,15 @@ public class Step2ModelTest {
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
 		assertThat(model.getSampleBasedDatePattern(), is(""));
 	}
+
+	@Test
+	public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
+		final int dataOffset = 25;
+		assertThat(model.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
+	}
+
+	@Test
+	public void shouldReturnZeroAsDefaultValueForSampleBasedDataOffset() {
+		assertThat(model.getSampleBasedDataOffset(), is(0));
+	}
 }

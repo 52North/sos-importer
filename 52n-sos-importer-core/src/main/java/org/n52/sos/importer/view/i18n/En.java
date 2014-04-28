@@ -424,6 +424,16 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedDataOffsetLabel() {
+		return "Offset data";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetToolTip() {
+		return "The offset in lines from sample beginning till the first lines with data.";
+	}
+
+	@Override
 	public String step2SampleBasedDateExtractionRegExLabel() {
 		return "Regular Expression \"Date Extraction\"";
 	}

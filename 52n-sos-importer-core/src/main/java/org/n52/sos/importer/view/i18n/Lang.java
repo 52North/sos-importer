@@ -401,6 +401,19 @@ public abstract class Lang {
 	public abstract String step2ParseHeader();
 
 	/**
+	 *
+	 * @return Offset data
+	 */
+	public abstract String step2SampleBasedDataOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset in lines from sample beginning till the first lines
+	 * 			with data.
+	 */
+	public abstract String step2SampleBasedDataOffsetToolTip();
+
+	/**
 	 * @return Regular Expression "Date Extraction"
 	 */
 	public abstract String step2SampleBasedDateExtractionRegExLabel();
@@ -454,12 +467,10 @@ public abstract class Lang {
 	 * @return Text qualifier
 	 */
 	public abstract String step2TextQualifier();
-
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */
 	public abstract String step3aDescription();
-
 	/**
 	 * @return You have to specify at least one measured value column.
 	 */
@@ -590,6 +601,7 @@ public abstract class Lang {
 		}
 		return res + step4bInfoResourceAlreadySetText() + measuredValue();
 	}
+
 	/**
 	 *
 	 * List how to replace the
@@ -618,7 +630,6 @@ public abstract class Lang {
 	 * @return Step 5a: Complete time data
 	 */
 	public abstract String step5aDescription();
-
 	/**
 	 * @return Complete missing information for the marked date and time.
 	 */
@@ -665,10 +676,12 @@ public abstract class Lang {
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
+
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI.
 	 */
 	public abstract String step6bURIInstructions();
+
 	/**
 	 * @return Use Name after prefix?
 	 */

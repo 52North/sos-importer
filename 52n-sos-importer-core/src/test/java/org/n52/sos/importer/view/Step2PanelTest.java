@@ -65,13 +65,13 @@ public class Step2PanelTest {
 	}
 
 	@Test
-	public void shouldReturnValueIfIsSampleBasedStartRegExIsSet() {
+	public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
 		final int dateOffset = MAX_ROWS-5;
 		assertThat(panel.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
 	}
 
 	@Test
-	public void shouldReturnOneAsDefaultValueForSampleBasedStartRegEx() {
+	public void shouldReturnOneAsDefaultValueForDateOffset() {
 		assertThat(panel.getSampleBasedDateOffset(), is(1));
 	}
 
@@ -97,5 +97,16 @@ public class Step2PanelTest {
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
 		assertThat(panel.getSampleBasedDatePattern(), is(""));
+	}
+
+	@Test
+	public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
+		final int dataOffset = MAX_ROWS-5;
+		assertThat(panel.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
+	}
+
+	@Test
+	public void shouldReturnOneAsDefaultValueForDataOffset() {
+		assertThat(panel.getSampleBasedDataOffset(), is(1));
 	}
 }

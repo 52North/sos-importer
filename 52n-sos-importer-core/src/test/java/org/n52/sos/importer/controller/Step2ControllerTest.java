@@ -43,7 +43,7 @@ public class Step2ControllerTest {
 	}
 
 	@Test
-	public void shouldReturnFalseIfStartRegExIsMissingAndSampleBasedIsTrue() {
+	public void shouldReturnFalseIfStartRegExIsMissing() {
 		((Step2Model)controller.getModel())
 			.setColumnSeparator(",")
 			.setCommentIndicator("#")
@@ -55,7 +55,7 @@ public class Step2ControllerTest {
 	}
 
 	@Test
-	public void shouldReturnFalseIfDateOffsetIsMissingAndSampleBasedIsTrue() {
+	public void shouldReturnFalseIfDateOffsetIsMissing() {
 		((Step2Model)controller.getModel())
 			.setColumnSeparator(",")
 			.setCommentIndicator("#")
@@ -68,7 +68,7 @@ public class Step2ControllerTest {
 	}
 
 	@Test
-	public void shouldReturnFalseIfDateExtractionRegExIsMissingAndSampleBasedIsTrue() {
+	public void shouldReturnFalseIfDateExtractionRegExIsMissing() {
 		((Step2Model)controller.getModel())
 			.setColumnSeparator(",")
 			.setCommentIndicator("#")
@@ -82,7 +82,7 @@ public class Step2ControllerTest {
 	}
 
 	@Test
-	public void shouldReturnFalseIfDatePatternIsMissingAndSampleBasedIsTrue() {
+	public void shouldReturnFalseIfDatePatternIsMissing() {
 		((Step2Model)controller.getModel())
 			.setColumnSeparator(",")
 			.setCommentIndicator("#")
@@ -91,9 +91,25 @@ public class Step2ControllerTest {
 			.setSampleBased(true)
 			.setSampleBasedStartRegEx("test-regex")
 			.setSampleBasedDateOffset(5)
-			.setSampleBasedDateExtractionRegEx("test-regex-2");
+			.setSampleBasedDateExtractionRegEx("(test)-regex-2");
 		controller.loadSettings();
 		assertThat(controller.isFinished(), is(false));
+	}
+
+	@Test
+	public void shouldReturnFalseIfDataOffsetIsMissing() {
+		((Step2Model)controller.getModel())
+		.setColumnSeparator(",")
+		.setCommentIndicator("#")
+		.setDecimalSeparator('.')
+		.setTextQualifier("\"")
+		.setSampleBased(true)
+		.setSampleBasedStartRegEx("test-regex")
+		.setSampleBasedDateOffset(5)
+		.setSampleBasedDateExtractionRegEx("(test)-regex-2")
+		.setSampleBasedDatePattern("test-pattern");
+	controller.loadSettings();
+	assertThat(controller.isFinished(), is(false));
 	}
 
 	@Test
@@ -106,8 +122,9 @@ public class Step2ControllerTest {
     		.setSampleBased(true)
     		.setSampleBasedStartRegEx("test-regex")
     		.setSampleBasedDateOffset(5)
-    		.setSampleBasedDateExtractionRegEx("test-regex2")
-    		.setSampleBasedDatePattern("date-pattern");
+    		.setSampleBasedDateExtractionRegEx("(test)-regex2-with-one-group")
+    		.setSampleBasedDatePattern("date-pattern")
+    		.setSampleBasedDataOffset(6);
 		// TODO extend with other sample based parameters
 		controller.loadSettings();
 		assertThat(controller.isFinished(), is(true));

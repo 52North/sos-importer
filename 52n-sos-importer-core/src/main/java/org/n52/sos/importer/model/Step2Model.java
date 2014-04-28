@@ -53,6 +53,8 @@ public class Step2Model implements StepModel {
 
 	private String sampleBasedDatePattern = "";
 
+	private int dataOffset = 0;
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -179,6 +181,15 @@ public class Step2Model implements StepModel {
 
 	public String getSampleBasedDatePattern() {
 		return sampleBasedDatePattern;
+	}
+
+	public Step2Model setSampleBasedDataOffset(final int dataOffset) {
+		this.dataOffset = dataOffset;
+		return this;
+	}
+
+	public int getSampleBasedDataOffset() {
+		return dataOffset;
 	}
 
 }

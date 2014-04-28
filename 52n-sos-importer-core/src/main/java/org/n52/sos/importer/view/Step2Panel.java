@@ -101,6 +101,10 @@ public class Step2Panel extends JPanel {
 	private JTextField datePatternTF;
 	private JPanel datePatternPanel;
 
+	private SpinnerNumberModel dataOffsetModel;
+	private JSpinner dataOffset;
+	private JPanel dataOffsetPanel;
+
 	public Step2Panel(final int csvFileRowCount) {
 		super();
 		this.csvFileRowCount = csvFileRowCount;
@@ -140,6 +144,31 @@ public class Step2Panel extends JPanel {
 		addDateOffset(csvSettingsPanel, gridY++);
 		addDateExtractionRegEx(csvSettingsPanel, gridY++);
 		addDatePattern(csvSettingsPanel, gridY++);
+		addDataOffset(csvSettingsPanel, gridY++);
+	}
+
+	private void addDataOffset(final JPanel csvSettingsPanel,
+			final int gridY) {
+		dataOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
+		dataOffsetModel.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(final ChangeEvent e) {
+				final int number = dataOffsetModel.getNumber().intValue();
+				if(number < 0) {
+					dataOffsetModel.setValue(0);
+				} else if (number > (csvFileRowCount-1)){
+					dataOffsetModel.setValue((csvFileRowCount-1));
+				}
+			}
+		});
+		dataOffset = new JSpinner(dateOffsetModel);
+		dataOffsetPanel = new JPanel();
+		dataOffsetPanel.setToolTipText(Lang.l().step2SampleBasedDataOffsetToolTip());
+		dataOffsetPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		dataOffsetPanel.add(new JLabel(Lang.l().step2SampleBasedDataOffsetLabel() + ":"));
+		dataOffsetPanel.add(dataOffset);
+		dataOffsetPanel.setVisible(false);
+		csvSettingsPanel.add(dataOffsetPanel, simpleConstraints(gridY));
 	}
 
 	private void addDatePattern(final JPanel csvSettingsPanel,
@@ -198,6 +227,7 @@ public class Step2Panel extends JPanel {
 		dateOffsetPanel.setVisible(state);
 		dateExtractionRegExPanel.setVisible(state);
 		datePatternPanel.setVisible(state);
+		dataOffsetPanel.setVisible(state);
 		firstDataJS.setEnabled(!state);
 	}
 
@@ -536,6 +566,15 @@ public class Step2Panel extends JPanel {
 
 	public Step2Panel setSampleBasedDatePattern(final String sampleBasedDatePattern) {
 		datePatternTF.setText(sampleBasedDatePattern);
+		return this;
+	}
+
+	public int getSampleBasedDataOffset() {
+		return dataOffsetModel.getNumber().intValue();
+	}
+
+	public Step2Panel setSampleBasedDataOffset(final int dataOffset) {
+		dataOffsetModel.setValue(dataOffset);
 		return this;
 	}
 

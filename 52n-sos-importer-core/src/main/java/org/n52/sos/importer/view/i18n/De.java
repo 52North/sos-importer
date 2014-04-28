@@ -421,6 +421,16 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedDataOffsetLabel() {
+		return "Zeilenabstand 'Messdaten'";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetToolTip() {
+		return "Der Abstand zwischen dem Start einer Messreihe und dem Beginn der Daten in Zeilen.";
+	}
+
+	@Override
 	public String step2SampleBasedDateExtractionRegExLabel() {
 		return "Regulärer Ausdruck \"Datumsinformation\"";
 	}
