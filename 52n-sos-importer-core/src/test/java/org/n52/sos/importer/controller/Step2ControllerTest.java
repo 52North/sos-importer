@@ -133,6 +133,27 @@ public class Step2ControllerTest {
 	}
 
 	@Test
+	public void shouldReturnFalseIfSampleSizeRegExIsMissing() {
+		((Step2Model)controller.getModel())
+			.setColumnSeparator(",")
+			.setCommentIndicator("#")
+			.setDecimalSeparator('.')
+			.setTextQualifier("\"")
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx("test-regex")
+			.setSampleBasedDateOffset(5)
+			.setSampleBasedDateExtractionRegEx("(test)-regex-2")
+			.setSampleBasedDatePattern("test-pattern")
+			.setSampleBasedDataOffset(6)
+			.setSampleBasedSampleSizeOffset(7);
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(false));
+		((Step2Model)controller.getModel()).setSampleBasedSampleSizeRegEx("test-regex");
+		controller.loadSettings();
+		assertThat(controller.isFinished(), is(false));
+	}
+
+	@Test
 	public void shouldReturnTrueIfSampleBasedValuesAreSet() {
 		((Step2Model)controller.getModel())
     		.setColumnSeparator(",")
@@ -145,7 +166,8 @@ public class Step2ControllerTest {
     		.setSampleBasedDateExtractionRegEx("(test)-regex2-with-one-group")
     		.setSampleBasedDatePattern("date-pattern")
     		.setSampleBasedDataOffset(6)
-    		.setSampleBasedSampleSizeOffset(7);
+    		.setSampleBasedSampleSizeOffset(7)
+    		.setSampleBasedSampleSizeRegEx("(test-regex)-with-one-group");
 		// TODO extend with other sample based parameters
 		controller.loadSettings();
 		assertThat(controller.isFinished(), is(true));

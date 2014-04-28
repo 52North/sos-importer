@@ -57,6 +57,8 @@ public class Step2Model implements StepModel {
 
 	private int sampleSizeOffset = 0;
 
+	private String sampleBasedSampleSizeRegEx = "";
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -202,5 +204,15 @@ public class Step2Model implements StepModel {
 	public int getSampleBasedSampleSizeOffset() {
 		return sampleSizeOffset;
 	}
+
+	public Step2Model setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
+		this.sampleBasedSampleSizeRegEx  = sampleBasedSampleSizeRegEx;
+		return this;
+	}
+
+	public String getSampleBasedSampleSizeRegEx() {
+		return sampleBasedSampleSizeRegEx;
+	}
+
 
 }

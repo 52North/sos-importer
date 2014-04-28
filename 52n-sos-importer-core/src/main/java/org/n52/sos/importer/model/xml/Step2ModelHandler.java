@@ -80,6 +80,7 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
 			dataFile.setSampleDatePattern(stepModel.getSampleBasedDatePattern());
 			dataFile.setSampleDataOffset(stepModel.getSampleBasedDataOffset());
 			dataFile.setSampleSizeOffset(stepModel.getSampleBasedSampleSizeOffset());
+			dataFile.setSampleSizeRegEx(stepModel.getSampleBasedSampleSizeRegEx());
 		}
 	}
 

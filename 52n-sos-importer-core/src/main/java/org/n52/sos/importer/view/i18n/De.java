@@ -478,6 +478,19 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedSampleSizeRegExLabel() {
+		return "Regulärer Ausdruck \"Messreihengröße\"";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExTooltip() {
+		return new StringBuffer("<html>Wird benutzt um die Größe der aktuellen Messreihe aus der Zeile")
+			.append(" zu extrahieren.<br />Das Ergebnis der Zeile muss EINE Gruppe sein,<br />")
+			.append("die in eine Zahl umgewandelt werden kann.</html>")
+			.toString();
+	}
+
+	@Override
 	public String step2SampleBasedStartRegExLabel() {
 		return "Regulärer Ausdruck \"Beginn der Messreihe\"";
 	}

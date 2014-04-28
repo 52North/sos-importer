@@ -480,6 +480,18 @@ public class En extends Lang {
 		.append("with data.</html>")
 		.toString();
 	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExLabel() {
+		return "Regular Expression \"Sample Size\"";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExTooltip() {
+		return new StringBuffer("<html>The regular expression to extract the sample size.<br/>")
+			   .append("The regular expression MUST result in ONE group<br/>")
+			   .append("which contains an integer value.</html>")
+			   .toString();
 	}
 
 	@Override

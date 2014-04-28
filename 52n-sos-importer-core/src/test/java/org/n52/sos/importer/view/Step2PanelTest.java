@@ -120,4 +120,15 @@ public class Step2PanelTest {
 	public void shouldReturnOneAsDefaultValueForSampleSizeOffset() {
 		assertThat(panel.getSampleBasedSampleSizeOffset(), is(1));
 	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
+		assertThat(panel.getSampleBasedSampleSizeRegEx(), is(""));
+	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
+		final String sampleSizeRegEx = "test-regex";
+		assertThat(panel.setSampleBasedSampleSizeRegEx(sampleSizeRegEx).getSampleBasedSampleSizeRegEx(), is(sampleSizeRegEx));
+	}
 }

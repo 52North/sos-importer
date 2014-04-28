@@ -464,6 +464,18 @@ public abstract class Lang {
 	public abstract String step2SampleBasedSampleSizeOffsetToolTip();
 
 	/**
+	 * @return Regular Expression "Sample Size"
+	 */
+	public abstract String step2SampleBasedSampleSizeRegExLabel();
+
+	/**
+	 * @return The regular expression to extract the sample size. The regular
+	 * 				expression MUST result in ONE group which contains an
+	 * 				integer value.
+	 */
+	public abstract String step2SampleBasedSampleSizeRegExTooltip();
+
+	/**
 	 *
 	 * @return Regular Expression "Sample Start"
 	 */
@@ -619,12 +631,10 @@ public abstract class Lang {
 	 *
 	 */
 	public abstract String step4bInfoNotMeasuredValue();
-
 	/**
 	 * @return " already set for this "
 	 */
 	public abstract String step4bInfoResourceAlreadySetText();
-
 	/**
 	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
 	 * @return
@@ -698,11 +708,13 @@ public abstract class Lang {
 	 * @return Step 6b: Add missing metadata
 	 */
 	public abstract String step6bDescription();
+
 	/**
 	 * Replacements: Resource &rarr; Orientation
 	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
 	 */
 	public abstract String step6bModelDescription();
+
 	/**
 	 * @return Please select the columns to generate the name.<br />
 	 * 			\nMultiple columns could be selected.

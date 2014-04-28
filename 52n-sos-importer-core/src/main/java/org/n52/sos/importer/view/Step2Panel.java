@@ -91,13 +91,17 @@ public class Step2Panel extends JPanel {
 
 	private int firstLineWithDataTmp = -1;
 	private JCheckBox isSampleBasedCheckBox;
+
 	private JPanel startRegExPanel;
 	private JTextField startRegExTF;
+
 	private JPanel dateOffsetPanel;
 	private JSpinner dateOffset;
 	private SpinnerNumberModel dateOffsetModel;
+
 	private JTextField dateExtractionRegExTF;
 	private JPanel dateExtractionRegExPanel;
+
 	private JTextField datePatternTF;
 	private JPanel datePatternPanel;
 
@@ -108,6 +112,9 @@ public class Step2Panel extends JPanel {
 	private SpinnerNumberModel sampleSizeOffsetModel;
 	private JSpinner sampleSizeOffset;
 	private JPanel sampleSizeOffsetPanel;
+
+	private JTextField sampleSizeRegExTF;
+	private JPanel sampleSizeRegExPanel;
 
 	public Step2Panel(final int csvFileRowCount) {
 		super();
@@ -150,6 +157,30 @@ public class Step2Panel extends JPanel {
 		addDatePattern(csvSettingsPanel, gridY++);
 		addDataOffset(csvSettingsPanel, gridY++);
 		addSampleSizeOffset(csvSettingsPanel, gridY++);
+		addSampleSizeRegEx(csvSettingsPanel, gridY++);
+	}
+
+	private void setSampleBasedElementsEnabled(final boolean state) {
+		startRegExPanel.setVisible(state);
+		dateOffsetPanel.setVisible(state);
+		dateExtractionRegExPanel.setVisible(state);
+		datePatternPanel.setVisible(state);
+		dataOffsetPanel.setVisible(state);
+		sampleSizeOffsetPanel.setVisible(state);
+		sampleSizeRegExPanel.setVisible(state);
+		firstDataJS.setEnabled(!state);
+	}
+
+	private void addSampleSizeRegEx(final JPanel csvSettingsPanel,
+			final int gridY) {
+		sampleSizeRegExTF = new JTextField(28);
+		sampleSizeRegExPanel = new JPanel();
+		sampleSizeRegExPanel.setToolTipText(Lang.l().step2SampleBasedSampleSizeRegExTooltip());
+		sampleSizeRegExPanel.setLayout(new GridLayout(2, 1));
+		sampleSizeRegExPanel.add(new JLabel(Lang.l().step2SampleBasedSampleSizeRegExLabel() + ":"));
+		sampleSizeRegExPanel.add(sampleSizeRegExTF);
+		sampleSizeRegExPanel.setVisible(false);
+		csvSettingsPanel.add(sampleSizeRegExPanel, simpleConstraints(gridY));
 	}
 
 	private void addSampleSizeOffset(final JPanel csvSettingsPanel,
@@ -249,16 +280,6 @@ public class Step2Panel extends JPanel {
 
 		});
 		csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
-	}
-
-	private void setSampleBasedElementsEnabled(final boolean state) {
-		startRegExPanel.setVisible(state);
-		dateOffsetPanel.setVisible(state);
-		dateExtractionRegExPanel.setVisible(state);
-		datePatternPanel.setVisible(state);
-		dataOffsetPanel.setVisible(state);
-		sampleSizeOffsetPanel.setVisible(state);
-		firstDataJS.setEnabled(!state);
 	}
 
 	private void addStartRegEx(final JPanel csvSettingsPanel,
@@ -616,5 +637,15 @@ public class Step2Panel extends JPanel {
 		sampleSizeOffsetModel.setValue(sampleSizeOffset);
 		return this;
 	}
+
+	public String getSampleBasedSampleSizeRegEx() {
+		return sampleSizeRegExTF.getText();
+	}
+
+	public Step2Panel setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
+		sampleSizeRegExTF.setText(sampleBasedSampleSizeRegEx);
+		return this;
+	}
+
 
 }

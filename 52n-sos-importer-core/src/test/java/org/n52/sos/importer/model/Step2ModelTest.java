@@ -116,4 +116,15 @@ public class Step2ModelTest {
 	public void shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset() {
 		assertThat(model.getSampleBasedSampleSizeOffset(), is(0));
 	}
+
+	@Test
+	public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
+		final String sampleBasedSampleSizeRegEx = "test-regex";
+		assertThat(model.setSampleBasedSampleSizeRegEx(sampleBasedSampleSizeRegEx).getSampleBasedSampleSizeRegEx(), is(sampleBasedSampleSizeRegEx));
+	}
+
+	@Test
+	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
+		assertThat(model.getSampleBasedSampleSizeRegEx(), is(""));
+	}
 }
