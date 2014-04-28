@@ -30,12 +30,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -47,7 +48,6 @@ import javax.swing.border.TitledBorder;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.controller.MainController;
-import org.n52.sos.importer.controller.Step7Controller;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -58,8 +58,14 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * TODO before commit => add SOS versions to sosVersionComboBox
+ *
  */
 public class Step7Panel extends JPanel {
+
+	private static final String[] SUPPORTED_SOS_VERSIONS = new String[] { "1.0.0","2.0.0" };
+
+	private static final String[] SUPPORTED_BINDINGS = new String[] {"POX" };
 
 	private static final long serialVersionUID = 1L;
 
@@ -82,13 +88,15 @@ public class Step7Panel extends JPanel {
 	private JPanel panel;
 	private JLabel spacer;
 	private JLabel sosURLInstructionsLabel;
-	private JLabel sosVersionInstructionsLabel;
-	private JPanel sosVersionPanel;
-	private JTextField sosVersionTextField;
-	private JLabel sosBindingLabel;
-	private JTextField sosBindingTextField;
-	private JPanel sosBindingPanel;
+	private final JLabel sosVersionLabel;
+	private JPanel metaPanel;
+	private final JLabel sosBindingLabel;
+	private final JComboBox<String> sosBindingCB;
 	private JPanel configFilePanel;
+	private final JComboBox<String> sosVersionCB;
+	private final JLabel fillLabel;
+	private final JPanel sosVersionPanel;
+	private final JPanel bindingPanel;
 
 	public Step7Panel() {
 		setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -104,41 +112,81 @@ public class Step7Panel extends JPanel {
 		initConfigFilePanel();
 		initSosVersionPanel();
 		initSosBindingPanel();
-		
+
 		final GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
 		gbc_sosURLPanel.fill = GridBagConstraints.BOTH;
 		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_sosURLPanel.gridx = 0;
 		gbc_sosURLPanel.gridy = 0;
 		add(sosURLPanel, gbc_sosURLPanel);
-		
+
 		final GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
 		gbc_configFilePanel.insets = new Insets(0, 0, 5, 5);
 		gbc_configFilePanel.fill = GridBagConstraints.BOTH;
 		gbc_configFilePanel.gridx = 0;
 		gbc_configFilePanel.gridy = 1;
 		add(configFilePanel, gbc_configFilePanel);
-		
+
 		final GridBagConstraints gbc_offeringPanel = new GridBagConstraints();
 		gbc_offeringPanel.fill = GridBagConstraints.BOTH;
 		gbc_offeringPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_offeringPanel.gridx = 0;
 		gbc_offeringPanel.gridy = 2;
 		add(offeringPanel, gbc_offeringPanel);
-		
-		final GridBagConstraints gbc_versionPanel = new GridBagConstraints();
-		gbc_versionPanel.fill = GridBagConstraints.BOTH;
-		gbc_versionPanel.insets = new Insets(0, 0, 5, 0);
-		gbc_versionPanel.gridx = 0;
-		gbc_versionPanel.gridy = 3;
-		add(sosVersionPanel, gbc_versionPanel);
-		
-		final GridBagConstraints gbc_bindingPanel = new GridBagConstraints();
-		gbc_bindingPanel.fill = GridBagConstraints.BOTH;
-		gbc_bindingPanel.insets = new Insets(0, 0, 5, 5);
-		gbc_bindingPanel.gridx = 0;
-		gbc_bindingPanel.gridy = 4;
-		add(sosBindingPanel, gbc_bindingPanel);
+		metaPanel.setLayout(null);
+
+		final GridBagConstraints gbc_metaPanel = new GridBagConstraints();
+		gbc_metaPanel.fill = GridBagConstraints.BOTH;
+		gbc_metaPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_metaPanel.gridx = 0;
+		gbc_metaPanel.gridy = 3;
+		add(metaPanel, gbc_metaPanel);
+
+						sosVersionPanel = new JPanel();
+						sosVersionPanel.setBounds(10, 18, 101, 20);
+						metaPanel.add(sosVersionPanel);
+						sosVersionPanel.setLayout(null);
+						sosVersionPanel.setToolTipText(Lang.l().step7SosVersionInstructions());
+
+						sosVersionLabel = new JLabel(Lang.l().step7SosVersionLabel() + ":");
+						sosVersionLabel.setBounds(0, 3, 39, 14);
+						sosVersionPanel.add(sosVersionLabel);
+
+						sosVersionCB = new JComboBox<>(SUPPORTED_SOS_VERSIONS);
+						sosVersionCB.setBounds(49, 0, 52, 20);
+						sosVersionPanel.add(sosVersionCB);
+						sosVersionCB.addItemListener(new ItemListener() {
+							@Override
+							public void itemStateChanged(final ItemEvent e) {
+								if (sosVersionCB.getSelectedItem().equals(SUPPORTED_SOS_VERSIONS [1])) {
+									sosBindingLabel.setVisible(true);
+									sosBindingCB.setVisible(true);
+								} else {
+									sosBindingLabel.setVisible(false);
+									sosBindingCB.setVisible(false);
+								}
+							}
+						});
+
+				bindingPanel = new JPanel();
+				bindingPanel.setBounds(121, 18, 101, 20);
+				metaPanel.add(bindingPanel);
+				bindingPanel.setLayout(null);
+				bindingPanel.setToolTipText(Lang.l().step7SosBindingInstructions());
+
+				sosBindingLabel = new JLabel(Lang.l().step7SosBindingLabel() + ":");
+				sosBindingLabel.setBounds(0, 3, 38, 15);
+				bindingPanel.add(sosBindingLabel);
+
+				sosBindingCB = new JComboBox<>(SUPPORTED_BINDINGS);
+				sosBindingCB.setBounds(48, 0, 52, 20);
+				bindingPanel.add(sosBindingCB);
+				sosBindingCB.setVisible(false);
+				sosBindingLabel.setVisible(false);
+
+				fillLabel = new JLabel("");
+				fillLabel.setBounds(818, 16, 30, 25);
+				metaPanel.add(fillLabel);
 	}
 
 	private void initConfigFilePanel() {
@@ -192,17 +240,17 @@ public class Step7Panel extends JPanel {
 						BackNextController.getInstance().setNextButtonEnabled(true);
 						return;
 					} else {
-						JOptionPane.showMessageDialog(Step7Panel.this, 
+						JOptionPane.showMessageDialog(Step7Panel.this,
 								Lang.l().step7ConfigDirNotDirOrWriteable(
-										fc.getSelectedFile().getAbsolutePath()), 
-										Lang.l().errorDialogTitle(), 
+										fc.getSelectedFile().getAbsolutePath()),
+										Lang.l().errorDialogTitle(),
 										JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				BackNextController.getInstance().setNextButtonEnabled(false);
 			}
 		});
-		
+
 		configFileNameJT = new JTextField(50);
 		configFileNameJT.setText(tmp);
 
@@ -225,7 +273,7 @@ public class Step7Panel extends JPanel {
 
 	private void initOfferingPanel() {
 		final JLabel offeringLabel = new JLabel(Lang.l().step7OfferingCheckBoxLabel());
-		
+
 		offeringInputLabel = new JLabel(Lang.l().step7OfferingInputTextfieldLabel());
 		offeringInputLabel.setVisible(false);
 
@@ -243,16 +291,16 @@ public class Step7Panel extends JPanel {
 				}
 			}
 		});
-		
+
 		offeringInputTextField = new JTextField();
 		offeringInputTextField.setColumns(10);
 		offeringInputTextField.setVisible(false);
-		
+
 		offeringPanel = new JPanel();
 		offeringPanel.setBorder(new TitledBorder(null, Lang.l().offering(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		offeringPanel.setToolTipText(ToolTips.get(ToolTips.OFFERING));
 		offeringPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-		
+
 		offeringPanel.add(offeringLabel);
 		offeringPanel.add(offeringGenerateCheckbox);
 		offeringPanel.add(offeringInputLabel);
@@ -271,7 +319,7 @@ public class Step7Panel extends JPanel {
 		sosUrlComboBox = new EditableJComboBoxPanel(
 				EditableComboBoxItems.getInstance().getSosURLs(), Lang.l().url(), ToolTips.get(ToolTips.SOS));
 		sosUrlComboBox.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
-		
+
 		final GridBagConstraints gbc_sosComboBox = new GridBagConstraints();
 		gbc_sosComboBox.fill = GridBagConstraints.BOTH;
 		gbc_sosComboBox.gridx = 0;
@@ -284,91 +332,20 @@ public class Step7Panel extends JPanel {
 		gbc_sosURLInstructionsLabel.fill = GridBagConstraints.BOTH;
 		sosURLPanel.add(sosURLInstructionsLabel, gbc_sosURLInstructionsLabel);
 	}
-	
+
 	private void initSosVersionPanel() {
-		sosVersionPanel = new JPanel();
-		sosVersionPanel.setBorder(
+		metaPanel = new JPanel();
+		metaPanel.setBorder(
 				new TitledBorder(UIManager.getBorder("TitledBorder.border"),
 						Lang.l().specificationVersion(),
 						TitledBorder.LEADING,
 						TitledBorder.TOP,
-						null, 
+						null,
 						new Color(0, 0, 0)));
-		
-		final GridBagLayout gbl_sosURLPanel = new GridBagLayout();
-		gbl_sosURLPanel.columnWidths = new int[]{750, 0};
-		gbl_sosURLPanel.rowHeights = new int[]{30, 0, 0};
-		gbl_sosURLPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_sosURLPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		sosVersionPanel.setLayout(gbl_sosURLPanel);
-		
-		sosVersionInstructionsLabel = new JLabel("  " + Lang.l().step7SosVersionInstructions());
-		
-		final GridBagConstraints gbc_sosURLInstructionsLabel = new GridBagConstraints();
-		gbc_sosURLInstructionsLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_sosURLInstructionsLabel.gridy = 0;
-		gbc_sosURLInstructionsLabel.gridx = 0;
-		gbc_sosURLInstructionsLabel.fill = GridBagConstraints.BOTH;
-		sosVersionPanel.add(sosVersionInstructionsLabel, gbc_sosURLInstructionsLabel);
-		
-		sosVersionTextField = new JTextField();
-		sosVersionTextField.setColumns(10);
-		sosVersionTextField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(final KeyEvent e)
-			{
-				if (sosVersionTextField.getText().equalsIgnoreCase("2.0.0"))
-				{
-					sosBindingPanel.setVisible(true);
-				}
-				else
-				{
-					sosBindingPanel.setVisible(false);
-					sosBindingTextField.setText("");
-				}
-			}
-		});
-		final GridBagConstraints gbc_sosVersionTextField = new GridBagConstraints();
-		gbc_sosVersionTextField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_sosVersionTextField.gridx = 0;
-		gbc_sosVersionTextField.gridy = 1;
-		sosVersionPanel.add(sosVersionTextField, gbc_sosVersionTextField);
+		metaPanel.setToolTipText(Lang.l().step7SosVersionInstructions());
 	}
-	
+
 	private void initSosBindingPanel() {
-		sosBindingPanel = new JPanel();
-		sosBindingPanel.setBorder(
-				new TitledBorder(UIManager.getBorder("TitledBorder.border"),
-						Lang.l().binding(), 
-						TitledBorder.LEADING, 
-						TitledBorder.TOP, 
-						null, 
-						new Color(0, 0, 0)));
-		
-		final GridBagLayout gbl_sosBindingPanel = new GridBagLayout();
-		gbl_sosBindingPanel.columnWidths = new int[]{750, 0};
-		gbl_sosBindingPanel.rowHeights = new int[]{20, 0, 0};
-		gbl_sosBindingPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_sosBindingPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		sosBindingPanel.setLayout(gbl_sosBindingPanel);
-		
-		sosBindingLabel = new JLabel("  " + Lang.l().step7SosBindingInstructions());
-		
-		final GridBagConstraints gbc_sosBindingLabel = new GridBagConstraints();
-		gbc_sosBindingLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_sosBindingLabel.gridx = 0;
-		gbc_sosBindingLabel.gridy = 0;
-		gbc_sosBindingLabel.fill = GridBagConstraints.BOTH;
-		sosBindingPanel.add(sosBindingLabel, gbc_sosBindingLabel);
-		
-		sosBindingTextField = new JTextField();
-		sosBindingTextField.setColumns(10);
-		final GridBagConstraints gbc_sosBindingTextField = new GridBagConstraints();
-		gbc_sosBindingTextField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_sosBindingTextField.gridx = 0;
-		gbc_sosBindingTextField.gridy = 1;
-		sosBindingPanel.add(sosBindingTextField, gbc_sosBindingTextField);
-		sosBindingPanel.setVisible(false);
 	}
 
 	public String getSOSURL() {
@@ -397,24 +374,22 @@ public class Step7Panel extends JPanel {
 		return offeringInputTextField.getText();
 	}
 
-	public String getSosBinding()
-	{
-		return sosBindingTextField.getText();
+	public String getSosBinding() {
+		return sosBindingCB.getSelectedItem().toString();
 	}
-	
-	public void setBinding(final String binding)
-	{
-		sosBindingTextField.setText(binding);
+
+	public Step7Panel setBinding(final String binding) {
+		sosBindingCB.setSelectedItem(binding);
+		return this;
 	}
-	
-	public String getSosVersion()
-	{
-		return sosVersionTextField.getText();
+
+	public String getSosVersion() {
+		return sosVersionCB.getSelectedItem().toString();
 	}
-	
-	public void setVersion(final String version)
-	{
-		sosVersionTextField.setText(version);
+
+	public Step7Panel setSosVersion(final String version) {
+		sosVersionCB.setSelectedItem(version);
+		return this;
 	}
 }
 

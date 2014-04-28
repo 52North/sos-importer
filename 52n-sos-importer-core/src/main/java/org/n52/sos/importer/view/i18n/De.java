@@ -847,6 +847,11 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step7SosBindingLabel() {
+		return "Binding";
+	}
+
+	@Override
 	public String step7SOSConncetionStart(final String strURL) {
 		return "Um mit dem Verbindungstest zu dem " + sos() +
 				"\n\"" + strURL + "\"\n" +
@@ -881,9 +886,13 @@ public class De extends Lang {
 	}
 
 	@Override
-	public String step7SosVersionInstructions()
-	{
+	public String step7SosVersionInstructions()	{
 		return "Bitte die Spezifikations-Version angeben, die durch die SOS-Instanz implementiert wird.";
+	}
+
+	@Override
+	public String step7SosVersionLabel() {
+		return "Version";
 	}
 
 	@Override

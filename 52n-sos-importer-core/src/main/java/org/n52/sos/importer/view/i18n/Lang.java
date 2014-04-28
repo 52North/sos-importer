@@ -854,6 +854,11 @@ public abstract class Lang {
 	public abstract String step7SosBindingInstructions();
 
 	/**
+	 * @return Binding
+	 */
+	public abstract String step7SosBindingLabel();
+
+	/**
 	 * @param strURL
 	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
 	 */
@@ -893,6 +898,11 @@ public abstract class Lang {
 	 * @return Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.
 	 */
 	public abstract String step7SosVersionInstructions();
+
+	/**
+	 * @return Specification
+	 */
+	public abstract String step7SosVersionLabel();
 
 	/**
 	 * @return Open Configuration File

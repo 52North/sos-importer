@@ -853,6 +853,11 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step7SosBindingLabel() {
+		return "Binding";
+	}
+
+	@Override
 	public String step7SOSConncetionStart(final String strURL) {
 		return "To start connection testing to URL" +
 				"\n\"" + strURL + "\"\n" +
@@ -889,6 +894,11 @@ public class En extends Lang {
 	public String step7SosVersionInstructions()
 	{
 		return "Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.";
+	}
+
+	@Override
+	public String step7SosVersionLabel() {
+		return "Version";
 	}
 
 	@Override
