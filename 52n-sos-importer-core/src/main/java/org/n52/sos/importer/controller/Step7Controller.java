@@ -55,7 +55,7 @@ public class Step7Controller extends StepController {
 
 	@Override
 	public void loadSettings() {
-		s7P = new Step7Panel(this);
+		s7P = new Step7Panel();
 		if (s7M != null) {
 			if (s7M.getSosURL() != null) {
 				s7P.setSOSURL(s7M.getSosURL());
