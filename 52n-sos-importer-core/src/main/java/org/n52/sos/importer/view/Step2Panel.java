@@ -115,7 +115,7 @@ public class Step2Panel extends JPanel {
 		addFirstLineWithData(csvFileRowCount, csvSettingsPanel, gridY++);
 		addDecimalSeparator(csvSettingsPanel, gridY++);
 		addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
-		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++, csvFileRowCount);
+		addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
 		final JPanel csvDataPanel = new JPanel();
 		addCsvDataPanel(csvDataPanel);
 
@@ -134,11 +134,10 @@ public class Step2Panel extends JPanel {
 	}
 
 	private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel,
-			int gridY,
-			final int max) {
+			int gridY) {
 		addIsSampleBased(csvSettingsPanel, gridY++);
 		addStartRegEx(csvSettingsPanel, gridY++);
-		addDateOffset(csvSettingsPanel, gridY++, max);
+		addDateOffset(csvSettingsPanel, gridY++);
 		addDateExtractionRegEx(csvSettingsPanel, gridY++);
 		addDatePattern(csvSettingsPanel, gridY++);
 	}
@@ -215,9 +214,8 @@ public class Step2Panel extends JPanel {
 	}
 
 	private void addDateOffset(final JPanel csvSettingsPanel,
-			final int gridY,
-			final int max) {
-		dateOffsetModel = new SpinnerNumberModel(1, 1, max, 1);
+			final int gridY) {
+		dateOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
 		dateOffsetModel.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(final ChangeEvent e) {
