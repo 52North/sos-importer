@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Lets the user choose a URL of a Sensor Observation Service (and test the 
+ * Lets the user choose a URL of a Sensor Observation Service (and test the
  * connection), define the offering, and save the configuration.
  * @author Raimund
  */
@@ -67,12 +67,12 @@ public class Step7Controller extends StepController {
 				s7P.setBinding(s7M.getBinding());
 			}
 			if (s7M.getVersion() != null && !s7M.getVersion().isEmpty()) {
-				s7P.setVersion(s7M.getVersion());
+				s7P.setSosVersion(s7M.getVersion());
 			}
 		}
 		BackNextController.getInstance().changeFinishToNext();
 	}
-	
+
 	@Override
 	public void back() {
 		final BackNextController bnc = BackNextController.getInstance();
@@ -161,8 +161,8 @@ public class Step7Controller extends StepController {
 
 	private boolean isOfferingNameNotGiven()
 	{
-		return !s7P.isGenerateOfferingFromSensorName() && 
-				(s7P.getOfferingName() == null || 
+		return !s7P.isGenerateOfferingFromSensorName() &&
+				(s7P.getOfferingName() == null ||
 				s7P.getOfferingName().equalsIgnoreCase(""));
 	}
 
