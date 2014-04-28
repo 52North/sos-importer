@@ -88,6 +88,8 @@ public class Step2Controller extends StepController {
 				step2Model.getSampleBasedDateOffset() < 1 ||
 				step2Model.getSampleBasedDateExtractionRegEx() == null ||
 				step2Model.getSampleBasedDateExtractionRegEx().isEmpty() ||
+				step2Model.getSampleBasedDateExtractionRegEx().indexOf("(") < 0 ||
+				step2Model.getSampleBasedDateExtractionRegEx().indexOf(")") < 1 ||
 				step2Model.getSampleBasedDatePattern() == null ||
 				step2Model.getSampleBasedDatePattern().isEmpty()
 				)) {
