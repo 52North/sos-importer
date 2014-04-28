@@ -437,13 +437,13 @@ public class De extends Lang {
 
 	@Override
 	public String step2SampleBasedDateExtractionRegExTooltip() {
-		return new StringBuffer("Der Reguläre Ausdruck mit dessen Hilfe die\n")
-			.append("Datumsinformatione aus der Zeile extrahiert werden, die\n")
-			.append("die entspr. Informationen für die aktuelle Messreihe\n")
-			.append("enthält. Das Ergebnis des Asudrucks MUSS genau EINE\n")
-			.append("Gruppe enthalten. Diese Gruppe wird mit Hilfe des\n")
-			.append("Attributes \"sampleDatePattern\" in einen Zeitstempel\n")
-			.append("umgewandelt.")
+		return new StringBuffer("<html>Der Reguläre Ausdruck mit dessen Hilfe die<br />")
+			.append("Datumsinformatione aus der Zeile extrahiert werden, die<br />")
+			.append("die entspr. Informationen für die aktuelle Messreihe<br />")
+			.append("enthält. Das Ergebnis des Asudrucks MUSS genau EINE<br />")
+			.append("Gruppe enthalten. Diese Gruppe wird mit Hilfe des<br />")
+			.append("Attributes \"sampleDatePattern\" in einen Zeitstempel<br />")
+			.append("umgewandelt.</html>")
 			.toString();
 	}
 

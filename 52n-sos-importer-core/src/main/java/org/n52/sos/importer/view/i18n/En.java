@@ -440,11 +440,11 @@ public class En extends Lang {
 
 	@Override
 	public String step2SampleBasedDateExtractionRegExTooltip() {
-		return new StringBuffer("The regular expression to extract the date\n")
-			.append("information from the line containing the date\n")
-			.append("information of the current sample. The expression MUST\n")
-			.append("result in ONE group. This group will be parsed to a\n")
-			.append("java.util.Date using \"sampleDatePattern\" attribute.")
+		return new StringBuffer("<html>The regular expression to extract the date<br/>")
+			.append("information from the line containing the date<br/>")
+			.append("information of the current sample. The expression MUST<br/>")
+			.append("result in ONE group. This group will be parsed to a<br/>")
+			.append("java.util.Date using \"sampleDatePattern\" attribute.</html>")
 			.toString();
 	}
 
@@ -475,7 +475,11 @@ public class En extends Lang {
 
 	@Override
 	public String step2SampleBasedSampleSizeOffsetToolTip() {
-		return "The offset in lines from sample beginning till the line containing the sample size in lines with data.";
+		return new StringBuffer("<html>The offset in lines from sample beginning")
+		.append("till<br />the line containing the sample size in lines ")
+		.append("with data.</html>")
+		.toString();
+	}
 	}
 
 	@Override
@@ -485,7 +489,7 @@ public class En extends Lang {
 
 	@Override
 	public String step2SampleBasedStartRegExTooltip() {
-		return "Used to identify the start of a new sample.\nMUST match the whole line.";
+		return "<html>Used to identify the start of a new sample.<br />MUST match the whole line.</html>";
 	}
 
 	@Override
