@@ -90,7 +90,7 @@ public class Step7Panel extends JPanel {
 	private JPanel sosBindingPanel;
 	private JPanel configFilePanel;
 
-	public Step7Panel(final Step7Controller s7C) {
+	public Step7Panel() {
 		setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		final GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{750, 0};
