@@ -82,6 +82,26 @@ public class Step2Controller extends StepController {
 			return false;
 		}
 
+		if(step2Model.isSampleBased() &&
+				(step2Model.getSampleBasedStartRegEx() == null ||
+				step2Model.getSampleBasedStartRegEx().isEmpty() ||
+				step2Model.getSampleBasedDateOffset() < 1 ||
+				step2Model.getSampleBasedDateExtractionRegEx() == null ||
+				step2Model.getSampleBasedDateExtractionRegEx().isEmpty() ||
+				step2Model.getSampleBasedDateExtractionRegEx().indexOf("(") < 0 ||
+				step2Model.getSampleBasedDateExtractionRegEx().indexOf(")") < 1 ||
+				step2Model.getSampleBasedDatePattern() == null ||
+				step2Model.getSampleBasedDatePattern().isEmpty() ||
+				step2Model.getSampleBasedDataOffset() < 1 ||
+				step2Model.getSampleBasedSampleSizeOffset() < 1 ||
+				step2Model.getSampleBasedSampleSizeRegEx() == null ||
+				step2Model.getSampleBasedSampleSizeRegEx().isEmpty() ||
+				step2Model.getSampleBasedSampleSizeRegEx().indexOf("(") < 0 ||
+				step2Model.getSampleBasedSampleSizeRegEx().indexOf(")") < 1
+				)) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -93,7 +113,7 @@ public class Step2Controller extends StepController {
 				step2Model.getFirstLineWithData());
 		return new Step3Controller(0,
 				step2Model.getFirstLineWithData(),
-				step2Model.getUseHeader());
+				step2Model.isUseHeader());
 	}
 
 	@Override
@@ -118,12 +138,23 @@ public class Step2Controller extends StepController {
 		final String csvFileContent = step2Model.getCSVFileContent();
 		step2Panel.setCSVFileContent(csvFileContent);
 
-		final boolean useHeader = step2Model.getUseHeader();
+		final boolean useHeader = step2Model.isUseHeader();
 		step2Panel.setUseHeader(useHeader);
 		step2Panel.setCSVFileHighlight(firstLineWithData);
 
 		final char decimalSeparator = step2Model.getDecimalSeparator();
 		step2Panel.setDecimalSeparator(decimalSeparator+"");
+
+		if (step2Model.isSampleBased()) {
+			step2Panel.setSampleBased(true);
+			step2Panel.setSampleBasedStartRegEx(step2Model.getSampleBasedStartRegEx());
+			step2Panel.setSampleBasedDateOffset(step2Model.getSampleBasedDateOffset());
+			step2Panel.setSampleBasedDateExtractionRegEx(step2Model.getSampleBasedDateExtractionRegEx());
+			step2Panel.setSampleBasedDatePattern(step2Model.getSampleBasedDatePattern());
+			step2Panel.setSampleBasedDataOffset(step2Model.getSampleBasedDataOffset());
+			step2Panel.setSampleBasedSampleSizeOffset(step2Model.getSampleBasedSampleSizeOffset());
+			step2Panel.setSampleBasedSampleSizeRegEx(step2Model.getSampleBasedSampleSizeRegEx());
+		}
 	}
 
 	@Override
@@ -162,6 +193,17 @@ public class Step2Controller extends StepController {
 			Constants.THOUSANDS_SEPARATOR = ',';
 		} else {
 			Constants.THOUSANDS_SEPARATOR = '.';
+		}
+
+		if (step2Panel.isSampleBased()) {
+			step2Model.setSampleBased(true);
+			step2Model.setSampleBasedStartRegEx(step2Panel.getSampleBasedStartRegEx());
+			step2Model.setSampleBasedDateOffset(step2Panel.getSampleBasedDateOffset());
+			step2Model.setSampleBasedDateExtractionRegEx(step2Panel.getSampleBasedDateExtractionRegEx());
+			step2Model.setSampleBasedDatePattern(step2Panel.getSampleBasedDatePattern());
+			step2Model.setSampleBasedDataOffset(step2Panel.getSampleBasedDataOffset());
+			step2Model.setSampleBasedSampleSizeOffset(step2Panel.getSampleBasedSampleSizeOffset());
+			step2Model.setSampleBasedSampleSizeRegEx(step2Panel.getSampleBasedSampleSizeRegEx());
 		}
 
 		step2Panel = null;
@@ -241,7 +283,7 @@ public class Step2Controller extends StepController {
 		final String quoteChar = step2Model.getCommentIndicator();
 		final String escape = step2Model.getTextQualifier();
 		final int firstLineWithData = step2Model.getFirstLineWithData();
-		final boolean useHeader = step2Model.getUseHeader();
+		final boolean useHeader = step2Model.isUseHeader();
 
 		logger.info("Parse CSV file: " +
 				"column separator: '"    + separator         + "', " +

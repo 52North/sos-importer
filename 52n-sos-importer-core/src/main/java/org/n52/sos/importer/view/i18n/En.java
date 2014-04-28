@@ -30,10 +30,11 @@ import java.util.Locale;
 import org.n52.sos.importer.Constants;
 
 /**
- * @author e.h.juerrens@52north.org
  * This class contains all String used by the GUI in English
+ *
+ * @author e.h.juerrens@52north.org
  */
-public class En extends Lang{
+public class En extends Lang {
 
 	private final static Locale locale = Locale.ENGLISH;
 
@@ -413,8 +414,94 @@ public class En extends Lang{
 	}
 
 	@Override
+	public String step2IsSampleBased() {
+		return "Is data file sample based";
+	}
+
+	@Override
 	public String step2ParseHeader() {
 		return "Interpret Header";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetLabel() {
+		return "Offset data";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetToolTip() {
+		return "The offset in lines from sample beginning till the first lines with data.";
+	}
+
+	@Override
+	public String step2SampleBasedDateExtractionRegExLabel() {
+		return "Regular Expression \"Date Extraction\"";
+	}
+
+	@Override
+	public String step2SampleBasedDateExtractionRegExTooltip() {
+		return new StringBuffer("<html>The regular expression to extract the date<br/>")
+			.append("information from the line containing the date<br/>")
+			.append("information of the current sample. The expression MUST<br/>")
+			.append("result in ONE group. This group will be parsed to a<br/>")
+			.append("java.util.Date using \"sampleDatePattern\" attribute.</html>")
+			.toString();
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetLabel() {
+		return "Offset date information";
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetToolTip() {
+		return "The offset of the line containing the date of the sample from the start line.";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternLabel() {
+		return "Parse Pattern \"Date Information\"";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternTooltip() {
+		return "The pattern used to parse the date information of the current sample.";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetLabel() {
+		return "Offset sample size";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetToolTip() {
+		return new StringBuffer("<html>The offset in lines from sample beginning")
+		.append("till<br />the line containing the sample size in lines ")
+		.append("with data.</html>")
+		.toString();
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExLabel() {
+		return "Regular Expression \"Sample Size\"";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExTooltip() {
+		return new StringBuffer("<html>The regular expression to extract the sample size.<br/>")
+			   .append("The regular expression MUST result in ONE group<br/>")
+			   .append("which contains an integer value.</html>")
+			   .toString();
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExLabel() {
+		return "Regular Expression \"Sample Start\"";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExTooltip() {
+		return "<html>Used to identify the start of a new sample.<br />MUST match the whole line.</html>";
 	}
 
 	@Override

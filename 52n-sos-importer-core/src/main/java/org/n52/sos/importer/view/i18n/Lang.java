@@ -391,119 +391,239 @@ public abstract class Lang {
 	 */
 	public abstract String step2FirstLineWithData();
 	/**
+	 *
+	 * @return Is data file sample based
+	 */
+	public abstract String step2IsSampleBased();
+	/**
 	 * @return Interpret Header
 	 */
 	public abstract String step2ParseHeader();
+
+	/**
+	 *
+	 * @return Offset data
+	 */
+	public abstract String step2SampleBasedDataOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset in lines from sample beginning till the first lines
+	 * 			with data.
+	 */
+	public abstract String step2SampleBasedDataOffsetToolTip();
+
+	/**
+	 * @return Regular Expression "Date Extraction"
+	 */
+	public abstract String step2SampleBasedDateExtractionRegExLabel();
+
+	/**
+	 * @return The regular expression to extract the date information from the
+	 * 				line containing the date information of the current sample.
+	 * 				The expression MUST result in ONE group. This group will be
+	 * 				parsed to a {@link java.util.Date} using
+	 * 				"sampleDatePattern" attribute.
+	 */
+	public abstract String step2SampleBasedDateExtractionRegExTooltip();
+
+	/**
+	 * @return Offset date information
+	 */
+	public abstract String step2SampleBasedDateOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset of the line containing the date of the
+     *                      sample from the start line.
+	 */
+	public abstract String step2SampleBasedDateOffsetToolTip();
+
+	/**
+	 * @return Parse Pattern "Date Information"
+	 */
+	public abstract String step2SampleBasedDatePatternLabel();
+
+	/**
+	 * @return The pattern used to parse the date information of the
+	 * 			current sample.
+	 */
+	public abstract String step2SampleBasedDatePatternTooltip();
+
+	/**
+	 *
+	 * @return Offset sample size
+	 */
+	public abstract String step2SampleBasedSampleSizeOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset in lines from sample beginning till the line
+	 * 			containing the sample size in lines with data.
+	 */
+	public abstract String step2SampleBasedSampleSizeOffsetToolTip();
+
+	/**
+	 * @return Regular Expression "Sample Size"
+	 */
+	public abstract String step2SampleBasedSampleSizeRegExLabel();
+
+	/**
+	 * @return The regular expression to extract the sample size. The regular
+	 * 				expression MUST result in ONE group which contains an
+	 * 				integer value.
+	 */
+	public abstract String step2SampleBasedSampleSizeRegExTooltip();
+
+	/**
+	 *
+	 * @return Regular Expression "Sample Start"
+	 */
+	public abstract String step2SampleBasedStartRegExLabel();
+
+	/**
+	 *
+	 * @return Used to identify the start of a new sample.\n
+	 * 							MUST match the whole line.
+	 */
+	public abstract String step2SampleBasedStartRegExTooltip();
+
 	/**
 	 * @return Text qualifier
 	 */
 	public abstract String step2TextQualifier();
+
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */
 	public abstract String step3aDescription();
+
 	/**
 	 * @return You have to specify at least one measured value column.
 	 */
 	public abstract String step3aMeasureValueColMissingDialogMessage();
+
 	/**
 	 * @return Measured value column missing
 	 */
 	public abstract String step3aMeasureValueColMissingDialogTitle();
+
 	/**
 	 * @return 1 value not parseable.
 	 */
 	public abstract String step3aParseTest1Failed();
+
 	/**
 	 * @return All values parseable.
 	 */
 	public abstract String step3aParseTestAllOk();
+
 	/**
 	 * @param n
 	 * @return <code>n</code> values not parseable.
 	 */
 	public abstract String step3aParseTestNFailed(int n);
+
 	/**
 	 * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
 	 */
 	public abstract String step3aSelectedColTypeUndefinedMsg();
+
 	/**
 	 * @return Column Type is "undefined"
 	 */
 	public abstract String step3aSelectedColTypeUndefinedTitle();
+
 	/**
 	 * @return Step 3b: Choose metadata for rows
 	 */
 	public abstract String step3bDescription();
+
 	/**
 	 * @return Date & Time
 	 */
 	public abstract String step3ColTypeDateTime();
+
 	/**
 	 * @return Do not export
 	 */
 	public abstract String step3ColTypeDoNotExport();
+
 	/**
 	 * @return Measured Value
 	 */
 	public abstract String step3ColTypeMeasuredValue();
+
 	/**
 	 * @return Undefined
 	 */
 	public abstract String step3ColTypeUndefined();
+
 	/**
 	 * @return Combination
 	 */
 	public abstract String step3DateAndTimeCombination();
+
 	/**
 	 * @return UNIX time
 	 */
 	public abstract String step3DateAndTimeUnixTime();
+
 	/**
 	 * @return Boolean
 	 */
 	public abstract String step3MeasuredValBoolean();
+
 	/**
 	 * @return Count
 	 */
 	public abstract String step3MeasuredValCount();
+
 	/**
 	 * @return Numeric Value
 	 */
 	public abstract String step3MeasuredValNumericValue();
+
 	/**
 	 * @return Text
 	 */
 	public abstract String step3MeasuredValText();
+
 	/**
 	 * @return {@linkplain org.n52.sos.importer.view.i18n.En.step3DateAndTimeCombination()}
 	 * 	<br />:= Combination
 	 */
 	public abstract String step3PositionCombination();
+
 	/**
 	 * @return Step 4a: Solve Date & Time ambiguities
 	 */
 	public abstract String step4aDescription();
+
 	/**
 	 * @return Date and Time are already set for this <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 */
 	public abstract String step4aInfoDateAndTime();
+
 	/**
 	 * @param element
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 */
 	public abstract String step4aInfoMeasuredValue();
+
 	/**
 	 * @param stringReplacer
 	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked Date & Time group corresponds to.
 	 */
 	public abstract String step4aModelDescription();
+
 	/**
 	 * @return Step 4b: Solve ambiguities
 	 */
 	public abstract String step4bDescription();
+
 	/**
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
@@ -588,6 +708,7 @@ public abstract class Lang {
 	 * @return Step 6b: Add missing metadata
 	 */
 	public abstract String step6bDescription();
+
 	/**
 	 * Replacements: Resource &rarr; Orientation
 	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
@@ -599,52 +720,64 @@ public abstract class Lang {
 	 * 			\nMultiple columns could be selected.
 	 */
 	public abstract String step6bSelectColumnsLabel();
+
 	/**
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
+
 	/**
 	 * @return What is the sensor for
 	 */
 	public abstract String step6bSpecialModelDescription();
+
 	/**
 	 * @return Please provide a URI or a prefix if using the name as part of the URI.
 	 */
 	public abstract String step6bURIInstructions();
+
 	/**
 	 * @return Use Name after prefix?
 	 */
 	public abstract String step6bUseNameAfterPrefix();
+
 	/**
 	 * @return Step 6c: Add missing positions
 	 */
 	public abstract String step6cDescription();
+
 	/**
 	 *
 	 * @return Set Position
 	 */
 	public abstract String step6cInfoToolName();
+
 	/**
 	 *
 	 * @return Set the position by clicking on the map
 	 */
 	public abstract String step6cInfoToolTooltip();
+
 	/**
 	 * @return What is the position of
 	 */
 	public abstract String step6cModelDescription();
+
 	/**
 	 * @return Automatically Generate Identifier
 	 */
 	public abstract String step6Generation();
+
 	/**
 	 * @return Set Identifier Manually
 	 */
 	public abstract String step6ManualInput();
+
 	/**
 	 * @return Some User Input is missing. Please enter the required information.
 	 */
 	public abstract String step6MissingUserInput();
+
 	/**
 	 * @return No user input at all. Please fill in the required information.
 	 */

@@ -29,10 +29,11 @@ import java.util.Locale;
 import org.n52.sos.importer.Constants;
 
 /**
- * @author e.h.juerrens@52north.org
  * This class contains all String used by the GUI in German
+ *
+ * @author e.h.juerrens@52north.org
  */
-public class De extends Lang{
+public class De extends Lang {
 
 	private final static Locale locale = Locale.GERMAN;
 
@@ -410,8 +411,93 @@ public class De extends Lang{
 	}
 
 	@Override
+	public String step2IsSampleBased() {
+		return "Besteht die Datei aus Messreihen";
+	}
+
+	@Override
 	public String step2ParseHeader() {
 		return "Kopfzeile auswerten";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetLabel() {
+		return "Zeilenabstand 'Messdaten'";
+	}
+
+	@Override
+	public String step2SampleBasedDataOffsetToolTip() {
+		return "Der Abstand zwischen dem Start einer Messreihe und dem Beginn der Daten in Zeilen.";
+	}
+
+	@Override
+	public String step2SampleBasedDateExtractionRegExLabel() {
+		return "Regulärer Ausdruck \"Datumsinformation\"";
+	}
+
+	@Override
+	public String step2SampleBasedDateExtractionRegExTooltip() {
+		return new StringBuffer("<html>Der Reguläre Ausdruck mit dessen Hilfe die<br />")
+			.append("Datumsinformatione aus der Zeile extrahiert werden, die<br />")
+			.append("die entspr. Informationen für die aktuelle Messreihe<br />")
+			.append("enthält. Das Ergebnis des Asudrucks MUSS genau EINE<br />")
+			.append("Gruppe enthalten. Diese Gruppe wird mit Hilfe des<br />")
+			.append("Attributes \"sampleDatePattern\" in einen Zeitstempel<br />")
+			.append("umgewandelt.</html>")
+			.toString();
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetLabel() {
+		return "Zeilenabstand 'Datumsinformation'";
+	}
+
+	@Override
+	public String step2SampleBasedDateOffsetToolTip() {
+		return "Der Abstand zwischen dem Start einer Messreihe und der Zeile mit den Datumsinformationen";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternLabel() {
+		return "Analyse Muster \"Datumsinformationen\"";
+	}
+
+	@Override
+	public String step2SampleBasedDatePatternTooltip() {
+		return "Muster, das zur Interpretation der Datumsinformationen für die aktuelle Messreihe verwendet wird.";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetLabel() {
+		return "Zeilenabstand 'Messreihengröße'";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetToolTip() {
+		return "Der Abstand ziwschem dem Start einer Messreihe und der Zeile mit der Anzahl der Zeilen in der aktuellen Reihe.";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExLabel() {
+		return "Regulärer Ausdruck \"Messreihengröße\"";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeRegExTooltip() {
+		return new StringBuffer("<html>Wird benutzt um die Größe der aktuellen Messreihe aus der Zeile")
+			.append(" zu extrahieren.<br />Das Ergebnis der Zeile muss EINE Gruppe sein,<br />")
+			.append("die in eine Zahl umgewandelt werden kann.</html>")
+			.toString();
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExLabel() {
+		return "Regulärer Ausdruck \"Beginn der Messreihe\"";
+	}
+
+	@Override
+	public String step2SampleBasedStartRegExTooltip() {
+		return "Wird benutzt um den Start einer Messreihe zu finden.\nMuss für die gesamte Zeile passen";
 	}
 
 	@Override

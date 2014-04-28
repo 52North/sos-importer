@@ -43,6 +43,22 @@ public class Step2Model implements StepModel {
 
 	private boolean useHeader;
 
+	private boolean isSampleBased;
+
+	private String sampleBasedStartRegEx = "";
+
+	private int dateOffset = 0;
+
+	private String sampleBasedDateExtractionRegEx = "";
+
+	private String sampleBasedDatePattern = "";
+
+	private int dataOffset = 0;
+
+	private int sampleSizeOffset = 0;
+
+	private String sampleBasedSampleSizeRegEx = "";
+
 	public Step2Model(final String csvFileContent, final int csvFileRowCount) {
 		this.csvFileContent = csvFileContent;
 
@@ -58,63 +74,145 @@ public class Step2Model implements StepModel {
 		return csvFileRowRount;
 	}
 
-	public void setCsvFileRowRount(final int csvFileRowRount) {
+	public Step2Model setCsvFileRowRount(final int csvFileRowRount) {
 		this.csvFileRowRount = csvFileRowRount;
+		return this;
 	}
 
 	public String getColumnSeparator() {
 		return columnSeparator;
 	}
 
-	public void setColumnSeparator(final String selectedColumnSeparator) {
+	public Step2Model setColumnSeparator(final String selectedColumnSeparator) {
 		columnSeparator = selectedColumnSeparator;
+		return this;
 	}
 
 	public String getCommentIndicator() {
 		return commentIndicator;
 	}
 
-	public void setCommentIndicator(final String selectedCommentIndicator) {
+	public Step2Model setCommentIndicator(final String selectedCommentIndicator) {
 		commentIndicator = selectedCommentIndicator;
+		return this;
 	}
 
 	public int getFirstLineWithData() {
 		return firstLineWithData;
 	}
 
-	public void setFirstLineWithData(final int firstLineWithData) {
+	public Step2Model setFirstLineWithData(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
+		return this;
 	}
 
 	public String getTextQualifier() {
 		return textQualifier;
 	}
 
-	public void setTextQualifier(final String selectedTextQualifier) {
+	public Step2Model setTextQualifier(final String selectedTextQualifier) {
 		textQualifier = selectedTextQualifier;
+		return this;
 	}
 
 	public String getCSVFileContent() {
 		return csvFileContent;
 	}
 
-	public void setCSVFileContent(final String cSVFileContent) {
+	public Step2Model setCSVFileContent(final String cSVFileContent) {
 		csvFileContent = cSVFileContent;
+		return this;
 	}
 
-	public boolean getUseHeader() {
+	public boolean isUseHeader() {
 		return useHeader;
 	}
 
-	public void setUseHeader(final boolean useHeader) {
+	public Step2Model setUseHeader(final boolean useHeader) {
 		this.useHeader = useHeader;
+		return this;
 	}
 
 	public char getDecimalSeparator() {
 		return decimalSeparator;
 	}
 
-	public void setDecimalSeparator(final char decimalSeparator) {
+	public Step2Model setDecimalSeparator(final char decimalSeparator) {
 		this.decimalSeparator = decimalSeparator;
+		return this;
 	}
+
+	public boolean isSampleBased() {
+		return isSampleBased;
+	}
+
+	public Step2Model setSampleBased(final boolean isSampleBased) {
+		this.isSampleBased = isSampleBased;
+		return this;
+	}
+
+	public Step2Model setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
+		this.sampleBasedStartRegEx = sampleBasedStartRegEx;
+		return this;
+	}
+
+	public String getSampleBasedStartRegEx() {
+		return sampleBasedStartRegEx;
+	}
+
+	public Step2Model setSampleBasedDateOffset(final int dateOffset) {
+		this.dateOffset = dateOffset;
+		return this;
+	}
+
+	public int getSampleBasedDateOffset() {
+		return dateOffset;
+	}
+
+	public Step2Model setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
+		this.sampleBasedDateExtractionRegEx  = sampleBasedDateExtractionRegEx;
+		return this;
+	}
+
+	public String getSampleBasedDateExtractionRegEx() {
+		return sampleBasedDateExtractionRegEx;
+	}
+
+	public Step2Model setSampleBasedDatePattern(final String sampleBasedDateDatePattern) {
+		sampleBasedDatePattern  = sampleBasedDateDatePattern;
+		return this;
+	}
+
+	public String getSampleBasedDatePattern() {
+		return sampleBasedDatePattern;
+	}
+
+	public Step2Model setSampleBasedDataOffset(final int dataOffset) {
+		this.dataOffset = dataOffset;
+		return this;
+	}
+
+	public int getSampleBasedDataOffset() {
+		return dataOffset;
+	}
+
+	public Step2Model setSampleBasedSampleSizeOffset(final int sampleSizeOffset) {
+		this.sampleSizeOffset = sampleSizeOffset;
+		return this;
+	}
+
+	public int getSampleBasedSampleSizeOffset() {
+		return sampleSizeOffset;
+	}
+
+	public Step2Model setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
+		this.sampleBasedSampleSizeRegEx  = sampleBasedSampleSizeRegEx;
+		return this;
+	}
+
+	public String getSampleBasedSampleSizeRegEx() {
+		return sampleBasedSampleSizeRegEx;
+	}
+
+
 }
