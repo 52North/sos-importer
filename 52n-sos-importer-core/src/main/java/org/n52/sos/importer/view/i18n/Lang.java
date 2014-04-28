@@ -452,6 +452,19 @@ public abstract class Lang {
 
 	/**
 	 *
+	 * @return Offset sample size
+	 */
+	public abstract String step2SampleBasedSampleSizeOffsetLabel();
+
+	/**
+	 *
+	 * @return The offset in lines from sample beginning till the line
+	 * 			containing the sample size in lines with data.
+	 */
+	public abstract String step2SampleBasedSampleSizeOffsetToolTip();
+
+	/**
+	 *
 	 * @return Regular Expression "Sample Start"
 	 */
 	public abstract String step2SampleBasedStartRegExLabel();
@@ -467,112 +480,138 @@ public abstract class Lang {
 	 * @return Text qualifier
 	 */
 	public abstract String step2TextQualifier();
+
 	/**
 	 * @return Step 3a: Choose Metadata for the selected column
 	 */
 	public abstract String step3aDescription();
+
 	/**
 	 * @return You have to specify at least one measured value column.
 	 */
 	public abstract String step3aMeasureValueColMissingDialogMessage();
+
 	/**
 	 * @return Measured value column missing
 	 */
 	public abstract String step3aMeasureValueColMissingDialogTitle();
+
 	/**
 	 * @return 1 value not parseable.
 	 */
 	public abstract String step3aParseTest1Failed();
+
 	/**
 	 * @return All values parseable.
 	 */
 	public abstract String step3aParseTestAllOk();
+
 	/**
 	 * @param n
 	 * @return <code>n</code> values not parseable.
 	 */
 	public abstract String step3aParseTestNFailed(int n);
+
 	/**
 	 * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
 	 */
 	public abstract String step3aSelectedColTypeUndefinedMsg();
+
 	/**
 	 * @return Column Type is "undefined"
 	 */
 	public abstract String step3aSelectedColTypeUndefinedTitle();
+
 	/**
 	 * @return Step 3b: Choose metadata for rows
 	 */
 	public abstract String step3bDescription();
+
 	/**
 	 * @return Date & Time
 	 */
 	public abstract String step3ColTypeDateTime();
+
 	/**
 	 * @return Do not export
 	 */
 	public abstract String step3ColTypeDoNotExport();
+
 	/**
 	 * @return Measured Value
 	 */
 	public abstract String step3ColTypeMeasuredValue();
+
 	/**
 	 * @return Undefined
 	 */
 	public abstract String step3ColTypeUndefined();
+
 	/**
 	 * @return Combination
 	 */
 	public abstract String step3DateAndTimeCombination();
+
 	/**
 	 * @return UNIX time
 	 */
 	public abstract String step3DateAndTimeUnixTime();
+
 	/**
 	 * @return Boolean
 	 */
 	public abstract String step3MeasuredValBoolean();
+
 	/**
 	 * @return Count
 	 */
 	public abstract String step3MeasuredValCount();
+
 	/**
 	 * @return Numeric Value
 	 */
 	public abstract String step3MeasuredValNumericValue();
+
 	/**
 	 * @return Text
 	 */
 	public abstract String step3MeasuredValText();
+
 	/**
 	 * @return {@linkplain org.n52.sos.importer.view.i18n.En.step3DateAndTimeCombination()}
 	 * 	<br />:= Combination
 	 */
 	public abstract String step3PositionCombination();
+
 	/**
 	 * @return Step 4a: Solve Date & Time ambiguities
 	 */
 	public abstract String step4aDescription();
+
 	/**
 	 * @return Date and Time are already set for this <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 */
 	public abstract String step4aInfoDateAndTime();
+
 	/**
 	 * @param element
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
 	 */
 	public abstract String step4aInfoMeasuredValue();
+
 	/**
 	 * @param stringReplacer
 	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked Date & Time group corresponds to.
 	 */
 	public abstract String step4aModelDescription();
+
 	/**
 	 * @return Step 4b: Solve ambiguities
 	 */
 	public abstract String step4bDescription();
+
 	/**
 	 * @return This is not a <code>En.measuredValue()</code>.
 	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
@@ -580,10 +619,12 @@ public abstract class Lang {
 	 *
 	 */
 	public abstract String step4bInfoNotMeasuredValue();
+
 	/**
 	 * @return " already set for this "
 	 */
 	public abstract String step4bInfoResourceAlreadySetText();
+
 	/**
 	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
 	 * @return
@@ -601,7 +642,6 @@ public abstract class Lang {
 		}
 		return res + step4bInfoResourceAlreadySetText() + measuredValue();
 	}
-
 	/**
 	 *
 	 * List how to replace the
@@ -668,10 +708,12 @@ public abstract class Lang {
 	 * 			\nMultiple columns could be selected.
 	 */
 	public abstract String step6bSelectColumnsLabel();
+
 	/**
 	 * @return Step 6b (Special): Add missing sensors
 	 */
 	public abstract String step6bSpecialDescription();
+
 	/**
 	 * @return What is the sensor for
 	 */

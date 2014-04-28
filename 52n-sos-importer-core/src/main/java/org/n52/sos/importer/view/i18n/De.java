@@ -468,6 +468,16 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedSampleSizeOffsetLabel() {
+		return "Zeilenabstand 'Messreihengröße'";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetToolTip() {
+		return "Der Abstand ziwschem dem Start einer Messreihe und der Zeile mit der Anzahl der Zeilen in der aktuellen Reihe.";
+	}
+
+	@Override
 	public String step2SampleBasedStartRegExLabel() {
 		return "Regulärer Ausdruck \"Beginn der Messreihe\"";
 	}

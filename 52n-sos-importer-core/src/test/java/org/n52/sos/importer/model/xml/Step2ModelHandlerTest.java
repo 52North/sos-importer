@@ -110,4 +110,22 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleDataOffset(), is(dataOffset));
 	}
 
+	@Test
+	public void shouldSetSampleBasedSampleSizeOffset() {
+		final int sampleSizeOffset = 42;
+		final Step2Model stepModel = new Step2Model("",2)
+			.setSampleBased(true)
+			.setSampleBasedStartRegEx("test-regex")
+			.setSampleBasedDateOffset(25)
+			.setSampleBasedDateExtractionRegEx("test-regex-2")
+			.setSampleBasedDatePattern("test-pattern")
+			.setSampleBasedDataOffset(6)
+			.setSampleBasedSampleSizeOffset(sampleSizeOffset);
+		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+		new Step2ModelHandler().handleModel(stepModel, importConf);
+
+		assertThat(importConf.getDataFile().isSetSampleSizeOffset(), is(true));
+		assertThat(importConf.getDataFile().getSampleSizeOffset(), is(sampleSizeOffset));
+	}
+
 }

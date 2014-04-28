@@ -105,6 +105,10 @@ public class Step2Panel extends JPanel {
 	private JSpinner dataOffset;
 	private JPanel dataOffsetPanel;
 
+	private SpinnerNumberModel sampleSizeOffsetModel;
+	private JSpinner sampleSizeOffset;
+	private JPanel sampleSizeOffsetPanel;
+
 	public Step2Panel(final int csvFileRowCount) {
 		super();
 		this.csvFileRowCount = csvFileRowCount;
@@ -145,6 +149,31 @@ public class Step2Panel extends JPanel {
 		addDateExtractionRegEx(csvSettingsPanel, gridY++);
 		addDatePattern(csvSettingsPanel, gridY++);
 		addDataOffset(csvSettingsPanel, gridY++);
+		addSampleSizeOffset(csvSettingsPanel, gridY++);
+	}
+
+	private void addSampleSizeOffset(final JPanel csvSettingsPanel,
+			final int gridY) {
+		sampleSizeOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
+		sampleSizeOffsetModel.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(final ChangeEvent e) {
+				final int number = sampleSizeOffsetModel.getNumber().intValue();
+				if(number < 0) {
+					sampleSizeOffsetModel.setValue(0);
+				} else if (number > (csvFileRowCount-1)){
+					sampleSizeOffsetModel.setValue((csvFileRowCount-1));
+				}
+			}
+		});
+		sampleSizeOffset = new JSpinner(sampleSizeOffsetModel);
+		sampleSizeOffsetPanel = new JPanel();
+		sampleSizeOffsetPanel.setToolTipText(Lang.l().step2SampleBasedSampleSizeOffsetToolTip());
+		sampleSizeOffsetPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		sampleSizeOffsetPanel.add(new JLabel(Lang.l().step2SampleBasedSampleSizeOffsetLabel() + ":"));
+		sampleSizeOffsetPanel.add(sampleSizeOffset);
+		sampleSizeOffsetPanel.setVisible(false);
+		csvSettingsPanel.add(sampleSizeOffsetPanel, simpleConstraints(gridY));
 	}
 
 	private void addDataOffset(final JPanel csvSettingsPanel,
@@ -161,7 +190,7 @@ public class Step2Panel extends JPanel {
 				}
 			}
 		});
-		dataOffset = new JSpinner(dateOffsetModel);
+		dataOffset = new JSpinner(dataOffsetModel);
 		dataOffsetPanel = new JPanel();
 		dataOffsetPanel.setToolTipText(Lang.l().step2SampleBasedDataOffsetToolTip());
 		dataOffsetPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -228,6 +257,7 @@ public class Step2Panel extends JPanel {
 		dateExtractionRegExPanel.setVisible(state);
 		datePatternPanel.setVisible(state);
 		dataOffsetPanel.setVisible(state);
+		sampleSizeOffsetPanel.setVisible(state);
 		firstDataJS.setEnabled(!state);
 	}
 
@@ -575,6 +605,15 @@ public class Step2Panel extends JPanel {
 
 	public Step2Panel setSampleBasedDataOffset(final int dataOffset) {
 		dataOffsetModel.setValue(dataOffset);
+		return this;
+	}
+
+	public int getSampleBasedSampleSizeOffset() {
+		return sampleSizeOffsetModel.getNumber().intValue();
+	}
+
+	public Step2Panel setSampleBasedSampleSizeOffset(final int sampleSizeOffset) {
+		sampleSizeOffsetModel.setValue(sampleSizeOffset);
 		return this;
 	}
 

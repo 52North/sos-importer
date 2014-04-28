@@ -469,6 +469,16 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step2SampleBasedSampleSizeOffsetLabel() {
+		return "Offset sample size";
+	}
+
+	@Override
+	public String step2SampleBasedSampleSizeOffsetToolTip() {
+		return "The offset in lines from sample beginning till the line containing the sample size in lines with data.";
+	}
+
+	@Override
 	public String step2SampleBasedStartRegExLabel() {
 		return "Regular Expression \"Sample Start\"";
 	}

@@ -109,4 +109,15 @@ public class Step2PanelTest {
 	public void shouldReturnOneAsDefaultValueForDataOffset() {
 		assertThat(panel.getSampleBasedDataOffset(), is(1));
 	}
+
+	@Test
+	public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
+		final int sampleSizeOffset = MAX_ROWS-5;
+		assertThat(panel.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
+	}
+
+	@Test
+	public void shouldReturnOneAsDefaultValueForSampleSizeOffset() {
+		assertThat(panel.getSampleBasedSampleSizeOffset(), is(1));
+	}
 }

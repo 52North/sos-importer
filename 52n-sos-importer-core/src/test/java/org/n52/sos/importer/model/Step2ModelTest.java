@@ -105,4 +105,15 @@ public class Step2ModelTest {
 	public void shouldReturnZeroAsDefaultValueForSampleBasedDataOffset() {
 		assertThat(model.getSampleBasedDataOffset(), is(0));
 	}
+
+	@Test
+	public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
+		final int sampleSizeOffset = 25;
+		assertThat(model.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
+	}
+
+	@Test
+	public void shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset() {
+		assertThat(model.getSampleBasedSampleSizeOffset(), is(0));
+	}
 }
