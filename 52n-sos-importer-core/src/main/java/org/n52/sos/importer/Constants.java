@@ -56,6 +56,20 @@ public class Constants {
 
 	private static final Logger logger = LoggerFactory.getLogger(Constants.class);
 
+	public static enum ImportStrategy {
+        /**
+         * Each value will be inserted as single observation into the SOS.
+         */
+        SingleObservation,
+        /**
+         * The file will be read at once. For each identified timeseries
+         * an OM_SWEArrayObservation will be created and inserted into the
+         * SOS using the "SplitDataArrayIntoObservations" of the 52North
+         * implementation.
+         */
+        SweArrayObservationWithSplitExtension;
+    }
+
 	public static final String BOOLEAN = "BOOLEAN";
 	public static final String COMBINATION = "COMBINATION";
 	public static final String COUNT = "COUNT";

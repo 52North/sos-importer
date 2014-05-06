@@ -28,6 +28,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.n52.sos.importer.Constants;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -64,5 +65,40 @@ public class Step7PanelTest {
 	public void shouldReturnBinding() {
 		panel.setBinding(POX);
 		assertThat(panel.getSosBinding(), is(POX));
+	}
+
+	@Test
+	public void shouldReturnImportStrategySingleObservationByDefault() {
+		assertThat(panel.getImportStrategy(), is(Constants.ImportStrategy.SingleObservation));
+	}
+
+	@Test
+	public void shouldReturnImportStrategySweArrayIfSet() {
+		panel.setImportStrategy(Constants.ImportStrategy.SweArrayObservationWithSplitExtension);
+		assertThat(panel.getImportStrategy(), is(Constants.ImportStrategy.SweArrayObservationWithSplitExtension));
+	}
+
+	@Test
+	public void shouldReturn5000AsDefaultHunksize() {
+		assertThat(panel.getHunkSize(), is(5000));
+	}
+
+	@Test
+	public void shouldReturnHunksize() {
+		final int hunkSize = 2500;
+		panel.setHunkSize(hunkSize);
+		assertThat(panel.getHunkSize(), is(hunkSize));
+	}
+
+	@Test
+	public void shouldReturn25AsDefaultSweArraySendBuffer() {
+		assertThat(panel.getSendBuffer(), is(25));
+	}
+
+	@Test
+	public void shouldReturnSweArraySendBuffe() {
+		final int buffer = 42;
+		panel.setSendBuffer(buffer);
+		assertThat(panel.getSendBuffer(), is(buffer));
 	}
 }

@@ -816,6 +816,36 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step7ImportStrategyBorderLabel() {
+		return "Import-Strategie";
+	}
+
+	@Override
+	public String step7ImportStrategyLabel() {
+		return "Strategie";
+	}
+
+	@Override
+	public String step7ImportStrategySingleObservation() {
+		return "Einzelne Beobachtungen";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayHunksizeLabel() {
+		return "Brockengröße";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayObservation() {
+		return "SweArrayObservation";
+	}
+
+	@Override
+	public String step7ImportStrategySweArraySendBuffer() {
+		return "Sendepuffer";
+	}
+
+	@Override
 	public String step7OfferingCheckBoxLabel() {
 		return "Offering-Bezeichner aus Sensor-Namen generieren?";
 	}

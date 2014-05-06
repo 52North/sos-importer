@@ -69,6 +69,14 @@ public class Step7Controller extends StepController {
 			if (s7M.getVersion() != null && !s7M.getVersion().isEmpty()) {
 				s7P.setSosVersion(s7M.getVersion());
 			}
+			switch (s7M.getImportStrategy()) {
+			case SweArrayObservationWithSplitExtension:
+				s7P.setHunkSize(s7M.getHunkSize());
+				s7P.setSendBuffer(s7M.getSendBuffer());
+			default:
+				s7P.setImportStrategy(s7M.getImportStrategy());
+				break;
+			}
 		}
 		BackNextController.getInstance().changeFinishToNext();
 	}
@@ -104,6 +112,14 @@ public class Step7Controller extends StepController {
 			if (!generateOfferingFromSensorName) {
 				s7M.setOffering(offering);
 			}
+		}
+		switch (s7P.getImportStrategy()) {
+		case SweArrayObservationWithSplitExtension:
+			s7M.setHunkSize(s7P.getHunkSize());
+			s7M.setSendBuffer(s7P.getSendBuffer());
+		default:
+			s7M.setImportStrategy(s7P.getImportStrategy());
+			break;
 		}
 	}
 
@@ -143,31 +159,26 @@ public class Step7Controller extends StepController {
 		return true;
 	}
 
-	private boolean isBindingNotGivenButRequired()
-	{
+	private boolean isBindingNotGivenButRequired() {
 		return s7P.getSosVersion() != null && s7P.getSosVersion().equalsIgnoreCase("2.0.0") && (s7P.getSosBinding() == null || s7P.getSosBinding().isEmpty());
 	}
 
-	private boolean isSosVersionNotGiven()
-	{
+	private boolean isSosVersionNotGiven() {
 		return s7P.getSosVersion() == null || s7P.getSosVersion().isEmpty();
 	}
 
-	private boolean isOfferingNameInvalid()
-	{
+	private boolean isOfferingNameInvalid() {
 		return !s7P.isGenerateOfferingFromSensorName() &&
 				!XMLTools.isNCName(s7P.getOfferingName());
 	}
 
-	private boolean isOfferingNameNotGiven()
-	{
+	private boolean isOfferingNameNotGiven() {
 		return !s7P.isGenerateOfferingFromSensorName() &&
 				(s7P.getOfferingName() == null ||
 				s7P.getOfferingName().equalsIgnoreCase(""));
 	}
 
-	private boolean showErrorDialogAndLogIt(final String msg)
-	{
+	private boolean showErrorDialogAndLogIt(final String msg) {
 		JOptionPane.showMessageDialog(null, msg, Lang.l().errorDialogTitle(), JOptionPane.ERROR_MESSAGE);
 		LOG.error(msg);
 		return false;
