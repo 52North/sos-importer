@@ -34,6 +34,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -41,11 +42,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import org.n52.sos.importer.Constants;
+import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
@@ -98,6 +103,24 @@ public class Step7Panel extends JPanel {
 	private final JPanel sosVersionPanel;
 	private final JPanel bindingPanel;
 
+	private final JRadioButton singleObservationRadioButton;
+
+	private final JRadioButton sweArrayObservationBufferRadioButton;
+
+	private final ButtonGroup importStrategy;
+
+	private final JLabel sweArrayObservationHunkSizeLabel;
+
+	private final JLabel sweArrayObservationBufferLabel;
+
+	private final JSpinner sweArrayObservationBufferSpinner;
+
+	private final JSpinner sweArrayObservationHunkSizeSpinner;
+
+	private final SpinnerNumberModel hunkSizeModel = new SpinnerNumberModel(5000, 0, Integer.MAX_VALUE, 1);
+
+	private final SpinnerNumberModel sweArraySendBuffer = new SpinnerNumberModel(25, 0, Integer.MAX_VALUE, 1);
+
 	public Step7Panel() {
 		setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -115,13 +138,13 @@ public class Step7Panel extends JPanel {
 
 		final GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
 		gbc_sosURLPanel.fill = GridBagConstraints.BOTH;
-		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_sosURLPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_sosURLPanel.gridx = 0;
 		gbc_sosURLPanel.gridy = 0;
 		add(sosURLPanel, gbc_sosURLPanel);
 
 		final GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
-		gbc_configFilePanel.insets = new Insets(0, 0, 5, 5);
+		gbc_configFilePanel.insets = new Insets(0, 0, 5, 0);
 		gbc_configFilePanel.fill = GridBagConstraints.BOTH;
 		gbc_configFilePanel.gridx = 0;
 		gbc_configFilePanel.gridy = 1;
@@ -129,7 +152,7 @@ public class Step7Panel extends JPanel {
 
 		final GridBagConstraints gbc_offeringPanel = new GridBagConstraints();
 		gbc_offeringPanel.fill = GridBagConstraints.BOTH;
-		gbc_offeringPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_offeringPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_offeringPanel.gridx = 0;
 		gbc_offeringPanel.gridy = 2;
 		add(offeringPanel, gbc_offeringPanel);
@@ -187,6 +210,113 @@ public class Step7Panel extends JPanel {
 				fillLabel = new JLabel("");
 				fillLabel.setBounds(818, 16, 30, 25);
 				metaPanel.add(fillLabel);
+
+				final JPanel importStrategyPanel = new JPanel();
+				importStrategyPanel.setBorder(new TitledBorder(null, Lang.l().step7ImportStrategyBorderLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				final GridBagConstraints gbc_importStrategyPanel = new GridBagConstraints();
+				gbc_importStrategyPanel.insets = new Insets(0, 0, 5, 0);
+				gbc_importStrategyPanel.fill = GridBagConstraints.BOTH;
+				gbc_importStrategyPanel.gridx = 0;
+				gbc_importStrategyPanel.gridy = 4;
+				add(importStrategyPanel, gbc_importStrategyPanel);
+				final GridBagLayout gbl_importStrategyPanel = new GridBagLayout();
+				gbl_importStrategyPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
+				gbl_importStrategyPanel.rowHeights = new int[]{0, 0, 0};
+				gbl_importStrategyPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+				gbl_importStrategyPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+				importStrategyPanel.setLayout(gbl_importStrategyPanel);
+
+				final JLabel importStrategyLabel = new JLabel(Lang.l().step7ImportStrategyLabel());
+				final GridBagConstraints gbc_importStrategyLabel = new GridBagConstraints();
+				gbc_importStrategyLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_importStrategyLabel.gridx = 0;
+				gbc_importStrategyLabel.gridy = 0;
+				importStrategyPanel.add(importStrategyLabel, gbc_importStrategyLabel);
+
+				singleObservationRadioButton = new JRadioButton(Lang.l().step7ImportStrategySingleObservation());
+				singleObservationRadioButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						if (singleObservationRadioButton.isSelected()) {
+							setVisibleSweArrayObservationStrategyGuiElements(false);
+						} else {
+							setVisibleSweArrayObservationStrategyGuiElements(true);
+						}
+					}
+
+				});
+				final GridBagConstraints gbc_singleObservationRadioButton = new GridBagConstraints();
+				gbc_singleObservationRadioButton.anchor = GridBagConstraints.WEST;
+				gbc_singleObservationRadioButton.insets = new Insets(0, 0, 5, 5);
+				gbc_singleObservationRadioButton.gridx = 1;
+				gbc_singleObservationRadioButton.gridy = 0;
+				importStrategyPanel.add(singleObservationRadioButton, gbc_singleObservationRadioButton);
+				singleObservationRadioButton.setSelected(true);
+
+				sweArrayObservationHunkSizeLabel = new JLabel(Lang.l().step7ImportStrategySweArrayHunksizeLabel());
+				sweArrayObservationHunkSizeLabel.setVisible(false);
+				final GridBagConstraints gbc_sweArrayObservationHunkSizeLabel = new GridBagConstraints();
+				gbc_sweArrayObservationHunkSizeLabel.anchor = GridBagConstraints.EAST;
+				gbc_sweArrayObservationHunkSizeLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_sweArrayObservationHunkSizeLabel.gridx = 2;
+				gbc_sweArrayObservationHunkSizeLabel.gridy = 0;
+				importStrategyPanel.add(sweArrayObservationHunkSizeLabel, gbc_sweArrayObservationHunkSizeLabel);
+
+				sweArrayObservationHunkSizeSpinner = new JSpinner(hunkSizeModel);
+				sweArrayObservationHunkSizeSpinner.setVisible(false);
+				final GridBagConstraints gbc_sweArrayObservationHunkSizeSpinner = new GridBagConstraints();
+				gbc_sweArrayObservationHunkSizeSpinner.insets = new Insets(0, 0, 5, 0);
+				gbc_sweArrayObservationHunkSizeSpinner.gridx = 3;
+				gbc_sweArrayObservationHunkSizeSpinner.gridy = 0;
+				importStrategyPanel.add(sweArrayObservationHunkSizeSpinner, gbc_sweArrayObservationHunkSizeSpinner);
+
+				sweArrayObservationBufferRadioButton = new JRadioButton(Lang.l().step7ImportStrategySweArrayObservation());
+				sweArrayObservationBufferRadioButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						if (sweArrayObservationBufferRadioButton.isSelected()) {
+							setVisibleSweArrayObservationStrategyGuiElements(true);
+						} else {
+							setVisibleSweArrayObservationStrategyGuiElements(false);
+						}
+					}
+				});
+				final GridBagConstraints gbc_sweArrayObservationBufferRadioButton = new GridBagConstraints();
+				gbc_sweArrayObservationBufferRadioButton.insets = new Insets(0, 0, 0, 5);
+				gbc_sweArrayObservationBufferRadioButton.anchor = GridBagConstraints.WEST;
+				gbc_sweArrayObservationBufferRadioButton.gridx = 1;
+				gbc_sweArrayObservationBufferRadioButton.gridy = 1;
+				importStrategyPanel.add(sweArrayObservationBufferRadioButton, gbc_sweArrayObservationBufferRadioButton);
+
+				importStrategy = new ButtonGroup();
+				importStrategy.add(singleObservationRadioButton);
+				importStrategy.add(sweArrayObservationBufferRadioButton);
+				importStrategy.setSelected(singleObservationRadioButton.getModel(), true);
+
+				sweArrayObservationBufferLabel = new JLabel(Lang.l().step7ImportStrategySweArraySendBuffer());
+				sweArrayObservationBufferLabel.setVisible(false);
+				final GridBagConstraints gbc_sweArrayObservationBufferLabel = new GridBagConstraints();
+				gbc_sweArrayObservationBufferLabel.anchor = GridBagConstraints.EAST;
+				gbc_sweArrayObservationBufferLabel.insets = new Insets(0, 0, 0, 5);
+				gbc_sweArrayObservationBufferLabel.gridx = 2;
+				gbc_sweArrayObservationBufferLabel.gridy = 1;
+				importStrategyPanel.add(sweArrayObservationBufferLabel, gbc_sweArrayObservationBufferLabel);
+
+				sweArrayObservationBufferSpinner = new JSpinner(sweArraySendBuffer);
+				sweArrayObservationBufferSpinner.setVisible(false);
+				final GridBagConstraints gbc_sweArrayObservationBufferSpinner = new GridBagConstraints();
+				gbc_sweArrayObservationBufferSpinner.gridx = 3;
+				gbc_sweArrayObservationBufferSpinner.gridy = 1;
+				importStrategyPanel.add(sweArrayObservationBufferSpinner, gbc_sweArrayObservationBufferSpinner);
+	}
+
+	private void setVisibleSweArrayObservationStrategyGuiElements(final boolean visible) {
+		sweArrayObservationHunkSizeLabel.setVisible(visible);
+		sweArrayObservationHunkSizeSpinner.setVisible(visible);
+		sweArrayObservationBufferLabel.setVisible(visible);
+		sweArrayObservationBufferSpinner.setVisible(visible);
 	}
 
 	private void initConfigFilePanel() {
@@ -389,6 +519,46 @@ public class Step7Panel extends JPanel {
 
 	public Step7Panel setSosVersion(final String version) {
 		sosVersionCB.setSelectedItem(version);
+		return this;
+	}
+
+	public int getHunkSize() {
+		return hunkSizeModel.getNumber().intValue();
+	}
+
+	public Step7Panel setHunkSize(final int hunkSize) {
+		hunkSizeModel.setValue(hunkSize);
+		return this;
+	}
+
+	public int getSendBuffer() {
+		return sweArraySendBuffer.getNumber().intValue();
+	}
+
+	public Step7Panel setSendBuffer(final int sendBuffer) {
+		sweArraySendBuffer.setValue(sendBuffer);
+		return this;
+	}
+
+	public ImportStrategy getImportStrategy() {
+		if (sweArrayObservationBufferRadioButton.isSelected()) {
+			return Constants.ImportStrategy.SweArrayObservationWithSplitExtension;
+		} else {
+			return Constants.ImportStrategy.SingleObservation;
+		}
+	}
+
+	public Step7Panel setImportStrategy(final ImportStrategy importStrategy) {
+		switch (importStrategy) {
+		case SweArrayObservationWithSplitExtension:
+			singleObservationRadioButton.setSelected(false);
+			sweArrayObservationBufferRadioButton.setSelected(true);
+			break;
+		default:
+			singleObservationRadioButton.setSelected(true);
+			sweArrayObservationBufferRadioButton.setSelected(false);
+			break;
+		}
 		return this;
 	}
 }

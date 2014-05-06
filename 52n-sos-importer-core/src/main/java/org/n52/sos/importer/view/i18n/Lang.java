@@ -821,6 +821,36 @@ public abstract class Lang {
 	public abstract String step7DirectImport();
 
 	/**
+	 * @return Import Strategy
+	 */
+	public abstract String step7ImportStrategyBorderLabel();
+
+	/**
+	 * @return Strategy
+	 */
+	public abstract String step7ImportStrategyLabel();
+
+	/**
+	 * @return Single Observation
+	 */
+	public abstract String step7ImportStrategySingleObservation();
+
+	/**
+	 * @return Hunk size
+	 */
+	public abstract String step7ImportStrategySweArrayHunksizeLabel();
+
+	/**
+	 * @return SweArrayObservation
+	 */
+	public abstract String step7ImportStrategySweArrayObservation();
+
+	/**
+	 * @return Send Buffer
+	 */
+	public abstract String step7ImportStrategySweArraySendBuffer();
+
+	/**
 	 * @return Generate Offering from Sensor name?
 	 */
 	public abstract String step7OfferingCheckBoxLabel();

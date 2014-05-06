@@ -27,8 +27,14 @@ import static java.lang.Boolean.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
+import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
+import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -83,6 +89,38 @@ public class Step7ModelHandlerTest {
 
 		assertThat(importConfEmpty.getSosMetadata().getVersion(), is(nullValue()));
 		assertThat(importConfNull.getSosMetadata().getVersion(), is(nullValue()));
+	}
+
+	@Test
+	public void shouldSetImportStrategy() {
+		final Step7Model stepModel = new Step7Model(null, null, false, null, "",null);
+		stepModel.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+		new Step7ModelHandler().handleModel(stepModel, importConf);
+
+		assertThat(getAdditionalMetadata(importConf, Key.IMPORT_STRATEGY), is(ImportStrategy.SweArrayObservationWithSplitExtension.name()));
+	}
+
+	@Test
+	public void shouldSetHunkSize() {
+		final int hunkSize = 42;
+		final Step7Model stepModel = new Step7Model(null, null, false, null, "",null)
+			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension)
+			.setHunkSize(hunkSize);
+		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+		new Step7ModelHandler().handleModel(stepModel, importConf);
+
+		assertThat(getAdditionalMetadata(importConf, Key.HUNK_SIZE), is(Integer.toString(hunkSize)));
+	}
+
+	private String getAdditionalMetadata(final SosImportConfiguration importConf,
+			final Enum key) {
+		for (final Metadata metadata : importConf.getAdditionalMetadata().getMetadataArray()) {
+			if (metadata.getKey().equals(key)) {
+				return metadata.getValue();
+			}
+		}
+		throw new NoSuchElementException(String.format("Element with Key '%' not found", key));
 	}
 
 }

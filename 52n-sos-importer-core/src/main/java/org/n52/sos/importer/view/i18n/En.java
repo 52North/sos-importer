@@ -822,6 +822,36 @@ public class En extends Lang {
 	}
 
 	@Override
+	public String step7ImportStrategyBorderLabel() {
+		return "Import Strategy";
+	}
+
+	@Override
+	public String step7ImportStrategyLabel() {
+		return "Strategy";
+	}
+
+	@Override
+	public String step7ImportStrategySingleObservation() {
+		return "Single Observation";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayHunksizeLabel() {
+		return "Hunk size";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayObservation() {
+		return "SweArrayObservation";
+	}
+
+	@Override
+	public String step7ImportStrategySweArraySendBuffer() {
+		return "Send Buffer";
+	}
+
+	@Override
 	public String step7OfferingCheckBoxLabel() {
 		return "Generate Offering from Sensor name?";
 	}
