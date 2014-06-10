@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 
 import org.n52.oxf.xml.NcNameResolver;
@@ -74,6 +75,8 @@ import au.com.bytecode.opencsv.CSVReader;
 public class DataFile {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DataFile.class);
+
+	private static final int MILLIES_PER_HOUR = 1000 * 60 * 60;
 
 	private final Configuration configuration;
 
@@ -352,6 +355,7 @@ public class DataFile {
 	/**
 	 * @param mVColumn
 	 * @param values
+	 * @param timeZone
 	 * @return
 	 * @throws ParseException
 	 */
@@ -365,10 +369,13 @@ public class DataFile {
 		}
 		// else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
 		group = configuration.getFirstDateTimeGroup();
+		// Try to get timezone from configuration
 		final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
 			// get value from each column
 			final Timestamp ts = new Timestamp();
+			// TODO implement case if time zone is contained in a column
+			final TimeZone timeZone = getTimeZone(cols);
 			for (final Column column : cols) {
 				// get pattern and fields
 				final String pattern = getParsePattern(column);
@@ -378,7 +385,8 @@ public class DataFile {
 					final short value =
 							parseTimestampComponent(values[column.getNumber()],
 									pattern,
-									field);
+									field,
+									timeZone);
 					// add to timestamp object
 					switch (field) {
 					case GregorianCalendar.YEAR:
@@ -421,6 +429,32 @@ public class DataFile {
 			return ts;
 		}
 		return null;
+	}
+
+	private TimeZone getTimeZone(final Column[] cols) {
+		if (cols == null || cols.length < 1) {
+			return TimeZone.getDefault();
+		}
+		for (final Column column : cols) {
+			if (column.getMetadataArray() == null ||
+					column.getMetadataArray().length < 1) {
+				continue;
+			}
+			for (final Metadata meta : column.getMetadataArray()) {
+				if (meta.getKey().equals(Key.TIME_ZONE)) {
+					try {
+						for (final String zoneId : TimeZone.getAvailableIDs(Integer.parseInt(meta.getValue())*MILLIES_PER_HOUR) ) {
+							return TimeZone.getTimeZone(zoneId);
+						}
+					} catch (final NumberFormatException nfe) {
+						LOG.error("Could not parse interger from timezone metadata value. Using default timezone");
+						LOG.debug("Exception thrown: ", nfe);
+						return TimeZone.getDefault();
+					}
+				}
+			}
+		}
+		return TimeZone.getDefault();
 	}
 
 	/**
@@ -762,17 +796,19 @@ public class DataFile {
 
 	private short parseTimestampComponent(final String timestampPart,
 			final String pattern,
-			final int field) throws ParseException {
+			final int field,
+			final TimeZone timeZone) throws ParseException {
 		LOG.trace(String.format("parseTimestampComponent(%s,%s,%d)",
 					timestampPart,
 					pattern,
 					field));
 		Date date = null;
 		final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		sdf.setTimeZone(timeZone);
 
 		date = sdf.parse(timestampPart);
 
-		final GregorianCalendar gc = new GregorianCalendar();
+		final GregorianCalendar gc = new GregorianCalendar(timeZone);
 		gc.setTime(date);
 
 		return new Integer(gc.get(field)).shortValue();
