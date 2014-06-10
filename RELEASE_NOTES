@@ -76,6 +76,8 @@ Bugfixes:
  * #10: NPE during feeding if binding value is not set
  * #11: BadLocationException in the case of having empty lines in csv file
  * #20: Current GUI is broken when using sample based files with minor inconsistencies
+ * #24: Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
+ + #25: Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
 
 Release Notes for SOS-Importer 0.3.0
 ====================================
