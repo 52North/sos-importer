@@ -500,9 +500,11 @@ public final class SensorObservationService {
 	}
 
 	private boolean isColumnIgnored(final int i) {
-		for (final int ignoredColumn : ignoredColumns) {
-			if (i == ignoredColumn) {
-				return true;
+		if (ignoredColumns != null && ignoredColumns.length > 0) {
+			for (final int ignoredColumn : ignoredColumns) {
+				if (i == ignoredColumn) {
+					return true;
+				}
 			}
 		}
 		return false;
