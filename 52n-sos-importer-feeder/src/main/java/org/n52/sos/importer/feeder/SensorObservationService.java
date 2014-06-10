@@ -371,7 +371,7 @@ public final class SensorObservationService {
 	}
 
 	private boolean isLineIgnorable(final String[] values) {
-		if (ignorePatterns == null || ignorePatterns.length > 0) {
+		if (ignorePatterns != null && ignorePatterns.length > 0) {
 			final String line = restoreLine(values);
 			for (final Pattern pattern : ignorePatterns) {
 				if (pattern.matcher(line).matches()) {
@@ -500,9 +500,11 @@ public final class SensorObservationService {
 	}
 
 	private boolean isColumnIgnored(final int i) {
-		for (final int ignoredColumn : ignoredColumns) {
-			if (i == ignoredColumn) {
-				return true;
+		if (ignoredColumns != null && ignoredColumns.length > 0) {
+			for (final int ignoredColumn : ignoredColumns) {
+				if (i == ignoredColumn) {
+					return true;
+				}
 			}
 		}
 		return false;
