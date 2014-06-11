@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.feeder;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
@@ -42,5 +43,13 @@ public interface CsvParser {
      *             if errors happen during the read
      */
     String[] readNext() throws IOException;
+
+	/**
+	 * MUST be called before first call of {@link #readNext()}!
+	 *
+	 * @param bufferedReader
+	 * @param configuration
+	 */
+	void init(BufferedReader bufferedReader, Configuration configuration);
 
 }

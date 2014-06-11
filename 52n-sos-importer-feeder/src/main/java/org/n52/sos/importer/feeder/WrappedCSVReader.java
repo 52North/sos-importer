@@ -23,6 +23,7 @@
  */
 package org.n52.sos.importer.feeder;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -32,15 +33,21 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class WrappedCSVReader implements CsvParser {
 
-	private final CSVReader csvReader;
-
-	public WrappedCSVReader(final CSVReader csvReader) {
-		this.csvReader = csvReader;
-	}
+	private CSVReader csvReader;
 
 	@Override
 	public String[] readNext() throws IOException {
 		return csvReader.readNext();
+	}
+
+	@Override
+	public void init(final BufferedReader bufferedReader,
+			final Configuration configuration) {
+		final int flwd = configuration.getFirstLineWithData();
+		final char separator = configuration.getCsvSeparator(),
+				quotechar = configuration.getCsvQuoteChar(),
+				escape = configuration.getCsvEscape();
+		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
 	}
 
 }
