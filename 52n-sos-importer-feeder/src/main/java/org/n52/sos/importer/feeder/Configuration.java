@@ -1269,6 +1269,12 @@ public final class Configuration {
 		return 1;
 	}
 
+	public boolean isCsvParserDefined() {
+		return importConf.getCsvMetadata().isSetCsvParserClass();
+	}
 
+	public String getCsvParser() {
+		return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
+	}
 
 }

@@ -67,6 +67,10 @@ Features:
    and the HUNK_SIZE value.
    The current OX-F SimpleHttpClient implementation uses a default value of 5s,
    hence setting this to 25,000 results in 30s connection and socket timeout.
+ * "CsvParserClass" add to CsvMetadata. The class that MUST be used for parsing
+   the data file. The interface org.n52.sos.importer.feeder.CsvParser MUST be
+   implemented. The class name MUST contain the fully qualified package name
+   and a zero-argument constructor MUST be provided.
  
 Changes:
 --------
