@@ -418,6 +418,9 @@ public final class SensorObservationService {
 	}
 
 	private String restoreLine(final String[] values) {
+		if (values == null || values.length == 0) {
+			return "";
+		}
 		final StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);
