@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -39,7 +40,8 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
-	private static final int millisPerDay = 1000 * 60 * 60 * 24;
+	private static final int millisPerHour = 1000 * 60 * 60;
+	private static final int millisPerDay = millisPerHour * 24;
 	private short year = Short.MIN_VALUE;
 	private byte month = Byte.MIN_VALUE;
 	private byte day = Byte.MIN_VALUE;
@@ -112,6 +114,9 @@ public class Timestamp {
 
 	public Timestamp set(final long dateToSet) {
 		final Calendar cal = new GregorianCalendar();
+		if (timezone != Byte.MIN_VALUE) {
+			cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs(timezone*millisPerHour)[0]));
+		}
 		cal.setTimeInMillis(dateToSet);
 		year = (short) cal.get(Calendar.YEAR);
 		month = (byte) (cal.get(Calendar.MONTH)+1);
@@ -119,7 +124,7 @@ public class Timestamp {
 		hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
 		minute = (byte) cal.get(Calendar.MINUTE);
 		seconds = (byte) cal.get(Calendar.SECOND);
-		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/3600000);
+		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/millisPerHour);
 		return this;
 	}
 
