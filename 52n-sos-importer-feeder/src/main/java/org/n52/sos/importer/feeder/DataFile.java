@@ -151,9 +151,9 @@ public class DataFile {
 	 * Returns a CSVReader instance for the current DataFile using the configuration
 	 * including the defined values for: first line with data, separator, escape, and text qualifier.
 	 * @return a <code>CSVReader</code> instance
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	public CsvParser getCSVReader() throws FileNotFoundException {
+	public CsvParser getCSVReader() throws IOException {
 		LOG.trace("getCSVReader()");
 		final FileReader fr = new FileReader(file);
 		final BufferedReader br = new BufferedReader(fr);

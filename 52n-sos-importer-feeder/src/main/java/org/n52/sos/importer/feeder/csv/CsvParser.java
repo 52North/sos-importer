@@ -51,7 +51,8 @@ public interface CsvParser {
 	 *
 	 * @param bufferedReader
 	 * @param configuration
+	 * @throws IOException
 	 */
-	void init(BufferedReader bufferedReader, Configuration configuration);
+	void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
 }
