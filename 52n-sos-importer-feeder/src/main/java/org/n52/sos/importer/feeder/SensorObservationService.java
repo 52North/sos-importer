@@ -164,6 +164,8 @@ public final class SensorObservationService {
 	// adding 25s
 	private int sweArrayObservationTimeOutBuffer = 25000;
 
+	private int sampleSizeDivisor;
+
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
 		this.config = config;
@@ -177,6 +179,7 @@ public final class SensorObservationService {
 			sampleSizePattern = Pattern.compile(config.getSampleSizeRegEx());
 			sampleSizeOffset = config.getSampleSizeOffset();
 			sampleDateOffset = config.getSampleDateOffset();
+			sampleSizeDivisor = config.getSampleSizeDivisor();
 			sampleOffsetDifference = Math.abs(sampleDateOffset - sampleSizeOffset);
 			sampleDataOffset = config.getSampleDataOffset();
 		}
@@ -405,8 +408,8 @@ public final class SensorObservationService {
 		final String lineToParse = restoreLine(values);
 		final Matcher matcher = sampleSizePattern.matcher(lineToParse);
 		if (matcher.matches() && matcher.groupCount() == 1) {
-			final String dateInformation = matcher.group(1);
-			return Integer.parseInt(dateInformation);
+			final String sampleSize = matcher.group(1);
+			return Integer.parseInt(sampleSize) / sampleSizeDivisor;
 			// TODO handle NumberformatException
 		}
 		throw new ParseException(String.format("Could not extract sampleSize from '%s' using regular expression '%s' (Offset is always 42).",

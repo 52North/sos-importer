@@ -1262,6 +1262,13 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
 	}
 
+	public int getSampleSizeDivisor() {
+		if (isSamplingFile() && importConf.getDataFile().isSetSampleSizeDivisor()) {
+			return importConf.getDataFile().getSampleSizeDivisor();
+		}
+		return 1;
+	}
+
 
 
 }
