@@ -21,35 +21,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.n52.sos.importer.feeder.Configuration;
+
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Interface to allow different CSVParser implementations
- *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public interface CsvParser {
+public class WrappedCSVReader implements CsvParser {
 
-	/**
-     * Reads the next line and converts to a string array.
-     *
-     * @return a string array with each comma-separated element as a separate
-     *         entry.
-     *
-     * @throws IOException
-     *             if errors happen during the read
-     */
-    String[] readNext() throws IOException;
+	private CSVReader csvReader;
 
-	/**
-	 * MUST be called before first call of {@link #readNext()}!
-	 *
-	 * @param bufferedReader
-	 * @param configuration
-	 */
-	void init(BufferedReader bufferedReader, Configuration configuration);
+	@Override
+	public String[] readNext() throws IOException {
+		return csvReader.readNext();
+	}
+
+	@Override
+	public void init(final BufferedReader bufferedReader,
+			final Configuration configuration) {
+		final int flwd = configuration.getFirstLineWithData();
+		final char separator = configuration.getCsvSeparator(),
+				quotechar = configuration.getCsvQuoteChar(),
+				escape = configuration.getCsvEscape();
+		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+	}
 
 }
