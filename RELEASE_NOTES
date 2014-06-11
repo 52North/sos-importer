@@ -53,6 +53,11 @@ Features:
    * "sampleSizeRegEx"   - the regular expression to extract the sample size. 
                            The regular expression MUST result in ONE group 
                            which contains an integer value.
+   * "sampleSizeDivisor" - defines a divisor that is applied to the sample size.
+                           Can be used in cases the sample size is not giving
+                           the number of samples but the time span of the
+                           sample. The divisor is used to calculate the number
+                           of lines in a sample. (OPTIONAL)
  * Setting of timeout buffer for the insertion of SweArrayObservations:
    With the attribute "insertSweArrayObservationTimeoutBuffer" of <SosMetadata"
    it is possible to define an additional timeout buffer for connect and socket 
