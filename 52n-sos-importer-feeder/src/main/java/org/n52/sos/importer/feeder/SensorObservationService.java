@@ -94,8 +94,6 @@ import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 /**
  * Handles connection to SOS and provides an easy to use interface.<br />
  * Now this class supports only OGC SOS <b>1.0.0</b>
@@ -267,7 +265,7 @@ public final class SensorObservationService {
 	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
 		LOG.trace("importData()");
 		// 0 Get line
-		final CSVReader cr = dataFile.getCSVReader();
+		final CsvParser cr = dataFile.getCSVReader();
 		String[] values;
 		lineCounter = dataFile.getFirstLineWithData();
 		if (dataFile.getHeaderLine() > -1 && headerLine == null) {
@@ -385,7 +383,7 @@ public final class SensorObservationService {
 		return false;
 	}
 
-	private void getSampleMetaData(final CSVReader cr) throws IOException, ParseException {
+	private void getSampleMetaData(final CsvParser cr) throws IOException, ParseException {
 		if (sampleDateOffset < sampleSizeOffset) {
 			skipLines(cr,sampleDateOffset-1);
 			sampleDate = parseSampleDate(cr.readNext());
@@ -446,7 +444,7 @@ public final class SensorObservationService {
 		return sampleIdPattern.matcher(restoreLine(values)).matches();
 	}
 
-	private void skipLines(final CSVReader cr,
+	private void skipLines(final CsvParser cr,
 			int skipCount) throws IOException {
 		// get the number of lines to skip (coming from already read lines)
 		String[] values;

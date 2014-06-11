@@ -152,7 +152,7 @@ public class DataFile {
 	 * @return a <code>CSVReader</code> instance
 	 * @throws FileNotFoundException
 	 */
-	public CSVReader getCSVReader() throws FileNotFoundException {
+	public CsvParser getCSVReader() throws FileNotFoundException {
 		LOG.trace("getCSVReader()");
 		final FileReader fr = new FileReader(file);
 		final BufferedReader br = new BufferedReader(fr);
@@ -160,7 +160,7 @@ public class DataFile {
 		final char separator = configuration.getCsvSeparator(),
 				quotechar = configuration.getCsvQuoteChar(),
 				escape = configuration.getCsvEscape();
-		final CSVReader cr = new CSVReader(br, separator, quotechar, escape, flwd);
+		final WrappedCSVReader cr = new WrappedCSVReader(new CSVReader(br, separator, quotechar, escape, flwd));
 		return cr;
 	}
 
