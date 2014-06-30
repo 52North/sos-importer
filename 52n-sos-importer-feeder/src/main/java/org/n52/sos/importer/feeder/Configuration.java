@@ -42,6 +42,7 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
+import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -1269,6 +1270,12 @@ public final class Configuration {
 		return 1;
 	}
 
+	public boolean isCsvParserDefined() {
+		return importConf.getCsvMetadata().isSetCsvParserClass();
+	}
 
+	public String getCsvParser() {
+		return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
+	}
 
 }
