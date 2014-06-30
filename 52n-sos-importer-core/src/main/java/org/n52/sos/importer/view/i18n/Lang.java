@@ -821,6 +821,36 @@ public abstract class Lang {
 	public abstract String step7DirectImport();
 
 	/**
+	 * @return Import Strategy
+	 */
+	public abstract String step7ImportStrategyBorderLabel();
+
+	/**
+	 * @return Strategy
+	 */
+	public abstract String step7ImportStrategyLabel();
+
+	/**
+	 * @return Single Observation
+	 */
+	public abstract String step7ImportStrategySingleObservation();
+
+	/**
+	 * @return Hunk size
+	 */
+	public abstract String step7ImportStrategySweArrayHunksizeLabel();
+
+	/**
+	 * @return SweArrayObservation
+	 */
+	public abstract String step7ImportStrategySweArrayObservation();
+
+	/**
+	 * @return Send Buffer
+	 */
+	public abstract String step7ImportStrategySweArraySendBuffer();
+
+	/**
 	 * @return Generate Offering from Sensor name?
 	 */
 	public abstract String step7OfferingCheckBoxLabel();
@@ -852,6 +882,11 @@ public abstract class Lang {
 	 * @return Please specify the binding.
 	 */
 	public abstract String step7SosBindingInstructions();
+
+	/**
+	 * @return Binding
+	 */
+	public abstract String step7SosBindingLabel();
 
 	/**
 	 * @param strURL
@@ -893,6 +928,11 @@ public abstract class Lang {
 	 * @return Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.
 	 */
 	public abstract String step7SosVersionInstructions();
+
+	/**
+	 * @return Specification
+	 */
+	public abstract String step7SosVersionLabel();
 
 	/**
 	 * @return Open Configuration File

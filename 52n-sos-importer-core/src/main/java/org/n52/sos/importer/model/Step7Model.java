@@ -25,21 +25,29 @@ package org.n52.sos.importer.model;
 
 import java.io.File;
 
+import org.n52.sos.importer.Constants.ImportStrategy;
+
 public class Step7Model implements StepModel {
-	
+
 	private String sosURL;
-	
+
 	private String version;
-	
+
 	private String binding;
-	
+
 	private File configFile;
 
 	private boolean generateOfferingFromSensorName;
 
 	private String offering;
 
-	public Step7Model(final String sosURL, 
+	private ImportStrategy importStrategy = ImportStrategy.SingleObservation;
+
+	private int sendBuffer = 25;
+
+	private int hunkSize = 5000;
+
+	public Step7Model(final String sosURL,
 			final File configFile,
 			final boolean generateOfferingFromSensorName,
 			final String offering,
@@ -52,7 +60,7 @@ public class Step7Model implements StepModel {
 		this.binding = binding;
 		this.version = version;
 	}
-	
+
 	public Step7Model() {
 		this(null,null,true,null,null,null);
 	}
@@ -90,24 +98,47 @@ public class Step7Model implements StepModel {
 		this.offering = offering;
 	}
 
-	public String getVersion()
-	{
-		return version;
-	}
-
-	public String getBinding()
-	{
+	public String getBinding() {
 		return binding;
 	}
 
-	public void setSosVersion(final String version)
-	{
+	public void setSosVersion(final String version) {
 		this.version = version;
 	}
 
-	public void setSosBinding(final String binding)
-	{
+	public String getVersion() {
+		return version;
+	}
+
+	public void setSosBinding(final String binding)	{
 		this.binding = binding;
+	}
+
+	public ImportStrategy getImportStrategy() {
+		return importStrategy;
+	}
+
+	public Step7Model setImportStrategy(final ImportStrategy importStrategy) {
+		this.importStrategy = importStrategy;
+		return this;
+	}
+
+	public int getSendBuffer() {
+		return sendBuffer;
+	}
+
+	public Step7Model setSendBuffer(final int sendBuffer) {
+		this.sendBuffer = sendBuffer;
+		return this;
+	}
+
+	public int getHunkSize() {
+		return hunkSize;
+	}
+
+	public Step7Model setHunkSize(final int hunkSize) {
+		this.hunkSize = hunkSize;
+		return this;
 	}
 
 }

@@ -816,6 +816,36 @@ public class De extends Lang {
 	}
 
 	@Override
+	public String step7ImportStrategyBorderLabel() {
+		return "Import-Strategie";
+	}
+
+	@Override
+	public String step7ImportStrategyLabel() {
+		return "Strategie";
+	}
+
+	@Override
+	public String step7ImportStrategySingleObservation() {
+		return "Einzelne Beobachtungen";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayHunksizeLabel() {
+		return "Brockengröße";
+	}
+
+	@Override
+	public String step7ImportStrategySweArrayObservation() {
+		return "SweArrayObservation";
+	}
+
+	@Override
+	public String step7ImportStrategySweArraySendBuffer() {
+		return "Sendepuffer";
+	}
+
+	@Override
 	public String step7OfferingCheckBoxLabel() {
 		return "Offering-Bezeichner aus Sensor-Namen generieren?";
 	}
@@ -844,6 +874,11 @@ public class De extends Lang {
 	public String step7SosBindingInstructions()
 	{
 		return "Geben Sie das Binding (Kommunikationprotokoll) an.";
+	}
+
+	@Override
+	public String step7SosBindingLabel() {
+		return "Binding";
 	}
 
 	@Override
@@ -881,9 +916,13 @@ public class De extends Lang {
 	}
 
 	@Override
-	public String step7SosVersionInstructions()
-	{
+	public String step7SosVersionInstructions()	{
 		return "Bitte die Spezifikations-Version angeben, die durch die SOS-Instanz implementiert wird.";
+	}
+
+	@Override
+	public String step7SosVersionLabel() {
+		return "Version";
 	}
 
 	@Override
