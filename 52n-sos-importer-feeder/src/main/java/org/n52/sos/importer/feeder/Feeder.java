@@ -186,11 +186,8 @@ public final class Feeder {
 	 */
 	private static void logApplicationMetadata() {
 		LOG.trace("logApplicationMetadata()");
-		InputStream manifestStream;
-		String logMessage;
-		//
-		logMessage = "Application started";
-		manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
+		final StringBuffer logMessage = new StringBuffer("Application started");
+		final InputStream manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
 		try {
 			final Manifest manifest = new Manifest(manifestStream);
 			final Attributes attributes = manifest.getMainAttributes();
@@ -198,16 +195,29 @@ public final class Feeder {
 			for (final Object object : keys) {
 				if (object instanceof Name) {
 					final Name key = (Name) object;
-					logMessage += String.format("\n\t\t%s: %s",key,attributes.getValue(key));
+					logMessage.append("\n\t\t")
+						.append(key)
+						.append(": ")
+						.append(attributes.getValue(key));
 				}
 			}
 			// add heap information
-			logMessage += "\n\t\t" + heapSizeInformation();
+			logMessage.append("\n\t\t")
+				.append(heapSizeInformation())
+				.append("\n\t\t")
+				.append(operatingSystemInformation());
 		}
 		catch(final IOException ex) {
 			LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
 		}
-		LOG.info(logMessage);
+		LOG.info(logMessage.toString());
+	}
+
+	private static String operatingSystemInformation() {
+		return String.format("os.name: %s; os.arch: %s; os.version: %s",
+				System.getProperty("os.name"),
+				System.getProperty("os.arch"),
+				System.getProperty("os.version"));
 	}
 
 	protected static String heapSizeInformation() {
