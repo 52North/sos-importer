@@ -23,7 +23,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import static java.lang.String.format;
 import static org.n52.sos.importer.feeder.Configuration.*;
 
 import java.io.BufferedReader;
@@ -242,7 +241,6 @@ public final class SensorObservationService {
 	 *         else <code>false</code>.
 	 */
 	public boolean isTransactional() {
-		LOG.trace("isTransactional()");
 		if (serviceDescriptor == null) {
 			LOG.error(String.format("Service descriptor not available for SOS '%s'", sosUrl));
 			return false;
@@ -478,8 +476,7 @@ public final class SensorObservationService {
 	}
 
 	private boolean isSizeValid(final DataFile dataFile,
-			final String[] values)
-	{
+			final String[] values) {
 		if (values.length != dataFile.getExpectedColumnCount()) {
 			final String errorMsg = String.format("Number of Expected columns '%s' does not match number of found columns '%s' -> Cancel import!",
 					dataFile.getExpectedColumnCount(),
@@ -518,7 +515,6 @@ public final class SensorObservationService {
 	private InsertObservation[] getInsertObservations(final String[] values,
 			final int[] mVColumns,
 			final DataFile df){
-		LOG.trace("getInsertObservations()");
 		if (mVColumns == null || mVColumns.length == 0) {
 			LOG.error("Method called with bad arguments: values: {}, mVColumns: {}", Arrays.toString(values), Arrays.toString(mVColumns));
 			return null;
@@ -544,7 +540,6 @@ public final class SensorObservationService {
 	private InsertObservation getInsertObservationForColumnIdFromValues(final int mVColumnId,
 			final String[] values,
 			final DataFile dataFile) throws ParseException{
-		LOG.trace("getInsertObservationForColumnIdFromValues()");
 		// SENSOR
 		final Sensor sensor = dataFile.getSensorForColumn(mVColumnId,values);
 		LOG.debug("Sensor: {}",sensor);
@@ -671,7 +666,6 @@ public final class SensorObservationService {
 
 	private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
 			final InsertObservation[] ios) {
-		LOG.trace("getUnitsOfMeasurement(...)");
 		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
@@ -685,7 +679,6 @@ public final class SensorObservationService {
 	}
 
 	private Map<ObservedProperty, String> getMeasuredValueTypes(final String sensorURI, final InsertObservation[] ios) {
-		LOG.trace("getMeasuredValueTypes(...)");
 		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
@@ -699,7 +692,6 @@ public final class SensorObservationService {
 	}
 
 	private Collection<ObservedProperty> getObservedProperties(final String sensorURI, final InsertObservation[] ios) {
-		LOG.trace("getObservedProperties(...)");
 		final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
@@ -713,7 +705,6 @@ public final class SensorObservationService {
 
 	private String insertSweArrayObservation(final org.n52.oxf.sos.request.InsertObservationParameters sweArrayObservation) {
 		OperationResult opResult = null;
-
 		try {
 			try {
 				final int connectionTimeout = sosWrapper.getConnectionTimeout();
@@ -784,7 +775,6 @@ public final class SensorObservationService {
 	}
 
 	private String insertObservation(final InsertObservation io) throws IOException {
-		LOG.trace("insertObservation()");
 		OperationResult opResult = null;
 		org.n52.oxf.sos.request.InsertObservationParameters parameters = null;
 
@@ -846,8 +836,6 @@ public final class SensorObservationService {
 
 	private org.n52.oxf.sos.request.InsertObservationParameters createParameterAssemblyFromIO(
 			final InsertObservation io) throws OXFException {
-
-		LOG.trace("createParameterBuilderFromIO()");
 		ObservationParameters obsParameter = null;
 
 		if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
@@ -905,30 +893,9 @@ public final class SensorObservationService {
 		return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
 	}
 
-	private String getOfferingForSensor(final InsertObservation io)	{
-		if (offerings != null && offerings.containsKey(io.getSensorURI())){
-			return offerings.get(io.getSensorURI());
-		}
-		final SOSContents sosContent = (SOSContents) serviceDescriptor.getContents();
-		final String[] offeringIds = sosContent.getDataIdentificationIDArray();
-		if (offeringIds != null) {
-			for (final String offeringId : offeringIds) {
-				final ObservationOffering offering = sosContent.getDataIdentification(offeringId);
-				final String[] sensorIds = offering.getProcedures();
-				for (final String sensorId : sensorIds) {
-					if (sensorId.equals(io.getSensorURI())) {
-						return offering.getIdentifier();
-					}
-				}
-			}
-		}
-		return null;
-	}
-
 	private String registerSensor(final RegisterSensor rs) throws OXFException, XmlException, IOException {
 		try {
 			if(sosVersion.equals("1.0.0")) {
-				LOG.trace("registerSensor()");
 				final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
 				final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
 				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
@@ -936,7 +903,6 @@ public final class SensorObservationService {
 				return response.getRegisterSensorResponse().getAssignedSensorId();
 			}
 			else if (sosVersion.equals("2.0.0")) {
-				LOG.trace("insertSensor()");
 				final InsertSensorParameters insSensorParams = createInsertSensorParametersFromRS(rs);
 				if (sosBinding != null) {
 					insSensorParams.addParameterValue(ISOSRequestBuilder.BINDING, sosBinding.name());
@@ -999,8 +965,8 @@ public final class SensorObservationService {
 		return null;
 	}
 
-	private InsertSensorParameters createInsertSensorParametersFromRS(final RegisterSensor rs) throws XmlException, IOException
-	{
+	private InsertSensorParameters createInsertSensorParametersFromRS(final RegisterSensor rs)
+			throws XmlException, IOException {
 		return new InsertSensorParameters(sensorDescBuilder.createSML(rs),
 				SML_101_FORMAT_URI,
 				getObservedPropertyURIs(rs.getObservedProperties()),
@@ -1008,8 +974,7 @@ public final class SensorObservationService {
 				getObservationTypeURIs(rs));
 	}
 
-	private Collection<String> getObservationTypeURIs(final RegisterSensor rs)
-	{
+	private Collection<String> getObservationTypeURIs(final RegisterSensor rs) {
 		if (rs == null || rs.getObservedProperties() == null || rs.getObservedProperties().size() < 1) {
 			return Collections.emptyList();
 		}
@@ -1023,8 +988,7 @@ public final class SensorObservationService {
 		return tmp;
 	}
 
-	private String getURIForObservationType(final String measuredValueType)
-	{
+	private String getURIForObservationType(final String measuredValueType)	{
 		if (measuredValueType.equals("NUMERIC")) {
 			return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement";
 		}
@@ -1042,8 +1006,7 @@ public final class SensorObservationService {
 		throw new IllegalArgumentException(errorMsg);
 	}
 
-	private Collection<String> getObservedPropertyURIs(final Collection<ObservedProperty> observedProperties)
-	{
+	private Collection<String> getObservedPropertyURIs(final Collection<ObservedProperty> observedProperties) {
 		if (observedProperties == null || observedProperties.size() < 1) {
 			return Collections.emptyList();
 		}
@@ -1056,8 +1019,6 @@ public final class SensorObservationService {
 
 	private RegisterSensorParameters createRegisterSensorParametersFromRS(
 			final RegisterSensor registerSensor) throws OXFException, XmlException, IOException {
-		LOG.trace("createParameterContainterFromRS()");
-
 		// create SensorML
 		// create template --> within the 52N 1.0.0 SOS implementation this template is somehow ignored --> take first observed property to get values for template
 		ObservationTemplateBuilder observationTemplate;
@@ -1077,7 +1038,6 @@ public final class SensorObservationService {
 	}
 
 	private boolean isSensorRegistered(final String sensorURI) {
-		LOG.trace(format("isSensorRegistered(%s)",sensorURI));
 		if (serviceDescriptor == null) {
 			LOG.error(String.format("Service descriptor not available for SOS '%s'",
 					sosUrl));
