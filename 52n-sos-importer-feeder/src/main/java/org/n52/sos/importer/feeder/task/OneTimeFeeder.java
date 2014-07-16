@@ -170,7 +170,6 @@ public class OneTimeFeeder implements Runnable {
 				} else if (!sos.isTransactional()){
 					LOG.error(String.format("SOS '%s' does not support required transactional operations!", sosURL));
 				} else {
-					LOG.debug("Create counter file");
 					final String directory = dataFile.getFileName();
 					File counterFile = null;
 					String fileName = null;
@@ -183,16 +182,16 @@ public class OneTimeFeeder implements Runnable {
 								"_counter";
 					}
 					counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
+					LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
 					// read already inserted line count
 					if (counterFile.exists()) {
-						LOG.debug("Get already read lines");
+						LOG.debug("Read already read lines from file");
 						final Scanner sc = new Scanner(counterFile);
 						final int count = sc.nextInt();
 						sos.setLastLine(count);
 					}
 
 					// SOS is available and transactional
-					// start reading data file line by line starting from flwd
 					final List<InsertObservation> failedInserts = sos.importData(dataFile);
 
 					LOG.debug("OneTimeFeeder: save read lines count: {}", sos.getLastLine());

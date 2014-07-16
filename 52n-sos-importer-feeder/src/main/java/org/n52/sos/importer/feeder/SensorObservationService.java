@@ -383,6 +383,9 @@ public final class SensorObservationService {
 	}
 
 	private void getSampleMetaData(final CsvParser cr) throws IOException, ParseException {
+		LOG.trace("getSampleMetadata(...)");
+		LOG.trace("dataOffset: {}; sizeOffset: {}; OffsetDifference: {}",
+				sampleDataOffset, sampleSizeOffset, sampleOffsetDifference);
 		if (sampleDateOffset < sampleSizeOffset) {
 			skipLines(cr,sampleDateOffset-1);
 			sampleDate = parseSampleDate(cr.readNext());
@@ -398,7 +401,8 @@ public final class SensorObservationService {
 			sampleDate = parseSampleDate(cr.readNext());
 			lineCounter++;
 		}
-
+		LOG.trace("Parsed Metadata: Date: '{}'; Size: {}",
+				sampleDate, sampleSize);
 	}
 
 	private int parseSampleSize(final String[] values) throws ParseException {
@@ -432,6 +436,8 @@ public final class SensorObservationService {
 		final String dateInfoPattern = config.getSampleDatePattern();
 		final String regExToExtractDateInfo = config.getSampleDateExtractionRegEx();
 		final String timestampInformation = restoreLine(values);
+		LOG.trace("parseSampleDate: dateInfoPattern: '{}'; extractRegEx: '{}'; line: '{}'",
+				dateInfoPattern, regExToExtractDateInfo, timestampInformation);
 		return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
 	}
 
@@ -1087,6 +1093,7 @@ public final class SensorObservationService {
 	}
 
 	public void setLastLine(final int lastLine) {
+		LOG.trace("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
 		this.lastLine = lastLine;
 	}
 
