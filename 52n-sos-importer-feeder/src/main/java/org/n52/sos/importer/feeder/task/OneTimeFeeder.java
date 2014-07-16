@@ -186,9 +186,10 @@ public class OneTimeFeeder implements Runnable {
 					// read already inserted line count
 					if (counterFile.exists()) {
 						LOG.debug("Read already read lines from file");
-						final Scanner sc = new Scanner(counterFile);
-						final int count = sc.nextInt();
-						sos.setLastLine(count);
+						try (final Scanner sc = new Scanner(counterFile)){
+    						final int count = sc.nextInt();
+    						sos.setLastLine(count);
+						}
 					}
 
 					// SOS is available and transactional
@@ -205,13 +206,14 @@ public class OneTimeFeeder implements Runnable {
 					 */
 					if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
 						lastLine = lastLine - 1;
-						LOG.debug("Decrement lastLine counter because of EPC hack: {}",lastLine);
+						LOG.debug("Decrement lastLine counter: {}",lastLine);
 					}
 					// override counter file
-					final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-					final PrintWriter out = new PrintWriter(counterFileWriter);
-					out.println(lastLine);
-					out.close();
+					try (
+							final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
+							final PrintWriter out = new PrintWriter(counterFileWriter);) {
+						out.println(lastLine);
+					}
 
 					saveFailedInsertObservations(failedInserts);
 					LOG.info("Feeding data from file {} to SOS instance finished.",dataFile.getFileName());
