@@ -193,12 +193,24 @@ public class OneTimeFeeder implements Runnable {
 
 					// SOS is available and transactional
 					final List<InsertObservation> failedInserts = sos.importData(dataFile);
-
-					LOG.debug("OneTimeFeeder: save read lines count: {}", sos.getLastLine());
+					int lastLine = sos.getLastLine();
+					LOG.debug("OneTimeFeeder: save read lines count: {} to '{}'",
+							lastLine,
+							counterFile.getCanonicalPath());
+					/*
+					 * Hack for UoL EPC instrument files
+					 * The EPC instrument produces data files with empty lines at the end.
+					 * When a new sample is appended, this empty line is removed, hence
+					 * the line counter needs to be decremented.
+					 */
+					if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
+						lastLine = lastLine - 1;
+						LOG.debug("Decrement lastLine counter because of EPC hack: {}",lastLine);
+					}
 					// override counter file
 					final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
 					final PrintWriter out = new PrintWriter(counterFileWriter);
-					out.println(sos.getLastLine());
+					out.println(lastLine);
 					out.close();
 
 					saveFailedInsertObservations(failedInserts);
@@ -221,6 +233,11 @@ public class OneTimeFeeder implements Runnable {
 				log(e);
 			}
 		}
+	}
+
+	private boolean isLinuxOrSimilar() {
+		final String osName = System.getProperty("os.name").toLowerCase();
+		return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0;
 	}
 
 	private void log(final Exception e)
