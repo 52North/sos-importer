@@ -41,6 +41,7 @@
 
 	<logger name="org.n52.sos.importer.feeder.Configuration" level="INFO" />
 	<logger name="org.n52.sos.importer.feeder.DataFile" level="INFO" />
+	<logger name="org.n52.sos.importer.feeder.SensorObservationService" level="TRACE" />
 	<logger name="org.n52" level="DEBUG" />
 
 	<root level="INFO">
