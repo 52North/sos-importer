@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ import org.n52.oxf.ows.OWSException;
 import org.n52.oxf.ows.OwsExceptionCode;
 import org.n52.oxf.ows.ServiceDescriptor;
 import org.n52.oxf.ows.capabilities.OperationsMetadata;
+import org.n52.oxf.request.MimetypeAwareRequestParameters;
 import org.n52.oxf.sos.adapter.ISOSRequestBuilder;
 import org.n52.oxf.sos.adapter.ISOSRequestBuilder.Binding;
 import org.n52.oxf.sos.adapter.SOSAdapter;
@@ -717,6 +719,7 @@ public final class SensorObservationService {
 				final int readTimeout = sosWrapper.getReadTimeout();
 				sosWrapper.setConnectionTimeOut(connectionTimeout + sweArrayObservationTimeOutBuffer);
 				sosWrapper.setReadTimeout(readTimeout + sweArrayObservationTimeOutBuffer);
+				setMimetype(sweArrayObservation);
 				opResult = sosWrapper.doInsertObservation(sweArrayObservation);
 				sosWrapper.setConnectionTimeOut(connectionTimeout);
 				sosWrapper.setReadTimeout(readTimeout);
@@ -786,6 +789,7 @@ public final class SensorObservationService {
 
 		try {
 			parameters = createParameterAssemblyFromIO(io);
+			setMimetype(parameters);
 			try {
 				LOG.debug("\tBEFORE OXF - doOperation 'InsertObservation'");
 				opResult = sosWrapper.doInsertObservation(parameters);
@@ -903,6 +907,7 @@ public final class SensorObservationService {
 		try {
 			if(sosVersion.equals("1.0.0")) {
 				final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
+				setMimetype(regSensorParameter);
 				final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
 				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 				LOG.debug("RegisterSensorResponse parsed");
@@ -913,6 +918,7 @@ public final class SensorObservationService {
 				if (sosBinding != null) {
 					insSensorParams.addParameterValue(ISOSRequestBuilder.BINDING, sosBinding.name());
 				}
+				setMimetype(insSensorParams);
 				final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
 				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
 				LOG.debug("InsertSensorResponse parsed");
@@ -969,6 +975,19 @@ public final class SensorObservationService {
 					e);
 		}
 		return null;
+	}
+
+	private void setMimetype(final MimetypeAwareRequestParameters parameters) {
+		String mimeType = "text/xml";
+		if (sosBinding != null) {
+			parameters.addParameterValue(ISOSRequestBuilder.BINDING, sosBinding.name());
+			if (sosBinding.equals(Binding.SOAP)) {
+				mimeType = "application/soap+xml";
+			}
+		}
+
+		parameters.setCharset(Charset.forName("UTF-8"));
+		parameters.setType(mimeType);
 	}
 
 	private InsertSensorParameters createInsertSensorParametersFromRS(final RegisterSensor rs)
