@@ -170,7 +170,6 @@ public class OneTimeFeeder implements Runnable {
 				} else if (!sos.isTransactional()){
 					LOG.error(String.format("SOS '%s' does not support required transactional operations!", sosURL));
 				} else {
-					LOG.debug("Create counter file");
 					final String directory = dataFile.getFileName();
 					File counterFile = null;
 					String fileName = null;
@@ -183,24 +182,38 @@ public class OneTimeFeeder implements Runnable {
 								"_counter";
 					}
 					counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
+					LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
 					// read already inserted line count
 					if (counterFile.exists()) {
-						LOG.debug("Get already read lines");
-						final Scanner sc = new Scanner(counterFile);
-						final int count = sc.nextInt();
-						sos.setLastLine(count);
+						LOG.debug("Read already read lines from file");
+						try (final Scanner sc = new Scanner(counterFile)){
+    						final int count = sc.nextInt();
+    						sos.setLastLine(count);
+						}
 					}
 
 					// SOS is available and transactional
-					// start reading data file line by line starting from flwd
 					final List<InsertObservation> failedInserts = sos.importData(dataFile);
-
-					LOG.debug("OneTimeFeeder: save read lines count: {}", sos.getLastLine());
+					int lastLine = sos.getLastLine();
+					LOG.debug("OneTimeFeeder: save read lines count: {} to '{}'",
+							lastLine,
+							counterFile.getCanonicalPath());
+					/*
+					 * Hack for UoL EPC instrument files
+					 * The EPC instrument produces data files with empty lines at the end.
+					 * When a new sample is appended, this empty line is removed, hence
+					 * the line counter needs to be decremented.
+					 */
+					if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
+						lastLine = lastLine - 1;
+						LOG.debug("Decrement lastLine counter: {}",lastLine);
+					}
 					// override counter file
-					final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-					final PrintWriter out = new PrintWriter(counterFileWriter);
-					out.println(sos.getLastLine());
-					out.close();
+					try (
+							final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
+							final PrintWriter out = new PrintWriter(counterFileWriter);) {
+						out.println(lastLine);
+					}
 
 					saveFailedInsertObservations(failedInserts);
 					LOG.info("Feeding data from file {} to SOS instance finished.",dataFile.getFileName());
@@ -222,6 +235,11 @@ public class OneTimeFeeder implements Runnable {
 				log(e);
 			}
 		}
+	}
+
+	private boolean isLinuxOrSimilar() {
+		final String osName = System.getProperty("os.name").toLowerCase();
+		return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0;
 	}
 
 	private void log(final Exception e)

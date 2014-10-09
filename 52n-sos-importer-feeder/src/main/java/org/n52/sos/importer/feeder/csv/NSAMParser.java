@@ -95,7 +95,7 @@ public class NSAMParser implements CsvParser {
         // 2.1 split each data line into time series
         String line;
         final List<List<String[]>> timeSeriesBuffer = new LinkedList<>();
-        for (final String startDate : startDates) {
+        for (@SuppressWarnings("unused") final String startDate : startDates) {
             timeSeriesBuffer.add(new LinkedList<String[]>());
         }
         final String timeSeriesElementSplitter = new String(new char[] {configuration.getCsvSeparator()});

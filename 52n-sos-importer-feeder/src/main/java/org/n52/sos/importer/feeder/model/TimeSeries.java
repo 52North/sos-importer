@@ -130,7 +130,6 @@ public class TimeSeries {
 	}
 
 	public InsertObservationParameters getSweArrayObservation(final String sosVersion) {
-		// TODO Auto-generated method "getSweArrayObservation" stub generated on 28.03.2014 around 12:49:28 by eike
 		final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
 		// add extension
 		obsParameter.addExtension("<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
