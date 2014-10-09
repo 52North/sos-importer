@@ -317,6 +317,7 @@ public final class SensorObservationService {
 				// * date information (depends on last timestamp because of
 				if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
 					sampleStartLine = lineCounter;
+					lastTimestamp = null;
 					getSampleMetaData(cr);
 					isInSample = true;
 					skipLines(cr, sampleDataOffset-1-(lineCounter-sampleStartLine));
