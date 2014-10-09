@@ -27,12 +27,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step2Model;
 
 /*
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+@Ignore("Requires display which is not available on remote build servers")
 public class Step2ControllerTest {
 
 	private Step2Controller controller;

@@ -27,11 +27,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+@Ignore("Requires display which is not available on remote build servers")
 public class Step2PanelTest {
 
 	private static final int MAX_ROWS = 30;

@@ -27,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
@@ -35,6 +36,7 @@ import org.n52.sos.importer.view.Step7Panel;
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+@Ignore("Requires display which is not available on remote build servers")
 public class Step7ControllerTest {
 
 	private Step7Controller controller;

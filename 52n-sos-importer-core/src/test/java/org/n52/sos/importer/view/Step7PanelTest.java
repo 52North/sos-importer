@@ -27,12 +27,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.n52.sos.importer.Constants;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+@Ignore("Requires display which is not available on remote build servers")
 public class Step7PanelTest {
 
 	private static final String POX = "POX";
