@@ -8,10 +8,10 @@ jdk:
 install: true
 script: mvn clean install
 notifications:
-	irc:
-		channels:
-			- "chat.freenode.net#52north"
-		on_success: always
-		on_failure: always
-		use_notice: true
-		skip_join: false
+  irc:
+    channels:
+      - "chat.freenode.net#52north"
+    on_success: always
+    on_failure: always
+    use_notice: true
+    skip_join: false
