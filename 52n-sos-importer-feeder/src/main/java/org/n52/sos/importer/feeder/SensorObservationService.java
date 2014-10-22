@@ -625,7 +625,7 @@ public final class SensorObservationService {
 						timeSeries.getSensorURI(),
 						timeSeries));
 				// TODO implement something useful here!
-				// failedInsertObservations.add(timeseries);
+				 failedInsertObservations.addAll(timeSeries.getInsertObservations());
 			} else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
 				LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
 						timeSeries));

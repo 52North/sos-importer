@@ -24,8 +24,10 @@
 package org.n52.sos.importer.feeder.model;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import net.opengis.swe.x20.DataArrayDocument;
 import net.opengis.swe.x20.DataArrayType;
@@ -297,6 +299,10 @@ public class TimeSeries {
 	 */
 	public boolean isEmpty() {
 		return timeseries.isEmpty();
+	}
+
+	public List<? extends InsertObservation> getInsertObservations() {
+		return Collections.unmodifiableList(timeseries);
 	}
 
 }
