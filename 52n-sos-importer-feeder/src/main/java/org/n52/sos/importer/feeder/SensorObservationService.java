@@ -1113,7 +1113,7 @@ public final class SensorObservationService {
 	}
 
 	public void setLastLine(final int lastLine) {
-		LOG.trace("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
+		LOG.debug("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
 		this.lastLine = lastLine;
 	}
 

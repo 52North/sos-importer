@@ -195,7 +195,7 @@ public class OneTimeFeeder implements Runnable {
 					// SOS is available and transactional
 					final List<InsertObservation> failedInserts = sos.importData(dataFile);
 					int lastLine = sos.getLastLine();
-					LOG.debug("OneTimeFeeder: save read lines count: {} to '{}'",
+					LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
 							lastLine,
 							counterFile.getCanonicalPath());
 					/*
