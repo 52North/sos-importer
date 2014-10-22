@@ -206,7 +206,7 @@ public class OneTimeFeeder implements Runnable {
 					 */
 					if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
 						lastLine = lastLine - 1;
-						LOG.debug("Decrement lastLine counter: {}",lastLine);
+						LOG.info("Decrement lastLine counter: {}",lastLine);
 					}
 					// override counter file
 					try (

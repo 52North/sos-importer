@@ -345,16 +345,12 @@ public final class SensorObservationService {
 				}
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
-						isSampleBasedDataFile,
-						isInSample,
-						lineCounter,
-						sampleStartLine,
-						sampleSize,
-						sampleDataOffset);
-				}
-				if (isSampleBasedDataFile && isInSample && isSampleEndReached(sampleStartLine)) {
-					isInSample = false;
-					LOG.debug("Current sample left");
+						isSampleBasedDataFile, isInSample, lineCounter, sampleStartLine, sampleSize, sampleDataOffset);
+					
+					if (isInSample && isSampleEndReached(sampleStartLine)) {
+						isInSample = false;
+						LOG.debug("Current sample left");
+					}
 				}
 			}
 			if (!timeSeriesRepository.isEmpty()) {
@@ -404,7 +400,7 @@ public final class SensorObservationService {
 			sampleDate = parseSampleDate(cr.readNext());
 			lineCounter++;
 		}
-		LOG.trace("Parsed Metadata: Date: '{}'; Size: {}",
+		LOG.info("Parsed Metadata: Date: '{}'; Size: {}",
 				sampleDate, sampleSize);
 	}
 
