@@ -173,4 +173,15 @@ public class NSAMParser implements CsvParser {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.n52.sos.importer.feeder.csv.CsvParser#getSkipLimit()
+     * 
+     * Skip limit is 0 because the "lines" are artificial in this parser and num of lines == num of observations.
+     */
+	@Override
+	public int getSkipLimit() {
+		return 0;
+	}
+
 }

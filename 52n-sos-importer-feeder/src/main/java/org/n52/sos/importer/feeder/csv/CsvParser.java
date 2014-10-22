@@ -55,4 +55,13 @@ public interface CsvParser {
 	 */
 	void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
+	/**
+	 * Should return 0, if number of lines == number of observations,<br>
+	 * 				else the difference between line number and line index.
+	 *  
+	 * @return 0, if number of lines == number of observations,<br>
+	 * 				else the difference between line number and line index.
+	 */
+	int getSkipLimit();
+
 }

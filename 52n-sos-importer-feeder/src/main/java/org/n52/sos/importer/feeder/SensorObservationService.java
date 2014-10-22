@@ -320,7 +320,7 @@ public final class SensorObservationService {
 					lastTimestamp = null;
 					getSampleMetaData(cr);
 					isInSample = true;
-					skipLines(cr, sampleDataOffset-1-(lineCounter-sampleStartLine));
+					skipLines(cr, sampleDataOffset-(lineCounter-sampleStartLine));
 					continue;
 				}
 				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
@@ -356,7 +356,7 @@ public final class SensorObservationService {
 			if (!timeSeriesRepository.isEmpty()) {
 				insertTimeSeries(timeSeriesRepository);
 			}
-			lastLine = lineCounter+1;
+			lastLine = lineCounter;
 			finishedImportData = System.currentTimeMillis();
 			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
 					new Date(startReadingFile).toString(),
@@ -386,17 +386,17 @@ public final class SensorObservationService {
 		LOG.trace("dataOffset: {}; sizeOffset: {}; OffsetDifference: {}",
 				sampleDataOffset, sampleSizeOffset, sampleOffsetDifference);
 		if (sampleDateOffset < sampleSizeOffset) {
-			skipLines(cr,sampleDateOffset-1);
+			skipLines(cr,sampleDateOffset);
 			sampleDate = parseSampleDate(cr.readNext());
 			lineCounter++;
-			skipLines(cr,sampleOffsetDifference-1);
+			skipLines(cr,sampleOffsetDifference);
 			sampleSize = parseSampleSize(cr.readNext());
 			lineCounter++;
 		} else {
-			skipLines(cr,sampleSizeOffset-1);
+			skipLines(cr,sampleSizeOffset);
 			sampleSize = parseSampleSize(cr.readNext());
 			lineCounter++;
-			skipLines(cr,sampleOffsetDifference-1);
+			skipLines(cr,sampleOffsetDifference);
 			sampleDate = parseSampleDate(cr.readNext());
 			lineCounter++;
 		}
@@ -441,7 +441,7 @@ public final class SensorObservationService {
 	}
 
 	public boolean isSampleEndReached(final int sampleStartLine) {
-		return sampleStartLine + sampleSize + sampleDataOffset - 1 == lineCounter;
+		return sampleStartLine + sampleSize + sampleDataOffset == lineCounter;
 	}
 
 	private boolean isSampleStart(final String[] values) {
@@ -452,7 +452,8 @@ public final class SensorObservationService {
 			int skipCount) throws IOException {
 		// get the number of lines to skip (coming from already read lines)
 		String[] values;
-		while (skipCount > 0) {
+		int skipLimit = cr.getSkipLimit();
+		while (skipCount > skipLimit) {
 			values = cr.readNext();
 			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),restoreLine(values)));
 			skipCount--;

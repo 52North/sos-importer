@@ -52,4 +52,9 @@ public class WrappedCSVReader implements CsvParser {
 		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
 	}
 
+	@Override
+	public int getSkipLimit() {
+		return 1;
+	}
+
 }
