@@ -280,7 +280,11 @@ public final class SensorObservationService {
 			LOG.error("No measured value columns found in configuration");
 			return null;
 		}
-		skipLines(cr, lastLine);
+		if (config.getFirstLineWithData()==0){
+			skipLines(cr, lastLine+1);
+		} else {
+			skipLines(cr, lastLine);
+		}
 		switch (config.getImportStrategy()) {
 		case SingleObservation:
 			long startReadingFile = System.currentTimeMillis();
