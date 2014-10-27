@@ -93,10 +93,7 @@ public class RepeatedFeeder extends TimerTask{
 						new OneTimeFeeder(configuration, fileToFeed).run();
 						lastUsedDateFile = fileToFeed;
 						saveLastFeedFile();
-						LOG.info("Finished feeding file {}. Next run in {} minute{}.",
-								fileToFeed.getName(),
-								periodInMinutes,
-								periodInMinutes>1?"s":"");
+						LOG.info("Finished feeding file {}.",fileToFeed.getName());
 					}
 					catch (final InvalidColumnCountException iae) {
 						// Exception is already logged -> nothing to do

@@ -190,6 +190,8 @@ public class OneTimeFeeder implements Runnable {
     						final int count = sc.nextInt();
     						sos.setLastLine(count);
 						}
+					} else {
+						LOG.debug("Counter file does not exist.");
 					}
 
 					// SOS is available and transactional
