@@ -89,6 +89,7 @@ Bugfixes:
  * #25: Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
  * #NN: Fix bug with timestamps of sample files
  * #NN: Fix bug with incrementing lastline causing data loss
+ * #NN: Fix bug with data files without headerline
 
 Release Notes for SOS-Importer 0.3.0
 ====================================
