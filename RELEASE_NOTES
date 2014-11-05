@@ -91,7 +91,8 @@ Bugfixes:
  * #NN: Fix bug with incrementing lastline causing data loss
  * #NN: Fix bug with data files without headerline
  * #NN: NSAMParser: Fix bug with timestamp extraction
- * #NN: NSAMParser: Fib bug with skipLimit
+ * #NN: NSAMParser: Fix bug with skipLimit
+ * #NN: NSAMParser: Fix bug with empty lines, line ending, time series encoding
 
 Release Notes for SOS-Importer 0.3.0
 ====================================

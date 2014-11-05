@@ -53,7 +53,12 @@ import org.slf4j.LoggerFactory;
  */
 public class NSAMParser implements CsvParser {
 
-    private static final int dataOffset = 21;
+	/*
+	 * This values is derived from "mm/dd/yy"
+	 */
+    private static final int dateStringLength = 8;
+
+	private static final int dataOffset = 21;
 
     private static final int metaDataOffset = 3;
 
@@ -116,15 +121,19 @@ public class NSAMParser implements CsvParser {
             }
             int i = 0;
             for (final String timeSeriesElem : line.split(timeSeriesSplitter)) {
-                final String[] timeSeriesElemTokens = timeSeriesElem.split(timeSeriesElementSplitter);
-                try {
-                    final Timestamp timestamp = getTimestamp(startDates[i],
-                            startTime, sdf, timeZone, timeSeriesElemTokens[0]);
-                    timeSeriesBuffer.get(i).add(new String[] {timestamp.toString(), timeSeriesElemTokens[1]});
-                    i++;
-                } catch (NumberFormatException | ParseException e) {
-                    LOG.error("Exception thrown: {}", e.getMessage(), e);
-                }
+            	if (timeSeriesElem != null && !timeSeriesElem.isEmpty()) {
+            		final String[] timeSeriesElemTokens = timeSeriesElem.split(timeSeriesElementSplitter);
+            		if (timeSeriesElemTokens != null && timeSeriesElemTokens.length > 0 && timeSeriesElemTokens[0].indexOf("Comment for Sample") == -1) {
+            			try {
+            				final Timestamp timestamp = getTimestamp(startDates[i],
+            						startTime, sdf, timeZone, timeSeriesElemTokens[0]);
+            				timeSeriesBuffer.get(i).add(new String[] {timestamp.toString(), timeSeriesElemTokens[1]});
+            				i++;
+            			} catch (NumberFormatException | ParseException e) {
+            				LOG.error("Exception thrown: {}", e.getMessage(), e);
+            			}
+            		}
+            	}
             }
         }
         // 3 create line Stack<String[]> from timeSeriesBuffer
@@ -154,13 +163,24 @@ public class NSAMParser implements CsvParser {
     }
 
     private String[] getStartDates(final String startDateLine) {
-        String[] startDates = startDateLine.substring(metaDatabeginIndex).split(metadataSplitter);
-        final ArrayList<String> startDatesTmp = new ArrayList<>(startDates.length+1);
-        startDatesTmp.add(startDateLine.substring(startTimeBeginIndex,startTimeEndIndex));
-        for (final String startDate : startDates) {
-            startDatesTmp.add(startDate);
-        }
-        startDates = startDatesTmp.toArray(new String[startDatesTmp.size()]);
+    	LOG.debug("Parsing startDateLine: '{}'", startDateLine);
+        String[] startDates = null;
+        if (startDateLine.length() > metaDatabeginIndex) {
+        		startDates = startDateLine.substring(metaDatabeginIndex).split(metadataSplitter);
+        		final ArrayList<String> startDatesTmp = new ArrayList<>(startDates.length+1);
+        		LOG.debug("StartDate first split: {}", Arrays.toString(startDates));
+        		startDatesTmp.add(startDateLine.substring(startTimeBeginIndex,startTimeEndIndex));
+        		for (final String startDate : startDates) {
+        			if (!startDate.isEmpty() && startDate.length()==dateStringLength) {
+        				startDatesTmp.add(startDate);
+        			}
+        		}
+        		startDates = startDatesTmp.toArray(new String[startDatesTmp.size()]);
+    	} else {
+    		startDates = new String[1];
+    		startDates[0] = startDateLine.substring(startTimeBeginIndex,startTimeEndIndex);
+    	}
+        LOG.debug("Start dates found: {}",Arrays.toString(startDates));
         return startDates;
     }
 
