@@ -90,6 +90,7 @@ Bugfixes:
  * #NN: Fix bug with timestamps of sample files
  * #NN: Fix bug with incrementing lastline causing data loss
  * #NN: Fix bug with data files without headerline
+ * #NN: NSAMParser: Fix bug with timestamp extraction
 
 Release Notes for SOS-Importer 0.3.0
 ====================================

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -63,14 +64,20 @@ public class NSAMParser implements CsvParser {
     private static final int startTimeEndIndex = 19;
 
     private static final int metaDatabeginIndex = 23;
+    
+    private static final int metaDataLength = 8;
+    
+    private static final int metaDataTimebeginIndex = 11;
+    
+    private static final int metaDataTimeLength = metaDataLength;
 
     private static final String metadataSplitter = ",,,,,";
 
     private static final String timeSeriesSplitter = ",,,";
 
-    private static final int metaDataLength = 8;
 
     final Stack<String[]> lines = new Stack<>();
+
 
     @Override
     public String[] readNext() throws IOException {
@@ -86,10 +93,11 @@ public class NSAMParser implements CsvParser {
         // 1 read file metadata
         skipLines(br,metaDataOffset);
         // 1.1 start date => # of timeseries (columns)
-        final String startDateLine = br.readLine();
+		final String startDateLine = br.readLine();
         final String[] startDates = getStartDates(startDateLine);
         // 1.2 start time pro zeitreihe einlesen
-        final String startTime = br.readLine().substring(metaDatabeginIndex,metaDatabeginIndex+metaDataLength);
+        String startTimeLine = br.readLine();
+        final String startTime = startTimeLine.substring(metaDataTimebeginIndex,metaDataTimebeginIndex+metaDataTimeLength);
         // 2 read data
         skipLines(br,dataOffset);
         // 2.1 split each data line into time series
