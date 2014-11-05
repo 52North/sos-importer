@@ -118,7 +118,8 @@ public class RepeatedFeeder extends TimerTask{
 		catch (final JavaApiBugJDL6203387Exception e) {
 			// Exception is already logged -> nothing to do
 		} catch (final Exception e) {
-			LOG.debug("Exception catched: {}", e.getMessage(),e);
+			LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());
+			LOG.debug("StackTrace:",e);
 		} finally {
 			oneFeederLock.unlock();
 		}
