@@ -78,7 +78,7 @@ public class NSAMParser implements CsvParser {
 
     private static final String metadataSplitter = ",,,,,";
 
-    private static final String timeSeriesSplitter = ",,,";
+    private static String timeSeriesSplitter = ",,,";
 
 
     final Stack<String[]> lines = new Stack<>();
@@ -115,9 +115,14 @@ public class NSAMParser implements CsvParser {
         final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
         final TimeZone timeZone = TimeZone.getTimeZone("UTC");
         sdf.setTimeZone(timeZone);
+        boolean firstLine = true;
         while ((line = br.readLine()) != null) {
             if (line.isEmpty()) {
                 break;
+            }
+            if (firstLine) {
+            	firstLine = false;
+            	createTimeSeriesSplitter(line);
             }
             int i = 0;
             for (final String timeSeriesElem : line.split(timeSeriesSplitter)) {
@@ -140,7 +145,28 @@ public class NSAMParser implements CsvParser {
         createStack(timeSeriesBuffer);
     }
 
-    private Timestamp getTimestamp(final String startDate,
+    private void createTimeSeriesSplitter(String line) {
+    	LOG.debug("Identify time series splitter from first line of data: '{}'", line);
+    	boolean startFound = false;
+    	int splitterCount = 1;
+    	for (final String elem : line.split(",")) {
+    			if (elem.isEmpty()) {
+    				startFound = true;
+    				splitterCount++;
+    			}
+    	        if (startFound && !elem.isEmpty()){
+    	        	break;
+    	        }
+    	}
+		timeSeriesSplitter = "";
+		while (splitterCount > 0) {
+			timeSeriesSplitter += ",";
+			splitterCount--;
+		}
+		LOG.debug("Created timeseries splitter: {}", timeSeriesSplitter);
+	}
+
+	private Timestamp getTimestamp(final String startDate,
             final String startTime,
             final SimpleDateFormat sdf,
             final TimeZone timeZone,
@@ -170,9 +196,19 @@ public class NSAMParser implements CsvParser {
         		final ArrayList<String> startDatesTmp = new ArrayList<>(startDates.length+1);
         		LOG.debug("StartDate first split: {}", Arrays.toString(startDates));
         		startDatesTmp.add(startDateLine.substring(startTimeBeginIndex,startTimeEndIndex));
-        		for (final String startDate : startDates) {
-        			if (!startDate.isEmpty() && startDate.length()==dateStringLength) {
-        				startDatesTmp.add(startDate);
+        		for (String startDate : startDates) {
+        			if (!startDate.isEmpty()) {
+        				// Case: Leftover ","
+        				if (startDate.indexOf(",") != -1) {
+        					startDate = startDate.replaceAll(",", "");
+        				}
+        				// Case: Wrong date format like 12/31/2015 and not 12/31/15
+        				if (startDate.length() == dateStringLength+2) {
+        					startDate = startDate.substring(0,startDate.lastIndexOf("/")+1).concat(startDate.substring(startDate.lastIndexOf("/")+3));
+        				}
+        				if (startDate.length()==dateStringLength){
+        					startDatesTmp.add(startDate);
+        				}
         			}
         		}
         		startDates = startDatesTmp.toArray(new String[startDatesTmp.size()]);
