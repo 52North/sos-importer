@@ -122,7 +122,11 @@ public class NSAMParser implements CsvParser {
             }
             if (firstLine) {
             	firstLine = false;
-            	createTimeSeriesSplitter(line);
+            	if (hasMoreThanOneTimeseries(startDates)) {
+            		createTimeSeriesSplitter(line);
+            	} else {
+            		LOG.debug("Only one time series in dataset found.");
+            	}
             }
             int i = 0;
             for (final String timeSeriesElem : line.split(timeSeriesSplitter)) {
@@ -145,6 +149,10 @@ public class NSAMParser implements CsvParser {
         createStack(timeSeriesBuffer);
     }
 
+	private boolean hasMoreThanOneTimeseries(final String[] startDates) {
+		return startDates.length > 1;
+	}
+
     private void createTimeSeriesSplitter(String line) {
     	LOG.debug("Identify time series splitter from first line of data: '{}'", line);
     	boolean startFound = false;
@@ -158,12 +166,16 @@ public class NSAMParser implements CsvParser {
     	        	break;
     	        }
     	}
-		timeSeriesSplitter = "";
-		while (splitterCount > 0) {
-			timeSeriesSplitter += ",";
-			splitterCount--;
-		}
-		LOG.debug("Created timeseries splitter: {}", timeSeriesSplitter);
+    	if (splitterCount > 1) {
+    		timeSeriesSplitter = "";
+    		while (splitterCount > 0) {
+    			timeSeriesSplitter += ",";
+    			splitterCount--;
+    		}
+    		LOG.debug("Created timeseries splitter: {}", timeSeriesSplitter);
+    	} else {
+    		LOG.debug("Splitter count == 1 => only one timeseries in dataset.");
+    	}
 	}
 
 	private Timestamp getTimestamp(final String startDate,
