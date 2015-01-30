@@ -141,7 +141,7 @@ public class RepeatedFeeder extends TimerTask{
 		if (files != null) {
 
 			for (final File file : files) {
-				if (lastUsedDateFile == null || file.lastModified() > lastUsedDateFile.lastModified()) {
+				if (lastUsedDateFile == null || file.lastModified() >= lastUsedDateFile.lastModified()) {
 					filesToFeed.add(file);
 				}
 			}
