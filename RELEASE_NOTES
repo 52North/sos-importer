@@ -27,7 +27,8 @@ Features:
    * "lastModifiedDelta" for moving the date n days back (this attribute is 
      OPTIONAL for this feature, too.)
  * Ignore lines with regular expressions feature:
-   0..infinity <IgnoreLineRegEx> elements can be added to the <DataFile> element.
+   0..infinity <IgnoreLineRegEx> elements can be added to the <DataFile> 
+   element.
    Each element will be used as regular expression and applied to each line of 
    the data file before parsing. 
  * Handling of data files containing several sample runs. A sample run contains
@@ -40,7 +41,7 @@ Features:
                            sample from the start line.
    * "sampleDateExtractionRegEx" - the regular expression to extract the date
                                    information from the line containing the 
-                                   date information of the current sample. The 
+                                   date information of the current sample. The
                                    expression MUST result in ONE group. This
                                    group will be parsed to a java.util.Date
                                    using "sampleDatePattern" attribute.
@@ -53,7 +54,8 @@ Features:
    * "sampleSizeRegEx"   - the regular expression to extract the sample size. 
                            The regular expression MUST result in ONE group 
                            which contains an integer value.
-   * "sampleSizeDivisor" - defines a divisor that is applied to the sample size.
+   * "sampleSizeDivisor" - defines a divisor that is applied to the sample 
+   						   size.
                            Can be used in cases the sample size is not giving
                            the number of samples but the time span of the
                            sample. The divisor is used to calculate the number
@@ -84,8 +86,10 @@ Bugfixes:
  * #06: Hardcoded time zone in test 
  * #10: NPE during feeding if binding value is not set
  * #11: BadLocationException in the case of having empty lines in csv file
- * #20: Current GUI is broken when using sample based files with minor inconsistencies
- * #24: Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
+ * #20: Current GUI is broken when using sample based files with minor
+ 		inconsistencies
+ * #24: Fix/ignore line and column: Solved two NPEs while ignoring lines or 
+ 		columns
  * #25: Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
  * #NN: Fix bug with timestamps of sample files
  * #NN: Fix bug with incrementing lastline causing data loss
@@ -117,9 +121,11 @@ Features:
  * 668 Step 6b: "Enter" goes "back" instead of "next"
  * 589 Step 3b: Not yet implemented
  * 649 Usability: User can not (really) change window size
- * 669 Step 6b: Question - Accidentally deleting a sensor name in dropdown list --> Consequences?
+ * 669 Step 6b: Question - Accidentally deleting a sensor name in dropdown list
+ 	   --> Consequences?
  * 586 Step 6c: Add Missing Position Information for Feature of Interest
- * 707 Step 5c & 6c: Altitude input requested from user in the case of using an reference system which is not 3d
+ * 707 Step 5c & 6c: Altitude input requested from user in the case of using an
+ 	   reference system which is not 3d
  * 523 Step 3: Merge DateAndTimes and Positions
 
  
