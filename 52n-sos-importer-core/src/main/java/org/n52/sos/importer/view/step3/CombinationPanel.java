@@ -29,6 +29,7 @@
 package org.n52.sos.importer.view.step3;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -85,8 +86,6 @@ public abstract class CombinationPanel extends SelectionPanel {
 		groupComboBox.setToolTipText(getGroupToolTip());
 		//setDefaultSelection();
 		
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-		
 		final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		formatPanel.add(patternComboBox);
 							
@@ -105,8 +104,10 @@ public abstract class CombinationPanel extends SelectionPanel {
 		dateTimePanel.add(formatPanel);	
 		dateTimePanel.add(examplePanel);
 		dateTimePanel.add(groupPanel);
-		this.add(dateTimePanel);
-		this.add(parseTestLabel);
+		
+		setLayout(new GridLayout(2, 1, 0, 0));
+		add(dateTimePanel);
+		add(parseTestLabel);
 	}
 	
 	public abstract Combination getCombination();
