@@ -160,8 +160,28 @@ public class Step7Controller extends StepController {
 			return showErrorDialogAndLogIt(Lang.l().step7SosVersionInstructions());
 		} else if (isBindingNotGivenButRequired()) {
 			return showErrorDialogAndLogIt(Lang.l().step7SosBindingInstructions());
+		} else if (isConfigFileNotSet()) {
+			return showErrorDialogAndLogIt(Lang.l().step7ConfigFileInstructions());
 		}
 		return true;
+	}
+
+	private boolean isConfigFileNotSet() {
+		String configPath = s7P.getConfigFile();
+		if (configPath == null || configPath.isEmpty()) {
+			return true;
+		}
+		File configFile = new File(configPath);
+		if (configFile.exists()) {
+			return !configFile.canWrite();
+		} else {
+			File configFileFolder = new File(configPath.substring(0,configPath.lastIndexOf(File.separatorChar)));
+			if (configFileFolder.exists()) {
+				return !configFileFolder.canWrite();
+			} else {
+				return true;
+			}
+		}
 	}
 
 	private boolean isBindingNotGivenButRequired() {

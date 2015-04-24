@@ -809,6 +809,11 @@ public class De extends Lang {
 	public String step7ConfigurationFile() {
 		return "Konfigurations-Datei";
 	}
+	
+	@Override
+	public String step7ConfigFileInstructions() {
+		return "Bitte das Verzeichnis zum Speichern der Konfigurationsdatei angeben.";
+	}
 
 	@Override
 	public String step7Description() {

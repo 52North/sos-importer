@@ -815,6 +815,11 @@ public class En extends Lang {
 	public String step7ConfigurationFile() {
 		return "Configuration File";
 	}
+	
+	@Override
+	public String step7ConfigFileInstructions() {
+		return "Please set the folder for saving the configuration file.";
+	}
 
 	@Override
 	public String step7Description() {

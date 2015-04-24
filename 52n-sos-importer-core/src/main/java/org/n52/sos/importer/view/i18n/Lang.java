@@ -837,6 +837,12 @@ public abstract class Lang {
 	 * @return Configuration File
 	 */
 	public abstract String step7ConfigurationFile();
+	
+	/**
+	 * 
+	 * @return Please set the folder for saving the configuration file.
+	 */
+	public abstract String step7ConfigFileInstructions();
 
 	/**
 	 * @return Step 7: Final Configuration
@@ -1128,4 +1134,5 @@ public abstract class Lang {
 	 * @return Year
 	 */
 	public abstract String year();
+
 }
