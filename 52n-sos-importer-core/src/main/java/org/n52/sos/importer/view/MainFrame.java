@@ -144,7 +144,6 @@ public class MainFrame extends JFrame {
 
 		if (n == JOptionPane.YES_OPTION) {
 			ComboBoxItems.getInstance().save();
-			Constants.save();
 			System.exit(0);
 		}
 	}

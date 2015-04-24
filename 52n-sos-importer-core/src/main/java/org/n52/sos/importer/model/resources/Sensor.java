@@ -74,12 +74,12 @@ public class Sensor extends Resource {
 	}
 
 	@Override
-	public DefaultComboBoxModel getNames() {
+	public DefaultComboBoxModel<String> getNames() {
 		return EditableComboBoxItems.getInstance().getSensorNames();
 	}
 
 	@Override
-	public DefaultComboBoxModel getURIs() {
+	public DefaultComboBoxModel<String> getURIs() {
 		return EditableComboBoxItems.getInstance().getSensorURIs();
 	}
 	

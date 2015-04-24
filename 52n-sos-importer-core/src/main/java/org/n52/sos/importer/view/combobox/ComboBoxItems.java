@@ -218,7 +218,7 @@ public class ComboBoxItems {
 		}
 	}
 	
-	public String format(final DefaultComboBoxModel dcbm) {
+	public String format(final DefaultComboBoxModel<String> dcbm) {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < dcbm.getSize(); i++) {
 			sb.append(dcbm.getElementAt(i) + Constants.SEPARATOR_STRING);

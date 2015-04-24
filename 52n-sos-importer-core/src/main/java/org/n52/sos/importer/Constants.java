@@ -30,36 +30,19 @@ package org.n52.sos.importer;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.xml.namespace.QName;
 
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.referencing.CRS;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * TODO move to shared module all constants that need to be shared!
  */
 public class Constants {
-
-	private static final Logger logger = LoggerFactory.getLogger(Constants.class);
 
 	public static enum ImportStrategy {
         /**
@@ -140,13 +123,6 @@ public class Constants {
 	public static final double DEFAULT_HEIGHT_FOI_POSITION = 0.0;
 	public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
 	public static final String DEFAULT_UNIT_FOI_POSITION = "deg";
-	public static final String WMS_VIEW_SELECT_TOOL_ICON_PNG_PATH = "/org/n52/sos/importer/view/position/noxin_crosshairs.png";
-	public static final String WMS_DEFAULT_URL = "http://osmtud.dyndns.org/wms/wms/";
-	public static final String WMS_GET_CAPABILITIES_REQUEST = "?VERSION=1.1.0&REQUEST=GetCapabilities";
-
-	private static final String WMS_EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
-	private static final String WMS_INTERNAL_FILE_PATH = "/org/n52/sos/importer/view/position/";
-	private static final String WMS_FILE_NAME = "wms.properties";
 
 	public static final String DEFAULT_FEEDER_JAR_NAME_START = "52n-sos-importer-feeder-";
 
@@ -164,107 +140,12 @@ public class Constants {
 	public static char DECIMAL_SEPARATOR = '.';
 	public static char THOUSANDS_SEPARATOR = ',';
 
-	private static String wms_url = "wms_url";
-	private static String wms_layer = "wms_layer";
-
 	/**
 	 * TODO implement loading of language parameter from configuration file
 	 * @return {@link org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
 	 */
 	public static String language() {
 		return Lang.l().getClass().getSimpleName();
-	}
-
-	public static String WMS_URL() {
-		final Properties props = load();
-		String wmsUrl = WMS_DEFAULT_URL;
-		if (props != null &&
-				props.getProperty(wms_url) != null &&
-				!props.getProperty(wms_url).equals("")) {
-			wmsUrl =  props.getProperty(wms_url);
-		}
-
-		logger.debug("WMS url: '{}'", wmsUrl);
-
-		return wmsUrl;
-	}
-
-	public static String WMS_BACKGROUND_LAYER_NAME() {
-		final Properties props = load();
-		String wmsLayer = WMS_DEFAULT_BACKGROUND_LAYER_NAME;
-		if (props != null &&
-				props.getProperty(wms_layer) != null &&
-				!props.getProperty(wms_layer).equals("")) {
-			wmsLayer =  props.getProperty(wms_layer);
-		}
-
-		logger.debug("WMS layer: '{}'", wmsLayer);
-
-		return wmsLayer;
-	}
-
-	private static Properties load() {
-		try {
-			InputStream is;
-			String filePath = WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME;
-			final File file = new File(filePath);
-			if (!file.exists()) {
-				logger.info("Load default settings from jar file");
-				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
-				logger.debug(String.format("filepath: %s", filePath));
-				is = Constants.class.getClass().getResourceAsStream(filePath);
-			} else if (!file.canRead()) {
-				logger.warn("Could not load settings.");
-				logger.warn("No reading permissions for " + file);
-				logger.info("Load default settings from jar file");
-				filePath = WMS_INTERNAL_FILE_PATH + WMS_FILE_NAME;
-				is = Constants.class.getClass().getResourceAsStream(filePath);
-			} else {
-				logger.info("Load settings from " + file);
-				is = new FileInputStream(file);
-			}
-			final Properties props = new Properties();
-			props.load(is);
-			logger.info("Settings loaded");
-			return props;
-		} catch (final FileNotFoundException e) {
-			logger.error("SOS Importer Settings not found", e);
-		} catch (final IOException  e) {
-			logger.error("SOS Importer Settings not readable.", e);
-		}
-		return null;
-	}
-
-	public static ReferencedEnvelope WMS_ENVELOPE()
-			throws
-			MismatchedDimensionException,
-			NoSuchAuthorityCodeException,
-			FactoryException {
-		return new ReferencedEnvelope(-180.0, 180.0, -90.0, 90.0, CRS.decode("EPSG:4326"));
-	}
-
-	public static void save() {
-		final File folder = new File(WMS_EXTERNAL_FILE_PATH);
-		final Properties props = load();
-		if (!folder.exists()) {
-
-			final boolean successful = folder.mkdir();
-			if (!successful) {
-				logger.warn("WMS properties could not be saved.");
-				logger.warn("No writing permissions at " + folder);
-				return;
-			}
-		}
-
-		final File file = new File(WMS_EXTERNAL_FILE_PATH + WMS_FILE_NAME);
-
-		try { //save properties
-			final OutputStream os = new FileOutputStream(file);
-			props.store(os, null);
-			logger.info("Save settings at " + file.getAbsolutePath());
-		} catch (final IOException e) {
-			logger.error("WMS properties could not be saved.", e);
-		}
 	}
 
 }

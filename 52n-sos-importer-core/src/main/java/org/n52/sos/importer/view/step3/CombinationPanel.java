@@ -67,7 +67,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	private static final Logger logger = LoggerFactory.getLogger(CombinationPanel.class);
 
 	private final JLabel groupLabel;
-	private final JComboBox groupComboBox = new JComboBox(getGroupItems());
+	private final JComboBox<String> groupComboBox = new JComboBox<>(getGroupItems());
 	
 	private final EditableJComboBoxPanel patternComboBox;
 	
@@ -114,7 +114,7 @@ public abstract class CombinationPanel extends SelectionPanel {
 	
 	public abstract String[] getGroupItems();
 	
-	public abstract DefaultComboBoxModel getPatterns();
+	public abstract DefaultComboBoxModel<String> getPatterns();
 	
 	public abstract Object getTestValue();
 	

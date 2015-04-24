@@ -76,12 +76,12 @@ public class ObservedProperty extends Resource {
 	}
 
 	@Override
-	public DefaultComboBoxModel getNames() {
+	public DefaultComboBoxModel<String> getNames() {
 		return EditableComboBoxItems.getInstance().getObservedPropertyNames();
 	}
 
 	@Override
-	public DefaultComboBoxModel getURIs() {
+	public DefaultComboBoxModel<String> getURIs() {
 		return EditableComboBoxItems.getInstance().getObservedPropertyURIs();
 	}
 	

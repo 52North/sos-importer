@@ -67,6 +67,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -125,6 +126,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 	String localArrayListType = DataFlavor.javaJVMLocalObjectMimeType
 			+ ";class=java.util.ArrayList";
 
+	@SuppressWarnings("rawtypes")
 	JList source = null;
 
 	int[] indices = null;
@@ -144,6 +146,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		serialArrayListFlavor = new DataFlavor(ArrayList.class, "ArrayList");
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public boolean importData(final JComponent c, final Transferable t) {
 		JList target = null;
@@ -206,6 +209,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return true;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void exportDone(final JComponent c, final Transferable data, final int action) {
 		if ((action == MOVE) && (indices != null)) {
@@ -267,16 +271,17 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return false;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected Transferable createTransferable(final JComponent c) {
 		if (c instanceof JList) {
 			source = (JList) c;
 			indices = source.getSelectedIndices();
-			final Object[] values = source.getSelectedValues();
-			if (values == null || values.length == 0) {
+			final List values = source.getSelectedValuesList();
+			if (values == null || values.isEmpty()) {
 				return null;
 			}
-			final ArrayList<String> alist = new ArrayList<String>(values.length);
+			final ArrayList<String> alist = new ArrayList<String>(values.size());
 			for (final Object o : values) {
 				String str = o.toString();
 				if (str == null) {

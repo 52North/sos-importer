@@ -82,7 +82,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 	}
 
 	@Override
-	public DefaultComboBoxModel getPatterns() {
+	public DefaultComboBoxModel<String> getPatterns() {
 		return EditableComboBoxItems.getInstance().getDateAndTimePatterns();
 	}
 

@@ -39,71 +39,71 @@ public class EditableComboBoxItems {
 	
 	private static EditableComboBoxItems instance = null;
 
-	private DefaultComboBoxModel columnSeparators;
+	private DefaultComboBoxModel<String> columnSeparators;
 	
-	private DefaultComboBoxModel commentIndicators;
+	private DefaultComboBoxModel<String> commentIndicators;
 	
-	private DefaultComboBoxModel textQualifiers;
+	private DefaultComboBoxModel<String> textQualifiers;
 	
-	private DefaultComboBoxModel dateAndTimePatterns;
+	private DefaultComboBoxModel<String> dateAndTimePatterns;
 	
-	private DefaultComboBoxModel positionPatterns;
+	private DefaultComboBoxModel<String> positionPatterns;
 	
-	private DefaultComboBoxModel EPSGCodes;
+	private DefaultComboBoxModel<String> EPSGCodes;
 	
-	private DefaultComboBoxModel referenceSystemNames;
+	private DefaultComboBoxModel<String> referenceSystemNames;
 	
-	private DefaultComboBoxModel featureOfInterestNames;
+	private DefaultComboBoxModel<String> featureOfInterestNames;
 	
-	private DefaultComboBoxModel observedPropertyNames;
+	private DefaultComboBoxModel<String> observedPropertyNames;
 	
-	private DefaultComboBoxModel unitOfMeasurementCodes;
+	private DefaultComboBoxModel<String> unitOfMeasurementCodes;
 	
-	private DefaultComboBoxModel sensorNames;
+	private DefaultComboBoxModel<String> sensorNames;
 	
-	private DefaultComboBoxModel featureOfInterestURIs;
+	private DefaultComboBoxModel<String> featureOfInterestURIs;
 	
-	private DefaultComboBoxModel observedPropertyURIs;
+	private DefaultComboBoxModel<String> observedPropertyURIs;
 	
-	private DefaultComboBoxModel unitOfMeasurementURIs;
+	private DefaultComboBoxModel<String> unitOfMeasurementURIs;
 	
-	private DefaultComboBoxModel sensorURIs;
+	private DefaultComboBoxModel<String> sensorURIs;
 
-	private DefaultComboBoxModel sosURLs;
+	private DefaultComboBoxModel<String> sosURLs;
 	
 	private EditableComboBoxItems() {
-		setColumnSeparators(new DefaultComboBoxModel(
+		setColumnSeparators(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getColumnSeparators()));
-		setCommentIndicators(new DefaultComboBoxModel(
+		setCommentIndicators(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getCommentIndicators()));
-		setTextQualifiers(new DefaultComboBoxModel(
+		setTextQualifiers(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getTextQualifiers()));
-		setDateAndTimePatterns(new DefaultComboBoxModel(
+		setDateAndTimePatterns(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getDateAndTimePatterns()));	
-		setPositionPatterns(new DefaultComboBoxModel(
+		setPositionPatterns(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getPositionPatterns()));
-		setEPSGCodes(new DefaultComboBoxModel(
+		setEPSGCodes(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getEpsgCodes()));
-		setReferenceSystemNames(new DefaultComboBoxModel(
+		setReferenceSystemNames(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getReferenceSystemNames()));
-		setSosURLs(new DefaultComboBoxModel(
+		setSosURLs(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getSosURLs()));
 		
-		setFeatureOfInterestNames(new DefaultComboBoxModel(
+		setFeatureOfInterestNames(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getFeatureOfInterestNames()));
-		setObservedPropertyNames(new DefaultComboBoxModel(
+		setObservedPropertyNames(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getObservedPropertyNames()));
-		setUnitOfMeasurementCodes(new DefaultComboBoxModel(
+		setUnitOfMeasurementCodes(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getUnitOfMeasurementCodes()));
-		setSensorNames(new DefaultComboBoxModel(
+		setSensorNames(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getSensorNames()));	
-		setFeatureOfInterestURIs(new DefaultComboBoxModel(
+		setFeatureOfInterestURIs(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getFeatureOfInterestURIs()));
-		setObservedPropertyURIs(new DefaultComboBoxModel(
+		setObservedPropertyURIs(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getObservedPropertyURIs()));
-		setUnitOfMeasurementURIs(new DefaultComboBoxModel(
+		setUnitOfMeasurementURIs(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
-		setSensorURIs(new DefaultComboBoxModel(
+		setSensorURIs(new DefaultComboBoxModel<>(
 				ComboBoxItems.getInstance().getSensorURIs()));
 	}
 
@@ -113,133 +113,133 @@ public class EditableComboBoxItems {
 		return instance;
 	}
 	
-	public DefaultComboBoxModel getColumnSeparators() {
+	public DefaultComboBoxModel<String> getColumnSeparators() {
 		return columnSeparators;
 	}
 
-	public void setColumnSeparators(DefaultComboBoxModel columnSeparators) {
+	public void setColumnSeparators(DefaultComboBoxModel<String> columnSeparators) {
 		this.columnSeparators = columnSeparators;
 	}
 
-	public DefaultComboBoxModel getCommentIndicators() {
+	public DefaultComboBoxModel<String> getCommentIndicators() {
 		return commentIndicators;
 	}
 
-	public void setCommentIndicators(DefaultComboBoxModel commentIndicators) {
+	public void setCommentIndicators(DefaultComboBoxModel<String> commentIndicators) {
 		this.commentIndicators = commentIndicators;
 	}
 
-	public DefaultComboBoxModel getTextQualifiers() {
+	public DefaultComboBoxModel<String> getTextQualifiers() {
 		return textQualifiers;
 	}
 
-	public void setTextQualifiers(DefaultComboBoxModel textQualifiers) {
+	public void setTextQualifiers(DefaultComboBoxModel<String> textQualifiers) {
 		this.textQualifiers = textQualifiers;
 	}
 
-	public DefaultComboBoxModel getDateAndTimePatterns() {
+	public DefaultComboBoxModel<String> getDateAndTimePatterns() {
 		return dateAndTimePatterns;
 	}
 
-	public void setDateAndTimePatterns(DefaultComboBoxModel dateAndTimePatterns) {
+	public void setDateAndTimePatterns(DefaultComboBoxModel<String> dateAndTimePatterns) {
 		this.dateAndTimePatterns = dateAndTimePatterns;
 	}
 
-	public DefaultComboBoxModel getEPSGCodes() {
+	public DefaultComboBoxModel<String> getEPSGCodes() {
 		return EPSGCodes;
 	}
 
-	public void setEPSGCodes(DefaultComboBoxModel ePSGCodes) {
+	public void setEPSGCodes(DefaultComboBoxModel<String> ePSGCodes) {
 		EPSGCodes = ePSGCodes;
 	}
 
-	public void setSosURLs(DefaultComboBoxModel sosURLs) {
+	public void setSosURLs(DefaultComboBoxModel<String> sosURLs) {
 		this.sosURLs = sosURLs;
 	}
 
-	public DefaultComboBoxModel getSosURLs() {
+	public DefaultComboBoxModel<String> getSosURLs() {
 		return sosURLs;
 	}
 	
-	public DefaultComboBoxModel getFeatureOfInterestNames() {
+	public DefaultComboBoxModel<String> getFeatureOfInterestNames() {
 		return featureOfInterestNames;
 	}
 
 	public void setFeatureOfInterestNames(
-			DefaultComboBoxModel featureOfInterestNames) {
+			DefaultComboBoxModel<String> featureOfInterestNames) {
 		this.featureOfInterestNames = featureOfInterestNames;
 	}
 
-	public DefaultComboBoxModel getObservedPropertyNames() {
+	public DefaultComboBoxModel<String> getObservedPropertyNames() {
 		return observedPropertyNames;
 	}
 
-	public void setObservedPropertyNames(DefaultComboBoxModel observedPropertyNames) {
+	public void setObservedPropertyNames(DefaultComboBoxModel<String> observedPropertyNames) {
 		this.observedPropertyNames = observedPropertyNames;
 	}
 
-	public DefaultComboBoxModel getUnitOfMeasurementCodes() {
+	public DefaultComboBoxModel<String> getUnitOfMeasurementCodes() {
 		return unitOfMeasurementCodes;
 	}
 
 	public void setUnitOfMeasurementCodes(
-			DefaultComboBoxModel unitOfMeasurementCodes) {
+			DefaultComboBoxModel<String> unitOfMeasurementCodes) {
 		this.unitOfMeasurementCodes = unitOfMeasurementCodes;
 	}
 
-	public DefaultComboBoxModel getSensorNames() {
+	public DefaultComboBoxModel<String> getSensorNames() {
 		return sensorNames;
 	}
 
-	public void setSensorNames(DefaultComboBoxModel sensorNames) {
+	public void setSensorNames(DefaultComboBoxModel<String> sensorNames) {
 		this.sensorNames = sensorNames;
 	}
 
-	public DefaultComboBoxModel getFeatureOfInterestURIs() {
+	public DefaultComboBoxModel<String> getFeatureOfInterestURIs() {
 		return featureOfInterestURIs;
 	}
 
-	public void setFeatureOfInterestURIs(DefaultComboBoxModel featureOfInterestURIs) {
+	public void setFeatureOfInterestURIs(DefaultComboBoxModel<String> featureOfInterestURIs) {
 		this.featureOfInterestURIs = featureOfInterestURIs;
 	}
 
-	public DefaultComboBoxModel getObservedPropertyURIs() {
+	public DefaultComboBoxModel<String> getObservedPropertyURIs() {
 		return observedPropertyURIs;
 	}
 
-	public void setObservedPropertyURIs(DefaultComboBoxModel observedPropertyURIs) {
+	public void setObservedPropertyURIs(DefaultComboBoxModel<String> observedPropertyURIs) {
 		this.observedPropertyURIs = observedPropertyURIs;
 	}
 
-	public DefaultComboBoxModel getUnitOfMeasurementURIs() {
+	public DefaultComboBoxModel<String> getUnitOfMeasurementURIs() {
 		return unitOfMeasurementURIs;
 	}
 
-	public void setUnitOfMeasurementURIs(DefaultComboBoxModel unitOfMeasurementURIs) {
+	public void setUnitOfMeasurementURIs(DefaultComboBoxModel<String> unitOfMeasurementURIs) {
 		this.unitOfMeasurementURIs = unitOfMeasurementURIs;
 	}
 
-	public DefaultComboBoxModel getSensorURIs() {
+	public DefaultComboBoxModel<String> getSensorURIs() {
 		return sensorURIs;
 	}
 
-	public void setSensorURIs(DefaultComboBoxModel sensorURIs) {
+	public void setSensorURIs(DefaultComboBoxModel<String> sensorURIs) {
 		this.sensorURIs = sensorURIs;
 	}
 
-	public void setPositionPatterns(DefaultComboBoxModel positionPatterns) {
+	public void setPositionPatterns(DefaultComboBoxModel<String> positionPatterns) {
 		this.positionPatterns = positionPatterns;
 	}
 
-	public DefaultComboBoxModel getPositionPatterns() {
+	public DefaultComboBoxModel<String> getPositionPatterns() {
 		return positionPatterns;
 	}
 
-	public void setReferenceSystemNames(DefaultComboBoxModel referenceSystemNames) {
+	public void setReferenceSystemNames(DefaultComboBoxModel<String> referenceSystemNames) {
 		this.referenceSystemNames = referenceSystemNames;
 	}
 
-	public DefaultComboBoxModel getReferenceSystemNames() {
+	public DefaultComboBoxModel<String> getReferenceSystemNames() {
 		return referenceSystemNames;
 	}
 }

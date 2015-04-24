@@ -60,7 +60,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
 	private final JLabel heightLabel;
 	private final JTextField heightTextField = new JTextField(8);
 	private final JLabel heightUnitLabel;
-	private final JComboBox heightUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getHeightUnits());
+	private final JComboBox<String> heightUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getHeightUnits());
 	
 	public MissingHeightPanel(final Position position) {
 		super();

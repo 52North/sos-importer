@@ -74,12 +74,12 @@ public class UnitOfMeasurement extends Resource {
 	}
 
 	@Override
-	public DefaultComboBoxModel getNames() {
+	public DefaultComboBoxModel<String> getNames() {
 		return EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes();
 	}
 
 	@Override
-	public DefaultComboBoxModel getURIs() {
+	public DefaultComboBoxModel<String> getURIs() {
 		return EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs();
 	}
 	

@@ -139,12 +139,12 @@ public abstract class Resource extends Component {
 	/**
 	 * get names of the resource stored in the properties file
 	 */
-	public abstract DefaultComboBoxModel getNames();
+	public abstract DefaultComboBoxModel<String> getNames();
 	
 	/**
 	 * get URIs of the resource stored in the properties file
 	 */
-	public abstract DefaultComboBoxModel getURIs();
+	public abstract DefaultComboBoxModel<String> getURIs();
 	
 	/**
 	 * get all resources of this type in the model store

@@ -91,7 +91,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private final Resource resource;
 	private JTextField columnConcationationString;
 	private JTextField uriOrPrefixTextField;
-	private JList columnList;
+	private JList<String> columnList;
 	private JCheckBox useNameAfterPrefixCheckBox;
 
 	public MissingResourcePanel(final Resource resource) {
@@ -299,7 +299,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		gbc_nameInstructions.gridy = 0;
 		generatedNamePanel.add(nameInstructions, gbc_nameInstructions);
 
-		columnList = new JList(toListModel(columnHeadingsWithId));
+		columnList = new JList<>(toListModel(columnHeadingsWithId));
 		//
 		columnList.setDragEnabled(true);
 		columnList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -386,13 +386,13 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		return indices;
 	}
 
-	private ListModel toListModel(final String[] columnHeadingsWithId) {
+	private ListModel<String> toListModel(final String[] columnHeadingsWithId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("toListModel()");
 		}
-		final DefaultListModel listModel = new DefaultListModel();
-		for (final String string : columnHeadingsWithId) {
-			listModel.addElement(string);
+		final DefaultListModel<String> listModel = new DefaultListModel<>();
+		for (final String columnHeading : columnHeadingsWithId) {
+			listModel.addElement(columnHeading);
 		}
 		return listModel;
 	}
@@ -425,17 +425,15 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			 * - Name -> column selection
 			 * - URI -> uriOrPrefix
 			 */
-			final Object[] selectedColumns = columnList.getSelectedValues();
+			final List<String> selectedColumns = columnList.getSelectedValuesList();
 			final String uriOrPrefix = uriOrPrefixTextField.getText();
 			final String concatString = columnConcationationString.getText();
 
-			if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString))
-			{
+			if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString)) {
 				showNoInputAtAllDialog();
 				return false;
 			} 
-			else if (validUserInput(selectedColumns, uriOrPrefix))
-			{
+			else if (validUserInput(selectedColumns, uriOrPrefix)) {
 				return true;
 			} 
 			else {
@@ -471,31 +469,27 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		}
 	}
 
-	private boolean validUserInput(final Object[] selectedColumns,
-			final String uriOrPrefix)
-	{
+	private boolean validUserInput(final List<String> selectedColumns,
+			final String uriOrPrefix) {
 		return uriOrPrefix != null && 
 				!uriOrPrefix.isEmpty() && 
 				isUriValid(uriOrPrefix) && 
 				isAtLeastOneColumnSelected(selectedColumns);
 	}
 
-	private boolean noUserInputAtAll(final Object[] selectedColumns,
+	private boolean noUserInputAtAll(final List<String> selectedColumns,
 			final String uriOrPrefix,
-			final String concatString)
-	{
-		return selectedColumns.length < 1 && 
+			final String concatString) {
+		return selectedColumns.size() < 1 && 
 				(uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) &&
 				(concatString == null || concatString.equalsIgnoreCase(""));
 	}
 
-	private boolean isAtLeastOneColumnSelected(final Object[] selectedColumns)
-	{
-		if (selectedColumns != null && selectedColumns.length > 0)
-		{
-			return true;
+	private boolean isAtLeastOneColumnSelected(final List<String> selectedColumns) {
+		if (selectedColumns == null || selectedColumns.isEmpty()) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private boolean isUriValid(final String uri) {
@@ -569,7 +563,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			resource.setConcatString(columnConcationationString.getText());
 			// get TableElements
 			final Column[] relatedCols = 
-					getColumnsFromSelection(columnList.getSelectedValues());
+					getColumnsFromSelection(columnList.getSelectedValuesList());
 			resource.setRelatedCols(relatedCols);
 		}
 		resource.setGenerated(!manualResInputJRB.isSelected() && generatedResJRB.isSelected());
@@ -579,16 +573,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		}
 	}
 
-	private Column[] getColumnsFromSelection(final Object[] selectedValues) {
+	private Column[] getColumnsFromSelection(final List<String> list) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getColumnsFromSelection()");
 		}
-		if (selectedValues == null || selectedValues.length < 1) {
+		if (list == null || list.isEmpty()) {
 			return null;
 		}
 		final int fLWD = TableController.getInstance().getFirstLineWithData();
-		final ArrayList<Column> result = new ArrayList<Column>(selectedValues.length);
-		for (final Object obj : selectedValues) {
+		final ArrayList<Column> result = new ArrayList<Column>(list.size());
+		for (final Object obj : list) {
 			if (obj instanceof String) {
 				final String s = (String) obj;
 				final int index = Integer.parseInt(s.substring(0,s.indexOf(":")));

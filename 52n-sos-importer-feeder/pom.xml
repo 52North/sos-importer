@@ -148,7 +148,7 @@
                 <configuration>
                     <noticeTemplate>../src/main/resources/NOTICE.template</noticeTemplate>
                     <licenseMapping>
-                        <param>../src/main/resources/notice-license-mappings.xml</param>
+                        <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
                     </licenseMapping>
                 </configuration>
             </plugin>

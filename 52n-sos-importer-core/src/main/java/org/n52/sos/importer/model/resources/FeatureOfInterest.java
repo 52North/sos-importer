@@ -113,12 +113,12 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
 	}
 
 	@Override
-	public DefaultComboBoxModel getNames() {
+	public DefaultComboBoxModel<String> getNames() {
 		return EditableComboBoxItems.getInstance().getFeatureOfInterestNames();
 	}
 
 	@Override
-	public DefaultComboBoxModel getURIs() {
+	public DefaultComboBoxModel<String> getURIs() {
 		return EditableComboBoxItems.getInstance().getFeatureOfInterestURIs();
 	}
 

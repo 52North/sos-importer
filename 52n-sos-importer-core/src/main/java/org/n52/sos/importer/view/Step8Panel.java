@@ -71,12 +71,9 @@ public class Step8Panel extends JPanel {
 	private JTextArea configurationFileInstructions;
 	private JTextArea directImportOutputTextArea;
 
-	private final Step7Model s7M;
-	
 	private final Step8Controller controller;
 
 	public Step8Panel(final Step7Model s7M, final Step8Controller controller) {
-		this.s7M = s7M;
 		this.controller = controller;
 		final GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{450, 0};

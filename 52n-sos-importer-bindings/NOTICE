@@ -14,4 +14,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
 visit the Free Software Foundation web page, http://www.fsf.org.
 
 This project includes:
-#GENERATED_NOTICES#
+  StAX API under The Apache Software License, Version 2.0
+  XmlBeans under The Apache Software License, Version 2.0
+  XMLbeans Module under GNU General Public License v2.0 only
+

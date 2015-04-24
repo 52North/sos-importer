@@ -57,18 +57,6 @@
         </dependency>
         <!-- geotools dependencies required for map display -->
         <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-swing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-wms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-hsql</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
         </dependency>
@@ -79,6 +67,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.geotools</groupId>
+        	<artifactId>gt-epsg-hsql</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -143,7 +135,7 @@
                 <configuration>
                     <noticeTemplate>../src/main/resources/NOTICE.template</noticeTemplate>
                     <licenseMapping>
-                        <param>../src/main/resources/notice-license-mappings.xml</param>
+                        <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
                     </licenseMapping>
                 </configuration>
             </plugin>

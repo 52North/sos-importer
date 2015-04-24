@@ -73,9 +73,9 @@ public class EditableJComboBoxPanel extends JPanel {
 
 	private final JLabel label;
 	
-	private final JComboBox comboBox;
+	private final JComboBox<String> comboBox;
 	
-	private final DefaultComboBoxModel model;
+	private final DefaultComboBoxModel<String> model;
 	
 	private final ActionListener selectionChanged;
 	
@@ -94,11 +94,11 @@ public class EditableJComboBoxPanel extends JPanel {
 	 * @param labelName
 	 * @param toolTip
 	 */
-	public EditableJComboBoxPanel(final DefaultComboBoxModel model, final String labelName, final String toolTip) {
+	public EditableJComboBoxPanel(final DefaultComboBoxModel<String> model, final String labelName, final String toolTip) {
 		super();
 		this.model = model;
 		label = new JLabel(labelName + ":   ");
-		comboBox = new JComboBox(model);
+		comboBox = new JComboBox<String>(model);
 		comboBox.setToolTipText(toolTip);
 		
 		if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) {
@@ -236,7 +236,7 @@ public class EditableJComboBoxPanel extends JPanel {
 				final int index = model.getIndexOf(lastSelectedItem);
 				model.removeElement(lastSelectedItem);
 				
-				final Object[] items = new Object[model.getSize()];
+				final String[] items = new String[model.getSize()];
 				for (int i = 0; i < model.getSize(); i++) {
 					items[i] = model.getElementAt(i);
 				}
@@ -258,14 +258,14 @@ public class EditableJComboBoxPanel extends JPanel {
 			}			
 		}
 		//put the new element at the first position of the list
-		final Object[] items = new Object[model.getSize()];
+		final String[] items = new String[model.getSize()];
 		for (int i = 0; i < model.getSize(); i++) {
 			items[i] = model.getElementAt(i);
 		}
 		
 		model.removeAllElements();
 		model.addElement(newItem);
-		for (final Object item : items) {
+		for (final String item : items) {
 			model.addElement(item);
 		}
 		

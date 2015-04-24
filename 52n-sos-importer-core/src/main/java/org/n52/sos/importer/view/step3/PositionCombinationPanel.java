@@ -66,7 +66,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 	}
 
 	@Override
-	public DefaultComboBoxModel getPatterns() {
+	public DefaultComboBoxModel<String> getPatterns() {
 		return EditableComboBoxItems.getInstance().getPositionPatterns();
 	}
 

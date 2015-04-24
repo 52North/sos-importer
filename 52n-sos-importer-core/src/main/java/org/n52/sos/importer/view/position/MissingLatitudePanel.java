@@ -60,7 +60,7 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 	private final JLabel latitudeLabel;
 	private final JTextField latitudeTextField = new JTextField(8);
 	private final JLabel latitudeUnitLabel;
-	private final JComboBox latitudeUnitComboBox = new JComboBox(ComboBoxItems.getInstance().getLatLonUnits());
+	private final JComboBox<String> latitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
 	
 	public MissingLatitudePanel(final Position position) {
 		super();
