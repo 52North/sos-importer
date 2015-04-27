@@ -105,7 +105,7 @@ public class Constants {
 	public static final Color DEFAULT_HIGHLIGHT_COLOR = Color.LIGHT_GRAY;
 	public static final int URL_CONNECT_TIMEOUT_SECONDS = 5;
 	public static final int URL_CONNECT_READ_TIMEOUT_SECONDS = 5;
-	public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.2/";
+	public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.4/";
 	public static final QName QNAME_GENERATED_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedResource");
 	public static final QName QNAME_GENERATED_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedSpatialResource");
 	public static final QName QNAME_MANUAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE,"ManualResource");
