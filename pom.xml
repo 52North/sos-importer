@@ -21,9 +21,9 @@
     </licenses>
     <inceptionYear>2011</inceptionYear>
     <modules>
-        <module>52n-sos-importer-bindings</module>
-        <module>52n-sos-importer-core</module>
-        <module>52n-sos-importer-feeder</module>
+        <module>bindings</module>
+        <module>wizard</module>
+        <module>feeder</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
