@@ -139,7 +139,7 @@ public class Step1Panel extends JPanel {
 			}
 		});
 
-		final JLabel encodingLabel = new JLabel(Lang.l().step1EncodingLabel());
+		final JLabel encodingLabel = new JLabel(Lang.l().step1EncodingLabel() + ":");
 		encodingLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
 		final Set<String> charsets = getCharsets();
 		encodingCB = new JComboBox<String>(charsets.toArray(new String[charsets.size()]));
@@ -349,7 +349,9 @@ public class Step1Panel extends JPanel {
 	}
 
 	public void setCSVFilePath(final String filePath) {
-		csvFileTextField.setText(filePath);
+		if (filePath != null && !filePath.isEmpty()) {
+			csvFileTextField.setText(filePath);
+		}
 	}
 
 	public String getCSVFilePath() {

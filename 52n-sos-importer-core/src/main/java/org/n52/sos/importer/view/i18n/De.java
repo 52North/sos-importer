@@ -319,7 +319,7 @@ public class De extends Lang {
 
 	@Override
 	public String step1EncodingLabel() {
-		return "Bitte die Enkodierung für die Datendatei angeben";
+		return "Bitte das Enkoding angeben";
 	}
 
 	@Override
