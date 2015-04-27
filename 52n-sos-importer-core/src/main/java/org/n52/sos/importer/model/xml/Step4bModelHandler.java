@@ -35,14 +35,14 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x02.RelatedFOIDocument.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x02.RelatedObservedPropertyDocument.RelatedObservedProperty;
-import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.ColumnAssignmentsDocument.ColumnAssignments;
+import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x04.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x04.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x04.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * During this step, the relations between resource columns and the measured

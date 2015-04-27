@@ -37,10 +37,10 @@ import java.util.NoSuchElementException;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>

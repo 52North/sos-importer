@@ -42,13 +42,13 @@ import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x02.GeneratedResourceType;
-import org.x52North.sensorweb.sos.importer.x02.ManualResourceType;
-import org.x52North.sensorweb.sos.importer.x02.NumberDocument.Number;
-import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.SensorType;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata;
+import org.x52North.sensorweb.sos.importer.x04.GeneratedResourceType;
+import org.x52North.sensorweb.sos.importer.x04.ManualResourceType;
+import org.x52North.sensorweb.sos.importer.x04.NumberDocument.Number;
+import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x04.SensorType;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * In the case of having no sensor. This sensor must be related to:
@@ -136,7 +136,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 				final java.net.URI uri = sensor.getURI();
 				final String uriPrefix = sensor.getUriPrefix();
 				final boolean useNameAfterPrefixAsUri = sensor.isUseNameAfterPrefixAsURI();
-				final org.x52North.sensorweb.sos.importer.x02.URIDocument.URI uriXB = sensorGRT.addNewURI();
+				final org.x52North.sensorweb.sos.importer.x04.URIDocument.URI uriXB = sensorGRT.addNewURI();
 				uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
 				if (uri != null) {
 					uriXB.setStringValue(uri.toString());
@@ -212,7 +212,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		for (final MeasuredValue mV : relatedMVs) {
 			final TableElement tabE = mV.getTableElement();
 			final int mvColId = Helper.getColumnIdFromTableElement(tabE);
-			final org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column 
+			final org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column 
 						mvColumn = Helper.getColumnById(mvColId, sosImportConf);
 			final RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
 			if (!Helper.isSensorInArray(relSensors,sensor.getXMLId())) {

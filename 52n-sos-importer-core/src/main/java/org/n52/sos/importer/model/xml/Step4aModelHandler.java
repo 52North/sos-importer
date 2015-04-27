@@ -31,8 +31,8 @@ package org.n52.sos.importer.model.xml;
 import org.n52.sos.importer.model.Step4aModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Solves ambiguities in case there is more than one date&time column.

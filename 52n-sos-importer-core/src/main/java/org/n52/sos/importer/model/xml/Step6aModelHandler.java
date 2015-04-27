@@ -37,11 +37,11 @@ import org.n52.sos.importer.model.Step6aModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Called in the case of not having any date information in the file

@@ -32,12 +32,12 @@ import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.OfferingDocument.Offering;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x02.SosMetadataDocument.SosMetadata;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.OfferingDocument.Offering;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.SosMetadataDocument.SosMetadata;
 
 /**
  * Saves the SOS URL and the offering settings.

@@ -33,13 +33,13 @@ import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key.Enum;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.ColumnAssignmentsDocument.ColumnAssignments;
+import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Offering methods used by different ModelHandler classes.

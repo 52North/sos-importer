@@ -31,8 +31,8 @@
 -->
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-        xmlns="http://52north.org/sensorweb/sos/importer/0.2/" 
-        targetNamespace="http://52north.org/sensorweb/sos/importer/0.2/" 
+        xmlns="http://52north.org/sensorweb/sos/importer/0.4/" 
+        targetNamespace="http://52north.org/sensorweb/sos/importer/0.4/" 
         elementFormDefault="qualified" 
         attributeFormDefault="unqualified">
     <!-- 

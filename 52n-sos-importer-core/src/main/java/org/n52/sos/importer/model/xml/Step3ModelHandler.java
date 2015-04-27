@@ -37,13 +37,13 @@ import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.ColumnAssignmentsDocument.ColumnAssignments;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x02.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x04.ColumnAssignmentsDocument.ColumnAssignments;
+import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
 
 /**
  * Get updates from Step3Model Provided information for each column:
@@ -188,7 +188,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 	 * @param cols
 	 *            all columns in the configuration
 	 * @return the
-	 *         <code>org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column</code>
+	 *         <code>org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column</code>
 	 *         with the given number
 	 */
 	private Column getColumnForKey(final int number, final Column[] cols) {

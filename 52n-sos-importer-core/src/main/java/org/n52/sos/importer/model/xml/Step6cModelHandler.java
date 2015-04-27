@@ -33,17 +33,17 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
-import org.x52North.sensorweb.sos.importer.x02.AltDocument.Alt;
-import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x02.GeneratedSpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x02.LatDocument.Lat;
-import org.x52North.sensorweb.sos.importer.x02.LongDocument.Long;
-import org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position;
-import org.x52North.sensorweb.sos.importer.x02.ResourceType;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x02.SpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata;
+import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
+import org.x52North.sensorweb.sos.importer.x04.AltDocument.Alt;
+import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x04.GeneratedSpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x04.LatDocument.Lat;
+import org.x52North.sensorweb.sos.importer.x04.LongDocument.Long;
+import org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position;
+import org.x52North.sensorweb.sos.importer.x04.ResourceType;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.SpatialResourceType;
 
 /**
  * Store the position for each feature of interest

@@ -31,10 +31,10 @@ package org.n52.sos.importer.model.xml;
 import org.n52.sos.importer.model.Step2Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x02.DataFileDocument.DataFile;
-import org.x52North.sensorweb.sos.importer.x02.ParameterDocument.Parameter;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x04.DataFileDocument.DataFile;
+import org.x52North.sensorweb.sos.importer.x04.ParameterDocument.Parameter;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Get updates from Step2Model Provided information:

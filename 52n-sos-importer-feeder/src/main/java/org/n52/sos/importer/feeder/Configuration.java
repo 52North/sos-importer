@@ -53,20 +53,20 @@ import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x02.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
-import org.x52North.sensorweb.sos.importer.x02.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x02.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x02.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x02.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x02.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x02.RelatedFOIDocument.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x02.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x02.SensorType;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x02.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x02.TypeDocument.Type;
-import org.x52North.sensorweb.sos.importer.x02.TypeDocument.Type.Enum;
-import org.x52North.sensorweb.sos.importer.x02.UnitOfMeasurementType;
+import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
+import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType;
+import org.x52North.sensorweb.sos.importer.x04.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x04.SensorType;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
+import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum;
+import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
 
 /**
  * This class holds the configuration XML file and provides easy access to all
@@ -559,7 +559,7 @@ public final class Configuration {
                         pos.getURI().getStringValue() != null &&
                         pos.getURI().getStringValue().equals(foiUri)){
                     // if element is found -> fill position
-                    final org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p = pos.getPosition();
+                    final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p = pos.getPosition();
                     if (p.isSetAlt() &&
                             p.isSetEPSGCode() &&
                             p.isSetLat() &&
@@ -573,11 +573,11 @@ public final class Configuration {
     }
 
     /**
-     * @param p {@link org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position}
+     * @param p {@link org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position}
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
     public Position getModelPositionXBPosition(
-            final org.x52North.sensorweb.sos.importer.x02.PositionDocument.Position p) {
+            final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p) {
         LOG.trace("getPosition()");
         final String[] units = new String[3];
         final double[] values = new double[3];
