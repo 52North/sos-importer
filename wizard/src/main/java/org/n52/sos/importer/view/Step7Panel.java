@@ -558,10 +558,12 @@ public class Step7Panel extends JPanel {
 		case SweArrayObservationWithSplitExtension:
 			singleObservationRadioButton.setSelected(false);
 			sweArrayObservationBufferRadioButton.setSelected(true);
+			setVisibleSweArrayObservationStrategyGuiElements(true);
 			break;
 		default:
 			singleObservationRadioButton.setSelected(true);
 			sweArrayObservationBufferRadioButton.setSelected(false);
+			setVisibleSweArrayObservationStrategyGuiElements(false);
 			break;
 		}
 		return this;
