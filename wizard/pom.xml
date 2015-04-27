@@ -6,8 +6,8 @@
         <artifactId>52n-sos-importer</artifactId>
         <version>0.4.0-SNAPSHOT</version>
     </parent>
-    <artifactId>52n-sos-importer-core</artifactId>
-    <name>Core Module</name>
+    <artifactId>52n-sos-importer-wizard</artifactId>
+    <name>Wizard Module</name>
     <description>GUI application to create XML based configurations which can be used be the feeding module to import data into a SOS 1.0.0</description>
     <packaging>jar</packaging>
     <licenses>
