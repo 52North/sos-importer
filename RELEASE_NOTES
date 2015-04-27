@@ -7,6 +7,9 @@ Release Notes for SOS-Importer 0.4.0
 ====================================
 Features:
 ---------
+ * Rename *Core* module to *Wizard*
+ * Support for SOS 2.0 incl. Binding definition
+ * Start Screen offers button to see all dependency licenses
  * Support for sensors with multiple outputs
  * Introduced import strategies:
    * SingleObservation: Default strategy 
@@ -76,8 +79,6 @@ Features:
  
 Changes:
 --------
- * SOS 2.0 support incl. bindings
- * Support for sensors with multiple outputs
 
 Bugfixes:
 ---------
