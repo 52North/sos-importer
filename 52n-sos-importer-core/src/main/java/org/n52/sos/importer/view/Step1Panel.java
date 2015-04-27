@@ -419,7 +419,9 @@ public class Step1Panel extends JPanel {
 				      // try to start system browser with link
 					if(Desktop.isDesktopSupported()) {
 						try {
-							Desktop.getDesktop().browse(e.getURL().toURI());
+							if (e.getURL() != null) {
+								Desktop.getDesktop().browse(e.getURL().toURI());
+							}
 						} catch (final IOException e1) {
 							final String error = "Could not start system browser with URL: \"" + e.getURL() + "\"";
 							logger.error(error, e1);
