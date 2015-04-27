@@ -41,10 +41,11 @@ import org.n52.sos.importer.feeder.Configuration;
 public interface CsvParser {
 
 	/**
-     * Reads the next line and converts to a string array.
+     * Reads the next line and converts to a string array. Should return <code>null</code>
+     * if no further data is available.
      *
      * @return a string array with each comma-separated element as a separate
-     *         entry.
+     *         entry or <code>null</code> if no further data is available.
      *
      * @throws IOException
      *             if errors happen during the read
