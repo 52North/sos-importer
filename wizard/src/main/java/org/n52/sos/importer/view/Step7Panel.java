@@ -170,151 +170,151 @@ public class Step7Panel extends JPanel {
 		gbc_metaPanel.gridy = 3;
 		add(metaPanel, gbc_metaPanel);
 
-						sosVersionPanel = new JPanel();
-						sosVersionPanel.setBounds(10, 18, 101, 20);
-						metaPanel.add(sosVersionPanel);
-						sosVersionPanel.setLayout(null);
-						sosVersionPanel.setToolTipText(Lang.l().step7SosVersionInstructions());
+		sosVersionPanel = new JPanel();
+		sosVersionPanel.setBounds(10, 18, 101, 20);
+		metaPanel.add(sosVersionPanel);
+		sosVersionPanel.setLayout(null);
+		sosVersionPanel.setToolTipText(Lang.l().step7SosVersionInstructions());
 
-						sosVersionLabel = new JLabel(Lang.l().step7SosVersionLabel() + ":");
-						sosVersionLabel.setBounds(0, 3, 39, 14);
-						sosVersionPanel.add(sosVersionLabel);
+		sosVersionLabel = new JLabel(Lang.l().step7SosVersionLabel() + ":");
+		sosVersionLabel.setBounds(0, 3, 39, 14);
+		sosVersionPanel.add(sosVersionLabel);
 
-						sosVersionCB = new JComboBox<>(SUPPORTED_SOS_VERSIONS);
-						sosVersionCB.setBounds(49, 0, 52, 20);
-						sosVersionPanel.add(sosVersionCB);
-						sosVersionCB.addItemListener(new ItemListener() {
-							@Override
-							public void itemStateChanged(final ItemEvent e) {
-								if (sosVersionCB.getSelectedItem().equals(SUPPORTED_SOS_VERSIONS [1])) {
-									sosBindingLabel.setVisible(true);
-									sosBindingCB.setVisible(true);
-								} else {
-									sosBindingLabel.setVisible(false);
-									sosBindingCB.setVisible(false);
-								}
-							}
-						});
+		sosVersionCB = new JComboBox<>(SUPPORTED_SOS_VERSIONS);
+		sosVersionCB.setBounds(49, 0, 52, 20);
+		sosVersionPanel.add(sosVersionCB);
+		sosVersionCB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(final ItemEvent e) {
+				if (sosVersionCB.getSelectedItem().equals(SUPPORTED_SOS_VERSIONS [1])) {
+					sosBindingLabel.setVisible(true);
+					sosBindingCB.setVisible(true);
+				} else {
+					sosBindingLabel.setVisible(false);
+					sosBindingCB.setVisible(false);
+				}
+			}
+		});
 
-				bindingPanel = new JPanel();
-				bindingPanel.setBounds(121, 18, 101, 20);
-				metaPanel.add(bindingPanel);
-				bindingPanel.setLayout(null);
-				bindingPanel.setToolTipText(Lang.l().step7SosBindingInstructions());
+		bindingPanel = new JPanel();
+		bindingPanel.setBounds(121, 18, 101, 20);
+		metaPanel.add(bindingPanel);
+		bindingPanel.setLayout(null);
+		bindingPanel.setToolTipText(Lang.l().step7SosBindingInstructions());
 
-				sosBindingLabel = new JLabel(Lang.l().step7SosBindingLabel() + ":");
-				sosBindingLabel.setBounds(0, 3, 38, 15);
-				bindingPanel.add(sosBindingLabel);
+		sosBindingLabel = new JLabel(Lang.l().step7SosBindingLabel() + ":");
+		sosBindingLabel.setBounds(0, 3, 38, 15);
+		bindingPanel.add(sosBindingLabel);
 
-				sosBindingCB = new JComboBox<>(SUPPORTED_BINDINGS);
-				sosBindingCB.setBounds(48, 0, 52, 20);
-				bindingPanel.add(sosBindingCB);
-				sosBindingCB.setVisible(false);
-				sosBindingLabel.setVisible(false);
+		sosBindingCB = new JComboBox<>(SUPPORTED_BINDINGS);
+		sosBindingCB.setBounds(48, 0, 52, 20);
+		bindingPanel.add(sosBindingCB);
+		sosBindingCB.setVisible(false);
+		sosBindingLabel.setVisible(false);
 
-				fillLabel = new JLabel("");
-				fillLabel.setBounds(818, 16, 30, 25);
-				metaPanel.add(fillLabel);
+		fillLabel = new JLabel("");
+		fillLabel.setBounds(818, 16, 30, 25);
+		metaPanel.add(fillLabel);
 
-				final JPanel importStrategyPanel = new JPanel();
-				importStrategyPanel.setBorder(new TitledBorder(null, Lang.l().step7ImportStrategyBorderLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				final GridBagConstraints gbc_importStrategyPanel = new GridBagConstraints();
-				gbc_importStrategyPanel.insets = new Insets(0, 0, 5, 0);
-				gbc_importStrategyPanel.fill = GridBagConstraints.BOTH;
-				gbc_importStrategyPanel.gridx = 0;
-				gbc_importStrategyPanel.gridy = 4;
-				add(importStrategyPanel, gbc_importStrategyPanel);
-				final GridBagLayout gbl_importStrategyPanel = new GridBagLayout();
-				gbl_importStrategyPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
-				gbl_importStrategyPanel.rowHeights = new int[]{0, 0, 0};
-				gbl_importStrategyPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-				gbl_importStrategyPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-				importStrategyPanel.setLayout(gbl_importStrategyPanel);
+		final JPanel importStrategyPanel = new JPanel();
+		importStrategyPanel.setBorder(new TitledBorder(null, Lang.l().step7ImportStrategyBorderLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		final GridBagConstraints gbc_importStrategyPanel = new GridBagConstraints();
+		gbc_importStrategyPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_importStrategyPanel.fill = GridBagConstraints.BOTH;
+		gbc_importStrategyPanel.gridx = 0;
+		gbc_importStrategyPanel.gridy = 4;
+		add(importStrategyPanel, gbc_importStrategyPanel);
+		final GridBagLayout gbl_importStrategyPanel = new GridBagLayout();
+		gbl_importStrategyPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
+		gbl_importStrategyPanel.rowHeights = new int[]{0, 0, 0};
+		gbl_importStrategyPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_importStrategyPanel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		importStrategyPanel.setLayout(gbl_importStrategyPanel);
 
-				final JLabel importStrategyLabel = new JLabel(Lang.l().step7ImportStrategyLabel());
-				final GridBagConstraints gbc_importStrategyLabel = new GridBagConstraints();
-				gbc_importStrategyLabel.insets = new Insets(0, 0, 5, 5);
-				gbc_importStrategyLabel.gridx = 0;
-				gbc_importStrategyLabel.gridy = 0;
-				importStrategyPanel.add(importStrategyLabel, gbc_importStrategyLabel);
+		final JLabel importStrategyLabel = new JLabel(Lang.l().step7ImportStrategyLabel());
+		final GridBagConstraints gbc_importStrategyLabel = new GridBagConstraints();
+		gbc_importStrategyLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_importStrategyLabel.gridx = 0;
+		gbc_importStrategyLabel.gridy = 0;
+		importStrategyPanel.add(importStrategyLabel, gbc_importStrategyLabel);
 
-				singleObservationRadioButton = new JRadioButton(Lang.l().step7ImportStrategySingleObservation());
-				singleObservationRadioButton.addActionListener(new ActionListener() {
+		singleObservationRadioButton = new JRadioButton(Lang.l().step7ImportStrategySingleObservation());
+		singleObservationRadioButton.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						if (singleObservationRadioButton.isSelected()) {
-							setVisibleSweArrayObservationStrategyGuiElements(false);
-						} else {
-							setVisibleSweArrayObservationStrategyGuiElements(true);
-						}
-					}
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (singleObservationRadioButton.isSelected()) {
+					setVisibleSweArrayObservationStrategyGuiElements(false);
+				} else {
+					setVisibleSweArrayObservationStrategyGuiElements(true);
+				}
+			}
 
-				});
-				final GridBagConstraints gbc_singleObservationRadioButton = new GridBagConstraints();
-				gbc_singleObservationRadioButton.anchor = GridBagConstraints.WEST;
-				gbc_singleObservationRadioButton.insets = new Insets(0, 0, 5, 5);
-				gbc_singleObservationRadioButton.gridx = 1;
-				gbc_singleObservationRadioButton.gridy = 0;
-				importStrategyPanel.add(singleObservationRadioButton, gbc_singleObservationRadioButton);
-				singleObservationRadioButton.setSelected(true);
+		});
+		final GridBagConstraints gbc_singleObservationRadioButton = new GridBagConstraints();
+		gbc_singleObservationRadioButton.anchor = GridBagConstraints.WEST;
+		gbc_singleObservationRadioButton.insets = new Insets(0, 0, 5, 5);
+		gbc_singleObservationRadioButton.gridx = 1;
+		gbc_singleObservationRadioButton.gridy = 0;
+		importStrategyPanel.add(singleObservationRadioButton, gbc_singleObservationRadioButton);
+		singleObservationRadioButton.setSelected(true);
 
-				sweArrayObservationHunkSizeLabel = new JLabel(Lang.l().step7ImportStrategySweArrayHunksizeLabel());
-				sweArrayObservationHunkSizeLabel.setVisible(false);
-				final GridBagConstraints gbc_sweArrayObservationHunkSizeLabel = new GridBagConstraints();
-				gbc_sweArrayObservationHunkSizeLabel.anchor = GridBagConstraints.EAST;
-				gbc_sweArrayObservationHunkSizeLabel.insets = new Insets(0, 0, 5, 5);
-				gbc_sweArrayObservationHunkSizeLabel.gridx = 2;
-				gbc_sweArrayObservationHunkSizeLabel.gridy = 0;
-				importStrategyPanel.add(sweArrayObservationHunkSizeLabel, gbc_sweArrayObservationHunkSizeLabel);
+		sweArrayObservationHunkSizeLabel = new JLabel(Lang.l().step7ImportStrategySweArrayHunksizeLabel());
+		sweArrayObservationHunkSizeLabel.setVisible(false);
+		final GridBagConstraints gbc_sweArrayObservationHunkSizeLabel = new GridBagConstraints();
+		gbc_sweArrayObservationHunkSizeLabel.anchor = GridBagConstraints.EAST;
+		gbc_sweArrayObservationHunkSizeLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_sweArrayObservationHunkSizeLabel.gridx = 2;
+		gbc_sweArrayObservationHunkSizeLabel.gridy = 0;
+		importStrategyPanel.add(sweArrayObservationHunkSizeLabel, gbc_sweArrayObservationHunkSizeLabel);
 
-				sweArrayObservationHunkSizeSpinner = new JSpinner(hunkSizeModel);
-				sweArrayObservationHunkSizeSpinner.setVisible(false);
-				final GridBagConstraints gbc_sweArrayObservationHunkSizeSpinner = new GridBagConstraints();
-				gbc_sweArrayObservationHunkSizeSpinner.insets = new Insets(0, 0, 5, 0);
-				gbc_sweArrayObservationHunkSizeSpinner.gridx = 3;
-				gbc_sweArrayObservationHunkSizeSpinner.gridy = 0;
-				importStrategyPanel.add(sweArrayObservationHunkSizeSpinner, gbc_sweArrayObservationHunkSizeSpinner);
+		sweArrayObservationHunkSizeSpinner = new JSpinner(hunkSizeModel);
+		sweArrayObservationHunkSizeSpinner.setVisible(false);
+		final GridBagConstraints gbc_sweArrayObservationHunkSizeSpinner = new GridBagConstraints();
+		gbc_sweArrayObservationHunkSizeSpinner.insets = new Insets(0, 0, 5, 0);
+		gbc_sweArrayObservationHunkSizeSpinner.gridx = 3;
+		gbc_sweArrayObservationHunkSizeSpinner.gridy = 0;
+		importStrategyPanel.add(sweArrayObservationHunkSizeSpinner, gbc_sweArrayObservationHunkSizeSpinner);
 
-				sweArrayObservationBufferRadioButton = new JRadioButton(Lang.l().step7ImportStrategySweArrayObservation());
-				sweArrayObservationBufferRadioButton.addActionListener(new ActionListener() {
+		sweArrayObservationBufferRadioButton = new JRadioButton(Lang.l().step7ImportStrategySweArrayObservation());
+		sweArrayObservationBufferRadioButton.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						if (sweArrayObservationBufferRadioButton.isSelected()) {
-							setVisibleSweArrayObservationStrategyGuiElements(true);
-						} else {
-							setVisibleSweArrayObservationStrategyGuiElements(false);
-						}
-					}
-				});
-				final GridBagConstraints gbc_sweArrayObservationBufferRadioButton = new GridBagConstraints();
-				gbc_sweArrayObservationBufferRadioButton.insets = new Insets(0, 0, 0, 5);
-				gbc_sweArrayObservationBufferRadioButton.anchor = GridBagConstraints.WEST;
-				gbc_sweArrayObservationBufferRadioButton.gridx = 1;
-				gbc_sweArrayObservationBufferRadioButton.gridy = 1;
-				importStrategyPanel.add(sweArrayObservationBufferRadioButton, gbc_sweArrayObservationBufferRadioButton);
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (sweArrayObservationBufferRadioButton.isSelected()) {
+					setVisibleSweArrayObservationStrategyGuiElements(true);
+				} else {
+					setVisibleSweArrayObservationStrategyGuiElements(false);
+				}
+			}
+		});
+		final GridBagConstraints gbc_sweArrayObservationBufferRadioButton = new GridBagConstraints();
+		gbc_sweArrayObservationBufferRadioButton.insets = new Insets(0, 0, 0, 5);
+		gbc_sweArrayObservationBufferRadioButton.anchor = GridBagConstraints.WEST;
+		gbc_sweArrayObservationBufferRadioButton.gridx = 1;
+		gbc_sweArrayObservationBufferRadioButton.gridy = 1;
+		importStrategyPanel.add(sweArrayObservationBufferRadioButton, gbc_sweArrayObservationBufferRadioButton);
 
-				importStrategy = new ButtonGroup();
-				importStrategy.add(singleObservationRadioButton);
-				importStrategy.add(sweArrayObservationBufferRadioButton);
-				importStrategy.setSelected(singleObservationRadioButton.getModel(), true);
+		importStrategy = new ButtonGroup();
+		importStrategy.add(singleObservationRadioButton);
+		importStrategy.add(sweArrayObservationBufferRadioButton);
+		importStrategy.setSelected(singleObservationRadioButton.getModel(), true);
 
-				sweArrayObservationBufferLabel = new JLabel(Lang.l().step7ImportStrategySweArraySendBuffer());
-				sweArrayObservationBufferLabel.setVisible(false);
-				final GridBagConstraints gbc_sweArrayObservationBufferLabel = new GridBagConstraints();
-				gbc_sweArrayObservationBufferLabel.anchor = GridBagConstraints.EAST;
-				gbc_sweArrayObservationBufferLabel.insets = new Insets(0, 0, 0, 5);
-				gbc_sweArrayObservationBufferLabel.gridx = 2;
-				gbc_sweArrayObservationBufferLabel.gridy = 1;
-				importStrategyPanel.add(sweArrayObservationBufferLabel, gbc_sweArrayObservationBufferLabel);
+		sweArrayObservationBufferLabel = new JLabel(Lang.l().step7ImportStrategySweArraySendBuffer());
+		sweArrayObservationBufferLabel.setVisible(false);
+		final GridBagConstraints gbc_sweArrayObservationBufferLabel = new GridBagConstraints();
+		gbc_sweArrayObservationBufferLabel.anchor = GridBagConstraints.EAST;
+		gbc_sweArrayObservationBufferLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_sweArrayObservationBufferLabel.gridx = 2;
+		gbc_sweArrayObservationBufferLabel.gridy = 1;
+		importStrategyPanel.add(sweArrayObservationBufferLabel, gbc_sweArrayObservationBufferLabel);
 
-				sweArrayObservationBufferSpinner = new JSpinner(sweArraySendBuffer);
-				sweArrayObservationBufferSpinner.setVisible(false);
-				final GridBagConstraints gbc_sweArrayObservationBufferSpinner = new GridBagConstraints();
-				gbc_sweArrayObservationBufferSpinner.gridx = 3;
-				gbc_sweArrayObservationBufferSpinner.gridy = 1;
-				importStrategyPanel.add(sweArrayObservationBufferSpinner, gbc_sweArrayObservationBufferSpinner);
+		sweArrayObservationBufferSpinner = new JSpinner(sweArraySendBuffer);
+		sweArrayObservationBufferSpinner.setVisible(false);
+		final GridBagConstraints gbc_sweArrayObservationBufferSpinner = new GridBagConstraints();
+		gbc_sweArrayObservationBufferSpinner.gridx = 3;
+		gbc_sweArrayObservationBufferSpinner.gridy = 1;
+		importStrategyPanel.add(sweArrayObservationBufferSpinner, gbc_sweArrayObservationBufferSpinner);
 	}
 
 	private void setVisibleSweArrayObservationStrategyGuiElements(final boolean visible) {
