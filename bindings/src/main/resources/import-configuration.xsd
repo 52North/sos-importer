@@ -1199,10 +1199,11 @@
     <xs:element name="SosImportConfiguration">
         <xs:annotation>
             <xs:documentation>
-                Configuration for a data file containing observation. Thes
-                observation should be imported to a running SOS instance using
-                the transactional interface. It is used by the 
-                52n-sensorweb-importer to store the metadata and re-use it.
+                Configuration for a data file containing observations. These
+                observations should be imported to a running SOS instance using
+                the transactional interface. The configuration is used by the 
+                52n-sensorweb-importer to store the metadata and re-use it for
+				later import runs.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
