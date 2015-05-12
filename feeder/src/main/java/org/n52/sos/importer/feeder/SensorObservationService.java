@@ -170,6 +170,8 @@ public final class SensorObservationService {
 	private int sweArrayObservationTimeOutBuffer = 25000;
 
 	private int sampleSizeDivisor;
+	
+	private String skipReason = "";
 
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
@@ -302,7 +304,11 @@ public final class SensorObservationService {
 					insertObservationsForOneLine(ios,values,dataFile);
 					LOG.debug(Feeder.heapSizeInformation());
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
+							(lineCounter+1),
+							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
+							Arrays.toString(values)));
+					skipReason = "";
 				}
 				lineCounter++;
 				if (lineCounter % 10000 == 0) {
@@ -346,7 +352,11 @@ public final class SensorObservationService {
 						currentHunk++;
 					}
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
+							(lineCounter+1),
+							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
+							Arrays.toString(values)));
+					skipReason = "";
 				}
 				lineCounter++;
 				if (lineCounter % 10000 == 0) {
@@ -383,6 +393,7 @@ public final class SensorObservationService {
 			final String line = restoreLine(values);
 			for (final Pattern pattern : ignorePatterns) {
 				if (pattern.matcher(line).matches()) {
+					skipReason = "Matched ignore pattern.";
 					return true;
 				}
 			}
@@ -487,7 +498,11 @@ public final class SensorObservationService {
 	}
 
 	private boolean isHeaderLine(final String[] values) {
-		return Arrays.equals(headerLine, values);
+		boolean isHeaderLine = Arrays.equals(headerLine, values);
+		if (!isHeaderLine) {
+			skipReason = "Headerline found.";
+		}
+		return isHeaderLine;
 	}
 
 	private boolean isSizeValid(final DataFile dataFile,
@@ -503,14 +518,15 @@ public final class SensorObservationService {
 	}
 
 	private boolean isNotEmpty(final String[] values) {
+		skipReason = "Line is empty.";
 		if (values != null && values.length > 0) {
 			for (int i = 0; i < values.length; i++) {
 				final String value = values[i];
 				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
-					LOG.debug("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
 					return false;
 				}
 			}
+			skipReason = "";
 			return true;
 		}
 		return false;
