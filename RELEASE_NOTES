@@ -101,6 +101,7 @@ Bugfixes:
  * #NN: fix/combinationpanel: On step 3 it was not possible to enter parse
  		patterns for position and date & time
  * #NN: fix problem with textfield for CSV file when switching to German      
+ * #NN: fix problem with multiple sensors in CSV file and register sensor
 
 Release Notes for SOS-Importer 0.3.0
 ====================================

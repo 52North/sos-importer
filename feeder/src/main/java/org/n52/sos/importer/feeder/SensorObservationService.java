@@ -622,7 +622,7 @@ public final class SensorObservationService {
 		for (final TimeSeries timeSeries : timeSeriesRepository.getTimeSeries()) {
 			// check if sensor is registered
 			if (!isSensorRegistered(timeSeries.getSensorURI())) {
-				final String assignedSensorId = registerSensor(timeSeriesRepository.getRegisterSensor());
+				final String assignedSensorId = registerSensor(timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI()));
 				if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
 					LOG.error(String.format("Sensor '%s'[%s] could not be registered at SOS '%s'. Skipping insert observation for this timeseries '%s'.",
 							timeSeries.getSensorName(),
