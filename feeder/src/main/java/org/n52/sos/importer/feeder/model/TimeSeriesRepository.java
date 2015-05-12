@@ -28,9 +28,11 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -72,42 +74,61 @@ public class TimeSeriesRepository {
 	}
 
 	/**
-	 * @return an {@link RegisterSensor} using
-	 * <ul><li>ObservedProperty</li>
-	 * <li>MeasureValueType</li>
-	 * <li>UnitOfMeasurement</li></ul>
-	 * from each timeseries in this {@link TimeSeriesRepository}.
+	 * @param sensorURI the URI of the Sensor
+	 * 
+	 * @return A {@link RegisterSensor} using
+	 * 			<ul>
+	 * 				<li>ObservedProperty</li>
+	 * 				<li>MeasureValueType</li>
+	 * 				<li>UnitOfMeasurement</li>
+	 * 			</ul>
+	 * 			from all timeseries in this {@link TimeSeriesRepository} 
+	 * 			having the Sensor with given URI <code>sensorURI</code>.
+	 * 
+	 * @throws IllegalArgumentException if no timeseries for the given 
+	 * 			<code>sensorURI</code> are available in this repository.
 	 */
-	public RegisterSensor getRegisterSensor() {
-		final InsertObservation io = repo.get(0).getFirst();
+	public RegisterSensor getRegisterSensor(final String sensorURI) {
+		// get all time series of sensor
+		List<TimeSeries> timeseries = new ArrayList<>(repo.capacity());
+		for (TimeSeries series : getTimeSeries()) {
+			if (series.getSensorURI().equals(sensorURI)) {
+				timeseries.add(series);
+			}
+		}
+		if (timeseries.isEmpty()) {
+			throw new IllegalArgumentException("Could not find any time series for sensor '" + sensorURI + "'");
+		}
+		final InsertObservation io = timeseries.get(0).getFirst();
+		
 		return new RegisterSensor(io,
-				getObservedProperties(),
-				getMeasuredValueTypes(),
-				getUnitsOfMeasurement());
+				getObservedProperties(timeseries),
+				getMeasuredValueTypes(timeseries),
+				getUnitsOfMeasurement(timeseries));
 	}
 
-	private Map<ObservedProperty, String> getUnitsOfMeasurement() {
+	private Map<ObservedProperty, String> getUnitsOfMeasurement(List<TimeSeries> timeseries) {
 		LOG.trace("getUnitsOfMeasurement(...)");
-		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(repo.capacity());
-		for (final TimeSeries ts : getTimeSeries()) {
+		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(timeseries.size());
+		for (final TimeSeries ts : timeseries) {
 			unitsOfMeasurement.put(ts.getObservedProperty(), ts.getUnitOfMeasurementCode());
 		}
 		return unitsOfMeasurement;
 	}
 
-	private Map<ObservedProperty, String> getMeasuredValueTypes() {
+	private Map<ObservedProperty, String> getMeasuredValueTypes(List<TimeSeries> timeseries) {
 		LOG.trace("getMeasuredValueTypes(...)");
-		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(repo.capacity());
-		for (final TimeSeries ts : getTimeSeries()) {
+		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(timeseries.size());
+		for (final TimeSeries ts : timeseries) {
 			measuredValueTypes.put(ts.getObservedProperty(), ts.getMeasuredValueType());
 		}
 		return measuredValueTypes;
 	}
 
-	private Collection<ObservedProperty> getObservedProperties() {
+	private Collection<ObservedProperty> getObservedProperties(List<TimeSeries> timeseries) {
 		LOG.trace("getObservedProperties(...)");
-		final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(repo.capacity());
-		for (final TimeSeries ts : getTimeSeries()) {
+		final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(timeseries.size());
+		for (final TimeSeries ts : timeseries) {
 				observedProperties.add(ts.getObservedProperty());
 		}
 		return observedProperties;

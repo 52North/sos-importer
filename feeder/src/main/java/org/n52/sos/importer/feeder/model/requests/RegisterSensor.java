@@ -140,4 +140,5 @@ public class RegisterSensor {
 	public String getUnitOfMeasurementCode(final ObservedProperty observedProperty) {
 		return unitOfMeasurements.get(observedProperty);
 	}
+
 }
