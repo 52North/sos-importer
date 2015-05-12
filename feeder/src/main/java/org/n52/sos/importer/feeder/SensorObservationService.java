@@ -732,7 +732,7 @@ public final class SensorObservationService {
 				sosWrapper.setReadTimeout(readTimeout);
 				if (sosVersion.equals("1.0.0")) {
 					try {
-						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
 								response.getAssignedObservationId()));
 						return response.getAssignedObservationId();
@@ -744,7 +744,7 @@ public final class SensorObservationService {
 				}
 				else if (sosVersion.equals("2.0.0")) {
 					try {
-						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug("Observation inserted successfully.");
 						return "SOS 2.0 InsertObservation doesn't return the assigned id";
 					} catch (final XmlException e) {
@@ -803,7 +803,7 @@ public final class SensorObservationService {
 				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
-						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
 								response.getAssignedObservationId()));
 						return response.getAssignedObservationId();
@@ -817,7 +817,7 @@ public final class SensorObservationService {
 				}
 				else if (sosVersion.equals("2.0.0")) {
 					try {
-						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug("Observation inserted successfully.");
 						return "SOS 2.0 InsertObservation doesn't return the assigned id";
 					} catch (final XmlException e) {
@@ -916,7 +916,7 @@ public final class SensorObservationService {
 				final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
 				setMimetype(regSensorParameter);
 				final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
-				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
 				LOG.debug("RegisterSensorResponse parsed");
 				return response.getRegisterSensorResponse().getAssignedSensorId();
 			}
@@ -927,7 +927,7 @@ public final class SensorObservationService {
 				}
 				setMimetype(insSensorParams);
 				final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
-				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
 				LOG.debug("InsertSensorResponse parsed");
 				offerings.put(response.getInsertSensorResponse().getAssignedProcedure(),response.getInsertSensorResponse().getAssignedOffering());
 				return response.getInsertSensorResponse().getAssignedProcedure();
