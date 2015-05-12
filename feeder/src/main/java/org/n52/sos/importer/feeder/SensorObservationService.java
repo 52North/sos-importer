@@ -170,6 +170,8 @@ public final class SensorObservationService {
 	private int sweArrayObservationTimeOutBuffer = 25000;
 
 	private int sampleSizeDivisor;
+	
+	private String skipReason = "";
 
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
@@ -302,7 +304,11 @@ public final class SensorObservationService {
 					insertObservationsForOneLine(ios,values,dataFile);
 					LOG.debug(Feeder.heapSizeInformation());
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
+							(lineCounter+1),
+							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
+							Arrays.toString(values)));
+					skipReason = "";
 				}
 				lineCounter++;
 				if (lineCounter % 10000 == 0) {
@@ -346,7 +352,11 @@ public final class SensorObservationService {
 						currentHunk++;
 					}
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),Arrays.toString(values)));
+					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
+							(lineCounter+1),
+							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
+							Arrays.toString(values)));
+					skipReason = "";
 				}
 				lineCounter++;
 				if (lineCounter % 10000 == 0) {
@@ -383,6 +393,7 @@ public final class SensorObservationService {
 			final String line = restoreLine(values);
 			for (final Pattern pattern : ignorePatterns) {
 				if (pattern.matcher(line).matches()) {
+					skipReason = "Matched ignore pattern.";
 					return true;
 				}
 			}
@@ -487,7 +498,11 @@ public final class SensorObservationService {
 	}
 
 	private boolean isHeaderLine(final String[] values) {
-		return Arrays.equals(headerLine, values);
+		boolean isHeaderLine = Arrays.equals(headerLine, values);
+		if (!isHeaderLine) {
+			skipReason = "Headerline found.";
+		}
+		return isHeaderLine;
 	}
 
 	private boolean isSizeValid(final DataFile dataFile,
@@ -503,14 +518,15 @@ public final class SensorObservationService {
 	}
 
 	private boolean isNotEmpty(final String[] values) {
+		skipReason = "Line is empty.";
 		if (values != null && values.length > 0) {
 			for (int i = 0; i < values.length; i++) {
 				final String value = values[i];
 				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
-					LOG.debug("Current line '{}' contains empty values . Skipping this line!", Arrays.toString(values));
 					return false;
 				}
 			}
+			skipReason = "";
 			return true;
 		}
 		return false;
@@ -606,7 +622,7 @@ public final class SensorObservationService {
 		for (final TimeSeries timeSeries : timeSeriesRepository.getTimeSeries()) {
 			// check if sensor is registered
 			if (!isSensorRegistered(timeSeries.getSensorURI())) {
-				final String assignedSensorId = registerSensor(timeSeriesRepository.getRegisterSensor());
+				final String assignedSensorId = registerSensor(timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI()));
 				if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
 					LOG.error(String.format("Sensor '%s'[%s] could not be registered at SOS '%s'. Skipping insert observation for this timeseries '%s'.",
 							timeSeries.getSensorName(),
@@ -732,7 +748,7 @@ public final class SensorObservationService {
 				sosWrapper.setReadTimeout(readTimeout);
 				if (sosVersion.equals("1.0.0")) {
 					try {
-						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
 								response.getAssignedObservationId()));
 						return response.getAssignedObservationId();
@@ -744,7 +760,7 @@ public final class SensorObservationService {
 				}
 				else if (sosVersion.equals("2.0.0")) {
 					try {
-						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug("Observation inserted successfully.");
 						return "SOS 2.0 InsertObservation doesn't return the assigned id";
 					} catch (final XmlException e) {
@@ -803,7 +819,7 @@ public final class SensorObservationService {
 				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
-						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug(String.format("Observation inserted succesfully. Returned id: %s",
 								response.getAssignedObservationId()));
 						return response.getAssignedObservationId();
@@ -817,7 +833,7 @@ public final class SensorObservationService {
 				}
 				else if (sosVersion.equals("2.0.0")) {
 					try {
-						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsStream()).getInsertObservationResponse();
+						net.opengis.sos.x20.InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
 						LOG.debug("Observation inserted successfully.");
 						return "SOS 2.0 InsertObservation doesn't return the assigned id";
 					} catch (final XmlException e) {
@@ -916,7 +932,7 @@ public final class SensorObservationService {
 				final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
 				setMimetype(regSensorParameter);
 				final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
-				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+				final RegisterSensorResponseDocument response = RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
 				LOG.debug("RegisterSensorResponse parsed");
 				return response.getRegisterSensorResponse().getAssignedSensorId();
 			}
@@ -927,7 +943,7 @@ public final class SensorObservationService {
 				}
 				setMimetype(insSensorParams);
 				final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
-				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsStream());
+				final InsertSensorResponseDocument response = InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
 				LOG.debug("InsertSensorResponse parsed");
 				offerings.put(response.getInsertSensorResponse().getAssignedProcedure(),response.getInsertSensorResponse().getAssignedOffering());
 				return response.getInsertSensorResponse().getAssignedProcedure();
