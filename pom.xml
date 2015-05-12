@@ -10,7 +10,7 @@
     <groupId>org.n52.sensorweb</groupId>
     <artifactId>52n-sos-importer</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.4.0</version>
     <name>52North SOS-Importer</name>
     <description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
     <licenses>
@@ -21,9 +21,9 @@
     </licenses>
     <inceptionYear>2011</inceptionYear>
     <modules>
-        <module>52n-sos-importer-bindings</module>
-        <module>52n-sos-importer-core</module>
-        <module>52n-sos-importer-feeder</module>
+        <module>bindings</module>
+        <module>wizard</module>
+        <module>feeder</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
@@ -92,21 +92,18 @@
         </contributor>
     </contributors>
     <properties>
-        <year>2012</year>
+    	<currentYear>2015</currentYear> <!-- manual setting -->
+    	<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+    	<currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <oxf.version>2.0.0-alpha.4-SNAPSHOT</oxf.version>
+        <oxf.version>2.0.0-alpha.4</oxf.version>
         <importer.xml.binding.version>0.2</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
     </properties>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-            </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
@@ -153,21 +150,6 @@
                 <version>${oxf.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-swing</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-wms</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-epsg-hsql</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.10</version>
@@ -201,7 +183,26 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.2</version>
-                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.geotools</groupId>
+                <artifactId>gt-epsg-hsql</artifactId>
+                <version>${geotools.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.media</groupId>
+                        <artifactId>jai_core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.media</groupId>
+                        <artifactId>jai_codec</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+            	<groupId>java3d</groupId>
+            	<artifactId>vecmath</artifactId>
+            	<version>1.5.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -211,73 +212,70 @@
                <plugin>
                    <groupId>org.jasig.maven</groupId>
                    <artifactId>maven-notice-plugin</artifactId>
-                   <version>1.0.5</version>
+                   <version>1.0.6.1</version>
                    <configuration>
                        <noticeTemplate>src/main/resources/NOTICE.template</noticeTemplate>
                        <licenseMapping>
-                           <param>src/main/resources/notice-license-mappings.xml</param>
+                           <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
                        </licenseMapping>
                    </configuration>
                </plugin>
+               <plugin>
+				   <groupId>com.mycila</groupId>
+				   <artifactId>license-maven-plugin</artifactId>
+				   <version>2.6</version>
+				   <inherited>false</inherited>
+				   <configuration>
+				      <header>src/main/resources/52n_license_header.txt</header>
+				      <aggregate>true</aggregate>
+				      <properties>
+				         <inceptionYear>${project.inceptionYear}</inceptionYear>
+				         <latestYearOfContribution>${currentYear}</latestYearOfContribution>
+						<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
+				      </properties>
+				      <includes>
+				         <include>src/**/*.java</include>
+				         <include>src/**/*.xml</include>
+				         <include>src/**/*.xsd</include>
+				         <include>src/**/*.properties</include>
+				      </includes>
+				      <excludes>
+				         <exclude>**/logback.xml</exclude>
+				         <exclude>**/logback-test.xml</exclude>
+				         <exclude>**/src/test/resources/**</exclude>
+				         <exclude>**/*.txt</exclude>
+				         <exclude>**/*.odt</exclude>
+				         <exclude>**/THIRD-PARTY.properties</exclude>
+				         <exclude>**/NOTICE.template</exclude>
+				         <exclude>**/*.md</exclude>
+				         <exclude>**/RELEASE_NOTES</exclude>
+				         <exclude>**/LICENSE.gpl-2.0</exclude>
+				         <exclude>**/XMLTools.java</exclude>
+				      </excludes>
+					  <licenseMerges>
+					    <licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+					    <licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
+					    <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
+					    <licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
+					    <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+					    <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
+					    <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+					    <licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
+					  </licenseMerges>
+				   </configuration>
+				   <executions>
+				      <execution>
+				         <id>check-license</id>
+				         <phase>initialize</phase>
+				         <goals>
+				            <goal>check</goal>
+				         </goals>
+				      </execution>
+				   </executions>
+				</plugin>
            </plugins>
        </pluginManagement>
     </build>
-<!-- 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
-                    <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.mycila.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <version>1.9.0</version>
-                    <configuration>
-                        <header>src/main/resources/52n_license_header.txt</header>
-                        <includes>
-                            <include>**/*.java</include>
-                        </includes>
-                        <strictCheck>true</strictCheck>
-                        <properties>
-                            <year>${year}</year>
-                        </properties>
-                        <encoding>${project.build.sourceEncoding}}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <configuration>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                        <finalName>${project.artifactId}-${project.version}</finalName>
-                        <archive>
-                            <index>false</index>
-                            <manifest>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                <addClasspath>true</addClasspath>
-                                <mainClass>org.n52.sos.importer.Start</mainClass>
-                            </manifest>
-                            <manifestEntries>
-                                <build-time>${timestamp}</build-time>
-                                <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                                <n52-oxf-version>${oxf.version}</n52-oxf-version>
-                                <geotools-version>${geotools.version}</geotools-version>
-                            </manifestEntries>
-                        </archive>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
- -->
     <repositories>
         <repository>
             <id>n52-releases</id>
@@ -290,7 +288,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
         <repository>
             <id>n52-snapshots</id>
             <name>52n Snapshots</name>
@@ -303,14 +300,32 @@
             </snapshots>
         </repository>
         <repository>
-            <id>geotools-new</id>
-            <url>http://repo.opengeo.org/</url>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>boundless</id>
+            <name>Boundless, formerly OpenGeo</name>
+            <url>http://repo.boundlessgeo.com/main/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <profiles>
         <profile>
             <id>release</id>
-            <!-- a profile wich shall be activated if a release is performed -->
+            <!-- a profile which shall be activated if a release is performed -->
             <build>
                 <plugins>
                     <plugin>
@@ -321,12 +336,91 @@
                                 release fails on perform -->
                             <preparationGoals>clean</preparationGoals>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <tagBase>https://svn.52north.org/svn/swe/incubation/SOS-importer/tags</tagBase>
                             <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-    </profiles>
+		<profile>
+			<id>create-license-list</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>1.5</version>
+						<configuration>
+							<useMissingFile>true</useMissingFile>
+							<!--<fileTemplate>misc/licenses/license-as-csv.ftl</fileTemplate>-->
+							<licenseMerges>
+							    <licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+							    <licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
+							    <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
+							    <licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
+							    <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+							    <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
+							    <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+							    <licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
+							</licenseMerges>
+							<excludedScopes>test</excludedScopes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>first</id>
+								<goals>
+									<goal>aggregate-add-third-party</goal>
+								</goals>
+								<phase>generate-resources</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+    </profiles><!--
+    <dependencies>
+    	<dependency>
+    		<groupId>org.geotools</groupId>
+    		<artifactId>gt-wms</artifactId>
+    		<exclusions>
+    			<exclusion>
+    				<artifactId>jai_core</artifactId>
+    				<groupId>javax.media</groupId>
+    			</exclusion>
+    			<exclusion>
+    				<artifactId>jai_imageio</artifactId>
+    				<groupId>javax.media</groupId>
+    			</exclusion>
+    			<exclusion>
+    				<artifactId>jai_codec</artifactId>
+    				<groupId>javax.media</groupId>
+    			</exclusion>
+    			<exclusion>
+    				<artifactId>vecmath</artifactId>
+    				<groupId>java3d</groupId>
+    			</exclusion>
+    		</exclusions>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.geotools</groupId>
+    		<artifactId>gt-swing</artifactId>
+    		<exclusions>
+    			<exclusion>
+    				<artifactId>jai_core</artifactId>
+    				<groupId>javax.media</groupId>
+    			</exclusion>
+    		</exclusions>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.geotools</groupId>
+    		<artifactId>gt-epsg-hsql</artifactId>
+    		<exclusions>
+    			<exclusion>
+    				<artifactId>jai_core</artifactId>
+    				<groupId>javax.media</groupId>
+    			</exclusion>
+    		</exclusions>
+    	</dependency>
+    </dependencies> -->
 </project>

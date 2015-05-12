@@ -1,0 +1,11 @@
+RELEASE NOTES
+
+Main functions
+========================
+
+ Import CSV observation archives to a running 52N SOS instance.
+ Requires activated RegisterSensor- and InsertObservationListener (@see 52N SOS 
+ documentation how to enable these).
+ 
+Release 52n-sensorweb-sos-importer-v0-00-01
+==================================

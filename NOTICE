@@ -1,0 +1,89 @@
+Copyright (C) 2015 52°North Initiative for Geospatial Open Source Software GmbH
+
+This program is free software; you can redistribute and/or modify it under
+the terms of the GNU General Public License version 2 as published by the
+Free Software Foundation.
+
+This program is distributed WITHOUT ANY WARRANTY; even without the implied
+WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program (see LICENSE.gpl-2.0). If not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
+visit the Free Software Foundation web page, http://www.fsf.org.
+
+This project includes:
+  52North OxFramework Adapters API under GNU General Public License, v2.0
+  52North OxFramework Common under GNU General Public License, v2.0
+  52North OxFramework Features under GNU General Public License, v2.0
+  52North OxFramework GRDC schema binding under GNU General Public License, v2.0
+  52North OxFramework OWS under GNU General Public License, v2.0
+  52North OxFramework SOS Adapter under GNU General Public License, v2.0
+  52North OxFramework SWES under GNU General Public License, v2.0
+  52North OxFramework Third Party - NCName resolver under BSD 2-clause "Simplified" or "FreeBSD" License
+  52North OxFramework Third Party - Saxon under Apache License 2.0
+  52North OxFramework Xmlbeans Handling under GNU General Public License, v2.0
+  52North SOS-Importer under GNU General Public License v2.0 only
+  Commons Codec under The Apache Software License, Version 2.0
+  Commons Lang under The Apache Software License, Version 2.0
+  Commons Logging under The Apache Software License, Version 2.0
+  Commons Net under The Apache Software License, Version 2.0
+  Commons Pool under The Apache Software License, Version 2.0
+  Core Module under GNU General Public License v2.0 only
+  EPSG Authority Service using HSQL database under Lesser General Public License (LGPL) or EPSG database distribution license or BSD License for HSQL
+  Feeding Module under GNU General Public License v2.0 only
+  Hamcrest All under New BSD License
+  Hamcrest Core under BSD style
+  HSQLDB under HSQLDB License
+  HttpClient under Apache License
+  HttpCore under Apache License
+  isorelax under MIT license
+  jcommon under GNU Lesser General Public Licence
+  jfreechart under GNU Lesser General Public Licence
+  jgridshift under GNU Lesser General Public License, version 2.0 (LGPLv2)
+  Joda time under Apache 2
+  jsr-275 under BSD License
+  JTS Topology Suite under Lesser General Public License (LGPL)
+  JUnit under Common Public License Version 1.0
+  Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
+  Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
+  Metadata under Lesser General Public License (LGPL)
+  OASIS WS-N specification schemas - including WS-BrokeredNotification (v1.3) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OASIS WS-Resources specification schemas v1.2 under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC Context schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC Filter schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC Filter schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC GML schema (spec. v3.1.1) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC GML schema (spec. v3.2.1) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC O&M schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC O&M schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC OWS schema (spec. v1.1.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC Sampling schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC Sampling schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SensorML schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SensorML schema (spec. v1.0.1) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SLD schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SOS schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SOS schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SWECommon schema (spec. v1.0.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SWECommon schema (spec. v1.0.1) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SWECommon schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC SWES schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  OGC WaterML schema (spec. v2.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  Open GIS Interfaces under OGC copyright or Lesser General Public License (LGPL)
+  opencsv under Apache 2
+  Referencing services under Lesser General Public License (LGPL)
+  Saxon-HE under Mozilla Public License Version 1.0
+  SLF4J API Module under MIT License
+  StAX API under The Apache Software License, Version 2.0
+  vecmath under GPL 2.0 license
+  W3C SOAP specification recommondation (v1.2 part 1) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  W3C WS-Addressing specification schemas (v1.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  W3C xlink schema (spec. v1.1.0) under GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+  Xerces2 Java Parser under The Apache Software License, Version 2.0
+  XML Commons External Components XML APIs under The Apache Software License, Version 2.0
+  XmlBeans under The Apache Software License, Version 2.0
+  XMLbeans Module under GNU General Public License v2.0 only
+  XmlBeansXPath under The Apache Software License, Version 2.0
+
