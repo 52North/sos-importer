@@ -15,6 +15,7 @@ Changes:
 Bugfixes:
 ---------
  * #35: Could not parse ISO8601 timestamps with timezone "Z" 
+ * #36: Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
 
 Release Notes for SOS-Importer 0.4.0
 ====================================
