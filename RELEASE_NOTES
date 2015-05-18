@@ -1,7 +1,20 @@
 For a complete Release Notes overview visit
 
   https://wiki.52north.org/bin/view/SensorWeb/SosImporter#Road_map
- 
+
+Release Notes for SOS-Importer 0.5.0
+==================================== 
+Features:
+---------
+ * 
+
+Changes:
+--------
+ *
+
+Bugfixes:
+---------
+ * #35: Could not parse ISO8601 timestamps with timezone "Z" 
 
 Release Notes for SOS-Importer 0.4.0
 ====================================

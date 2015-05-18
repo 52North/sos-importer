@@ -130,8 +130,7 @@ public class RepeatedFeeder extends TimerTask{
 		}
 	}
 
-	private void addNewerFiles(final ArrayList<File> filesToFeed)
-	{
+	private void addNewerFiles(final ArrayList<File> filesToFeed) {
 		// TODO if last feed file is null: add all (OR only the newest?) files in directory to list "filesToFeed"
 		// TODO else: get all files newer than last feed file and add to list "filesToFeed"
 		final File[] files = file.listFiles(new FileFilter() {
@@ -160,8 +159,7 @@ public class RepeatedFeeder extends TimerTask{
 		}
 	}
 
-	private void saveLastFeedFile()
-	{
+	private void saveLastFeedFile()	{
 		final Properties prop = new Properties();
 		prop.put("lastFeedFile", lastUsedDateFile.getAbsolutePath());
 		try {
@@ -172,8 +170,7 @@ public class RepeatedFeeder extends TimerTask{
 		}
 	}
 
-	private void getLastFeedFile()
-	{
+	private void getLastFeedFile() {
 		final Properties prop = new Properties();
 		String lastFeedFilePropertiesPath = "";
 		try {
