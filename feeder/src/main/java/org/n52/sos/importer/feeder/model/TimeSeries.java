@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.opengis.swe.x20.BooleanType;
+import net.opengis.swe.x20.CountType;
 import net.opengis.swe.x20.DataArrayDocument;
 import net.opengis.swe.x20.DataArrayType;
 import net.opengis.swe.x20.DataArrayType.ElementType;
@@ -40,6 +42,7 @@ import net.opengis.swe.x20.DataRecordType;
 import net.opengis.swe.x20.DataRecordType.Field;
 import net.opengis.swe.x20.QuantityType;
 import net.opengis.swe.x20.TextEncodingType;
+import net.opengis.swe.x20.TextType;
 import net.opengis.swe.x20.TimeType;
 
 import org.apache.xmlbeans.XmlString;
@@ -50,6 +53,8 @@ import org.n52.oxf.xml.NcNameResolver;
 import org.n52.oxf.xml.XMLConstants;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
+import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
 
 public class TimeSeries {
 
@@ -139,15 +144,15 @@ public class TimeSeries {
 		final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
 		// add extension
 		obsParameter.addExtension("<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
-			// OM_Observation
-
-    		// procedure
+		
+		// OM_Observation
+   		// procedure
 		obsParameter.addProcedure(getSensorURI());
-    		// obsProp
+   		// obsProp
 		obsParameter.addObservedProperty(getObservedProperty().getUri());
-    		// feature
+   		// feature
 		addFeature(obsParameter);
-			// result
+		// result
     	addResult(obsParameter);
 		if (sosVersion.equalsIgnoreCase("2.0.0")) {
 			obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + getFirst().getEpsgCode());
@@ -168,7 +173,6 @@ public class TimeSeries {
 		final DataArrayType xbDataArray = xbDataArrayDoc.addNewDataArray1();
 		// count
 		xbDataArray.addNewElementCount().addNewCount().setValue(BigInteger.valueOf(timeseries.size()));
-		// element type
 		final DataRecordType xbDataRecord = DataRecordType.Factory.newInstance();
 		// phentime
 		final Field xbPhenTime = xbDataRecord.addNewField();
@@ -183,14 +187,30 @@ public class TimeSeries {
 		// obsProp
 		final Field xbObsProperty = xbDataRecord.addNewField();
 		xbObsProperty.setName(NcNameResolver.fixNcName(getObservedProperty().getName()));
-		final QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
-		xbQuantityWithUom.setDefinition(getObservedProperty().getUri());
-		xbQuantityWithUom.addNewUom().setCode(getUnitOfMeasurementCode());
-		xbObsProperty.addNewAbstractDataComponent().set(xbQuantityWithUom);
-		xbObsProperty
-			.getAbstractDataComponent()
-			.substitute(XMLConstants.QN_SWE_2_0_QUANTITY, QuantityType.type);
-
+		if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+			final TextType xbTextType = TextType.Factory.newInstance();
+			xbTextType.setDefinition(getObservedProperty().getUri());
+			xbObsProperty.addNewAbstractDataComponent().set(xbTextType);
+			xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_TEXT, TextType.type);
+		} else if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+			final CountType xbCountType = CountType.Factory.newInstance();
+			xbCountType.setDefinition(getObservedProperty().getUri());
+			xbObsProperty.addNewAbstractDataComponent().set(xbCountType);
+			xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_COUNT, CountType.type);
+		} else if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+			final BooleanType xbBooleanType = BooleanType.Factory.newInstance();
+			xbBooleanType.setDefinition(getObservedProperty().getUri());
+			xbObsProperty.addNewAbstractDataComponent().set(xbBooleanType);
+			xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_BOOLEAN, BooleanType.type);
+			throw new RuntimeException("NO YET IMPLEMENTED");			
+		} else {
+			final QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
+			xbQuantityWithUom.setDefinition(getObservedProperty().getUri());
+			xbQuantityWithUom.addNewUom().setCode(getUnitOfMeasurementCode());
+			xbObsProperty.addNewAbstractDataComponent().set(xbQuantityWithUom);
+			xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_QUANTITY, QuantityType.type);
+		}
+		// element type
 		final ElementType xbElementType = xbDataArray.addNewElementType();
 		xbElementType.setName("definition");
 		xbElementType.addNewAbstractDataComponent().set(xbDataRecord);
