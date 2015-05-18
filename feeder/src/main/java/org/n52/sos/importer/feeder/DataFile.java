@@ -827,7 +827,7 @@ public class DataFile {
 		return null;
 	}
 
-	private short parseTimestampComponent(final String timestampPart,
+	private short parseTimestampComponent(String timestampPart,
 			final String pattern,
 			final int field,
 			final TimeZone timeZone) throws ParseException {
@@ -838,6 +838,10 @@ public class DataFile {
 		Date date = null;
 		final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		sdf.setTimeZone(timeZone);
+		
+		if (timestampPart.indexOf('Z') != -1) {
+			timestampPart = timestampPart.replaceAll("Z", "+0100");
+		}
 
 		date = sdf.parse(timestampPart);
 
