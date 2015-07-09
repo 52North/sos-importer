@@ -393,7 +393,7 @@ public final class Configuration {
             }
             return result;
         }
-        return null;
+        return new int[0];
     }
 
     /**
