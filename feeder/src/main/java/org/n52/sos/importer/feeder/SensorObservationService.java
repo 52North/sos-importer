@@ -811,7 +811,9 @@ public final class SensorObservationService {
 						||
 						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED) > -1
 						||
-						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT) > -1);
+						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT) > -1
+						||
+						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_UNIQUE_CONSTRAINT_VIOLATION) > -1);
 	}
 
 	private String insertObservation(final InsertObservation io) throws IOException {
