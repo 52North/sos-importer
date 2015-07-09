@@ -228,15 +228,11 @@ public final class Feeder {
 	protected static String heapSizeInformation() {
 		final long mb = 1024 * 1024;
 		final Runtime rt = Runtime.getRuntime();
-		final long maxMemoryMB = rt.maxMemory() / mb;
-		final long totalMemoryMB = rt.totalMemory() / mb;
-		final long freeMemoryMB = rt.freeMemory() / mb;
-		final long usedMemoryMB = (rt.totalMemory() - rt.freeMemory()) / mb;
 		return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
-				maxMemoryMB,
-				totalMemoryMB,
-				freeMemoryMB,
-				usedMemoryMB);
+				rt.maxMemory() / mb,
+				rt.totalMemory() / mb,
+				rt.freeMemory() / mb,
+				(rt.totalMemory() - rt.freeMemory()) / mb);
 	}
 
 }

@@ -824,9 +824,7 @@ public final class SensorObservationService {
 			parameters = createParameterAssemblyFromIO(io);
 			setMimetype(parameters);
 			try {
-				LOG.debug("\tBEFORE OXF - doOperation 'InsertObservation'");
 				opResult = sosWrapper.doInsertObservation(parameters);
-				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
