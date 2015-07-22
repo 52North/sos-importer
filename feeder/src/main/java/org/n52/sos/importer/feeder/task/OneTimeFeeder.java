@@ -173,7 +173,7 @@ public class OneTimeFeeder implements Runnable {
 				if (sos == null || !sos.isAvailable()) {
 					LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
 				} else if (!sos.isTransactional()){
-					LOG.error(String.format("SOS '%s' does not support required transactional operations!", sosURL));
+					LOG.error(String.format("SOS '%s' does not support required transactional operations: InsertSensor, InsertObservation. Please enable.", sosURL));
 				} else {
 					final String directory = dataFile.getFileName();
 					File counterFile = null;
