@@ -221,58 +221,58 @@
                    </configuration>
                </plugin>
                <plugin>
-				   <groupId>com.mycila</groupId>
-				   <artifactId>license-maven-plugin</artifactId>
-				   <version>2.6</version>
-				   <inherited>false</inherited>
-				   <configuration>
-				      <header>src/main/resources/52n_license_header.txt</header>
-				      <aggregate>true</aggregate>
-				      <properties>
-				         <inceptionYear>${project.inceptionYear}</inceptionYear>
-				         <latestYearOfContribution>${currentYear}</latestYearOfContribution>
-						<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
-				      </properties>
-				      <includes>
-				         <include>src/**/*.java</include>
-				         <include>src/**/*.xml</include>
-				         <include>src/**/*.xsd</include>
-				         <include>src/**/*.properties</include>
-				      </includes>
-				      <excludes>
-				         <exclude>**/logback.xml</exclude>
-				         <exclude>**/logback-test.xml</exclude>
-				         <exclude>**/src/test/resources/**</exclude>
-				         <exclude>**/*.txt</exclude>
-				         <exclude>**/*.odt</exclude>
-				         <exclude>**/THIRD-PARTY.properties</exclude>
-				         <exclude>**/NOTICE.template</exclude>
-				         <exclude>**/*.md</exclude>
-				         <exclude>**/RELEASE_NOTES</exclude>
-				         <exclude>**/LICENSE.gpl-2.0</exclude>
-				         <exclude>**/XMLTools.java</exclude>
-				      </excludes>
-					  <licenseMerges>
-					    <licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
-					    <licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
-					    <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
-					    <licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
-					    <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
-					    <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
-					    <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
-					    <licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
-					  </licenseMerges>
-				   </configuration>
-				   <executions>
-				      <execution>
-				         <id>check-license</id>
-				         <phase>initialize</phase>
-				         <goals>
-				            <goal>check</goal>
-				         </goals>
-				      </execution>
-				   </executions>
-				</plugin>
+			<groupId>com.mycila</groupId>
+			<artifactId>license-maven-plugin</artifactId>
+			<version>2.6</version>
+			<inherited>false</inherited>
+			<configuration>
+				<header>src/main/resources/52n_license_header.txt</header>
+				<aggregate>true</aggregate>
+				<properties>
+					<inceptionYear>${project.inceptionYear}</inceptionYear>
+				        <latestYearOfContribution>${currentYear}</latestYearOfContribution>
+					<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
+				</properties>
+				<includes>
+					<include>src/**/*.java</include>
+					<include>src/**/*.xml</include>
+					<include>src/**/*.xsd</include>
+					<include>src/**/*.properties</include>
+				</includes>
+				<excludes>
+					<exclude>**/logback.xml</exclude>
+					<exclude>**/logback-test.xml</exclude>
+					<exclude>**/src/test/resources/**</exclude>
+					<exclude>**/*.txt</exclude>
+					<exclude>**/*.odt</exclude>
+					<exclude>**/THIRD-PARTY.properties</exclude>
+					<exclude>**/NOTICE.template</exclude>
+					<exclude>**/*.md</exclude>
+					<exclude>**/RELEASE_NOTES</exclude>
+					<exclude>**/LICENSE.gpl-2.0</exclude>
+					<exclude>**/XMLTools.java</exclude>
+				</excludes>
+				<licenseMerges>
+					<licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+					<licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
+					<licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
+					<licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
+					<licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+					<licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
+					<licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+					<licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
+				</licenseMerges>
+			</configuration>
+			<executions>
+				<execution>
+					<id>check-license</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>check</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
            </plugins>
        </pluginManagement>
     </build>
@@ -378,49 +378,5 @@
 				</plugins>
 			</build>
 		</profile>
-    </profiles><!--
-    <dependencies>
-    	<dependency>
-    		<groupId>org.geotools</groupId>
-    		<artifactId>gt-wms</artifactId>
-    		<exclusions>
-    			<exclusion>
-    				<artifactId>jai_core</artifactId>
-    				<groupId>javax.media</groupId>
-    			</exclusion>
-    			<exclusion>
-    				<artifactId>jai_imageio</artifactId>
-    				<groupId>javax.media</groupId>
-    			</exclusion>
-    			<exclusion>
-    				<artifactId>jai_codec</artifactId>
-    				<groupId>javax.media</groupId>
-    			</exclusion>
-    			<exclusion>
-    				<artifactId>vecmath</artifactId>
-    				<groupId>java3d</groupId>
-    			</exclusion>
-    		</exclusions>
-    	</dependency>
-    	<dependency>
-    		<groupId>org.geotools</groupId>
-    		<artifactId>gt-swing</artifactId>
-    		<exclusions>
-    			<exclusion>
-    				<artifactId>jai_core</artifactId>
-    				<groupId>javax.media</groupId>
-    			</exclusion>
-    		</exclusions>
-    	</dependency>
-    	<dependency>
-    		<groupId>org.geotools</groupId>
-    		<artifactId>gt-epsg-hsql</artifactId>
-    		<exclusions>
-    			<exclusion>
-    				<artifactId>jai_core</artifactId>
-    				<groupId>javax.media</groupId>
-    			</exclusion>
-    		</exclusions>
-    	</dependency>
-    </dependencies> -->
+    </profiles>
 </project>
