@@ -2,12 +2,12 @@
 <SosImportConfiguration xsi:schemaLocation="https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.4/">
     <DataFile referenceIsARegularExpression="false">
         <LocalFile>
-            <Path>/home/eike/Desktop/tmp/sos-importer-bug-57/data_obs.csv</Path>
+            <Path>src/test/resources/issue-057/data_obs.csv</Path>
             <Encoding>UTF-8</Encoding>
         </LocalFile>
     </DataFile>
     <SosMetadata>
-        <URL>http://serv.tumblingwalls.com/52n-sos-webapp/service</URL>
+        <URL>http://localhost/52n-sos-webapp/service</URL>
         <Offering generate="true"/>
         <Version>2.0.0</Version>
         <Binding>POX</Binding>
@@ -97,6 +97,18 @@
                     <Key>TIME_ZONE</Key>
                     <Value>1</Value>
                 </Metadata>
+            </Column>
+            <Column>
+                <Number>8</Number>
+                <Type>DO_NOT_EXPORT</Type>
+            </Column>
+            <Column>
+                <Number>9</Number>
+                <Type>DO_NOT_EXPORT</Type>
+            </Column>
+            <Column>
+                <Number>10</Number>
+                <Type>DO_NOT_EXPORT</Type>
             </Column>
         </ColumnAssignments>
         <DecimalSeparator>.</DecimalSeparator>
