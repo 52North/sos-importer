@@ -135,7 +135,7 @@ public final class SensorObservationService {
 	// Max possible value: 12500
 	private int hunkSize = 5000;
 
-	private final Configuration config;
+	private Configuration configuration;
 
 	// stores the Timestamp of the last insertObservations
 	// (required for handling sample based files)
@@ -175,7 +175,7 @@ public final class SensorObservationService {
 
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
-		this.config = config;
+		this.configuration = config;
 		sosUrl = config.getSosUrl();
 		sosVersion = config.getSosVersion();
 		sosBinding = getBinding(config.getSosBinding());
@@ -287,17 +287,20 @@ public final class SensorObservationService {
 			LOG.error("No measured value columns found in configuration");
 			return null;
 		}
-		if (config.getFirstLineWithData()==0){
+		if (configuration.getFirstLineWithData()==0){
 			skipLines(cr, lastLine+1);
 		} else {
 			skipLines(cr, lastLine);
 		}
-		switch (config.getImportStrategy()) {
+		switch (configuration.getImportStrategy()) {
 		case SingleObservation:
 			long startReadingFile = System.currentTimeMillis();
 			// for each line
 			while ((values = cr.readNext()) != null) {
-				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				if (!isLineIgnorable(values) && 
+						isSizeValid(dataFile, values) && 
+						containsData(values) && 
+						!isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					numOfObsTriedToInsert += ios.length;
@@ -338,7 +341,7 @@ public final class SensorObservationService {
 					skipLines(cr, sampleDataOffset-(lineCounter-sampleStartLine));
 					continue;
 				}
-				if (!isLineIgnorable(values) && isNotEmpty(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
+				if (!isLineIgnorable(values) && containsData(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
 					timeSeriesRepository.addObservations(ios);
@@ -445,15 +448,15 @@ public final class SensorObservationService {
 		for (int i = 0; i < values.length; i++) {
 			sb.append(values[i]);
 			if (i != values.length-1) {
-				sb.append(config.getCsvSeparator());
+				sb.append(configuration.getCsvSeparator());
 			}
 		}
 		return sb.toString();
 	}
 
 	private Timestamp parseSampleDate(final String[] values) throws ParseException {
-		final String dateInfoPattern = config.getSampleDatePattern();
-		final String regExToExtractDateInfo = config.getSampleDateExtractionRegEx();
+		final String dateInfoPattern = configuration.getSampleDatePattern();
+		final String regExToExtractDateInfo = configuration.getSampleDateExtractionRegEx();
 		final String timestampInformation = restoreLine(values);
 		LOG.trace("parseSampleDate: dateInfoPattern: '{}'; extractRegEx: '{}'; line: '{}'",
 				dateInfoPattern, regExToExtractDateInfo, timestampInformation);
@@ -508,7 +511,7 @@ public final class SensorObservationService {
 	private boolean isSizeValid(final DataFile dataFile,
 			final String[] values) {
 		if (values.length != dataFile.getExpectedColumnCount()) {
-			final String errorMsg = String.format("Number of Expected columns '%s' does not match number of found columns '%s' -> Cancel import!",
+			final String errorMsg = String.format("Number of Expected columns '%s' does not match number of found columns '%s' -> Cancel import! Please update your configuration to match the number of columns.",
 					dataFile.getExpectedColumnCount(),
 					values.length);
 			LOG.error(errorMsg);
@@ -517,12 +520,13 @@ public final class SensorObservationService {
 		return true;
 	}
 
-	private boolean isNotEmpty(final String[] values) {
+	private boolean containsData(final String[] values) {
 		skipReason = "Line is empty.";
 		if (values != null && values.length > 0) {
 			for (int i = 0; i < values.length; i++) {
 				final String value = values[i];
 				if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
+					skipReason = String.format("Value of column '%s' is null or empty but shouldn't." , i);
 					return false;
 				}
 			}
