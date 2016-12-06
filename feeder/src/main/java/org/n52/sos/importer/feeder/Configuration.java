@@ -37,7 +37,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
@@ -634,25 +633,34 @@ public final class Configuration {
                 mvColumnId));
         return null;
     }
+    
+    public Position getPosition(final String[] values) throws ParseException {
+    	String group = "";
+    	// get first group in Document for position column
+    	outerfor:
+    	for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+			if (column.getType().equals(Type.POSITION)) {
+				for (Metadata metadata : column.getMetadataArray()) {
+					if (metadata.getKey().equals(Key.GROUP)) {
+						group = metadata.getValue();
+						break outerfor;
+					}
+				}
+			}
+		}
+    	return getPosition(group, values);
+    }
 
     public Position getPosition(final String group, final String[] values) throws ParseException {
-        LOG.trace(String.format("getPosition(group:%s,%s)",
-                group,
-                Arrays.toString(values)));
+        LOG.trace(String.format("getPosition(group:%s,..)", group));
         final Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
         // combine the values from the different columns
         final String[] units = new String[3];
         final double[] posValues = new double[3];
         int epsgCode = -1;
         for (final Column c : cols) {
-            //            boolean isCombination = false; // now every position is of type combination
             for (final Metadata m : c.getMetadataArray()) {
-                // check for type combination
-                //                if (m.getKey().equals(Key.TYPE) && m.getValue().equals(Configuration.POSITION_TYPE_COMBINATION)) {
-                //                    isCombination = true;
-                //                }
-                // get parse pattern and parse available values
-                /*else*/ if (m.getKey().equals(Key.PARSE_PATTERN)) {
+               if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
                     pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LATITUDE, "{0}");
                     pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LONGITUDE, "{1}");

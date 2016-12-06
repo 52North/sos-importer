@@ -76,6 +76,7 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
 /**
  * Class holds the datafile and provides easy to use interfaces to get certain
  * required resources.
+ * 
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
@@ -211,12 +212,6 @@ public class DataFile {
 		return configuration.getFirstLineWithData();
 	}
 
-	/**
-	 *
-	 * @param mvColumnId
-	 * @param values
-	 * @return
-	 */
 	public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
 		LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
 		// check for sensor column and return new sensor
@@ -254,29 +249,28 @@ public class DataFile {
 		return sensor;
 	}
 
-	/**
-	 *
-	 * @param mvColumnId
-	 * @param values
-	 * @return
-	 * @throws ParseException
-	 */
 	public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
 		LOG.trace(String.format("getFoiForColumn(%d,%s)",
 					mvColumnId,
 					Arrays.toString(values)));
-		// check for foi column and return new sensor
+		// check for foi column and return new foi
 		FeatureOfInterest foi = getFoiColumn(mvColumnId,values);
 		if (foi == null) {
 			LOG.debug(String.format("Could not find foi column for column id %d",
 					mvColumnId));
 		} else {
-			return foi;
+			if (foi.getPosition() == null) {
+				LOG.debug(String.format("Found foi '%s' but no position for column %d",
+						foi.getName(),
+						mvColumnId));
+			} else {
+				return foi;
+			}
 		}
 		// else build foi from manual or generated resource
 		final FeatureOfInterestType foiT = configuration.getRelatedFoi(mvColumnId);
 		if (foiT != null && foiT.getResource() != null) {
-			// generated sensor
+			// generated foi
 			if (foiT.getResource() instanceof GeneratedSpatialResourceType) {
 				final GeneratedSpatialResourceType gSRT =
 						(GeneratedSpatialResourceType) foiT.getResource();
@@ -290,7 +284,7 @@ public class DataFile {
 				final Position p = getPosition(gSRT.getPosition(),values);
 				foi = new FeatureOfInterest(a[0],a[1],p);
 			} else if (foiT.getResource() instanceof SpatialResourceType) {
-				// manual sensor
+				// manual foi
 				final SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
 				final Position p = getPosition(mSRT.getPosition(),values);
 				foi = new FeatureOfInterest(mSRT.getName(),
@@ -784,16 +778,21 @@ public class DataFile {
 		}
 	}
 
-	private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) {
-		LOG.trace(String.format("getFoiColumn(%d,%s)",
-					mvColumnId,
-					Arrays.toString(values)));
+	private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) throws ParseException {
+		LOG.trace(String.format("getFoiColumn(%d,...)",
+					mvColumnId));
 		final int i = configuration.getColumnIdForFoi(mvColumnId);
 		if (i < 0) {
 			// foi is not in the data file -> return null
 			return null;
 		} else {
-			final Position p = configuration.getFoiPosition(values[i]);
+			Position p = configuration.getFoiPosition(values[i]);
+			if (p == null && configuration.getMeasureValueColumnIds().length == 1) {
+				p = configuration.getPosition(values);
+			}
+			else {
+				LOG.error(String.format("Could not find position for foi '%s'", values[i]));
+			}
 			final FeatureOfInterest s = new FeatureOfInterest(values[i],
 					values[i],
 					p);
