@@ -5,7 +5,7 @@
 	<property name="logFile" value="logs/sos-importer-feeder" />
 
 	<!-- 
-		the following assumptions are made by the Adminstrator:
+		the following assumptions are made by the Administrator:
 		* The name of a file appender is FILE
 		* The name of a console appender is STDOUT
 		* The appender named FILE is of type ch.qos.logback.core.rolling.RollingFileAppender

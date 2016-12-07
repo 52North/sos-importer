@@ -307,21 +307,11 @@ public final class SensorObservationService {
 					insertObservationsForOneLine(ios,values,dataFile);
 					LOG.debug(Feeder.heapSizeInformation());
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
-							(lineCounter+1),
-							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
-							Arrays.toString(values)));
-					skipReason = "";
+					logSkippedLine(values);
 				}
-				lineCounter++;
-				if (lineCounter % 10000 == 0) {
-					LOG.info("Processed line {}.",lineCounter);
-				}
+				udpateLineCounter();
 			}
-			long finishedImportData = System.currentTimeMillis();
-			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
-					new Date(startReadingFile).toString(),
-					new Date(finishedImportData).toString());
+			logTiming(startReadingFile);
 			break;
 
 		case SweArrayObservationWithSplitExtension:
@@ -334,11 +324,7 @@ public final class SensorObservationService {
 				// if it is a sample based file, I need to get the following information
 				// * date information (depends on last timestamp because of
 				if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
-					sampleStartLine = lineCounter;
-					lastTimestamp = null;
-					getSampleMetaData(cr);
-					isInSample = true;
-					skipLines(cr, sampleDataOffset-(lineCounter-sampleStartLine));
+					sampleStartLine = processSampleStart(cr);
 					continue;
 				}
 				if (!isLineIgnorable(values) && containsData(values) && isSizeValid(dataFile, values) && !isHeaderLine(values)) {
@@ -355,16 +341,9 @@ public final class SensorObservationService {
 						currentHunk++;
 					}
 				} else {
-					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
-							(lineCounter+1),
-							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
-							Arrays.toString(values)));
-					skipReason = "";
+					logSkippedLine(values);
 				}
-				lineCounter++;
-				if (lineCounter % 10000 == 0) {
-					LOG.info("Processed line {}.",lineCounter);
-				}
+				udpateLineCounter();
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
 						isSampleBasedDataFile, isInSample, lineCounter, sampleStartLine, sampleSize, sampleDataOffset);
@@ -379,16 +358,45 @@ public final class SensorObservationService {
 				insertTimeSeries(timeSeriesRepository);
 			}
 			lastLine = lineCounter;
-			finishedImportData = System.currentTimeMillis();
-			LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
-					new Date(startReadingFile).toString(),
-					new Date(finishedImportData).toString());
+			logTiming(startReadingFile);
 		}
 
 		final int newFailedObservationsCount = failedInsertObservations.size()-failedObservationsBefore;
 		final int newObservationsCount = numOfObsTriedToInsert-newFailedObservationsCount;
 		LOG.info("New observations in SOS: {}. Failed observations: {}.", newObservationsCount,newFailedObservationsCount);
 		return failedInsertObservations;
+	}
+
+	private int processSampleStart(final CsvParser cr) throws IOException,
+			ParseException {
+		int sampleStartLine;
+		sampleStartLine = lineCounter;
+		lastTimestamp = null;
+		getSampleMetaData(cr);
+		isInSample = true;
+		skipLines(cr, sampleDataOffset-(lineCounter-sampleStartLine));
+		return sampleStartLine;
+	}
+
+	private void logTiming(long startReadingFile) {
+		LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
+				new Date(startReadingFile).toString(),
+				new Date(System.currentTimeMillis()).toString());
+	}
+
+	private void udpateLineCounter() {
+		lineCounter++;
+		if (lineCounter % 10000 == 0) {
+			LOG.info("Processed line {}.",lineCounter);
+		}
+	}
+
+	private void logSkippedLine(String[] values) {
+		LOG.debug(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
+				(lineCounter+1),
+				!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
+				Arrays.toString(values)));
+		skipReason = "";
 	}
 
 	private boolean isLineIgnorable(final String[] values) {
@@ -807,7 +815,9 @@ public final class SensorObservationService {
 						||
 						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED) > -1
 						||
-						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT) > -1);
+						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT) > -1
+						||
+						owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_UNIQUE_CONSTRAINT_VIOLATION) > -1);
 	}
 
 	private String insertObservation(final InsertObservation io) throws IOException {
@@ -818,9 +828,7 @@ public final class SensorObservationService {
 			parameters = createParameterAssemblyFromIO(io);
 			setMimetype(parameters);
 			try {
-				LOG.debug("\tBEFORE OXF - doOperation 'InsertObservation'");
 				opResult = sosWrapper.doInsertObservation(parameters);
-				LOG.debug("\tAFTER OXF - doOperation 'InsertObservation'");
 				if (sosVersion.equals("1.0.0")) {
 					try {
 						final InsertObservationResponse response = InsertObservationResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
