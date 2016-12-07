@@ -59,7 +59,6 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 		TableElement tabElem = null;
 		Column col = null;
 		int columnId;
-		double val;
 	
 		pos = stepModel.getPosition();
 		//
@@ -78,40 +77,40 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 		// 4.1 check latitude
 		if (pos.getLatitude() != null &&
 				pos.getLatitude().getTableElement() == null) {
-			val = pos.getLatitude().getValue();
+			final double val = pos.getLatitude().getValue();
 			if (val != Constants.NO_INPUT_INT) {
 				key = Key.POSITION_LATITUDE;
-				value = val + "";
+				value = val + " " + pos.getLatitude().getParsedUnit();
 				Helper.addOrUpdateColumnMetadata(key,value,col);
 			}
 		}
 		// 4.2 check longitude
 		if (pos.getLongitude() != null &&
 				pos.getLongitude().getTableElement() == null) {
-			val = pos.getLongitude().getValue();
+			final double val = pos.getLongitude().getValue();
 			if (val != Constants.NO_INPUT_INT) {
 				key = Key.POSITION_LONGITUDE;
-				value = val + "";
+				value = val + " " + pos.getLongitude().getParsedUnit();
 				Helper.addOrUpdateColumnMetadata(key,value,col);
 			}
 		}
 		// 4.3 check altitude
 		if (pos.getHeight() != null &&
 				pos.getHeight().getTableElement() == null) {
-			val = pos.getHeight().getValue();
+			final double val = pos.getHeight().getValue();
 			if (val != Constants.NO_INPUT_INT) {
 				key = Key.POSITION_ALTITUDE;
-				value = val + "";
+				value = val + " " + pos.getHeight().getParsedUnit();
 				Helper.addOrUpdateColumnMetadata(key,value,col);
 			}
 		}
 		// 4.4 check EPSG code
 		if (pos.getEPSGCode() != null &&
 				pos.getEPSGCode().getTableElement() == null) {
-			final int valI = pos.getEPSGCode().getValue();
-			if (valI != Constants.NO_INPUT_INT) {
+			final int val = pos.getEPSGCode().getValue();
+			if (val != Constants.NO_INPUT_INT) {
 				key = Key.POSITION_EPSG_CODE;
-				value = valI + "";
+				value = val + "";
 				Helper.addOrUpdateColumnMetadata(key,value,col);
 			}
 		}
