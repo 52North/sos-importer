@@ -754,6 +754,8 @@ public final class Configuration {
         }
         else {
             number = alt;
+            // we are assuming "m" as default value
+            unit = "m";
         }
         value = parseToDouble(number);
 
