@@ -82,8 +82,8 @@ public class Helper {
 		}
 		meta.setValue(value);
 		if (logger.isDebugEnabled()) {
-			logger.debug(addedOrUpdated + " column metadata. Key: " + key + "; Value: " + 
-					value + " in column " + col.getNumber());
+			logger.debug(String.format("%s column metadata. Key: '%s'; Value: '%s' in column '%d'.",
+					addedOrUpdated, key, value, col.getNumber()));
 		}
 		return (meta.getValue().equalsIgnoreCase(value));
 	}
