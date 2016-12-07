@@ -1,6 +1,6 @@
-# 52°North SOS Importer
+# 52Â°North SOS Importer
 
-[![Build Status](http://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](http://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/)
+[![Build Status](http://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](http://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/) [![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)
 
 For information on this project visit [its homepage](https://wiki.52north.org/bin/view/SensorWeb/SosImporter).
 

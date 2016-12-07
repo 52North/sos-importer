@@ -92,7 +92,7 @@
         </contributor>
     </contributors>
     <properties>
-    	<currentYear>2015</currentYear> <!-- manual setting -->
+    	<currentYear>2016</currentYear> <!-- manual setting -->
     	<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
     	<currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
         <timestamp>${maven.build.timestamp}</timestamp>
