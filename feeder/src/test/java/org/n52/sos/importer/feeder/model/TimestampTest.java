@@ -40,6 +40,9 @@ import org.junit.Test;
 
 public class TimestampTest {
 
+	// 12:01 UTZ in millis
+	private static final int UTC_12_01 = 43260000;
+
 	private static final int millisPerDay = 1000 * 60 * 60 * 24;
 
 	private Timestamp timestamp;
@@ -49,39 +52,59 @@ public class TimestampTest {
 	private final int millisPerHour = millisPerMinute * 60;
 
 	@Before
-	public void createTimestamp() throws Exception
-	{
+	public void createTimestamp() throws Exception {
 		timestamp = new Timestamp();
 	}
 
 	@Test public void
 	shouldSetAllValuesViaSetLong() {
-		timestamp.set(86401000);
+		shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getDefault());
+	}
 
-		final TimeZone tz = TimeZone.getDefault();
+	/*
+	 * Test for Issue #63: Cannot build importer when host in timezone MST (-07:00)
+	 *
+	 * https://github.com/52North/sos-importer/issues/63
+	 */
+	@Test public void
+	shouldSetAllValuesViaSetLongUsingTimeZoneMST() {
+		timestamp.setTimezone((byte) -7);
+		shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getTimeZone("MST"));
+	}
+
+	private void shouldSetAllValuesViaSetLongUsingTimeZone(final TimeZone tz) {
+		// given
 		String sign = "-";
 		int rawOffset = tz.getRawOffset();
 		if (rawOffset>= 0) {
 			sign = "+";
 		}
-		rawOffset = Math.abs(rawOffset);
-		final int hours = rawOffset / millisPerHour;
-		final int minutes = (rawOffset - (hours * millisPerHour)) / millisPerMinute;
+		final int offsetInHours = rawOffset / millisPerHour; 
+		final int hours = 12 + offsetInHours;
+		final int minutes = (rawOffset - (offsetInHours * millisPerHour)) / millisPerMinute;
 		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
-		final String hoursString = hours < 10? "0"+hours : Integer.toString(hours);
+		final String hoursString = String.format("%02d", hours);
+		// why minutes+1?
 		final int minutesTime = Integer.parseInt(minutesString)+1;
 		final String timeMinutesString = minutesTime < 10? "0"+minutesTime : Integer.toString(minutesTime);
-		final String asExpected = String.format("1970-01-02T%s:00:%s%s%s:%s",
+		final String offsetInHoursString = String.format("%02d", Math.abs(offsetInHours));
+		final String asExpected = String.format("1970-01-01T%s:%s:00%s%s:%s",
 				hoursString,
 				timeMinutesString,
-				sign, hoursString, minutesString);
+				sign,
+				offsetInHoursString,
+				minutesString);
+		
+		// when
+		timestamp.set(UTC_12_01);
 
+		// then
 		assertThat(timestamp.toString(),is(asExpected));
 	}
 
 	@Test public void
 	shouldCreateDateFromTimestamp() {
-		final long time = getCurrentTimeMillisTimestampCompatible();
+		final long time = UTC_12_01;
 		final Date dateFromTimestamp = timestamp.set(time).toDate();
 		final Date dateFromSystem = new Date(time);
 		assertThat(dateFromTimestamp.compareTo(dateFromSystem), is(0));
@@ -129,7 +152,7 @@ public class TimestampTest {
 
 	@Test public final void
 	shouldEnrichWithLastModificationDate() {
-		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		final long lastModified = UTC_12_01;
 		timestamp.enrich(lastModified, -1);
 		final Timestamp expected = new Timestamp().set(lastModified);
 		assertThat(timestamp.getYear(), is(expected.getYear()));
@@ -139,7 +162,7 @@ public class TimestampTest {
 
 	@Test public final void
 	shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
-		final long lastModified = getCurrentTimeMillisTimestampCompatible();
+		final long lastModified = UTC_12_01;
 		final int lastModifiedDelta = 2;
 		timestamp.enrich(lastModified, lastModifiedDelta);
 		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
@@ -163,7 +186,7 @@ public class TimestampTest {
 
 	@Test public final void
 	shouldEnrichDateInformationFromOtherTimeStamp() {
-		final Timestamp other = new Timestamp().set(getCurrentTimeMillisTimestampCompatible());
+		final Timestamp other = new Timestamp().set(UTC_12_01);
 		timestamp.set(0).enrich(other);
 
 		assertThat(timestamp.getYear(), is(other.getYear()));
@@ -199,8 +222,4 @@ public class TimestampTest {
 		assertThat(timestamp.getTimezone(), is(Byte.MIN_VALUE));
 	}
 
-	private long getCurrentTimeMillisTimestampCompatible() {
-		// Timestamp is not storing milliseconds now => remove them
-		return (System.currentTimeMillis() / 1000) * 1000;
-	}
 }
