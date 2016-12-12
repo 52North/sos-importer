@@ -38,6 +38,7 @@ import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step4aModel;
 import org.n52.sos.importer.model.StepModel;
+import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.Step3Panel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -141,6 +142,11 @@ public class Step3Controller extends StepController {
 		step3Model.addSelection(selection);
 		selP = step3Panel.getLastChildPanel();
 		selP.assign(new Column(number,firstLineWithData));
+		if (selection.size() == 2 && selection.get(1).equals("UNIX time")){
+			DateAndTime dtm = new DateAndTime();
+			dtm.setGroup("1");
+			ModelStore.getInstance().add(dtm);
+		}
 		//
 		// when having reached the last column, merge positions and date&time
 		if (step3Model.getMarkedColumn() + 1 == 
