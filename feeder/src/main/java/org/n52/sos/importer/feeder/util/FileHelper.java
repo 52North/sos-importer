@@ -32,6 +32,8 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,18 +56,8 @@ public class FileHelper {
 	
 	protected static String shortenStringViaMD5Hash(final String longString) {
 		try {
-			final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(longString.getBytes());
-			final byte[] hash = messageDigest.digest();
-
-			//converting byte array to Hexadecimal String
-			final StringBuilder sb = new StringBuilder(2*hash.length);
-			for(final byte b : hash){
-				sb.append(String.format("%02x", b&0xff));
-			}
-
-			return sb.toString();
-
+			final MessageDigest md5 = MessageDigest.getInstance("MD5");
+			return DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
 		} catch (final NoSuchAlgorithmException e) {
 			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
 			LOG.debug("Exception thrown: {}", e.getMessage(), e);
