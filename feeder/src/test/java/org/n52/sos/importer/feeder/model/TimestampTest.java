@@ -58,14 +58,27 @@ public class TimestampTest {
 
 	@Test public void
 	shouldSetAllValuesViaSetLong() {
+		shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getDefault());
+	}
+
+	/*
+	 * Test for Issue #63: Cannot build importer when host in timezone MST (-07:00)
+	 *
+	 * https://github.com/52North/sos-importer/issues/63
+	 */
+	@Test public void
+	shouldSetAllValuesViaSetLongUsingTimeZoneMST() {
+		timestamp.setTimezone((byte) -7);
+		shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getTimeZone("MST"));
+	}
+
+	private void shouldSetAllValuesViaSetLongUsingTimeZone(final TimeZone tz) {
 		// given
-		final TimeZone tz = TimeZone.getDefault();
 		String sign = "-";
 		int rawOffset = tz.getRawOffset();
 		if (rawOffset>= 0) {
 			sign = "+";
 		}
-		rawOffset = Math.abs(rawOffset);
 		final int offsetInHours = rawOffset / millisPerHour; 
 		final int hours = 12 + offsetInHours;
 		final int minutes = (rawOffset - (offsetInHours * millisPerHour)) / millisPerMinute;
@@ -74,7 +87,7 @@ public class TimestampTest {
 		// why minutes+1?
 		final int minutesTime = Integer.parseInt(minutesString)+1;
 		final String timeMinutesString = minutesTime < 10? "0"+minutesTime : Integer.toString(minutesTime);
-		final String offsetInHoursString = String.format("%02d", offsetInHours);
+		final String offsetInHoursString = String.format("%02d", Math.abs(offsetInHours));
 		final String asExpected = String.format("1970-01-01T%s:%s:00%s%s:%s",
 				hoursString,
 				timeMinutesString,
