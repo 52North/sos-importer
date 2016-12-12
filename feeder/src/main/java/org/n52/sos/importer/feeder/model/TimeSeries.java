@@ -33,6 +33,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.xmlbeans.XmlString;
+import org.n52.oxf.sos.observation.ObservationParameters;
+import org.n52.oxf.sos.observation.SweArrayObservationParameters;
+import org.n52.oxf.sos.request.InsertObservationParameters;
+import org.n52.oxf.xml.NcNameResolver;
+import org.n52.oxf.xml.XMLConstants;
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.model.requests.InsertObservation;
+
 import net.opengis.swe.x20.BooleanType;
 import net.opengis.swe.x20.CountType;
 import net.opengis.swe.x20.DataArrayDocument;
@@ -44,17 +53,6 @@ import net.opengis.swe.x20.QuantityType;
 import net.opengis.swe.x20.TextEncodingType;
 import net.opengis.swe.x20.TextType;
 import net.opengis.swe.x20.TimeType;
-
-import org.apache.xmlbeans.XmlString;
-import org.n52.oxf.sos.observation.ObservationParameters;
-import org.n52.oxf.sos.observation.SweArrayObservationParameters;
-import org.n52.oxf.sos.request.InsertObservationParameters;
-import org.n52.oxf.xml.NcNameResolver;
-import org.n52.oxf.xml.XMLConstants;
-import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
 
 public class TimeSeries {
 

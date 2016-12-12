@@ -181,10 +181,7 @@ public class OneTimeFeeder implements Runnable {
 					if (config.isRemoteFile()) {
 						fileName = directory + "_counter";
 					} else {
-						fileName = config.getConfigFile().getCanonicalPath() +
-								"_" +
-								dataFile.getCanonicalPath() +
-								"_counter";
+						fileName = getLocalFilename();
 					}
 					counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
 					LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
@@ -217,8 +214,8 @@ public class OneTimeFeeder implements Runnable {
 					}
 					// override counter file
 					try (
-							final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-							final PrintWriter out = new PrintWriter(counterFileWriter);) {
+						final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
+						final PrintWriter out = new PrintWriter(counterFileWriter);) {
 						out.println(lastLine);
 					}
 
@@ -244,13 +241,19 @@ public class OneTimeFeeder implements Runnable {
 		}
 	}
 
+	protected String getLocalFilename() throws IOException {
+		return config.getConfigFile().getCanonicalPath() +
+				"_" +
+				dataFile.getCanonicalPath() +
+				"_counter";
+	}
+
 	private boolean isLinuxOrSimilar() {
 		final String osName = System.getProperty("os.name").toLowerCase();
 		return osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0;
 	}
 
-	private void log(final Exception e)
-	{
+	private void log(final Exception e)	{
 		LOG.error("Exception thrown: {}", e.getMessage());
 		LOG.debug("Exception Stack Trace:", e);
 	}

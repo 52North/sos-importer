@@ -32,6 +32,8 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,28 +47,22 @@ public class FileHelper {
 	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
 	
 	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
+		LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
 		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
 	}
 
-	public static String cleanPathToCreateFileName(final String fileName)
-	{
+	public static String cleanPathToCreateFileName(final String fileName) {
+		LOG.trace("cleanPathToCreateFileName({})", fileName);
 		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
 	}
 	
 	public static String shortenStringViaMD5Hash(final String longString) {
 		try {
-			final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(longString.getBytes());
-			final byte[] hash = messageDigest.digest();
-
-			//converting byte array to Hexadecimal String
-			final StringBuilder sb = new StringBuilder(2*hash.length);
-			for(final byte b : hash){
-				sb.append(String.format("%02x", b&0xff));
-			}
-
-			return sb.toString();
-
+			LOG.trace("shortenStringViaMD5Hash({})", longString);
+			final MessageDigest md5 = MessageDigest.getInstance("MD5");
+			String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
+			LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
+			return shortString;
 		} catch (final NoSuchAlgorithmException e) {
 			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
 			LOG.debug("Exception thrown: {}", e.getMessage(), e);
@@ -74,13 +70,13 @@ public class FileHelper {
 		}
 	}
 
-	public static File getHome()
-	{
-		final String baseDir = System.getProperty("user.home") + File.separator
+	public static File getHome() {
+		final String homePath = System.getProperty("user.home") + File.separator
 				+ ".SOSImporter" + File.separator;
-		final File home = new File(baseDir);
+		LOG.trace("Estimated importer home '{}'", homePath);
+		final File home = new File(homePath);
 		if (!home.exists() && !home.mkdir()) {
-			LOG.error("Could not create importer home '{}'",home.getAbsolutePath());
+			LOG.error("Could not create importer home '{}'", home.getAbsolutePath());
 		}
 		return home;
 	}

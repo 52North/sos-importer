@@ -309,8 +309,9 @@ public final class SensorObservationService {
 				} else {
 					logSkippedLine(values);
 				}
-				udpateLineCounter();
+				incrementLineCounter();
 			}
+			lastLine = lineCounter;
 			logTiming(startReadingFile);
 			break;
 
@@ -343,7 +344,7 @@ public final class SensorObservationService {
 				} else {
 					logSkippedLine(values);
 				}
-				udpateLineCounter();
+				incrementLineCounter();
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
 						isSampleBasedDataFile, isInSample, lineCounter, sampleStartLine, sampleSize, sampleDataOffset);
@@ -384,7 +385,7 @@ public final class SensorObservationService {
 				new Date(System.currentTimeMillis()).toString());
 	}
 
-	private void udpateLineCounter() {
+	private void incrementLineCounter() {
 		lineCounter++;
 		if (lineCounter % 10000 == 0) {
 			LOG.info("Processed line {}.",lineCounter);
