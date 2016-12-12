@@ -128,8 +128,9 @@ public class DataFile {
 
 	private boolean checkWindowsJavaApiBugJDK6203387(final File file) {
 		if (isWindows()) {
+			FileReader fr = null;
 			try {
-				new FileReader(file);
+				fr = new FileReader(file);
 			}
 			catch (final FileNotFoundException fnfe) {
 				// TODO add more language specific versions of this error message
@@ -143,6 +144,15 @@ public class DataFile {
 						fnfe.getMessage().indexOf(file.getName()) >=0)
 				{
 					return true;
+				}
+			}
+			finally {
+				if (fr != null) {
+					try {
+						fr.close();
+					} catch (IOException e) {
+						LOG.error("Exception thrown!", e);
+					}
 				}
 			}
 		}

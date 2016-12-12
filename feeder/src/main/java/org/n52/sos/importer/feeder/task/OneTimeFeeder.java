@@ -217,8 +217,8 @@ public class OneTimeFeeder implements Runnable {
 					}
 					// override counter file
 					try (
-							final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-							final PrintWriter out = new PrintWriter(counterFileWriter);) {
+						final FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
+						final PrintWriter out = new PrintWriter(counterFileWriter);) {
 						out.println(lastLine);
 					}
 

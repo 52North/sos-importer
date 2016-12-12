@@ -48,12 +48,11 @@ public class FileHelper {
 		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
 	}
 
-	public static String cleanPathToCreateFileName(final String fileName)
-	{
+	public static String cleanPathToCreateFileName(final String fileName) {
 		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
 	}
 	
-	public static String shortenStringViaMD5Hash(final String longString) {
+	protected static String shortenStringViaMD5Hash(final String longString) {
 		try {
 			final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			messageDigest.update(longString.getBytes());
@@ -74,8 +73,7 @@ public class FileHelper {
 		}
 	}
 
-	public static File getHome()
-	{
+	public static File getHome() {
 		final String baseDir = System.getProperty("user.home") + File.separator
 				+ ".SOSImporter" + File.separator;
 		final File home = new File(baseDir);
