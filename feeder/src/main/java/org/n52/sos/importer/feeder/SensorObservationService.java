@@ -311,6 +311,7 @@ public final class SensorObservationService {
 				}
 				incrementLineCounter();
 			}
+			lastLine = lineCounter;
 			logTiming(startReadingFile);
 			break;
 

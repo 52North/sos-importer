@@ -47,17 +47,22 @@ public class FileHelper {
 	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
 	
 	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
+		LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
 		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
 	}
 
 	public static String cleanPathToCreateFileName(final String fileName) {
+		LOG.trace("cleanPathToCreateFileName({})", fileName);
 		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
 	}
 	
-	protected static String shortenStringViaMD5Hash(final String longString) {
+	public static String shortenStringViaMD5Hash(final String longString) {
 		try {
+			LOG.trace("shortenStringViaMD5Hash({})", longString);
 			final MessageDigest md5 = MessageDigest.getInstance("MD5");
-			return DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
+			String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
+			LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
+			return shortString;
 		} catch (final NoSuchAlgorithmException e) {
 			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
 			LOG.debug("Exception thrown: {}", e.getMessage(), e);
@@ -66,11 +71,12 @@ public class FileHelper {
 	}
 
 	public static File getHome() {
-		final String baseDir = System.getProperty("user.home") + File.separator
+		final String homePath = System.getProperty("user.home") + File.separator
 				+ ".SOSImporter" + File.separator;
-		final File home = new File(baseDir);
+		LOG.trace("Estimated importer home '{}'", homePath);
+		final File home = new File(homePath);
 		if (!home.exists() && !home.mkdir()) {
-			LOG.error("Could not create importer home '{}'",home.getAbsolutePath());
+			LOG.error("Could not create importer home '{}'", home.getAbsolutePath());
 		}
 		return home;
 	}
