@@ -2,7 +2,7 @@
 <SosImportConfiguration xsi:schemaLocation="https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.4/">
     <DataFile referenceIsARegularExpression="false">
         <LocalFile>
-            <Path>/home/pi/Desktop/SOS/test/temperature.csv</Path>
+            <Path>src/test/resources/issue-058/data_obs.csv</Path>
             <Encoding>UTF-8</Encoding>
         </LocalFile>
     </DataFile>
