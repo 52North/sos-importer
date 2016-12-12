@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration xsi:schemaLocation="https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.4/">
+    <DataFile referenceIsARegularExpression="false">
+        <LocalFile>
+            <Path>C:\PathtotheFolder\xtest\</Path>
+			<RegularExpresssionForAllowedFileNames>NAMEOFREGEX.*</RegularExpresssionForAllowedFileNames>
+            <Encoding>UTF-8</Encoding>
+        </LocalFile>
+    </DataFile>
+    <SosMetadata>
+        <URL>http://example.com/52n-sos-webapp/sos</URL>
+        <Offering generate="true"/>
+        <Version>2.0.0</Version>
+        <Binding>POX</Binding>
+    </SosMetadata>
+    <CsvMetadata>
+        <ColumnAssignments>
+            <Column>
+                <Number>0</Number>
+                <Type>DATE_TIME</Type>
+                <Metadata>
+                    <Key>GROUP</Key>
+                    <Value>1</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>PARSE_PATTERN</Key>
+                    <Value>yyyyMMdd HHmmss</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>COMBINATION</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>TIME_ZONE</Key>
+                    <Value>-4</Value>
+                </Metadata>
+            </Column>
+            <Column>
+                <Number>1</Number>
+                <Type>MEASURED_VALUE</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>NUMERIC</Value>
+                </Metadata>
+            </Column>
+            <Column>
+                <Number>2</Number>
+                <Type>FOI</Type>
+            </Column>
+            <Column>
+                <Number>3</Number>
+                <Type>OBSERVED_PROPERTY</Type>
+            </Column>
+            <Column>
+                <Number>4</Number>
+                <Type>UOM</Type>
+            </Column>
+            <Column>
+                <Number>5</Number>
+                <Type>SENSOR</Type>
+            </Column>
+        </ColumnAssignments>
+        <DecimalSeparator>.</DecimalSeparator>
+        <FirstLineWithData>0</FirstLineWithData>
+        <Parameter>
+            <CommentIndicator>#</CommentIndicator>
+            <ColumnSeparator>;</ColumnSeparator>
+            <TextIndicator>"</TextIndicator>
+        </Parameter>
+        <UseHeader>false</UseHeader>
+    </CsvMetadata>
+    <AdditionalMetadata>
+        <Metadata>
+            <Key>IMPORT_STRATEGY</Key>
+            <Value>SingleObservation</Value>
+        </Metadata>
+        <FOIPosition>
+            <URI>Name of the feature of interest</URI>
+            <Position>
+                <Alt unit="meters">114.0</Alt>
+                <EPSGCode>4326</EPSGCode>
+                <Lat unit="deg">52.0</Lat>
+                <Long unit="deg">-42.0</Long>
+            </Position>
+        </FOIPosition>
+    </AdditionalMetadata>
+</SosImportConfiguration>
