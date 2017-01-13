@@ -64,7 +64,7 @@ public class TestIssue57ReadFoiPosition {
 		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
 		Assert.assertThat(foi.getUri(), Is.is("SE10_0AB_1"));
 		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
-		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("UNIT_NOT_SET"));
+		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
 		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
 		Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
 		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
