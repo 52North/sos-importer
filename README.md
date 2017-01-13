@@ -145,7 +145,7 @@ The `SosMetadata` section has one optional attribute `insertSweArrayObservationT
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/04_CsvMetadata.png" alt="04_CsvMetadata.png" width='482' height='278' />
 
-The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [[SosImporter#Extend_CsvParser][Extend !CsvParser]] for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections.
+The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [Extend CsvParser](#Extend_CsvParser) section below for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections.
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/05_Column.png" alt="05_Column.png" width='532' height='724' />
 
@@ -190,20 +190,21 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links).
 
 
-### !AdditionalMetadata
+### AdditionalMetadata
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/06_AdditionalMetadata.png" alt="06_AdditionalMetadata.png" width='575' height='644' />
 
 The `AdditionalMetadata` is the last of the four top level sections and it is optional. The intention is to provide additional metadata. These are generic `Metadata` elements, `Resources` like `Sensor`, `ObservedProperty`, `FeatureOfInterest`, `UnitOfMeasurement` and <code>FOIPosition</code>s. The table below lists the supported values for the `Metadata` elements.
 
 | *Key* | *Value* |
-| `IMPORT_STRATEGY` | The import strategy to use: `SingleObservation` (default strategy) or `SweArrayObservationWithSplitExtension`. The second one is only working if the SOS instance supports the [[SplitDataArrayIntoObservations][SensorObservationServiceIVDocumentation#SplitDataArrayIntoObservations]] request extension. It results in better performance and less data transfered. |
+| --- | --- |
+| `IMPORT_STRATEGY` | The import strategy to use: `SingleObservation` (default strategy) or `SweArrayObservationWithSplitExtension`. The second one is only working if the SOS instance supports the [SplitDataArrayIntoObservations](https://wiki.52north.org/SensorWeb/SensorObservationServiceIVDocumentation#SplitDataArrayIntoObservations) request extension. It results in better performance and less data transfered. |
 | `HUNK_SIZE` | Integer value defining the number of rows that should be combined in one SWEArrayObservation. |
 | `OTHER` | Not used. Maybe used by other `CsvParser` implementations. |
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/07_Resource.png" alt="07_Resource.png" width='241' height='220' />
 
-A `Resource` is a sensor, observed property, feature of interest or unit of measurement and it has a unique `ID` within each configuration. A resource can have a `Position` (e.g. a feature of interest). The information can be entered manually or it can be generated from values in the same line of the data file (=GeneratedResource=).
+A `Resource` is a sensor, observed property, feature of interest or unit of measurement and it has a unique `ID` within each configuration. A resource can have a `Position` (e.g. a feature of interest). The information can be entered manually or it can be generated from values in the same line of the data file (`GeneratedResource`).
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/08_GeneratedResource.png" alt="08_GeneratedResource.png" width='496' height='503' />
 
@@ -211,7 +212,7 @@ The `Number` define the `Column` which content is used for the identifier and na
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/09_ManualResource.png" alt="09_ManualResource.png" width='438' height='399' />
 
-A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the URI :` URI + Name).
+A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := URI + Name`).
 
 
 ## Road map
@@ -222,11 +223,11 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the URI :` UR
    * [ ] &rarr; denotes open issues
    * [x] &rarr; denotes closed issues
 
-:information_source: Dear developer, please update our [[https://trello.com/b/kydEVMz3/sos-importer][trello board]] accordingly!
+:information_source: Dear developer, please update our [trello board](https://trello.com/b/kydEVMz3/sos-importer) accordingly!
 
-### %M% Open Features
+### :white_large_square: Open Features
 
-:information_source: Please add feature requests as [[https://github.com/52North/sos-importer/issues/new][new issue]] with label **enhancement**.
+:information_source: Please add feature requests as [new issue](https://github.com/52North/sos-importer/issues/new) with label **enhancement**.
 
    * [ ] Allow regular expressions to describe dynamic directory/file names (repeated feeding)
    * [ ] Generic web client for multiple protocol support
