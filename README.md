@@ -119,19 +119,19 @@ The `DataFile` contains information about the file containing the observations. 
 | *Attribute* | *Description* | *Optional* |
 | --- | --- | --- |
 | `referenceIsARegularExpression` | If set to TRUE the LocaleFile.Path or RemoteFile.URL contains a regular expression needing special handling before retrieving the data file. |:x: |
-| `useDateFromLastModifiedDate` | If set to TRUE the last modified date of the datafile will be used as date value for the observation of this data file.| [x] |
-| `lastModifiedDelta` | If available and `useDateFromLastModifiedDate` is set to TRUE, the date value will be set to `n` days before last modified date. | [x] |
-| `regExDateInfoInFileName` | If present, the contained regular expression will be applied to the file name of the datafile to extract date information in combination with the "dateInfoPattern". Hence, this pattern is used to extract the date string and the dateInfoPattern is used to convert this date string into valid date information. The pattern MUST contain one group that holds all date information! | [x] |
-| `dateInfoPattern` | MUST be set, if `regExDateInfoInFileName` is set, for converting the date string into valid date information. Supported pattern elements: `y`, `M`, `d`, `H`, `m`, `s`, `z`, `Z` | [x] |
-| `headerLine` | Identifies the header line. MUST be set in the case of having the header line repeatedly in the data file. | [x] |
-| `sampleStartRegEx` | Identifies the beginning of an new sample in the data file. Requires the presence of the following attributes: `sampleDateOffset`, `sampleDateExtractionRegEx`, `sampleDatePattern`, `sampleDataOffset`. A "sample" is a single samplingrun having additional metadata like date information which is not contained in the lines. | [x] |
-| `sampleDateOffset` | Defines the offset in lines between the first line of a sample and the line containing the date information. | [x] |
-| `sampleDateExtractionRegEx` | Regular expression to extract the date information from the line containing the date information of the current sample. The expression MUST result in ONE group. This group will be parsed to a `java.util.Date` using `sampleDatePattern` attribute. | [x] |
-| `sampleDatePattern` | Defines the pattern used to parse the date information of the current sample. | [x] |
-| `sampleDataOffset` | Defines the offset in lines from sample beginning till the first lines with data. | [x] |
-| `sampleSizeOffset` | Defines the offset in lines from sample beginning till the line containing the sample size in lines with data. | [x] |
-| `sampleSizeRegEx` | Defines a regular expression to extract the sample size. The regular expression MUST result in ONE group which contains an integer value. | [x] |
-| `sampleSizeDivisor` | Defines a divisor that is applied to the sample size. Can be used in cases the sample size is not giving the number of samples but the time span of the sample. The divisor is used to calculate the number of lines in a sample. | [x] |
+| `useDateFromLastModifiedDate` | If set to TRUE the last modified date of the datafile will be used as date value for the observation of this data file.| :white_check_mark: |
+| `lastModifiedDelta` | If available and `useDateFromLastModifiedDate` is set to TRUE, the date value will be set to `n` days before last modified date. | :white_check_mark: |
+| `regExDateInfoInFileName` | If present, the contained regular expression will be applied to the file name of the datafile to extract date information in combination with the "dateInfoPattern". Hence, this pattern is used to extract the date string and the dateInfoPattern is used to convert this date string into valid date information. The pattern MUST contain one group that holds all date information! | :white_check_mark: |
+| `dateInfoPattern` | MUST be set, if `regExDateInfoInFileName` is set, for converting the date string into valid date information. Supported pattern elements: `y`, `M`, `d`, `H`, `m`, `s`, `z`, `Z` | :white_check_mark: |
+| `headerLine` | Identifies the header line. MUST be set in the case of having the header line repeatedly in the data file. | :white_check_mark: |
+| `sampleStartRegEx` | Identifies the beginning of an new sample in the data file. Requires the presence of the following attributes: `sampleDateOffset`, `sampleDateExtractionRegEx`, `sampleDatePattern`, `sampleDataOffset`. A "sample" is a single samplingrun having additional metadata like date information which is not contained in the lines. | :white_check_mark: |
+| `sampleDateOffset` | Defines the offset in lines between the first line of a sample and the line containing the date information. | :white_check_mark: |
+| `sampleDateExtractionRegEx` | Regular expression to extract the date information from the line containing the date information of the current sample. The expression MUST result in ONE group. This group will be parsed to a `java.util.Date` using `sampleDatePattern` attribute. | :white_check_mark: |
+| `sampleDatePattern` | Defines the pattern used to parse the date information of the current sample. | :white_check_mark: |
+| `sampleDataOffset` | Defines the offset in lines from sample beginning till the first lines with data. | :white_check_mark: |
+| `sampleSizeOffset` | Defines the offset in lines from sample beginning till the line containing the sample size in lines with data. | :white_check_mark: |
+| `sampleSizeRegEx` | Defines a regular expression to extract the sample size. The regular expression MUST result in ONE group which contains an integer value. | :white_check_mark: |
+| `sampleSizeDivisor` | Defines a divisor that is applied to the sample size. Can be used in cases the sample size is not giving the number of samples but the time span of the sample. The divisor is used to calculate the number of lines in a sample. | :white_check_mark: |
 
 
 ### SosMetadata
@@ -426,25 +426,35 @@ You can just download exmaple files to see how the application works:
 ## How to Build
 
    1. Have jdk, maven, and git installed already.
-   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:<verbatim>~$ git clone https://github.com/52North/OX-Framework.git
-~$ cd OX-Framework
-~/OX-Framework$ mvn install</verbatim>or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!): <verbatim>~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
-~/OX-Framework$ git fetch eike
-~/OX-Framework$ git checkout -b eike-develop eike/develop
-~/OX-Framework$ mvn clean instal</verbatim>.
-   1. Checkout latest version of SOS-Importer with: <verbatim>~$ git clone https://github.com/52North/sos-importer.git</verbatim> in a separate directory.
-   1. Swtich to required branch (=master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
-   1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)): <verbatim><repository>
-	<id>osgeo</id>
-	<name>Open Source Geospatial Foundation Repository</name>
-	<url>http://download.osgeo.org/webdav/geotools/</url>
-</repository></verbatim>
-   1. Build SOS importer modules: <verbatim>~/sos-importer$ mvn install</verbatim>
+   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:<br />
+   ```
+   ~$ git clone https://github.com/52North/OX-Framework.git
+   ~$ cd OX-Framework
+   ~/OX-Framework$ mvn install
+  ```
+or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!): <br />
+  ```
+  ~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
+  ~/OX-Framework$ git fetch eike
+  ~/OX-Framework$ git checkout -b eike-develop eike/develop
+  ~/OX-Framework$ mvn clean instal
+  ```
+   1. Checkout latest version of SOS-Importer with: `~$ git clone https://github.com/52North/sos-importer.git` in a separate directory.
+   1. Switch to required branch (`master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
+   1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)):
+   ```
+  <repository>
+  	 <id>osgeo</id>
+  	 <name>Open Source Geospatial Foundation Repository</name>
+  	 <url>http://download.osgeo.org/webdav/geotools/</url>
+  </repository>
+  ```
+   1. Build SOS importer modules: `~/sos-importer$ mvn install`
    1. Find the jar files here:
-      * _wizard_: `~/52n-sos-importer/wizard/target/=
-      * _feeder_: `~/52n-sos-importer/feeder/target/=
+      * _wizard_: `~/52n-sos-importer/wizard/target/`
+      * _feeder_: `~/52n-sos-importer/feeder/target/`
 
-| *URLs* | *Comment* |
+| *URLs* | *Content* |
 | --- | --- |
 | git: `https://github.com/52North/sos-importer/tree/develop` | latest development version |
 | git: `https://github.com/52North/sos-importer/tree/master` | latest stable version |
@@ -481,21 +491,6 @@ If you have any problems, please check the issues section for the sos importer f
    * [All open issues](https://github.com/52North/sos-importer/issues)
    * [All closed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed)
    * [All issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue)
-
-# Feedback
-
-   * Add user interface for file output (generates request as separate XML files instead of sending them) for testing and inspection before inserting data. This requires the OX-F to be extended with functionality to create and retrieve request documents. -- Main.DanielNuest - 2013-01-07
-      * Switch to slf4j + logback logging -- Main.EikeHinderkJuerrens - 2013-07-17
-   * Step 2:
-      * The highlighting for the selected lines is a bit misleading. I think it is better to highlight the lines that will be used, so if I say "Ignore data until line 3", then the first two lines should be ignored and all others marked as selected. -- Main.DanielNuest - 2012-11-06
-         * Interesting point. [x] -- Main.EikeHinderkJuerrens - 2013-01-04
-      * I think a "first line contain column names" would be a good option &gt; it has the same effect than ignoring everything until line 2, but might be more easily understandable by users. And clicking that checkbox can effectively just set the value of the "ignore lines" input field. -- Main.DanielNuest - 2012-11-06
-   * Step 3:
-      * Ignored lines should not be shown in Step 3 -- Main.DanielNuest - 2012-11-06
-   * Why can I not resize the window? -- Main.DanielNuest - 2012-11-06
-
-
-####### OLD OLD
 
 For more information on this project visit [its homepage](https://wiki.52north.org/bin/view/SensorWeb/SosImporter).
 
