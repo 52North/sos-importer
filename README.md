@@ -240,28 +240,28 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
 
 ### :white_large_square: 0.5
 
-   * [ ] Switch to `joda-time` or [[https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html][EOL]]
+   * [ ] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
    * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
    * [ ] Switch wizard to Java FX.
-   * [x] [[https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+][Fixed issues]]
+   * [x] [Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)
 
 
 ### :white_check_mark: 0.4
 
-   * *Code:* [[https://github.com/52North/sos-importer/tree/52n-sos-importer-0.4.0][github]]
+   * *Code:* [github](https://github.com/52North/sos-importer/tree/52n-sos-importer-0.4.0)
    * *Features*
       * Rename *Core* module to *Wizard*
       * Support for SOS 2.0 incl. Binding definition
       * Start Screen offers button to see all dependency licenses
       * Support for sensors with multiple outputs
       * Introduced import strategies:
-         * !SingleObservation: Default strategy<
-         * !SweArrayObservationWithSplitExtension: %BR %Reads hunksize# lines and imports each time series using an !SWEArrayObservation in combination with the !SplitExtension of the 52North SOS implementation. Hence, this strategy works only in combination with 52North implementation. Other impl. might work, too, but not as expected. Hunksize and import strategy are both optional &lt;AdditionalMetadata&gt;&lt;Metadata&gt; elements.
-      * Support for date information extraction from file name using two new OPTIONAL attributes in element &lt;DataFile&gt;:
+         * SingleObservation: `Default strategy`
+         * SweArrayObservationWithSplitExtension: <br /> Reads `hunksize` # lines and imports each time series using an SWEArrayObservation in combination with the SplitExtension of the 52North SOS implementation. Hence, this strategy works only in combination with 52North implementation. Other impl. might work, too, but not as expected. Hunksize and import strategy are both optional `<AdditionalMetadata><Metadata>` elements.
+      * Support for date information extraction from file name using two new OPTIONAL attributes in element `<DataFile>`:
          * "regExDateInfoInFileName" for extracting date information from file names.
-         * "dateInfoPattern" for parsing the date information into a java.util.Date.
+         * "dateInfoPattern" for parsing the date information into a `java.util.Date`.
       * Date information extraction from last modified date using two new OPTIONAL attributes:
-         * "useDateFromLastModifiedDate" for enabling this feature</li>
+         * "useDateFromLastModifiedDate" for enabling this feature
          * "lastModifiedDelta" for moving the date n days back (this attribute is OPTIONAL for this feature, too.)
       * Ignore lines with regular expressions feature: 0..infinity elements can be added to the element. Each element will be used as regular expression and applied to each line of the data file before parsing.
       * Handling of data files containing several sample runs. A sample run contains additional metadata like its size (number of performed measurements) and a date. The required attributes are:
@@ -272,15 +272,15 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
          * "sampleDataOffset" - the offset in lines from sample beginning till the first lines with data.
          * "sampleSizeOffset" - the offset in lines from sample beginning till the line containing the sample size in lines with data.
          * "sampleSizeRegEx" - the regular expression to extract the sample size. The regular expression MUST result in ONE group which contains an integer value.
-      * Setting of timeout buffer for the insertion of !SweArrayObservations:  %BR%With the attribute "insertSweArrayObservationTimeoutBuffer" of &lt;SosMetadata" it is possible to define an additional timeout buffer for connect and socket timeout when using import strategy !SweArrayObservationWithSplitExtension". Scale is in milliseconds, e.g. 1000 `&gt; 1s more connect and socket timeout. The size of this value is related to the set-up of the SOS server, importer, and the HUNK_SIZE value.%BR%The current OX-F !SimpleHttpClient implementation uses a default value of 5s, hence setting this to 25,000 results in 30s connection and socket timeout.
+      * Setting of timeout buffer for the insertion of SweArrayObservations: <br /> With the attribute "insertSweArrayObservationTimeoutBuffer" of `<SosMetadata>` it is possible to define an additional timeout buffer for connect and socket timeout when using import strategy "SweArrayObservationWithSplitExtension". Scale is in milliseconds, e.g. `1000` &rarr; 1s more connect and socket timeout. The size of this value is related to the set-up of the SOS server, importer, and the `HUNK_SIZE` value.<br/>The current OX-F SimpleHttpClient implementation uses a default value of 5s, hence setting this to `25,000` results in 30s connection and socket timeout.
       * More details can be found in the release notes.
    * *Fixed Bugs/Issues*
-      * [[https://github.com/52North/sos-importer/issues/6][#06]]: Hardcoded time zone in test
-      * [[https://github.com/52North/sos-importer/issues/10][#10]]: NPE during feeding if binding value is not set
-      * [[https://github.com/52North/sos-importer/issues/11][#11]]: !BadLocationException in the case of having empty lines in csv file
-      * [[https://github.com/52North/sos-importer/issues/20][#20]]: Current GUI is broken when using sample based files with minor inconsistencies
-      * [[https://github.com/52North/sos-importer/issues/24][#24]]: Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
-      * [[https://github.com/52North/sos-importer/issues/25][#25]]: Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
+      * [#06](https://github.com/52North/sos-importer/issues/6): Hardcoded time zone in test
+      * [#10](https://github.com/52North/sos-importer/issues/10): NPE during feeding if binding value is not set
+      * [#11](https://github.com/52North/sos-importer/issues/11): !BadLocationException in the case of having empty lines in csv file
+      * [#20](https://github.com/52North/sos-importer/issues/20): Current GUI is broken when using sample based files with minor inconsistencies
+      * [#24](https://github.com/52North/sos-importer/issues/24): Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
+      * [#25](https://github.com/52North/sos-importer/issues/25): Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
       * #NN: Fix bug with timestamps of sample files
       * #NN: Fix bug with incrementing lastline causing data loss
       * #NN: Fix bug with data files without headerline
@@ -290,30 +290,30 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
       * #NN: fix/combinationpanel: On step 3 it was not possible to enter parse patterns for position and date & time
       * #NN: fix problem with textfield for CSV file when switching to German      
       * #NN: fix problem with multiple sensors in CSV file and register sensor
-      * [[https://bugzilla.52north.org/show_bug.cgi?id=878][878]]
+      * [878](https://bugzilla.52north.org/show_bug.cgi?id=878)
       * "Too many columns issue"
-      * [[https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=milestone%3A0.4.0+is%3Aclosed][Fixed issues]]
+      * [Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=milestone%3A0.4.0+is%3Aclosed)
    * *Release files*:
-      * *Feeder Module*: [[https://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.4.0/?C=M;O=D][Snapshots]] - :information_source: Download newest file ending with `-bin.jar`.
-      * *Wizard Module*: [[https://52north.org/maven/repo/snapshots/org/n52/sensorweb/52n-sos-importer-wizard/0.4.0/?C=M;O=D][Snapshots]] - :information_source: Download newest file ending with `-bin.jar`.
+      * *Feeder Module*: [Snapshots](https://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.4.0/?C=M;O=D) - :information_source: Download newest file ending with `-bin.jar`.
+      * *Wizard Module*: [Snapshots](https://52north.org/maven/repo/snapshots/org/n52/sensorweb/52n-sos-importer-wizard/0.4.0/?C=M;O=D) - :information_source: Download newest file ending with `-bin.jar`.
 
 
 ### :white_check_mark: 0.3
 
-   * *Release file:* [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar][Core Module]] [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar.md5][md5]], [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar][Feeding Module]] [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar.md5][md5]]
-   * *Code:* [[https://github.com/52North/sos-importer/tree/0.3.0][Github]]
+   * *Release file:* [Core Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar.md5), [Feeding Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar.md5)
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.3.0)
    * *Features*
       * [x] Use SOSWrapper from OXF
       * [x] Support more observation types
       * [x] FTP Remote File Support
    * *Fixed Bugs*
-      * [[https://bugzilla.52north.org/show_bug.cgi?id=736][736]], [[https://bugzilla.52north.org/show_bug.cgi?id=738][738]], [[https://bugzilla.52north.org/show_bug.cgi?id=650][650]], [[https://bugzilla.52north.org/show_bug.cgi?id=630][630]], [[https://bugzilla.52north.org/show_bug.cgi?id=645][645]], [[https://bugzilla.52north.org/show_bug.cgi?id=733][733]], [[https://bugzilla.52north.org/show_bug.cgi?id=629][629]], [[https://bugzilla.52north.org/show_bug.cgi?id=668][668]], [[https://bugzilla.52north.org/show_bug.cgi?id=589][589]], [[https://bugzilla.52north.org/show_bug.cgi?id=649][649]], [[https://bugzilla.52north.org/show_bug.cgi?id=669][669]], [[https://bugzilla.52north.org/show_bug.cgi?id=586][586]], [[https://bugzilla.52north.org/show_bug.cgi?id=707][707]], [[https://bugzilla.52north.org/show_bug.cgi?id=523][523]]
+      * [736](https://bugzilla.52north.org/show_bug.cgi?id=736), [738](https://bugzilla.52north.org/show_bug.cgi?id=738), [650](https://bugzilla.52north.org/show_bug.cgi?id=650), [630](https://bugzilla.52north.org/show_bug.cgi?id=630), [645](https://bugzilla.52north.org/show_bug.cgi?id=645), [733](https://bugzilla.52north.org/show_bug.cgi?id=733), [629](https://bugzilla.52north.org/show_bug.cgi?id=629), [668](https://bugzilla.52north.org/show_bug.cgi?id=668), [589](https://bugzilla.52north.org/show_bug.cgi?id=589), [649](https://bugzilla.52north.org/show_bug.cgi?id=649), [669](https://bugzilla.52north.org/show_bug.cgi?id=669), [586](https://bugzilla.52north.org/show_bug.cgi?id=586), [707](https://bugzilla.52north.org/show_bug.cgi?id=707), [523](https://bugzilla.52north.org/show_bug.cgi?id=523)
 
 
 ### :white_check_mark: 0.2
 
-   * *Release file:* [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar][Core Module]] [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar.md5][md5]], [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar][Feeding Module]] [[http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar.md5][md5]]
-   * *Code:* [[https://github.com/52North/sos-importer/tree/0.2.0][Github]]
+   * *Release file:* [Core Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar.md5), [Feeding Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar.md5)
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.2.0)
    * *Features*
       * [x] maven build
       * [x] multi language support
@@ -325,7 +325,7 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
 ### :white_check_mark: 0.1
 
    * *Release file:* <a target="_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
-   * *Code:* [[https://github.com/52North/sos-importer/tree/0.1.0][Github]]
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.1.0)
    * *Features*
       * [x] Swing GUI
       * [x] CSV file support
@@ -335,17 +335,17 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
 ## Contributors
 
    * Active
-      * Main.EikeHinderkJuerrens
+      * [EHJ-52n](https://github.com/EHJ-52n/)
       * Your name here!
    * Former
       * Eric Fiedler
       * Raimund Schn&#252;rer
-      * Main.JanSchulte
+      * [janschulte](https://github.com/janschulte)
 
 
 ## Get Involved
 
-You may first get in touch using the [[mailto:swe@52north.org][sensor web mailinglist]] ([[http://list.52north.org/mailman/listinfo/swe][Mailman page including archive access]], [[http://sensorweb.forum.52north.org/][Forum view]] for browser addicted). In addition, you might follow the overall instruction about [[http://52north.org/about/get-involved/][getting involved with 52&#176;North]] which offers more than contributing as developer like designer, translator, writer, .... Your help is always welcome!
+You may first get in touch using the [sensor web mailinglist](mailto:swe@52north.org) ([Mailman page including archive access](http://list.52north.org/mailman/listinfo/swe), [Forum view](http://sensorweb.forum.52north.org/) for browser addicted). In addition, you might follow the overall instruction about [getting involved with 52&#176;North](http://52north.org/about/get-involved/) which offers more than contributing as developer like designer, translator, writer, .... Your help is always welcome!
 
 
 ## Project Funding
@@ -359,87 +359,93 @@ You may first get in touch using the [[mailto:swe@52north.org][sensor web mailin
 ## How to Run
 ### Module _feeder_
 
-   1 Have *datafile* and *configuration file* ready.
-   1 Open command line tool.
-   1 Change to directory with `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar=
-   1 Run `java -jar 52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` to see the latest supported and required parameters like this:%BR% <verbatim>usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
-				options and arguments:
-				-c file	 : read the config file and start the import process
-				-d datafile : OPTIONAL override of the datafile defined in config file
-				-p period   : OPTIONAL time period in minutes for repeated feeding</verbatim>
+   1. Have *datafile* and *configuration file* ready.
+   1. Open command line tool.
+   1. Change to directory with `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar`.
+   1. Run `java -jar 52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` to see the latest supported and required parameters like this:<br />
+```
+usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
+        options and arguments:
+        -c file	 : read the config file and start the import process
+        -d datafile : OPTIONAL override of the datafile defined in config file
+        -p period   : OPTIONAL time period in minutes for repeated feeding
+```
+
 
    * *Notes*
       * *Repeated Feeding*
-         * Element `SosImportConfiguration::DataFile::LocalFile::Path=
-            * ...set to a directory &rarr; the repeated feeding implementation will always take the newest file (regarding `java.io.File.lastModified()=) and skip the current run if no new file is available.
+         * Element `SosImportConfiguration::DataFile::LocalFile::Path`
+            * ...set to a directory &rarr; the repeated feeding implementation will always take the newest file (regarding `java.io.File.lastModified()`) and skip the current run if no new file is available.
             * ...set to a file &rarr; the repeated feeding implementation will always try to import all found observations from the datafile (:information_source: the 52&#176;North SOS implementation prohibits inserting duplicate observations! &rarr; no problem when finding some in the data file!)
 
 
 ### Module _wizard_
 
-   1 Open command line tool.
-   1 Change to directory with `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar=
-   1 Run `java -jar 52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar=
-   1 Follow the wizard to create a configuration file which can be used by the feeder module for repeated feeding or import the data once using the wizard (the second option requires the latest `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` in the same folder like the `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
+   1. Open command line tool.
+   1. Change to directory with `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
+   1. Run `java -jar 52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
+   1. Follow the wizard to create a configuration file which can be used by the feeder module for repeated feeding or import the data once using the wizard (the second option requires the latest `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` in the same folder like the `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
 
 
 ## Example tutorial
 
-Follow this list of steps or [[http://52north.org/files/sensorweb/eo2h/52n-sensorweb-sos-importer-guide.pdf][this user guide]] using the [[SosImporter#Demo_data][demo data]] to get a first user experience.
+Follow this list of steps or [this user guide](http://52north.org/files/sensorweb/eo2h/52n-sensorweb-sos-importer-guide.pdf) using the [demo data](SosImporter#Demo_data) to get a first user experience.
 
-   1 Download the example data to your computer.
-   1 Start the application with `javar -jar 52n-sos-importer-wizard-bin.jar=
-   1 Select the file you have just downloaded on step 1 and click *next*.
-   1 Increase the value of *Ignore data until line* to `1` and click *next*.
-   1 Select *Date & Time* and than *Combination* and than provide the following date parsing pattern: `dd.MM.yyyy HH:mm` and click *next*.
-   1 3x Select *Measured Value* and than *Numeric Value* and click *next*.
-   1 Set UTC offset to 0. :information_source: If you want to import data reguarly, it is common sense to use UTC for timestamps.
-   1 Feature of Interest: On the next view *Add missing metadata* select *Set Identifier manually*, click on the *pen* next to the *Name* label and enter any *name* and *URI* combination you can think of. Repeat this step 3 times (one for each time series). For time series #2 and #3 you can although select the previously entered value.
-   1 Observed property: repeat as before but enter *name* and *URI* of the observed property for each timeseries, e.g. Propan, Water and Krypton.
-   1 Unit of Measurement: repeat as before but enter *name* and *URI* of the unit of measurement for each timeseries, e.g. l,l,kg.
-   1 Sensor: repeat as before but enter *name* and *URI* of the sensor for each timeseries, that performed the observations, e.g. propane-sensor, water-meter, crypro-graph.
-   1 Define the position of the feature of interest manually, giving its coordinates.
-   1 Next, specify the URL of the SOS instance, you want to import data into.
-   1 Choose a folder to store the import configuration (for later re-use with the feeder module, for example).
-   1 Specify the OGC specification version the SOS instance supports (We recommend to use `2.0.0`!).
-   1 When using the 52N SOS, you can specify to use the import strategy !SweArrayObservation which improves the performance of the communication between feeder and SOS a lot.
-   1 On the last step, you can view the log file, configuration file or start the import procedure. That's it, now you should be able to import data into a running SOS instance from CSV files, or similar.
+   1. Download the example data to your computer.
+   1. Start the application with `javar -jar 52n-sos-importer-wizard-bin.jar`.
+   1. Select the file you have just downloaded on step 1 and click *next*.
+   1. Increase the value of *Ignore data until line* to `1` and click *next*.
+   1. Select *Date & Time* and than *Combination* and than provide the following date parsing pattern: `dd.MM.yyyy HH:mm` and click *next*.
+   1. 3x Select *Measured Value* and than *Numeric Value* and click *next*.
+   1. Set UTC offset to 0.
+      <br />:information_source: If you want to import data reguarly, it is common sense to use UTC for timestamps.
+   1. Feature of Interest: On the next view *Add missing metadata* select *Set Identifier manually*, click on the *pen* next to the *Name* label and enter any *name* and *URI* combination you can think of. Repeat this step 3 times (one for each time series). For time series #2 and #3 you can although select the previously entered value.
+   1. Observed property: repeat as before but enter *name* and *URI* of the observed property for each timeseries, e.g. Propan, Water and Krypton.
+   1. Unit of Measurement: repeat as before but enter *name* and *URI* of the unit of measurement for each timeseries, e.g. l,l,kg.
+   1. Sensor: repeat as before but enter *name* and *URI* of the sensor for each timeseries, that performed the observations, e.g. propane-sensor, water-meter, crypto-graph.
+   1. Define the position of the feature of interest manually, giving its coordinates.
+   1. Next, specify the URL of the SOS instance, you want to import data into.
+   1. Choose a folder to store the import configuration (for later re-use with the feeder module, for example).
+   1. Specify the OGC specification version the SOS instance supports (We recommend to use `2.0.0`!).
+   1. When using the 52N SOS, you can specify to use the import strategy SweArrayObservation which improves the performance of the communication between feeder and SOS a lot.
+   1. On the last step, you can view the log file, configuration file or start the import procedure. That's it, now you should be able to import data into a running SOS instance from CSV files, or similar.
 
 
 ## Demo data
 
 You can just download exmaple files to see how the application works:
-   * [[%ATTACHURL%/example-data.csv][example-data.csv]]: Example CSV file with 3 time series
+   * [example-data.csv](https://wiki.52north.org/pub/SensorWeb/SosImporter/example-data.csv): Example CSV file with 3 time series
 
 
 # Developers
 ## Todos
 
-%M% [[https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aopen+][Github issues are used to organize the work]].
+:information_source: [Github issues are used to organize the work](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aopen+).
 
 
 ## How to Build
 
-   1 Have jdk, maven, and git installed already.
-   1 Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:<verbatim>~$ git clone https://github.com/52North/OX-Framework.git
+   1. Have jdk, maven, and git installed already.
+   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:<verbatim>~$ git clone https://github.com/52North/OX-Framework.git
 ~$ cd OX-Framework
-~/OX-Framework$ mvn install</verbatim>or this fork (please check for [[https://github.com/52North/OX-Framework/pulls][open pull requests]]!): <verbatim>~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
+~/OX-Framework$ mvn install</verbatim>or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!): <verbatim>~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
 ~/OX-Framework$ git fetch eike
 ~/OX-Framework$ git checkout -b eike-develop eike/develop
 ~/OX-Framework$ mvn clean instal</verbatim>.
-   1 Checkout latest version of SOS-Importer with: <verbatim>~$ git clone https://github.com/52North/sos-importer.git</verbatim> in a separate directory.
-   1 Swtich to required branch (=master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
-   1 Set-Up the geotools repository like this ([[http://maven.apache.org/guides/mini/guide-multiple-repositories.html][maven help regarding repositories]]): <verbatim><repository>
+   1. Checkout latest version of SOS-Importer with: <verbatim>~$ git clone https://github.com/52North/sos-importer.git</verbatim> in a separate directory.
+   1. Swtich to required branch (=master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
+   1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)): <verbatim><repository>
 	<id>osgeo</id>
 	<name>Open Source Geospatial Foundation Repository</name>
 	<url>http://download.osgeo.org/webdav/geotools/</url>
 </repository></verbatim>
-   1 Build SOS importer modules: <verbatim>~/sos-importer$ mvn install</verbatim>
-   1 Find the jar files here:
+   1. Build SOS importer modules: <verbatim>~/sos-importer$ mvn install</verbatim>
+   1. Find the jar files here:
       * _wizard_: `~/52n-sos-importer/wizard/target/=
       * _feeder_: `~/52n-sos-importer/feeder/target/=
 
 | *URLs* | *Comment* |
+| --- | --- |
 | git: `https://github.com/52North/sos-importer/tree/develop` | latest development version |
 | git: `https://github.com/52North/sos-importer/tree/master` | latest stable version |
 | git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.4.0` | release 0.4.0 |
@@ -451,7 +457,7 @@ You can just download exmaple files to see how the application works:
 ## Dependencies
 
    * JAVA 1.7+
-   * List of Dependencies (generated following our [[https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus][best practice]] documentation): [[%ATTACHURL%/THIRD-PARTY.txt][THIRD-PARTY.txt]]
+   * List of Dependencies (generated following our [best practice](https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus) documentation): [THIRD-PARTY.txt](https://wiki.52north.org/pub/SensorWeb/SosImporter/THIRD-PARTY.txt)
 
 
 ## Extend `CsvParser`
@@ -464,7 +470,7 @@ To get your own parser implementation working, you need to implement the `CsvPar
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/sos-importer_csvparser.png" alt="sos-importer_csvparser.png" width='274' height='165' />
 
-In addition, you need to add `&lt;CsvParserClass&gt;` in your configuration to `&lt;CsvMetadata&gt;`. The class that MUST be used for parsing the data file. The interface `org.n52.sos.importer.feeder.CsvParser` MUST be implemented. The class name MUST contain the fully qualified package name and a zero-argument constructor MUST be provided.
+In addition, you need to add `<CsvParserClass>` in your configuration to `<CsvMetadata>`. The class that MUST be used for parsing the data file. The interface `org.n52.sos.importer.feeder.CsvParser` MUST be implemented. The class name MUST contain the fully qualified package name and a zero-argument constructor MUST be provided.
 
 The `CsvParser.init(..)` is called after the constructor and should result in a ready-to-use parser instance. `CsvParser.readNext()` returns the next "line" of values that should be processed as `String[]`. An `IOException` could be thrown if something unexpected happens during the read operation. The `CsvParser.getSkipLimit()` should return 0, if number of lines `` number of observations, or the difference between line number and line index.
 
@@ -472,9 +478,9 @@ The `CsvParser.init(..)` is called after the constructor and should result in a 
 # Troubleshooting/Bugs
 
 If you have any problems, please check the issues section for the sos importer first:
-   * [[https://github.com/52North/sos-importer/issues][All open issues]]
-   * [[https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed][All closed issues]]
-   * [[https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue][All issues]]
+   * [All open issues](https://github.com/52North/sos-importer/issues)
+   * [All closed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed)
+   * [All issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue)
 
 # Feedback
 
