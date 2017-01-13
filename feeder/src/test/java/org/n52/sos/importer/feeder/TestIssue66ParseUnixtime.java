@@ -42,12 +42,12 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 /**
  * Test for Issue #66: Parsing Uninx time fails
  * 
- * https://github.com/52North/sos-importer/issues/58
+ * https://github.com/52North/sos-importer/issues/66
  * 
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
-public class Issue66ParseUnixtime {
+public class TestIssue66ParseUnixtime {
 
 	@Test
 	public void shouldParseUnixtimeColumnContent() throws XmlException, IOException, ParseException {

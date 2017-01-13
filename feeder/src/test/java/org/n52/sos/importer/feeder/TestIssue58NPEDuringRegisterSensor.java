@@ -39,35 +39,36 @@ import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 
 /**
- * Test for Issue #57: Feeder fails to read FoI position
+ * Test for Issue #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
  * 
- * https://github.com/52North/sos-importer/issues/57
+ * https://github.com/52North/sos-importer/issues/58
  * 
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
-public class Issue57ReadFoiPosition {
+public class TestIssue58NPEDuringRegisterSensor {
 	
 
 	@Test
 	public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
 		// given
-		final Configuration config = new Configuration("src/test/resources/issue-057/data_config.xml");
+		final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
 		DataFile dataFile = new DataFile(config, config.getDataFile());
 		
 		// when
 		int mvColumnId = 4;
-		String[] values = { "SE10_0AB_1", "Sensor1", "51.48790", "0.00441", "0.71", "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "" };
+		String[] values = { "TemperaturesensorAdrian", "TemperaturesensorAdrian", "20.10.2016 11:50", "48.14935 11.567826", "Temperature", "CEL", "24" };
 		FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
 		
 		// then
 		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-		Assert.assertThat(foi.getUri(), Is.is("SE10_0AB_1"));
-		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
-		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("UNIT_NOT_SET"));
-		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
+		Assert.assertThat(foi.getUri(), Is.is("TemperaturesensorAdrian"));
+		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(48.14935));
 		Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
-		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
+		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(11.567826));
 		Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
+		// the next two values are coming from the configuration
+		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(524.0));
+		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
 	}
 }
