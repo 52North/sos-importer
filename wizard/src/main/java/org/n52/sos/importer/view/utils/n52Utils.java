@@ -44,6 +44,9 @@ public class n52Utils {
 	
 	private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
 
+	/**
+	 * @deprecated who is using this method?
+	 */
 	public static Double parseDouble(final String text){
 		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
 
