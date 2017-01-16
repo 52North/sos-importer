@@ -1,51 +1,5 @@
 # 52°North SOS Importer
 
-<div style="float:right; border: 1px solid #000; padding: 5px">
-
-**Table of Contents**
-<br />
-
-<!-- MDTOC maxdepth:6 firsth1:0 numbering:0 flatten:0 bullets:0 updateOnSave:1 -->
-
-[Description](#description)   
-[License](#license)   
-[Requirements](#requirements)   
-[Terminology](#terminology)   
-[Step Description](#step-description)   
-[Design](#design)   
-&emsp;[Wizard Module](#wizard-module)   
-&emsp;[Feeder Module](#feeder-module)   
-[Configuration Schema](#configuration-schema)   
-&emsp;[SosImportConfiguration](#sosimportconfiguration)   
-&emsp;[SosMetadata](#sosmetadata)   
-&emsp;[CsvMetadata](#csvmetadata)   
-&emsp;[AdditionalMetadata](#additionalmetadata)   
-[Road map](#road-map)   
-&emsp;[:white_large_square: Open Features](#white_large_square-open-features)   
-&emsp;[:white_large_square: 0.5](#white_large_square-05)   
-&emsp;[:white_check_mark: 0.4](#white_check_mark-04)   
-&emsp;[:white_check_mark: 0.3](#white_check_mark-03)   
-&emsp;[:white_check_mark: 0.2](#white_check_mark-02)   
-&emsp;[:white_check_mark: 0.1](#white_check_mark-01)   
-[Contributors](#contributors)   
-[Get Involved](#get-involved)   
-[Project Funding](#project-funding)   
-[How to Run](#how-to-run)   
-&emsp;[Module _feeder_](#module-_feeder_)   
-&emsp;[Module _wizard_](#module-_wizard_)   
-[Example tutorial](#example-tutorial)   
-[Demo data](#demo-data)   
-[Todos](#todos)   
-[How to Build](#how-to-build)   
-[Dependencies](#dependencies)   
-[Extend `CsvParser`](#extend-csvparser)   
-[Branches](#branches)   
-[Build Status](#build-status)   
-
-<!-- /MDTOC -->
-
-</div>
-
 ## Description
 
 **Upload data to standardized observation repositories**
@@ -472,30 +426,47 @@ You can just download exmaple files to see how the application works:
 ## How to Build
 
    1. Have jdk, maven, and git installed already.
-   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:<br />
-   ```
-   ~$ git clone https://github.com/52North/OX-Framework.git
-   ~$ cd OX-Framework
-   ~/OX-Framework$ mvn install
-  ```
-or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!): <br />
-  ```
-  ~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
-  ~/OX-Framework$ git fetch eike
-  ~/OX-Framework$ git checkout -b eike-develop eike/develop
-  ~/OX-Framework$ mvn clean instal
-  ```
-   1. Checkout latest version of SOS-Importer with: `~$ git clone https://github.com/52North/sos-importer.git` in a separate directory.
+   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
+
+      ```
+      ~$ git clone https://github.com/52North/OX-Framework.git
+      ~$ cd OX-Framework
+      ~/OX-Framework$ mvn install
+      ```
+
+      or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!):
+
+      ```
+      ~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
+      ~/OX-Framework$ git fetch eike
+      ~/OX-Framework$ git checkout -b eike-develop eike/develop
+      ~/OX-Framework$ mvn clean instal
+      ```
+
+   1. Checkout latest version of SOS-Importer with:
+
+      ```
+      ~$ git clone https://github.com/52North/sos-importer.git
+      ```
+
+      in a separate directory.
    1. Switch to required branch (`master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
    1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)):
-   ```
-  <repository>
-  	 <id>osgeo</id>
-  	 <name>Open Source Geospatial Foundation Repository</name>
-  	 <url>http://download.osgeo.org/webdav/geotools/</url>
-  </repository>
-  ```
-   1. Build SOS importer modules: `~/sos-importer$ mvn install`
+
+      ```
+      <repository>
+  	     <id>osgeo</id>
+  	     <name>Open Source Geospatial Foundation Repository</name>
+  	     <url>http://download.osgeo.org/webdav/geotools/</url>
+      </repository>
+      ```
+
+   1. Build SOS importer modules:
+
+      ```
+      ~/sos-importer$ mvn install
+      ```
+
    1. Find the jar files here:
       * _wizard_: `~/52n-sos-importer/wizard/target/`
       * _feeder_: `~/52n-sos-importer/feeder/target/`
