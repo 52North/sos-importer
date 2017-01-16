@@ -28,7 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -53,7 +52,7 @@ public class TestIssue66ParseUnixtime {
 	public void shouldParseUnixtimeColumnContent() throws XmlException, IOException, ParseException {
 		// given
 		Configuration configuration = new Configuration("src/test/resources/issue-066/data_config.xml");
-		DataFile dataFile = new DataFile(configuration, new File("src/test/resources/issue-066/data_obs.csv"));
+		DataFile dataFile = new DataFile(configuration, null);
 		int mVColumnId = 2;
 		// Thu, 09 Jun 2016 10:29:40 GMT
 		String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
