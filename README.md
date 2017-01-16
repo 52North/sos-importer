@@ -413,7 +413,7 @@ Follow this list of steps or [this user guide](http://52north.org/files/sensorwe
 
 ## Demo data
 
-You can just download exmaple files to see how the application works:
+You can just download example files to see how the application works:
    * [example-data.csv](https://wiki.52north.org/pub/SensorWeb/SosImporter/example-data.csv): Example CSV file with 3 time series
 
 
