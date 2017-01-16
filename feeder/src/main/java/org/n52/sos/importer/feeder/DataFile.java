@@ -340,12 +340,6 @@ public class DataFile {
 		return result;
 	}
 
-	/**
-	 *
-	 * @param mVColumn
-	 * @param values
-	 * @return
-	 */
 	public Object getValue(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace(String.format("getValue(%s,%s)",
 				mVColumn,
@@ -384,18 +378,6 @@ public class DataFile {
 		return null;
 	}
 
-	/*
-	 * {@link org.n52.sos.importer.controller.DateAndTimeController#assignPattern()}
-	 * {@link org.n52.sos.importer.controller.DateAndTimeController#forThis()}
-	 * {@link {@link org.n52.sos.importer.model.dateAndTime.DateAndTimeComponent#parse()}
-	 */
-	/**
-	 * @param mVColumn
-	 * @param values
-	 * @param timeZone
-	 * @return
-	 * @throws ParseException
-	 */
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
@@ -405,60 +387,26 @@ public class DataFile {
 			group = col.getRelatedDateTimeGroup();
 		}
 		// else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
-		group = configuration.getFirstDateTimeGroup();
-		// Try to get timezone from configuration
+		if (group == null) {
+			group = configuration.getFirstDateTimeGroup();
+		}
 		final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
-			// get value from each column
+			// Try to get timezone from configuration
 			final Timestamp ts = new Timestamp();
-			// TODO implement case if time zone is contained in a column
-			final TimeZone timeZone = getTimeZone(cols);
-			for (final Column column : cols) {
-				// get pattern and fields
-				final String pattern = getParsePattern(column);
-				final int[] fields = getGregorianCalendarFields(pattern);
-				for (final int field : fields) {
-					// parse values
-					final short value =
-							parseTimestampComponent(values[column.getNumber()],
-									pattern,
-									field,
-									timeZone);
-					// add to timestamp object
-					switch (field) {
-					case GregorianCalendar.YEAR:
-						ts.setYear(value);
-						break;
-					case GregorianCalendar.MONTH:
-						// java starts month counting at 0 -> +1 for each month
-						ts.setMonth((byte) (value+1));
-						break;
-					case GregorianCalendar.DAY_OF_MONTH:
-						ts.setDay((byte) value);
-						break;
-					case GregorianCalendar.HOUR_OF_DAY:
-						ts.setHour((byte) value);
-						break;
-					case GregorianCalendar.MINUTE:
-						ts.setMinute((byte) value);
-						break;
-					case GregorianCalendar.SECOND:
-						ts.setSeconds((byte) value);
-						break;
-					case GregorianCalendar.ZONE_OFFSET:
-						ts.setTimezone((byte) value);
-						break;
-					default:
-						break;
-					}
-				}
-				enrichTimestampWithColumnMetadata(ts,column);
+			TimeZone timeZone = getTimeZone(cols);
+			if (isUnixTime(cols)) {
+				handleUnixTime(values, cols, ts);
+			}
+			else {
+				handleDateTimeCombination(values, cols, ts, timeZone);
 			}
 			if (configuration.isDateInfoExtractionFromFileNameSetupValid()) {
 				ts.enrich(
 					file.getName(),
 					configuration.getRegExDateInfoInFileName(),
-					configuration.getDateInfoPattern());
+					configuration.getDateInfoPattern()
+					);
 			}
 			if (configuration.isUseDateInfoFromFileModificationSet()) {
 				ts.enrich(file.lastModified(), configuration.getLastModifiedDelta());
@@ -466,6 +414,80 @@ public class DataFile {
 			return ts;
 		}
 		return null;
+	}
+
+	private void handleDateTimeCombination(final String[] values, final Column[] cols, final Timestamp ts,
+			TimeZone timeZone) throws ParseException {
+		// TODO implement case if time zone is contained in a column
+		// get value from each column
+		for (final Column column : cols) {
+			// get pattern and fields
+			final String pattern = getParsePattern(column);
+			final int[] fields = getGregorianCalendarFields(pattern);
+			for (final int field : fields) {
+				// parse values
+				final short value =
+						parseTimestampComponent(values[column.getNumber()],
+								pattern,
+								field,
+								timeZone);
+				// add to timestamp object
+				switch (field) {
+				case GregorianCalendar.YEAR:
+					ts.setYear(value);
+					break;
+				case GregorianCalendar.MONTH:
+					// java starts month counting at 0 -> +1 for each month
+					ts.setMonth((byte) (value+1));
+					break;
+				case GregorianCalendar.DAY_OF_MONTH:
+					ts.setDay((byte) value);
+					break;
+				case GregorianCalendar.HOUR_OF_DAY:
+					ts.setHour((byte) value);
+					break;
+				case GregorianCalendar.MINUTE:
+					ts.setMinute((byte) value);
+					break;
+				case GregorianCalendar.SECOND:
+					ts.setSeconds((byte) value);
+					break;
+				case GregorianCalendar.ZONE_OFFSET:
+					ts.setTimezone((byte) value);
+					break;
+				default:
+					break;
+				}
+			}
+			enrichTimestampWithColumnMetadata(ts,column);
+		}
+	}
+
+	private void handleUnixTime(final String[] values, final Column[] cols, final Timestamp ts) {
+		TimeZone timeZone;
+		// handle unix time:
+		// DO: TZ := UTC; value from one single column (should be an integer)
+		timeZone = TimeZone.getTimeZone("UTC");
+		ts.setTimezone((byte)(timeZone.getRawOffset()/MILLIES_PER_HOUR));
+		ts.set(Long.parseLong(values[cols[0].getNumber()])*1000);
+	}
+
+	private boolean isUnixTime(final Column[] cols) { 
+		// PRE: 1 column and TYPE DATE_TIME and metadata:type:UNIX_TIME
+		return cols.length == 1 && 
+				containsUnixTimeType(cols[0].getMetadataArray());
+	}
+
+	private boolean containsUnixTimeType(Metadata[] metadataArray) {
+		if (metadataArray == null || metadataArray.length == 0) {
+			return false;
+		}
+		for (Metadata metadata : metadataArray) {
+			if (metadata.getKey().equals(Key.TYPE) && metadata.getValue().equals("UNIX_TIME")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private TimeZone getTimeZone(final Column[] cols) {

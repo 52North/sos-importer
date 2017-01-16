@@ -28,47 +28,47 @@
  */
 package org.n52.sos.importer.feeder;
 
-
 import java.io.IOException;
 import java.text.ParseException;
 
 import org.apache.xmlbeans.XmlException;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
-import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.Timestamp;
 
 /**
- * Test for Issue #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
+ * Test for Issue #66: Parsing Uninx time fails
  * 
- * https://github.com/52North/sos-importer/issues/58
+ * https://github.com/52North/sos-importer/issues/66
  * 
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
-public class Issue58NPEDuringRegisterSensor {
-	
+public class TestIssue66ParseUnixtime {
 
 	@Test
-	public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
+	public void shouldParseUnixtimeColumnContent() throws XmlException, IOException, ParseException {
 		// given
-		final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
-		DataFile dataFile = new DataFile(config, config.getDataFile());
+		Configuration configuration = new Configuration("src/test/resources/issue-066/data_config.xml");
+		DataFile dataFile = new DataFile(configuration, null);
+		int mVColumnId = 2;
+		// Thu, 09 Jun 2016 10:29:40 GMT
+		String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
 		
 		// when
-		int mvColumnId = 4;
-		String[] values = { "TemperaturesensorAdrian", "TemperaturesensorAdrian", "20.10.2016 11:50", "48.14935 11.567826", "Temperature", "CEL", "24" };
-		FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
+		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
 		
 		// then
-		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-		Assert.assertThat(foi.getUri(), Is.is("TemperaturesensorAdrian"));
-		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(48.14935));
-		Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
-		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(11.567826));
-		Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
-		// the next two values are coming from the configuration
-		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(524.0));
-		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
+		Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
+		Assert.assertThat(timeStamp.getYear(), Is.is((short)2016));
+		Assert.assertThat(timeStamp.getMonth(), Is.is((byte)6));
+		Assert.assertThat(timeStamp.getDay(), Is.is((byte)9));
+		Assert.assertThat(timeStamp.getHour(), Is.is((byte)10));
+		Assert.assertThat(timeStamp.getMinute(), Is.is((byte)29));
+		Assert.assertThat(timeStamp.getSeconds(), Is.is((byte)40));
+		Assert.assertThat(timeStamp.getTimezone(), Is.is((byte)0));
 	}
+
 }
