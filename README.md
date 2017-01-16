@@ -1,5 +1,7 @@
 # 52°North SOS Importer
 
+[:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer'></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop"></a>
+
 ## Description
 
 **Upload data to standardized observation repositories**
@@ -16,7 +18,7 @@ The **Wizard Module** is the GUI wizard for creating the configurations (metadat
 
 The **Feeder Module** uses the configurations created by the Wizard Module for importing the data into a running SOS instance.
 
-Please check the [how to run](#How_to_Run) section for instructions to start the two modules.
+Please check the [how to run](#how-to-run) section for instructions to start the two modules.
 
 <a href="https://wiki.52north.org/pub/SensorWeb/SosImporter/52n-sos-importer_screenshot_arranged-with-logo.png"><img width="400" alt="52n-sos-importer_screenshot_arranged-with-logo.png" src="https://wiki.52north.org/pub/SensorWeb/SosImporter/52n-sos-importer_screenshot_arranged-with-logo.png"></a>
 
