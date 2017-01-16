@@ -78,7 +78,7 @@ public class MainFrame extends JFrame {
 		stepContainerPanel.setLayout(new BorderLayout());
 		setTitle(frameTitle);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setResizable(false);
+		setResizable(true);
 		addWindowListener(new WindowChanged());
 		
 		final Container cp = getContentPane();
