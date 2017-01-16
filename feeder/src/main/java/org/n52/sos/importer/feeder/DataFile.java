@@ -387,8 +387,9 @@ public class DataFile {
 			group = col.getRelatedDateTimeGroup();
 		}
 		// else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
-		group = configuration.getFirstDateTimeGroup();
-		// Try to get timezone from configuration
+		if (group == null) {
+			group = configuration.getFirstDateTimeGroup();
+		}
 		final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
 		if (cols != null) {
 			// get value from each column
