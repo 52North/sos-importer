@@ -335,12 +335,12 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
 ## Contributors
 
    * Active
-      * [EHJ-52n](https://github.com/EHJ-52n/)
+      * [Eike J&uuml;rrens](https://github.com/EHJ-52n)
       * Your name here!
    * Former
       * Eric Fiedler
       * Raimund Schn&#252;rer
-      * [janschulte](https://github.com/janschulte)
+      * [Jan Schulte](https://github.com/janschulte)
 
 
 ## Get Involved
@@ -387,7 +387,7 @@ usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
    1. Follow the wizard to create a configuration file which can be used by the feeder module for repeated feeding or import the data once using the wizard (the second option requires the latest `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` in the same folder like the `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
 
 
-## Example tutorial
+## Quickstart
 
 Follow this list of steps or [this user guide](http://52north.org/files/sensorweb/eo2h/52n-sensorweb-sos-importer-guide.pdf) using the [demo data](SosImporter#Demo_data) to get a first user experience.
 
@@ -411,7 +411,7 @@ Follow this list of steps or [this user guide](http://52north.org/files/sensorwe
    1. On the last step, you can view the log file, configuration file or start the import procedure. That's it, now you should be able to import data into a running SOS instance from CSV files, or similar.
 
 
-## Demo data
+### Demo data
 
 You can just download example files to see how the application works:
    * [example-data.csv](https://wiki.52north.org/pub/SensorWeb/SosImporter/example-data.csv): Example CSV file with 3 time series
