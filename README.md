@@ -1,5 +1,51 @@
 # 52°North SOS Importer
 
+<div style="float:right; border: 1px solid #000; padding: 5px">
+
+**Table of Contents**
+<br />
+
+<!-- MDTOC maxdepth:6 firsth1:0 numbering:0 flatten:0 bullets:0 updateOnSave:1 -->
+
+[Description](#description)   
+[License](#license)   
+[Requirements](#requirements)   
+[Terminology](#terminology)   
+[Step Description](#step-description)   
+[Design](#design)   
+&emsp;[Wizard Module](#wizard-module)   
+&emsp;[Feeder Module](#feeder-module)   
+[Configuration Schema](#configuration-schema)   
+&emsp;[SosImportConfiguration](#sosimportconfiguration)   
+&emsp;[SosMetadata](#sosmetadata)   
+&emsp;[CsvMetadata](#csvmetadata)   
+&emsp;[AdditionalMetadata](#additionalmetadata)   
+[Road map](#road-map)   
+&emsp;[:white_large_square: Open Features](#white_large_square-open-features)   
+&emsp;[:white_large_square: 0.5](#white_large_square-05)   
+&emsp;[:white_check_mark: 0.4](#white_check_mark-04)   
+&emsp;[:white_check_mark: 0.3](#white_check_mark-03)   
+&emsp;[:white_check_mark: 0.2](#white_check_mark-02)   
+&emsp;[:white_check_mark: 0.1](#white_check_mark-01)   
+[Contributors](#contributors)   
+[Get Involved](#get-involved)   
+[Project Funding](#project-funding)   
+[How to Run](#how-to-run)   
+&emsp;[Module _feeder_](#module-_feeder_)   
+&emsp;[Module _wizard_](#module-_wizard_)   
+[Example tutorial](#example-tutorial)   
+[Demo data](#demo-data)   
+[Todos](#todos)   
+[How to Build](#how-to-build)   
+[Dependencies](#dependencies)   
+[Extend `CsvParser`](#extend-csvparser)   
+[Branches](#branches)   
+[Build Status](#build-status)   
+
+<!-- /MDTOC -->
+
+</div>
+
 ## Description
 
 **Upload data to standardized observation repositories**
