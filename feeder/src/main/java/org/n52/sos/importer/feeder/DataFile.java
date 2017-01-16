@@ -340,12 +340,6 @@ public class DataFile {
 		return result;
 	}
 
-	/**
-	 *
-	 * @param mVColumn
-	 * @param values
-	 * @return
-	 */
 	public Object getValue(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace(String.format("getValue(%s,%s)",
 				mVColumn,
@@ -384,18 +378,6 @@ public class DataFile {
 		return null;
 	}
 
-	/*
-	 * {@link org.n52.sos.importer.controller.DateAndTimeController#assignPattern()}
-	 * {@link org.n52.sos.importer.controller.DateAndTimeController#forThis()}
-	 * {@link {@link org.n52.sos.importer.model.dateAndTime.DateAndTimeComponent#parse()}
-	 */
-	/**
-	 * @param mVColumn
-	 * @param values
-	 * @param timeZone
-	 * @return
-	 * @throws ParseException
-	 */
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
