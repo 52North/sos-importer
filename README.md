@@ -450,7 +450,13 @@ You can just download exmaple files to see how the application works:
       ```
 
       in a separate directory.
-   1. Switch to required branch (`master` for latest stable version; `develop` for latest development version) via `~/sos-importer$ git checkout devlop`, for example.
+   1. Switch to required branch (`master` for latest stable version; `develop` for latest development version) via
+
+      ```
+      ~/sos-importer$ git checkout devlop
+      ```
+
+      , for example.
    1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)):
 
       ```
@@ -477,8 +483,8 @@ You can just download exmaple files to see how the application works:
 | git: `https://github.com/52North/sos-importer/tree/master` | latest stable version |
 | git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.4.0` | release 0.4.0 |
 | git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.3.0` | release 0.3.0 |
-| svn: `https://svn.52north.org/svn/swe/incubation/SOS-importer/tags/52n-sos-importer-0.2.0/` <br /> git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.2.0` | release 0.2.0 |
-| svn: `https://svn.52north.org/svn/swe/incubation/SOS-importer/tags/52n-sos-importer-0.1.0/` <br /> git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.1.0` | release 0.1.0 |
+| git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.2.0` | release 0.2.0 |
+| git: `https://github.com/52North/sos-importer/releases/tag/52n-sos-importer-0.1.0` | release 0.1.0 |
 
 
 ## Dependencies
@@ -509,7 +515,6 @@ If you have any problems, please check the issues section for the sos importer f
    * [All closed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed)
    * [All issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aissue)
 
-For more information on this project visit [its homepage](https://wiki.52north.org/bin/view/SensorWeb/SosImporter).
 
 ## Branches
 
