@@ -23,17 +23,12 @@ Please check the [how to run](#How_to_Run) section for instructions to start the
 :information_source: *Click to view a larger version of the image.*
 
 
-## License
-
-The 52&deg;North Sos-Importer is published under the [GNU General Public License v2.0](http://www.spdx.org/licenses/GPL-2.0). The licenses of the dependencies are documented in [another section](#Dependencies).
-
-
-## Requirements
+### Requirements
 
 The SOS Importer requires [JAVA](http://java.com/) 1.7+ and a running SOS instance (OGC SOS v1.0 or v2.0) to work. The wizard module requires a GUI capable system.
 
 
-## Terminology
+### Terminology
 
 Several sensor web specific terms are used within this topic:
 
@@ -45,7 +40,7 @@ Several sensor web specific terms are used within this topic:
 If you are not familiar with them, please take a look at [this explaining OGC tutorial](http://www.ogcnetwork.net/sos_2_0/tutorial/om). It's short and easy to understand.
 
 
-## Step Description
+### Step Description
 
 | *Step* | *Description* |
 | --- | --- |
@@ -525,3 +520,7 @@ Ongoing development is done in branch [develop](../../tree/develop) and dedicate
 ## Build Status
 
 * Master: [![Build Status](http://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](http://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/) [![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)
+
+## License
+
+The 52&deg;North Sos-Importer is published under the [GNU General Public License v2.0](http://www.spdx.org/licenses/GPL-2.0). The licenses of the dependencies are documented in [another section](#Dependencies).
