@@ -16,6 +16,11 @@ Bugfixes:
 ---------
  * #35: Could not parse ISO8601 timestamps with timezone "Z" 
  * #36: Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
+ * #57: Feeder fails to read FoI positions
+ * #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
+ * #62: Number of read lines not stored
+ * #63: Cannot build importer when host in timezone MST (-07:00)
+ * #66: Parsing Unix time fails
 
 Release Notes for SOS-Importer 0.4.0
 ====================================
