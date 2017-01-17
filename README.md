@@ -421,7 +421,7 @@ You can just download example files to see how the application works:
 
 ## How to Build
 
-   1. Have jdk, maven, and git installed already.
+   1. Have jdk (>=1.7), maven (>=3.1.1), and git installed already.
    1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
 
       ```
