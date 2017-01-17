@@ -1,20 +1,17 @@
 For a complete Release Notes overview visit
 
-  https://wiki.52north.org/bin/view/SensorWeb/SosImporter#Road_map
+  * [the roadmap](./README.md#Road_map)
 
-Release Notes for SOS-Importer 0.5.0
-==================================== 
-Features:
----------
- * 
-
-Changes:
---------
+# Release Notes for SOS-Importer 0.5.0
+## Features:
  *
 
-Bugfixes:
----------
- * #35: Could not parse ISO8601 timestamps with timezone "Z" 
+
+## Changes:
+ * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
+
+## Bugfixes:
+ * #35: Could not parse ISO8601 timestamps with timezone "Z"
  * #36: Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
  * #57: Feeder fails to read FoI positions
  * #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
@@ -22,94 +19,76 @@ Bugfixes:
  * #63: Cannot build importer when host in timezone MST (-07:00)
  * #66: Parsing Unix time fails
 
-Release Notes for SOS-Importer 0.4.0
-====================================
-Features:
----------
+# Release Notes for SOS-Importer 0.4.0
+## Features:
  * Rename *Core* module to *Wizard*
  * Support for SOS 2.0 incl. Binding definition
  * Start Screen offers button to see all dependency licenses
  * Support for sensors with multiple outputs
  * Introduced import strategies:
-   * SingleObservation: Default strategy 
-   * SweArrayObservationWithSplitExtension: 
-        Reads hunksize# lines and imports each time series using an 
-        SWEArrayObservation in combination with the SplitExtension of the 
-        52North SOS implementation. Hence, this strategy works only in 
+   * SingleObservation: Default strategy
+   * SweArrayObservationWithSplitExtension:
+        Reads hunksize# lines and imports each time series using an
+        SWEArrayObservation in combination with the SplitExtension of the
+        52North SOS implementation. Hence, this strategy works only in
         combination with 52North implementation. Other impl. might work, too,
-        but not as expected. Hunksize and import strategy are both optional 
-        <AdditionalMetadata><Metadata> elements.
- * Support for date information extraction from file name using two new 
-   OPTIONAL attributes in element <DataFile>:
+        but not as expected. Hunksize and import strategy are both optional
+        `<AdditionalMetadata><Metadata>` elements.
+ * Support for date information extraction from file name using two new
+   OPTIONAL attributes in element `<DataFile>`:
    * "regExDateInfoInFileName" for extracting date information from file names.
    * "dateInfoPattern" for parsing the date information into a java.util.Date.
  * Date information extraction from last modified date using two new OPTIONAL
    attributes:
    * "useDateFromLastModifiedDate" for enabling this feature
-   * "lastModifiedDelta" for moving the date n days back (this attribute is 
+   * "lastModifiedDelta" for moving the date n days back (this attribute is
      OPTIONAL for this feature, too.)
  * Ignore lines with regular expressions feature:
-   0..infinity <IgnoreLineRegEx> elements can be added to the <DataFile> 
-   element.
-   Each element will be used as regular expression and applied to each line of 
-   the data file before parsing. 
+   0..infinity `<IgnoreLineRegEx>` elements can be added to the `<DataFile>`
+   element. <br />
+   Each element will be used as regular expression and applied to each line of
+   the data file before parsing.
  * Handling of data files containing several sample runs. A sample run contains
-   additional metadata like its size (number of performed measurements) and a 
-   date.
+   additional metadata like its size (number of performed measurements) and a
+   date.<br />
    The required attributes are:
-   * "sampleStartRegEx"  - the start of a new sample (MUST match the whole 
-                           line).
-   * "sampleDateOffset"  - the offset of the line containing the date of the 
-                           sample from the start line.
-   * "sampleDateExtractionRegEx" - the regular expression to extract the date
-                                   information from the line containing the 
-                                   date information of the current sample. The
-                                   expression MUST result in ONE group. This
-                                   group will be parsed to a java.util.Date
-                                   using "sampleDatePattern" attribute.
-   * "sampleDatePattern" - the pattern used to parse the date information of
-                           the current sample.
-   * "sampleDataOffset"  - the offset in lines from sample beginning till the
-                           first lines with data.
-   * "sampleSizeOffset"  - the offset in lines from sample beginning till the
-                           line containing the sample size in lines with data.
-   * "sampleSizeRegEx"   - the regular expression to extract the sample size. 
-                           The regular expression MUST result in ONE group 
-                           which contains an integer value.
-   * "sampleSizeDivisor" - defines a divisor that is applied to the sample 
-   						   size.
-                           Can be used in cases the sample size is not giving
-                           the number of samples but the time span of the
-                           sample. The divisor is used to calculate the number
-                           of lines in a sample. (OPTIONAL)
+   * "sampleStartRegEx":<br />
+     the start of a new sample (MUST match the whole line).
+   * "sampleDateOffset":<br />
+     the offset of the line containing the date of the sample from the start line.
+   * "sampleDateExtractionRegEx":<br />
+      the regular expression to extract the date information from the line containing the date information of the current sample. The expression MUST result in ONE group. This group will be parsed to a `java.util.Date` using "sampleDatePattern" attribute.
+   * "sampleDatePattern":<br />
+     the pattern used to parse the date information of the current sample.
+   * "sampleDataOffset":<br />
+     the offset in lines from sample beginning till the first lines with data.
+   * "sampleSizeOffset":<br />
+     the offset in lines from sample beginning till the line containing the sample size in lines with data.
+   * "sampleSizeRegEx":<br />
+     the regular expression to extract the sample size. The regular expression MUST result in ONE group  which contains an integer value.
+   * "sampleSizeDivisor":<br />
+     defines a divisor that is applied to the sample size. Can be used in cases the sample size is not giving the number of samples but the time span of the sample. The divisor is used to calculate the number of lines in a sample. (OPTIONAL)
  * Setting of timeout buffer for the insertion of SweArrayObservations:
-   With the attribute "insertSweArrayObservationTimeoutBuffer" of <SosMetadata"
-   it is possible to define an additional timeout buffer for connect and socket 
-   timeout when using import strategy "SweArrayObservationWithSplitExtension".
-   Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.
-   The size of this value is related to the set-up of the SOS server, importer,
-   and the HUNK_SIZE value.
-   The current OX-F SimpleHttpClient implementation uses a default value of 5s,
+   With the attribute "insertSweArrayObservationTimeoutBuffer" of `<SosMetadata>` it is possible to define an additional timeout buffer for connect and socket timeout when using import strategy "SweArrayObservationWithSplitExtension". Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout. The size of this value is related to the set-up of the SOS server, importer,
+   and the HUNK_SIZE value. The current OX-F SimpleHttpClient implementation uses a default value of 5s,
    hence setting this to 25,000 results in 30s connection and socket timeout.
  * "CsvParserClass" add to CsvMetadata. The class that MUST be used for parsing
    the data file. The interface org.n52.sos.importer.feeder.CsvParser MUST be
    implemented. The class name MUST contain the fully qualified package name
    and a zero-argument constructor MUST be provided.
- 
-Changes:
---------
 
-Bugfixes:
----------
+# Changes
+ *
+
+
+# Bugfixes
  * 878 SOS Feeder (v.0.4.0-SNAPSHOT) Error: InvalidParameterValue
  * "Too many columns issue"
- * #06: Hardcoded time zone in test 
+ * #06: Hardcoded time zone in test
  * #10: NPE during feeding if binding value is not set
  * #11: BadLocationException in the case of having empty lines in csv file
- * #20: Current GUI is broken when using sample based files with minor
- 		inconsistencies
- * #24: Fix/ignore line and column: Solved two NPEs while ignoring lines or 
- 		columns
+ * #20: Current GUI is broken when using sample based files with minor inconsistencies
+ * #24: Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
  * #25: Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
  * #NN: Fix bug with timestamps of sample files
  * #NN: Fix bug with incrementing lastline causing data loss
@@ -117,24 +96,19 @@ Bugfixes:
  * #NN: NSAMParser: Fix bug with timestamp extraction
  * #NN: NSAMParser: Fix bug with skipLimit
  * #NN: NSAMParser: Fix bug with empty lines, line ending, time series encoding
- * #NN: fix/combinationpanel: On step 3 it was not possible to enter parse
- 		patterns for position and date & time
- * #NN: fix problem with textfield for CSV file when switching to German      
+ * #NN: fix/combinationpanel: On step 3 it was not possible to enter parse patterns for position and date & time
+ * #NN: fix problem with textfield for CSV file when switching to German
  * #NN: fix problem with multiple sensors in CSV file and register sensor
 
-Release Notes for SOS-Importer 0.3.0
-====================================
-Features:
----------
+# Release Notes for SOS-Importer 0.3.0
+## Features
  * Support more observation types
  * FTP Remote File Support
- 
- Changes:
---------
+
+## Changes
  * Use SOSWrapper from OXF
 
- Bugfixes:
----------
+## Bugfixes
  * 736 Cannot run from source
  * 738 Could not save xml file
  * 650 Design: Instructions are not very large
@@ -145,33 +119,24 @@ Features:
  * 668 Step 6b: "Enter" goes "back" instead of "next"
  * 589 Step 3b: Not yet implemented
  * 649 Usability: User can not (really) change window size
- * 669 Step 6b: Question - Accidentally deleting a sensor name in dropdown list
- 	   --> Consequences?
+ * 669 Step 6b: Question - Accidentally deleting a sensor name in dropdown list --> Consequences?
  * 586 Step 6c: Add Missing Position Information for Feature of Interest
- * 707 Step 5c & 6c: Altitude input requested from user in the case of using an
- 	   reference system which is not 3d
+ * 707 Step 5c & 6c: Altitude input requested from user in the case of using an reference system which is not 3d
  * 523 Step 3: Merge DateAndTimes and Positions
 
- 
-Release Notes for SOS-Importer 0.2.0
-====================================
-Features:
----------
+
+# Release Notes for SOS-Importer 0.2.0
+## Features
  * Multi language support
  * Xml configuration
  * Generation of FOIs and other data from columns
  * Feeding component
-
- Changes:
---------
+## Changes
  * Maven build
 
 
-Release Notes for SOS-Importer 0.1.0
-====================================
-Features:
---------- 
+# Release Notes for SOS-Importer 0.1.0
+## Features
  * Swing GUI
  * CSV file support
  * One time import
-
