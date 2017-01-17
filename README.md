@@ -1,6 +1,5 @@
 # 52°North SOS Importer
-
-[:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer'></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop"></a>
+[:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)&nbsp;&nbsp;&nbsp;**Master**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer_develop/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer_develop' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
