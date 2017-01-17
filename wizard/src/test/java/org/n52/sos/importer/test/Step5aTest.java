@@ -70,28 +70,28 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.Column;
 public class Step5aTest {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_ONLY_STRINGS);
-		final int firstLineWithData = 0;
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final MainController f = MainController.getInstance();
+        TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_ONLY_STRINGS);
+        final int firstLineWithData = 0;
 
-		final DateAndTime dtm1 = new DateAndTime();
-		DateAndTimeController dtc = new DateAndTimeController(dtm1);
-		dtc.assignPattern("HH-mm-ss", new Column(0,firstLineWithData));
-		ModelStore.getInstance().add(dtm1);
+        final DateAndTime dtm1 = new DateAndTime();
+        DateAndTimeController dtc = new DateAndTimeController(dtm1);
+        dtc.assignPattern("HH-mm-ss", new Column(0,firstLineWithData));
+        ModelStore.getInstance().add(dtm1);
 
-		final DateAndTime dtm2 = new DateAndTime();
-		dtc = new DateAndTimeController(dtm2);
-		dtc.assignPattern("dd-MM-yyyy", new Column(1,firstLineWithData));
-		ModelStore.getInstance().add(dtm2);
+        final DateAndTime dtm2 = new DateAndTime();
+        dtc = new DateAndTimeController(dtm2);
+        dtc.assignPattern("dd-MM-yyyy", new Column(1,firstLineWithData));
+        ModelStore.getInstance().add(dtm2);
 
-		final Step5aController controller = new Step5aController(firstLineWithData);
-		controller.isNecessary();
-		f.setStepController(controller);
-	}
+        final Step5aController controller = new Step5aController(firstLineWithData);
+        controller.isNecessary();
+        f.setStepController(controller);
+    }
 }

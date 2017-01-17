@@ -51,105 +51,105 @@ import org.slf4j.LoggerFactory;
  */
 public class ParseTestLabel extends JLabel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final Parseable parser;
+    private final Parseable parser;
 
-	private int firstLineWithData = 0;
+    private int firstLineWithData = 0;
 
-	private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
 
-	private final ParseTestLabel _this;
+    private final ParseTestLabel _this;
 
-	private List<String> values;
+    private List<String> values;
 
-	private final Runnable parserThread;
+    private final Runnable parserThread;
 
-	/**
-	 * <p>Constructor for ParseTestLabel.</p>
-	 *
-	 * @param parser a {@link org.n52.sos.importer.model.Parseable} object.
-	 * @param firstLineWithData a int.
-	 */
-	public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
-		super();
-		if (logger.isTraceEnabled()) {
-			logger.trace("ParseTestLabel()[" + hashCode() + "]");
-		}
-		this.parser = parser;
-		this.firstLineWithData = firstLineWithData;
-		_this = this;
-		parserThread = new ParserThread();
-	}
+    /**
+     * <p>Constructor for ParseTestLabel.</p>
+     *
+     * @param parser a {@link org.n52.sos.importer.model.Parseable} object.
+     * @param firstLineWithData a int.
+     */
+    public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
+        super();
+        if (logger.isTraceEnabled()) {
+            logger.trace("ParseTestLabel()[" + hashCode() + "]");
+        }
+        this.parser = parser;
+        this.firstLineWithData = firstLineWithData;
+        _this = this;
+        parserThread = new ParserThread();
+    }
 
-	/**
-	 * <p>parseValues.</p>
-	 *
-	 * @param values a {@link java.util.List} object.
-	 */
-	public void parseValues(final List<String> values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("[" + hashCode() + "]." +
-					"parseValues()");
-		}
-		setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
-				"</u></html>");
-		this.values = values;
-		BackNextController.getInstance().setNextButtonEnabled(false);
-		// call invokeLater()
-		SwingUtilities.invokeLater(parserThread);
-	}
+    /**
+     * <p>parseValues.</p>
+     *
+     * @param values a {@link java.util.List} object.
+     */
+    public void parseValues(final List<String> values) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("[" + hashCode() + "]." +
+                    "parseValues()");
+        }
+        setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
+                "</u></html>");
+        this.values = values;
+        BackNextController.getInstance().setNextButtonEnabled(false);
+        // call invokeLater()
+        SwingUtilities.invokeLater(parserThread);
+    }
 
-	private class ParserThread implements Runnable{
-		@Override
-		public void run() {
-			if (logger.isTraceEnabled()) {
-				logger.trace("[" + hashCode() + "]." +
-						"run() <- parsing values ###########################################################");
-			}
-			int notParseableValues = 0;
-			int currentLine = 0;
-			final StringBuilder notParseable = new StringBuilder();
-			String text = "";
-			final Set<String> notParseableStrings = new HashSet<String>();
-			//
-			notParseable.append("<html>");
-			// do the test parsing
-			for (final String value: values) {
-				if(currentLine >= firstLineWithData) {
-					try {
-						parser.parse(value);
-					} catch (final Exception e) { // $codepro.audit.disable
-						if (notParseableStrings.add(value)) {
-							notParseable.append(value + "<br>");
-						}
-						notParseableValues++;
-					}
-				} else {
-					if (logger.isDebugEnabled()) {
-						logger.debug("skipping line to parse #" + currentLine);
-					}
-				}
-				currentLine++;
-			}
-			// handle the results of the test parsing
-			if (notParseableValues == 0) {
-				text = Lang.l().step3aParseTestAllOk();
-				_this.setForeground(Color.blue);
-			} else if (notParseableValues == 1) {
-				text = Lang.l().step3aParseTest1Failed();
-				_this.setForeground(Color.red);
-			} else {
-				text = Lang.l().step3aParseTestNFailed(notParseableValues);
-				_this.setForeground(Color.red);
-			}
-			_this.setText("<html>" + text+ "</html>");
-			notParseable.append("</html>");
-			_this.setToolTipText(notParseable.toString());
-			// enabled next button after parsing
-			// TODO maybe add check if no value could be parsed -> dialog and not enabling next
-			BackNextController.getInstance().setNextButtonEnabled(true);
-		}
-	}
+    private class ParserThread implements Runnable{
+        @Override
+        public void run() {
+            if (logger.isTraceEnabled()) {
+                logger.trace("[" + hashCode() + "]." +
+                        "run() <- parsing values ###########################################################");
+            }
+            int notParseableValues = 0;
+            int currentLine = 0;
+            final StringBuilder notParseable = new StringBuilder();
+            String text = "";
+            final Set<String> notParseableStrings = new HashSet<String>();
+            //
+            notParseable.append("<html>");
+            // do the test parsing
+            for (final String value: values) {
+                if(currentLine >= firstLineWithData) {
+                    try {
+                        parser.parse(value);
+                    } catch (final Exception e) { // $codepro.audit.disable
+                        if (notParseableStrings.add(value)) {
+                            notParseable.append(value + "<br>");
+                        }
+                        notParseableValues++;
+                    }
+                } else {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("skipping line to parse #" + currentLine);
+                    }
+                }
+                currentLine++;
+            }
+            // handle the results of the test parsing
+            if (notParseableValues == 0) {
+                text = Lang.l().step3aParseTestAllOk();
+                _this.setForeground(Color.blue);
+            } else if (notParseableValues == 1) {
+                text = Lang.l().step3aParseTest1Failed();
+                _this.setForeground(Color.red);
+            } else {
+                text = Lang.l().step3aParseTestNFailed(notParseableValues);
+                _this.setForeground(Color.red);
+            }
+            _this.setText("<html>" + text+ "</html>");
+            notParseable.append("</html>");
+            _this.setToolTipText(notParseable.toString());
+            // enabled next button after parsing
+            // TODO maybe add check if no value could be parsed -> dialog and not enabling next
+            BackNextController.getInstance().setNextButtonEnabled(true);
+        }
+    }
 
 }

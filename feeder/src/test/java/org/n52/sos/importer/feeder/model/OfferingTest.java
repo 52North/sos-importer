@@ -35,19 +35,19 @@ import org.junit.Test;
 
 public class OfferingTest {
 
-	@Test
-	public void should_set_name_for_offering()
-	{
-		final String name = "name";
-		final Offering offering = new Offering(name, null);
-		assertThat(offering.getName(), is(name));
-	}
+    @Test
+    public void should_set_name_for_offering()
+    {
+        final String name = "name";
+        final Offering offering = new Offering(name, null);
+        assertThat(offering.getName(), is(name));
+    }
 
-	@Test
-	public void should_set_uri_for_offering()
-	{
-		final String uri = "uri";
-		final Offering offering = new Offering(null, uri);
-		assertThat(offering.getUri(), is(uri));
-	}
+    @Test
+    public void should_set_uri_for_offering()
+    {
+        final String uri = "uri";
+        final Offering offering = new Offering(null, uri);
+        assertThat(offering.getUri(), is(uri));
+    }
 }

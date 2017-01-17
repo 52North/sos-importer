@@ -84,85 +84,85 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 public class Step7Test {
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
-		final int firstLineWithData = 0;
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
+        final int firstLineWithData = 0;
 
-		final DateAndTime dtm1 = new DateAndTime();
-		dtm1.setGroup("1");
-		final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-		dtc1.assignPattern("dd/MM/yyyy", new Column(0,firstLineWithData));
-		ModelStore.getInstance().add(dtm1);
+        final DateAndTime dtm1 = new DateAndTime();
+        dtm1.setGroup("1");
+        final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
+        dtc1.assignPattern("dd/MM/yyyy", new Column(0,firstLineWithData));
+        ModelStore.getInstance().add(dtm1);
 
-		final DateAndTime dtm2 = new DateAndTime();
-		dtm2.setGroup("1");
-		final DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
-		dtc2.assignPattern("HH:mm", new Column(1,firstLineWithData));
-		ModelStore.getInstance().add(dtm2);
+        final DateAndTime dtm2 = new DateAndTime();
+        dtm2.setGroup("1");
+        final DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
+        dtc2.assignPattern("HH:mm", new Column(1,firstLineWithData));
+        ModelStore.getInstance().add(dtm2);
 
-		dtc2.mergeDateAndTimes();
+        dtc2.mergeDateAndTimes();
 
-		final DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
-		dtm.setSecond(new Second(0));
-		dtm.setTimeZone(new TimeZone(0));
+        final DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
+        dtm.setSecond(new Second(0));
+        dtm.setTimeZone(new TimeZone(0));
 
-		final Position p = new Position();
-		p.setGroup("A");
-		final Latitude lat = new Latitude(52.5, "°");
-		final Longitude lon = new Longitude(7.5, "°");
-		final Height h = new Height(100, "m");
-		final EPSGCode epsgCode = new EPSGCode(4236);
-		p.setLatitude(lat);
-		p.setLongitude(lon);
-		p.setHeight(h);
-		p.setEPSGCode(epsgCode);
+        final Position p = new Position();
+        p.setGroup("A");
+        final Latitude lat = new Latitude(52.5, "°");
+        final Longitude lon = new Longitude(7.5, "°");
+        final Height h = new Height(100, "m");
+        final EPSGCode epsgCode = new EPSGCode(4236);
+        p.setLatitude(lat);
+        p.setLongitude(lon);
+        p.setHeight(h);
+        p.setEPSGCode(epsgCode);
 
-		final ObservedProperty op = new ObservedProperty();
-		op.setName("Temperature");
-		final UnitOfMeasurement uom = new UnitOfMeasurement();
-		uom.setName("degC");
-		final FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setName("Weatherstation Muenster");
-		final Sensor sn = new Sensor();
-		sn.setName("Thermometer 1");
+        final ObservedProperty op = new ObservedProperty();
+        op.setName("Temperature");
+        final UnitOfMeasurement uom = new UnitOfMeasurement();
+        uom.setName("degC");
+        final FeatureOfInterest foi = new FeatureOfInterest();
+        foi.setName("Weatherstation Muenster");
+        final Sensor sn = new Sensor();
+        sn.setName("Thermometer 1");
 
-		final Sensor sn2 = new Sensor();
-		sn2.setName("Thermometer 2");
-		try {
-			sn2.setURI(new URI("http://thermo.org/123"));
-		} catch (final URISyntaxException e) {
-			e.printStackTrace();
-		}
+        final Sensor sn2 = new Sensor();
+        sn2.setName("Thermometer 2");
+        try {
+            sn2.setURI(new URI("http://thermo.org/123"));
+        } catch (final URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-		final NumericValue nv1 = new NumericValue();
-		nv1.setTableElement(new Column(1,firstLineWithData));
-		nv1.setDateAndTime(dtm);
-		nv1.setObservedProperty(op);
-		nv1.setFeatureOfInterest(foi);
-		nv1.setSensor(sn);
-		nv1.setUnitOfMeasurement(uom);
+        final NumericValue nv1 = new NumericValue();
+        nv1.setTableElement(new Column(1,firstLineWithData));
+        nv1.setDateAndTime(dtm);
+        nv1.setObservedProperty(op);
+        nv1.setFeatureOfInterest(foi);
+        nv1.setSensor(sn);
+        nv1.setUnitOfMeasurement(uom);
 
-		final NumericValue nv2 = new NumericValue();
-		nv2.setTableElement(new Column(2,firstLineWithData));
-		nv2.setDateAndTime(dtm);
-		nv2.setObservedProperty(op);
-		nv2.setFeatureOfInterest(foi);
-		nv2.setSensor(sn2);
-		nv2.setUnitOfMeasurement(uom);
+        final NumericValue nv2 = new NumericValue();
+        nv2.setTableElement(new Column(2,firstLineWithData));
+        nv2.setDateAndTime(dtm);
+        nv2.setObservedProperty(op);
+        nv2.setFeatureOfInterest(foi);
+        nv2.setSensor(sn2);
+        nv2.setUnitOfMeasurement(uom);
 
-		foi.setPosition(p);
+        foi.setPosition(p);
 
-		ModelStore.getInstance().add(nv1);
-		ModelStore.getInstance().add(nv2);
-		ModelStore.getInstance().add(foi);
+        ModelStore.getInstance().add(nv1);
+        ModelStore.getInstance().add(nv2);
+        ModelStore.getInstance().add(foi);
 
-		final MainController f = MainController.getInstance();
+        final MainController f = MainController.getInstance();
 
-		f.setStepController(new Step7Controller());
-	}
+        f.setStepController(new Step7Controller());
+    }
 }

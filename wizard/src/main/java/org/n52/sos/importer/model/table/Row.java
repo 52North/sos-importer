@@ -40,92 +40,92 @@ import org.n52.sos.importer.controller.TableController;
  */
 public class Row extends TableElement {
 
-	private int number = -1;
+    private int number = -1;
 
-	/**
-	 * <p>Constructor for Row.</p>
-	 *
-	 * @param number a int.
-	 */
-	public Row(int number) {
-		this.number = number;
-	}
+    /**
+     * <p>Constructor for Row.</p>
+     *
+     * @param number a int.
+     */
+    public Row(int number) {
+        this.number = number;
+    }
 
-	/**
-	 * <p>Setter for the field <code>number</code>.</p>
-	 *
-	 * @param number a int.
-	 */
-	public void setNumber(int number) {
-		this.number = number;
-	}
+    /**
+     * <p>Setter for the field <code>number</code>.</p>
+     *
+     * @param number a int.
+     */
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-	/**
-	 * <p>Getter for the field <code>number</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getNumber() {
-		return number;
-	}
+    /**
+     * <p>Getter for the field <code>number</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getNumber() {
+        return number;
+    }
 
-	/**
-	 * <p>mark.</p>
-	 */
-	public void mark() {
-		TableController.getInstance().mark(this);
-	}
+    /**
+     * <p>mark.</p>
+     */
+    public void mark() {
+        TableController.getInstance().mark(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getValueFor(Cell c) {
-		return TableController.getInstance().getValueAt(this.getNumber(), c.getColumn());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getValueFor(Cell c) {
+        return TableController.getInstance().getValueAt(this.getNumber(), c.getColumn());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Cell getCellFor(Cell c) {
-		return new Cell(this.getNumber(), c.getColumn());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Cell getCellFor(Cell c) {
+        return new Cell(this.getNumber(), c.getColumn());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public HashSet<String> getValues() {
-		HashSet<String> values = new HashSet<String>();
-		for (int i = 0; i < TableController.getInstance().getColumnCount(); i++) {
-			String value = TableController.getInstance().getValueAt(this.getNumber(), i);
-			values.add(value);
-		}
-		return values;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public HashSet<String> getValues() {
+        HashSet<String> values = new HashSet<String>();
+        for (int i = 0; i < TableController.getInstance().getColumnCount(); i++) {
+            String value = TableController.getInstance().getValueAt(this.getNumber(), i);
+            values.add(value);
+        }
+        return values;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "row[" + number + "]";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "row[" + number + "]";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + number;
-		return result;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + number;
+        return result;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Row))
-			return false;
-		Row other = (Row) obj;
-		if (number != other.number)
-			return false;
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Row))
+            return false;
+        Row other = (Row) obj;
+        if (number != other.number)
+            return false;
+        return true;
+    }
 }

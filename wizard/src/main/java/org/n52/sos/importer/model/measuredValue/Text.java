@@ -63,21 +63,21 @@ package org.n52.sos.importer.model.measuredValue;
 import org.n52.sos.importer.model.Parseable;
 public class Text extends MeasuredValue implements Parseable {
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Text" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Text" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Object parse(String s) {
-		return s.trim();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Object parse(String s) {
+        return s.trim();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setPattern(String parsePattern) {
-		// do nothing, it's Java base type wrapper
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setPattern(String parsePattern) {
+        // do nothing, it's Java base type wrapper
+    }
 }

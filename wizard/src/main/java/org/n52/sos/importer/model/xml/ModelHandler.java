@@ -38,13 +38,13 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  * @version $Id: $Id
  */
 public interface ModelHandler<T extends StepModel>{
-	/**
-	 * Handles the given StepModel.<br>
-	 * The given SosImportConfiguration is updated with the values from the
-	 * given StepModel.
-	 *
-	 * @param stepModel The StepModel to update the SosImportConfiguation
-	 * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
-	 */
-	public void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+    /**
+     * Handles the given StepModel.<br>
+     * The given SosImportConfiguration is updated with the values from the
+     * given StepModel.
+     *
+     * @param stepModel The StepModel to update the SosImportConfiguation
+     * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
+     */
+    public void handleModel(T stepModel, SosImportConfiguration sosImportConf);
 }

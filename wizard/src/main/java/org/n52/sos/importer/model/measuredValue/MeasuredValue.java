@@ -75,187 +75,187 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public abstract class MeasuredValue implements Parseable {
 
-	private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);
 
-	private TableElement tableElement;
+    private TableElement tableElement;
 
-	private DateAndTime dateAndTime;
+    private DateAndTime dateAndTime;
 
-	private ObservedProperty observedProperty;
+    private ObservedProperty observedProperty;
 
-	private UnitOfMeasurement unitOfMeasurement;
+    private UnitOfMeasurement unitOfMeasurement;
 
-	private FeatureOfInterest featureOfInterest;
+    private FeatureOfInterest featureOfInterest;
 
-	private Sensor sensor;
+    private Sensor sensor;
 
-	/**
-	 * <p>Setter for the field <code>featureOfInterest</code>.</p>
-	 *
-	 * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-	 */
-	public void setFeatureOfInterest(final FeatureOfInterest featureOfInterest) {
-		if (featureOfInterest == null) {
-			logger.info("Unassign Feature Of Interest from " + this);
-		} else {
-			logger.info("Assign " + featureOfInterest + " to " + this);
-		}
-		this.featureOfInterest = featureOfInterest;
-	}
+    /**
+     * <p>Setter for the field <code>featureOfInterest</code>.</p>
+     *
+     * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
+     */
+    public void setFeatureOfInterest(final FeatureOfInterest featureOfInterest) {
+        if (featureOfInterest == null) {
+            logger.info("Unassign Feature Of Interest from " + this);
+        } else {
+            logger.info("Assign " + featureOfInterest + " to " + this);
+        }
+        this.featureOfInterest = featureOfInterest;
+    }
 
-	/**
-	 * <p>Getter for the field <code>featureOfInterest</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-	 */
-	public FeatureOfInterest getFeatureOfInterest() {
-		return featureOfInterest;
-	}
+    /**
+     * <p>Getter for the field <code>featureOfInterest</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
+     */
+    public FeatureOfInterest getFeatureOfInterest() {
+        return featureOfInterest;
+    }
 
-	/**
-	 * <p>Setter for the field <code>observedProperty</code>.</p>
-	 *
-	 * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
-	 */
-	public void setObservedProperty(final ObservedProperty observedProperty) {
-		if (observedProperty != null) {
-			logger.info("Assign " + observedProperty + " to " + this);
-		} else {
-			logger.info("Unassign Observed Property from " + this);
-		}
-		this.observedProperty = observedProperty;
-	}
+    /**
+     * <p>Setter for the field <code>observedProperty</code>.</p>
+     *
+     * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
+     */
+    public void setObservedProperty(final ObservedProperty observedProperty) {
+        if (observedProperty != null) {
+            logger.info("Assign " + observedProperty + " to " + this);
+        } else {
+            logger.info("Unassign Observed Property from " + this);
+        }
+        this.observedProperty = observedProperty;
+    }
 
-	/**
-	 * <p>Getter for the field <code>observedProperty</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
-	 */
-	public ObservedProperty getObservedProperty() {
-		return observedProperty;
-	}
+    /**
+     * <p>Getter for the field <code>observedProperty</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
+     */
+    public ObservedProperty getObservedProperty() {
+        return observedProperty;
+    }
 
-	/**
-	 * <p>Setter for the field <code>unitOfMeasurement</code>.</p>
-	 *
-	 * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
-	 */
-	public void setUnitOfMeasurement(final UnitOfMeasurement unitOfMeasurement) {
-		if (unitOfMeasurement != null) {
-			logger.info("Assign " + unitOfMeasurement + " to " + this);
-		} else {
-			logger.info("Unassign Unit of Measurement from " + this);
-		}
-		this.unitOfMeasurement = unitOfMeasurement;
-	}
+    /**
+     * <p>Setter for the field <code>unitOfMeasurement</code>.</p>
+     *
+     * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
+     */
+    public void setUnitOfMeasurement(final UnitOfMeasurement unitOfMeasurement) {
+        if (unitOfMeasurement != null) {
+            logger.info("Assign " + unitOfMeasurement + " to " + this);
+        } else {
+            logger.info("Unassign Unit of Measurement from " + this);
+        }
+        this.unitOfMeasurement = unitOfMeasurement;
+    }
 
-	/**
-	 * <p>Getter for the field <code>unitOfMeasurement</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
-	 */
-	public UnitOfMeasurement getUnitOfMeasurement() {
-		return unitOfMeasurement;
-	}
+    /**
+     * <p>Getter for the field <code>unitOfMeasurement</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
+     */
+    public UnitOfMeasurement getUnitOfMeasurement() {
+        return unitOfMeasurement;
+    }
 
-	/**
-	 * <p>Setter for the field <code>sensor</code>.</p>
-	 *
-	 * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
-	 */
-	public void setSensor(final Sensor sensor) {
-		if (sensor != null) {
-			logger.info("Assign " + sensor + " to " + this);
-		} else {
-			logger.info("Unassign Sensor from " + this);
-		}
-		this.sensor = sensor;
-	}
+    /**
+     * <p>Setter for the field <code>sensor</code>.</p>
+     *
+     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
+     */
+    public void setSensor(final Sensor sensor) {
+        if (sensor != null) {
+            logger.info("Assign " + sensor + " to " + this);
+        } else {
+            logger.info("Unassign Sensor from " + this);
+        }
+        this.sensor = sensor;
+    }
 
-	/**
-	 * <p>Getter for the field <code>sensor</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.Sensor} object.
-	 */
-	public Sensor getSensor() {
-		return sensor;
-	}
+    /**
+     * <p>Getter for the field <code>sensor</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.Sensor} object.
+     */
+    public Sensor getSensor() {
+        return sensor;
+    }
 
-	/**
-	 * <p>Setter for the field <code>tableElement</code>.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 */
-	public void setTableElement(final TableElement tableElement) {
-		logger.info("In " + tableElement + " are " + this + "s");
-		this.tableElement = tableElement;
-	}
+    /**
+     * <p>Setter for the field <code>tableElement</code>.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     */
+    public void setTableElement(final TableElement tableElement) {
+        logger.info("In " + tableElement + " are " + this + "s");
+        this.tableElement = tableElement;
+    }
 
-	/**
-	 * <p>Getter for the field <code>tableElement</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 */
-	public TableElement getTableElement() {
-		return tableElement;
-	}
+    /**
+     * <p>Getter for the field <code>tableElement</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
+     */
+    public TableElement getTableElement() {
+        return tableElement;
+    }
 
-	/**
-	 * <p>Setter for the field <code>dateAndTime</code>.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public void setDateAndTime(final DateAndTime dateAndTime) {
-		if (dateAndTime != null) {
-			logger.info("Assign " + dateAndTime + " to " + this);
-		} else {
-			logger.info("Unassign " + this.dateAndTime + " from " + this);
-		}
-		this.dateAndTime = dateAndTime;
-	}
+    /**
+     * <p>Setter for the field <code>dateAndTime</code>.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public void setDateAndTime(final DateAndTime dateAndTime) {
+        if (dateAndTime != null) {
+            logger.info("Assign " + dateAndTime + " to " + this);
+        } else {
+            logger.info("Unassign " + this.dateAndTime + " from " + this);
+        }
+        this.dateAndTime = dateAndTime;
+    }
 
-	/**
-	 * <p>Getter for the field <code>dateAndTime</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public DateAndTime getDateAndTime() {
-		return dateAndTime;
-	}
+    /**
+     * <p>Getter for the field <code>dateAndTime</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public DateAndTime getDateAndTime() {
+        return dateAndTime;
+    }
 
-	/**
-	 * Returns a sensor for the given feature of interest name and observed property
-	 * name; this method is called when a sensor has been assigned to them in
-	 * step 6b (special)
-	 *
-	 * @param featureOfInterestName a {@link java.lang.String} object.
-	 * @param observedPropertyName a {@link java.lang.String} object.
-	 * @return a {@link org.n52.sos.importer.model.resources.Sensor} object.
-	 */
-	public Sensor getSensorFor(final String featureOfInterestName, final String observedPropertyName) {
-		final Iterator<Step6bSpecialModel> iterator =
-			ModelStore.getInstance().getStep6bSpecialModels().iterator();
+    /**
+     * Returns a sensor for the given feature of interest name and observed property
+     * name; this method is called when a sensor has been assigned to them in
+     * step 6b (special)
+     *
+     * @param featureOfInterestName a {@link java.lang.String} object.
+     * @param observedPropertyName a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.model.resources.Sensor} object.
+     */
+    public Sensor getSensorFor(final String featureOfInterestName, final String observedPropertyName) {
+        final Iterator<Step6bSpecialModel> iterator =
+            ModelStore.getInstance().getStep6bSpecialModels().iterator();
 
-		Step6bSpecialModel step6bSpecialModel;
-		while (iterator.hasNext()) {
-			step6bSpecialModel = iterator.next();
-			if (step6bSpecialModel.getFeatureOfInterest().getName().equals(featureOfInterestName) &&
-				step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName)) {
-				return step6bSpecialModel.getSensor();
-			}
-		}
+        Step6bSpecialModel step6bSpecialModel;
+        while (iterator.hasNext()) {
+            step6bSpecialModel = iterator.next();
+            if (step6bSpecialModel.getFeatureOfInterest().getName().equals(featureOfInterestName) &&
+                step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName)) {
+                return step6bSpecialModel.getSensor();
+            }
+        }
 
-		//should never get here
-		return null;
-	}
+        //should never get here
+        return null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		if (getTableElement() == null) {
-			return "";
-		} else {
-			return " " + getTableElement();
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        if (getTableElement() == null) {
+            return "";
+        } else {
+            return " " + getTableElement();
+        }
+    }
 }

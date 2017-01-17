@@ -48,52 +48,52 @@ import org.n52.sos.importer.view.Step7Panel;
 @Ignore("Requires display which is not available on remote build servers")
 public class Step7ControllerTest {
 
-	private Step7Controller controller;
+    private Step7Controller controller;
 
-	/**
-	 * <p>init.</p>
-	 */
-	@Before
-	public void init() {
-		controller = new Step7Controller();
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        controller = new Step7Controller();
+    }
 
-	/**
-	 * <p>shouldSetHunkSizeInModel.</p>
-	 */
-	@Test
-	public void shouldSetHunkSizeInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setHunkSize(42)
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getHunkSize(), is(42));
-	}
+    /**
+     * <p>shouldSetHunkSizeInModel.</p>
+     */
+    @Test
+    public void shouldSetHunkSizeInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setHunkSize(42)
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        assertThat(((Step7Model) controller.getModel()).getHunkSize(), is(42));
+    }
 
-	/**
-	 * <p>shouldSetSendBufferInModel.</p>
-	 */
-	@Test
-	public void shouldSetSendBufferInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setSendBuffer(42)
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getSendBuffer(), is(42));
-	}
+    /**
+     * <p>shouldSetSendBufferInModel.</p>
+     */
+    @Test
+    public void shouldSetSendBufferInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setSendBuffer(42)
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        assertThat(((Step7Model) controller.getModel()).getSendBuffer(), is(42));
+    }
 
-	/**
-	 * <p>shouldSetImportStrategyInModel.</p>
-	 */
-	@Test
-	public void shouldSetImportStrategyInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
-	}
+    /**
+     * <p>shouldSetImportStrategyInModel.</p>
+     */
+    @Test
+    public void shouldSetImportStrategyInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        assertThat(((Step7Model) controller.getModel()).getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
+    }
 
 }

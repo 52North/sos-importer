@@ -72,84 +72,84 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 public class UnitOfMeasurement extends Resource {
 
-	/** {@inheritDoc} */
-	@Override
-	public void assign(MeasuredValue measuredValue) {
-		measuredValue.setUnitOfMeasurement(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assign(MeasuredValue measuredValue) {
+        measuredValue.setUnitOfMeasurement(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssigned(MeasuredValue measuredValue) {
-		return measuredValue.getUnitOfMeasurement() != null;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isAssigned(MeasuredValue measuredValue) {
+        return measuredValue.getUnitOfMeasurement() != null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssignedTo(MeasuredValue measuredValue) {
-		return measuredValue.getUnitOfMeasurement() == this;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isAssignedTo(MeasuredValue measuredValue) {
+        return measuredValue.getUnitOfMeasurement() == this;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassign(MeasuredValue mv) {
-		mv.setUnitOfMeasurement(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassign(MeasuredValue mv) {
+        mv.setUnitOfMeasurement(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public UnitOfMeasurement forThis(Cell measuredValuePosition) {
-		if (getTableElement() == null) {
-			return this;
-		} else {
-			UnitOfMeasurement uom = new UnitOfMeasurement();
-			String name = getTableElement().getValueFor(measuredValuePosition);
-			uom.setName(name);
-			return uom;
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public UnitOfMeasurement forThis(Cell measuredValuePosition) {
+        if (getTableElement() == null) {
+            return this;
+        } else {
+            UnitOfMeasurement uom = new UnitOfMeasurement();
+            String name = getTableElement().getValueFor(measuredValuePosition);
+            uom.setName(name);
+            return uom;
+        }
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public DefaultComboBoxModel<String> getNames() {
-		return EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public DefaultComboBoxModel<String> getNames() {
+        return EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public DefaultComboBoxModel<String> getURIs() {
-		return EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public DefaultComboBoxModel<String> getURIs() {
+        return EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public List<Resource> getList() {
-		List<Resource> resources = new ArrayList<Resource>();
-		resources.addAll(ModelStore.getInstance().getUnitOfMeasurements());
-		return resources;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public List<Resource> getList() {
+        List<Resource> resources = new ArrayList<Resource>();
+        resources.addAll(ModelStore.getInstance().getUnitOfMeasurements());
+        return resources;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Resource getNextResourceType() {
-		return new Sensor();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Resource getNextResourceType() {
+        return new Sensor();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Unit Of Measurement" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Unit Of Measurement" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getTypeName() {
-		return Lang.l().unitOfMeasurement();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getTypeName() {
+        return Lang.l().unitOfMeasurement();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String XML_PREFIX() {
-		return "uom";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String XML_PREFIX() {
+        return "uom";
+    }
 }

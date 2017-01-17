@@ -67,19 +67,19 @@ import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.Step2Model;
 public class Step2Test {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		final TableController tc = TableController.getInstance();
-		tc.setContent(TestData.EXAMPLE_TABLE);
-		final Step2Model s2M = new Step2Model("line 1\nline2\nline3\nlin4\nline5\nline6", 6);
-		final Step2Controller s2C = new Step2Controller(
-				s2M);
-		//
-		f.setStepController(s2C);
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final MainController f = MainController.getInstance();
+        final TableController tc = TableController.getInstance();
+        tc.setContent(TestData.EXAMPLE_TABLE);
+        final Step2Model s2M = new Step2Model("line 1\nline2\nline3\nlin4\nline5\nline6", 6);
+        final Step2Controller s2C = new Step2Controller(
+                s2M);
+        //
+        f.setStepController(s2C);
+    }
 }

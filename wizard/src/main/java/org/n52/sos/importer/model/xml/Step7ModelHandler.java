@@ -47,82 +47,82 @@ import org.x52North.sensorweb.sos.importer.x04.SosMetadataDocument.SosMetadata;
  */
 public class Step7ModelHandler implements ModelHandler<Step7Model> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Step7ModelHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step7ModelHandler.class);
 
-	/** {@inheritDoc} */
-	@Override
-	public void handleModel(final Step7Model stepModel,
-			final SosImportConfiguration sosImportConf) {
-		LOG.trace("handleModel()");
-		SosMetadata sosMeta = sosImportConf.getSosMetadata();
-		//
-		if (sosMeta == null) {
-			sosMeta = sosImportConf.addNewSosMetadata();
-			LOG.debug("Added new SosMetadata element.");
-		}
-		sosMeta.setURL(stepModel.getSosURL());
-		Offering off = sosMeta.getOffering();
-		if (off == null) {
-			off = sosMeta.addNewOffering();
-			LOG.debug("Added new Offering element");
-		}
-		off.setGenerate(stepModel.isGenerateOfferingFromSensorName());
-		if (!off.getGenerate()) {
-			off.setStringValue(stepModel.getOffering());
-		}
-		if (stepModel.getBinding() != null && !stepModel.getBinding().isEmpty()) {
-			sosMeta.setBinding(stepModel.getBinding());
-		}
-		if (stepModel.getVersion() != null && !stepModel.getVersion().isEmpty()) {
-			sosMeta.setVersion(stepModel.getVersion());
-		}
-		addImportStrategy(stepModel.getImportStrategy(), sosImportConf);
-		if (stepModel.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
-			sosMeta.setInsertSweArrayObservationTimeoutBuffer(stepModel.getSendBuffer());
-			addHunkSize(stepModel.getHunkSize(), sosImportConf);
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void handleModel(final Step7Model stepModel,
+            final SosImportConfiguration sosImportConf) {
+        LOG.trace("handleModel()");
+        SosMetadata sosMeta = sosImportConf.getSosMetadata();
+        //
+        if (sosMeta == null) {
+            sosMeta = sosImportConf.addNewSosMetadata();
+            LOG.debug("Added new SosMetadata element.");
+        }
+        sosMeta.setURL(stepModel.getSosURL());
+        Offering off = sosMeta.getOffering();
+        if (off == null) {
+            off = sosMeta.addNewOffering();
+            LOG.debug("Added new Offering element");
+        }
+        off.setGenerate(stepModel.isGenerateOfferingFromSensorName());
+        if (!off.getGenerate()) {
+            off.setStringValue(stepModel.getOffering());
+        }
+        if (stepModel.getBinding() != null && !stepModel.getBinding().isEmpty()) {
+            sosMeta.setBinding(stepModel.getBinding());
+        }
+        if (stepModel.getVersion() != null && !stepModel.getVersion().isEmpty()) {
+            sosMeta.setVersion(stepModel.getVersion());
+        }
+        addImportStrategy(stepModel.getImportStrategy(), sosImportConf);
+        if (stepModel.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
+            sosMeta.setInsertSweArrayObservationTimeoutBuffer(stepModel.getSendBuffer());
+            addHunkSize(stepModel.getHunkSize(), sosImportConf);
+        }
+    }
 
-	private void addHunkSize(final int hunkSize,
-			final SosImportConfiguration sosImportConf) {
-		addAdditionalMetadata(sosImportConf, Key.HUNK_SIZE, Integer.toString(hunkSize));
-	}
+    private void addHunkSize(final int hunkSize,
+            final SosImportConfiguration sosImportConf) {
+        addAdditionalMetadata(sosImportConf, Key.HUNK_SIZE, Integer.toString(hunkSize));
+    }
 
-	private void addImportStrategy(final ImportStrategy importStrategy,
-			final SosImportConfiguration sosImportConf) {
-		final Enum key = Key.IMPORT_STRATEGY;
-		String value = "SingleObservation";
-		if (importStrategy == ImportStrategy.SweArrayObservationWithSplitExtension) {
-			value = "SweArrayObservationWithSplitExtension";
-		}
-		addAdditionalMetadata(sosImportConf, key, value);
-	}
+    private void addImportStrategy(final ImportStrategy importStrategy,
+            final SosImportConfiguration sosImportConf) {
+        final Enum key = Key.IMPORT_STRATEGY;
+        String value = "SingleObservation";
+        if (importStrategy == ImportStrategy.SweArrayObservationWithSplitExtension) {
+            value = "SweArrayObservationWithSplitExtension";
+        }
+        addAdditionalMetadata(sosImportConf, key, value);
+    }
 
-	private void addAdditionalMetadata(final SosImportConfiguration sosImportConf,
-			final Enum key,
-			final String value) {
-		if (!sosImportConf.isSetAdditionalMetadata()) {
-			sosImportConf.addNewAdditionalMetadata();
-		}
-		Metadata importStrategyMetadata = null;
-		if (sosImportConf.getAdditionalMetadata().getMetadataArray() == null ||
-				sosImportConf.getAdditionalMetadata().getMetadataArray().length == 0) {
-			importStrategyMetadata = sosImportConf.getAdditionalMetadata().addNewMetadata();
-		} else {
-			boolean notFound = true;
-			for (final Metadata metadata : sosImportConf.getAdditionalMetadata().getMetadataArray()) {
-				if (metadata.getKey().equals(key)) {
-					importStrategyMetadata = metadata;
-					notFound = false;
-					break;
-				}
-			}
-			if (notFound) {
-				importStrategyMetadata = sosImportConf.getAdditionalMetadata().addNewMetadata();
-			}
-		}
-		importStrategyMetadata.setKey(key);
-		importStrategyMetadata.setValue(value);
-	}
+    private void addAdditionalMetadata(final SosImportConfiguration sosImportConf,
+            final Enum key,
+            final String value) {
+        if (!sosImportConf.isSetAdditionalMetadata()) {
+            sosImportConf.addNewAdditionalMetadata();
+        }
+        Metadata importStrategyMetadata = null;
+        if (sosImportConf.getAdditionalMetadata().getMetadataArray() == null ||
+                sosImportConf.getAdditionalMetadata().getMetadataArray().length == 0) {
+            importStrategyMetadata = sosImportConf.getAdditionalMetadata().addNewMetadata();
+        } else {
+            boolean notFound = true;
+            for (final Metadata metadata : sosImportConf.getAdditionalMetadata().getMetadataArray()) {
+                if (metadata.getKey().equals(key)) {
+                    importStrategyMetadata = metadata;
+                    notFound = false;
+                    break;
+                }
+            }
+            if (notFound) {
+                importStrategyMetadata = sosImportConf.getAdditionalMetadata().addNewMetadata();
+            }
+        }
+        importStrategyMetadata.setKey(key);
+        importStrategyMetadata.setValue(value);
+    }
 
 }

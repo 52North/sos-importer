@@ -36,18 +36,18 @@ import org.n52.sos.importer.feeder.util.FileHelper;
 
 public class FileHelperTest {
 
-	@Test
-	public void shouldShortenALongString() {
-		// given
-		final String expectedMD5Hash = "c42073bd88ccb323a36b57092093b139";
-		final String longString = "This is a very long string that should be shortened to a shorter one";
+    @Test
+    public void shouldShortenALongString() {
+        // given
+        final String expectedMD5Hash = "c42073bd88ccb323a36b57092093b139";
+        final String longString = "This is a very long string that should be shortened to a shorter one";
 
-		// when
-		final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
+        // when
+        final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
 
-		// then
-		assertThat(shorterString.length(),is(32));
-		assertThat(shorterString,is(expectedMD5Hash));
-	}
+        // then
+        assertThat(shorterString.length(),is(32));
+        assertThat(shorterString,is(expectedMD5Hash));
+    }
 
 }

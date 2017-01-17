@@ -42,39 +42,39 @@ import org.n52.sos.importer.Constants;
  */
 public class DescriptionPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static DescriptionPanel instance = null;
+    private static DescriptionPanel instance = null;
 
-	private final JLabel descriptionLabel = new JLabel();
+    private final JLabel descriptionLabel = new JLabel();
 
-	private DescriptionPanel() {
-		super();
-		setLayout(new FlowLayout(FlowLayout.CENTER));
-		descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
-		add(descriptionLabel);
-		if (Constants.GUI_DEBUG) {
-			setBorder(Constants.DEBUG_BORDER);
-		}
-	}
+    private DescriptionPanel() {
+        super();
+        setLayout(new FlowLayout(FlowLayout.CENTER));
+        descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
+        add(descriptionLabel);
+        if (Constants.GUI_DEBUG) {
+            setBorder(Constants.DEBUG_BORDER);
+        }
+    }
 
-	/**
-	 * <p>Getter for the field <code>instance</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.view.DescriptionPanel} object.
-	 */
-	public static DescriptionPanel getInstance() {
-		if (instance == null)
-			instance = new DescriptionPanel();
-		return instance;
-	}
+    /**
+     * <p>Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.view.DescriptionPanel} object.
+     */
+    public static DescriptionPanel getInstance() {
+        if (instance == null)
+            instance = new DescriptionPanel();
+        return instance;
+    }
 
-	/**
-	 * <p>setText.</p>
-	 *
-	 * @param stepDescription a {@link java.lang.String} object.
-	 */
-	public void setText(String stepDescription) {
-		descriptionLabel.setText(stepDescription);
-	}
+    /**
+     * <p>setText.</p>
+     *
+     * @param stepDescription a {@link java.lang.String} object.
+     */
+    public void setText(String stepDescription) {
+        descriptionLabel.setText(stepDescription);
+    }
 }

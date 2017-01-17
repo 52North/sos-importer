@@ -43,29 +43,29 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class WrappedCSVReader implements CsvParser {
 
-	private CSVReader csvReader;
+    private CSVReader csvReader;
 
-	/** {@inheritDoc} */
-	@Override
-	public String[] readNext() throws IOException {
-		return csvReader.readNext();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String[] readNext() throws IOException {
+        return csvReader.readNext();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void init(final BufferedReader bufferedReader,
-			final Configuration configuration) {
-		final int flwd = configuration.getFirstLineWithData();
-		final char separator = configuration.getCsvSeparator(),
-				quotechar = configuration.getCsvQuoteChar(),
-				escape = configuration.getCsvEscape();
-		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void init(final BufferedReader bufferedReader,
+            final Configuration configuration) {
+        final int flwd = configuration.getFirstLineWithData();
+        final char separator = configuration.getCsvSeparator(),
+                quotechar = configuration.getCsvQuoteChar(),
+                escape = configuration.getCsvEscape();
+        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int getSkipLimit() {
-		return 1;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int getSkipLimit() {
+        return 1;
+    }
 
 }

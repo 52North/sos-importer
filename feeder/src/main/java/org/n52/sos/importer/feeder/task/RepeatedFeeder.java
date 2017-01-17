@@ -55,156 +55,156 @@ import org.slf4j.LoggerFactory;
  */
 public class RepeatedFeeder extends TimerTask{
 
-	private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
 
-	private final Configuration configuration;
-	private final File file;
+    private final Configuration configuration;
+    private final File file;
 
-	private final int periodInMinutes;
+    private final int periodInMinutes;
 
-	final private static Lock oneFeederLock = new ReentrantLock(true);
+    final private static Lock oneFeederLock = new ReentrantLock(true);
 
-	private static File lastUsedDateFile;
+    private static File lastUsedDateFile;
 
-	/**
-	 * <p>Constructor for RepeatedFeeder.</p>
-	 *
-	 * @param c a {@link org.n52.sos.importer.feeder.Configuration} object.
-	 * @param f a {@link java.io.File} object.
-	 * @param periodInMinutes a int.
-	 */
-	public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
-		configuration = c;
-		file = f;
-		this.periodInMinutes = periodInMinutes;
-	}
+    /**
+     * <p>Constructor for RepeatedFeeder.</p>
+     *
+     * @param c a {@link org.n52.sos.importer.feeder.Configuration} object.
+     * @param f a {@link java.io.File} object.
+     * @param periodInMinutes a int.
+     */
+    public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
+        configuration = c;
+        file = f;
+        this.periodInMinutes = periodInMinutes;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void run() {
-		LOG.trace("run()");
-		File datafile;
-		 // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
-		oneFeederLock.lock();
-		try {
-			/*
-			 * save last feeded file incl. counter
-			 * check for newer files
-			 * each on own thread?
-			 * 	feed all obs in last feeded file
-			 * 	feed all newer files
-			 */
-			// if file is a directory, get latest from file list
-			if (file.isDirectory()) {
-				final ArrayList<File> filesToFeed = new ArrayList<File>();
-				getLastFeedFile();
-				if (lastUsedDateFile != null) {
-					filesToFeed.add(lastUsedDateFile);
-				}
-				addNewerFiles(filesToFeed);
-				for (final File fileToFeed : filesToFeed) {
-					LOG.info("Start feeding file {}",fileToFeed.getName());
-					try {
-						new OneTimeFeeder(configuration, fileToFeed).run();
-						lastUsedDateFile = fileToFeed;
-						saveLastFeedFile();
-						LOG.info("Finished feeding file {}.",fileToFeed.getName());
-					}
-					catch (final InvalidColumnCountException iae) {
-						// Exception is already logged -> nothing to do
-					}
-					catch (final JavaApiBugJDL6203387Exception e) {
-						// Exception is already logged -> nothing to do
-					}
-				}
-			} else {
-				datafile = file;
-				// OneTimeFeeder with file override used not as thread
-				new OneTimeFeeder(configuration, datafile).run();
-				LOG.info("Finished feeding file {}. Next run in {} minute{}.",
-						datafile.getName(),
-						periodInMinutes,
-						periodInMinutes>1?"s":"");
-			}
-		}
-		catch (final InvalidColumnCountException iae) {
-			// Exception is already logged -> nothing to do
-		}
-		catch (final JavaApiBugJDL6203387Exception e) {
-			// Exception is already logged -> nothing to do
-		} catch (final Exception e) {
-			LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());
-			LOG.debug("StackTrace:",e);
-		} finally {
-			oneFeederLock.unlock();
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void run() {
+        LOG.trace("run()");
+        File datafile;
+         // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
+        oneFeederLock.lock();
+        try {
+            /*
+             * save last feeded file incl. counter
+             * check for newer files
+             * each on own thread?
+             *  feed all obs in last feeded file
+             *  feed all newer files
+             */
+            // if file is a directory, get latest from file list
+            if (file.isDirectory()) {
+                final ArrayList<File> filesToFeed = new ArrayList<File>();
+                getLastFeedFile();
+                if (lastUsedDateFile != null) {
+                    filesToFeed.add(lastUsedDateFile);
+                }
+                addNewerFiles(filesToFeed);
+                for (final File fileToFeed : filesToFeed) {
+                    LOG.info("Start feeding file {}",fileToFeed.getName());
+                    try {
+                        new OneTimeFeeder(configuration, fileToFeed).run();
+                        lastUsedDateFile = fileToFeed;
+                        saveLastFeedFile();
+                        LOG.info("Finished feeding file {}.",fileToFeed.getName());
+                    }
+                    catch (final InvalidColumnCountException iae) {
+                        // Exception is already logged -> nothing to do
+                    }
+                    catch (final JavaApiBugJDL6203387Exception e) {
+                        // Exception is already logged -> nothing to do
+                    }
+                }
+            } else {
+                datafile = file;
+                // OneTimeFeeder with file override used not as thread
+                new OneTimeFeeder(configuration, datafile).run();
+                LOG.info("Finished feeding file {}. Next run in {} minute{}.",
+                        datafile.getName(),
+                        periodInMinutes,
+                        periodInMinutes>1?"s":"");
+            }
+        }
+        catch (final InvalidColumnCountException iae) {
+            // Exception is already logged -> nothing to do
+        }
+        catch (final JavaApiBugJDL6203387Exception e) {
+            // Exception is already logged -> nothing to do
+        } catch (final Exception e) {
+            LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());
+            LOG.debug("StackTrace:",e);
+        } finally {
+            oneFeederLock.unlock();
+        }
+    }
 
-	private void addNewerFiles(final ArrayList<File> filesToFeed) {
-		// TODO if last feed file is null: add all (OR only the newest?) files in directory to list "filesToFeed"
-		// TODO else: get all files newer than last feed file and add to list "filesToFeed"
-		final File[] files = file.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(final File pathname) {
-				return pathname.isFile() &&
-						pathname.canRead() &&
-						(configuration.getLocaleFilePattern() != null?
-						configuration.getLocaleFilePattern().matcher(pathname.getName()).matches():true);
-			}
-		});
-		if (files != null) {
+    private void addNewerFiles(final ArrayList<File> filesToFeed) {
+        // TODO if last feed file is null: add all (OR only the newest?) files in directory to list "filesToFeed"
+        // TODO else: get all files newer than last feed file and add to list "filesToFeed"
+        final File[] files = file.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(final File pathname) {
+                return pathname.isFile() &&
+                        pathname.canRead() &&
+                        (configuration.getLocaleFilePattern() != null?
+                        configuration.getLocaleFilePattern().matcher(pathname.getName()).matches():true);
+            }
+        });
+        if (files != null) {
 
-			for (final File file : files) {
-				if (lastUsedDateFile == null || file.lastModified() >= lastUsedDateFile.lastModified()) {
-					filesToFeed.add(file);
-				}
-			}
-			if (filesToFeed.size() < 1) {
-				LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
-						file.getAbsolutePath(),
-						lastUsedDateFile!=null?lastUsedDateFile.getName():"none");
-			}
-		} else {
-			LOG.error("No file found in directory '{}'",file.getAbsolutePath());
-		}
-	}
+            for (final File file : files) {
+                if (lastUsedDateFile == null || file.lastModified() >= lastUsedDateFile.lastModified()) {
+                    filesToFeed.add(file);
+                }
+            }
+            if (filesToFeed.size() < 1) {
+                LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
+                        file.getAbsolutePath(),
+                        lastUsedDateFile!=null?lastUsedDateFile.getName():"none");
+            }
+        } else {
+            LOG.error("No file found in directory '{}'",file.getAbsolutePath());
+        }
+    }
 
-	private void saveLastFeedFile()	{
-		final Properties prop = new Properties();
-		prop.put("lastFeedFile", lastUsedDateFile.getAbsolutePath());
-		try {
-			prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"), null);
-			LOG.info("Saved last used data file: {}", lastUsedDateFile.getName());
-		} catch (final IOException e) {
-			LOG.error("Exception thrown: {}", e.getMessage(), e);
-		}
-	}
+    private void saveLastFeedFile() {
+        final Properties prop = new Properties();
+        prop.put("lastFeedFile", lastUsedDateFile.getAbsolutePath());
+        try {
+            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"), null);
+            LOG.info("Saved last used data file: {}", lastUsedDateFile.getName());
+        } catch (final IOException e) {
+            LOG.error("Exception thrown: {}", e.getMessage(), e);
+        }
+    }
 
-	private void getLastFeedFile() {
-		final Properties prop = new Properties();
-		String lastFeedFilePropertiesPath = "";
-		try {
-			lastFeedFilePropertiesPath = new StringBuffer(FileHelper.getHome().getAbsolutePath())
-				.append(File.separator)
-				.append(FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()))
-				.append(".properties")
-				.toString();
-			prop.load(new FileReader(lastFeedFilePropertiesPath));
-		} catch (final FileNotFoundException fnfe) {
-			LOG.debug(String.format("Last feed file properties not found: %s",lastFeedFilePropertiesPath));
-		} catch (final IOException e) {
-			LOG.debug("Exception thrown: {}", e.getMessage(), e); // only on DEBUG because it is not a problem if this file does not exist
-		}
-		final String lastFeedFileName = prop.getProperty("lastFeedFile");
-		if (lastFeedFileName == null) {
-			return;
-		}
-		final File lastFeedFile = new File(lastFeedFileName);
-		if (lastFeedFile.canRead()) {
-			lastUsedDateFile = lastFeedFile;
-		} else {
-			lastUsedDateFile = null;
-		}
-	}
+    private void getLastFeedFile() {
+        final Properties prop = new Properties();
+        String lastFeedFilePropertiesPath = "";
+        try {
+            lastFeedFilePropertiesPath = new StringBuffer(FileHelper.getHome().getAbsolutePath())
+                .append(File.separator)
+                .append(FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()))
+                .append(".properties")
+                .toString();
+            prop.load(new FileReader(lastFeedFilePropertiesPath));
+        } catch (final FileNotFoundException fnfe) {
+            LOG.debug(String.format("Last feed file properties not found: %s",lastFeedFilePropertiesPath));
+        } catch (final IOException e) {
+            LOG.debug("Exception thrown: {}", e.getMessage(), e); // only on DEBUG because it is not a problem if this file does not exist
+        }
+        final String lastFeedFileName = prop.getProperty("lastFeedFile");
+        if (lastFeedFileName == null) {
+            return;
+        }
+        final File lastFeedFile = new File(lastFeedFileName);
+        if (lastFeedFile.canRead()) {
+            lastUsedDateFile = lastFeedFile;
+        } else {
+            lastUsedDateFile = null;
+        }
+    }
 
 }

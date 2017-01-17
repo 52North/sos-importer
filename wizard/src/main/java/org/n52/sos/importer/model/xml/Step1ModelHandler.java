@@ -50,57 +50,57 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step1ModelHandler implements ModelHandler<Step1Model> {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step1ModelHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step1ModelHandler.class);
 
-	/** {@inheritDoc} */
-	@Override
-	public void handleModel(final Step1Model stepModel, final SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
+    /** {@inheritDoc} */
+    @Override
+    public void handleModel(final Step1Model stepModel, final SosImportConfiguration sosImportConf) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("handleModel()");
+        }
 
-		DataFile dF = sosImportConf.getDataFile();
-		if (dF == null) {
-			dF = sosImportConf.addNewDataFile();
-		}
+        DataFile dF = sosImportConf.getDataFile();
+        if (dF == null) {
+            dF = sosImportConf.addNewDataFile();
+        }
 
-		if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
-			if (dF.getRemoteFile() != null) {
-				dF.setRemoteFile(null);
-			}
-			final LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
-			final String path = stepModel.getCSVFilePath();
-			if (path != null && !path.equals("")) {
-				lF.setPath(path);
-			} else {
-				final String msg = "empty path to CSV file in Step1Model: " + path;
-				logger.error(msg);
-				throw new NullPointerException(msg);
-			}
-			final String encoding = stepModel.getFileEncoding();
-			if (encoding != null && !encoding.isEmpty()) {
-				lF.setEncoding(encoding);
-			}
-		} else {
-			if (dF.getLocalFile() != null) {
-				dF.setLocalFile(null);
-			}
-			final RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
-			String url = stepModel.getUrl();
-			if (stepModel.getDirectory() != null && url.charAt(url.length() - 1) != '/'
-					&& stepModel.getDirectory().charAt(0) != '/') {
-				url += '/';
-			}
-			url += stepModel.getDirectory();
-			if (url.charAt(url.length() - 1) != '/' && stepModel.getFilenameSchema().charAt(0) != '/') {
-				url += '/';
-			}
-			url += stepModel.getFilenameSchema();
-			rF.setURL(url);
-			final Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
-			cDoc.setUserName(stepModel.getUser());
-			cDoc.setPassword(stepModel.getPassword());
-		}
-		dF.setReferenceIsARegularExpression(stepModel.isRegex());
-	}
+        if (stepModel.getFeedingType() == Step1Panel.CSV_FILE) {
+            if (dF.getRemoteFile() != null) {
+                dF.setRemoteFile(null);
+            }
+            final LocalFile lF = (dF.getLocalFile() == null) ? dF.addNewLocalFile() : dF.getLocalFile();
+            final String path = stepModel.getCSVFilePath();
+            if (path != null && !path.equals("")) {
+                lF.setPath(path);
+            } else {
+                final String msg = "empty path to CSV file in Step1Model: " + path;
+                logger.error(msg);
+                throw new NullPointerException(msg);
+            }
+            final String encoding = stepModel.getFileEncoding();
+            if (encoding != null && !encoding.isEmpty()) {
+                lF.setEncoding(encoding);
+            }
+        } else {
+            if (dF.getLocalFile() != null) {
+                dF.setLocalFile(null);
+            }
+            final RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
+            String url = stepModel.getUrl();
+            if (stepModel.getDirectory() != null && url.charAt(url.length() - 1) != '/'
+                    && stepModel.getDirectory().charAt(0) != '/') {
+                url += '/';
+            }
+            url += stepModel.getDirectory();
+            if (url.charAt(url.length() - 1) != '/' && stepModel.getFilenameSchema().charAt(0) != '/') {
+                url += '/';
+            }
+            url += stepModel.getFilenameSchema();
+            rF.setURL(url);
+            final Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
+            cDoc.setUserName(stepModel.getUser());
+            cDoc.setPassword(stepModel.getPassword());
+        }
+        dF.setReferenceIsARegularExpression(stepModel.isRegex());
+    }
 }

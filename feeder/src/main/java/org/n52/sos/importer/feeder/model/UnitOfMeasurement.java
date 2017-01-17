@@ -36,19 +36,19 @@ package org.n52.sos.importer.feeder.model;
  */
 public class UnitOfMeasurement extends Resource {
 
-	/**
-	 * <p>Constructor for UnitOfMeasurement.</p>
-	 *
-	 * @param code a {@link java.lang.String} object.
-	 * @param uri a {@link java.lang.String} object.
-	 */
-	public UnitOfMeasurement(String code, String uri) {
-		super(code, uri);
-	}
-	/**
-	 * <p>getCode.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getCode() { return getName(); }
+    /**
+     * <p>Constructor for UnitOfMeasurement.</p>
+     *
+     * @param code a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public UnitOfMeasurement(String code, String uri) {
+        super(code, uri);
+    }
+    /**
+     * <p>getCode.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getCode() { return getName(); }
 }

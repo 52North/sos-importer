@@ -68,82 +68,82 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
 public class Latitude extends PositionComponent {
 
-	/**
-	 * <p>Constructor for Latitude.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 * @param pattern a {@link java.lang.String} object.
-	 */
-	public Latitude(TableElement tableElement, String pattern) {
-		super(tableElement, pattern);
-	}
+    /**
+     * <p>Constructor for Latitude.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public Latitude(TableElement tableElement, String pattern) {
+        super(tableElement, pattern);
+    }
 
-	/**
-	 * <p>Constructor for Latitude.</p>
-	 *
-	 * @param value a double.
-	 * @param unit a {@link java.lang.String} object.
-	 */
-	public Latitude(double value, String unit) {
-		super(value, unit);
-	}
+    /**
+     * <p>Constructor for Latitude.</p>
+     *
+     * @param value a double.
+     * @param unit a {@link java.lang.String} object.
+     */
+    public Latitude(double value, String unit) {
+        super(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Latitude" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Latitude" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingLatitudePanel((Position)c);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingLatitudePanel((Position)c);
+    }
 
-	/**
-	 * Tries to convert a given String into a valid Latitude object
-	 *
-	 * @param s a {@link java.lang.String} object.
-	 * @return a {@link org.n52.sos.importer.model.position.Latitude} object.
-	 */
-	// TODO units and Strings -> Constants
-	public static Latitude parse(String s) {
-		double value = 0.0;
-		String unit = "";
+    /**
+     * Tries to convert a given String into a valid Latitude object
+     *
+     * @param s a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.model.position.Latitude} object.
+     */
+    // TODO units and Strings -> Constants
+    public static Latitude parse(String s) {
+        double value = 0.0;
+        String unit = "";
 
-		String number;
-		//TODO handle inputs like degrees/minutes/seconds, n.Br.
-		if (s.contains("°")) {
-			unit = "°";
-			String[] part = s.split("°");
-			number = part[0];
-		} else if (s.contains("m")) {
-			unit = "m";
-			number = s.replace("m", "");
-		} else
-			number = s;
+        String number;
+        //TODO handle inputs like degrees/minutes/seconds, n.Br.
+        if (s.contains("°")) {
+            unit = "°";
+            String[] part = s.split("°");
+            number = part[0];
+        } else if (s.contains("m")) {
+            unit = "m";
+            number = s.replace("m", "");
+        } else
+            number = s;
 
-		NumericValue nv = new NumericValue();
+        NumericValue nv = new NumericValue();
 
-		value = nv.parse(number);
+        value = nv.parse(number);
 
-		if (unit.equals(""))
-			if (value <= 90.0 && value >= -90.0)
-				unit = "°";
-			else
-				unit = "m";
+        if (unit.equals(""))
+            if (value <= 90.0 && value >= -90.0)
+                unit = "°";
+            else
+                unit = "m";
 
-		return new Latitude(value, unit);
-	}
+        return new Latitude(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Latitude forThis(Cell featureOfInterestPosition) {
-		if (getTableElement() == null)
-			return new Latitude(getValue(), getParsedUnit());
-		else {
-			String latitudeString = getTableElement().getValueFor(featureOfInterestPosition);
-			return Latitude.parse(latitudeString);
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Latitude forThis(Cell featureOfInterestPosition) {
+        if (getTableElement() == null)
+            return new Latitude(getValue(), getParsedUnit());
+        else {
+            String latitudeString = getTableElement().getValueFor(featureOfInterestPosition);
+            return Latitude.parse(latitudeString);
+        }
+    }
 }

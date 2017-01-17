@@ -67,154 +67,154 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public abstract class PositionComponent extends Component {
 
-	private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);
+    private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);
 
-	private TableElement tableElement;
+    private TableElement tableElement;
 
-	private String pattern;
+    private String pattern;
 
-	private double value = -1;
+    private double value = -1;
 
-	private String unit = null;
+    private String unit = null;
 
-	/**
-	 * <p>Constructor for PositionComponent.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 * @param pattern a {@link java.lang.String} object.
-	 */
-	public PositionComponent(final TableElement tableElement, final String pattern) {
-		this.tableElement = tableElement;
-		this.pattern = pattern;
-	}
+    /**
+     * <p>Constructor for PositionComponent.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public PositionComponent(final TableElement tableElement, final String pattern) {
+        this.tableElement = tableElement;
+        this.pattern = pattern;
+    }
 
-	/**
-	 * <p>Constructor for PositionComponent.</p>
-	 *
-	 * @param value a double.
-	 * @param unit a {@link java.lang.String} object.
-	 */
-	public PositionComponent(final double value, final String unit) {
-		this.value = value;
-		this.unit = unit;
-	}
+    /**
+     * <p>Constructor for PositionComponent.</p>
+     *
+     * @param value a double.
+     * @param unit a {@link java.lang.String} object.
+     */
+    public PositionComponent(final double value, final String unit) {
+        this.value = value;
+        this.unit = unit;
+    }
 
-	/**
-	 * <p>Setter for the field <code>value</code>.</p>
-	 *
-	 * @param value a double.
-	 */
-	public void setValue(final double value) {
-		logger.info("Assign Value to " + this.getClass().getName());
-		this.value = value;
-	}
+    /**
+     * <p>Setter for the field <code>value</code>.</p>
+     *
+     * @param value a double.
+     */
+    public void setValue(final double value) {
+        logger.info("Assign Value to " + this.getClass().getName());
+        this.value = value;
+    }
 
-	/**
-	 * <p>Getter for the field <code>value</code>.</p>
-	 *
-	 * @return a double.
-	 */
-	public double getValue() {
-		return value;
-	}
+    /**
+     * <p>Getter for the field <code>value</code>.</p>
+     *
+     * @return a double.
+     */
+    public double getValue() {
+        return value;
+    }
 
-	/**
-	 * <p>Setter for the field <code>unit</code>.</p>
-	 *
-	 * @param unit a {@link java.lang.String} object.
-	 */
-	public void setUnit(final String unit) {
-		this.unit = unit;
-	}
+    /**
+     * <p>Setter for the field <code>unit</code>.</p>
+     *
+     * @param unit a {@link java.lang.String} object.
+     */
+    public void setUnit(final String unit) {
+        this.unit = unit;
+    }
 
-	/**
-	 * <p>Getter for the field <code>unit</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getUnit() {
-		return unit;
-	}
+    /**
+     * <p>Getter for the field <code>unit</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getUnit() {
+        return unit;
+    }
 
-	/**
-	 * <p>Setter for the field <code>tableElement</code>.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 */
-	public void setTableElement(final TableElement tableElement) {
-		logger.info("Assign Column to " + this.getClass().getName());
-		this.tableElement = tableElement;
-	}
+    /**
+     * <p>Setter for the field <code>tableElement</code>.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     */
+    public void setTableElement(final TableElement tableElement) {
+        logger.info("Assign Column to " + this.getClass().getName());
+        this.tableElement = tableElement;
+    }
 
-	/**
-	 * <p>Getter for the field <code>tableElement</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 */
-	public TableElement getTableElement() {
-		return tableElement;
-	}
+    /**
+     * <p>Getter for the field <code>tableElement</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
+     */
+    public TableElement getTableElement() {
+        return tableElement;
+    }
 
-	/**
-	 * colors this particular component
-	 */
-	public void mark() {
-		if (tableElement != null) {
-			tableElement.mark();
-		}
-	}
+    /**
+     * colors this particular component
+     */
+    public void mark() {
+        if (tableElement != null) {
+            tableElement.mark();
+        }
+    }
 
-	/**
-	 * <p>getParsedUnit.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getParsedUnit() {
-		if (unit == null || unit.equals("")) {
-			return "n/a";
-		} else if (unit.equals("m") || unit.equals("meters")) {
-			return "m";
-		} else if (unit.equals("ft") || unit.equals("feet")) {
-			return "ft";
-		} else if (unit.equals("degree") || unit.equals("°")) {
-			return "degree";
-		}
-		return "n/a";
-	}
+    /**
+     * <p>getParsedUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getParsedUnit() {
+        if (unit == null || unit.equals("")) {
+            return "n/a";
+        } else if (unit.equals("m") || unit.equals("meters")) {
+            return "m";
+        } else if (unit.equals("ft") || unit.equals("feet")) {
+            return "ft";
+        } else if (unit.equals("degree") || unit.equals("°")) {
+            return "degree";
+        }
+        return "n/a";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		if (getTableElement() == null) {
-			return " " + getValue() + getUnit();
-		} else {
-			return " " + getTableElement();
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        if (getTableElement() == null) {
+            return " " + getValue() + getUnit();
+        } else {
+            return " " + getTableElement();
+        }
+    }
 
-	/**
-	 * <p>Setter for the field <code>pattern</code>.</p>
-	 *
-	 * @param pattern a {@link java.lang.String} object.
-	 */
-	public void setPattern(final String pattern) {
-		this.pattern = pattern;
-	}
+    /**
+     * <p>Setter for the field <code>pattern</code>.</p>
+     *
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public void setPattern(final String pattern) {
+        this.pattern = pattern;
+    }
 
-	/**
-	 * <p>Getter for the field <code>pattern</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
+    /**
+     * <p>Getter for the field <code>pattern</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getPattern() {
+        return pattern;
+    }
 
-	/**
-	 * returns the corresponding position component for a feature of interest cell
-	 *
-	 * @param featureOfInterestPosition a {@link org.n52.sos.importer.model.table.Cell} object.
-	 * @return a {@link org.n52.sos.importer.model.position.PositionComponent} object.
-	 */
-	public abstract PositionComponent forThis(Cell featureOfInterestPosition);
+    /**
+     * returns the corresponding position component for a feature of interest cell
+     *
+     * @param featureOfInterestPosition a {@link org.n52.sos.importer.model.table.Cell} object.
+     * @return a {@link org.n52.sos.importer.model.position.PositionComponent} object.
+     */
+    public abstract PositionComponent forThis(Cell featureOfInterestPosition);
 }

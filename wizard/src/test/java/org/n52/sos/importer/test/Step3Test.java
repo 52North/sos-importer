@@ -67,25 +67,25 @@ import org.n52.sos.importer.controller.Step3Controller;
 import org.n52.sos.importer.controller.TableController;
 public class Step3Test {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		Constants.DECIMAL_SEPARATOR = '.';
-		Constants.THOUSANDS_SEPARATOR = ',';
-		Constants.GUI_DEBUG = false;
-		final TableController tc = TableController.getInstance();
-		tc.setContent(TestData.EXAMPLE_TABLE);
-		final int markedColumn = 0;
-		final int firstLineWithData = 1;
-		final boolean useHeader = false;
-		final Step3Controller s3C = new Step3Controller(markedColumn,
-				firstLineWithData,
-				useHeader);
-		//
-		f.setStepController(s3C);
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final MainController f = MainController.getInstance();
+        Constants.DECIMAL_SEPARATOR = '.';
+        Constants.THOUSANDS_SEPARATOR = ',';
+        Constants.GUI_DEBUG = false;
+        final TableController tc = TableController.getInstance();
+        tc.setContent(TestData.EXAMPLE_TABLE);
+        final int markedColumn = 0;
+        final int firstLineWithData = 1;
+        final boolean useHeader = false;
+        final Step3Controller s3C = new Step3Controller(markedColumn,
+                firstLineWithData,
+                useHeader);
+        //
+        f.setStepController(s3C);
+    }
 }

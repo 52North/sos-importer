@@ -48,77 +48,77 @@ import org.slf4j.LoggerFactory;
  */
 public class Step4cController extends StepController {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step4cController.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step4cController.class);
 
-	private final int firstLineWithData;
+    private final int firstLineWithData;
 
-	/**
-	 * <p>Constructor for Step4cController.</p>
-	 *
-	 * @param firstLineWithData a int.
-	 */
-	public Step4cController(final int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public void loadSettings() {
-	}
-	/** {@inheritDoc} */
-	@Override
-	public void saveSettings() {
-	}
-	/** {@inheritDoc} */
-	@Override
-	public String getDescription() {
-		return null;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public JPanel getStepPanel() {
-		return null;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public StepController getNextStepController() {
-		return new Step5aController(firstLineWithData);
-	}
+    /**
+     * <p>Constructor for Step4cController.</p>
+     *
+     * @param firstLineWithData a int.
+     */
+    public Step4cController(final int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public void loadSettings() {
+    }
+    /** {@inheritDoc} */
+    @Override
+    public void saveSettings() {
+    }
+    /** {@inheritDoc} */
+    @Override
+    public String getDescription() {
+        return null;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public JPanel getStepPanel() {
+        return null;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public StepController getNextStepController() {
+        return new Step5aController(firstLineWithData);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isNecessary() {
-		final int positions = ModelStore.getInstance().getPositions().size();
+    /** {@inheritDoc} */
+    @Override
+    public boolean isNecessary() {
+        final int positions = ModelStore.getInstance().getPositions().size();
 
-		if (positions == 0) {
-			logger.info("Skip Step 4c since there are not any Positions");
-			return false;
-		}
-		if (positions == 1) {
-			final Position position = ModelStore.getInstance().getPositions().get(0);
-			logger.info("Skip Step 4c since there is just one " + position);
+        if (positions == 0) {
+            logger.info("Skip Step 4c since there are not any Positions");
+            return false;
+        }
+        if (positions == 1) {
+            final Position position = ModelStore.getInstance().getPositions().get(0);
+            logger.info("Skip Step 4c since there is just one " + position);
 
-			for (final FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests()) {
-				foi.setPosition(position);
-			}
-			return false;
-		}
-		//TODO implement handling of more than one position group
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-//		return true;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public StepController getNext() {
-		return null;
-	}
-	/** {@inheritDoc} */
-	@Override
-	public StepModel getModel() {
-		return null;
-	}
+            for (final FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests()) {
+                foi.setPosition(position);
+            }
+            return false;
+        }
+        //TODO implement handling of more than one position group
+        throw new RuntimeException("NOT YET IMPLEMENTED");
+//      return true;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public StepController getNext() {
+        return null;
+    }
+    /** {@inheritDoc} */
+    @Override
+    public StepModel getModel() {
+        return null;
+    }
 }

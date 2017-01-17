@@ -35,13 +35,13 @@ package org.n52.sos.importer.feeder.model;
  * @version $Id: $Id
  */
 public final class Sensor extends Resource {
-	/**
-	 * <p>Constructor for Sensor.</p>
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 * @param uri a {@link java.lang.String} object.
-	 */
-	public Sensor(String name, String uri) {
-		super(name, uri);
-	}
+    /**
+     * <p>Constructor for Sensor.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public Sensor(String name, String uri) {
+        super(name, uri);
+    }
 }

@@ -67,67 +67,67 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.i18n.Lang;
 public class Step6aModel implements StepModel {
 
-	private final String description = Lang.l().step6aModelDescription();
+    private final String description = Lang.l().step6aModelDescription();
 
-	private DateAndTime dateAndTime;
+    private DateAndTime dateAndTime;
 
-	private List<Component> missingDateAndTimeComponents;
+    private List<Component> missingDateAndTimeComponents;
 
-	/**
-	 * <p>Constructor for Step6aModel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public Step6aModel(DateAndTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
-		missingDateAndTimeComponents = new ArrayList<Component>();
-	}
+    /**
+     * <p>Constructor for Step6aModel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public Step6aModel(DateAndTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+        missingDateAndTimeComponents = new ArrayList<Component>();
+    }
 
-	/**
-	 * <p>Setter for the field <code>dateAndTime</code>.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public void setDateAndTime(DateAndTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
-	}
+    /**
+     * <p>Setter for the field <code>dateAndTime</code>.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public void setDateAndTime(DateAndTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
 
-	/**
-	 * <p>Getter for the field <code>dateAndTime</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public DateAndTime getDateAndTime() {
-		return dateAndTime;
-	}
+    /**
+     * <p>Getter for the field <code>dateAndTime</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public DateAndTime getDateAndTime() {
+        return dateAndTime;
+    }
 
-	/**
-	 * <p>Getter for the field <code>description</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * <p>Getter for the field <code>description</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * saves the components which are missing for this step
-	 * (= all date&amp;time components)
-	 *
-	 * @param missingDateAndTimeComponents a {@link java.util.List} object.
-	 */
-	public void setMissingDateAndTimeComponents(
-			List<Component> missingDateAndTimeComponents) {
-		this.missingDateAndTimeComponents = missingDateAndTimeComponents;
-	}
+    /**
+     * saves the components which are missing for this step
+     * (= all date&amp;time components)
+     *
+     * @param missingDateAndTimeComponents a {@link java.util.List} object.
+     */
+    public void setMissingDateAndTimeComponents(
+            List<Component> missingDateAndTimeComponents) {
+        this.missingDateAndTimeComponents = missingDateAndTimeComponents;
+    }
 
-	/**
-	 * returns the components which were missing for this step
-	 * (= all date&amp;time components)
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<Component> getMissingDateAndTimeComponents() {
-		return missingDateAndTimeComponents;
-	}
+    /**
+     * returns the components which were missing for this step
+     * (= all date&amp;time components)
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<Component> getMissingDateAndTimeComponents() {
+        return missingDateAndTimeComponents;
+    }
 }

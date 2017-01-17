@@ -42,38 +42,38 @@ import org.n52.sos.importer.model.Component;
  */
 public abstract class MissingComponentPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Allocate values of the missing component
-	 */
-	public abstract void assignValues();
+    /**
+     * Allocate values of the missing component
+     */
+    public abstract void assignValues();
 
-	/**
-	 * Release values of the missing component
-	 */
-	public abstract void unassignValues();
+    /**
+     * Release values of the missing component
+     */
+    public abstract void unassignValues();
 
-	/**
-	 * Checks if all values are in the defined range
-	 * of this component; returns false, if not
-	 *
-	 * @return <b>true</b>, if all given values are in allowed ranges.<br>
-	 * 			<b>false</b>, if not.
-	 */
-	public abstract boolean checkValues();
+    /**
+     * Checks if all values are in the defined range
+     * of this component; returns false, if not
+     *
+     * @return <b>true</b>, if all given values are in allowed ranges.<br>
+     *          <b>false</b>, if not.
+     */
+    public abstract boolean checkValues();
 
-	/**
-	 * Returns the missing component
-	 *
-	 * @return a {@link org.n52.sos.importer.model.Component} object.
-	 */
-	public abstract Component getMissingComponent();
+    /**
+     * Returns the missing component
+     *
+     * @return a {@link org.n52.sos.importer.model.Component} object.
+     */
+    public abstract Component getMissingComponent();
 
-	/**
-	 * Initialises the missing component
-	 *
-	 * @param c a {@link org.n52.sos.importer.model.Component} object.
-	 */
-	public abstract void setMissingComponent(Component c);
+    /**
+     * Initialises the missing component
+     *
+     * @param c a {@link org.n52.sos.importer.model.Component} object.
+     */
+    public abstract void setMissingComponent(Component c);
 }

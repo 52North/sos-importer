@@ -41,69 +41,69 @@ import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
  */
 public class Date extends Component {
 
-	private Year year;
+    private Year year;
 
-	private Month month;
+    private Month month;
 
-	private Day day;
+    private Day day;
 
-	/**
-	 * <p>Setter for the field <code>year</code>.</p>
-	 *
-	 * @param year a {@link org.n52.sos.importer.model.dateAndTime.Year} object.
-	 */
-	public void setYear(Year year) {
-		this.year = year;
-	}
+    /**
+     * <p>Setter for the field <code>year</code>.</p>
+     *
+     * @param year a {@link org.n52.sos.importer.model.dateAndTime.Year} object.
+     */
+    public void setYear(Year year) {
+        this.year = year;
+    }
 
-	/**
-	 * <p>Getter for the field <code>year</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.Year} object.
-	 */
-	public Year getYear() {
-		return year;
-	}
+    /**
+     * <p>Getter for the field <code>year</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Year} object.
+     */
+    public Year getYear() {
+        return year;
+    }
 
-	/**
-	 * <p>Setter for the field <code>month</code>.</p>
-	 *
-	 * @param month a {@link org.n52.sos.importer.model.dateAndTime.Month} object.
-	 */
-	public void setMonth(Month month) {
-		this.month = month;
-	}
+    /**
+     * <p>Setter for the field <code>month</code>.</p>
+     *
+     * @param month a {@link org.n52.sos.importer.model.dateAndTime.Month} object.
+     */
+    public void setMonth(Month month) {
+        this.month = month;
+    }
 
-	/**
-	 * <p>Getter for the field <code>month</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.Month} object.
-	 */
-	public Month getMonth() {
-		return month;
-	}
+    /**
+     * <p>Getter for the field <code>month</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Month} object.
+     */
+    public Month getMonth() {
+        return month;
+    }
 
-	/**
-	 * <p>Setter for the field <code>day</code>.</p>
-	 *
-	 * @param day a {@link org.n52.sos.importer.model.dateAndTime.Day} object.
-	 */
-	public void setDay(Day day) {
-		this.day = day;
-	}
+    /**
+     * <p>Setter for the field <code>day</code>.</p>
+     *
+     * @param day a {@link org.n52.sos.importer.model.dateAndTime.Day} object.
+     */
+    public void setDay(Day day) {
+        this.day = day;
+    }
 
-	/**
-	 * <p>Getter for the field <code>day</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.Day} object.
-	 */
-	public Day getDay() {
-		return day;
-	}
+    /**
+     * <p>Getter for the field <code>day</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Day} object.
+     */
+    public Day getDay() {
+        return day;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingDatePanel((DateAndTime)c);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingDatePanel((DateAndTime)c);
+    }
 }

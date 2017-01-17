@@ -37,25 +37,25 @@ import org.n52.sos.importer.feeder.model.Position;
 
 public class InsertObservationTest {
 
-	@Test public void
-	shouldReturnTrueIfAltitudeIsAvailable()
-	{
-		final double alt = 2.0;
-		final FeatureOfInterest foi = new FeatureOfInterest(null, null, new Position(new double[] {0.0, 1.0, alt},new String[] {"deg","deg","m"},4326));
-		final InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
-		assertThat(insertObservation.isSetAltitudeValue(), is(true));
-		assertThat(insertObservation.getAltitudeValue(),is(alt));
-	}
+    @Test public void
+    shouldReturnTrueIfAltitudeIsAvailable()
+    {
+        final double alt = 2.0;
+        final FeatureOfInterest foi = new FeatureOfInterest(null, null, new Position(new double[] {0.0, 1.0, alt},new String[] {"deg","deg","m"},4326));
+        final InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
+        assertThat(insertObservation.isSetAltitudeValue(), is(true));
+        assertThat(insertObservation.getAltitudeValue(),is(alt));
+    }
 
-	@Test public void
-	shouldReturnFalseIfAltitudeIsNotAvailable()
-	{
-		final FeatureOfInterest foi = new FeatureOfInterest(null, null, new Position(new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},new String[] {"deg","deg",null},4326));
-		InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
-		assertThat(insertObservation.isSetAltitudeValue(), is(false));
+    @Test public void
+    shouldReturnFalseIfAltitudeIsNotAvailable()
+    {
+        final FeatureOfInterest foi = new FeatureOfInterest(null, null, new Position(new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},new String[] {"deg","deg",null},4326));
+        InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
+        assertThat(insertObservation.isSetAltitudeValue(), is(false));
 
-		insertObservation = new InsertObservation(null, null, null, null, null, null, null, null);
-		assertThat(insertObservation.isSetAltitudeValue(), is(false));
-	}
+        insertObservation = new InsertObservation(null, null, null, null, null, null, null, null);
+        assertThat(insertObservation.isSetAltitudeValue(), is(false));
+    }
 
 }

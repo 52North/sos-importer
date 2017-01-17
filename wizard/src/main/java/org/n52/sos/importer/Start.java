@@ -40,12 +40,12 @@ import org.n52.sos.importer.controller.Step1Controller;
  */
 public class Start {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(String[] args) {
-		MainController.getInstance().setStepController(new Step1Controller());
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(String[] args) {
+        MainController.getInstance().setStepController(new Step1Controller());
+    }
 }

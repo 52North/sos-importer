@@ -64,86 +64,86 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.i18n.Lang;
 public class Step4aModel implements StepModel {
 
-	private final String description = Lang.l().step4aModelDescription();
+    private final String description = Lang.l().step4aModelDescription();
 
-	private int[] selectedRowsOrColumns;
+    private int[] selectedRowsOrColumns;
 
-	private int firstLineWithData = -1;
+    private int firstLineWithData = -1;
 
-	private DateAndTime dateAndTimeModel;
+    private DateAndTime dateAndTimeModel;
 
-	/**
-	 * <p>Constructor for Step4aModel.</p>
-	 *
-	 * @param dateAndTimeModel a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 * @param firstLineWithData a int.
-	 */
-	public Step4aModel(DateAndTime dateAndTimeModel, int firstLineWithData) {
-		this.dateAndTimeModel = dateAndTimeModel;
-		this.selectedRowsOrColumns = new int[0];
-		this.firstLineWithData = firstLineWithData;
-	}
+    /**
+     * <p>Constructor for Step4aModel.</p>
+     *
+     * @param dateAndTimeModel a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     * @param firstLineWithData a int.
+     */
+    public Step4aModel(DateAndTime dateAndTimeModel, int firstLineWithData) {
+        this.dateAndTimeModel = dateAndTimeModel;
+        this.selectedRowsOrColumns = new int[0];
+        this.firstLineWithData = firstLineWithData;
+    }
 
-	/**
-	 * <p>Setter for the field <code>dateAndTimeModel</code>.</p>
-	 *
-	 * @param dateAndTimeModel a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public void setDateAndTimeModel(DateAndTime dateAndTimeModel) {
-		this.dateAndTimeModel = dateAndTimeModel;
-	}
+    /**
+     * <p>Setter for the field <code>dateAndTimeModel</code>.</p>
+     *
+     * @param dateAndTimeModel a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public void setDateAndTimeModel(DateAndTime dateAndTimeModel) {
+        this.dateAndTimeModel = dateAndTimeModel;
+    }
 
-	/**
-	 * <p>Getter for the field <code>dateAndTimeModel</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public DateAndTime getDateAndTimeModel() {
-		return dateAndTimeModel;
-	}
+    /**
+     * <p>Getter for the field <code>dateAndTimeModel</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public DateAndTime getDateAndTimeModel() {
+        return dateAndTimeModel;
+    }
 
-	/**
-	 * <p>Setter for the field <code>selectedRowsOrColumns</code>.</p>
-	 *
-	 * @param selectedRowsOrColumns an array of int.
-	 */
-	public void setSelectedRowsOrColumns(int[] selectedRowsOrColumns) {
-		this.selectedRowsOrColumns = selectedRowsOrColumns;
-	}
+    /**
+     * <p>Setter for the field <code>selectedRowsOrColumns</code>.</p>
+     *
+     * @param selectedRowsOrColumns an array of int.
+     */
+    public void setSelectedRowsOrColumns(int[] selectedRowsOrColumns) {
+        this.selectedRowsOrColumns = selectedRowsOrColumns;
+    }
 
-	/**
-	 * <p>Getter for the field <code>selectedRowsOrColumns</code>.</p>
-	 *
-	 * @return an array of int.
-	 */
-	public int[] getSelectedRowsOrColumns() {
-		return selectedRowsOrColumns;
-	}
+    /**
+     * <p>Getter for the field <code>selectedRowsOrColumns</code>.</p>
+     *
+     * @return an array of int.
+     */
+    public int[] getSelectedRowsOrColumns() {
+        return selectedRowsOrColumns;
+    }
 
-	/**
-	 * <p>Getter for the field <code>description</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * <p>Getter for the field <code>description</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * <p>Getter for the field <code>firstLineWithData</code>.</p>
-	 *
-	 * @return the firstLineWithData
-	 */
-	public int getFirstLineWithData() {
-		return firstLineWithData;
-	}
+    /**
+     * <p>Getter for the field <code>firstLineWithData</code>.</p>
+     *
+     * @return the firstLineWithData
+     */
+    public int getFirstLineWithData() {
+        return firstLineWithData;
+    }
 
-	/**
-	 * <p>Setter for the field <code>firstLineWithData</code>.</p>
-	 *
-	 * @param firstLineWithData the firstLineWithData to set
-	 */
-	public void setFirstLineWithData(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-	}
+    /**
+     * <p>Setter for the field <code>firstLineWithData</code>.</p>
+     *
+     * @param firstLineWithData the firstLineWithData to set
+     */
+    public void setFirstLineWithData(int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+    }
 }

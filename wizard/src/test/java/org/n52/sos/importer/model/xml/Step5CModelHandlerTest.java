@@ -53,50 +53,50 @@ import org.x52North.sensorweb.sos.importer.x04.TypeDocument;
  */
 public class Step5CModelHandlerTest {
 
-	/**
-	 * <p>testStoringOfAltitudeWithUnit.</p>
-	 */
-	@Test
-	public void testStoringOfAltitudeWithUnit() {
-		//given
-		final double altitude = 52.0;
-		final String unit = "m";
-		final String pattern = "LAT LON";
-		final int positionColumnId = 3;
-		Position position = new Position(
-				new Latitude(new Column(positionColumnId, 0), pattern),
-				new Longitude(new Column(positionColumnId, 0),pattern),
-				new Height(altitude, unit),
-				new EPSGCode(4326));
-		position.setGroup("A");
-		final Step5cModel stepModel = new Step5cModel(position);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column = importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
-		column.setNumber(positionColumnId);
-		column.setType(TypeDocument.Type.POSITION);
-		Metadata meta = column.addNewMetadata();
-		meta.setKey(Key.GROUP);
-		meta.setValue("A");
-		meta = column.addNewMetadata();
-		meta.setKey(Key.TYPE);
-		meta.setValue("COMBINATION");
-		meta = column.addNewMetadata();
-		meta.setKey(Key.PARSE_PATTERN);
-		meta.setValue(pattern);
+    /**
+     * <p>testStoringOfAltitudeWithUnit.</p>
+     */
+    @Test
+    public void testStoringOfAltitudeWithUnit() {
+        //given
+        final double altitude = 52.0;
+        final String unit = "m";
+        final String pattern = "LAT LON";
+        final int positionColumnId = 3;
+        Position position = new Position(
+                new Latitude(new Column(positionColumnId, 0), pattern),
+                new Longitude(new Column(positionColumnId, 0),pattern),
+                new Height(altitude, unit),
+                new EPSGCode(4326));
+        position.setGroup("A");
+        final Step5cModel stepModel = new Step5cModel(position);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column = importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
+        column.setNumber(positionColumnId);
+        column.setType(TypeDocument.Type.POSITION);
+        Metadata meta = column.addNewMetadata();
+        meta.setKey(Key.GROUP);
+        meta.setValue("A");
+        meta = column.addNewMetadata();
+        meta.setKey(Key.TYPE);
+        meta.setValue("COMBINATION");
+        meta = column.addNewMetadata();
+        meta.setKey(Key.PARSE_PATTERN);
+        meta.setValue(pattern);
 
-		//when
-		new Step5cModelHandler().handleModel(stepModel, importConf);
+        //when
+        new Step5cModelHandler().handleModel(stepModel, importConf);
 
-		// then
-		Metadata altitudeMetadata = null;
-		for (Metadata metadata : importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
-			if (metadata.getKey().equals(Key.POSITION_ALTITUDE)) {
-				altitudeMetadata = metadata;
-				break;
-			}
-		}
-		Assert.assertThat(altitudeMetadata, Is.is(CoreMatchers.notNullValue()));
-		Assert.assertThat(altitudeMetadata.getValue(), Is.is(altitude + " " + unit));
-	}
+        // then
+        Metadata altitudeMetadata = null;
+        for (Metadata metadata : importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
+            if (metadata.getKey().equals(Key.POSITION_ALTITUDE)) {
+                altitudeMetadata = metadata;
+                break;
+            }
+        }
+        Assert.assertThat(altitudeMetadata, Is.is(CoreMatchers.notNullValue()));
+        Assert.assertThat(altitudeMetadata.getValue(), Is.is(altitude + " " + unit));
+    }
 
 }

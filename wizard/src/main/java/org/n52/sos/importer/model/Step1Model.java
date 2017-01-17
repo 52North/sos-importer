@@ -61,172 +61,172 @@
 package org.n52.sos.importer.model;
 public class Step1Model implements StepModel{
 
-	private String url, user, password, directory, filenameSchema;
-	private boolean regex;
-	private int feedingType;
-	private String csvFilePath = "";
-	private String fileEncoding = "";
+    private String url, user, password, directory, filenameSchema;
+    private boolean regex;
+    private int feedingType;
+    private String csvFilePath = "";
+    private String fileEncoding = "";
 
-	/**
-	 * <p>Getter for the field <code>feedingType</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getFeedingType() {
-		return feedingType;
-	}
+    /**
+     * <p>Getter for the field <code>feedingType</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getFeedingType() {
+        return feedingType;
+    }
 
-	/**
-	 * <p>Setter for the field <code>feedingType</code>.</p>
-	 *
-	 * @param feedingType a int.
-	 */
-	public void setFeedingType(final int feedingType) {
-		this.feedingType = feedingType;
-	}
+    /**
+     * <p>Setter for the field <code>feedingType</code>.</p>
+     *
+     * @param feedingType a int.
+     */
+    public void setFeedingType(final int feedingType) {
+        this.feedingType = feedingType;
+    }
 
-	/**
-	 * <p>Getter for the field <code>url</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getUrl() {
-		return url;
-	}
+    /**
+     * <p>Getter for the field <code>url</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getUrl() {
+        return url;
+    }
 
-	/**
-	 * <p>Setter for the field <code>url</code>.</p>
-	 *
-	 * @param url a {@link java.lang.String} object.
-	 */
-	public void setUrl(final String url) {
-		this.url = url;
-	}
+    /**
+     * <p>Setter for the field <code>url</code>.</p>
+     *
+     * @param url a {@link java.lang.String} object.
+     */
+    public void setUrl(final String url) {
+        this.url = url;
+    }
 
-	/**
-	 * <p>Getter for the field <code>user</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getUser() {
-		return user;
-	}
+    /**
+     * <p>Getter for the field <code>user</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getUser() {
+        return user;
+    }
 
-	/**
-	 * <p>Setter for the field <code>user</code>.</p>
-	 *
-	 * @param user a {@link java.lang.String} object.
-	 */
-	public void setUser(final String user) {
-		this.user = user;
-	}
+    /**
+     * <p>Setter for the field <code>user</code>.</p>
+     *
+     * @param user a {@link java.lang.String} object.
+     */
+    public void setUser(final String user) {
+        this.user = user;
+    }
 
-	/**
-	 * <p>Getter for the field <code>password</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * <p>Getter for the field <code>password</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * <p>Setter for the field <code>password</code>.</p>
-	 *
-	 * @param password a {@link java.lang.String} object.
-	 */
-	public void setPassword(final String password) {
-		this.password = password;
-	}
+    /**
+     * <p>Setter for the field <code>password</code>.</p>
+     *
+     * @param password a {@link java.lang.String} object.
+     */
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 
-	/**
-	 * <p>isRegex.</p>
-	 *
-	 * @return a boolean.
-	 */
-	public boolean isRegex() {
-		return regex;
-	}
+    /**
+     * <p>isRegex.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isRegex() {
+        return regex;
+    }
 
-	/**
-	 * <p>Setter for the field <code>regex</code>.</p>
-	 *
-	 * @param regex a boolean.
-	 */
-	public void setRegex(final boolean regex) {
-		this.regex = regex;
-	}
+    /**
+     * <p>Setter for the field <code>regex</code>.</p>
+     *
+     * @param regex a boolean.
+     */
+    public void setRegex(final boolean regex) {
+        this.regex = regex;
+    }
 
-	/**
-	 * <p>Getter for the field <code>directory</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDirectory() {
-		return directory;
-	}
+    /**
+     * <p>Getter for the field <code>directory</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDirectory() {
+        return directory;
+    }
 
-	/**
-	 * <p>Setter for the field <code>directory</code>.</p>
-	 *
-	 * @param directory a {@link java.lang.String} object.
-	 */
-	public void setDirectory(final String directory) {
-		this.directory = directory;
-	}
+    /**
+     * <p>Setter for the field <code>directory</code>.</p>
+     *
+     * @param directory a {@link java.lang.String} object.
+     */
+    public void setDirectory(final String directory) {
+        this.directory = directory;
+    }
 
-	/**
-	 * <p>Getter for the field <code>filenameSchema</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getFilenameSchema() {
-		return filenameSchema;
-	}
+    /**
+     * <p>Getter for the field <code>filenameSchema</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFilenameSchema() {
+        return filenameSchema;
+    }
 
-	/**
-	 * <p>Setter for the field <code>filenameSchema</code>.</p>
-	 *
-	 * @param filenameSchema a {@link java.lang.String} object.
-	 */
-	public void setFilenameSchema(final String filenameSchema) {
-		this.filenameSchema = filenameSchema;
-	}
+    /**
+     * <p>Setter for the field <code>filenameSchema</code>.</p>
+     *
+     * @param filenameSchema a {@link java.lang.String} object.
+     */
+    public void setFilenameSchema(final String filenameSchema) {
+        this.filenameSchema = filenameSchema;
+    }
 
-	/**
-	 * <p>setCSVFilePath.</p>
-	 *
-	 * @param csvFilePath a {@link java.lang.String} object.
-	 */
-	public void setCSVFilePath(final String csvFilePath) {
-		this.csvFilePath = csvFilePath;
-	}
+    /**
+     * <p>setCSVFilePath.</p>
+     *
+     * @param csvFilePath a {@link java.lang.String} object.
+     */
+    public void setCSVFilePath(final String csvFilePath) {
+        this.csvFilePath = csvFilePath;
+    }
 
-	/**
-	 * <p>getCSVFilePath.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getCSVFilePath() {
-		return csvFilePath;
-	}
+    /**
+     * <p>getCSVFilePath.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getCSVFilePath() {
+        return csvFilePath;
+    }
 
-	/**
-	 * <p>Getter for the field <code>fileEncoding</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getFileEncoding() {
-		return fileEncoding;
-	}
+    /**
+     * <p>Getter for the field <code>fileEncoding</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFileEncoding() {
+        return fileEncoding;
+    }
 
-	/**
-	 * <p>Setter for the field <code>fileEncoding</code>.</p>
-	 *
-	 * @param fileEncoding a {@link java.lang.String} object.
-	 */
-	public void setFileEncoding(final String fileEncoding) {
-		this.fileEncoding = fileEncoding;
-	}
+    /**
+     * <p>Setter for the field <code>fileEncoding</code>.</p>
+     *
+     * @param fileEncoding a {@link java.lang.String} object.
+     */
+    public void setFileEncoding(final String fileEncoding) {
+        this.fileEncoding = fileEncoding;
+    }
 
 }

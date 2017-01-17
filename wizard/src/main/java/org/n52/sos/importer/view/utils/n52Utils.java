@@ -44,30 +44,30 @@ import org.slf4j.LoggerFactory;
  */
 public class n52Utils {
 
-	private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
+    private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
 
-	/**
-	 * <p>parseDouble.</p>
-	 *
-	 * @deprecated who is using this method?
-	 * @param text a {@link java.lang.String} object.
-	 * @return a {@link java.lang.Double} object.
-	 */
-	public static Double parseDouble(final String text){
-		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+    /**
+     * <p>parseDouble.</p>
+     *
+     * @deprecated who is using this method?
+     * @param text a {@link java.lang.String} object.
+     * @return a {@link java.lang.Double} object.
+     */
+    public static Double parseDouble(final String text){
+        final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
 
-		Number n;
-		final DecimalFormat formatter = new DecimalFormat();
-		formatter.setDecimalFormatSymbols(symbols);
-		try {
-			n = formatter.parse(text);
-			return n.doubleValue();
-		} catch (final ParseException e) {
-			logger.error(String.format("Exception thrown: %s",
-						e.getMessage()),
-					e);
-		}
-		return null;
-	}
+        Number n;
+        final DecimalFormat formatter = new DecimalFormat();
+        formatter.setDecimalFormatSymbols(symbols);
+        try {
+            n = formatter.parse(text);
+            return n.doubleValue();
+        } catch (final ParseException e) {
+            logger.error(String.format("Exception thrown: %s",
+                        e.getMessage()),
+                    e);
+        }
+        return null;
+    }
 
 }

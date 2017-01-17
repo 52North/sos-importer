@@ -42,29 +42,29 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step4aModelHandler implements ModelHandler<Step4aModel> {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step4aModelHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step4aModelHandler.class);
 
-	/** {@inheritDoc} */
-	@Override
-	public void handleModel(final Step4aModel s4aM,
-			final SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
-		// for each element in s4aM.selectedRowsOrColumns -> set RelatedDateTimeGroup to s4aM.dateAndTimeModel.getGroup()
-		for (final int mvColumnId : s4aM.getSelectedRowsOrColumns()) {
-			final Column c = Helper.getColumnById(mvColumnId, sosImportConf);
-			if (c.isSetRelatedDateTimeGroup() && logger.isDebugEnabled()) {
-				final String dateTimeGroup = c.getRelatedDateTimeGroup();
-				logger.debug(String.format("Element RelatedDateTimeGroup already set to: %s",
-						dateTimeGroup));
-			}
-			c.setRelatedDateTimeGroup(s4aM.getDateAndTimeModel().getGroup());
-			if (logger.isDebugEnabled()) {
-				logger.debug(String.format("Element RelatedDateTimeGroup set to: %s",
-						c.getRelatedDateTimeGroup()));
-			}
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void handleModel(final Step4aModel s4aM,
+            final SosImportConfiguration sosImportConf) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("handleModel()");
+        }
+        // for each element in s4aM.selectedRowsOrColumns -> set RelatedDateTimeGroup to s4aM.dateAndTimeModel.getGroup()
+        for (final int mvColumnId : s4aM.getSelectedRowsOrColumns()) {
+            final Column c = Helper.getColumnById(mvColumnId, sosImportConf);
+            if (c.isSetRelatedDateTimeGroup() && logger.isDebugEnabled()) {
+                final String dateTimeGroup = c.getRelatedDateTimeGroup();
+                logger.debug(String.format("Element RelatedDateTimeGroup already set to: %s",
+                        dateTimeGroup));
+            }
+            c.setRelatedDateTimeGroup(s4aM.getDateAndTimeModel().getGroup());
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Element RelatedDateTimeGroup set to: %s",
+                        c.getRelatedDateTimeGroup()));
+            }
+        }
+    }
 
 }

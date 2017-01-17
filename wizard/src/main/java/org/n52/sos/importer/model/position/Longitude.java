@@ -68,82 +68,82 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingLongitudePanel;
 public class Longitude extends PositionComponent {
 
-	/**
-	 * <p>Constructor for Longitude.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 * @param pattern a {@link java.lang.String} object.
-	 */
-	public Longitude(TableElement tableElement, String pattern) {
-		super(tableElement, pattern);
-	}
+    /**
+     * <p>Constructor for Longitude.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public Longitude(TableElement tableElement, String pattern) {
+        super(tableElement, pattern);
+    }
 
-	/**
-	 * <p>Constructor for Longitude.</p>
-	 *
-	 * @param value a double.
-	 * @param unit a {@link java.lang.String} object.
-	 */
-	public Longitude(double value, String unit) {
-		super(value, unit);
-	}
+    /**
+     * <p>Constructor for Longitude.</p>
+     *
+     * @param value a double.
+     * @param unit a {@link java.lang.String} object.
+     */
+    public Longitude(double value, String unit) {
+        super(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Longitude" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Longitude" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingLongitudePanel((Position)c);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingLongitudePanel((Position)c);
+    }
 
-	/**
-	 * tries to convert a given String into a valid Longitude object
-	 *
-	 * @param s a {@link java.lang.String} object.
-	 * @return a {@link org.n52.sos.importer.model.position.Longitude} object.
-	 */
-	// TODO units and Strings -> Constants
-	public static Longitude parse(String s) {
-		double value = 0.0;
-		String unit = "";
+    /**
+     * tries to convert a given String into a valid Longitude object
+     *
+     * @param s a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.model.position.Longitude} object.
+     */
+    // TODO units and Strings -> Constants
+    public static Longitude parse(String s) {
+        double value = 0.0;
+        String unit = "";
 
-		String number;
-		//TODO handle inputs like degrees/minutes/seconds, n.Br.
-		if (s.contains("°")) {
-			unit = "°";
-			String[] part = s.split("°");
-			number = part[0];
-		} else if (s.contains("m")) {
-			unit = "m";
-			number = s.replace("m", "");
-		} else
-			number = s;
+        String number;
+        //TODO handle inputs like degrees/minutes/seconds, n.Br.
+        if (s.contains("°")) {
+            unit = "°";
+            String[] part = s.split("°");
+            number = part[0];
+        } else if (s.contains("m")) {
+            unit = "m";
+            number = s.replace("m", "");
+        } else
+            number = s;
 
-		NumericValue nv = new NumericValue();
+        NumericValue nv = new NumericValue();
 
-		value = nv.parse(number);
+        value = nv.parse(number);
 
-		if (unit.equals(""))
-			if (value <= 180.0 && value >= -180.0)
-				unit = "°";
-			else
-				unit = "m";
+        if (unit.equals(""))
+            if (value <= 180.0 && value >= -180.0)
+                unit = "°";
+            else
+                unit = "m";
 
-		return new Longitude(value, unit);
-	}
+        return new Longitude(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Longitude forThis(Cell featureOfInterestPosition) {
-		if (getTableElement() == null)
-			return new Longitude(getValue(), getParsedUnit());
-		else {
-			String longitudeString = getTableElement().getValueFor(featureOfInterestPosition);
-			return Longitude.parse(longitudeString);
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Longitude forThis(Cell featureOfInterestPosition) {
+        if (getTableElement() == null)
+            return new Longitude(getValue(), getParsedUnit());
+        else {
+            String longitudeString = getTableElement().getValueFor(featureOfInterestPosition);
+            return Longitude.parse(longitudeString);
+        }
+    }
 }

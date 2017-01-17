@@ -52,79 +52,79 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class MissingTimePanel extends MissingDateAndTimePanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JLabel timeLabel;
+    private JLabel timeLabel;
 
-	private SpinnerDateModel timeModel;
-	private JSpinner timeSpinner;
+    private SpinnerDateModel timeModel;
+    private JSpinner timeSpinner;
 
-	/**
-	 * <p>Constructor for MissingTimePanel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public MissingTimePanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		timeModel = new SpinnerDateModel();
-		GregorianCalendar gc = new GregorianCalendar(0, 0, 0, 0, 0, 0);
-		timeModel.setValue(gc.getTime());
-		timeModel.setCalendarField(Calendar.HOUR_OF_DAY);
-		timeSpinner = new JSpinner(timeModel);
-		timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm:ss"));
+    /**
+     * <p>Constructor for MissingTimePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingTimePanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        timeModel = new SpinnerDateModel();
+        GregorianCalendar gc = new GregorianCalendar(0, 0, 0, 0, 0, 0);
+        timeModel.setValue(gc.getTime());
+        timeModel.setCalendarField(Calendar.HOUR_OF_DAY);
+        timeSpinner = new JSpinner(timeModel);
+        timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm:ss"));
 
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		this.timeLabel = new JLabel(Lang.l().time() + ": ");
+        this.timeLabel = new JLabel(Lang.l().time() + ": ");
 
-		this.add(timeLabel);
-		this.add(timeSpinner);
-	}
+        this.add(timeLabel);
+        this.add(timeSpinner);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assignValues() {
-		Calendar c = new GregorianCalendar();
-		c.setTime(timeModel.getDate());
-		dateAndTime.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
-		dateAndTime.setMinute(new Minute(c.get(Calendar.MINUTE)));
-		dateAndTime.setSecond(new Second(c.get(Calendar.SECOND)));
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        Calendar c = new GregorianCalendar();
+        c.setTime(timeModel.getDate());
+        dateAndTime.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
+        dateAndTime.setMinute(new Minute(c.get(Calendar.MINUTE)));
+        dateAndTime.setSecond(new Second(c.get(Calendar.SECOND)));
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassignValues() {
-		dateAndTime.setHour(null);
-		dateAndTime.setMinute(null);
-		dateAndTime.setSecond(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        dateAndTime.setHour(null);
+        dateAndTime.setMinute(null);
+        dateAndTime.setSecond(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Component getMissingComponent() {
-		Calendar c = new GregorianCalendar();
-		c.setTime(timeModel.getDate());
-		Time time = new Time();
-		time.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
-		time.setMinute(new Minute(c.get(Calendar.MINUTE)));
-		time.setSecond(new Second(c.get(Calendar.SECOND)));
-		return time;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        Calendar c = new GregorianCalendar();
+        c.setTime(timeModel.getDate());
+        Time time = new Time();
+        time.setHour(new Hour(c.get(Calendar.HOUR_OF_DAY)));
+        time.setMinute(new Minute(c.get(Calendar.MINUTE)));
+        time.setSecond(new Second(c.get(Calendar.SECOND)));
+        return time;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setMissingComponent(Component c) {
-		Time time = (Time)c;
-		int hour = time.getHour().getValue();
-		int minute = time.getMinute().getValue();
-		int second = time.getSecond().getValue();
-		GregorianCalendar gc = new GregorianCalendar(0, 0, 0, hour, minute, second);
-		timeModel.setValue(gc.getTime());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(Component c) {
+        Time time = (Time)c;
+        int hour = time.getHour().getValue();
+        int minute = time.getMinute().getValue();
+        int second = time.getSecond().getValue();
+        GregorianCalendar gc = new GregorianCalendar(0, 0, 0, hour, minute, second);
+        timeModel.setValue(gc.getTime());
+    }
 }

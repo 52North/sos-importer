@@ -48,117 +48,117 @@ import org.slf4j.LoggerFactory;
  */
 public class DescriptionBuilder {
 
-	private final boolean shouldAddOfferingMetadataToOutputs;
+    private final boolean shouldAddOfferingMetadataToOutputs;
 
-	/**
-	 * <p>Constructor for DescriptionBuilder.</p>
-	 *
-	 * @param shouldAddOfferingMetadataToOutputs a boolean.
-	 */
-	public DescriptionBuilder(final boolean shouldAddOfferingMetadataToOutputs) {
-		this.shouldAddOfferingMetadataToOutputs = shouldAddOfferingMetadataToOutputs;
-	}
+    /**
+     * <p>Constructor for DescriptionBuilder.</p>
+     *
+     * @param shouldAddOfferingMetadataToOutputs a boolean.
+     */
+    public DescriptionBuilder(final boolean shouldAddOfferingMetadataToOutputs) {
+        this.shouldAddOfferingMetadataToOutputs = shouldAddOfferingMetadataToOutputs;
+    }
 
-	/**
-	 * <p>Constructor for DescriptionBuilder.</p>
-	 */
-	public DescriptionBuilder() {
-		this(true);
-	}
+    /**
+     * <p>Constructor for DescriptionBuilder.</p>
+     */
+    public DescriptionBuilder() {
+        this(true);
+    }
 
-	private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
 
-	/**
-	 * <p>createSML.</p>
-	 *
-	 * @param rs a {@link org.n52.sos.importer.feeder.model.requests.RegisterSensor} object.
-	 * @return a {@link java.lang.String} object.
-	 * @throws org.apache.xmlbeans.XmlException if any.
-	 * @throws java.io.IOException if any.
-	 */
-	public String createSML(final RegisterSensor rs) throws XmlException, IOException {
-		LOG.trace("createSML()");
-		final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
+    /**
+     * <p>createSML.</p>
+     *
+     * @param rs a {@link org.n52.sos.importer.feeder.model.requests.RegisterSensor} object.
+     * @return a {@link java.lang.String} object.
+     * @throws org.apache.xmlbeans.XmlException if any.
+     * @throws java.io.IOException if any.
+     */
+    public String createSML(final RegisterSensor rs) throws XmlException, IOException {
+        LOG.trace("createSML()");
+        final SensorDescriptionBuilder builder = new SensorDescriptionBuilder();
 
-		builder.setAddOfferingMetadataToOutputs(shouldAddOfferingMetadataToOutputs);
+        builder.setAddOfferingMetadataToOutputs(shouldAddOfferingMetadataToOutputs);
 
-		final StringBuilder intendedApplication = new StringBuilder();
+        final StringBuilder intendedApplication = new StringBuilder();
 
-		// add keywords
-		builder.addKeyword(rs.getFeatureOfInterestName());
-		builder.addKeyword(rs.getSensorName());
+        // add keywords
+        builder.addKeyword(rs.getFeatureOfInterestName());
+        builder.addKeyword(rs.getSensorName());
 
-		// add all identifier
-		builder.setIdentifierUniqeId(rs.getSensorURI());
-		builder.setIdentifierLongName(rs.getSensorName());
-		builder.setIdentifierShortName(rs.getSensorName());
+        // add all identifier
+        builder.setIdentifierUniqeId(rs.getSensorURI());
+        builder.setIdentifierLongName(rs.getSensorName());
+        builder.setIdentifierShortName(rs.getSensorName());
 
-		// set capabilities - status
-		builder.setCapabilityCollectingStatus("status", true);
+        // set capabilities - status
+        builder.setCapabilityCollectingStatus("status", true);
 
-		builder.addFeatureOfInterest(rs.getFeatureOfInterestName(), rs.getFeatureOfInterestURI());
+        builder.addFeatureOfInterest(rs.getFeatureOfInterestName(), rs.getFeatureOfInterestURI());
 
-		builder.setCapabilityBbox(rs.getLongitudeUnit(),
-				rs.getLongitudeValue(), rs.getLatitudeUnit(),
-				rs.getLatitudeValue(), rs.getLongitudeUnit(),
-				rs.getLongitudeValue(), rs.getLatitudeUnit(),
-				rs.getLatitudeValue(),
-				rs.getEpsgCode().equalsIgnoreCase(Integer.toString(4979))?
-						Integer.toString(4326):
-							rs.getEpsgCode());
+        builder.setCapabilityBbox(rs.getLongitudeUnit(),
+                rs.getLongitudeValue(), rs.getLatitudeUnit(),
+                rs.getLatitudeValue(), rs.getLongitudeUnit(),
+                rs.getLongitudeValue(), rs.getLatitudeUnit(),
+                rs.getLatitudeValue(),
+                rs.getEpsgCode().equalsIgnoreCase(Integer.toString(4979))?
+                        Integer.toString(4326):
+                            rs.getEpsgCode());
 
-		builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:1.0:offeringID",rs.getOfferingUri());
+        builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:1.0:offeringID",rs.getOfferingUri());
 
-		// set position data
-		builder.setPosition("sensorPosition",
-				rs.getEpsgCode(),
-				"SYSTEM_LOCATION",
-				rs.getLongitudeUnit(), rs.getLongitudeValue(),
-				rs.getLatitudeUnit(), rs.getLatitudeValue(),
-				rs.getAltitudeUnit(), rs.getAltitudeValue());
+        // set position data
+        builder.setPosition("sensorPosition",
+                rs.getEpsgCode(),
+                "SYSTEM_LOCATION",
+                rs.getLongitudeUnit(), rs.getLongitudeValue(),
+                rs.getLatitudeUnit(), rs.getLatitudeValue(),
+                rs.getAltitudeUnit(), rs.getAltitudeValue());
 
-		for (final ObservedProperty observedProperty : rs.getObservedProperties()) {
-			// add inputs
-			builder.addInput(observedProperty.getName(), observedProperty.getUri());
-			// add outputs
-			if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
-				builder.addOutputText(observedProperty.getName(),
-						observedProperty.getUri(),
-						rs.getOfferingUri(),
-						rs.getOfferingName());
-			}
-			else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_BOOLEAN)) {
-				builder.addOutputBoolean(observedProperty.getName(),
-						observedProperty.getUri(),
-						rs.getOfferingUri(),
-						rs.getOfferingName());
-			}
-			else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_COUNT)) {
-				builder.addOutputCount(observedProperty.getName(),
-						observedProperty.getUri(),
-						rs.getOfferingUri(),
-						rs.getOfferingName());
-			}
-			else {
-				builder.addOutputMeasurement(observedProperty.getName(),
-						observedProperty.getUri(),
-						rs.getOfferingUri(),
-						rs.getOfferingName(),
-						rs.getUnitOfMeasurementCode(observedProperty));
-			}
-			// add keyword
-			builder.addKeyword(observedProperty.getName());
-			intendedApplication.append(observedProperty.getName());
-			intendedApplication.append(", ");
-		}
+        for (final ObservedProperty observedProperty : rs.getObservedProperties()) {
+            // add inputs
+            builder.addInput(observedProperty.getName(), observedProperty.getUri());
+            // add outputs
+            if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
+                builder.addOutputText(observedProperty.getName(),
+                        observedProperty.getUri(),
+                        rs.getOfferingUri(),
+                        rs.getOfferingName());
+            }
+            else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_BOOLEAN)) {
+                builder.addOutputBoolean(observedProperty.getName(),
+                        observedProperty.getUri(),
+                        rs.getOfferingUri(),
+                        rs.getOfferingName());
+            }
+            else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_COUNT)) {
+                builder.addOutputCount(observedProperty.getName(),
+                        observedProperty.getUri(),
+                        rs.getOfferingUri(),
+                        rs.getOfferingName());
+            }
+            else {
+                builder.addOutputMeasurement(observedProperty.getName(),
+                        observedProperty.getUri(),
+                        rs.getOfferingUri(),
+                        rs.getOfferingName(),
+                        rs.getUnitOfMeasurementCode(observedProperty));
+            }
+            // add keyword
+            builder.addKeyword(observedProperty.getName());
+            intendedApplication.append(observedProperty.getName());
+            intendedApplication.append(", ");
+        }
 
-		// add all classifier
-		builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length()-2));
+        // add all classifier
+        builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length()-2));
 
-		// add validTime starting from now
-		builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(),"unknown");
+        // add validTime starting from now
+        builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(),"unknown");
 
-		return builder.buildSensorDescription();
-	}
+        return builder.buildSensorDescription();
+    }
 
 }

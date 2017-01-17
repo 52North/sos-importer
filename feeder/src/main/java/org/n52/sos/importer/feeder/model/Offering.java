@@ -36,14 +36,14 @@ package org.n52.sos.importer.feeder.model;
  */
 public class Offering extends Resource {
 
-	/**
-	 * <p>Constructor for Offering.</p>
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 * @param uri a {@link java.lang.String} object.
-	 */
-	public Offering(final String name, final String uri) {
-		super(name, uri);
-	}
+    /**
+     * <p>Constructor for Offering.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public Offering(final String name, final String uri) {
+        super(name, uri);
+    }
 
 }

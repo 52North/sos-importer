@@ -40,17 +40,17 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  */
 public abstract class MissingDateAndTimePanel extends MissingComponentPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected DateAndTime dateAndTime;
+    protected DateAndTime dateAndTime;
 
-	/**
-	 * <p>Constructor for MissingDateAndTimePanel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public MissingDateAndTimePanel(DateAndTime dateAndTime) {
-		super();
-		this.dateAndTime = dateAndTime;
-	}
+    /**
+     * <p>Constructor for MissingDateAndTimePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingDateAndTimePanel(DateAndTime dateAndTime) {
+        super();
+        this.dateAndTime = dateAndTime;
+    }
 }

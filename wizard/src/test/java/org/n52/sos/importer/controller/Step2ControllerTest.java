@@ -75,169 +75,169 @@ import org.n52.sos.importer.model.Step2Model;
 @Ignore("Requires display which is not available on remote build servers")
 public class Step2ControllerTest {
 
-	private Step2Controller controller;
+    private Step2Controller controller;
 
-	/**
-	 * <p>init.</p>
-	 */
-	@Before
-	public void init() {
-		controller = new Step2Controller(new Step2Model("", 1));
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        controller = new Step2Controller(new Step2Model("", 1));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfStartRegExIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfStartRegExIsMissing() {
-		((Step2Model)controller.getModel())
-			.setColumnSeparator(",")
-			.setCommentIndicator("#")
-			.setDecimalSeparator('.')
-			.setTextQualifier("\"")
-			.setSampleBased(true);
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfStartRegExIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfStartRegExIsMissing() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true);
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfDateOffsetIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfDateOffsetIsMissing() {
-		((Step2Model)controller.getModel())
-			.setColumnSeparator(",")
-			.setCommentIndicator("#")
-			.setDecimalSeparator('.')
-			.setTextQualifier("\"")
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex");
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfDateOffsetIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfDateOffsetIsMissing() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex");
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfDateExtractionRegExIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfDateExtractionRegExIsMissing() {
-		((Step2Model)controller.getModel())
-			.setColumnSeparator(",")
-			.setCommentIndicator("#")
-			.setDecimalSeparator('.')
-			.setTextQualifier("\"")
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(5);
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-		((Step2Model)controller.getModel()).setSampleBasedDateExtractionRegEx("test-regex");
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfDateExtractionRegExIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfDateExtractionRegExIsMissing() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(5);
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+        ((Step2Model)controller.getModel()).setSampleBasedDateExtractionRegEx("test-regex");
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfDatePatternIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfDatePatternIsMissing() {
-		((Step2Model)controller.getModel())
-			.setColumnSeparator(",")
-			.setCommentIndicator("#")
-			.setDecimalSeparator('.')
-			.setTextQualifier("\"")
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(5)
-			.setSampleBasedDateExtractionRegEx("(test)-regex-2");
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfDatePatternIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfDatePatternIsMissing() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(5)
+            .setSampleBasedDateExtractionRegEx("(test)-regex-2");
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfDataOffsetIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfDataOffsetIsMissing() {
-		((Step2Model)controller.getModel())
-		.setColumnSeparator(",")
-		.setCommentIndicator("#")
-		.setDecimalSeparator('.')
-		.setTextQualifier("\"")
-		.setSampleBased(true)
-		.setSampleBasedStartRegEx("test-regex")
-		.setSampleBasedDateOffset(5)
-		.setSampleBasedDateExtractionRegEx("(test)-regex-2")
-		.setSampleBasedDatePattern("test-pattern");
-	controller.loadSettings();
-	assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfDataOffsetIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfDataOffsetIsMissing() {
+        ((Step2Model)controller.getModel())
+        .setColumnSeparator(",")
+        .setCommentIndicator("#")
+        .setDecimalSeparator('.')
+        .setTextQualifier("\"")
+        .setSampleBased(true)
+        .setSampleBasedStartRegEx("test-regex")
+        .setSampleBasedDateOffset(5)
+        .setSampleBasedDateExtractionRegEx("(test)-regex-2")
+        .setSampleBasedDatePattern("test-pattern");
+    controller.loadSettings();
+    assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfSampleSizeOffsetIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfSampleSizeOffsetIsMissing() {
-		((Step2Model)controller.getModel())
-		.setColumnSeparator(",")
-		.setCommentIndicator("#")
-		.setDecimalSeparator('.')
-		.setTextQualifier("\"")
-		.setSampleBased(true)
-		.setSampleBasedStartRegEx("test-regex")
-		.setSampleBasedDateOffset(5)
-		.setSampleBasedDateExtractionRegEx("(test)-regex-2")
-		.setSampleBasedDatePattern("test-pattern")
-		.setSampleBasedDataOffset(6);
-	controller.loadSettings();
-	assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfSampleSizeOffsetIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfSampleSizeOffsetIsMissing() {
+        ((Step2Model)controller.getModel())
+        .setColumnSeparator(",")
+        .setCommentIndicator("#")
+        .setDecimalSeparator('.')
+        .setTextQualifier("\"")
+        .setSampleBased(true)
+        .setSampleBasedStartRegEx("test-regex")
+        .setSampleBasedDateOffset(5)
+        .setSampleBasedDateExtractionRegEx("(test)-regex-2")
+        .setSampleBasedDatePattern("test-pattern")
+        .setSampleBasedDataOffset(6);
+    controller.loadSettings();
+    assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnFalseIfSampleSizeRegExIsMissing.</p>
-	 */
-	@Test
-	public void shouldReturnFalseIfSampleSizeRegExIsMissing() {
-		((Step2Model)controller.getModel())
-			.setColumnSeparator(",")
-			.setCommentIndicator("#")
-			.setDecimalSeparator('.')
-			.setTextQualifier("\"")
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(5)
-			.setSampleBasedDateExtractionRegEx("(test)-regex-2")
-			.setSampleBasedDatePattern("test-pattern")
-			.setSampleBasedDataOffset(6)
-			.setSampleBasedSampleSizeOffset(7);
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-		((Step2Model)controller.getModel()).setSampleBasedSampleSizeRegEx("test-regex");
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(false));
-	}
+    /**
+     * <p>shouldReturnFalseIfSampleSizeRegExIsMissing.</p>
+     */
+    @Test
+    public void shouldReturnFalseIfSampleSizeRegExIsMissing() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(5)
+            .setSampleBasedDateExtractionRegEx("(test)-regex-2")
+            .setSampleBasedDatePattern("test-pattern")
+            .setSampleBasedDataOffset(6)
+            .setSampleBasedSampleSizeOffset(7);
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+        ((Step2Model)controller.getModel()).setSampleBasedSampleSizeRegEx("test-regex");
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(false));
+    }
 
-	/**
-	 * <p>shouldReturnTrueIfSampleBasedValuesAreSet.</p>
-	 */
-	@Test
-	public void shouldReturnTrueIfSampleBasedValuesAreSet() {
-		((Step2Model)controller.getModel())
-    		.setColumnSeparator(",")
-    		.setCommentIndicator("#")
-    		.setDecimalSeparator('.')
-    		.setTextQualifier("\"")
-    		.setSampleBased(true)
-    		.setSampleBasedStartRegEx("test-regex")
-    		.setSampleBasedDateOffset(5)
-    		.setSampleBasedDateExtractionRegEx("(test)-regex2-with-one-group")
-    		.setSampleBasedDatePattern("date-pattern")
-    		.setSampleBasedDataOffset(6)
-    		.setSampleBasedSampleSizeOffset(7)
-    		.setSampleBasedSampleSizeRegEx("(test-regex)-with-one-group");
-		// TODO extend with other sample based parameters
-		controller.loadSettings();
-		assertThat(controller.isFinished(), is(true));
-	}
+    /**
+     * <p>shouldReturnTrueIfSampleBasedValuesAreSet.</p>
+     */
+    @Test
+    public void shouldReturnTrueIfSampleBasedValuesAreSet() {
+        ((Step2Model)controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier("\"")
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(5)
+            .setSampleBasedDateExtractionRegEx("(test)-regex2-with-one-group")
+            .setSampleBasedDatePattern("date-pattern")
+            .setSampleBasedDataOffset(6)
+            .setSampleBasedSampleSizeOffset(7)
+            .setSampleBasedSampleSizeRegEx("(test-regex)-with-one-group");
+        // TODO extend with other sample based parameters
+        controller.loadSettings();
+        assertThat(controller.isFinished(), is(true));
+    }
 
 }

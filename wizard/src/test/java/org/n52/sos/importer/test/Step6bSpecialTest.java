@@ -82,64 +82,64 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class Step6bSpecialTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTest.class);
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 * @throws java.net.URISyntaxException if any.
-	 */
-	public static void main(final String[] args) throws URISyntaxException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Start Test");
-		}
-		final MainController mC = MainController.getInstance();
-		final TableController tc = TableController.getInstance();
-		final ModelStore ms = ModelStore.getInstance();
-		final int firstLineWithData = 1;
-		int i = 0;
-		MeasuredValue mv;
-		Column markedColumn;
-		Constants.GUI_DEBUG = false;
-		Step3Model s3M;
-		Step6bSpecialModel s6bSM = null;
-		List<String> selection;
-		FeatureOfInterest foi;
-		ObservedProperty obsProp;
-		//
-		/*
-		 * Set-Up Step specific data
-		 */
-		foi = TestData.EXAMPLE_FOI;
-		obsProp = TestData.EXAMPLE_OBS_PROP;
-		s6bSM = new Step6bSpecialModel(foi, obsProp);
-		markedColumn = new Column(4,firstLineWithData );
-		tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI);
-		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
-		tc.setColumnHeading(++i, Lang.l().sensor());
-		tc.setColumnHeading(++i, Lang.l().observedProperty());
-		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
-		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
-		tc.mark(markedColumn);
-		mv = new NumericValue();
-		mv.setFeatureOfInterest(foi);
-		mv.setObservedProperty(obsProp);
-		mv.setTableElement(markedColumn);
-		ms.add(mv);
-		/*
-		 * Set-Up Column metadata
-		 */
-		s3M = new Step3Model(4, firstLineWithData, false);
-		selection = new ArrayList<String>(1);
-		selection.add(Lang.l().step3ColTypeMeasuredValue());
-		selection.add(Lang.l().step3MeasuredValNumericValue());
-		selection.add(".SEP,");
-		s3M.addSelection(selection);
-		mC.registerProvider(s3M);
-		mC.updateModel();
-		mC.removeProvider(s3M);
-		//
-		mC.setStepController(new Step6bSpecialController(s6bSM,firstLineWithData));
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.net.URISyntaxException if any.
+     */
+    public static void main(final String[] args) throws URISyntaxException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Start Test");
+        }
+        final MainController mC = MainController.getInstance();
+        final TableController tc = TableController.getInstance();
+        final ModelStore ms = ModelStore.getInstance();
+        final int firstLineWithData = 1;
+        int i = 0;
+        MeasuredValue mv;
+        Column markedColumn;
+        Constants.GUI_DEBUG = false;
+        Step3Model s3M;
+        Step6bSpecialModel s6bSM = null;
+        List<String> selection;
+        FeatureOfInterest foi;
+        ObservedProperty obsProp;
+        //
+        /*
+         * Set-Up Step specific data
+         */
+        foi = TestData.EXAMPLE_FOI;
+        obsProp = TestData.EXAMPLE_OBS_PROP;
+        s6bSM = new Step6bSpecialModel(foi, obsProp);
+        markedColumn = new Column(4,firstLineWithData );
+        tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI);
+        tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
+        tc.setColumnHeading(++i, Lang.l().sensor());
+        tc.setColumnHeading(++i, Lang.l().observedProperty());
+        tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+        tc.mark(markedColumn);
+        mv = new NumericValue();
+        mv.setFeatureOfInterest(foi);
+        mv.setObservedProperty(obsProp);
+        mv.setTableElement(markedColumn);
+        ms.add(mv);
+        /*
+         * Set-Up Column metadata
+         */
+        s3M = new Step3Model(4, firstLineWithData, false);
+        selection = new ArrayList<String>(1);
+        selection.add(Lang.l().step3ColTypeMeasuredValue());
+        selection.add(Lang.l().step3MeasuredValNumericValue());
+        selection.add(".SEP,");
+        s3M.addSelection(selection);
+        mC.registerProvider(s3M);
+        mC.updateModel();
+        mC.removeProvider(s3M);
+        //
+        mC.setStepController(new Step6bSpecialController(s6bSM,firstLineWithData));
+    }
 }

@@ -68,63 +68,63 @@ import org.n52.sos.importer.view.i18n.Lang;
 public class Step5aModel implements StepModel {
 
 
-	private DateAndTime dateAndTime;
+    private DateAndTime dateAndTime;
 
-	private List<Component> missingDateAndTimeComponents;
+    private List<Component> missingDateAndTimeComponents;
 
-	/**
-	 * <p>Constructor for Step5aModel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public Step5aModel(DateAndTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
-		missingDateAndTimeComponents = new ArrayList<Component>();
-	}
+    /**
+     * <p>Constructor for Step5aModel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public Step5aModel(DateAndTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+        missingDateAndTimeComponents = new ArrayList<Component>();
+    }
 
-	/**
-	 * <p>setDateAndTimeModel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public void setDateAndTimeModel(DateAndTime dateAndTime) {
-		this.dateAndTime = dateAndTime;
-	}
+    /**
+     * <p>setDateAndTimeModel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public void setDateAndTimeModel(DateAndTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
 
-	/**
-	 * <p>Getter for the field <code>dateAndTime</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public DateAndTime getDateAndTime() {
-		return dateAndTime;
-	}
+    /**
+     * <p>Getter for the field <code>dateAndTime</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public DateAndTime getDateAndTime() {
+        return dateAndTime;
+    }
 
-	/**
-	 * <p>getDescription.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return Lang.l().step5aModelDescription();
-	}
+    /**
+     * <p>getDescription.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return Lang.l().step5aModelDescription();
+    }
 
-	/**
-	 * saves the components which are missing for this step
-	 *
-	 * @param missingDateAndTimeComponents a {@link java.util.List} object.
-	 */
-	public void setMissingDateAndTimeComponents(List<Component> missingDateAndTimeComponents) {
-		this.missingDateAndTimeComponents = missingDateAndTimeComponents;
-	}
+    /**
+     * saves the components which are missing for this step
+     *
+     * @param missingDateAndTimeComponents a {@link java.util.List} object.
+     */
+    public void setMissingDateAndTimeComponents(List<Component> missingDateAndTimeComponents) {
+        this.missingDateAndTimeComponents = missingDateAndTimeComponents;
+    }
 
-	/**
-	 * returns the components which were missing for this step
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<Component> getMissingDateAndTimeComponents() {
-		return missingDateAndTimeComponents;
-	}
+    /**
+     * returns the components which were missing for this step
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<Component> getMissingDateAndTimeComponents() {
+        return missingDateAndTimeComponents;
+    }
 
 }

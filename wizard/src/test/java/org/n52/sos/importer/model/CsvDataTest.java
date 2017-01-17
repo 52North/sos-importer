@@ -71,73 +71,73 @@ import org.junit.Before;
 import org.junit.Test;
 public class CsvDataTest {
 
-	private CsvData data;
+    private CsvData data;
 
-	/**
-	 * <p>setupData.</p>
-	 */
-	@Before
-	public void setupData() {
-		data = new CsvData();
-	}
+    /**
+     * <p>setupData.</p>
+     */
+    @Before
+    public void setupData() {
+        data = new CsvData();
+    }
 
-	/**
-	 * <p>shouldReturnRowCountZeroIfLinesNotSet.</p>
-	 */
-	@Test
-	public void shouldReturnRowCountZeroIfLinesNotSet() {
-		assertThat(data.getRowCount(), is(0));
-	}
+    /**
+     * <p>shouldReturnRowCountZeroIfLinesNotSet.</p>
+     */
+    @Test
+    public void shouldReturnRowCountZeroIfLinesNotSet() {
+        assertThat(data.getRowCount(), is(0));
+    }
 
-	/**
-	 * <p>shouldReturnColumnCountZeroIfLinesNotSet.</p>
-	 */
-	@Test
-	public void shouldReturnColumnCountZeroIfLinesNotSet() {
-		assertThat(data.getColumnCount(), is(0));
-	}
+    /**
+     * <p>shouldReturnColumnCountZeroIfLinesNotSet.</p>
+     */
+    @Test
+    public void shouldReturnColumnCountZeroIfLinesNotSet() {
+        assertThat(data.getColumnCount(), is(0));
+    }
 
-	/**
-	 * <p>shouldReturnZeroForCountsIfLinesIsNull.</p>
-	 */
-	@Test
-	public void shouldReturnZeroForCountsIfLinesIsNull() {
-		data.setLines(null);
+    /**
+     * <p>shouldReturnZeroForCountsIfLinesIsNull.</p>
+     */
+    @Test
+    public void shouldReturnZeroForCountsIfLinesIsNull() {
+        data.setLines(null);
 
-		assertThat(data.getRowCount(), is(0));
-		assertThat(data.getColumnCount(), is(0));
-	}
+        assertThat(data.getRowCount(), is(0));
+        assertThat(data.getColumnCount(), is(0));
+    }
 
-	/**
-	 * <p>shouldReturnCorrectColumnCount.</p>
-	 */
-	@Test
-	public void shouldReturnCorrectColumnCount() {
-		final List<String[]> testData = new LinkedList<>();
-		testData.add(new String[] {"col1","col2"});
-		testData.add(new String[] {"col1"});
-		testData.add(new String[] {"col1","col2", "col3"});
-		data.setLines(testData);
+    /**
+     * <p>shouldReturnCorrectColumnCount.</p>
+     */
+    @Test
+    public void shouldReturnCorrectColumnCount() {
+        final List<String[]> testData = new LinkedList<>();
+        testData.add(new String[] {"col1","col2"});
+        testData.add(new String[] {"col1"});
+        testData.add(new String[] {"col1","col2", "col3"});
+        data.setLines(testData);
 
-		assertThat(data.getColumnCount(), is(3));
-		assertThat(data.getRowCount(), is(3));
-	}
+        assertThat(data.getColumnCount(), is(3));
+        assertThat(data.getRowCount(), is(3));
+    }
 
-	/**
-	 * <p>shouldReturnLineFilledWithEmptyStringsIfColumnContainedLessValuesThanColumnCount.</p>
-	 */
-	@Test
-	public void shouldReturnLineFilledWithEmptyStringsIfColumnContainedLessValuesThanColumnCount() {
-		final List<String[]> testData = new LinkedList<>();
-		testData.add(new String[] {"col1","col2"});
-		testData.add(new String[] {"col1"});
-		testData.add(new String[] {"col1","col2", "col3"});
-		data.setLines(testData);
+    /**
+     * <p>shouldReturnLineFilledWithEmptyStringsIfColumnContainedLessValuesThanColumnCount.</p>
+     */
+    @Test
+    public void shouldReturnLineFilledWithEmptyStringsIfColumnContainedLessValuesThanColumnCount() {
+        final List<String[]> testData = new LinkedList<>();
+        testData.add(new String[] {"col1","col2"});
+        testData.add(new String[] {"col1"});
+        testData.add(new String[] {"col1","col2", "col3"});
+        data.setLines(testData);
 
-		assertThat(data.getLine(1).length, is(data.getColumnCount()));
-		for (int i = 1; i < data.getLine(1).length; i++) {
-			final String string = data.getLine(1)[i];
-			assertThat(string, is(""));
-		}
-	}
+        assertThat(data.getLine(1).length, is(data.getColumnCount()));
+        for (int i = 1; i < data.getLine(1).length; i++) {
+            final String string = data.getLine(1)[i];
+            assertThat(string, is(""));
+        }
+    }
 }

@@ -52,21 +52,21 @@ public interface CsvParser {
      */
     String[] readNext() throws IOException;
 
-	/**
-	 * MUST be called before first call of {@link #readNext()}!
-	 *
-	 * @param bufferedReader a {@link java.io.BufferedReader} object.
-	 * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
-	 * @throws java.io.IOException if any.
-	 */
-	void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
+    /**
+     * MUST be called before first call of {@link #readNext()}!
+     *
+     * @param bufferedReader a {@link java.io.BufferedReader} object.
+     * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
+     * @throws java.io.IOException if any.
+     */
+    void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
-	/**
-	 * Should return 0, if number of lines == number of observations,<br>
-	 * 				else the difference between line number and line index.
-	 *
-	 * @return a int.
-	 */
-	int getSkipLimit();
+    /**
+     * Should return 0, if number of lines == number of observations,<br>
+     *              else the difference between line number and line index.
+     *
+     * @return a int.
+     */
+    int getSkipLimit();
 
 }

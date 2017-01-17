@@ -67,62 +67,62 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.i18n.Lang;
 public class Step5cModel implements StepModel {
 
-	private Position position;
+    private Position position;
 
-	private List<Component> missingPositionComponents;
+    private List<Component> missingPositionComponents;
 
-	/**
-	 * <p>Constructor for Step5cModel.</p>
-	 *
-	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-	 */
-	public Step5cModel(Position position) {
-		this.setPosition(position);
-		setMissingPositionComponents(new ArrayList<Component>());
-	}
+    /**
+     * <p>Constructor for Step5cModel.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public Step5cModel(Position position) {
+        this.setPosition(position);
+        setMissingPositionComponents(new ArrayList<Component>());
+    }
 
-	/**
-	 * <p>Setter for the field <code>position</code>.</p>
-	 *
-	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-	 */
-	public void setPosition(Position position) {
-		this.position = position;
-	}
+    /**
+     * <p>Setter for the field <code>position</code>.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 
-	/**
-	 * <p>Getter for the field <code>position</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.position.Position} object.
-	 */
-	public Position getPosition() {
-		return position;
-	}
+    /**
+     * <p>Getter for the field <code>position</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public Position getPosition() {
+        return position;
+    }
 
-	/**
-	 * <p>getDescription.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return Lang.l().step5cModelDescription();
-	}
+    /**
+     * <p>getDescription.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return Lang.l().step5cModelDescription();
+    }
 
-	/**
-	 * saves the components which are missing for this step
-	 *
-	 * @param missingPositionComponents a {@link java.util.List} object.
-	 */
-	public void setMissingPositionComponents(List<Component> missingPositionComponents) {
-		this.missingPositionComponents = missingPositionComponents;
-	}
+    /**
+     * saves the components which are missing for this step
+     *
+     * @param missingPositionComponents a {@link java.util.List} object.
+     */
+    public void setMissingPositionComponents(List<Component> missingPositionComponents) {
+        this.missingPositionComponents = missingPositionComponents;
+    }
 
-	/**
-	 * returns the components which were missing for this step
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<Component> getMissingPositionComponents() {
-		return missingPositionComponents;
-	}
+    /**
+     * returns the components which were missing for this step
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<Component> getMissingPositionComponents() {
+        return missingPositionComponents;
+    }
 }

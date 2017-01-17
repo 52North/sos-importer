@@ -64,84 +64,84 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.i18n.Lang;
 public class Step4bModel implements StepModel {
 
-	private Resource resource;
+    private Resource resource;
 
-	private int[] selectedColumns;
+    private int[] selectedColumns;
 
-	private int firstLineWithData = -1;
+    private int firstLineWithData = -1;
 
-	/**
-	 * <p>Constructor for Step4bModel.</p>
-	 *
-	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 * @param firstLineWithData a int.
-	 */
-	public Step4bModel(Resource resource, int firstLineWithData) {
-		this.resource = resource;
-		this.firstLineWithData = firstLineWithData;
-		this.selectedColumns = new int[0];
-	}
+    /**
+     * <p>Constructor for Step4bModel.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     * @param firstLineWithData a int.
+     */
+    public Step4bModel(Resource resource, int firstLineWithData) {
+        this.resource = resource;
+        this.firstLineWithData = firstLineWithData;
+        this.selectedColumns = new int[0];
+    }
 
-	/**
-	 * <p>Setter for the field <code>resource</code>.</p>
-	 *
-	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * <p>Setter for the field <code>resource</code>.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * <p>Getter for the field <code>resource</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * <p>Getter for the field <code>resource</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * <p>getDescription.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return Lang.l().step4bModelDescription();
-	}
+    /**
+     * <p>getDescription.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return Lang.l().step4bModelDescription();
+    }
 
-	/**
-	 * <p>Setter for the field <code>selectedColumns</code>.</p>
-	 *
-	 * @param selectedColumns an array of int.
-	 */
-	public void setSelectedColumns(int[] selectedColumns) {
-		this.selectedColumns = selectedColumns;
-	}
+    /**
+     * <p>Setter for the field <code>selectedColumns</code>.</p>
+     *
+     * @param selectedColumns an array of int.
+     */
+    public void setSelectedColumns(int[] selectedColumns) {
+        this.selectedColumns = selectedColumns;
+    }
 
-	/**
-	 * <p>Getter for the field <code>selectedColumns</code>.</p>
-	 *
-	 * @return an array of int.
-	 */
-	public int[] getSelectedColumns() {
-		return selectedColumns;
-	}
+    /**
+     * <p>Getter for the field <code>selectedColumns</code>.</p>
+     *
+     * @return an array of int.
+     */
+    public int[] getSelectedColumns() {
+        return selectedColumns;
+    }
 
-	/**
-	 * <p>Getter for the field <code>firstLineWithData</code>.</p>
-	 *
-	 * @return the firstLineWithData
-	 */
-	public int getFirstLineWithData() {
-		return firstLineWithData;
-	}
+    /**
+     * <p>Getter for the field <code>firstLineWithData</code>.</p>
+     *
+     * @return the firstLineWithData
+     */
+    public int getFirstLineWithData() {
+        return firstLineWithData;
+    }
 
-	/**
-	 * <p>Setter for the field <code>firstLineWithData</code>.</p>
-	 *
-	 * @param firstLineWithData the firstLineWithData to set
-	 */
-	public void setFirstLineWithData(int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-	}
+    /**
+     * <p>Setter for the field <code>firstLineWithData</code>.</p>
+     *
+     * @param firstLineWithData the firstLineWithData to set
+     */
+    public void setFirstLineWithData(int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+    }
 }

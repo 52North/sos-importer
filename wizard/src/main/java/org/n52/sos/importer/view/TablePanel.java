@@ -49,58 +49,58 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class TablePanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static TablePanel instance = null;
+    private static TablePanel instance = null;
 
-	private final JTable table;
+    private final JTable table;
 
-	private TablePanel() {
-		super();
-		setBorder(new TitledBorder(null, Lang.l().dataPreview(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		final GridBagLayout gridBagLayout = new GridBagLayout();
-		/*gridBagLayout.columnWidths = new int[]{438, 0};
-		gridBagLayout.rowHeights = new int[]{273, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
-		setLayout(gridBagLayout);
-		table = new JTable();
-		table.setPreferredScrollableViewportSize(new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT-450));
-		table.setAutoscrolls(true);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		final JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		final GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		add(scrollPane, c);
-		if (Constants.GUI_DEBUG) {
-			setBorder(Constants.DEBUG_BORDER);
-			scrollPane.setBorder(Constants.DEBUG_BORDER);
-		}
-	}
+    private TablePanel() {
+        super();
+        setBorder(new TitledBorder(null, Lang.l().dataPreview(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        final GridBagLayout gridBagLayout = new GridBagLayout();
+        /*gridBagLayout.columnWidths = new int[]{438, 0};
+        gridBagLayout.rowHeights = new int[]{273, 0};
+        gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+        gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
+        setLayout(gridBagLayout);
+        table = new JTable();
+        table.setPreferredScrollableViewportSize(new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT-450));
+        table.setAutoscrolls(true);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        final JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        final GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        add(scrollPane, c);
+        if (Constants.GUI_DEBUG) {
+            setBorder(Constants.DEBUG_BORDER);
+            scrollPane.setBorder(Constants.DEBUG_BORDER);
+        }
+    }
 
-	/**
-	 * <p>Getter for the field <code>instance</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.view.TablePanel} object.
-	 */
-	public static TablePanel getInstance() {
-		if (instance == null) {
-			instance = new TablePanel();
-		}
-		return instance;
-	}
+    /**
+     * <p>Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.view.TablePanel} object.
+     */
+    public static TablePanel getInstance() {
+        if (instance == null) {
+            instance = new TablePanel();
+        }
+        return instance;
+    }
 
-	/**
-	 * <p>Getter for the field <code>table</code>.</p>
-	 *
-	 * @return a {@link javax.swing.JTable} object.
-	 */
-	public JTable getTable() {
-		return table;
-	}
+    /**
+     * <p>Getter for the field <code>table</code>.</p>
+     *
+     * @return a {@link javax.swing.JTable} object.
+     */
+    public JTable getTable() {
+        return table;
+    }
 }

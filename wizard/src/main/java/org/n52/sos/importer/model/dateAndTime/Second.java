@@ -68,40 +68,40 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingSecondPanel;
 public class Second extends DateAndTimeComponent {
 
-	/**
-	 * <p>Constructor for Second.</p>
-	 *
-	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-	 * @param pattern a {@link java.lang.String} object.
-	 */
-	public Second(TableElement tableElement, String pattern) {
-		super(tableElement, pattern);
-	}
+    /**
+     * <p>Constructor for Second.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public Second(TableElement tableElement, String pattern) {
+        super(tableElement, pattern);
+    }
 
-	/**
-	 * <p>Constructor for Second.</p>
-	 *
-	 * @param value a int.
-	 */
-	public Second(int value) {
-		super(value);
-	}
+    /**
+     * <p>Constructor for Second.</p>
+     *
+     * @param value a int.
+     */
+    public Second(int value) {
+        super(value);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int getGregorianCalendarField() {
-		return GregorianCalendar.SECOND;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int getGregorianCalendarField() {
+        return GregorianCalendar.SECOND;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Second" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Second" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingSecondPanel((DateAndTime)c);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingSecondPanel((DateAndTime)c);
+    }
 }

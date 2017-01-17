@@ -63,27 +63,27 @@ package org.n52.sos.importer.model.measuredValue;
 import org.n52.sos.importer.model.Parseable;
 public class Count extends MeasuredValue implements Parseable {
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Count" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Count" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Object parse(String s) {
-		s = s.trim();
-		int i = Integer.parseInt(s);
-		if (i < 0) {
-			throw new NumberFormatException(
-					"value for type count should be > 0. Given value is: " + i);
-		}
-		return i;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Object parse(String s) {
+        s = s.trim();
+        int i = Integer.parseInt(s);
+        if (i < 0) {
+            throw new NumberFormatException(
+                    "value for type count should be > 0. Given value is: " + i);
+        }
+        return i;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setPattern(String parsePattern) {
-		// do nothing, it's Java base type wrapper
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setPattern(String parsePattern) {
+        // do nothing, it's Java base type wrapper
+    }
 }

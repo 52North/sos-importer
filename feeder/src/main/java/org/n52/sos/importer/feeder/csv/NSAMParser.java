@@ -59,12 +59,12 @@ import org.slf4j.LoggerFactory;
  */
 public class NSAMParser implements CsvParser {
 
-	/*
-	 * This values is derived from "mm/dd/yy"
-	 */
+    /*
+     * This values is derived from "mm/dd/yy"
+     */
     private static final int dateStringLength = 8;
 
-	private static final int dataOffset = 21;
+    private static final int dataOffset = 21;
 
     private static final int metaDataOffset = 3;
 
@@ -106,7 +106,7 @@ public class NSAMParser implements CsvParser {
         // 1 read file metadata
         skipLines(br,metaDataOffset);
         // 1.1 start date => # of timeseries (columns)
-		final String startDateLine = br.readLine();
+        final String startDateLine = br.readLine();
         final String[] startDates = getStartDates(startDateLine);
         // 1.2 start time pro zeitreihe einlesen
         String startTimeLine = br.readLine();
@@ -129,64 +129,64 @@ public class NSAMParser implements CsvParser {
                 break;
             }
             if (firstLine) {
-            	firstLine = false;
-            	if (hasMoreThanOneTimeseries(startDates)) {
-            		createTimeSeriesSplitter(line);
-            	} else {
-            		LOG.debug("Only one time series in dataset found.");
-            	}
+                firstLine = false;
+                if (hasMoreThanOneTimeseries(startDates)) {
+                    createTimeSeriesSplitter(line);
+                } else {
+                    LOG.debug("Only one time series in dataset found.");
+                }
             }
             int i = 0;
             for (final String timeSeriesElem : line.split(timeSeriesSplitter)) {
-            	if (timeSeriesElem != null && !timeSeriesElem.isEmpty()) {
-            		final String[] timeSeriesElemTokens = timeSeriesElem.split(timeSeriesElementSplitter);
-            		if (timeSeriesElemTokens != null && timeSeriesElemTokens.length > 0 && timeSeriesElemTokens[0].indexOf("Comment for Sample") == -1) {
-            			try {
-            				final Timestamp timestamp = getTimestamp(startDates[i],
-            						startTime, sdf, timeZone, timeSeriesElemTokens[0]);
-            				timeSeriesBuffer.get(i).add(new String[] {timestamp.toString(), timeSeriesElemTokens[1]});
-            				i++;
-            			} catch (NumberFormatException | ParseException e) {
-            				LOG.error("Exception thrown: {}", e.getMessage(), e);
-            			}
-            		}
-            	}
+                if (timeSeriesElem != null && !timeSeriesElem.isEmpty()) {
+                    final String[] timeSeriesElemTokens = timeSeriesElem.split(timeSeriesElementSplitter);
+                    if (timeSeriesElemTokens != null && timeSeriesElemTokens.length > 0 && timeSeriesElemTokens[0].indexOf("Comment for Sample") == -1) {
+                        try {
+                            final Timestamp timestamp = getTimestamp(startDates[i],
+                                    startTime, sdf, timeZone, timeSeriesElemTokens[0]);
+                            timeSeriesBuffer.get(i).add(new String[] {timestamp.toString(), timeSeriesElemTokens[1]});
+                            i++;
+                        } catch (NumberFormatException | ParseException e) {
+                            LOG.error("Exception thrown: {}", e.getMessage(), e);
+                        }
+                    }
+                }
             }
         }
         // 3 create line Stack<String[]> from timeSeriesBuffer
         createStack(timeSeriesBuffer);
     }
 
-	private boolean hasMoreThanOneTimeseries(final String[] startDates) {
-		return startDates.length > 1;
-	}
+    private boolean hasMoreThanOneTimeseries(final String[] startDates) {
+        return startDates.length > 1;
+    }
 
     private void createTimeSeriesSplitter(String line) {
-    	LOG.debug("Identify time series splitter from first line of data: '{}'", line);
-    	boolean startFound = false;
-    	int splitterCount = 1;
-    	for (final String elem : line.split(",")) {
-    			if (elem.isEmpty()) {
-    				startFound = true;
-    				splitterCount++;
-    			}
-    	        if (startFound && !elem.isEmpty()){
-    	        	break;
-    	        }
-    	}
-    	if (splitterCount > 1) {
-    		timeSeriesSplitter = "";
-    		while (splitterCount > 0) {
-    			timeSeriesSplitter += ",";
-    			splitterCount--;
-    		}
-    		LOG.debug("Created timeseries splitter: {}", timeSeriesSplitter);
-    	} else {
-    		LOG.debug("Splitter count == 1 => only one timeseries in dataset.");
-    	}
-	}
+        LOG.debug("Identify time series splitter from first line of data: '{}'", line);
+        boolean startFound = false;
+        int splitterCount = 1;
+        for (final String elem : line.split(",")) {
+                if (elem.isEmpty()) {
+                    startFound = true;
+                    splitterCount++;
+                }
+                if (startFound && !elem.isEmpty()){
+                    break;
+                }
+        }
+        if (splitterCount > 1) {
+            timeSeriesSplitter = "";
+            while (splitterCount > 0) {
+                timeSeriesSplitter += ",";
+                splitterCount--;
+            }
+            LOG.debug("Created timeseries splitter: {}", timeSeriesSplitter);
+        } else {
+            LOG.debug("Splitter count == 1 => only one timeseries in dataset.");
+        }
+    }
 
-	private Timestamp getTimestamp(final String startDate,
+    private Timestamp getTimestamp(final String startDate,
             final String startTime,
             final SimpleDateFormat sdf,
             final TimeZone timeZone,
@@ -209,33 +209,33 @@ public class NSAMParser implements CsvParser {
     }
 
     private String[] getStartDates(final String startDateLine) {
-    	LOG.debug("Parsing startDateLine: '{}'", startDateLine);
+        LOG.debug("Parsing startDateLine: '{}'", startDateLine);
         String[] startDates = null;
         if (startDateLine.length() > metaDatabeginIndex) {
-        		startDates = startDateLine.substring(metaDatabeginIndex).split(metadataSplitter);
-        		final ArrayList<String> startDatesTmp = new ArrayList<>(startDates.length+1);
-        		LOG.debug("StartDate first split: {}", Arrays.toString(startDates));
-        		startDatesTmp.add(startDateLine.substring(startTimeBeginIndex,startTimeEndIndex));
-        		for (String startDate : startDates) {
-        			if (!startDate.isEmpty()) {
-        				// Case: Leftover ","
-        				if (startDate.indexOf(",") != -1) {
-        					startDate = startDate.replaceAll(",", "");
-        				}
-        				// Case: Wrong date format like 12/31/2015 and not 12/31/15
-        				if (startDate.length() == dateStringLength+2) {
-        					startDate = startDate.substring(0,startDate.lastIndexOf("/")+1).concat(startDate.substring(startDate.lastIndexOf("/")+3));
-        				}
-        				if (startDate.length()==dateStringLength){
-        					startDatesTmp.add(startDate);
-        				}
-        			}
-        		}
-        		startDates = startDatesTmp.toArray(new String[startDatesTmp.size()]);
-    	} else {
-    		startDates = new String[1];
-    		startDates[0] = startDateLine.substring(startTimeBeginIndex,startTimeEndIndex);
-    	}
+                startDates = startDateLine.substring(metaDatabeginIndex).split(metadataSplitter);
+                final ArrayList<String> startDatesTmp = new ArrayList<>(startDates.length+1);
+                LOG.debug("StartDate first split: {}", Arrays.toString(startDates));
+                startDatesTmp.add(startDateLine.substring(startTimeBeginIndex,startTimeEndIndex));
+                for (String startDate : startDates) {
+                    if (!startDate.isEmpty()) {
+                        // Case: Leftover ","
+                        if (startDate.indexOf(",") != -1) {
+                            startDate = startDate.replaceAll(",", "");
+                        }
+                        // Case: Wrong date format like 12/31/2015 and not 12/31/15
+                        if (startDate.length() == dateStringLength+2) {
+                            startDate = startDate.substring(0,startDate.lastIndexOf("/")+1).concat(startDate.substring(startDate.lastIndexOf("/")+3));
+                        }
+                        if (startDate.length()==dateStringLength){
+                            startDatesTmp.add(startDate);
+                        }
+                    }
+                }
+                startDates = startDatesTmp.toArray(new String[startDatesTmp.size()]);
+        } else {
+            startDates = new String[1];
+            startDates[0] = startDateLine.substring(startTimeBeginIndex,startTimeEndIndex);
+        }
         LOG.debug("Start dates found: {}",Arrays.toString(startDates));
         return startDates;
     }
@@ -263,10 +263,10 @@ public class NSAMParser implements CsvParser {
      *
      * Skip limit is 1 because the "lines" are artificial in this parser and num of lines == num of observations.
      */
-	/** {@inheritDoc} */
-	@Override
-	public int getSkipLimit() {
-		return 1;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int getSkipLimit() {
+        return 1;
+    }
 
 }

@@ -149,8 +149,8 @@ public final class Configuration {
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
     /** Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT="observation_featureofinterestid_observa"{trunked}</code> */
     public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = "observation_featureofinterestid_observablepropertyid_proced_key";
-	/** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
-	public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
+    /** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
+    public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
 
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
@@ -438,7 +438,7 @@ public final class Configuration {
         final ArrayList<Integer> ids = new ArrayList<Integer>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)){
-            	LOG.debug("Found measured value column: {}", column.getNumber());
+                LOG.debug("Found measured value column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
         }
@@ -459,12 +459,12 @@ public final class Configuration {
      * @return an array of int.
      */
     public int[] getIgnoredColumnIds() {
-    	LOG.trace("getIgnoredColumnIds()");
+        LOG.trace("getIgnoredColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         final ArrayList<Integer> ids = new ArrayList<Integer>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)){
-            	LOG.debug("Found ignored column: {}", column.getNumber());
+                LOG.debug("Found ignored column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
         }
@@ -734,20 +734,20 @@ public final class Configuration {
      * @throws java.text.ParseException if any.
      */
     public Position getPosition(final String[] values) throws ParseException {
-    	String group = "";
-    	// get first group in Document for position column
-    	outerfor:
-    	for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
-			if (column.getType().equals(Type.POSITION)) {
-				for (Metadata metadata : column.getMetadataArray()) {
-					if (metadata.getKey().equals(Key.GROUP)) {
-						group = metadata.getValue();
-						break outerfor;
-					}
-				}
-			}
-		}
-    	return getPosition(group, values);
+        String group = "";
+        // get first group in Document for position column
+        outerfor:
+        for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+            if (column.getType().equals(Type.POSITION)) {
+                for (Metadata metadata : column.getMetadataArray()) {
+                    if (metadata.getKey().equals(Key.GROUP)) {
+                        group = metadata.getValue();
+                        break outerfor;
+                    }
+                }
+            }
+        }
+        return getPosition(group, values);
     }
 
     /**
@@ -1281,8 +1281,8 @@ public final class Configuration {
      * <p>isSamplingFile.</p>
      *
      * @return <code>true</code>, if all required attributes are available for
-     * 			importing sample based files,<br>
-     * 			else <code>false</code>.
+     *          importing sample based files,<br>
+     *          else <code>false</code>.
      */
     public boolean isSamplingFile() {
         return importConf.getDataFile().isSetSampleStartRegEx() &&
@@ -1308,92 +1308,92 @@ public final class Configuration {
      * @return a {@link java.lang.String} object.
      */
     public String getSampleStartRegEx() {
-    	if (importConf.getDataFile().isSetSampleStartRegEx() &&
+        if (importConf.getDataFile().isSetSampleStartRegEx() &&
                 !importConf.getDataFile().getSampleStartRegEx().isEmpty()) {
-    		return importConf.getDataFile().getSampleStartRegEx();
-    	}
-    	throw new IllegalArgumentException("Attribute 'sampleIdRegEx' of <DataFile> not set.");
-	}
+            return importConf.getDataFile().getSampleStartRegEx();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleIdRegEx' of <DataFile> not set.");
+    }
 
-	/**
-	 * <p>getSampleSizeRegEx.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getSampleSizeRegEx() {
-		if (importConf.getDataFile().isSetSampleSizeRegEx() &&
-				!importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
+    /**
+     * <p>getSampleSizeRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSampleSizeRegEx() {
+        if (importConf.getDataFile().isSetSampleSizeRegEx() &&
+                !importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
                 importConf.getDataFile().getSampleSizeRegEx().indexOf("(") >= 0 &&
                 importConf.getDataFile().getSampleSizeRegEx().indexOf(")") > 1) {
-			return importConf.getDataFile().getSampleSizeRegEx();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleSizeRegEx' of <DataFile> not set.");
-	}
+            return importConf.getDataFile().getSampleSizeRegEx();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleSizeRegEx' of <DataFile> not set.");
+    }
 
-	/**
-	 * <p>getSampleSizeOffset.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getSampleSizeOffset() {
-		if (importConf.getDataFile().isSetSampleSizeOffset()) {
-			return importConf.getDataFile().getSampleSizeOffset();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleSizeOffset' of <DataFile> not set.");
-	}
+    /**
+     * <p>getSampleSizeOffset.</p>
+     *
+     * @return a int.
+     */
+    public int getSampleSizeOffset() {
+        if (importConf.getDataFile().isSetSampleSizeOffset()) {
+            return importConf.getDataFile().getSampleSizeOffset();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleSizeOffset' of <DataFile> not set.");
+    }
 
-	/**
-	 * <p>getSampleDateOffset.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getSampleDateOffset() {
-		if (importConf.getDataFile().isSetSampleDateOffset()) {
-			return importConf.getDataFile().getSampleDateOffset();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleDateOffset' of <DataFile> not set.");
-	}
+    /**
+     * <p>getSampleDateOffset.</p>
+     *
+     * @return a int.
+     */
+    public int getSampleDateOffset() {
+        if (importConf.getDataFile().isSetSampleDateOffset()) {
+            return importConf.getDataFile().getSampleDateOffset();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleDateOffset' of <DataFile> not set.");
+    }
 
-	/**
-	 * <p>getSampleDataOffset.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getSampleDataOffset() {
-		if (importConf.getDataFile().isSetSampleDataOffset()) {
-			return importConf.getDataFile().getSampleDataOffset();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleDataOffset' of <DataFile> not set.");
-	}
+    /**
+     * <p>getSampleDataOffset.</p>
+     *
+     * @return a int.
+     */
+    public int getSampleDataOffset() {
+        if (importConf.getDataFile().isSetSampleDataOffset()) {
+            return importConf.getDataFile().getSampleDataOffset();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleDataOffset' of <DataFile> not set.");
+    }
 
 
-	/**
-	 * <p>getSampleDatePattern.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getSampleDatePattern() {
-		if (importConf.getDataFile().isSetSampleDatePattern() &&
-				!importConf.getDataFile().getSampleDatePattern().isEmpty()) {
-			return importConf.getDataFile().getSampleDatePattern();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleDateInfoPattern' of <DataFile> not set.");
-	}
+    /**
+     * <p>getSampleDatePattern.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSampleDatePattern() {
+        if (importConf.getDataFile().isSetSampleDatePattern() &&
+                !importConf.getDataFile().getSampleDatePattern().isEmpty()) {
+            return importConf.getDataFile().getSampleDatePattern();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleDateInfoPattern' of <DataFile> not set.");
+    }
 
-	/**
-	 * <p>getSampleDateExtractionRegEx.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getSampleDateExtractionRegEx() {
-		if (importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
-				!importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
+    /**
+     * <p>getSampleDateExtractionRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSampleDateExtractionRegEx() {
+        if (importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
+                !importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
                 importConf.getDataFile().getSampleDateExtractionRegEx().indexOf("(") >= 0 &&
                 importConf.getDataFile().getSampleDateExtractionRegEx().indexOf(")") > 1) {
-			return importConf.getDataFile().getSampleDateExtractionRegEx();
-		}
-		throw new IllegalArgumentException("Attribute 'sampleDateExtractionRegEx' of <DataFile> not set.");
-	}
+            return importConf.getDataFile().getSampleDateExtractionRegEx();
+        }
+        throw new IllegalArgumentException("Attribute 'sampleDateExtractionRegEx' of <DataFile> not set.");
+    }
 
 
     /**
@@ -1494,78 +1494,78 @@ public final class Configuration {
      * @return a boolean.
      */
     public boolean isIgnoreLineRegExSet() {
-    	return importConf.getDataFile().getIgnoreLineRegExArray() != null &&
-    			importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
-	}
+        return importConf.getDataFile().getIgnoreLineRegExArray() != null &&
+                importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
+    }
 
-	/**
-	 * <p>getIgnoreLineRegExPatterns.</p>
-	 *
-	 * @return an array of {@link java.util.regex.Pattern} objects.
-	 */
-	public Pattern[] getIgnoreLineRegExPatterns() {
-		if (!isIgnoreLineRegExSet()) {
-			return new Pattern[0];
-		}
-		final String[] ignoreLineRegExArray = importConf.getDataFile().getIgnoreLineRegExArray();
-		final LinkedList<Pattern> patterns = new LinkedList<>();
-		for (final String regEx : ignoreLineRegExArray) {
-			if (regEx != null && !regEx.isEmpty()) {
-				patterns.add(Pattern.compile(regEx));
-			}
-		}
-		return patterns.toArray(new Pattern[patterns.size()]);
-	}
+    /**
+     * <p>getIgnoreLineRegExPatterns.</p>
+     *
+     * @return an array of {@link java.util.regex.Pattern} objects.
+     */
+    public Pattern[] getIgnoreLineRegExPatterns() {
+        if (!isIgnoreLineRegExSet()) {
+            return new Pattern[0];
+        }
+        final String[] ignoreLineRegExArray = importConf.getDataFile().getIgnoreLineRegExArray();
+        final LinkedList<Pattern> patterns = new LinkedList<>();
+        for (final String regEx : ignoreLineRegExArray) {
+            if (regEx != null && !regEx.isEmpty()) {
+                patterns.add(Pattern.compile(regEx));
+            }
+        }
+        return patterns.toArray(new Pattern[patterns.size()]);
+    }
 
-	/**
-	 * <p>isInsertSweArrayObservationTimeoutBufferSet.</p>
-	 *
-	 * @return a boolean.
-	 */
-	public boolean isInsertSweArrayObservationTimeoutBufferSet() {
-		return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
-	}
+    /**
+     * <p>isInsertSweArrayObservationTimeoutBufferSet.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isInsertSweArrayObservationTimeoutBufferSet() {
+        return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
+    }
 
-	/**
-	 * <p>getInsertSweArrayObservationTimeoutBuffer.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getInsertSweArrayObservationTimeoutBuffer() {
-		if (isInsertSweArrayObservationTimeoutBufferSet()) {
-			return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
-		}
-		throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
-	}
+    /**
+     * <p>getInsertSweArrayObservationTimeoutBuffer.</p>
+     *
+     * @return a int.
+     */
+    public int getInsertSweArrayObservationTimeoutBuffer() {
+        if (isInsertSweArrayObservationTimeoutBufferSet()) {
+            return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
+        }
+        throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
+    }
 
-	/**
-	 * <p>getSampleSizeDivisor.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getSampleSizeDivisor() {
-		if (isSamplingFile() && importConf.getDataFile().isSetSampleSizeDivisor()) {
-			return importConf.getDataFile().getSampleSizeDivisor();
-		}
-		return 1;
-	}
+    /**
+     * <p>getSampleSizeDivisor.</p>
+     *
+     * @return a int.
+     */
+    public int getSampleSizeDivisor() {
+        if (isSamplingFile() && importConf.getDataFile().isSetSampleSizeDivisor()) {
+            return importConf.getDataFile().getSampleSizeDivisor();
+        }
+        return 1;
+    }
 
-	/**
-	 * <p>isCsvParserDefined.</p>
-	 *
-	 * @return a boolean.
-	 */
-	public boolean isCsvParserDefined() {
-		return importConf.getCsvMetadata().isSetCsvParserClass();
-	}
+    /**
+     * <p>isCsvParserDefined.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isCsvParserDefined() {
+        return importConf.getCsvMetadata().isSetCsvParserClass();
+    }
 
-	/**
-	 * <p>getCsvParser.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getCsvParser() {
-		return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
-	}
+    /**
+     * <p>getCsvParser.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getCsvParser() {
+        return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
+    }
 
 }

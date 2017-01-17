@@ -38,19 +38,19 @@ package org.n52.sos.importer.model;
  */
 public interface Parseable {
 
-	/**
-	 * converts a String with the help of a certain pattern
-	 * into a user-defined object
-	 *
-	 * @param s a {@link java.lang.String} object.
-	 * @return a {@link java.lang.Object} object.
-	 */
-	public Object parse(String s);
+    /**
+     * converts a String with the help of a certain pattern
+     * into a user-defined object
+     *
+     * @param s a {@link java.lang.String} object.
+     * @return a {@link java.lang.Object} object.
+     */
+    public Object parse(String s);
 
-	/**
-	 * set the pattern to be used by parse(String s);
-	 *
-	 * @param parsePattern a {@link java.lang.String} object.
-	 */
-	public void setPattern(String parsePattern);
+    /**
+     * set the pattern to be used by parse(String s);
+     *
+     * @param parsePattern a {@link java.lang.String} object.
+     */
+    public void setPattern(String parsePattern);
 }

@@ -77,44 +77,44 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 public class Step6bTestObservedProperty {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
-		Constants.GUI_DEBUG = false;
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final MainController f = MainController.getInstance();
+        TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
+        Constants.GUI_DEBUG = false;
 
-		final DateAndTime dtm1 = new DateAndTime();
-		dtm1.setGroup("1");
-		final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-		final int firstLineWithData = 0;
-		dtc1.assignPattern("dd.MM.yy", new Column(0,firstLineWithData ));
-		dtm1.setHour(new Hour(0));
-		dtm1.setMinute(new Minute(0));
-		dtm1.setSecond(new Second(0));
-		dtm1.setTimeZone(new TimeZone(1));
-		ModelStore.getInstance().add(dtm1);
+        final DateAndTime dtm1 = new DateAndTime();
+        dtm1.setGroup("1");
+        final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
+        final int firstLineWithData = 0;
+        dtc1.assignPattern("dd.MM.yy", new Column(0,firstLineWithData ));
+        dtm1.setHour(new Hour(0));
+        dtm1.setMinute(new Minute(0));
+        dtm1.setSecond(new Second(0));
+        dtm1.setTimeZone(new TimeZone(1));
+        ModelStore.getInstance().add(dtm1);
 
-		final FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setTableElement(new Column(1,firstLineWithData));
-		ModelStore.getInstance().add(foi);
+        final FeatureOfInterest foi = new FeatureOfInterest();
+        foi.setTableElement(new Column(1,firstLineWithData));
+        ModelStore.getInstance().add(foi);
 
-		//ObservedProperty op = new ObservedProperty();
-		//op.setTableElement(new Column(2));
-		//ModelStore.getInstance().add(op);
+        //ObservedProperty op = new ObservedProperty();
+        //op.setTableElement(new Column(2));
+        //ModelStore.getInstance().add(op);
 
-		final NumericValue nv = new NumericValue();
-		nv.setTableElement(new Column(3,firstLineWithData));
-		nv.setDateAndTime(dtm1);
-		nv.setFeatureOfInterest(foi);
-		//nv.setObservedProperty(op);
-		ModelStore.getInstance().add(nv);
+        final NumericValue nv = new NumericValue();
+        nv.setTableElement(new Column(3,firstLineWithData));
+        nv.setDateAndTime(dtm1);
+        nv.setFeatureOfInterest(foi);
+        //nv.setObservedProperty(op);
+        ModelStore.getInstance().add(nv);
 
-		final Step6bController s6c = new Step6bController(firstLineWithData);
-		s6c.isNecessary();
-		f.setStepController(s6c);
-	}
+        final Step6bController s6c = new Step6bController(firstLineWithData);
+        s6c.isNecessary();
+        f.setStepController(s6c);
+    }
 }

@@ -46,64 +46,64 @@ import org.slf4j.LoggerFactory;
  */
 public class FileHelper {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
 
-	/**
-	 * <p>createFileInImporterHomeWithUniqueFileName.</p>
-	 *
-	 * @param fileName a {@link java.lang.String} object.
-	 * @return a {@link java.io.File} object.
-	 */
-	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
-		LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
-		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
-	}
+    /**
+     * <p>createFileInImporterHomeWithUniqueFileName.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @return a {@link java.io.File} object.
+     */
+    public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
+        LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
+        return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
+    }
 
-	/**
-	 * <p>cleanPathToCreateFileName.</p>
-	 *
-	 * @param fileName a {@link java.lang.String} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public static String cleanPathToCreateFileName(final String fileName) {
-		LOG.trace("cleanPathToCreateFileName({})", fileName);
-		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
-	}
+    /**
+     * <p>cleanPathToCreateFileName.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String cleanPathToCreateFileName(final String fileName) {
+        LOG.trace("cleanPathToCreateFileName({})", fileName);
+        return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
+    }
 
-	/**
-	 * <p>shortenStringViaMD5Hash.</p>
-	 *
-	 * @param longString a {@link java.lang.String} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public static String shortenStringViaMD5Hash(final String longString) {
-		try {
-			LOG.trace("shortenStringViaMD5Hash({})", longString);
-			final MessageDigest md5 = MessageDigest.getInstance("MD5");
-			String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
-			LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
-			return shortString;
-		} catch (final NoSuchAlgorithmException e) {
-			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
-			LOG.debug("Exception thrown: {}", e.getMessage(), e);
-			return longString;
-		}
-	}
+    /**
+     * <p>shortenStringViaMD5Hash.</p>
+     *
+     * @param longString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String shortenStringViaMD5Hash(final String longString) {
+        try {
+            LOG.trace("shortenStringViaMD5Hash({})", longString);
+            final MessageDigest md5 = MessageDigest.getInstance("MD5");
+            String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
+            LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
+            return shortString;
+        } catch (final NoSuchAlgorithmException e) {
+            LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
+            LOG.debug("Exception thrown: {}", e.getMessage(), e);
+            return longString;
+        }
+    }
 
-	/**
-	 * <p>getHome.</p>
-	 *
-	 * @return a {@link java.io.File} object.
-	 */
-	public static File getHome() {
-		final String homePath = System.getProperty("user.home") + File.separator
-				+ ".SOSImporter" + File.separator;
-		LOG.trace("Estimated importer home '{}'", homePath);
-		final File home = new File(homePath);
-		if (!home.exists() && !home.mkdir()) {
-			LOG.error("Could not create importer home '{}'", home.getAbsolutePath());
-		}
-		return home;
-	}
+    /**
+     * <p>getHome.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
+    public static File getHome() {
+        final String homePath = System.getProperty("user.home") + File.separator
+                + ".SOSImporter" + File.separator;
+        LOG.trace("Estimated importer home '{}'", homePath);
+        final File home = new File(homePath);
+        if (!home.exists() && !home.mkdir()) {
+            LOG.error("Could not create importer home '{}'", home.getAbsolutePath());
+        }
+        return home;
+    }
 
 }

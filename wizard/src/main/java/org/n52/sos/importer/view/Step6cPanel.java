@@ -48,61 +48,61 @@ import org.n52.sos.importer.view.position.MissingPositionPanel;
  */
 public class Step6cPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-		private MissingPositionPanel mpp;
+        private MissingPositionPanel mpp;
 
-		/**
-		 * <p>Constructor for Step6cPanel.</p>
-		 *
-		 * @param description a {@link java.lang.String} object.
-		 * @param featureOfInterestName a {@link java.lang.String} object.
-		 * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
-		 */
-		public Step6cPanel(String description,
-				String featureOfInterestName,
-				Step6cModel s6cM) {
-			String questionStatement = String.format("%s %s ", description, Lang.l().featureOfInterest());
-			setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-			JLabel questionStartLabel = new JLabel(questionStatement);
-			JLabel foiName = new JLabel(featureOfInterestName);
-			foiName.setFont(Constants.DEFAULT_LABEL_FONT_BOLD);
+        /**
+         * <p>Constructor for Step6cPanel.</p>
+         *
+         * @param description a {@link java.lang.String} object.
+         * @param featureOfInterestName a {@link java.lang.String} object.
+         * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+         */
+        public Step6cPanel(String description,
+                String featureOfInterestName,
+                Step6cModel s6cM) {
+            String questionStatement = String.format("%s %s ", description, Lang.l().featureOfInterest());
+            setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+            JLabel questionStartLabel = new JLabel(questionStatement);
+            JLabel foiName = new JLabel(featureOfInterestName);
+            foiName.setFont(Constants.DEFAULT_LABEL_FONT_BOLD);
 
-			JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
-			descriptionPanel.add(questionStartLabel);
-			descriptionPanel.add(foiName);
-			descriptionPanel.add(new JLabel("?"));
-			add(descriptionPanel, BorderLayout.NORTH);
+            JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
+            descriptionPanel.add(questionStartLabel);
+            descriptionPanel.add(foiName);
+            descriptionPanel.add(new JLabel("?"));
+            add(descriptionPanel, BorderLayout.NORTH);
 
-			mpp = new MissingPositionPanel(s6cM);
-			add(mpp);
-			if (Constants.GUI_DEBUG) {
-				descriptionPanel.setBorder(Constants.DEBUG_BORDER);
-				mpp.setBorder(Constants.DEBUG_BORDER);
-			}
-		}
+            mpp = new MissingPositionPanel(s6cM);
+            add(mpp);
+            if (Constants.GUI_DEBUG) {
+                descriptionPanel.setBorder(Constants.DEBUG_BORDER);
+                mpp.setBorder(Constants.DEBUG_BORDER);
+            }
+        }
 
-		/**
-		 * <p>isFinished.</p>
-		 *
-		 * @return a boolean.
-		 */
-		public boolean isFinished() {
-			return mpp.isFinished();
-		}
+        /**
+         * <p>isFinished.</p>
+         *
+         * @return a boolean.
+         */
+        public boolean isFinished() {
+            return mpp.isFinished();
+        }
 
-		/**
-		 * <p>saveSettings.</p>
-		 */
-		public void saveSettings() {
-			mpp.saveSettings();
-		}
+        /**
+         * <p>saveSettings.</p>
+         */
+        public void saveSettings() {
+            mpp.saveSettings();
+        }
 
-		/**
-		 * <p>loadSettings.</p>
-		 */
-		public void loadSettings() {
-			mpp.loadSettings();
-		}
+        /**
+         * <p>loadSettings.</p>
+         */
+        public void loadSettings() {
+            mpp.loadSettings();
+        }
 
 }

@@ -47,53 +47,53 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class MissingSecondPanel extends MissingDateAndTimePanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JLabel secondLabel;
+    private JLabel secondLabel;
 
-	private SpinnerNumberModel secondModel = new SpinnerNumberModel(0, 0, 59, 1);
-	private JSpinner secondSpinner = new JSpinner(secondModel);
+    private SpinnerNumberModel secondModel = new SpinnerNumberModel(0, 0, 59, 1);
+    private JSpinner secondSpinner = new JSpinner(secondModel);
 
-	/**
-	 * <p>Constructor for MissingSecondPanel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public MissingSecondPanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.secondLabel = new JLabel(Lang.l().seconds() + ": ");
-		this.add(secondLabel);
-		this.add(secondSpinner);
-	}
+    /**
+     * <p>Constructor for MissingSecondPanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingSecondPanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.secondLabel = new JLabel(Lang.l().seconds() + ": ");
+        this.add(secondLabel);
+        this.add(secondSpinner);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assignValues() {
-		dateAndTime.setSecond(new Second(secondModel.getNumber().intValue()));
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        dateAndTime.setSecond(new Second(secondModel.getNumber().intValue()));
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassignValues() {
-		dateAndTime.setSecond(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        dateAndTime.setSecond(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Component getMissingComponent() {
-		return new Second(secondModel.getNumber().intValue());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        return new Second(secondModel.getNumber().intValue());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setMissingComponent(Component c) {
-		secondModel.setValue(((Second)c).getValue());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(Component c) {
+        secondModel.setValue(((Second)c).getValue());
+    }
 }

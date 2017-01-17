@@ -49,52 +49,52 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Step6Panel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final JLabel descriptionLabel1 = new JLabel();
-	private final JLabel descriptionLabel2 = new JLabel();
-	private final JLabel questionMarkLabel = new JLabel("?");
-	private final JTextField featureOfInterestTextField = new JTextField();
-	private final JTextField observedPropertyTextField = new JTextField();
+    private final JLabel descriptionLabel1 = new JLabel();
+    private final JLabel descriptionLabel2 = new JLabel();
+    private final JLabel questionMarkLabel = new JLabel("?");
+    private final JTextField featureOfInterestTextField = new JTextField();
+    private final JTextField observedPropertyTextField = new JTextField();
 
-	private final JPanel containerPanel = new JPanel();
+    private final JPanel containerPanel = new JPanel();
 
-	/**
-	 * <p>Constructor for Step6Panel.</p>
-	 *
-	 * @param description a {@link java.lang.String} object.
-	 * @param featureOfInterestName a {@link java.lang.String} object.
-	 * @param observedPropertyName a {@link java.lang.String} object.
-	 * @param missingComponentPanels a {@link java.util.List} object.
-	 */
-	public Step6Panel(String description, String featureOfInterestName,
-			String observedPropertyName, List<MissingComponentPanel> missingComponentPanels) {
-		super();
-		descriptionLabel1.setText(description + " " + Lang.l().featureOfInterest() + " ");
-		featureOfInterestTextField.setText(" " + featureOfInterestName + " ");
-		featureOfInterestTextField.setEditable(false);
+    /**
+     * <p>Constructor for Step6Panel.</p>
+     *
+     * @param description a {@link java.lang.String} object.
+     * @param featureOfInterestName a {@link java.lang.String} object.
+     * @param observedPropertyName a {@link java.lang.String} object.
+     * @param missingComponentPanels a {@link java.util.List} object.
+     */
+    public Step6Panel(String description, String featureOfInterestName,
+            String observedPropertyName, List<MissingComponentPanel> missingComponentPanels) {
+        super();
+        descriptionLabel1.setText(description + " " + Lang.l().featureOfInterest() + " ");
+        featureOfInterestTextField.setText(" " + featureOfInterestName + " ");
+        featureOfInterestTextField.setEditable(false);
 
-		if (observedPropertyName != null) {
-			descriptionLabel2.setText(" " + Lang.l().and() + " " + Lang.l().observedProperty() + " ");
-			observedPropertyTextField.setText(" " + observedPropertyName + " ");
-			observedPropertyTextField.setEditable(false);
-		}
-		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		descriptionPanel.add(descriptionLabel1);
-		descriptionPanel.add(featureOfInterestTextField);
-		if (observedPropertyName != null) {
-			descriptionPanel.add(descriptionLabel2);
-			descriptionPanel.add(observedPropertyTextField);
-		}
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		descriptionPanel.add(questionMarkLabel);
-		add(descriptionPanel);
+        if (observedPropertyName != null) {
+            descriptionLabel2.setText(" " + Lang.l().and() + " " + Lang.l().observedProperty() + " ");
+            observedPropertyTextField.setText(" " + observedPropertyName + " ");
+            observedPropertyTextField.setEditable(false);
+        }
+        JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        descriptionPanel.add(descriptionLabel1);
+        descriptionPanel.add(featureOfInterestTextField);
+        if (observedPropertyName != null) {
+            descriptionPanel.add(descriptionLabel2);
+            descriptionPanel.add(observedPropertyTextField);
+        }
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        descriptionPanel.add(questionMarkLabel);
+        add(descriptionPanel);
 
-		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
-		add(containerPanel);
+        containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
+        add(containerPanel);
 
-		for (MissingComponentPanel mcp: missingComponentPanels) {
-			containerPanel.add(mcp);
-		}
-	}
+        for (MissingComponentPanel mcp: missingComponentPanels) {
+            containerPanel.add(mcp);
+        }
+    }
 }

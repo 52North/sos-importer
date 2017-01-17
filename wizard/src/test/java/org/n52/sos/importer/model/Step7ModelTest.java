@@ -44,64 +44,64 @@ import org.n52.sos.importer.Constants.ImportStrategy;
  */
 public class Step7ModelTest {
 
-	private Step7Model model;
+    private Step7Model model;
 
-	/**
-	 * <p>init.</p>
-	 */
-	@Before
-	public void init() {
-		model = new Step7Model();
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        model = new Step7Model();
+    }
 
-	/**
-	 * <p>shouldReturnSingleObservationAsDefaultImportStrategie.</p>
-	 */
-	@Test
-	public void shouldReturnSingleObservationAsDefaultImportStrategie() {
-		assertThat(model.getImportStrategy(), is(ImportStrategy.SingleObservation));
-	}
+    /**
+     * <p>shouldReturnSingleObservationAsDefaultImportStrategie.</p>
+     */
+    @Test
+    public void shouldReturnSingleObservationAsDefaultImportStrategie() {
+        assertThat(model.getImportStrategy(), is(ImportStrategy.SingleObservation));
+    }
 
-	/**
-	 * <p>shouldReturnImportStrategie.</p>
-	 */
-	@Test
-	public void shouldReturnImportStrategie() {
-		model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		assertThat(model.getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
-	}
+    /**
+     * <p>shouldReturnImportStrategie.</p>
+     */
+    @Test
+    public void shouldReturnImportStrategie() {
+        model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        assertThat(model.getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
+    }
 
-	/**
-	 * <p>shouldReturn25AsDefaultSendBuffer.</p>
-	 */
-	@Test
-	public void shouldReturn25AsDefaultSendBuffer() {
-		assertThat(model.getSendBuffer(), is(25));
-	}
+    /**
+     * <p>shouldReturn25AsDefaultSendBuffer.</p>
+     */
+    @Test
+    public void shouldReturn25AsDefaultSendBuffer() {
+        assertThat(model.getSendBuffer(), is(25));
+    }
 
-	/**
-	 * <p>shouldReturnSendBuffer.</p>
-	 */
-	@Test
-	public void shouldReturnSendBuffer() {
-		model.setSendBuffer(42);
-		assertThat(model.getSendBuffer(), is(42));
-	}
+    /**
+     * <p>shouldReturnSendBuffer.</p>
+     */
+    @Test
+    public void shouldReturnSendBuffer() {
+        model.setSendBuffer(42);
+        assertThat(model.getSendBuffer(), is(42));
+    }
 
-	/**
-	 * <p>shouldReturn5000AsDefaultHunkSize.</p>
-	 */
-	@Test
-	public void shouldReturn5000AsDefaultHunkSize() {
-		assertThat(model.getHunkSize(), is(5000));
-	}
+    /**
+     * <p>shouldReturn5000AsDefaultHunkSize.</p>
+     */
+    @Test
+    public void shouldReturn5000AsDefaultHunkSize() {
+        assertThat(model.getHunkSize(), is(5000));
+    }
 
-	/**
-	 * <p>shouldReturnHunkSize.</p>
-	 */
-	@Test
-	public void shouldReturnHunkSize() {
-		model.setHunkSize(52);
-		assertThat(model.getHunkSize(), is(52));
-	}
+    /**
+     * <p>shouldReturnHunkSize.</p>
+     */
+    @Test
+    public void shouldReturnHunkSize() {
+        model.setHunkSize(52);
+        assertThat(model.getHunkSize(), is(52));
+    }
 }

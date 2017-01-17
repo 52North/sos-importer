@@ -68,217 +68,217 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class Position extends Combination {
 
-	private static final Logger logger = LoggerFactory.getLogger(Position.class);
+    private static final Logger logger = LoggerFactory.getLogger(Position.class);
 
-	private Latitude latitude;
+    private Latitude latitude;
 
-	private Longitude longitude;
+    private Longitude longitude;
 
-	private Height height;
+    private Height height;
 
-	private EPSGCode epsgCode;
+    private EPSGCode epsgCode;
 
-	private String group;
+    private String group;
 
-	/**
-	 * <p>Constructor for Position.</p>
-	 */
-	public Position() {
-		super();
-	}
+    /**
+     * <p>Constructor for Position.</p>
+     */
+    public Position() {
+        super();
+    }
 
-	/**
-	 * <p>Constructor for Position.</p>
-	 *
-	 * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
-	 * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
-	 * @param height a {@link org.n52.sos.importer.model.position.Height} object.
-	 * @param epsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-	 */
-	public Position(final Latitude latitude, final Longitude longitude, final Height height,
-			final EPSGCode epsgCode) {
-		super();
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.height = height;
-		this.epsgCode = epsgCode;
-	}
+    /**
+     * <p>Constructor for Position.</p>
+     *
+     * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
+     * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
+     * @param height a {@link org.n52.sos.importer.model.position.Height} object.
+     * @param epsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
+     */
+    public Position(final Latitude latitude, final Longitude longitude, final Height height,
+            final EPSGCode epsgCode) {
+        super();
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.height = height;
+        this.epsgCode = epsgCode;
+    }
 
-	/**
-	 * <p>Getter for the field <code>height</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.position.Height} object.
-	 */
-	public Height getHeight() {
-		return height;
-	}
+    /**
+     * <p>Getter for the field <code>height</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.position.Height} object.
+     */
+    public Height getHeight() {
+        return height;
+    }
 
-	/**
-	 * <p>Setter for the field <code>height</code>.</p>
-	 *
-	 * @param height a {@link org.n52.sos.importer.model.position.Height} object.
-	 */
-	public void setHeight(final Height height) {
-		if (getGroup() != null) {
-			if (height != null) {
-				logger.info("Add " + height + " to " + this);
-			} else {
-				logger.info("Remove " + this.height + " from " + this);
-			}
-		}
-		this.height = height;
-	}
+    /**
+     * <p>Setter for the field <code>height</code>.</p>
+     *
+     * @param height a {@link org.n52.sos.importer.model.position.Height} object.
+     */
+    public void setHeight(final Height height) {
+        if (getGroup() != null) {
+            if (height != null) {
+                logger.info("Add " + height + " to " + this);
+            } else {
+                logger.info("Remove " + this.height + " from " + this);
+            }
+        }
+        this.height = height;
+    }
 
-	/**
-	 * <p>getEPSGCode.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-	 */
-	public EPSGCode getEPSGCode() {
-		return epsgCode;
-	}
+    /**
+     * <p>getEPSGCode.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.position.EPSGCode} object.
+     */
+    public EPSGCode getEPSGCode() {
+        return epsgCode;
+    }
 
-	/**
-	 * <p>setEPSGCode.</p>
-	 *
-	 * @param epsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-	 */
-	public void setEPSGCode(final EPSGCode epsgCode) {
-		if (getGroup() != null) {
-			if (epsgCode != null) {
-				logger.info("Add " + epsgCode + " to " + this);
-			} else {
-				logger.info("Remove " + this.epsgCode + " from " + this);
-			}
-		}
-		this.epsgCode = epsgCode;
-	}
+    /**
+     * <p>setEPSGCode.</p>
+     *
+     * @param epsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
+     */
+    public void setEPSGCode(final EPSGCode epsgCode) {
+        if (getGroup() != null) {
+            if (epsgCode != null) {
+                logger.info("Add " + epsgCode + " to " + this);
+            } else {
+                logger.info("Remove " + this.epsgCode + " from " + this);
+            }
+        }
+        this.epsgCode = epsgCode;
+    }
 
-	/**
-	 * <p>Setter for the field <code>longitude</code>.</p>
-	 *
-	 * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
-	 */
-	public void setLongitude(final Longitude longitude) {
-		if (getGroup() != null) {
-			if (longitude != null) {
-				logger.info("Add " + longitude + " to " + this);
-			} else {
-				logger.info("Remove " + this.longitude + " from " + this);
-			}
-		}
-		this.longitude = longitude;
-	}
+    /**
+     * <p>Setter for the field <code>longitude</code>.</p>
+     *
+     * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
+     */
+    public void setLongitude(final Longitude longitude) {
+        if (getGroup() != null) {
+            if (longitude != null) {
+                logger.info("Add " + longitude + " to " + this);
+            } else {
+                logger.info("Remove " + this.longitude + " from " + this);
+            }
+        }
+        this.longitude = longitude;
+    }
 
-	/**
-	 * <p>Getter for the field <code>longitude</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.position.Longitude} object.
-	 */
-	public Longitude getLongitude() {
-		return longitude;
-	}
+    /**
+     * <p>Getter for the field <code>longitude</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.position.Longitude} object.
+     */
+    public Longitude getLongitude() {
+        return longitude;
+    }
 
-	/**
-	 * <p>Setter for the field <code>latitude</code>.</p>
-	 *
-	 * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
-	 */
-	public void setLatitude(final Latitude latitude) {
-		if (getGroup() != null) {
-			if (latitude != null) {
-				logger.info("Add " + latitude + " to " + this);
-			} else {
-				logger.info("Remove " + this.latitude + " from " + this);
-			}
-		}
-		this.latitude = latitude;
-	}
+    /**
+     * <p>Setter for the field <code>latitude</code>.</p>
+     *
+     * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
+     */
+    public void setLatitude(final Latitude latitude) {
+        if (getGroup() != null) {
+            if (latitude != null) {
+                logger.info("Add " + latitude + " to " + this);
+            } else {
+                logger.info("Remove " + this.latitude + " from " + this);
+            }
+        }
+        this.latitude = latitude;
+    }
 
-	/**
-	 * <p>Getter for the field <code>latitude</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.position.Latitude} object.
-	 */
-	public Latitude getLatitude() {
-		return latitude;
-	}
+    /**
+     * <p>Getter for the field <code>latitude</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.position.Latitude} object.
+     */
+    public Latitude getLatitude() {
+        return latitude;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setGroup(final String group) {
-		this.group = group;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setGroup(final String group) {
+        this.group = group;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getGroup() {
-		return group;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getGroup() {
+        return group;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String format(final Object o) {
-		final Position p = (Position) o;
-		String positionString = getPattern();
-		// TODO remove explicit string from here
-		positionString = positionString.replaceAll("LAT", p.getLatitude().getValue() + p.getLatitude().getUnit());
-		positionString = positionString.replaceAll("LON", p.getLongitude().getValue() + p.getLongitude().getUnit());
-		positionString = positionString.replaceAll("ALT", p.getHeight().getValue() + p.getHeight().getUnit());
-		positionString = positionString.replaceAll("EPSG", p.getEPSGCode().getValue() + "");
-		return positionString;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String format(final Object o) {
+        final Position p = (Position) o;
+        String positionString = getPattern();
+        // TODO remove explicit string from here
+        positionString = positionString.replaceAll("LAT", p.getLatitude().getValue() + p.getLatitude().getUnit());
+        positionString = positionString.replaceAll("LON", p.getLongitude().getValue() + p.getLongitude().getUnit());
+        positionString = positionString.replaceAll("ALT", p.getHeight().getValue() + p.getHeight().getUnit());
+        positionString = positionString.replaceAll("EPSG", p.getEPSGCode().getValue() + "");
+        return positionString;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Position parse(final String s) {
-		String pattern = getPattern();
+    /** {@inheritDoc} */
+    @Override
+    public Position parse(final String s) {
+        String pattern = getPattern();
 
-		pattern = pattern.replaceAll("LAT", "{0}");
-		pattern = pattern.replaceAll("LON", "{1}");
-		pattern = pattern.replaceAll("ALT", "{2}");
-		pattern = pattern.replaceAll("EPSG", "{3}");
+        pattern = pattern.replaceAll("LAT", "{0}");
+        pattern = pattern.replaceAll("LON", "{1}");
+        pattern = pattern.replaceAll("ALT", "{2}");
+        pattern = pattern.replaceAll("EPSG", "{3}");
 
-		final MessageFormat mf = new MessageFormat(pattern);
-		Object[] o = null;
-		try {
-			o = mf.parse(s);
-		} catch (final ParseException e) {
-			throw new NumberFormatException();
-		}
+        final MessageFormat mf = new MessageFormat(pattern);
+        Object[] o = null;
+        try {
+            o = mf.parse(s);
+        } catch (final ParseException e) {
+            throw new NumberFormatException();
+        }
 
-		if (o == null) {
-			throw new NumberFormatException();
-		}
+        if (o == null) {
+            throw new NumberFormatException();
+        }
 
-		Latitude latitude = null;
-		Longitude longitude = null;
-		Height height = null;
-		EPSGCode epsgCode = null;
+        Latitude latitude = null;
+        Longitude longitude = null;
+        Height height = null;
+        EPSGCode epsgCode = null;
 
-		if (o.length > 0 && o[0] != null) {
-			latitude = Latitude.parse((String) o[0]);
-		}
-		if (o.length > 1 && o[1] != null) {
-			longitude = Longitude.parse((String)o[1]);
-		}
-		if (o.length > 2 && o[2] != null) {
-			height = Height.parse((String)o[2]);
-		}
-		if (o.length > 3 && o[3] != null) {
-			epsgCode = EPSGCode.parse((String)o[3]);
-		}
-		return new Position(latitude, longitude, height, epsgCode);
-	}
+        if (o.length > 0 && o[0] != null) {
+            latitude = Latitude.parse((String) o[0]);
+        }
+        if (o.length > 1 && o[1] != null) {
+            longitude = Longitude.parse((String)o[1]);
+        }
+        if (o.length > 2 && o[2] != null) {
+            height = Height.parse((String)o[2]);
+        }
+        if (o.length > 3 && o[3] != null) {
+            epsgCode = EPSGCode.parse((String)o[3]);
+        }
+        return new Position(latitude, longitude, height, epsgCode);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		if (getGroup() == null) {
-			return "Position (" + latitude + ", " + longitude + ", "
-			+ height + ", " + epsgCode + ")";
-		} else {
-			return "Position group " + getGroup();
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        if (getGroup() == null) {
+            return "Position (" + latitude + ", " + longitude + ", "
+            + height + ", " + epsgCode + ")";
+        } else {
+            return "Position group " + getGroup();
+        }
+    }
 }

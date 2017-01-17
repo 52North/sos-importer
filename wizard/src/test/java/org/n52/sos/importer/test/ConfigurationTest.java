@@ -76,82 +76,82 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 import org.x52North.sensorweb.sos.importer.x04.SosMetadataDocument.SosMetadata;
 public class ConfigurationTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
 
-	private static final File testConfig = new File("src/test/xml/configuration-test.xml");
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 * @throws java.io.IOException if any.
-	 * @throws org.apache.xmlbeans.XmlException if any.
-	 */
-	public static void main(final String[] args) throws XmlException, IOException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Starting configuration test.");
-			logger.debug("try loading file \"" +
-					testConfig.getAbsolutePath() + "\"");
-		}
-		final SosImportConfigurationDocument importerConfiguration = SosImportConfigurationDocument.Factory.parse(testConfig);
-		final SosImportConfiguration importConf = importerConfiguration.getSosImportConfiguration();
-		if(importConf.getDataFile().isSetLocalFile()) {
-			final String path = importConf.getDataFile().getLocalFile().getPath();
-			if(logger.isDebugEnabled()) {
-				logger.debug("Path for datafile: " + path);
-			}
-		}
-		final CsvMetadata csvMeta = importConf.getCsvMetadata();
-		if (logger.isDebugEnabled()) {
-			logger.debug("CSV metadata found:");
-			//
-			final boolean useHeader = csvMeta.getUseHeader();
-			final int firstLineWithData = csvMeta.getFirstLineWithData();
-			final String commentIndicator = csvMeta.getParameter().getCommentIndicator();
-			final String elemSep = csvMeta.getParameter().getColumnSeparator();
-			final String txtIndi = csvMeta.getParameter().getTextIndicator();
-			final Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
-			Metadata[] colMetadata;
-			//
-			logger.debug("useHeader: "         + useHeader);
-			logger.debug("firstLineWithData: " + firstLineWithData);
-			logger.debug("commentIndicator: "  + commentIndicator);
-			logger.debug("elementSeparator: "  + elemSep);
-			logger.debug("textIndicator: "     + txtIndi);
-			logger.debug("Columns (" + columns.length + "): ");
-			for (final Column column : columns) {
-				logger.debug("Column[" + column.getNumber() + "]: " +
-						"; type: " +
-						column.getType().toString() +
-						"; metadata?: " +
-						column.sizeOfMetadataArray());
-				if(column.sizeOfMetadataArray() > 0) {
-					colMetadata = column.getMetadataArray();
-					for (final Metadata m : colMetadata) {
-						logger.debug("\tKey: " +
-								m.getKey().toString() +
-								"; Value: " +
-								m.getValue());
-					}
-				}
-			}
-		}
-		final SosMetadata sosMeta = importConf.getSosMetadata();
-		if (logger.isDebugEnabled()) {
-			logger.debug("SOS metadata found");
-			//
-			final String sosUrl = sosMeta.getURL();
-			boolean offeringAutogenerate = false;
-			final Offering sosOff = sosMeta.getOffering();
-			final String offeringInfo = sosOff.getStringValue();
-			//
-			if(sosOff.isSetGenerate()) {
-				offeringAutogenerate = sosOff.getGenerate();
-			}
-			//
-			logger.debug("sosURL: " + sosUrl);
-			logger.debug("autogenerate Offering?: " + offeringAutogenerate);
-			logger.debug("offeringInfo: \"" + offeringInfo + "\"");
-		}
-	}
+    private static final File testConfig = new File("src/test/xml/configuration-test.xml");
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.io.IOException if any.
+     * @throws org.apache.xmlbeans.XmlException if any.
+     */
+    public static void main(final String[] args) throws XmlException, IOException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting configuration test.");
+            logger.debug("try loading file \"" +
+                    testConfig.getAbsolutePath() + "\"");
+        }
+        final SosImportConfigurationDocument importerConfiguration = SosImportConfigurationDocument.Factory.parse(testConfig);
+        final SosImportConfiguration importConf = importerConfiguration.getSosImportConfiguration();
+        if(importConf.getDataFile().isSetLocalFile()) {
+            final String path = importConf.getDataFile().getLocalFile().getPath();
+            if(logger.isDebugEnabled()) {
+                logger.debug("Path for datafile: " + path);
+            }
+        }
+        final CsvMetadata csvMeta = importConf.getCsvMetadata();
+        if (logger.isDebugEnabled()) {
+            logger.debug("CSV metadata found:");
+            //
+            final boolean useHeader = csvMeta.getUseHeader();
+            final int firstLineWithData = csvMeta.getFirstLineWithData();
+            final String commentIndicator = csvMeta.getParameter().getCommentIndicator();
+            final String elemSep = csvMeta.getParameter().getColumnSeparator();
+            final String txtIndi = csvMeta.getParameter().getTextIndicator();
+            final Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
+            Metadata[] colMetadata;
+            //
+            logger.debug("useHeader: "         + useHeader);
+            logger.debug("firstLineWithData: " + firstLineWithData);
+            logger.debug("commentIndicator: "  + commentIndicator);
+            logger.debug("elementSeparator: "  + elemSep);
+            logger.debug("textIndicator: "     + txtIndi);
+            logger.debug("Columns (" + columns.length + "): ");
+            for (final Column column : columns) {
+                logger.debug("Column[" + column.getNumber() + "]: " +
+                        "; type: " +
+                        column.getType().toString() +
+                        "; metadata?: " +
+                        column.sizeOfMetadataArray());
+                if(column.sizeOfMetadataArray() > 0) {
+                    colMetadata = column.getMetadataArray();
+                    for (final Metadata m : colMetadata) {
+                        logger.debug("\tKey: " +
+                                m.getKey().toString() +
+                                "; Value: " +
+                                m.getValue());
+                    }
+                }
+            }
+        }
+        final SosMetadata sosMeta = importConf.getSosMetadata();
+        if (logger.isDebugEnabled()) {
+            logger.debug("SOS metadata found");
+            //
+            final String sosUrl = sosMeta.getURL();
+            boolean offeringAutogenerate = false;
+            final Offering sosOff = sosMeta.getOffering();
+            final String offeringInfo = sosOff.getStringValue();
+            //
+            if(sosOff.isSetGenerate()) {
+                offeringAutogenerate = sosOff.getGenerate();
+            }
+            //
+            logger.debug("sosURL: " + sosUrl);
+            logger.debug("autogenerate Offering?: " + offeringAutogenerate);
+            logger.debug("offeringInfo: \"" + offeringInfo + "\"");
+        }
+    }
 
 }

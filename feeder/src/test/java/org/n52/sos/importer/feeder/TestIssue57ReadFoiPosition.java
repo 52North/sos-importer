@@ -49,25 +49,25 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 public class TestIssue57ReadFoiPosition {
 
 
-	@Test
-	public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
-		// given
-		final Configuration config = new Configuration("src/test/resources/issue-057/data_config.xml");
-		DataFile dataFile = new DataFile(config, config.getDataFile());
+    @Test
+    public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
+        // given
+        final Configuration config = new Configuration("src/test/resources/issue-057/data_config.xml");
+        DataFile dataFile = new DataFile(config, config.getDataFile());
 
-		// when
-		int mvColumnId = 4;
-		String[] values = { "SE10_0AB_1", "Sensor1", "51.48790", "0.00441", "0.71", "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "" };
-		FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
+        // when
+        int mvColumnId = 4;
+        String[] values = { "SE10_0AB_1", "Sensor1", "51.48790", "0.00441", "0.71", "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "" };
+        FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
 
-		// then
-		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-		Assert.assertThat(foi.getUri(), Is.is("SE10_0AB_1"));
-		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
-		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
-		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
-		Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
-		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
-		Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
-	}
+        // then
+        Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
+        Assert.assertThat(foi.getUri(), Is.is("SE10_0AB_1"));
+        Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
+        Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
+        Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
+        Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
+        Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
+        Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
+    }
 }

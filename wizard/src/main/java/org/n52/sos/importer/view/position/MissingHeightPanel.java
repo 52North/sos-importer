@@ -52,83 +52,83 @@ import org.slf4j.LoggerFactory;
  */
 public class MissingHeightPanel extends MissingComponentPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final Position position;
+    private final Position position;
 
-	private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
+    private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
 
-	private final JLabel heightLabel;
-	private final JTextField heightTextField = new JTextField(8);
-	private final JLabel heightUnitLabel;
-	private final JComboBox<String> heightUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getHeightUnits());
+    private final JLabel heightLabel;
+    private final JTextField heightTextField = new JTextField(8);
+    private final JLabel heightUnitLabel;
+    private final JComboBox<String> heightUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getHeightUnits());
 
-	/**
-	 * <p>Constructor for MissingHeightPanel.</p>
-	 *
-	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-	 */
-	public MissingHeightPanel(final Position position) {
-		super();
-		this.position = position;
-		heightTextField.setText("0");
+    /**
+     * <p>Constructor for MissingHeightPanel.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public MissingHeightPanel(final Position position) {
+        super();
+        this.position = position;
+        heightTextField.setText("0");
 
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		heightLabel = new JLabel("   " + Lang.l().altitude() + ": ");
-		heightUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+        heightLabel = new JLabel("   " + Lang.l().altitude() + ": ");
+        heightUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
 
-		this.add(heightLabel);
-		this.add(heightTextField);
-		this.add(heightUnitLabel);
-		this.add(heightUnitComboBox);
-	}
+        this.add(heightLabel);
+        this.add(heightTextField);
+        this.add(heightUnitLabel);
+        this.add(heightUnitComboBox);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assignValues() {
-		final double value = Double.parseDouble(heightTextField.getText());
-		final String unit = (String) heightUnitComboBox.getSelectedItem();
-		final Height h = new Height(value, unit);
-		position.setHeight(h);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        final double value = Double.parseDouble(heightTextField.getText());
+        final String unit = (String) heightUnitComboBox.getSelectedItem();
+        final Height h = new Height(value, unit);
+        position.setHeight(h);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassignValues() {
-		position.setHeight(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        position.setHeight(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean checkValues() {
-		try {
-			Double.parseDouble(heightTextField.getText());
-		} catch (final NumberFormatException e) {
-			JOptionPane.showMessageDialog(null,
-				    Lang.l().heightWarningDialogDecimalNumber(),
-				    Lang.l().warningDialogTitle(),
-				    JOptionPane.WARNING_MESSAGE);
-			logger.error("The height has to be a decimal number.", e);
-			return false;
-		}
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        try {
+            Double.parseDouble(heightTextField.getText());
+        } catch (final NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                    Lang.l().heightWarningDialogDecimalNumber(),
+                    Lang.l().warningDialogTitle(),
+                    JOptionPane.WARNING_MESSAGE);
+            logger.error("The height has to be a decimal number.", e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Component getMissingComponent() {
-		final double value = Double.parseDouble(heightTextField.getText());
-		final String unit = (String) heightUnitComboBox.getSelectedItem();
-		return new Height(value, unit);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        final double value = Double.parseDouble(heightTextField.getText());
+        final String unit = (String) heightUnitComboBox.getSelectedItem();
+        return new Height(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setMissingComponent(final Component c) {
-		final Height height = (Height)c;
-		heightTextField.setText(height.getValue() + "");
-		heightUnitComboBox.setSelectedItem(height.getUnit());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(final Component c) {
+        final Height height = (Height)c;
+        heightTextField.setText(height.getValue() + "");
+        heightUnitComboBox.setSelectedItem(height.getUnit());
+    }
 }

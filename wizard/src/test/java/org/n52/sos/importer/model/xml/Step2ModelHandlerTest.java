@@ -44,137 +44,137 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step2ModelHandlerTest {
 
-	/**
-	 * <p>shouldSetSampleBasedStartRegEx.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedStartRegEx() {
-		final String sampleBasedStartRegEx = "test-regex";
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx(sampleBasedStartRegEx);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedStartRegEx.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedStartRegEx() {
+        final String sampleBasedStartRegEx = "test-regex";
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx(sampleBasedStartRegEx);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleStartRegEx(), is(true));
-		assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
-	}
+        assertThat(importConf.getDataFile().isSetSampleStartRegEx(), is(true));
+        assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedDateOffset.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedDateOffset() {
-		final int dateOffset = 25;
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(dateOffset);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedDateOffset.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedDateOffset() {
+        final int dateOffset = 25;
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(dateOffset);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleDateOffset(), is(true));
-		assertThat(importConf.getDataFile().getSampleDateOffset(), is(dateOffset));
-	}
+        assertThat(importConf.getDataFile().isSetSampleDateOffset(), is(true));
+        assertThat(importConf.getDataFile().getSampleDateOffset(), is(dateOffset));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedDateExtractionRegEx.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedDateExtractionRegEx() {
-		final String dateExtractionRegEx = "test-regex-2";
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(25)
-			.setSampleBasedDateExtractionRegEx(dateExtractionRegEx);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedDateExtractionRegEx.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedDateExtractionRegEx() {
+        final String dateExtractionRegEx = "test-regex-2";
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(25)
+            .setSampleBasedDateExtractionRegEx(dateExtractionRegEx);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleDateExtractionRegEx(), is(true));
-		assertThat(importConf.getDataFile().getSampleDateExtractionRegEx(), is(dateExtractionRegEx));
-	}
+        assertThat(importConf.getDataFile().isSetSampleDateExtractionRegEx(), is(true));
+        assertThat(importConf.getDataFile().getSampleDateExtractionRegEx(), is(dateExtractionRegEx));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedDatePattern.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedDatePattern() {
-		final String datePattern = "test-regex-2";
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(25)
-			.setSampleBasedDateExtractionRegEx("test-regex-2")
-			.setSampleBasedDatePattern(datePattern);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedDatePattern.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedDatePattern() {
+        final String datePattern = "test-regex-2";
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(25)
+            .setSampleBasedDateExtractionRegEx("test-regex-2")
+            .setSampleBasedDatePattern(datePattern);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleDatePattern(), is(true));
-		assertThat(importConf.getDataFile().getSampleDatePattern(), is(datePattern));
-	}
+        assertThat(importConf.getDataFile().isSetSampleDatePattern(), is(true));
+        assertThat(importConf.getDataFile().getSampleDatePattern(), is(datePattern));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedDataOffset.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedDataOffset() {
-		final int dataOffset = 42;
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(25)
-			.setSampleBasedDateExtractionRegEx("test-regex-2")
-			.setSampleBasedDatePattern("test-pattern")
-			.setSampleBasedDataOffset(dataOffset);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedDataOffset.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedDataOffset() {
+        final int dataOffset = 42;
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(25)
+            .setSampleBasedDateExtractionRegEx("test-regex-2")
+            .setSampleBasedDatePattern("test-pattern")
+            .setSampleBasedDataOffset(dataOffset);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleDataOffset(), is(true));
-		assertThat(importConf.getDataFile().getSampleDataOffset(), is(dataOffset));
-	}
+        assertThat(importConf.getDataFile().isSetSampleDataOffset(), is(true));
+        assertThat(importConf.getDataFile().getSampleDataOffset(), is(dataOffset));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedSampleSizeOffset.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedSampleSizeOffset() {
-		final int sampleSizeOffset = 42;
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(25)
-			.setSampleBasedDateExtractionRegEx("test-regex-2")
-			.setSampleBasedDatePattern("test-pattern")
-			.setSampleBasedDataOffset(6)
-			.setSampleBasedSampleSizeOffset(sampleSizeOffset);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedSampleSizeOffset.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedSampleSizeOffset() {
+        final int sampleSizeOffset = 42;
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(25)
+            .setSampleBasedDateExtractionRegEx("test-regex-2")
+            .setSampleBasedDatePattern("test-pattern")
+            .setSampleBasedDataOffset(6)
+            .setSampleBasedSampleSizeOffset(sampleSizeOffset);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleSizeOffset(), is(true));
-		assertThat(importConf.getDataFile().getSampleSizeOffset(), is(sampleSizeOffset));
-	}
+        assertThat(importConf.getDataFile().isSetSampleSizeOffset(), is(true));
+        assertThat(importConf.getDataFile().getSampleSizeOffset(), is(sampleSizeOffset));
+    }
 
-	/**
-	 * <p>shouldSetSampleBasedSampleSizeRegEx.</p>
-	 */
-	@Test
-	public void shouldSetSampleBasedSampleSizeRegEx() {
-		final String sampleSizeRegEx = "test-regex";
-		final Step2Model stepModel = new Step2Model("",2)
-			.setSampleBased(true)
-			.setSampleBasedStartRegEx("test-regex")
-			.setSampleBasedDateOffset(25)
-			.setSampleBasedDateExtractionRegEx("test-regex-2")
-			.setSampleBasedDatePattern("test-pattern")
-			.setSampleBasedDataOffset(6)
-			.setSampleBasedSampleSizeOffset(42)
-			.setSampleBasedSampleSizeRegEx(sampleSizeRegEx);
-		final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-		new Step2ModelHandler().handleModel(stepModel, importConf);
+    /**
+     * <p>shouldSetSampleBasedSampleSizeRegEx.</p>
+     */
+    @Test
+    public void shouldSetSampleBasedSampleSizeRegEx() {
+        final String sampleSizeRegEx = "test-regex";
+        final Step2Model stepModel = new Step2Model("",2)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedDateOffset(25)
+            .setSampleBasedDateExtractionRegEx("test-regex-2")
+            .setSampleBasedDatePattern("test-pattern")
+            .setSampleBasedDataOffset(6)
+            .setSampleBasedSampleSizeOffset(42)
+            .setSampleBasedSampleSizeRegEx(sampleSizeRegEx);
+        final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step2ModelHandler().handleModel(stepModel, importConf);
 
-		assertThat(importConf.getDataFile().isSetSampleSizeRegEx(), is(true));
-		assertThat(importConf.getDataFile().getSampleSizeRegEx(), is(sampleSizeRegEx));
-	}
+        assertThat(importConf.getDataFile().isSetSampleSizeRegEx(), is(true));
+        assertThat(importConf.getDataFile().getSampleSizeRegEx(), is(sampleSizeRegEx));
+    }
 
 }

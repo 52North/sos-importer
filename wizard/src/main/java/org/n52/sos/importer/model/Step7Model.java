@@ -65,222 +65,222 @@ import java.io.File;
 import org.n52.sos.importer.Constants.ImportStrategy;
 public class Step7Model implements StepModel {
 
-	private String sosURL;
+    private String sosURL;
 
-	private String version;
+    private String version;
 
-	private String binding;
+    private String binding;
 
-	private File configFile;
+    private File configFile;
 
-	private boolean generateOfferingFromSensorName;
+    private boolean generateOfferingFromSensorName;
 
-	private String offering;
+    private String offering;
 
-	private ImportStrategy importStrategy = ImportStrategy.SingleObservation;
+    private ImportStrategy importStrategy = ImportStrategy.SingleObservation;
 
-	private int sendBuffer = 25;
+    private int sendBuffer = 25;
 
-	private int hunkSize = 5000;
+    private int hunkSize = 5000;
 
-	/**
-	 * <p>Constructor for Step7Model.</p>
-	 *
-	 * @param sosURL a {@link java.lang.String} object.
-	 * @param configFile a {@link java.io.File} object.
-	 * @param generateOfferingFromSensorName a boolean.
-	 * @param offering a {@link java.lang.String} object.
-	 * @param version a {@link java.lang.String} object.
-	 * @param binding a {@link java.lang.String} object.
-	 */
-	public Step7Model(final String sosURL,
-			final File configFile,
-			final boolean generateOfferingFromSensorName,
-			final String offering,
-			final String version,
-			final String binding) {
-		this.sosURL = sosURL;
-		this.configFile = configFile;
-		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
-		this.offering = offering;
-		this.binding = binding;
-		this.version = version;
-	}
+    /**
+     * <p>Constructor for Step7Model.</p>
+     *
+     * @param sosURL a {@link java.lang.String} object.
+     * @param configFile a {@link java.io.File} object.
+     * @param generateOfferingFromSensorName a boolean.
+     * @param offering a {@link java.lang.String} object.
+     * @param version a {@link java.lang.String} object.
+     * @param binding a {@link java.lang.String} object.
+     */
+    public Step7Model(final String sosURL,
+            final File configFile,
+            final boolean generateOfferingFromSensorName,
+            final String offering,
+            final String version,
+            final String binding) {
+        this.sosURL = sosURL;
+        this.configFile = configFile;
+        this.generateOfferingFromSensorName = generateOfferingFromSensorName;
+        this.offering = offering;
+        this.binding = binding;
+        this.version = version;
+    }
 
-	/**
-	 * <p>Constructor for Step7Model.</p>
-	 */
-	public Step7Model() {
-		this(null,null,true,null,null,null);
-	}
+    /**
+     * <p>Constructor for Step7Model.</p>
+     */
+    public Step7Model() {
+        this(null,null,true,null,null,null);
+    }
 
-	/**
-	 * <p>Getter for the field <code>sosURL</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getSosURL() {
-		return sosURL;
-	}
+    /**
+     * <p>Getter for the field <code>sosURL</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSosURL() {
+        return sosURL;
+    }
 
-	/**
-	 * <p>Getter for the field <code>configFile</code>.</p>
-	 *
-	 * @return a {@link java.io.File} object.
-	 */
-	public File getConfigFile() {
-		return configFile;
-	}
+    /**
+     * <p>Getter for the field <code>configFile</code>.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
+    public File getConfigFile() {
+        return configFile;
+    }
 
-	/**
-	 * <p>Setter for the field <code>configFile</code>.</p>
-	 *
-	 * @param configFile a {@link java.io.File} object.
-	 */
-	public void setConfigFile(final File configFile) {
-		this.configFile = configFile;
-	}
+    /**
+     * <p>Setter for the field <code>configFile</code>.</p>
+     *
+     * @param configFile a {@link java.io.File} object.
+     */
+    public void setConfigFile(final File configFile) {
+        this.configFile = configFile;
+    }
 
-	/**
-	 * <p>Setter for the field <code>sosURL</code>.</p>
-	 *
-	 * @param sosURL a {@link java.lang.String} object.
-	 */
-	public void setSosURL(final String sosURL) {
-		this.sosURL = sosURL;
-	}
+    /**
+     * <p>Setter for the field <code>sosURL</code>.</p>
+     *
+     * @param sosURL a {@link java.lang.String} object.
+     */
+    public void setSosURL(final String sosURL) {
+        this.sosURL = sosURL;
+    }
 
-	/**
-	 * <p>isGenerateOfferingFromSensorName.</p>
-	 *
-	 * @return a boolean.
-	 */
-	public boolean isGenerateOfferingFromSensorName() {
-		return generateOfferingFromSensorName;
-	}
+    /**
+     * <p>isGenerateOfferingFromSensorName.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isGenerateOfferingFromSensorName() {
+        return generateOfferingFromSensorName;
+    }
 
-	/**
-	 * <p>Setter for the field <code>generateOfferingFromSensorName</code>.</p>
-	 *
-	 * @param generateOfferingFromSensorName a boolean.
-	 */
-	public void setGenerateOfferingFromSensorName(
-			final boolean generateOfferingFromSensorName) {
-		this.generateOfferingFromSensorName = generateOfferingFromSensorName;
-	}
+    /**
+     * <p>Setter for the field <code>generateOfferingFromSensorName</code>.</p>
+     *
+     * @param generateOfferingFromSensorName a boolean.
+     */
+    public void setGenerateOfferingFromSensorName(
+            final boolean generateOfferingFromSensorName) {
+        this.generateOfferingFromSensorName = generateOfferingFromSensorName;
+    }
 
-	/**
-	 * <p>Getter for the field <code>offering</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getOffering() {
-		return offering;
-	}
+    /**
+     * <p>Getter for the field <code>offering</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getOffering() {
+        return offering;
+    }
 
-	/**
-	 * <p>Setter for the field <code>offering</code>.</p>
-	 *
-	 * @param offering a {@link java.lang.String} object.
-	 */
-	public void setOffering(final String offering) {
-		this.offering = offering;
-	}
+    /**
+     * <p>Setter for the field <code>offering</code>.</p>
+     *
+     * @param offering a {@link java.lang.String} object.
+     */
+    public void setOffering(final String offering) {
+        this.offering = offering;
+    }
 
-	/**
-	 * <p>Getter for the field <code>binding</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getBinding() {
-		return binding;
-	}
+    /**
+     * <p>Getter for the field <code>binding</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getBinding() {
+        return binding;
+    }
 
-	/**
-	 * <p>setSosVersion.</p>
-	 *
-	 * @param version a {@link java.lang.String} object.
-	 */
-	public void setSosVersion(final String version) {
-		this.version = version;
-	}
+    /**
+     * <p>setSosVersion.</p>
+     *
+     * @param version a {@link java.lang.String} object.
+     */
+    public void setSosVersion(final String version) {
+        this.version = version;
+    }
 
-	/**
-	 * <p>Getter for the field <code>version</code>.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getVersion() {
-		return version;
-	}
+    /**
+     * <p>Getter for the field <code>version</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getVersion() {
+        return version;
+    }
 
-	/**
-	 * <p>setSosBinding.</p>
-	 *
-	 * @param binding a {@link java.lang.String} object.
-	 */
-	public void setSosBinding(final String binding)	{
-		this.binding = binding;
-	}
+    /**
+     * <p>setSosBinding.</p>
+     *
+     * @param binding a {@link java.lang.String} object.
+     */
+    public void setSosBinding(final String binding) {
+        this.binding = binding;
+    }
 
-	/**
-	 * <p>Getter for the field <code>importStrategy</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
-	 */
-	public ImportStrategy getImportStrategy() {
-		return importStrategy;
-	}
+    /**
+     * <p>Getter for the field <code>importStrategy</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
+     */
+    public ImportStrategy getImportStrategy() {
+        return importStrategy;
+    }
 
-	/**
-	 * <p>Setter for the field <code>importStrategy</code>.</p>
-	 *
-	 * @param importStrategy a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
-	 * @return a {@link org.n52.sos.importer.model.Step7Model} object.
-	 */
-	public Step7Model setImportStrategy(final ImportStrategy importStrategy) {
-		this.importStrategy = importStrategy;
-		return this;
-	}
+    /**
+     * <p>Setter for the field <code>importStrategy</code>.</p>
+     *
+     * @param importStrategy a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
+     * @return a {@link org.n52.sos.importer.model.Step7Model} object.
+     */
+    public Step7Model setImportStrategy(final ImportStrategy importStrategy) {
+        this.importStrategy = importStrategy;
+        return this;
+    }
 
-	/**
-	 * <p>Getter for the field <code>sendBuffer</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getSendBuffer() {
-		return sendBuffer;
-	}
+    /**
+     * <p>Getter for the field <code>sendBuffer</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getSendBuffer() {
+        return sendBuffer;
+    }
 
-	/**
-	 * <p>Setter for the field <code>sendBuffer</code>.</p>
-	 *
-	 * @param sendBuffer a int.
-	 * @return a {@link org.n52.sos.importer.model.Step7Model} object.
-	 */
-	public Step7Model setSendBuffer(final int sendBuffer) {
-		this.sendBuffer = sendBuffer;
-		return this;
-	}
+    /**
+     * <p>Setter for the field <code>sendBuffer</code>.</p>
+     *
+     * @param sendBuffer a int.
+     * @return a {@link org.n52.sos.importer.model.Step7Model} object.
+     */
+    public Step7Model setSendBuffer(final int sendBuffer) {
+        this.sendBuffer = sendBuffer;
+        return this;
+    }
 
-	/**
-	 * <p>Getter for the field <code>hunkSize</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getHunkSize() {
-		return hunkSize;
-	}
+    /**
+     * <p>Getter for the field <code>hunkSize</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getHunkSize() {
+        return hunkSize;
+    }
 
-	/**
-	 * <p>Setter for the field <code>hunkSize</code>.</p>
-	 *
-	 * @param hunkSize a int.
-	 * @return a {@link org.n52.sos.importer.model.Step7Model} object.
-	 */
-	public Step7Model setHunkSize(final int hunkSize) {
-		this.hunkSize = hunkSize;
-		return this;
-	}
+    /**
+     * <p>Setter for the field <code>hunkSize</code>.</p>
+     *
+     * @param hunkSize a int.
+     * @return a {@link org.n52.sos.importer.model.Step7Model} object.
+     */
+    public Step7Model setHunkSize(final int hunkSize) {
+        this.hunkSize = hunkSize;
+        return this;
+    }
 
 }

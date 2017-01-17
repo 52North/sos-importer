@@ -71,22 +71,22 @@ import org.n52.sos.importer.controller.Step8Controller;
 import org.n52.sos.importer.model.Step7Model;
 public class Step8Test {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final JFileChooser fc = new JFileChooser();
-		if (fc.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
-			final File configFile = fc.getSelectedFile();
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final JFileChooser fc = new JFileChooser();
+        if (fc.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
+            final File configFile = fc.getSelectedFile();
 
-			final Step7Model s7M = new Step7Model("http://localhost:8080/ImportTestSOS/sos",
-					configFile, true, null,"1.0.0",null);
-			final MainController f = MainController.getInstance();
+            final Step7Model s7M = new Step7Model("http://localhost:8080/ImportTestSOS/sos",
+                    configFile, true, null,"1.0.0",null);
+            final MainController f = MainController.getInstance();
 
-			f.setStepController(new Step8Controller(s7M));
-		}
-	}
+            f.setStepController(new Step8Controller(s7M));
+        }
+    }
 
 }

@@ -35,13 +35,13 @@ package org.n52.sos.importer.feeder.model;
  * @version $Id: $Id
  */
 public class ObservedProperty extends Resource {
-	/**
-	 * <p>Constructor for ObservedProperty.</p>
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 * @param uri a {@link java.lang.String} object.
-	 */
-	public ObservedProperty(String name, String uri) {
-		super(name, uri);
-	}
+    /**
+     * <p>Constructor for ObservedProperty.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public ObservedProperty(String name, String uri) {
+        super(name, uri);
+    }
 }

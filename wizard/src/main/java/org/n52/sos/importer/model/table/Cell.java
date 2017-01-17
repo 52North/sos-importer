@@ -40,124 +40,124 @@ import org.n52.sos.importer.controller.TableController;
  */
 public class Cell extends TableElement {
 
-	private int column;
+    private int column;
 
-	private int row;
+    private int row;
 
-	/**
-	 * <p>Constructor for Cell.</p>
-	 */
-	public Cell() {
-		column = -1;
-		row = -1;
-	}
+    /**
+     * <p>Constructor for Cell.</p>
+     */
+    public Cell() {
+        column = -1;
+        row = -1;
+    }
 
-	/**
-	 * <p>Constructor for Cell.</p>
-	 *
-	 * @param row a int.
-	 * @param column a int.
-	 */
-	public Cell(int row, int column) {
-		setRow(row);
-		setColumn(column);
-	}
+    /**
+     * <p>Constructor for Cell.</p>
+     *
+     * @param row a int.
+     * @param column a int.
+     */
+    public Cell(int row, int column) {
+        setRow(row);
+        setColumn(column);
+    }
 
-	/**
-	 * <p>Setter for the field <code>column</code>.</p>
-	 *
-	 * @param column a int.
-	 */
-	public void setColumn(int column) {
-		this.column = column;
-	}
+    /**
+     * <p>Setter for the field <code>column</code>.</p>
+     *
+     * @param column a int.
+     */
+    public void setColumn(int column) {
+        this.column = column;
+    }
 
-	/**
-	 * <p>Getter for the field <code>column</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getColumn() {
-		return column;
-	}
+    /**
+     * <p>Getter for the field <code>column</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getColumn() {
+        return column;
+    }
 
-	/**
-	 * <p>Setter for the field <code>row</code>.</p>
-	 *
-	 * @param row a int.
-	 */
-	public void setRow(int row) {
-		this.row = row;
-	}
+    /**
+     * <p>Setter for the field <code>row</code>.</p>
+     *
+     * @param row a int.
+     */
+    public void setRow(int row) {
+        this.row = row;
+    }
 
-	/**
-	 * <p>Getter for the field <code>row</code>.</p>
-	 *
-	 * @return a int.
-	 */
-	public int getRow() {
-		return row;
-	}
+    /**
+     * <p>Getter for the field <code>row</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getRow() {
+        return row;
+    }
 
-	/**
-	 * <p>mark.</p>
-	 */
-	public void mark() {
-		TableController.getInstance().mark(this);
-	}
+    /**
+     * <p>mark.</p>
+     */
+    public void mark() {
+        TableController.getInstance().mark(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getValueFor(Cell c) {
-		return TableController.getInstance().getValueAt(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getValueFor(Cell c) {
+        return TableController.getInstance().getValueAt(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Cell getCellFor(Cell c) {
-		return this;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Cell getCellFor(Cell c) {
+        return this;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public HashSet<String> getValues() {
-		HashSet<String> values = new HashSet<String>();
-		String value = TableController.getInstance().getValueAt(this);
-		values.add(value);
-		return values;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public HashSet<String> getValues() {
+        HashSet<String> values = new HashSet<String>();
+        String value = TableController.getInstance().getValueAt(this);
+        values.add(value);
+        return values;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "cell[" + row + "|" + column + "]";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "cell[" + row + "|" + column + "]";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + column;
-		result = prime * result + row;
-		return result;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + column;
+        result = prime * result + row;
+        return result;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Cell))
-			return false;
-		Cell other = (Cell) obj;
-		if (column != other.column)
-			return false;
-		if (row != other.row)
-			return false;
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Cell))
+            return false;
+        Cell other = (Cell) obj;
+        if (column != other.column)
+            return false;
+        if (row != other.row)
+            return false;
+        return true;
+    }
 
 }

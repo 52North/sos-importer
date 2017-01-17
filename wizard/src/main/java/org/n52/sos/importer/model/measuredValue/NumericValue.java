@@ -68,49 +68,49 @@ import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Formatable;
 public class NumericValue extends MeasuredValue implements Formatable {
 
-	/** {@inheritDoc} */
-	@Override
-	public Double parse(String s) {
-		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-		symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
-		symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
+    /** {@inheritDoc} */
+    @Override
+    public Double parse(String s) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
+        symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
 
-		Number n;
-		try {
-			DecimalFormat formatter = new DecimalFormat();
-			formatter.setDecimalFormatSymbols(symbols);
-			n = formatter.parse(s);
+        Number n;
+        try {
+            DecimalFormat formatter = new DecimalFormat();
+            formatter.setDecimalFormatSymbols(symbols);
+            n = formatter.parse(s);
         } catch (ParseException e) {
-	        throw new NumberFormatException();
-		}
+            throw new NumberFormatException();
+        }
 
-		return n.doubleValue();
-	}
+        return n.doubleValue();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String format(Object o) {
-		double number = (Double)o;
+    /** {@inheritDoc} */
+    @Override
+    public String format(Object o) {
+        double number = (Double)o;
 
-		DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-		symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
-		symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
+        symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
 
-		DecimalFormat formatter = new DecimalFormat();
-		formatter.setDecimalFormatSymbols(symbols);
-		String n = formatter.format(number);
-		return n;
-	}
+        DecimalFormat formatter = new DecimalFormat();
+        formatter.setDecimalFormatSymbols(symbols);
+        String n = formatter.format(number);
+        return n;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Numeric Value" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Numeric Value" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setPattern(String formatPattern) {
-		// do nothing, it's Java base type wrapper
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setPattern(String formatPattern) {
+        // do nothing, it's Java base type wrapper
+    }
 }

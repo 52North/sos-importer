@@ -53,136 +53,136 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6aController extends StepController {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step6aController.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step6aController.class);
 
-	private Step6aModel step6aModel;
+    private Step6aModel step6aModel;
 
-	private Step5Panel step5Panel;
+    private Step5Panel step5Panel;
 
-	private DateAndTimeController dateAndTimeController;
+    private DateAndTimeController dateAndTimeController;
 
-	private final TableController tableController;
+    private final TableController tableController;
 
-	private final int firstLineWithData;
+    private final int firstLineWithData;
 
-	/**
-	 * <p>Constructor for Step6aController.</p>
-	 *
-	 * @param firstLineWithData a int.
-	 */
-	public Step6aController(final int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-		tableController = TableController.getInstance();
-	}
+    /**
+     * <p>Constructor for Step6aController.</p>
+     *
+     * @param firstLineWithData a int.
+     */
+    public Step6aController(final int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+        tableController = TableController.getInstance();
+    }
 
-	/**
-	 * <p>Constructor for Step6aController.</p>
-	 *
-	 * @param step6aModel a {@link org.n52.sos.importer.model.Step6aModel} object.
-	 * @param firstLineWithData a int.
-	 */
-	public Step6aController(final Step6aModel step6aModel,final int firstLineWithData) {
-		this(firstLineWithData);
-		this.step6aModel = step6aModel;
-	}
+    /**
+     * <p>Constructor for Step6aController.</p>
+     *
+     * @param step6aModel a {@link org.n52.sos.importer.model.Step6aModel} object.
+     * @param firstLineWithData a int.
+     */
+    public Step6aController(final Step6aModel step6aModel,final int firstLineWithData) {
+        this(firstLineWithData);
+        this.step6aModel = step6aModel;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void loadSettings() {
-		tableController.turnSelectionOff();
+    /** {@inheritDoc} */
+    @Override
+    public void loadSettings() {
+        tableController.turnSelectionOff();
 
-		final DateAndTime dateAndTime = step6aModel.getDateAndTime();
-		dateAndTimeController = new DateAndTimeController(dateAndTime);
-		final List<Component> components = step6aModel.getMissingDateAndTimeComponents();
-		dateAndTimeController.setMissingComponents(components);
+        final DateAndTime dateAndTime = step6aModel.getDateAndTime();
+        dateAndTimeController = new DateAndTimeController(dateAndTime);
+        final List<Component> components = step6aModel.getMissingDateAndTimeComponents();
+        dateAndTimeController.setMissingComponents(components);
 
-		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			mv.setDateAndTime(null);
-		}
+        for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+            mv.setDateAndTime(null);
+        }
 
-		dateAndTimeController.unassignMissingComponentValues();
+        dateAndTimeController.unassignMissingComponentValues();
 
-		final String description = step6aModel.getDescription();
-		final List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
-		step5Panel = new Step5Panel(description, mcp);
-	}
+        final String description = step6aModel.getDescription();
+        final List<MissingComponentPanel> mcp = dateAndTimeController.getMissingComponentPanels();
+        step5Panel = new Step5Panel(description, mcp);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void saveSettings() {
-		dateAndTimeController.assignMissingComponentValues();
+    /** {@inheritDoc} */
+    @Override
+    public void saveSettings() {
+        dateAndTimeController.assignMissingComponentValues();
 
-		final List<Component> components = dateAndTimeController.getMissingComponents();
-		step6aModel.setMissingDateAndTimeComponents(components);
+        final List<Component> components = dateAndTimeController.getMissingComponents();
+        step6aModel.setMissingDateAndTimeComponents(components);
 
-		final DateAndTime dateAndTime = dateAndTimeController.getDateAndTime();
+        final DateAndTime dateAndTime = dateAndTimeController.getDateAndTime();
 
-		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			mv.setDateAndTime(dateAndTime);
-		}
+        for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+            mv.setDateAndTime(dateAndTime);
+        }
 
-		tableController.turnSelectionOn();
+        tableController.turnSelectionOn();
 
-		step5Panel = null;
-	}
+        step5Panel = null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void back() {
-		tableController.turnSelectionOn();
+    /** {@inheritDoc} */
+    @Override
+    public void back() {
+        tableController.turnSelectionOn();
 
-		step5Panel = null;
-	}
+        step5Panel = null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getDescription() {
-		return Lang.l().step6aDescription();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getDescription() {
+        return Lang.l().step6aDescription();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public JPanel getStepPanel() {
-		return step5Panel;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public JPanel getStepPanel() {
+        return step5Panel;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public StepController getNextStepController() {
-		return new Step6bController(firstLineWithData);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public StepController getNextStepController() {
+        return new Step6bController(firstLineWithData);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isNecessary() {
-		final int n = ModelStore.getInstance().getDateAndTimes().size();
-		if (n == 0) {
-			final DateAndTime dateAndTime = new DateAndTime();
-			step6aModel = new Step6aModel(dateAndTime);
-			return true;
-		}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isNecessary() {
+        final int n = ModelStore.getInstance().getDateAndTimes().size();
+        if (n == 0) {
+            final DateAndTime dateAndTime = new DateAndTime();
+            step6aModel = new Step6aModel(dateAndTime);
+            return true;
+        }
 
-		logger.info("Skip Step 6a since there is at least one Date&Time");
+        logger.info("Skip Step 6a since there is at least one Date&Time");
 
-		return false;
-	}
+        return false;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isFinished() {
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public StepController getNext() {
-		return null;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public StepController getNext() {
+        return null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public StepModel getModel() {
-		return step6aModel;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public StepModel getModel() {
+        return step6aModel;
+    }
 
 }

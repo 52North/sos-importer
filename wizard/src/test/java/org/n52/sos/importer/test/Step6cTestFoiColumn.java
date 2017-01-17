@@ -79,49 +79,49 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 public class Step6cTestFoiColumn {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
-		final int firstLineWithData = 0;
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        final MainController f = MainController.getInstance();
+        TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
+        final int firstLineWithData = 0;
 
-		final DateAndTime dtm = new DateAndTime();
-		final DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern("dd.MM.yy", new Column(0,firstLineWithData));
-		dtm.setHour(new Hour(0));
-		dtm.setMinute(new Minute(0));
-		dtm.setSecond(new Second(0));
-		dtm.setTimeZone(new TimeZone(1));
+        final DateAndTime dtm = new DateAndTime();
+        final DateAndTimeController dtc = new DateAndTimeController(dtm);
+        dtc.assignPattern("dd.MM.yy", new Column(0,firstLineWithData));
+        dtm.setHour(new Hour(0));
+        dtm.setMinute(new Minute(0));
+        dtm.setSecond(new Second(0));
+        dtm.setTimeZone(new TimeZone(1));
 
-		final FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setTableElement(new Column(1,firstLineWithData));
+        final FeatureOfInterest foi = new FeatureOfInterest();
+        foi.setTableElement(new Column(1,firstLineWithData));
 
-		final ObservedProperty op = new ObservedProperty();
-		op.setTableElement(new Column(2,firstLineWithData));
+        final ObservedProperty op = new ObservedProperty();
+        op.setTableElement(new Column(2,firstLineWithData));
 
-		final UnitOfMeasurement uom = new UnitOfMeasurement();
-		uom.setName("myg/m3");
-		final Sensor sn = new Sensor();
-		sn.setName("PM10Sensor");
+        final UnitOfMeasurement uom = new UnitOfMeasurement();
+        uom.setName("myg/m3");
+        final Sensor sn = new Sensor();
+        sn.setName("PM10Sensor");
 
-		final NumericValue nv1 = new NumericValue();
-		nv1.setTableElement(new Column(3,firstLineWithData));
-		nv1.setDateAndTime(dtm);
-		nv1.setFeatureOfInterest(foi);
-		nv1.setObservedProperty(op);
-		nv1.setSensor(sn);
-		nv1.setUnitOfMeasurement(uom);
+        final NumericValue nv1 = new NumericValue();
+        nv1.setTableElement(new Column(3,firstLineWithData));
+        nv1.setDateAndTime(dtm);
+        nv1.setFeatureOfInterest(foi);
+        nv1.setObservedProperty(op);
+        nv1.setSensor(sn);
+        nv1.setUnitOfMeasurement(uom);
 
-		ModelStore.getInstance().add(nv1);
-		ModelStore.getInstance().add(foi);
+        ModelStore.getInstance().add(nv1);
+        ModelStore.getInstance().add(foi);
 
-		final Step6cController s6c = new Step6cController();
-		s6c.isNecessary();
-		f.setStepController(s6c);
-	}
+        final Step6cController s6c = new Step6cController();
+        s6c.isNecessary();
+        f.setStepController(s6c);
+    }
 
 }

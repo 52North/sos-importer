@@ -72,86 +72,86 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 public class ObservedProperty extends Resource {
 
-	/** {@inheritDoc} */
-	@Override
-	public void assign(MeasuredValue measuredValue) {
-		measuredValue.setObservedProperty(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assign(MeasuredValue measuredValue) {
+        measuredValue.setObservedProperty(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssigned(MeasuredValue measuredValue) {
-		return measuredValue.getObservedProperty() != null;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isAssigned(MeasuredValue measuredValue) {
+        return measuredValue.getObservedProperty() != null;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssignedTo(MeasuredValue measuredValue) {
-		return measuredValue.getObservedProperty() == this;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean isAssignedTo(MeasuredValue measuredValue) {
+        return measuredValue.getObservedProperty() == this;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassign(MeasuredValue mv) {
-		mv.setObservedProperty(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassign(MeasuredValue mv) {
+        mv.setObservedProperty(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public ObservedProperty forThis(Cell measuredValuePosition) {
-		if (getTableElement() == null || isGenerated()) {
-			return this;
-		} else {
-			ObservedProperty op = new ObservedProperty();
-			String name = getTableElement().getValueFor(measuredValuePosition);
-			op.setName(name);
-			// TODO check, if the next line break any logic
-			op.setTableElement(getTableElement());
-			return op;
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public ObservedProperty forThis(Cell measuredValuePosition) {
+        if (getTableElement() == null || isGenerated()) {
+            return this;
+        } else {
+            ObservedProperty op = new ObservedProperty();
+            String name = getTableElement().getValueFor(measuredValuePosition);
+            op.setName(name);
+            // TODO check, if the next line break any logic
+            op.setTableElement(getTableElement());
+            return op;
+        }
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public DefaultComboBoxModel<String> getNames() {
-		return EditableComboBoxItems.getInstance().getObservedPropertyNames();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public DefaultComboBoxModel<String> getNames() {
+        return EditableComboBoxItems.getInstance().getObservedPropertyNames();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public DefaultComboBoxModel<String> getURIs() {
-		return EditableComboBoxItems.getInstance().getObservedPropertyURIs();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public DefaultComboBoxModel<String> getURIs() {
+        return EditableComboBoxItems.getInstance().getObservedPropertyURIs();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public List<Resource> getList() {
-		List<Resource> resources = new ArrayList<Resource>();
-		resources.addAll(ModelStore.getInstance().getObservedProperties());
-		return resources;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public List<Resource> getList() {
+        List<Resource> resources = new ArrayList<Resource>();
+        resources.addAll(ModelStore.getInstance().getObservedProperties());
+        return resources;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Resource getNextResourceType() {
-		return new UnitOfMeasurement();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Resource getNextResourceType() {
+        return new UnitOfMeasurement();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "Observed Property" + super.toString();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Observed Property" + super.toString();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String getTypeName() {
-		return Lang.l().observedProperty();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String getTypeName() {
+        return Lang.l().observedProperty();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String XML_PREFIX() {
-		return "obsprop";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String XML_PREFIX() {
+        return "obsprop";
+    }
 }

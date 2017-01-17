@@ -78,53 +78,53 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 public class Step6cTestManualFoi {
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
-		final int firstLineWithData = 0;
-		final DateAndTime dtm = new DateAndTime();
-		final DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
-		dtm.setSecond(new Second(0));
-		dtm.setTimeZone(new TimeZone(1));
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
+        final int firstLineWithData = 0;
+        final DateAndTime dtm = new DateAndTime();
+        final DateAndTimeController dtc = new DateAndTimeController(dtm);
+        dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
+        dtm.setSecond(new Second(0));
+        dtm.setTimeZone(new TimeZone(1));
 
-		final ObservedProperty op = new ObservedProperty();
-		op.setName("Temperature");
-		final UnitOfMeasurement uom = new UnitOfMeasurement();
-		uom.setName("Degree Celsius");
-		final FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setName("Weatherstation Muenster");
-		final Sensor sn = new Sensor();
-		sn.setName("Thermometer xy");
+        final ObservedProperty op = new ObservedProperty();
+        op.setName("Temperature");
+        final UnitOfMeasurement uom = new UnitOfMeasurement();
+        uom.setName("Degree Celsius");
+        final FeatureOfInterest foi = new FeatureOfInterest();
+        foi.setName("Weatherstation Muenster");
+        final Sensor sn = new Sensor();
+        sn.setName("Thermometer xy");
 
-		final NumericValue nv1 = new NumericValue();
-		nv1.setTableElement(new Column(1,firstLineWithData));
-		nv1.setDateAndTime(dtm);
-		nv1.setObservedProperty(op);
-		nv1.setFeatureOfInterest(foi);
-		nv1.setSensor(sn);
-		nv1.setUnitOfMeasurement(uom);
+        final NumericValue nv1 = new NumericValue();
+        nv1.setTableElement(new Column(1,firstLineWithData));
+        nv1.setDateAndTime(dtm);
+        nv1.setObservedProperty(op);
+        nv1.setFeatureOfInterest(foi);
+        nv1.setSensor(sn);
+        nv1.setUnitOfMeasurement(uom);
 
-		final NumericValue nv2 = new NumericValue();
-		nv2.setTableElement(new Column(2,firstLineWithData));
-		nv2.setDateAndTime(dtm);
-		nv2.setObservedProperty(op);
-		nv2.setFeatureOfInterest(foi);
-		nv2.setSensor(sn);
-		nv2.setUnitOfMeasurement(uom);
+        final NumericValue nv2 = new NumericValue();
+        nv2.setTableElement(new Column(2,firstLineWithData));
+        nv2.setDateAndTime(dtm);
+        nv2.setObservedProperty(op);
+        nv2.setFeatureOfInterest(foi);
+        nv2.setSensor(sn);
+        nv2.setUnitOfMeasurement(uom);
 
-		ModelStore.getInstance().add(nv1);
-		ModelStore.getInstance().add(nv2);
-		ModelStore.getInstance().add(foi);
+        ModelStore.getInstance().add(nv1);
+        ModelStore.getInstance().add(nv2);
+        ModelStore.getInstance().add(foi);
 
-		final MainController f = MainController.getInstance();
+        final MainController f = MainController.getInstance();
 
-		final Step6cModel step7Model = new Step6cModel(foi);
-		f.setStepController(new Step6cController(step7Model));
-	}
+        final Step6cModel step7Model = new Step6cModel(foi);
+        f.setStepController(new Step6cController(step7Model));
+    }
 
 }

@@ -43,54 +43,54 @@ import org.n52.sos.importer.model.table.TableElement;
  */
 public class ResourceSelectionPanel extends SelectionPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Resource resource;
+    private Resource resource;
 
-	/**
-	 * <p>Constructor for ResourceSelectionPanel.</p>
-	 *
-	 * @param containerPanel a {@link javax.swing.JPanel} object.
-	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
-		super(containerPanel);
-		this.resource = resource;
-	}
+    /**
+     * <p>Constructor for ResourceSelectionPanel.</p>
+     *
+     * @param containerPanel a {@link javax.swing.JPanel} object.
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
+        super(containerPanel);
+        this.resource = resource;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected void setSelection(String s) {
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected void setSelection(String s) {
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected String getSelection() {
-		return "0";
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected String getSelection() {
+        return "0";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setDefaultSelection() {
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setDefaultSelection() {
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assign(TableElement tableElement) {
-		resource.setTableElement(tableElement);
-		ModelStore.getInstance().add(resource);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assign(TableElement tableElement) {
+        resource.setTableElement(tableElement);
+        ModelStore.getInstance().add(resource);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unAssign(TableElement tableElement) {
-		Resource resourceToRemove = null;
-		for (Resource r: resource.getList())
-			if (tableElement.equals(r.getTableElement())) {
-				resourceToRemove = r;
-				break;
-			}
+    /** {@inheritDoc} */
+    @Override
+    public void unAssign(TableElement tableElement) {
+        Resource resourceToRemove = null;
+        for (Resource r: resource.getList())
+            if (tableElement.equals(r.getTableElement())) {
+                resourceToRemove = r;
+                break;
+            }
 
-		ModelStore.getInstance().remove(resourceToRemove);
-	}
+        ModelStore.getInstance().remove(resourceToRemove);
+    }
 }

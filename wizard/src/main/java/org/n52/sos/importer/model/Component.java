@@ -39,12 +39,12 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  */
 public abstract class Component {
 
-	/**
-	 * returns a panel to complete the component
-	 * in case it is missing
-	 *
-	 * @param c a {@link org.n52.sos.importer.model.Combination} object.
-	 * @return a {@link org.n52.sos.importer.view.MissingComponentPanel} object.
-	 */
-	public abstract MissingComponentPanel getMissingComponentPanel(Combination c);
+    /**
+     * returns a panel to complete the component
+     * in case it is missing
+     *
+     * @param c a {@link org.n52.sos.importer.model.Combination} object.
+     * @return a {@link org.n52.sos.importer.view.MissingComponentPanel} object.
+     */
+    public abstract MissingComponentPanel getMissingComponentPanel(Combination c);
 }

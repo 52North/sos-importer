@@ -52,82 +52,82 @@ import org.slf4j.LoggerFactory;
  */
 public class MissingLatitudePanel extends MissingComponentPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = LoggerFactory.getLogger(MissingLatitudePanel.class);
+    private static final Logger logger = LoggerFactory.getLogger(MissingLatitudePanel.class);
 
-	private final Position position;
+    private final Position position;
 
-	private final JLabel latitudeLabel;
-	private final JTextField latitudeTextField = new JTextField(8);
-	private final JLabel latitudeUnitLabel;
-	private final JComboBox<String> latitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
+    private final JLabel latitudeLabel;
+    private final JTextField latitudeTextField = new JTextField(8);
+    private final JLabel latitudeUnitLabel;
+    private final JComboBox<String> latitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
 
-	/**
-	 * <p>Constructor for MissingLatitudePanel.</p>
-	 *
-	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-	 */
-	public MissingLatitudePanel(final Position position) {
-		super();
-		this.position = position;
-		latitudeTextField.setText("0");
+    /**
+     * <p>Constructor for MissingLatitudePanel.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public MissingLatitudePanel(final Position position) {
+        super();
+        this.position = position;
+        latitudeTextField.setText("0");
 
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-		latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
-		this.add(latitudeLabel);
-		this.add(latitudeTextField);
-		latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
-		this.add(latitudeUnitLabel);
-		this.add(latitudeUnitComboBox);
-	}
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
+        this.add(latitudeLabel);
+        this.add(latitudeTextField);
+        latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+        this.add(latitudeUnitLabel);
+        this.add(latitudeUnitComboBox);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assignValues() {
-		final double value = Double.parseDouble(latitudeTextField.getText());
-		final String unit = (String) latitudeUnitComboBox.getSelectedItem();
-		final Latitude l = new Latitude(value, unit);
-		position.setLatitude(l);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        final double value = Double.parseDouble(latitudeTextField.getText());
+        final String unit = (String) latitudeUnitComboBox.getSelectedItem();
+        final Latitude l = new Latitude(value, unit);
+        position.setLatitude(l);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassignValues() {
-		position.setLatitude(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        position.setLatitude(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean checkValues() {
-		String latVal = null;
-		try {
-			latVal = latitudeTextField.getText();
-			Double.parseDouble(latVal);
-		} catch (final NumberFormatException e) {
-			logger.error("Latitude value could not be parsed: " + latVal, e);
-			JOptionPane.showMessageDialog(null,
-				    Lang.l().latitudeDialogDecimalValue(),
-				    Lang.l().warningDialogTitle(),
-				    JOptionPane.WARNING_MESSAGE);
-			return false;
-		}
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        String latVal = null;
+        try {
+            latVal = latitudeTextField.getText();
+            Double.parseDouble(latVal);
+        } catch (final NumberFormatException e) {
+            logger.error("Latitude value could not be parsed: " + latVal, e);
+            JOptionPane.showMessageDialog(null,
+                    Lang.l().latitudeDialogDecimalValue(),
+                    Lang.l().warningDialogTitle(),
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Component getMissingComponent() {
-		final double value = Double.parseDouble(latitudeTextField.getText());
-		final String unit = (String) latitudeUnitComboBox.getSelectedItem();
-		return new Latitude(value, unit);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        final double value = Double.parseDouble(latitudeTextField.getText());
+        final String unit = (String) latitudeUnitComboBox.getSelectedItem();
+        return new Latitude(value, unit);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setMissingComponent(final Component c) {
-		final Latitude latitude = (Latitude)c;
-		latitudeTextField.setText(latitude.getValue() + "");
-		latitudeUnitComboBox.setSelectedItem(latitude.getUnit());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(final Component c) {
+        final Latitude latitude = (Latitude)c;
+        latitudeTextField.setText(latitude.getValue() + "");
+        latitudeUnitComboBox.setSelectedItem(latitude.getUnit());
+    }
 }

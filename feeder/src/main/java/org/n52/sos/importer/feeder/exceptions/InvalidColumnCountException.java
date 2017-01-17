@@ -36,15 +36,15 @@ package org.n52.sos.importer.feeder.exceptions;
  */
 public class InvalidColumnCountException extends IllegalArgumentException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * <p>Constructor for InvalidColumnCountException.</p>
-	 *
-	 * @param errorMsg a {@link java.lang.String} object.
-	 */
-	public InvalidColumnCountException(final String errorMsg) {
-		super(errorMsg);
-	}
+    /**
+     * <p>Constructor for InvalidColumnCountException.</p>
+     *
+     * @param errorMsg a {@link java.lang.String} object.
+     */
+    public InvalidColumnCountException(final String errorMsg) {
+        super(errorMsg);
+    }
 
 }

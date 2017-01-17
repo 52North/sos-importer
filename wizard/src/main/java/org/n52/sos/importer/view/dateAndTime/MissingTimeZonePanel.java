@@ -48,54 +48,54 @@ import org.n52.sos.importer.view.utils.ToolTips;
  */
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JLabel timeZoneLabel;
+    private JLabel timeZoneLabel;
 
-	private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
-	private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
+    private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
+    private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
 
-	/**
-	 * <p>Constructor for MissingTimeZonePanel.</p>
-	 *
-	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-	 */
-	public MissingTimeZonePanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
-		this.add(timeZoneLabel);
-		this.add(timeZoneSpinner);
-	}
+    /**
+     * <p>Constructor for MissingTimeZonePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingTimeZonePanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
+        this.add(timeZoneLabel);
+        this.add(timeZoneSpinner);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void assignValues() {
-		dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void unassignValues() {
-		dateAndTime.setTimeZone(null);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        dateAndTime.setTimeZone(null);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Component getMissingComponent() {
-		return new TimeZone(timeZoneModel.getNumber().intValue());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        return new TimeZone(timeZoneModel.getNumber().intValue());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setMissingComponent(Component c) {
-		timeZoneModel.setValue(((TimeZone)c).getValue());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(Component c) {
+        timeZoneModel.setValue(((TimeZone)c).getValue());
+    }
 }

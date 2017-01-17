@@ -65,63 +65,63 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.i18n.Lang;
 public class Step6bModel implements StepModel {
 
-	private MeasuredValue measuredValue;
+    private MeasuredValue measuredValue;
 
-	private Resource resource;
+    private Resource resource;
 
-	/**
-	 * <p>Constructor for Step6bModel.</p>
-	 *
-	 * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
-	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public Step6bModel(MeasuredValue measuredValue, Resource resource) {
-		setMeasuredValue(measuredValue);
-		setResource(resource);
-	}
+    /**
+     * <p>Constructor for Step6bModel.</p>
+     *
+     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public Step6bModel(MeasuredValue measuredValue, Resource resource) {
+        setMeasuredValue(measuredValue);
+        setResource(resource);
+    }
 
-	/**
-	 * <p>Setter for the field <code>measuredValue</code>.</p>
-	 *
-	 * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
-	 */
-	public void setMeasuredValue(MeasuredValue measuredValue) {
-		this.measuredValue = measuredValue;
-	}
+    /**
+     * <p>Setter for the field <code>measuredValue</code>.</p>
+     *
+     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+     */
+    public void setMeasuredValue(MeasuredValue measuredValue) {
+        this.measuredValue = measuredValue;
+    }
 
-	/**
-	 * <p>Getter for the field <code>measuredValue</code>.</p>
-	 *
-	 * @return the related measure value object
-	 */
-	public MeasuredValue getMeasuredValue() {
-		return measuredValue;
-	}
+    /**
+     * <p>Getter for the field <code>measuredValue</code>.</p>
+     *
+     * @return the related measure value object
+     */
+    public MeasuredValue getMeasuredValue() {
+        return measuredValue;
+    }
 
-	/**
-	 * <p>Setter for the field <code>resource</code>.</p>
-	 *
-	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    /**
+     * <p>Setter for the field <code>resource</code>.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
-	/**
-	 * <p>Getter for the field <code>resource</code>.</p>
-	 *
-	 * @return a {@link org.n52.sos.importer.model.resources.Resource} object.
-	 */
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * <p>Getter for the field <code>resource</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
-	/**
-	 * ... RESOURCE ... ORIENTATION
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getDescription() {
-		return Lang.l().step6bModelDescription();
-	}
+    /**
+     * ... RESOURCE ... ORIENTATION
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return Lang.l().step6bModelDescription();
+    }
 }

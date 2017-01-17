@@ -49,44 +49,44 @@ import org.slf4j.LoggerFactory;
  */
 public class Step4bTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step4bTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step4bTest.class);
 
-	/**
-	 * <p>main.</p>
-	 *
-	 * @param args an array of {@link java.lang.String} objects.
-	 */
-	public static void main(final String[] args) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("main()");
-		}
-		final MainController f = MainController.getInstance();
-//		Lang.setCurrentLocale(Locale.GERMAN);
-		final int firstLineWithData = 1;
-		int i = 0;
-		final FeatureOfInterest foi = TestData.EXAMPLE_FOI;
-		final TableController tc = TableController.getInstance();
-		tc.setContent(TestData.EXAMPLE_TABLE);
-		tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
-		tc.setColumnHeading(++i, Lang.l().sensor());
-		tc.setColumnHeading(++i, Lang.l().observedProperty());
-		tc.setColumnHeading(++i, Lang.l().featureOfInterest());
-		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
-		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
-		tc.setColumnHeading(++i, Lang.l().featureOfInterest());
-		tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
-		tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    public static void main(final String[] args) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("main()");
+        }
+        final MainController f = MainController.getInstance();
+//      Lang.setCurrentLocale(Locale.GERMAN);
+        final int firstLineWithData = 1;
+        int i = 0;
+        final FeatureOfInterest foi = TestData.EXAMPLE_FOI;
+        final TableController tc = TableController.getInstance();
+        tc.setContent(TestData.EXAMPLE_TABLE);
+        tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
+        tc.setColumnHeading(++i, Lang.l().sensor());
+        tc.setColumnHeading(++i, Lang.l().observedProperty());
+        tc.setColumnHeading(++i, Lang.l().featureOfInterest());
+        tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+        tc.setColumnHeading(++i, Lang.l().featureOfInterest());
+        tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
 
-		final ModelStore ms = ModelStore.getInstance();
-		final NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();
-		nV1.setTableElement(new Column(5, firstLineWithData));
-		nV2.setTableElement(new Column(8, firstLineWithData));
+        final ModelStore ms = ModelStore.getInstance();
+        final NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();
+        nV1.setTableElement(new Column(5, firstLineWithData));
+        nV2.setTableElement(new Column(8, firstLineWithData));
 
-		ms.add(nV1);
-		ms.add(nV2);
+        ms.add(nV1);
+        ms.add(nV2);
 
-		f.setStepController(
-				new Step4bController(
-						new Step4bModel(foi,firstLineWithData),firstLineWithData));
-	}
+        f.setStepController(
+                new Step4bController(
+                        new Step4bModel(foi,firstLineWithData),firstLineWithData));
+    }
 }

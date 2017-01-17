@@ -48,27 +48,27 @@ import org.n52.sos.importer.feeder.model.Timestamp;
  */
 public class TestIssue66ParseUnixtime {
 
-	@Test
-	public void shouldParseUnixtimeColumnContent() throws XmlException, IOException, ParseException {
-		// given
-		Configuration configuration = new Configuration("src/test/resources/issue-066/data_config.xml");
-		DataFile dataFile = new DataFile(configuration, null);
-		int mVColumnId = 2;
-		// Thu, 09 Jun 2016 10:29:40 GMT
-		String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
+    @Test
+    public void shouldParseUnixtimeColumnContent() throws XmlException, IOException, ParseException {
+        // given
+        Configuration configuration = new Configuration("src/test/resources/issue-066/data_config.xml");
+        DataFile dataFile = new DataFile(configuration, null);
+        int mVColumnId = 2;
+        // Thu, 09 Jun 2016 10:29:40 GMT
+        String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
 
-		// when
-		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        // when
+        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
 
-		// then
-		Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
-		Assert.assertThat(timeStamp.getYear(), Is.is((short)2016));
-		Assert.assertThat(timeStamp.getMonth(), Is.is((byte)6));
-		Assert.assertThat(timeStamp.getDay(), Is.is((byte)9));
-		Assert.assertThat(timeStamp.getHour(), Is.is((byte)10));
-		Assert.assertThat(timeStamp.getMinute(), Is.is((byte)29));
-		Assert.assertThat(timeStamp.getSeconds(), Is.is((byte)40));
-		Assert.assertThat(timeStamp.getTimezone(), Is.is((byte)0));
-	}
+        // then
+        Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
+        Assert.assertThat(timeStamp.getYear(), Is.is((short)2016));
+        Assert.assertThat(timeStamp.getMonth(), Is.is((byte)6));
+        Assert.assertThat(timeStamp.getDay(), Is.is((byte)9));
+        Assert.assertThat(timeStamp.getHour(), Is.is((byte)10));
+        Assert.assertThat(timeStamp.getMinute(), Is.is((byte)29));
+        Assert.assertThat(timeStamp.getSeconds(), Is.is((byte)40));
+        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte)0));
+    }
 
 }
