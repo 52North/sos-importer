@@ -40,11 +40,12 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 
 /**
- * consists of a customized instruction panel and 
+ * consists of a customized instruction panel and
  * a container panel for all missing components
- * (used for steps 6bspecial and 6c) 
- * @author Raimund
+ * (used for steps 6bspecial and 6c)
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step6Panel extends JPanel {
 
@@ -55,16 +56,24 @@ public class Step6Panel extends JPanel {
 	private final JLabel questionMarkLabel = new JLabel("?");
 	private final JTextField featureOfInterestTextField = new JTextField();
 	private final JTextField observedPropertyTextField = new JTextField();
-	
+
 	private final JPanel containerPanel = new JPanel();
-	
-	public Step6Panel(String description, String featureOfInterestName, 
+
+	/**
+	 * <p>Constructor for Step6Panel.</p>
+	 *
+	 * @param description a {@link java.lang.String} object.
+	 * @param featureOfInterestName a {@link java.lang.String} object.
+	 * @param observedPropertyName a {@link java.lang.String} object.
+	 * @param missingComponentPanels a {@link java.util.List} object.
+	 */
+	public Step6Panel(String description, String featureOfInterestName,
 			String observedPropertyName, List<MissingComponentPanel> missingComponentPanels) {
 		super();
 		descriptionLabel1.setText(description + " " + Lang.l().featureOfInterest() + " ");
 		featureOfInterestTextField.setText(" " + featureOfInterestName + " ");
 		featureOfInterestTextField.setEditable(false);
-		
+
 		if (observedPropertyName != null) {
 			descriptionLabel2.setText(" " + Lang.l().and() + " " + Lang.l().observedProperty() + " ");
 			observedPropertyTextField.setText(" " + observedPropertyName + " ");
@@ -80,10 +89,10 @@ public class Step6Panel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		descriptionPanel.add(questionMarkLabel);
 		add(descriptionPanel);
-		
+
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
 		add(containerPanel);
-		
+
 		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
 		}

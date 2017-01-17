@@ -42,58 +42,65 @@ import org.n52.sos.importer.Constants;
 
 
 /**
- * consists of an instruction panel, the table and 
+ * consists of an instruction panel, the table and
  * a container panel for all missing components
- * (used for steps 5a, 5c, 6a, 6b) 
- * @author Raimund
+ * (used for steps 5a, 5c, 6a, 6b)
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step5Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 * <p>Constructor for Step5Panel.</p>
+	 *
+	 * @param description a {@link java.lang.String} object.
+	 * @param missingComponentPanels a {@link java.util.List} object.
+	 */
 	public Step5Panel(String description, List<MissingComponentPanel> missingComponentPanels) {
 		super();
-		
+
 		JLabel descriptionLabel = new JLabel(description);
 		JPanel descriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		descriptionPanel.add(descriptionLabel);
-		
+
 		TablePanel tablePanel = TablePanel.getInstance();
-		
+
 		JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.PAGE_AXIS));
 		for (MissingComponentPanel mcp: missingComponentPanels) {
 			containerPanel.add(mcp);
 		}
-		
+
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{795, 0};
 		gridBagLayout.rowHeights = new int[]{25, 138, 1, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
+
 		GridBagConstraints gbc_descriptionPanel = new GridBagConstraints();
 		gbc_descriptionPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_descriptionPanel.fill = GridBagConstraints.BOTH;
 		gbc_descriptionPanel.gridx = 0;
 		gbc_descriptionPanel.gridy = 0;
 		add(descriptionPanel, gbc_descriptionPanel);
-		
+
 		GridBagConstraints gbc_tablePanel = new GridBagConstraints();
 		gbc_tablePanel.gridx = 0;
 		gbc_tablePanel.gridy = 1;
 		gbc_tablePanel.fill = GridBagConstraints.BOTH;
 		add(tablePanel, gbc_tablePanel);
-		
-		
+
+
 		GridBagConstraints gbc_containerPanel = new GridBagConstraints();
 		gbc_containerPanel.gridx = 0;
 		gbc_containerPanel.gridy = 2;
 		gbc_containerPanel.fill = GridBagConstraints.BOTH;
 		add(containerPanel, gbc_containerPanel);
-		
+
 		if (Constants.GUI_DEBUG) {
 			descriptionPanel.setBorder(Constants.DEBUG_BORDER);
 			containerPanel.setBorder(Constants.DEBUG_BORDER);

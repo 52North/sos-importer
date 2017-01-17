@@ -50,98 +50,121 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * used to determine sensors in case there is one of the following 
+ * used to determine sensors in case there is one of the following
  * relationships between feature of interest and observed property
  * column: 0:1, 0:n, n:0, 1:0, 1:1, n:n
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step6bSpecialController extends StepController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialController.class);
 
 	private Step6bSpecialModel step6bSpecialModel;
-	
+
 	private Step6Panel step6cPanel;
-	
+
 	private MissingResourcePanel missingResourcePanel;
 
 	private final TableController tableController;
 
 	private final int firstLineWithData;
-	
+
+	/**
+	 * <p>Constructor for Step6bSpecialController.</p>
+	 *
+	 * @param firstLineWithData a int.
+	 */
 	public Step6bSpecialController(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 		tableController = TableController.getInstance();
 	}
-	
+
+	/**
+	 * <p>Constructor for Step6bSpecialController.</p>
+	 *
+	 * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
+	 * @param firstLineWithData a int.
+	 */
 	public Step6bSpecialController(final Step6bSpecialModel step6bSpecialModel, final int firstLineWithData) {
 		this(firstLineWithData);
 		this.step6bSpecialModel = step6bSpecialModel;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		// FIXME does not work with generated
 		final String description = step6bSpecialModel.getDescription();
 		final String foiName = step6bSpecialModel.getFeatureOfInterest().getName();
 		final String opName = step6bSpecialModel.getObservedProperty().getName();
-		
+
 		final Sensor sensor = step6bSpecialModel.getSensor();
 		missingResourcePanel = new MissingResourcePanel(sensor);
 		missingResourcePanel.setMissingComponent(sensor);
 		ModelStore.getInstance().remove(step6bSpecialModel);
 		missingResourcePanel.unassignValues();
-		
+
 		final List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
 		missingComponentPanels.add(missingResourcePanel);
-		
+
 		step6cPanel = new Step6Panel(description, foiName, opName, missingComponentPanels);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
 		missingResourcePanel.assignValues();
 		ModelStore.getInstance().add(step6bSpecialModel);
-		
+
 		step6cPanel = null;
 		missingResourcePanel = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step6bSpecialDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step6cPanel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		return new Step6cController();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		if (ModelStore.getInstance().getSensorsInTable().size() > 0) {
 			logger.info("Skip 6b (Special) since there are sensors in the table.");
 			return false;
 		}
-		
+
 		if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
 			ModelStore.getInstance().getObservedPropertiesInTable().size() == 0) {
 			logger.info("Skip 6b (Special) since there are not any features of interest" +
 					"and observed properties in the table.");
 			return false;
 		}
-		
+
 		step6bSpecialModel = getNextModel();
 		return true;
-		
+
 	}
-		
+
+	/**
+	 * <p>getNextModel.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
+	 */
 	public Step6bSpecialModel getNextModel() {
 		final int rows = tableController.getRowCount();
 		final int flwd = tableController.getFirstLineWithData();
@@ -150,9 +173,9 @@ public class Step6bSpecialController extends StepController {
 		//iterate through all measured value columns/rows
 		mvLoop:
 			for (final MeasuredValue mv: ms.getMeasuredValues()) {
-				
+
 				rowsLoop:
-					for (int i = flwd; i < rows; i++) {	
+					for (int i = flwd; i < rows; i++) {
 						//test if the measuredValue can be parsed
 						final Cell cell = new Cell(i, ((Column)mv.getTableElement()).getNumber());
 						final String value = tableController.getValueAt(cell);
@@ -164,7 +187,7 @@ public class Step6bSpecialController extends StepController {
 									logger.trace("Value could not be parsed: " + value, e);
 								}
 								continue rowsLoop; // it okay this way because parsing test happened during step 3
-							}	
+							}
 
 							final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
 							final ObservedProperty op = mv.getObservedProperty().forThis(cell);
@@ -173,7 +196,7 @@ public class Step6bSpecialController extends StepController {
 							for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
 								if (s6bsM.getSensor().isGenerated() &&
 										s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) && // XXX maybe own equals
-										s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) { // XXX check if foi and obsprop 
+										s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) { // XXX check if foi and obsprop
 									continue mvLoop;
 								}
 							}
@@ -186,21 +209,24 @@ public class Step6bSpecialController extends StepController {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		return missingResourcePanel.checkValues();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		final Step6bSpecialModel step6bSpecialModel = getNextModel();
 		if (step6bSpecialModel != null) {
 			return new Step6bSpecialController(step6bSpecialModel,firstLineWithData);
 		}
-		
+
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step6bSpecialModel;

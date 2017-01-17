@@ -47,8 +47,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Feeder class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public final class Feeder {
 
@@ -56,6 +58,11 @@ public final class Feeder {
 
 	private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 */
 	public static void main(final String[] args) {
 		LOG.trace("main()");
 		logApplicationMetadata();
@@ -141,7 +148,7 @@ public final class Feeder {
 	 * wrong, it will be logged.
 	 * @param args the parameters given by the user
 	 * @return <b>true</b> if the parameters are valid and the programm has all
-	 * 				required information.<br />
+	 * 				required information.<br>
 	 * 			<b>false</b> if parameters are missing or not usable in the
 	 * 				specified form.
 	 */
@@ -225,6 +232,11 @@ public final class Feeder {
 				System.getProperty("os.version"));
 	}
 
+	/**
+	 * <p>heapSizeInformation.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String heapSizeInformation() {
 		final long mb = 1024 * 1024;
 		final Runtime rt = Runtime.getRuntime();

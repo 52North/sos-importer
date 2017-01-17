@@ -38,17 +38,25 @@ import org.n52.sos.importer.model.table.TableElement;
 
 /**
  * assigns or unassigns columns to Booleans, Counts and Text
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class MeasuredValueSelectionPanel extends SelectionPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final ParseTestLabel parseTestLabel;
-	
+
 	private MeasuredValue measuredValue;
-	
+
+	/**
+	 * <p>Constructor for MeasuredValueSelectionPanel.</p>
+	 *
+	 * @param containerPanel a {@link javax.swing.JPanel} object.
+	 * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+	 * @param firstLineWithData a int.
+	 */
 	public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue,int firstLineWithData) {
 		super(containerPanel);
 		this.measuredValue = measuredValue;
@@ -57,25 +65,33 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 		this.add(parseTestLabel);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected void setSelection(String s) {	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getSelection() { return "0"; }
 
+	/** {@inheritDoc} */
 	@Override
 	public void setDefaultSelection() {	}
-	
+
+	/**
+	 * <p>reInit.</p>
+	 */
 	protected void reInit() {
 		//parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
-	}		
-	
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public void assign(TableElement tableElement) {
 		measuredValue.setTableElement(tableElement);
 		ModelStore.getInstance().add(measuredValue);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void unAssign(TableElement tableElement) {
 		MeasuredValue measuredValueToRemove = null;
@@ -84,7 +100,7 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 				measuredValueToRemove = mv;
 				break;
 			}
-				
+
 		ModelStore.getInstance().remove(measuredValueToRemove);
 	}
 }

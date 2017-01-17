@@ -34,41 +34,64 @@ import org.n52.sos.importer.controller.TableController;
 
 /**
  * represents a column in the table
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Column extends TableElement {
-	
+
 	private int number = -1;
 	private int firstLineWithData = -1;
 
+	/**
+	 * <p>Constructor for Column.</p>
+	 *
+	 * @param number a int.
+	 * @param firstLineWithData a int.
+	 */
 	public Column(int number, int firstLineWithData) {
 		this.number = number;
 		this.firstLineWithData = firstLineWithData;
 	}
 
+	/**
+	 * <p>Setter for the field <code>number</code>.</p>
+	 *
+	 * @param number a int.
+	 */
 	public void setNumber(int number) {
 		this.number = number;
 	}
 
+	/**
+	 * <p>Getter for the field <code>number</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getNumber() {
 		return number;
 	}
-	
+
+	/**
+	 * <p>mark.</p>
+	 */
 	public void mark() {
 		TableController.getInstance().mark(this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getValueFor(Cell c) {
 		return TableController.getInstance().getValueAt(c.getRow(), this.getNumber());
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Cell getCellFor(Cell c) {
 		return new Cell(c.getRow(), this.getNumber());
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public HashSet<String> getValues() {
 		HashSet<String> values = new HashSet<String>();
@@ -80,12 +103,14 @@ public class Column extends TableElement {
 		}
 		return values;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "column[#:" + number + "; fLWD:" + firstLineWithData + "]";
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -94,6 +119,7 @@ public class Column extends TableElement {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -109,13 +135,17 @@ public class Column extends TableElement {
 	}
 
 	/**
-	 * @return firstLineWithData, -1 if not set
+	 * <p>Getter for the field <code>firstLineWithData</code>.</p>
+	 *
+	 * @return a int.
 	 */
 	public int getFirstLineWithData() {
 		return firstLineWithData;
 	}
 
 	/**
+	 * <p>Setter for the field <code>firstLineWithData</code>.</p>
+	 *
 	 * @param firstLineWithData the firstLineWithData to set
 	 */
 	public void setFirstLineWithData(int firstLineWithData) {

@@ -46,17 +46,24 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for year, month and day
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingDatePanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel dateLabel = new JLabel(Lang.l().date() + ": ");
-	
+
 	private SpinnerDateModel dateModel;
 	private JSpinner dateSpinner;
-	
+
+	/**
+	 * <p>Constructor for MissingDatePanel.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public MissingDatePanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -68,12 +75,13 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 		dateModel = new SpinnerDateModel(initDate, earliestDate, latestDate, Calendar.YEAR);
 		dateSpinner = new JSpinner(dateModel);
 		dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
-		
+
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.add(dateLabel);
 		this.add(dateSpinner);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
 		Calendar c = new GregorianCalendar();
@@ -83,18 +91,21 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 		dateAndTime.setYear(new Year(c.get(Calendar.YEAR)));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
 		dateAndTime.setDay(null);
 		dateAndTime.setMonth(null);
-		dateAndTime.setYear(null);	
+		dateAndTime.setYear(null);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		Calendar c = new GregorianCalendar();
@@ -106,6 +117,7 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
 		return date;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(Component c) {
 		org.n52.sos.importer.model.dateAndTime.Date date = (org.n52.sos.importer.model.dateAndTime.Date)c;

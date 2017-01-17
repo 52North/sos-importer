@@ -47,26 +47,38 @@ import org.slf4j.LoggerFactory;
 /**
  * Solves ambiguities in case there is more than one feature of interest,
  * observed property, unit of measurement or sensor column
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step4bController extends StepController {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step4bController.class);
-	
+
 	private Step4bModel step4bModel;
-	
+
 	private final TableController tableController;
-	
+
 	private Step4Panel step4Panel;
-	
+
 	private int firstLineWithData = -1;
-	
+
+	/**
+	 * <p>Constructor for Step4bController.</p>
+	 *
+	 * @param firstLineWithData a int.
+	 */
 	public Step4bController(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 		tableController = TableController.getInstance();
 	}
-	
+
+	/**
+	 * <p>Constructor for Step4bController.</p>
+	 *
+	 * @param step4bModel a {@link org.n52.sos.importer.model.Step4bModel} object.
+	 * @param firstLineWithData a int.
+	 */
 	public Step4bController(final Step4bModel step4bModel,final int firstLineWithData) {
 		this(firstLineWithData);
 		this.step4bModel = step4bModel;
@@ -75,23 +87,24 @@ public class Step4bController extends StepController {
 	/*
 	 * {@link org.n52.sos.importer.view.i18n.Lang#step4bModelDescription()}
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		final Resource resource = step4bModel.getResource();
 		final int[] selectedRowsOrColumns = step4bModel.getSelectedColumns();
 		final int fLWData = step4bModel.getFirstLineWithData();
-		
+
 		String text = step4bModel.getDescription();
 		final String orientation = tableController.getOrientationString();
-		
+
 		/*
-		 * List how to replace the org.n52.sos.importer.view.utils.Constants.STRING_REPLACER in the correct order: 
+		 * List how to replace the org.n52.sos.importer.view.utils.Constants.STRING_REPLACER in the correct order:
 		 * 	1 The table element type of the measured values, maybe "column"
 		 * 	2 The resource type, that is linked to the measured value table element
 		 * 	3 Table element of element to be selected
 		 * 	4 Table element of element to be selected
 		 * 	5 The resource type, that is linked to the measured value table element
-		 * 	6 Table element of element to be selected 
+		 * 	6 Table element of element to be selected
 		 */
 		if (logger.isDebugEnabled()) {
 			logger.debug("Text: " + text);
@@ -102,35 +115,36 @@ public class Step4bController extends StepController {
 		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
 		text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
 		text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
-		
+
 		step4Panel = new Step4Panel(text);
-		
+
 		tableController.setTableSelectionMode(TableController.COLUMNS);
 		tableController.addMultipleSelectionListener(new SelectionChanged());
-		
+
 		for (final int number: selectedRowsOrColumns) {
 			final Column column = new Column(number,fLWData);
 			final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 			resource.unassign(mv);
 			tableController.selectColumn(number);
-		}		
-		
+		}
+
 		resource.getTableElement().mark();
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
-		final Resource resource = step4bModel.getResource();	
+		final Resource resource = step4bModel.getResource();
 		final int[] selectedColumns = tableController.getSelectedColumns();
 		final int fLWData = step4bModel.getFirstLineWithData();
 		step4bModel.setSelectedColumns(selectedColumns);
-		
+
 		for (final int number: selectedColumns) {
 			final Column column = new Column(number,fLWData);
 			final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
 			resource.assign(mv);
 		}
-		
+
 		tableController.clearMarkedTableElements();
 		tableController.deselectAllColumns();
 		tableController.setTableSelectionMode(TableController.CELLS);
@@ -138,17 +152,18 @@ public class Step4bController extends StepController {
 
 		step4Panel = null;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void back() {
 		tableController.clearMarkedTableElements();
 		tableController.deselectAllColumns();
 		tableController.setTableSelectionMode(TableController.CELLS);
 		tableController.removeMultipleSelectionListener();
-		
+
 		step4Panel = null;
 	};
-	
+
 	private class SelectionChanged implements TableController.MultipleSelectionListener {
 
 		@Override
@@ -165,7 +180,7 @@ public class Step4bController extends StepController {
 					tableController.deselectColumn(number);
 					return;
 				}
-				
+
 				final Resource resource = step4bModel.getResource();
 				if (resource.isAssigned(mv)) {
 					JOptionPane.showMessageDialog(null,
@@ -181,33 +196,37 @@ public class Step4bController extends StepController {
 		@Override
 		public void rowSelectionChanged(final int[] selectedRows) {
 			// Do nothing -> only columns are used.
-		}	
+		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step4bDescription();
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step4Panel;
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		return new Step4cController(firstLineWithData);
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
-	public boolean isNecessary() {	
+	public boolean isNecessary() {
 		Resource resourceType = new FeatureOfInterest();
 		Resource resource = null;
-		
-		//find how many Feature of Interests, Observed Properties, Units of 
+
+		//find how many Feature of Interests, Observed Properties, Units of
 		//Measurement or Sensors there are and handle the cases 0, 1 and n
 		while (resourceType != null) {
 			final int number = resourceType.getList().size();
@@ -216,11 +235,11 @@ public class Step4bController extends StepController {
 				final Resource oneResource = resourceType.getList().get(0);
 				logger.info("Skip Step 4b for " + resourceType + "s" +
 						" since there is just " + oneResource);
-				
+
 				for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 					oneResource.assign(mv);
 				}
-			
+
 			//in case there are more than two resources of this type:
 			} else if (resource == null && number >= 2){
 				resource = getNextUnassignedResource(resourceType);
@@ -230,41 +249,42 @@ public class Step4bController extends StepController {
 			}
 			resourceType = resourceType.getNextResourceType();
 		}
-		
+
 		step4bModel = new Step4bModel(resource,firstLineWithData);
 		return resource != null;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		Resource resourceType = step4bModel.getResource();
-		
+
 		Resource nextResource = null;
 		while (resourceType != null) {
 			nextResource = getNextUnassignedResource(resourceType);
 			if (nextResource != null) {
 				return new Step4bController(new Step4bModel(nextResource,firstLineWithData),firstLineWithData);
 			}
-			
+
 			resourceType = resourceType.getNextResourceType();
 		}
 		return null;
-	}	
-	
+	}
+
 	private Resource getNextUnassignedResource(final Resource resourceType) {
 		final boolean unassignedMeasuredValues = areThereAnyUnassignedMeasuredValuesOf(resourceType);
 		if (!unassignedMeasuredValues) {
 			return null;
 		}
-		
+
 		for (final Resource resource: resourceType.getList()) {
 			if (!isAssignedToMeasuredValues(resource)) {
 				return resource;
 			}
-		}	
+		}
 		return null;
 	}
-	
+
 	private boolean areThereAnyUnassignedMeasuredValuesOf(final Resource resourceType) {
 		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			if (!resourceType.isAssigned(mv)) {
@@ -273,7 +293,7 @@ public class Step4bController extends StepController {
 		}
 		return false;
 	}
-	
+
 	private boolean isAssignedToMeasuredValues(final Resource resource) {
 		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
 			if (resource.isAssignedTo(mv)) {
@@ -283,11 +303,13 @@ public class Step4bController extends StepController {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step4bModel;

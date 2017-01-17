@@ -43,10 +43,17 @@ import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
+ * <p>Step7ModelHandlerTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step7ModelHandlerTest {
 
+	/**
+	 * <p>shouldAddBindingIfSetInModel.</p>
+	 */
 	@Test
 	public void shouldAddBindingIfSetInModel() {
 		final String binding = "test-binding";
@@ -58,6 +65,9 @@ public class Step7ModelHandlerTest {
 		assertThat(importConf.getSosMetadata().getBinding(), is(binding));
 	}
 
+	/**
+	 * <p>shouldNotAddBindingIfEmptyOrNull.</p>
+	 */
 	@Test
 	public void shouldNotAddBindingIfEmptyOrNull() {
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "");
@@ -72,6 +82,9 @@ public class Step7ModelHandlerTest {
 		assertThat(importConfNull.getSosMetadata().isSetBinding(), is(FALSE));
 	}
 
+	/**
+	 * <p>shouldAddVersionIfSetInModel.</p>
+	 */
 	@Test
 	public void shouldAddVersionIfSetInModel() {
 		final String version = "test-version";
@@ -82,6 +95,9 @@ public class Step7ModelHandlerTest {
 		assertThat(importConf.getSosMetadata().getVersion(), is(version));
 	}
 
+	/**
+	 * <p>shouldNotAddVersionIfEmptyOrNull.</p>
+	 */
 	@Test
 	public void shouldNotAddVersionIfEmptyOrNull() {
 		final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "",null);
@@ -96,6 +112,9 @@ public class Step7ModelHandlerTest {
 		assertThat(importConfNull.getSosMetadata().getVersion(), is(nullValue()));
 	}
 
+	/**
+	 * <p>shouldSetImportStrategy.</p>
+	 */
 	@Test
 	public void shouldSetImportStrategy() {
 		final Step7Model stepModel = new Step7Model(null, null, false, null, "",null);
@@ -106,6 +125,9 @@ public class Step7ModelHandlerTest {
 		assertThat(getAdditionalMetadata(importConf, Key.IMPORT_STRATEGY), is(ImportStrategy.SweArrayObservationWithSplitExtension.name()));
 	}
 
+	/**
+	 * <p>shouldSetHunkSize.</p>
+	 */
 	@Test
 	public void shouldSetHunkSize() {
 		final int hunkSize = 42;

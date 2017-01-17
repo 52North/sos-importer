@@ -73,7 +73,7 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  * initialisation.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
+ * @version $Id: $Id
  */
 public final class Configuration {
 
@@ -84,43 +84,75 @@ public final class Configuration {
     private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
     private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
     // TODO read from configuration file
+    /** Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code> */
     public static final String SOS_200_EPSG_CODE_PREFIX = "http://www.opengis.net/def/crs/EPSG/0/";
+    /** Constant <code>SOS_100_EPSG_CODE_PREFIX="urn:ogc:def:crs:EPSG::"</code> */
     public static final String SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
+    /** Constant <code>REGISTER_SENSOR_SML_SYSTEM_TEMPLATE="./SML_1.0.1_System_template.xml"</code> */
     public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
     private static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
     private static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
+    /** Constant <code>QN_SOS_1_0_OFFERING</code> */
     public static final QName QN_SOS_1_0_OFFERING = new QName(NS_SOS_1_0_0, "offering");
+    /** Constant <code>QN_SOS_1_0_ID</code> */
     public static final QName QN_SOS_1_0_ID = new QName(NS_SOS_1_0_0, "id");
+    /** Constant <code>QN_SOS_1_0_NAME</code> */
     public static final QName QN_SOS_1_0_NAME = new QName(NS_SOS_1_0_0, "name");
+    /** Constant <code>QN_SWE_1_0_1_SIMPLE_DATA_RECORD</code> */
     public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName(NS_SWE_1_0_1,"SimpleDataRecord");
+    /** Constant <code>QN_SWE_1_0_1_DATA_RECORD</code> */
     public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName (NS_SWE_1_0_1,"DataRecord");
+    /** Constant <code>QN_SWE_1_0_1_ENVELOPE</code> */
     public static final QName QN_SWE_1_0_1_ENVELOPE = new QName (NS_SWE_1_0_1,"Envelope");
+    /** Constant <code>SML_ATTRIBUTE_VERSION="version"</code> */
     public static final String SML_ATTRIBUTE_VERSION = "version";
+    /** Constant <code>SML_VERSION="1.0.1"</code> */
     public static final String SML_VERSION = "1.0.1";
+    /** Constant <code>UNICODE_REPLACER='_'</code> */
     public static final char UNICODE_REPLACER = '_';
+    /** Constant <code>UNICODE_ONLY_REPLACER_LEFT_PATTERN</code> */
     public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
     private static final String COLUMN_SEPARATOR_SPACE = "Space";
     private static final String COLUMN_SEPARATOR_TAB = "Tab";
+    /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START="Sensor with ID"</code> */
     public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
+    /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END="is already registered at this SOS"</code> */
     public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END = "is already registered at this SOS";
+    /** Constant <code>SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE="NoApplicableCode"</code> */
     public static final String SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE = "NoApplicableCode";
+    /** Constant <code>SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT="observation_time_stamp_key"</code> */
     public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
+    /** Constant <code>SOS_OBSERVATION_ALREADY_CONTAINED="observation already contained in sos"</code> */
     public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
+    /** Constant <code>SOS_OBSERVATION_TYPE_TEXT="TEXT"</code> */
     public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
+    /** Constant <code>SOS_OBSERVATION_TYPE_COUNT="COUNT"</code> */
     public static final String SOS_OBSERVATION_TYPE_COUNT = "COUNT";
+    /** Constant <code>SOS_OBSERVATION_TYPE_BOOLEAN="BOOLEAN"</code> */
     public static final String SOS_OBSERVATION_TYPE_BOOLEAN = "BOOLEAN";
+    /** Constant <code>OGC_DISCOVERY_ID_TERM_DEFINITION="urn:ogc:def:identifier:OGC:1.0:uniqueID"</code> */
     public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
+    /** Constant <code>OGC_DISCOVERY_LONG_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:longName"</code> */
     public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
+    /** Constant <code>OGC_DISCOVERY_SHORT_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:shortNam"{trunked}</code> */
     public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
+    /** Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION="urn:ogc:def:classifier:OGC:1.0:applicat"{trunked}</code> */
     public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION = "urn:ogc:def:classifier:OGC:1.0:application";
+    /** Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION="urn:ogc:def:property:OGC:1.0:observedBB"{trunked}</code> */
     public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = "urn:ogc:def:property:OGC:1.0:observedBBOX";
 
+    /** Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED="This observation is already contained i"{trunked}</code> */
     public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = "This observation is already contained in SOS database!";
+    /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START="The offering with the identifier"</code> */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START = "The offering with the identifier";
+    /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END="still exists in this service and it is "{trunked}</code> */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
+    /** Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT="observation_featureofinterestid_observa"{trunked}</code> */
     public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = "observation_featureofinterestid_observablepropertyid_proced_key";
+	/** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
 	public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
 
+    /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
@@ -150,6 +182,13 @@ public final class Configuration {
 
     private Pattern localeFilePattern = null;
 
+    /**
+     * <p>Constructor for Configuration.</p>
+     *
+     * @param pathToFile a {@link java.lang.String} object.
+     * @throws org.apache.xmlbeans.XmlException if any.
+     * @throws java.io.IOException if any.
+     */
     public Configuration(final String pathToFile) throws XmlException, IOException {
         LOG.trace("Configuration({})",pathToFile);
         configFile = new File(pathToFile);
@@ -189,6 +228,8 @@ public final class Configuration {
 
     /**
      * For testing only!
+     *
+     * @param importConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
      */
     protected Configuration(final SosImportConfiguration importConf) {
         if (importConf == null) {
@@ -210,8 +251,9 @@ public final class Configuration {
     /**
      * Returns a File instance pointing to the data file defined in XML import
      * configuration.
+     *
      * @return a <b><code>new File</code></b> instance pointing to
-     *             <code>DataFile.LocalFile.Path</code> or<br />
+     *             <code>DataFile.LocalFile.Path</code> or<br>
      *             <b><code>null</code></b>, if element is not defined in config
      */
     public File getDataFile() {
@@ -226,6 +268,11 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>Getter for the field <code>configFile</code>.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
     public File getConfigFile() {
         return configFile;
     }
@@ -293,15 +340,21 @@ public final class Configuration {
         return result;
     }
 
+    /**
+     * <p>isFtpUrlRegex.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isFtpUrlRegex() {
         LOG.trace("isSosUrlRegex()");
         return importConf.getDataFile().getReferenceIsARegularExpression();
     }
 
     /**
+     * <p>getSosUrl.</p>
      *
-     * @return
-     * @throws MalformedURLException
+     * @throws java.net.MalformedURLException if any.
+     * @return a {@link java.net.URL} object.
      */
     public URL getSosUrl() throws MalformedURLException {
         LOG.trace("getSosUrl()");
@@ -312,22 +365,38 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>getUser.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getUser() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getUserName();
     }
 
+    /**
+     * <p>getPassword.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getPassword() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getPassword();
     }
 
     /**
      * The number of the first line with data. Line counting starts at 0.
-     * @return
+     *
+     * @return a int.
      */
     public int getFirstLineWithData() {
         return importConf.getCsvMetadata().getFirstLineWithData();
     }
 
+    /**
+     * <p>getCsvSeparator.</p>
+     *
+     * @return a char.
+     */
     public char getCsvSeparator() {
         final String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
         if (sep.equals(Configuration.COLUMN_SEPARATOR_SPACE)) {
@@ -339,16 +408,27 @@ public final class Configuration {
         }
     }
 
+    /**
+     * <p>getCsvQuoteChar.</p>
+     *
+     * @return a char.
+     */
     public char getCsvQuoteChar() {
         return importConf.getCsvMetadata().getParameter().getTextIndicator().charAt(0);
     }
 
+    /**
+     * <p>getCsvEscape.</p>
+     *
+     * @return a char.
+     */
     public char getCsvEscape() {
         return importConf.getCsvMetadata().getParameter().getCommentIndicator().charAt(0);
     }
 
     /**
      * Returns the ids of measured value columns.
+     *
      * @return An <code>int[]</code> if any measured value column is found. <code>null</code>
      *         if no column is found.
      */
@@ -373,6 +453,11 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>getIgnoredColumnIds.</p>
+     *
+     * @return an array of int.
+     */
     public int[] getIgnoredColumnIds() {
     	LOG.trace("getIgnoredColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
@@ -397,7 +482,8 @@ public final class Configuration {
     /**
      * Returns the column id for the given measured value column if available.
      * If not -1.
-     * @param mvColumnId
+     *
+     * @param mvColumnId a int.
      * @return The column id of the sensor related to this measure value column
      *             or -1 if no sensor column is available for this column
      */
@@ -440,9 +526,10 @@ public final class Configuration {
     }
 
     /**
+     * <p>getColumnById.</p>
      *
-     * @param mvColumnId
-     * @return
+     * @param mvColumnId a int.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
      */
     public Column getColumnById(final int mvColumnId) {
         LOG.trace(String.format("getColumnById(%d)",mvColumnId));
@@ -465,8 +552,9 @@ public final class Configuration {
      * Returns the SensorType linked to the column, identified by the given id,
      * by its RelatedSensor.IdRef element. If no sensor could be found
      * <code>null</code> is returned.
-     * @param mvColumnId
-     * @return
+     *
+     * @param mvColumnId a int.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
      */
     public SensorType getRelatedSensor(final int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
@@ -503,9 +591,10 @@ public final class Configuration {
     }
 
     /**
+     * <p>getColumnIdForFoi.</p>
      *
-     * @param mvColumnId
-     * @return
+     * @param mvColumnId a int.
+     * @return a int.
      */
     public int getColumnIdForFoi(final int mvColumnId) {
         LOG.trace(String.format("getColumnIdForFoi(%d)",
@@ -540,9 +629,10 @@ public final class Configuration {
     }
 
     /**
+     * <p>getFoiPosition.</p>
      *
-     * @param foiUri
-     * @return
+     * @param foiUri a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
      */
     public Position getFoiPosition(final String foiUri) {
         LOG.trace(String.format("getFoiPosition(%s)",
@@ -571,6 +661,8 @@ public final class Configuration {
     }
 
     /**
+     * <p>getModelPositionXBPosition.</p>
+     *
      * @param p {@link org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position}
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
@@ -598,9 +690,10 @@ public final class Configuration {
     }
 
     /**
+     * <p>getRelatedFoi.</p>
      *
-     * @param mvColumnId
-     * @return
+     * @param mvColumnId a int.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType} object.
      */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
@@ -632,7 +725,14 @@ public final class Configuration {
                 mvColumnId));
         return null;
     }
-    
+
+    /**
+     * <p>getPosition.</p>
+     *
+     * @param values an array of {@link java.lang.String} objects.
+     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
+     * @throws java.text.ParseException if any.
+     */
     public Position getPosition(final String[] values) throws ParseException {
     	String group = "";
     	// get first group in Document for position column
@@ -650,6 +750,14 @@ public final class Configuration {
     	return getPosition(group, values);
     }
 
+    /**
+     * <p>getPosition.</p>
+     *
+     * @param group a {@link java.lang.String} object.
+     * @param values an array of {@link java.lang.String} objects.
+     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
+     * @throws java.text.ParseException if any.
+     */
     public Position getPosition(final String group, final String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(group:%s,..)", group));
         final Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
@@ -827,6 +935,13 @@ public final class Configuration {
         return result;
     }
 
+    /**
+     * <p>parseToDouble.</p>
+     *
+     * @param number a {@link java.lang.String} object.
+     * @return a double.
+     * @throws java.text.ParseException if any.
+     */
     public double parseToDouble(final String number) throws ParseException{
         LOG.trace(String.format("parseToDouble(%s)",
                 number));
@@ -859,9 +974,12 @@ public final class Configuration {
 
     /**
      * Returns all columns of the corresponding <code>group</code>
+     *
      * @param group a <code>{@link java.lang.String String}</code> as group identifier
+     * @param t a {@link org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum} object.
      * @return a <code>Column[]</code> having all the group id
-     *             <code>group</code> <b>or</or><br />
+     *             <code>group</code> <b>or</b><br>
+     *             an empty <code>Column[]</code>
      */
     public Column[] getAllColumnsForGroup(final String group, final Enum t) {
         LOG.trace("getAllColumnsForGroup()");
@@ -894,6 +1012,7 @@ public final class Configuration {
     /**
      * Returns the group id of the first date time group found in
      * <code>CsvMetadata.ColumnAssignments.Column[]</code>
+     *
      * @return a <code>{@link java.lang.String String}</code>
      */
     public String getFirstDateTimeGroup() {
@@ -921,9 +1040,10 @@ public final class Configuration {
 
     /**
      * Returns the uom with the given id or <code>null</code>
-     * @param idRef
+     *
+     * @param idRef a {@link java.lang.String} object.
      * @return <code>UnitOfMeasurementType</code> instance with
-     *                 <code>id == idRef</code>,<br />or <code>null</code>
+     *                 <code>id == idRef</code>,<br>or <code>null</code>
      */
     public UnitOfMeasurementType getUomById(final String idRef) {
         LOG.trace(String.format("getUomById('%s')",
@@ -940,7 +1060,8 @@ public final class Configuration {
     /**
      * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns
      * the id of the first column with Type "UOM"
-     * @param mVColumnId
+     *
+     * @param mVColumnId a int.
      * @return the id of the first uom column or -1 if not found
      */
     public int getColumnIdForUom(final int mVColumnId) {
@@ -958,8 +1079,9 @@ public final class Configuration {
 
     /**
      * Returns the op with the given id or <code>null</code>
-     * @param idRef
-     * @return
+     *
+     * @param idRef a {@link java.lang.String} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType} object.
      */
     public ObservedPropertyType getObsPropById(final String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
@@ -977,7 +1099,8 @@ public final class Configuration {
     /**
      * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns
      * the id of the first column with Type "OBSERVED_PROPERTY"
-     * @param mVColumnId
+     *
+     * @param mVColumnId a int.
      * @return the id of the first op column or -1 if not found
      */
     public int getColumnIdForOpsProp(final int mVColumnId) {
@@ -993,6 +1116,12 @@ public final class Configuration {
         return -1;
     }
 
+    /**
+     * <p>getOffering.</p>
+     *
+     * @param s a {@link org.n52.sos.importer.feeder.model.Sensor} object.
+     * @return a {@link org.n52.sos.importer.feeder.model.Offering} object.
+     */
     public Offering getOffering(final Sensor s) {
         LOG.trace("getOffering()");
         if( importConf.getSosMetadata().getOffering().isSetGenerate() &&
@@ -1004,15 +1133,27 @@ public final class Configuration {
         }
     }
 
+    /**
+     * <p>getFileName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getFileName() {
         return configFile.getName();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("Configuration [file=%s]", configFile);
     }
 
+    /**
+     * <p>getType.</p>
+     *
+     * @param mVColumnId a int.
+     * @return a {@link java.lang.String} object.
+     */
     public String getType(final int mVColumnId) {
         for (final Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
             if (col.getNumber() == mVColumnId) {
@@ -1026,6 +1167,11 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>getSensorFromAdditionalMetadata.</p>
+     *
+     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
+     */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");
         if (importConf.getAdditionalMetadata() != null &&
@@ -1036,15 +1182,30 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>isOneMvColumn.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isOneMvColumn() {
         return (getMeasureValueColumnIds().length == 1);
     }
 
+    /**
+     * <p>getSosVersion.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSosVersion() {
         LOG.trace("getSosVersion()");
         return importConf.getSosMetadata().getVersion();
     }
 
+    /**
+     * <p>getSosBinding.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSosBinding() {
         LOG.trace("getSosBinding()");
         if (importConf.getSosMetadata().isSetBinding())
@@ -1055,22 +1216,47 @@ public final class Configuration {
         return null;
     }
 
+    /**
+     * <p>getExpectedColumnCount.</p>
+     *
+     * @return a int.
+     */
     public int getExpectedColumnCount() {
         return importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray();
     }
 
+    /**
+     * <p>Getter for the field <code>localeFilePattern</code>.</p>
+     *
+     * @return a {@link java.util.regex.Pattern} object.
+     */
     public Pattern getLocaleFilePattern() {
         return localeFilePattern;
     }
 
+    /**
+     * <p>getRegExDateInfoInFileName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getRegExDateInfoInFileName() {
         return importConf.getDataFile().getRegExDateInfoInFileName();
     }
 
+    /**
+     * <p>getDateInfoPattern.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getDateInfoPattern() {
         return importConf.getDataFile().getDateInfoPattern();
     }
 
+    /**
+     * <p>isDateInfoExtractionFromFileNameSetupValid.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isDateInfoExtractionFromFileNameSetupValid() {
         return importConf.getDataFile().isSetRegExDateInfoInFileName() &&
                 importConf.getDataFile().isSetRegExDateInfoInFileName() &&
@@ -1081,14 +1267,21 @@ public final class Configuration {
                 !getDateInfoPattern().isEmpty();
     }
 
+    /**
+     * <p>isUseDateInfoFromFileModificationSet.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isUseDateInfoFromFileModificationSet() {
         return importConf.getDataFile().isSetUseDateFromLastModifiedDate() &&
                 importConf.getDataFile().getUseDateFromLastModifiedDate();
     }
 
     /**
+     * <p>isSamplingFile.</p>
+     *
      * @return <code>true</code>, if all required attributes are available for
-     * 			importing sample based files,<br />
+     * 			importing sample based files,<br>
      * 			else <code>false</code>.
      */
     public boolean isSamplingFile() {
@@ -1109,6 +1302,11 @@ public final class Configuration {
                 importConf.getDataFile().getSampleSizeRegEx().indexOf(")") > 1;
     }
 
+    /**
+     * <p>getSampleStartRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSampleStartRegEx() {
     	if (importConf.getDataFile().isSetSampleStartRegEx() &&
                 !importConf.getDataFile().getSampleStartRegEx().isEmpty()) {
@@ -1117,6 +1315,11 @@ public final class Configuration {
     	throw new IllegalArgumentException("Attribute 'sampleIdRegEx' of <DataFile> not set.");
 	}
 
+	/**
+	 * <p>getSampleSizeRegEx.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSampleSizeRegEx() {
 		if (importConf.getDataFile().isSetSampleSizeRegEx() &&
 				!importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
@@ -1127,6 +1330,11 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'sampleSizeRegEx' of <DataFile> not set.");
 	}
 
+	/**
+	 * <p>getSampleSizeOffset.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSampleSizeOffset() {
 		if (importConf.getDataFile().isSetSampleSizeOffset()) {
 			return importConf.getDataFile().getSampleSizeOffset();
@@ -1134,6 +1342,11 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'sampleSizeOffset' of <DataFile> not set.");
 	}
 
+	/**
+	 * <p>getSampleDateOffset.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSampleDateOffset() {
 		if (importConf.getDataFile().isSetSampleDateOffset()) {
 			return importConf.getDataFile().getSampleDateOffset();
@@ -1141,6 +1354,11 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'sampleDateOffset' of <DataFile> not set.");
 	}
 
+	/**
+	 * <p>getSampleDataOffset.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSampleDataOffset() {
 		if (importConf.getDataFile().isSetSampleDataOffset()) {
 			return importConf.getDataFile().getSampleDataOffset();
@@ -1149,6 +1367,11 @@ public final class Configuration {
 	}
 
 
+	/**
+	 * <p>getSampleDatePattern.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSampleDatePattern() {
 		if (importConf.getDataFile().isSetSampleDatePattern() &&
 				!importConf.getDataFile().getSampleDatePattern().isEmpty()) {
@@ -1157,6 +1380,11 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'sampleDateInfoPattern' of <DataFile> not set.");
 	}
 
+	/**
+	 * <p>getSampleDateExtractionRegEx.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSampleDateExtractionRegEx() {
 		if (importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
 				!importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
@@ -1169,7 +1397,9 @@ public final class Configuration {
 
 
     /**
-     * @return The configured value <b>> 0</b>, if it is set<br />
+     * <p>getLastModifiedDelta.</p>
+     *
+     * @return The configured value <b>&gt; 0</b>, if it is set<br>
      *             else <b>-1</b>.
      */
     public int getLastModifiedDelta() {
@@ -1180,8 +1410,10 @@ public final class Configuration {
     }
 
     /**
+     * <p>getHeaderLine.</p>
+     *
      * @return number of the line that contains the header information for the
-     *             first time, or<br />
+     *             first time, or<br>
      *             <b>-1</b> if the optional attribute "headerLine" is not
      *             set in DataFile element
      */
@@ -1193,7 +1425,9 @@ public final class Configuration {
     }
 
     /**
-     * @return Name of the data file encoding, or <br />
+     * <p>getDataFileEncoding.</p>
+     *
+     * @return Name of the data file encoding, or <br>
      *             if not set, "UTF-8"
      */
     public String getDataFileEncoding() {
@@ -1207,9 +1441,11 @@ public final class Configuration {
     }
 
     /**
-     * @return The {@link ImportStrategy} that could be configured in
+     * <p>getImportStrategy.</p>
+     *
+     * @return The {@link org.n52.sos.importer.feeder.Configuration.ImportStrategy} that could be configured in
      *         <code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
-     *         <br />Default if nothing matching is found: {@link ImportStrategy#SingleObservation}
+     *         <br>Default if nothing matching is found: {@link org.n52.sos.importer.feeder.Configuration.ImportStrategy#SingleObservation}
      */
     public ImportStrategy getImportStrategy() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
@@ -1227,6 +1463,11 @@ public final class Configuration {
         return ImportStrategy.SingleObservation;
     }
 
+    /**
+     * <p>getHunkSize.</p>
+     *
+     * @return a int.
+     */
     public int getHunkSize() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
             for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
@@ -1247,11 +1488,21 @@ public final class Configuration {
     }
 
 
+    /**
+     * <p>isIgnoreLineRegExSet.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isIgnoreLineRegExSet() {
     	return importConf.getDataFile().getIgnoreLineRegExArray() != null &&
     			importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
 	}
 
+	/**
+	 * <p>getIgnoreLineRegExPatterns.</p>
+	 *
+	 * @return an array of {@link java.util.regex.Pattern} objects.
+	 */
 	public Pattern[] getIgnoreLineRegExPatterns() {
 		if (!isIgnoreLineRegExSet()) {
 			return new Pattern[0];
@@ -1266,10 +1517,20 @@ public final class Configuration {
 		return patterns.toArray(new Pattern[patterns.size()]);
 	}
 
+	/**
+	 * <p>isInsertSweArrayObservationTimeoutBufferSet.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isInsertSweArrayObservationTimeoutBufferSet() {
 		return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
 	}
 
+	/**
+	 * <p>getInsertSweArrayObservationTimeoutBuffer.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getInsertSweArrayObservationTimeoutBuffer() {
 		if (isInsertSweArrayObservationTimeoutBufferSet()) {
 			return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
@@ -1277,6 +1538,11 @@ public final class Configuration {
 		throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
 	}
 
+	/**
+	 * <p>getSampleSizeDivisor.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSampleSizeDivisor() {
 		if (isSamplingFile() && importConf.getDataFile().isSetSampleSizeDivisor()) {
 			return importConf.getDataFile().getSampleSizeDivisor();
@@ -1284,10 +1550,20 @@ public final class Configuration {
 		return 1;
 	}
 
+	/**
+	 * <p>isCsvParserDefined.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isCsvParserDefined() {
 		return importConf.getCsvMetadata().isSetCsvParserClass();
 	}
 
+	/**
+	 * <p>getCsvParser.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getCsvParser() {
 		return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
 	}

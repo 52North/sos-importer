@@ -34,55 +34,91 @@ import org.n52.sos.importer.controller.TableController;
 
 /**
  * represents a single cell in the table
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Cell extends TableElement {
-	
+
 	private int column;
-	
+
 	private int row;
-	
+
+	/**
+	 * <p>Constructor for Cell.</p>
+	 */
 	public Cell() {
 		column = -1;
 		row = -1;
 	}
-	
+
+	/**
+	 * <p>Constructor for Cell.</p>
+	 *
+	 * @param row a int.
+	 * @param column a int.
+	 */
 	public Cell(int row, int column) {
 		setRow(row);
 		setColumn(column);
 	}
-	
+
+	/**
+	 * <p>Setter for the field <code>column</code>.</p>
+	 *
+	 * @param column a int.
+	 */
 	public void setColumn(int column) {
 		this.column = column;
 	}
 
+	/**
+	 * <p>Getter for the field <code>column</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getColumn() {
 		return column;
 	}
 
+	/**
+	 * <p>Setter for the field <code>row</code>.</p>
+	 *
+	 * @param row a int.
+	 */
 	public void setRow(int row) {
 		this.row = row;
 	}
 
+	/**
+	 * <p>Getter for the field <code>row</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getRow() {
 		return row;
 	}
 
+	/**
+	 * <p>mark.</p>
+	 */
 	public void mark() {
 		TableController.getInstance().mark(this);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getValueFor(Cell c) {
 		return TableController.getInstance().getValueAt(this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Cell getCellFor(Cell c) {
 		return this;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public HashSet<String> getValues() {
 		HashSet<String> values = new HashSet<String>();
@@ -90,12 +126,14 @@ public class Cell extends TableElement {
 		values.add(value);
 		return values;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "cell[" + row + "|" + column + "]";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -105,6 +143,7 @@ public class Cell extends TableElement {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

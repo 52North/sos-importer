@@ -46,38 +46,45 @@ import org.slf4j.LoggerFactory;
 
 /**
  * consists of a text field for the height and a combobox for the units
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingHeightPanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private final Position position;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
-	
+
 	private final JLabel heightLabel;
 	private final JTextField heightTextField = new JTextField(8);
 	private final JLabel heightUnitLabel;
 	private final JComboBox<String> heightUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getHeightUnits());
-	
+
+	/**
+	 * <p>Constructor for MissingHeightPanel.</p>
+	 *
+	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+	 */
 	public MissingHeightPanel(final Position position) {
 		super();
-		this.position = position;	
+		this.position = position;
 		heightTextField.setText("0");
-		
+
 		setLayout(new FlowLayout(FlowLayout.LEFT));
-		
+
 		heightLabel = new JLabel("   " + Lang.l().altitude() + ": ");
 		heightUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
-		
+
 		this.add(heightLabel);
 		this.add(heightTextField);
 		this.add(heightUnitLabel);
 		this.add(heightUnitComboBox);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
 		final double value = Double.parseDouble(heightTextField.getText());
@@ -85,12 +92,14 @@ public class MissingHeightPanel extends MissingComponentPanel {
 		final Height h = new Height(value, unit);
 		position.setHeight(h);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
 		position.setHeight(null);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		try {
@@ -103,10 +112,11 @@ public class MissingHeightPanel extends MissingComponentPanel {
 			logger.error("The height has to be a decimal number.", e);
 			return false;
 		}
-		
+
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		final double value = Double.parseDouble(heightTextField.getText());
@@ -114,6 +124,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
 		return new Height(value, unit);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(final Component c) {
 		final Height height = (Height)c;

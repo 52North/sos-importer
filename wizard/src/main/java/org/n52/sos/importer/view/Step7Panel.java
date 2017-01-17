@@ -65,11 +65,12 @@ import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * chooses the URL of the Sensor Observation Service
+ *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
- * TODO before commit => add SOS versions to sosVersionComboBox
- *
+ * TODO before commit =&gt; add SOS versions to sosVersionComboBox
+ * @version $Id: $Id
  */
 public class Step7Panel extends JPanel {
 
@@ -126,6 +127,9 @@ public class Step7Panel extends JPanel {
 
 	private final SpinnerNumberModel sweArraySendBuffer = new SpinnerNumberModel(25, 0, Integer.MAX_VALUE, 1);
 
+	/**
+	 * <p>Constructor for Step7Panel.</p>
+	 */
 	public Step7Panel() {
 		setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -483,68 +487,147 @@ public class Step7Panel extends JPanel {
 	private void initSosBindingPanel() {
 	}
 
+	/**
+	 * <p>getSOSURL.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSOSURL() {
 		return (String) sosUrlComboBox.getSelectedItem();
 	}
 
+	/**
+	 * <p>setSOSURL.</p>
+	 *
+	 * @param sosURL a {@link java.lang.String} object.
+	 */
 	public void setSOSURL(final String sosURL) {
 		sosUrlComboBox.setSelectedItem(sosURL);
 	}
 
+	/**
+	 * <p>getConfigFile.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getConfigFile() {
 		return configFilePath + File.separatorChar + configFileNameJT.getText();
 	}
 
+	/**
+	 * <p>setConfigFile.</p>
+	 *
+	 * @param configFile a {@link java.lang.String} object.
+	 */
 	public void setConfigFile(final String configFile) {
 		// split String by last index of File.separatorChar and save to fields
 		configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar)+1);
 		configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar)+1);
 	}
 
+	/**
+	 * <p>isGenerateOfferingFromSensorName.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isGenerateOfferingFromSensorName() {
 		return offeringGenerateCheckbox.isSelected();
 	}
 
+	/**
+	 * <p>getOfferingName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOfferingName() {
 		return offeringInputTextField.getText();
 	}
 
+	/**
+	 * <p>getSosBinding.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSosBinding() {
 		return sosBindingCB.getSelectedItem().toString();
 	}
 
+	/**
+	 * <p>setBinding.</p>
+	 *
+	 * @param binding a {@link java.lang.String} object.
+	 * @return a {@link org.n52.sos.importer.view.Step7Panel} object.
+	 */
 	public Step7Panel setBinding(final String binding) {
 		sosBindingCB.setSelectedItem(binding);
 		return this;
 	}
 
+	/**
+	 * <p>getSosVersion.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSosVersion() {
 		return sosVersionCB.getSelectedItem().toString();
 	}
 
+	/**
+	 * <p>setSosVersion.</p>
+	 *
+	 * @param version a {@link java.lang.String} object.
+	 * @return a {@link org.n52.sos.importer.view.Step7Panel} object.
+	 */
 	public Step7Panel setSosVersion(final String version) {
 		sosVersionCB.setSelectedItem(version);
 		return this;
 	}
 
+	/**
+	 * <p>getHunkSize.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getHunkSize() {
 		return hunkSizeModel.getNumber().intValue();
 	}
 
+	/**
+	 * <p>setHunkSize.</p>
+	 *
+	 * @param hunkSize a int.
+	 * @return a {@link org.n52.sos.importer.view.Step7Panel} object.
+	 */
 	public Step7Panel setHunkSize(final int hunkSize) {
 		hunkSizeModel.setValue(hunkSize);
 		return this;
 	}
 
+	/**
+	 * <p>getSendBuffer.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSendBuffer() {
 		return sweArraySendBuffer.getNumber().intValue();
 	}
 
+	/**
+	 * <p>setSendBuffer.</p>
+	 *
+	 * @param sendBuffer a int.
+	 * @return a {@link org.n52.sos.importer.view.Step7Panel} object.
+	 */
 	public Step7Panel setSendBuffer(final int sendBuffer) {
 		sweArraySendBuffer.setValue(sendBuffer);
 		return this;
 	}
 
+	/**
+	 * <p>Getter for the field <code>importStrategy</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
+	 */
 	public ImportStrategy getImportStrategy() {
 		if (sweArrayObservationBufferRadioButton.isSelected()) {
 			return Constants.ImportStrategy.SweArrayObservationWithSplitExtension;
@@ -553,6 +636,12 @@ public class Step7Panel extends JPanel {
 		}
 	}
 
+	/**
+	 * <p>Setter for the field <code>importStrategy</code>.</p>
+	 *
+	 * @param importStrategy a {@link org.n52.sos.importer.Constants.ImportStrategy} object.
+	 * @return a {@link org.n52.sos.importer.view.Step7Panel} object.
+	 */
 	public Step7Panel setImportStrategy(final ImportStrategy importStrategy) {
 		switch (importStrategy) {
 		case SweArrayObservationWithSplitExtension:

@@ -36,88 +36,122 @@ import org.slf4j.LoggerFactory;
 
 /**
  * stores past, future and present step controller
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class BackNextModel {
 
 	private final Stack<StepController> previousStepControllers;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(BackNextModel.class);
-	
+
 	private final Stack<StepController> followingStepControllers;
-	
+
 	private StepController currentStepController;
-	
+
+	/**
+	 * <p>Constructor for BackNextModel.</p>
+	 */
 	public BackNextModel() {
 		previousStepControllers = new Stack<StepController>();
 		followingStepControllers = new Stack<StepController>();
 	}
-	
+
+	/**
+	 * <p>getPreviousStepController.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public StepController getPreviousStepController() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getPreviousStepController()");
 		}
 		final StepController sc = previousStepControllers.pop();
 		if (logger.isTraceEnabled()) {
-			logger.trace("result: " + 
-					(sc!=null?sc.getClass().getSimpleName():sc) + 
+			logger.trace("result: " +
+					(sc!=null?sc.getClass().getSimpleName():sc) +
 					"[" + (sc!=null?sc.hashCode():sc) + "])");
 		}
 		return sc;
 	}
-	
+
+	/**
+	 * <p>addPreviousStepController.</p>
+	 *
+	 * @param sc a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public void addPreviousStepController(final StepController sc) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("addPreviousStepController(" + 
-					(sc!=null?sc.getClass().getSimpleName():sc) + 
+			logger.trace("addPreviousStepController(" +
+					(sc!=null?sc.getClass().getSimpleName():sc) +
 					"[" + (sc!=null?sc.hashCode():sc) + "])");
 		}
 		previousStepControllers.push(sc);
 	}
 
+	/**
+	 * <p>Setter for the field <code>currentStepController</code>.</p>
+	 *
+	 * @param currentSC a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public void setCurrentStepController(final StepController currentSC) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("setCurrentStepController(" + 
-					currentSC.getClass().getSimpleName() + 
+			logger.trace("setCurrentStepController(" +
+					currentSC.getClass().getSimpleName() +
 					"[" + currentSC.hashCode() + "])");
 		}
 		currentStepController = currentSC;
 	}
 
+	/**
+	 * <p>Getter for the field <code>currentStepController</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public StepController getCurrentStepController() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getCurrentStepController()" +
 					(currentStepController != null? ": result:" +
-					currentStepController.getClass().getSimpleName() + 
+					currentStepController.getClass().getSimpleName() +
 					"[" + currentStepController.hashCode() + "]":""));
 		}
 		return currentStepController;
 	}
-	
+
+	/**
+	 * <p>getFollowingStepController.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public StepController getFollowingStepController() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getFollowingStepController()");
 		}
 		StepController sc = null;
 		if (followingStepControllers.size() > 0) {
-			sc = followingStepControllers.pop(); 
+			sc = followingStepControllers.pop();
 		}
 		if (logger.isTraceEnabled()) {
-			logger.trace("followingSC: " + 
+			logger.trace("followingSC: " +
 					(sc!=null?
-							sc.getClass().getSimpleName() + 
+							sc.getClass().getSimpleName() +
 							"[" + sc.hashCode() + "]"
 							:sc)
 					);
 		}
 		return sc;
 	}
-	
+
+	/**
+	 * <p>addFollowingStepController.</p>
+	 *
+	 * @param sc a {@link org.n52.sos.importer.controller.StepController} object.
+	 */
 	public void addFollowingStepController(final StepController sc) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("addFollowingStepController(" + 
-					(sc!=null?sc.getClass().getSimpleName():sc) + 
+			logger.trace("addFollowingStepController(" +
+					(sc!=null?sc.getClass().getSimpleName():sc) +
 					"[" + (sc!=null?sc.hashCode():sc) + "])");
 		}
 		followingStepControllers.push(sc);

@@ -52,28 +52,42 @@ import org.slf4j.LoggerFactory;
 
 /**
  * handles operations on DateAndTime objects
+ *
  * @author Raimund
- * 
+ * @version $Id: $Id
  */
 public class DateAndTimeController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DateAndTimeController.class);
-	
+
 	private DateAndTime dateAndTime;
-	
+
 	private final List<MissingComponentPanel> missingComponentPanels;
-	
+
+	/**
+	 * <p>Constructor for DateAndTimeController.</p>
+	 */
 	public DateAndTimeController() {
 		dateAndTime = new DateAndTime();
 		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
-	
+
+	/**
+	 * <p>Constructor for DateAndTimeController.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public DateAndTimeController(final DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
 		missingComponentPanels = new ArrayList<MissingComponentPanel>();
 	}
-	
-	public List<MissingComponentPanel> getMissingComponentPanels() {	
+
+	/**
+	 * <p>Getter for the field <code>missingComponentPanels</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
+	public List<MissingComponentPanel> getMissingComponentPanels() {
 		if (!missingComponentPanels.isEmpty()) {
 			return missingComponentPanels;
 		}
@@ -83,8 +97,8 @@ public class DateAndTimeController {
 		 * whole date component is missing
 		 */
 		/* Disabled because the user might enter observations on year or month level without giving a date
-		if (dateAndTime.getDay() == null && 
-				dateAndTime.getMonth() == null && 
+		if (dateAndTime.getDay() == null &&
+				dateAndTime.getMonth() == null &&
 				dateAndTime.getYear() == null) {
 			missingComponentPanels.add(new MissingDatePanel(dateAndTime));
 		} else {
@@ -102,12 +116,12 @@ public class DateAndTimeController {
 		*/
 		/*
 		 * 	TIME SECTION
-		 * 
+		 *
 		 * whole time is missing
 		 */
 		/* Disabled because the user might enter observations on year, month, or day level without giving a specific time
-		if (dateAndTime.getHour() == null && 
-				dateAndTime.getMinute() == null && 
+		if (dateAndTime.getHour() == null &&
+				dateAndTime.getMinute() == null &&
 				dateAndTime.getSeconds() == null) {
 			missingComponentPanels.add(new MissingTimePanel(dateAndTime));
 		}else {
@@ -127,16 +141,21 @@ public class DateAndTimeController {
 		 * 	TIME_ZONE SECTION
 		 *  Only add if at least one time element is already set
 		 */
-		if (dateAndTime.getTimeZone() == null && ( 
-				(dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null) || 
+		if (dateAndTime.getTimeZone() == null && (
+				(dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null) ||
 				(dateAndTime.getMinute() != null && dateAndTime.getMinute().getTableElement() != null) ||
 				(dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null)) ) {
 			missingComponentPanels.add(new MissingTimeZonePanel(dateAndTime));
 		}
 		//
 		return missingComponentPanels;
-	}	
-	
+	}
+
+	/**
+	 * <p>setMissingComponents.</p>
+	 *
+	 * @param components a {@link java.util.List} object.
+	 */
 	public void setMissingComponents(final List<Component> components) {
 		for (final Component c: components) {
 			final MissingComponentPanel mcp = c.getMissingComponentPanel(dateAndTime);
@@ -144,7 +163,12 @@ public class DateAndTimeController {
 			missingComponentPanels.add(mcp);
 		}
 	}
-	
+
+	/**
+	 * <p>getMissingComponents.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<Component> getMissingComponents() {
 		final List<Component> components = new ArrayList<Component>();
 		for (final MissingComponentPanel mcp: missingComponentPanels) {
@@ -152,15 +176,25 @@ public class DateAndTimeController {
 		}
 		return components;
 	}
-	
+
+	/**
+	 * <p>Getter for the field <code>dateAndTime</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public DateAndTime getDateAndTime() {
 		return dateAndTime;
 	}
-	
+
+	/**
+	 * <p>Setter for the field <code>dateAndTime</code>.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public void setDateAndTime(final DateAndTime dateAndTime) {
 		this.dateAndTime = dateAndTime;
 	}
-	
+
 	/**
 	 * Assigns for each MissingComponentPanel the values
 	 */
@@ -169,23 +203,27 @@ public class DateAndTimeController {
 			mcp.assignValues();
 		}
 	}
-	
+
+	/**
+	 * <p>unassignMissingComponentValues.</p>
+	 */
 	public void unassignMissingComponentValues() {
 		for (final MissingComponentPanel mcp: missingComponentPanels) {
 			mcp.unassignValues();
 		}
 	}
-	
-	
+
+
 	/**
-	 * Method checks the <code>pattern</code> and sets the members of the 
+	 * Method checks the <code>pattern</code> and sets the members of the
 	 * controlled <code>DateAndTime</code> instance.
-	 * @param pattern
-	 * @param tableElement
+	 *
+	 * @param pattern a {@link java.lang.String} object.
+	 * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
 	 */
-	public void assignPattern(final String pattern, final TableElement tableElement) {		
+	public void assignPattern(final String pattern, final TableElement tableElement) {
 		logger.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
-		
+
     	if (pattern.indexOf("y") != -1) {
 			dateAndTime.setYear(new Year(tableElement, pattern));
 		}
@@ -208,10 +246,15 @@ public class DateAndTimeController {
 			dateAndTime.setTimeZone(new TimeZone(tableElement, pattern));
 		}
 	}
-	
+
+	/**
+	 * <p>getNextDateAndTimeWithMissingValues.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public DateAndTime getNextDateAndTimeWithMissingValues() {
 		List<MissingComponentPanel> missingComponentPanels;
-		
+
 		for (final DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
 			setDateAndTime(dateAndTime);
 			missingComponentPanels = getMissingComponentPanels();
@@ -221,7 +264,10 @@ public class DateAndTimeController {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * <p>markComponents.</p>
+	 */
 	public void markComponents() {
 		if (dateAndTime.getSeconds() != null) {
 			dateAndTime.getSeconds().mark();
@@ -245,7 +291,14 @@ public class DateAndTimeController {
 			dateAndTime.getTimeZone().mark();
 		}
 	}
-	
+
+	/**
+	 * <p>forThis.</p>
+	 *
+	 * @param measuredValuePosition a {@link org.n52.sos.importer.model.table.Cell} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.text.ParseException if any.
+	 */
 	public String forThis(final Cell measuredValuePosition) throws ParseException {
 		final int second = dateAndTime.getSeconds()!=null?dateAndTime.getSeconds().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
 		final int minute = dateAndTime.getMinute()!=null?dateAndTime.getMinute().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
@@ -254,7 +307,7 @@ public class DateAndTimeController {
 		final int month = dateAndTime.getMonth()!=null?dateAndTime.getMonth().getParsedValue(measuredValuePosition) + 1:Integer.MIN_VALUE;
 		final int year = dateAndTime.getYear()!=null?dateAndTime.getYear().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
 		final int timezone = dateAndTime.getTimeZone()!=null?dateAndTime.getTimeZone().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-		
+
 		final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
 		if (year != Integer.MIN_VALUE) {
 			ts.append(year);
@@ -290,14 +343,14 @@ public class DateAndTimeController {
 		if (second != Integer.MIN_VALUE) {
 			ts.append(second<10?"0"+second:second);
 		}
-		if (timezone != Integer.MIN_VALUE && 
+		if (timezone != Integer.MIN_VALUE &&
 				(hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) ) {
 			ts.append(convertTimeZone(timezone));
 		}
-		
+
 		return ts.toString();
 	}
-	
+
 	private String convertTimeZone(final int timeZone) {
 		if (timeZone >= 0) {
 			if (timeZone >= 10) {
@@ -313,8 +366,11 @@ public class DateAndTimeController {
 			}
 		}
 	}
-	
-	
+
+
+	/**
+	 * <p>mergeDateAndTimes.</p>
+	 */
 	public void mergeDateAndTimes() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("mergeDateAndTimes()");
@@ -342,7 +398,7 @@ public class DateAndTimeController {
 		mergedDateAndTimes.trimToSize();
 		ModelStore.getInstance().setDateAndTimes(mergedDateAndTimes);
 	}
-	
+
 	private void merge(final DateAndTime dateAndTime1, final DateAndTime dateAndTime2) {
 		if (dateAndTime1.getSeconds() == null && dateAndTime2.getSeconds() != null) {
 			dateAndTime1.setSecond(dateAndTime2.getSeconds());

@@ -39,52 +39,88 @@ import org.slf4j.LoggerFactory;
 
 /**
  * loads tooltips from the properties file
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class ToolTips {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
-	
+
 	private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips"; //$NON-NLS-1$
-	
+
 	private static ResourceBundle res;
 
 	/*
 	 * For the following keys tooltips are available
 	 */
+	/** Constant <code>CSV_File="CSVFile"</code> */
 	public static final String CSV_File = "CSVFile";
+	/** Constant <code>COLUMN_SEPARATOR="ColumnSeparator"</code> */
 	public static final String COLUMN_SEPARATOR = "ColumnSeparator";
+	/** Constant <code>COMMENT_INDICATOR="CommentIndicator"</code> */
 	public static final String COMMENT_INDICATOR = "CommentIndicator";
+	/** Constant <code>TEXT_QUALIFIER="TextQualifier"</code> */
 	public static final String TEXT_QUALIFIER = "TextQualifier";
+	/** Constant <code>MEASURED_VALUE="MeasuredValue"</code> */
 	public static final String MEASURED_VALUE = "MeasuredValue";
+	/** Constant <code>DATE_AND_TIME="DateAndTime"</code> */
 	public static final String DATE_AND_TIME = "DateAndTime";
+	/** Constant <code>POSITION="Position"</code> */
 	public static final String POSITION = "Position";
+	/** Constant <code>FEATURE_OF_INTEREST="FeatureOfInterest"</code> */
 	public static final String FEATURE_OF_INTEREST = "FeatureOfInterest";
+	/** Constant <code>OBSERVED_PROPERTY="ObservedProperty"</code> */
 	public static final String OBSERVED_PROPERTY = "ObservedProperty";
+	/** Constant <code>UNIT_OF_MEASUREMENT="UnitOfMeasurement"</code> */
 	public static final String UNIT_OF_MEASUREMENT = "UnitOfMeasurement";
+	/** Constant <code>SENSOR="Sensor"</code> */
 	public static final String SENSOR = "Sensor";
+	/** Constant <code>TEXT="Text"</code> */
 	public static final String TEXT = "Text";
+	/** Constant <code>BOOLEAN="Boolean"</code> */
 	public static final String BOOLEAN = "Boolean";
+	/** Constant <code>COUNT="Count"</code> */
 	public static final String COUNT = "Count";
+	/** Constant <code>NUMERIC_VALUE="NumericValue"</code> */
 	public static final String NUMERIC_VALUE = "NumericValue";
+	/** Constant <code>DECIMAL_SEPARATOR="DecimalSeparator"</code> */
 	public static final String DECIMAL_SEPARATOR = "DecimalSeparator";
+	/** Constant <code>THOUSANDS_SEPARATOR="ThousandsSeparator"</code> */
 	public static final String THOUSANDS_SEPARATOR = "ThousandsSeparator";
+	/** Constant <code>TIME_ZONE="UTCOffset"</code> */
 	public static final String TIME_ZONE = "UTCOffset";
+	/** Constant <code>EPSG="EPSG"</code> */
 	public static final String EPSG = "EPSG";
+	/** Constant <code>REFERENCE_SYSTEMS="ReferenceSystem"</code> */
 	public static final String REFERENCE_SYSTEMS = "ReferenceSystem";
+	/** Constant <code>DATE_AND_TIME_PATTERNS="DateAndTimePatterns"</code> */
 	public static final String DATE_AND_TIME_PATTERNS = "DateAndTimePatterns";
+	/** Constant <code>DATE_AND_TIME_GROUPS="DateAndTimeGroups"</code> */
 	public static final String DATE_AND_TIME_GROUPS = "DateAndTimeGroups";
+	/** Constant <code>POSITION_PATTERNS="PositionPatterns"</code> */
 	public static final String POSITION_PATTERNS = "PositionPatterns";
+	/** Constant <code>POSITION_GROUPS="PositionGroups"</code> */
 	public static final String POSITION_GROUPS = "PositionGroups";
+	/** Constant <code>SOS="SOS"</code> */
 	public static final String SOS = "SOS";
+	/** Constant <code>NAME="Name"</code> */
 	public static final String NAME = "Name";
+	/** Constant <code>URI="URI"</code> */
 	public static final String URI = "URI";
+	/** Constant <code>STEP6_AUTOMATIC_GENERATION_COLUMN_TOOLTIPS="Step6AutogenerationColumn"</code> */
 	public static final String STEP6_AUTOMATIC_GENERATION_COLUMN_TOOLTIPS = "Step6AutogenerationColumn";
+	/** Constant <code>OFFERING="Offering"</code> */
 	public static final String OFFERING = "Offering";
 
 	private ToolTips() {}
 
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param key a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String get(final String key) {
 		try {
 			if (res == null) {
@@ -92,15 +128,18 @@ public class ToolTips {
 			}
 			return res.getString(key);
 		} catch (final MissingResourceException e) {
-			logger.error("Value for key: \"" + 
-						key + 
-						"\" not found in resource bundle \"" 
+			logger.error("Value for key: \"" +
+						key +
+						"\" not found in resource bundle \""
 						+ res
 						+ "\".",e);
 			return '!' + key + '!';
 		}
 	}
-	
+
+	/**
+	 * <p>loadSettings.</p>
+	 */
 	public static void loadSettings() {
 		ToolTipManager.sharedInstance().setInitialDelay(500);
 		ToolTipManager.sharedInstance().setDismissDelay(50000);

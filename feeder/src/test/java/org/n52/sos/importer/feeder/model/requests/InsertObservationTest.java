@@ -46,16 +46,16 @@ public class InsertObservationTest {
 		assertThat(insertObservation.isSetAltitudeValue(), is(true));
 		assertThat(insertObservation.getAltitudeValue(),is(alt));
 	}
-	
+
 	@Test public void
 	shouldReturnFalseIfAltitudeIsNotAvailable()
 	{
 		final FeatureOfInterest foi = new FeatureOfInterest(null, null, new Position(new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},new String[] {"deg","deg",null},4326));
 		InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
 		assertThat(insertObservation.isSetAltitudeValue(), is(false));
-		
+
 		insertObservation = new InsertObservation(null, null, null, null, null, null, null, null);
 		assertThat(insertObservation.isSetAltitudeValue(), is(false));
 	}
-	
+
 }

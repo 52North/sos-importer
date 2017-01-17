@@ -44,25 +44,36 @@ import org.slf4j.LoggerFactory;
 
 /**
  * lets the user choose the position for each feature of interest
- * (either stored in a column or manually selected) 
+ * (either stored in a column or manually selected)
  * in case there are not any positions given in the CSV file
+ *
  * @author Raimund
  * FIXME already defined positions are not identified
+ * @version $Id: $Id
  */
 public class Step6cController extends StepController {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step6cController.class);
-	
+
 	private Step6cModel step6cModel;
-	
+
 	private Step6cPanel step6cPanel;
-	
+
+	/**
+	 * <p>Constructor for Step6cController.</p>
+	 */
 	public Step6cController() {	}
 
+	/**
+	 * <p>Constructor for Step6cController.</p>
+	 *
+	 * @param step6cModel a {@link org.n52.sos.importer.model.Step6cModel} object.
+	 */
 	public Step6cController(final Step6cModel step6cModel) {
 		this.step6cModel = step6cModel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		final FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
@@ -74,19 +85,20 @@ public class Step6cController extends StepController {
 		} else {
 			foi.removePositionFor(name);
 		}
-		
+
 		final String description = step6cModel.getDescription();
 		step6cPanel = new Step6cPanel(description,
 				// to indicate to the user, that this resource is generated
 				(foi.isGenerated()?Lang.l().generated() + ": " + name:name),
-				step6cModel);	
+				step6cModel);
 		step6cPanel.loadSettings();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
 		step6cPanel.saveSettings();
-		
+
 		final String name = step6cModel.getFeatureOfInterestName();
 		final Position position = step6cModel.getPosition();
 		if (name == null) {//when this feature is not contained in the table
@@ -96,38 +108,42 @@ public class Step6cController extends StepController {
 		}
 		step6cPanel = null;
 	}
-	
-	
+
+
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step6cDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step6cPanel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		final Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithUnCompletePosition();
 		if (foiWithoutPosition == null) {
 			return null;
 		}
-		
+
 		return new Step6cController(foiWithoutPosition);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		return new Step7Controller();
 	}
-	
+
 	private Step6cModel getNextFeatureOfInterestWithUnCompletePosition() {
 		final List<FeatureOfInterest> featureOfInterests = ModelStore.getInstance().getFeatureOfInterests();
 		// TODO check if the current foi is in the no data area of the column
 		for (final FeatureOfInterest foi: featureOfInterests) {
-			
+
 			if (foi.getTableElement() == null) {
 				// FIXME implement handling of generated fois
 				if (foi.getPosition() == null)
@@ -138,7 +154,7 @@ public class Step6cController extends StepController {
 			} else {
 				if (foi.getPosition() == null) {
 					for (final String name: foi.getTableElement().getValues()) {
-						
+
 						final Position p = foi.getPositionFor(name);
 						if (p == null) {
 							return new Step6cModel(foi, name);
@@ -153,6 +169,7 @@ public class Step6cController extends StepController {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		step6cModel = getNextFeatureOfInterestWithUnCompletePosition();
@@ -164,11 +181,13 @@ public class Step6cController extends StepController {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		return step6cPanel.isFinished();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step6cModel;

@@ -43,27 +43,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * label which shows the success of parsing a marked column 
+ * label which shows the success of parsing a marked column
  * in the table and shows all values which could not be parsed
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class ParseTestLabel extends JLabel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final Parseable parser;
-	
+
 	private int firstLineWithData = 0;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
-	
+
 	private final ParseTestLabel _this;
-	
+
 	private List<String> values;
-	
+
 	private final Runnable parserThread;
-	
+
+	/**
+	 * <p>Constructor for ParseTestLabel.</p>
+	 *
+	 * @param parser a {@link org.n52.sos.importer.model.Parseable} object.
+	 * @param firstLineWithData a int.
+	 */
 	public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
 		super();
 		if (logger.isTraceEnabled()) {
@@ -74,7 +81,12 @@ public class ParseTestLabel extends JLabel {
 		_this = this;
 		parserThread = new ParserThread();
 	}
-	
+
+	/**
+	 * <p>parseValues.</p>
+	 *
+	 * @param values a {@link java.util.List} object.
+	 */
 	public void parseValues(final List<String> values) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("[" + hashCode() + "]." +
@@ -86,8 +98,8 @@ public class ParseTestLabel extends JLabel {
 		BackNextController.getInstance().setNextButtonEnabled(false);
 		// call invokeLater()
 		SwingUtilities.invokeLater(parserThread);
-	}	
-	
+	}
+
 	private class ParserThread implements Runnable{
 		@Override
 		public void run() {
@@ -139,5 +151,5 @@ public class ParseTestLabel extends JLabel {
 			BackNextController.getInstance().setNextButtonEnabled(true);
 		}
 	}
-	
+
 }

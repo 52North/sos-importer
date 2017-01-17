@@ -40,9 +40,9 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 
 /**
  * Test for Issue #66: Parsing Uninx time fails
- * 
+ *
  * https://github.com/52North/sos-importer/issues/66
- * 
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
@@ -56,10 +56,10 @@ public class TestIssue66ParseUnixtime {
 		int mVColumnId = 2;
 		// Thu, 09 Jun 2016 10:29:40 GMT
 		String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
-		
+
 		// when
 		final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
-		
+
 		// then
 		Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
 		Assert.assertThat(timeStamp.getYear(), Is.is((short)2016));

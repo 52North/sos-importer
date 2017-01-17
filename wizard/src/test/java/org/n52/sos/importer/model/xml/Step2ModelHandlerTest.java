@@ -36,10 +36,17 @@ import org.n52.sos.importer.model.Step2Model;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
+ * <p>Step2ModelHandlerTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step2ModelHandlerTest {
 
+	/**
+	 * <p>shouldSetSampleBasedStartRegEx.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedStartRegEx() {
 		final String sampleBasedStartRegEx = "test-regex";
@@ -53,6 +60,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedDateOffset.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedDateOffset() {
 		final int dateOffset = 25;
@@ -67,6 +77,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleDateOffset(), is(dateOffset));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedDateExtractionRegEx.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedDateExtractionRegEx() {
 		final String dateExtractionRegEx = "test-regex-2";
@@ -82,6 +95,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleDateExtractionRegEx(), is(dateExtractionRegEx));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedDatePattern.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedDatePattern() {
 		final String datePattern = "test-regex-2";
@@ -98,6 +114,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleDatePattern(), is(datePattern));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedDataOffset.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedDataOffset() {
 		final int dataOffset = 42;
@@ -115,6 +134,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleDataOffset(), is(dataOffset));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedSampleSizeOffset.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedSampleSizeOffset() {
 		final int sampleSizeOffset = 42;
@@ -133,6 +155,9 @@ public class Step2ModelHandlerTest {
 		assertThat(importConf.getDataFile().getSampleSizeOffset(), is(sampleSizeOffset));
 	}
 
+	/**
+	 * <p>shouldSetSampleBasedSampleSizeRegEx.</p>
+	 */
 	@Test
 	public void shouldSetSampleBasedSampleSizeRegEx() {
 		final String sampleSizeRegEx = "test-regex";

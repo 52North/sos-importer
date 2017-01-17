@@ -41,17 +41,24 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for single years
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingYearPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private JLabel yearLabel;
-	
+
 	private SpinnerNumberModel yearModel = new SpinnerNumberModel(2011, 1900, 2100, 1);
 	private JSpinner yearSpinner = new JSpinner(yearModel);
-	
+
+	/**
+	 * <p>Constructor for MissingYearPanel.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public MissingYearPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -60,27 +67,32 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
 		yearSpinner.setEditor(new JSpinner.NumberEditor(yearSpinner, "#"));
 		this.add(yearSpinner);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
-		dateAndTime.setYear(new Year(yearModel.getNumber().intValue()));	
+		dateAndTime.setYear(new Year(yearModel.getNumber().intValue()));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
-		dateAndTime.setYear(null);	
+		dateAndTime.setYear(null);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		return new Year(yearModel.getNumber().intValue());
 	}
-	
+
+	/** {@inheritDoc} */
 	public void setMissingComponent(Component c) {
 		yearModel.setValue(((Year)c).getValue());
 	}

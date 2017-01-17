@@ -39,18 +39,28 @@ import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.Step7Panel;
 
 /**
+ * <p>Step7ControllerTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 @Ignore("Requires display which is not available on remote build servers")
 public class Step7ControllerTest {
 
 	private Step7Controller controller;
 
+	/**
+	 * <p>init.</p>
+	 */
 	@Before
 	public void init() {
 		controller = new Step7Controller();
 	}
 
+	/**
+	 * <p>shouldSetHunkSizeInModel.</p>
+	 */
 	@Test
 	public void shouldSetHunkSizeInModel() {
 		controller.loadSettings();
@@ -61,6 +71,9 @@ public class Step7ControllerTest {
 		assertThat(((Step7Model) controller.getModel()).getHunkSize(), is(42));
 	}
 
+	/**
+	 * <p>shouldSetSendBufferInModel.</p>
+	 */
 	@Test
 	public void shouldSetSendBufferInModel() {
 		controller.loadSettings();
@@ -71,6 +84,9 @@ public class Step7ControllerTest {
 		assertThat(((Step7Model) controller.getModel()).getSendBuffer(), is(42));
 	}
 
+	/**
+	 * <p>shouldSetImportStrategyInModel.</p>
+	 */
 	@Test
 	public void shouldSetImportStrategyInModel() {
 		controller.loadSettings();

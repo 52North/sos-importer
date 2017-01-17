@@ -39,12 +39,18 @@ import java.util.List;
  *
  * @since 0.4.0
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class CsvData {
 
 	private List<String[]> lines = new LinkedList<>();
 	private int columns = 0;
 
+	/**
+	 * <p>Setter for the field <code>lines</code>.</p>
+	 *
+	 * @param lines a {@link java.util.List} object.
+	 */
 	public void setLines(final List<String[]> lines) {
 		this.lines = lines;
 		columns = 0;
@@ -57,6 +63,11 @@ public class CsvData {
 		}
 	}
 
+	/**
+	 * <p>getRowCount.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getRowCount() {
 		if (lines == null) {
 			return 0;
@@ -64,10 +75,21 @@ public class CsvData {
 		return lines.size();
 	}
 
+	/**
+	 * <p>getColumnCount.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getColumnCount() {
 		return columns;
 	}
 
+	/**
+	 * <p>getLine.</p>
+	 *
+	 * @param i a int.
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public String[] getLine(final int i) {
 		final String[] extended = new String[columns];
 		if (lines == null) {

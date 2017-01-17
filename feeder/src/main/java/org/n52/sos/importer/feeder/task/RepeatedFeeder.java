@@ -48,8 +48,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>RepeatedFeeder class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class RepeatedFeeder extends TimerTask{
 
@@ -64,12 +66,20 @@ public class RepeatedFeeder extends TimerTask{
 
 	private static File lastUsedDateFile;
 
+	/**
+	 * <p>Constructor for RepeatedFeeder.</p>
+	 *
+	 * @param c a {@link org.n52.sos.importer.feeder.Configuration} object.
+	 * @param f a {@link java.io.File} object.
+	 * @param periodInMinutes a int.
+	 */
 	public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
 		configuration = c;
 		file = f;
 		this.periodInMinutes = periodInMinutes;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void run() {
 		LOG.trace("run()");

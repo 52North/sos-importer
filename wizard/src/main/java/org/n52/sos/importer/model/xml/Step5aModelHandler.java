@@ -40,13 +40,16 @@ import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
- * Updates the metadata of the according time&date column.
+ * Updates the metadata of the according time&amp;date column.
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step5aModelHandler implements ModelHandler<Step5aModel> {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step5aModelHandler.class);
 
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step5aModel stepModel,
 			final SosImportConfiguration sosImportConf) {
@@ -158,38 +161,38 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
 		}
 		TableElement tabElem = null;
 		if (dat.getDay() != null && dat.getDay().getTableElement() != null) {
-	
+
 			tabElem = dat.getDay().getTableElement();
-	
+
 		} else if (dat.getHour() != null
 				&& dat.getHour().getTableElement() != null) {
 			tabElem = dat.getHour().getTableElement();
-	
+
 		} else if (dat.getMinute() != null
 				&& dat.getMinute().getTableElement() != null) {
-	
+
 			tabElem = dat.getMinute().getTableElement();
-	
+
 		} else if (dat.getMonth() != null
 				&& dat.getMonth().getTableElement() != null) {
-	
+
 			tabElem = dat.getMonth().getTableElement();
-	
+
 		} else if (dat.getSeconds() != null
 				&& dat.getSeconds().getTableElement() != null) {
-	
+
 			tabElem = dat.getSeconds().getTableElement();
-	
+
 		} else if (dat.getTimeZone() != null
 				&& dat.getTimeZone().getTableElement() != null) {
-	
+
 			tabElem = dat.getTimeZone().getTableElement();
-	
+
 		} else if (dat.getYear() != null
 				&& dat.getYear().getTableElement() != null) {
-	
+
 			tabElem = dat.getYear().getTableElement();
-	
+
 		}
 		return tabElem;
 	}

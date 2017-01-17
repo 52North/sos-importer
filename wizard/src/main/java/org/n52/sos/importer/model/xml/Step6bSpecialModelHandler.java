@@ -55,13 +55,15 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  * <ol><li>a measured value column</li>
  * <li>a feature of interest</li>
  * <li>an observed property</li></ol>
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialModel> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialModelHandler.class);
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step6bSpecialModel stepModel,
 			final SosImportConfiguration sosImportConf) {
@@ -85,8 +87,8 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 			}
 		} else {
 			 sensorsXB = addiMeta.getSensorArray();
-			 
-			 findSensor: 
+
+			 findSensor:
 			 for (final SensorType aSensor : sensorsXB) {
 				if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
 					sensorXB = aSensor;
@@ -140,7 +142,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 				uriXB.setUseAsPrefix(useNameAfterPrefixAsUri);
 				if (uri != null) {
 					uriXB.setStringValue(uri.toString());
-				} else if (uriPrefix != null && 
+				} else if (uriPrefix != null &&
 						!uriPrefix.equalsIgnoreCase("") &&
 						useNameAfterPrefixAsUri) {
 					uriXB.setStringValue(uriPrefix);
@@ -212,7 +214,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
 		for (final MeasuredValue mV : relatedMVs) {
 			final TableElement tabE = mV.getTableElement();
 			final int mvColId = Helper.getColumnIdFromTableElement(tabE);
-			final org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column 
+			final org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column
 						mvColumn = Helper.getColumnById(mvColId, sosImportConf);
 			final RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
 			if (!Helper.isSensorInArray(relSensors,sensor.getXMLId())) {

@@ -50,24 +50,32 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
- * selection panel in step 3 for date&time combinations
- * @author Raimund
+ * selection panel in step 3 for {@link DateAndTime} combinations
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class DateAndTimeCombinationPanel extends CombinationPanel {
 	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
 	// 			examples/components/ComboBoxDemo2Project/src/components/
 	// 			ComboBoxDemo2.java
 	private static final long serialVersionUID = 1L;
-	
+
 	private DateAndTime dateAndTime;
-	
-	public DateAndTimeCombinationPanel(JPanel containerPanel, 
-			int firstLineWithData) {	
+
+	/**
+	 * <p>Constructor for DateAndTimeCombinationPanel.</p>
+	 *
+	 * @param containerPanel a {@link javax.swing.JPanel} object.
+	 * @param firstLineWithData a int.
+	 */
+	public DateAndTimeCombinationPanel(JPanel containerPanel,
+			int firstLineWithData) {
 		super(containerPanel,firstLineWithData);
 		this.dateAndTime = new DateAndTime();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DateAndTime getCombination() {
 		if (dateAndTime == null) {
@@ -76,31 +84,37 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 		return dateAndTime;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] getGroupItems() {
 		return ComboBoxItems.getInstance().getDateAndTimeGroups();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DefaultComboBoxModel<String> getPatterns() {
 		return EditableComboBoxItems.getInstance().getDateAndTimePatterns();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getTestValue() {
 		return new Date();
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getPatternToolTip() {
 		return ToolTips.get(ToolTips.DATE_AND_TIME_PATTERNS);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getGroupToolTip() {
 		return ToolTips.get(ToolTips.DATE_AND_TIME_GROUPS);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assign(TableElement tableElement) {
     	String[] part = getSelection().split(Constants.SEPARATOR_STRING);
@@ -115,6 +129,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 		ModelStore.getInstance().add(dtm);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unAssign(TableElement tableElement) {
 		DateAndTime dateAndTimeToRemove = null;
@@ -126,7 +141,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 			Month month = dtm.getMonth();
 			Year year = dtm.getYear();
 			TimeZone timeZone = dtm.getTimeZone();
-			
+
 			if ((second != null && tableElement.equals(second.getTableElement())) ||
 				(minute != null && tableElement.equals(minute.getTableElement())) ||
 				(hour != null && tableElement.equals(hour.getTableElement())) ||
@@ -138,7 +153,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
 				break;
 			}
 		}
-		
+
 		ModelStore.getInstance().remove(dateAndTimeToRemove);
 	}
 }

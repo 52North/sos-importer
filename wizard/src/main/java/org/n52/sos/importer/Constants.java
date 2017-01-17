@@ -39,8 +39,11 @@ import javax.xml.namespace.QName;
 import org.n52.sos.importer.view.i18n.Lang;
 
 /**
+ * <p>Constants class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * TODO move to shared module all constants that need to be shared!
+ * @version $Id: $Id
  */
 public class Constants {
 
@@ -58,14 +61,20 @@ public class Constants {
         SweArrayObservationWithSplitExtension;
     }
 
+	/** Constant <code>BOOLEAN="BOOLEAN"</code> */
 	public static final String BOOLEAN = "BOOLEAN";
+	/** Constant <code>COMBINATION="COMBINATION"</code> */
 	public static final String COMBINATION = "COMBINATION";
+	/** Constant <code>COUNT="COUNT"</code> */
 	public static final String COUNT = "COUNT";
+	/** Constant <code>DATE_FORMAT_STRING="yyyy-MM-dd'T'HH:mm:ssZ"</code> */
 	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	/** Constant <code>DEBUG_BORDER</code> */
 	public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
 	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE = 238;
 	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN = 238;
 	private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_RED = 238;
+	/** Constant <code>DEFAULT_COLOR_BACKGROUND</code> */
 	public static final Color DEFAULT_COLOR_BACKGROUND = Color.getHSBColor(
 			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN,
@@ -76,73 +85,123 @@ public class Constants {
 			Color.RGBtoHSB(DEFAULT__COLOR_BACKGROUND_COMPONENT_RED,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN,
 					DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE, null)[2]);
+	/** Constant <code>DEFAULT_LABEL_FONT</code> */
 	public static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.PLAIN, 12);
+	/** Constant <code>DEFAULT_LABEL_FONT_BOLD</code> */
 	public static final Font DEFAULT_LABEL_FONT_BOLD =  new Font("SansSerif", Font.BOLD, 12);
+	/** Constant <code>DEFAULT_STEP_TITLE_FONT</code> */
 	public static final Font DEFAULT_STEP_TITLE_FONT = new Font("SansSerif", Font.BOLD, 14);
+	/** Constant <code>NO_INPUT_INT=Integer.MIN_VALUE</code> */
 	public static final int NO_INPUT_INT = Integer.MIN_VALUE;
+	/** Constant <code>NUMERIC="NUMERIC"</code> */
 	public static final String NUMERIC = "NUMERIC";
 	/**
 	 * Is used to distinguish between line number and content
 	 */
 	public static final String RAW_DATA_SEPARATOR = ":";
+	/** Constant <code>SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START</code> */
 	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
+	/** Constant <code>SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END</code> */
 	public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = "' is already registered at ths SOS!";
+	/** Constant <code>SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE</code> */
 	public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = "exceptionCode=\"NoApplicableCode\"";
+	/** Constant <code>XML_SCHEMA_PREFIX="xsi"</code> */
 	public static final String XML_SCHEMA_PREFIX = "xsi";
+	/** Constant <code>XML_SCHEMA_NAMESPACE="http://www.w3.org/2001/XMLSchema-instan"{trunked}</code> */
 	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
+	/** Constant <code>XML_SCHEMALOCATION_QNAME</code> */
 	public static final QName XML_SCHEMALOCATION_QNAME = new QName(XML_SCHEMA_NAMESPACE,"schemaLocation",XML_SCHEMA_PREFIX);
+	/** Constant <code>XML_SOS_IMPORTER_SCHEMA_LOCATION="https://raw.githubusercontent.com/52Nor"{trunked}</code> */
 	public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = "https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd";
+	/** Constant <code>UNICODE_OFFERING_PREFIX="_offering-"</code> */
 	public static final String UNICODE_OFFERING_PREFIX = "_offering-";
+	/** Constant <code>SEPARATOR_STRING="SEP"</code> */
 	public final static String SEPARATOR_STRING = "SEP";
+	/** Constant <code>SPACE_STRING="Lang.l().spaceString()"</code> */
 	public static final String SPACE_STRING = Lang.l().spaceString();
+	/** Constant <code>STRING_REPLACER="-@@@-"</code> */
 	public static final String STRING_REPLACER = "-@@@-";
+	/** Constant <code>TEXT="TEXT"</code> */
 	public static final String TEXT = "TEXT";
+	/** Constant <code>UNIX_TIME="UNIX_TIME"</code> */
 	public static final String UNIX_TIME = "UNIX_TIME";
+	/** Constant <code>VERSION="0.4"</code> */
 	public static final String VERSION = "0.4";
+	/** Constant <code>WELCOME_RES_CONTENT_TYPE="text/html"</code> */
 	public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
+	/** Constant <code>XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX=".52n-sos-import-config.xml"</code> */
 	public static final String XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX = ".52n-sos-import-config.xml";
+	/** Constant <code>DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD</code> */
 	public static final Font DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD = new Font("SansSerif", Font.BOLD, 12);
+	/** Constant <code>DEFAULT_HIGHLIGHT_COLOR</code> */
 	public static final Color DEFAULT_HIGHLIGHT_COLOR = Color.LIGHT_GRAY;
+	/** Constant <code>URL_CONNECT_TIMEOUT_SECONDS=5</code> */
 	public static final int URL_CONNECT_TIMEOUT_SECONDS = 5;
+	/** Constant <code>URL_CONNECT_READ_TIMEOUT_SECONDS=5</code> */
 	public static final int URL_CONNECT_READ_TIMEOUT_SECONDS = 5;
+	/** Constant <code>XML_BINDINGS_NAMESPACE="http://52north.org/sensorweb/sos/import/0.4/"</code> */
 	public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.4/";
+	/** Constant <code>QNAME_GENERATED_RESOURCE</code> */
 	public static final QName QNAME_GENERATED_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedResource");
+	/** Constant <code>QNAME_GENERATED_SPATIAL_RESOURCE</code> */
 	public static final QName QNAME_GENERATED_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedSpatialResource");
+	/** Constant <code>QNAME_MANUAL_RESOURCE</code> */
 	public static final QName QNAME_MANUAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE,"ManualResource");
+	/** Constant <code>QNAME_MANUAL_SPATIAL_RESOURCE</code> */
 	public static final QName QNAME_MANUAL_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE,"SpatialResource");
+	/** Constant <code>DECIMAL_SEPARATORS="{.,,}"</code> */
 	public static final String[] DECIMAL_SEPARATORS = {".",","};
+	/** Constant <code>DEFAULT_LATITUDE_UNIT="deg"</code> */
 	public static final String DEFAULT_LATITUDE_UNIT = "deg";
+	/** Constant <code>DEFAULT_LONGITUDE_UNIT="deg"</code> */
 	public static final String DEFAULT_LONGITUDE_UNIT = "deg";
+	/** Constant <code>DEFAULT_ALTITUDE_UNIT="m"</code> */
 	public static final String DEFAULT_ALTITUDE_UNIT = "m";
 	// TODO read from file!
+	/** Constant <code>UNICODE_REPLACER='_'</code> */
 	public static final char UNICODE_REPLACER = '_';
+	/** Constant <code>UNICODE_ONLY_REPLACER_LEFT_PATTERN</code> */
 	public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
+	/** Constant <code>UNICODE_FOI_PREFIX="_foi-"</code> */
 	public static final String UNICODE_FOI_PREFIX = "_foi-";
+	/** Constant <code>SOS_GET_GET_CAPABILITIES_REQUEST="?service=SOS&amp;REQUEST=GetCapabilities&amp;AcceptVersions=1.0.0"</code> */
 	public static final String SOS_GET_GET_CAPABILITIES_REQUEST = "?service=SOS&REQUEST=GetCapabilities&AcceptVersions=1.0.0";
+	/** Constant <code>DEFAULT_EPSG_CODE=4326</code> */
 	public static final int DEFAULT_EPSG_CODE = 4326;
+	/** Constant <code>DEFAULT_HEIGHT_FOI_POSITION=0.0</code> */
 	public static final double DEFAULT_HEIGHT_FOI_POSITION = 0.0;
+	/** Constant <code>DEFAULT_HEIGHT_UNIT_FOI_POSITION="m"</code> */
 	public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
+	/** Constant <code>DEFAULT_UNIT_FOI_POSITION="deg"</code> */
 	public static final String DEFAULT_UNIT_FOI_POSITION = "deg";
 
+	/** Constant <code>DEFAULT_FEEDER_JAR_NAME_START="52n-sos-importer-feeder-"</code> */
 	public static final String DEFAULT_FEEDER_JAR_NAME_START = "52n-sos-importer-feeder-";
 
+	/** Constant <code>DIALOG_WIDTH=800</code> */
 	public final static int DIALOG_WIDTH = 800;
 
+	/** Constant <code>DIALOG_HEIGHT=600</code> */
 	public final static int DIALOG_HEIGHT = 600;
 
+	/** Constant <code>WMS_DEFAULT_BACKGROUND_LAYER_NAME="OSMBackground"</code> */
 	public static final String WMS_DEFAULT_BACKGROUND_LAYER_NAME = "OSMBackground";
 
 
 	/*
 	 * CHANGEABLE VALUES
 	 */
+	/** Constant <code>GUI_DEBUG=false</code> */
 	public static boolean GUI_DEBUG = false;
+	/** Constant <code>DECIMAL_SEPARATOR='.'</code> */
 	public static char DECIMAL_SEPARATOR = '.';
+	/** Constant <code>THOUSANDS_SEPARATOR=','</code> */
 	public static char THOUSANDS_SEPARATOR = ',';
 
 	/**
 	 * TODO implement loading of language parameter from configuration file
-	 * @return {@link org.n52.sos.importer.view.i18n.Lang.l().getClass().getSimpleName()}
+	 *
+	 * @return The simple name string of the currently loaded {@link Lang} implementation.
 	 */
 	public static String language() {
 		return Lang.l().getClass().getSimpleName();

@@ -43,12 +43,15 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  * <li>CsvMeta.FirstLineWithData</li>
  * <li>CsvMeta.UseHeader</li>
  * </ul>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step2ModelHandler implements ModelHandler<Step2Model> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step2ModelHandler.class);
 
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step2Model stepModel,
 			final SosImportConfiguration sosImportConf) {

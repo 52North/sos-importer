@@ -33,35 +33,56 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 /**
- * @author http://www.java-tips.org/java-se-tips/javax.swing/apply-special-filter-to-a-jtextfield.html
+ * <p>JTextFieldFilter class.</p>
  *
+ * @author http://www.java-tips.org/java-se-tips/javax.swing/apply-special-filter-to-a-jtextfield.html
+ * @version $Id: $Id
  */
 public class JTextFieldFilter extends PlainDocument {
 
 	private static final long serialVersionUID = 1L;
+	/** Constant <code>LOWERCASE="abcdefghijklmnopqrstuvwxyz"</code> */
 	public static final String LOWERCASE  =
 		"abcdefghijklmnopqrstuvwxyz";
+	/** Constant <code>UPPERCASE="ABCDEFGHIJKLMNOPQRSTUVWXYZ"</code> */
 	public static final String UPPERCASE  =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/** Constant <code>ALPHA="LOWERCASE + UPPERCASE"</code> */
 	public static final String ALPHA   =
 		LOWERCASE + UPPERCASE;
+	/** Constant <code>NUMERIC="0123456789"</code> */
 	public static final String NUMERIC =
 		"0123456789";
+	/** Constant <code>FLOAT="NUMERIC + ."</code> */
 	public static final String FLOAT =
 		NUMERIC + ".";
+	/** Constant <code>ALPHA_NUMERIC="ALPHA + NUMERIC"</code> */
 	public static final String ALPHA_NUMERIC =
 		ALPHA + NUMERIC;
 
 	protected String acceptedChars = null;
 	protected boolean negativeAccepted = false;
 
+	/**
+	 * <p>Constructor for JTextFieldFilter.</p>
+	 */
 	public JTextFieldFilter() {
 		this(ALPHA_NUMERIC);
 	}
+	/**
+	 * <p>Constructor for JTextFieldFilter.</p>
+	 *
+	 * @param acceptedchars a {@link java.lang.String} object.
+	 */
 	public JTextFieldFilter(String acceptedchars) {
 		acceptedChars = acceptedchars;
 	}
 
+	/**
+	 * <p>Setter for the field <code>negativeAccepted</code>.</p>
+	 *
+	 * @param negativeaccepted a boolean.
+	 */
 	public void setNegativeAccepted(boolean negativeaccepted) {
 		if (acceptedChars.equals(NUMERIC) ||
 				acceptedChars.equals(FLOAT) ||
@@ -71,6 +92,7 @@ public class JTextFieldFilter extends PlainDocument {
 		}
 	}
 
+	/** {@inheritDoc} */
 	public void insertString
 	(int offset, String  str, AttributeSet attr)
 	throws BadLocationException {

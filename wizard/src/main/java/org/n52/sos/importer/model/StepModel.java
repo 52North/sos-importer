@@ -29,8 +29,10 @@
 package org.n52.sos.importer.model;
 
 /**
- * @author e.h.juerrens@52north.org
+ * <p>StepModel interface.</p>
  *
+ * @author e.h.juerrens@52north.org
+ * @version $Id: $Id
  */
 public interface StepModel {
 

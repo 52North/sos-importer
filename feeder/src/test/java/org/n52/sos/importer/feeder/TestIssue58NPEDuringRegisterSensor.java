@@ -40,26 +40,26 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 
 /**
  * Test for Issue #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
- * 
+ *
  * https://github.com/52North/sos-importer/issues/58
- * 
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public class TestIssue58NPEDuringRegisterSensor {
-	
+
 
 	@Test
 	public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
 		// given
 		final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
 		DataFile dataFile = new DataFile(config, config.getDataFile());
-		
+
 		// when
 		int mvColumnId = 4;
 		String[] values = { "TemperaturesensorAdrian", "TemperaturesensorAdrian", "20.10.2016 11:50", "48.14935 11.567826", "Temperature", "CEL", "24" };
 		FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
-		
+
 		// then
 		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
 		Assert.assertThat(foi.getUri(), Is.is("TemperaturesensorAdrian"));

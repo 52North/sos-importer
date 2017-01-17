@@ -46,27 +46,33 @@ import org.slf4j.LoggerFactory;
 
 /**
  * consists of a text field for the latitude and a combobox for the units
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingLatitudePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MissingLatitudePanel.class);
 
 	private final Position position;
-	
+
 	private final JLabel latitudeLabel;
 	private final JTextField latitudeTextField = new JTextField(8);
 	private final JLabel latitudeUnitLabel;
 	private final JComboBox<String> latitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
-	
+
+	/**
+	 * <p>Constructor for MissingLatitudePanel.</p>
+	 *
+	 * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+	 */
 	public MissingLatitudePanel(final Position position) {
 		super();
 		this.position = position;
 		latitudeTextField.setText("0");
-		
+
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
 		this.add(latitudeLabel);
@@ -75,7 +81,8 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		this.add(latitudeUnitLabel);
 		this.add(latitudeUnitComboBox);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
 		final double value = Double.parseDouble(latitudeTextField.getText());
@@ -83,12 +90,14 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		final Latitude l = new Latitude(value, unit);
 		position.setLatitude(l);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
 		position.setLatitude(null);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		String latVal = null;
@@ -105,7 +114,8 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		}
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		final double value = Double.parseDouble(latitudeTextField.getText());
@@ -113,6 +123,7 @@ public class MissingLatitudePanel extends MissingComponentPanel {
 		return new Latitude(value, unit);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(final Component c) {
 		final Latitude latitude = (Latitude)c;

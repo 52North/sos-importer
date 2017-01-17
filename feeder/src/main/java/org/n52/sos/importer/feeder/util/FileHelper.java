@@ -39,23 +39,43 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>FileHelper class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class FileHelper {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
-	
+
+	/**
+	 * <p>createFileInImporterHomeWithUniqueFileName.</p>
+	 *
+	 * @param fileName a {@link java.lang.String} object.
+	 * @return a {@link java.io.File} object.
+	 */
 	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
 		LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
 		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
 	}
 
+	/**
+	 * <p>cleanPathToCreateFileName.</p>
+	 *
+	 * @param fileName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String cleanPathToCreateFileName(final String fileName) {
 		LOG.trace("cleanPathToCreateFileName({})", fileName);
 		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
 	}
-	
+
+	/**
+	 * <p>shortenStringViaMD5Hash.</p>
+	 *
+	 * @param longString a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String shortenStringViaMD5Hash(final String longString) {
 		try {
 			LOG.trace("shortenStringViaMD5Hash({})", longString);
@@ -70,6 +90,11 @@ public class FileHelper {
 		}
 	}
 
+	/**
+	 * <p>getHome.</p>
+	 *
+	 * @return a {@link java.io.File} object.
+	 */
 	public static File getHome() {
 		final String homePath = System.getProperty("user.home") + File.separator
 				+ ".SOSImporter" + File.separator;
@@ -80,5 +105,5 @@ public class FileHelper {
 		}
 		return home;
 	}
-	
+
 }

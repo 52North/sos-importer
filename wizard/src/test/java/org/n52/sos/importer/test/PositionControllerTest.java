@@ -39,20 +39,27 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class to test the methods of the position controller
- * @author e.h.juerrens@52north.org
  *
+ * @author e.h.juerrens@52north.org
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class PositionControllerTest {
 
-	private static final Logger logger = 
+	private static final Logger logger =
 			LoggerFactory.getLogger(PositionControllerTest.class);
 
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 */
 	public static void main(final String[] args) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Start Test");
 		}
 		final int firstLineWithData = 1;
-		final String g = "1", 
+		final String g = "1",
 				pa1 = "LAT",
 				pa2 = "LON";
 		//

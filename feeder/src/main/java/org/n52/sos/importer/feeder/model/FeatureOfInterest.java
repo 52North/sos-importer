@@ -29,17 +29,21 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>FeatureOfInterest class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public final class FeatureOfInterest extends Resource {
-	
+
 	private Position p;
 
 	/**
-	 * @param name
-	 * @param uri
-	 * @param p
+	 * <p>Constructor for FeatureOfInterest.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param uri a {@link java.lang.String} object.
+	 * @param p a {@link org.n52.sos.importer.feeder.model.Position} object.
 	 */
 	public FeatureOfInterest(String name,
 			String uri,
@@ -49,6 +53,8 @@ public final class FeatureOfInterest extends Resource {
 	}
 
 	/**
+	 * <p>getPosition.</p>
+	 *
 	 * @return the p
 	 */
 	public Position getPosition() {
@@ -58,6 +64,7 @@ public final class FeatureOfInterest extends Resource {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return String.format(
@@ -66,5 +73,5 @@ public final class FeatureOfInterest extends Resource {
 				getName(),
 				getUri());
 	}
-	
+
 }

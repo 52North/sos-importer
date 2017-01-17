@@ -29,32 +29,56 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Abstract Resource class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public abstract class Resource {
-	
+
 	private String name;
-	
+
 	private String uri;
 
+	/**
+	 * <p>Constructor for Resource.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param uri a {@link java.lang.String} object.
+	 */
 	public Resource(String name, String uri) {
 		this.name = name;
 		this.uri = uri;
 	}
 
+	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		return name;
 	}
-	
+
+	/**
+	 * <p>Setter for the field <code>name</code>.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * <p>Getter for the field <code>uri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getUri() {
 		return uri;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return String.format("%s [name=%s, uri=%s]",
@@ -63,6 +87,7 @@ public abstract class Resource {
 				uri);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -72,6 +97,7 @@ public abstract class Resource {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -100,7 +126,7 @@ public abstract class Resource {
 		}
 		return true;
 	}
-	
-	
+
+
 
 }

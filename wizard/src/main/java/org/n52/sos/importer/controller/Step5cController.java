@@ -44,103 +44,123 @@ import org.slf4j.LoggerFactory;
 
 /**
  * lets the user add missing metadata for identified positions
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step5cController extends StepController {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step5cController.class);
-	
+
 	private Step5cModel step5cModel;
-	
+
 	private Step5Panel step5Panel;
-	
+
 	private PositionController positionController;
-	
+
 	private final TableController tableController;
-	
+
 	private final int firstLineWithData;
-	
+
+	/**
+	 * <p>Constructor for Step5cController.</p>
+	 *
+	 * @param firstLineWithData a int.
+	 */
 	public Step5cController(final int firstLineWithData) {
 		this.firstLineWithData = firstLineWithData;
 		tableController = TableController.getInstance();
 	}
-	
+
+	/**
+	 * <p>Constructor for Step5cController.</p>
+	 *
+	 * @param step5cModel a {@link org.n52.sos.importer.model.Step5cModel} object.
+	 * @param firstLineWithData a int.
+	 */
 	public Step5cController(final Step5cModel step5cModel,final int firstLineWithData) {
 		this(firstLineWithData);
 		this.step5cModel = step5cModel;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
-	public void loadSettings() {			
+	public void loadSettings() {
 		final Position position = step5cModel.getPosition();
 		positionController = new PositionController(position);
 		final List<Component> components = step5cModel.getMissingPositionComponents();
 		positionController.setMissingComponents(components);
 		positionController.unassignMissingComponentValues();
-		
+
 		final String description = step5cModel.getDescription();
-		final List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();	
+		final List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
 		step5Panel = new Step5Panel(description, missingComponentPanels);
-		
+
 		tableController.turnSelectionOff();
 		positionController.markComponents();
 	}
-	
-	
+
+
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
-		positionController.assignMissingComponentValues();	
-		
+		positionController.assignMissingComponentValues();
+
 		final List<Component> components = positionController.getMissingComponents();
 		step5cModel.setMissingPositionComponents(components);
-		
+
 		tableController.clearMarkedTableElements();
 		tableController.turnSelectionOn();
-		
-		positionController = null;
-		step5Panel = null;
-	}
-	
-	@Override
-	public void back() {
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
-		
+
 		positionController = null;
 		step5Panel = null;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void back() {
+		tableController.clearMarkedTableElements();
+		tableController.turnSelectionOn();
+
+		positionController = null;
+		step5Panel = null;
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		return positionController.checkMissingComponentValues();
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step5cDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step5Panel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		positionController = new PositionController();
 		final Position p = positionController.getNextPositionWithMissingValues();
-		
+
 		if (p == null) {
 			logger.info("Skip Step 5c since there are not any Positions" +
 					" with missing values");
 			return false;
 		}
-		
+
 		step5cModel = new Step5cModel(p);
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		positionController = new PositionController();
@@ -148,16 +168,18 @@ public class Step5cController extends StepController {
 		if (p != null) {
 			return new Step5cController(new Step5cModel(p),firstLineWithData);
 		}
-		
+
 		positionController = null;
-		return null;	
+		return null;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		return new Step6aController(firstLineWithData);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step5cModel;

@@ -53,8 +53,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * chooses a CSV file
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step1Controller extends StepController {
 
@@ -68,15 +69,20 @@ public class Step1Controller extends StepController {
 
 	private int csvFileRowCount = -1;
 
+	/**
+	 * <p>Constructor for Step1Controller.</p>
+	 */
 	public Step1Controller() {
 		step1Model = new Step1Model();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step1Description();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		//if (step1Panel == null) {
@@ -106,6 +112,7 @@ public class Step1Controller extends StepController {
 		step1Panel.setFileEncoding(step1Model.getFileEncoding());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
 		if (step1Panel != null) {
@@ -124,6 +131,9 @@ public class Step1Controller extends StepController {
 		step1Panel = null;
 	}
 
+	/**
+	 * <p>browseButtonClicked.</p>
+	 */
 	public void browseButtonClicked() {
 		final JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new CSVFileFilter());
@@ -136,6 +146,9 @@ public class Step1Controller extends StepController {
 	/*
 	 * Checks the validity of the next button enablement after switching the
 	 * feeding type cards.
+	 */
+	/**
+	 * <p>checkInputFileValue.</p>
 	 */
 	public void checkInputFileValue() {
 		if (step1Panel.getCSVFilePath() != null &&
@@ -159,16 +172,19 @@ public class Step1Controller extends StepController {
 	    }
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step1Panel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 
@@ -348,11 +364,13 @@ public class Step1Controller extends StepController {
 		return tmpCSVFileContent = sb.toString();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		final Step2Model s2m = new Step2Model(tmpCSVFileContent,csvFileRowCount);
@@ -361,6 +379,7 @@ public class Step1Controller extends StepController {
 		return new Step2Controller(s2m);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step1Model;

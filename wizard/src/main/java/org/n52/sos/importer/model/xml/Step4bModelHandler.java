@@ -47,16 +47,17 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 /**
  * During this step, the relations between resource columns and the measured
  * value column are saved.
- * 
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * 
- * TODO check functionality
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ *
+ * TODO check functionality
+ * @version $Id: $Id
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step4bModelHandler.class);
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step4bModel s4M,
 			final SosImportConfiguration sosImportConf) {
@@ -96,24 +97,24 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		for (final Column column : availableCols) {
 			// check for correct column id
 			if(isIntInArray(relatedColumnsIds, column.getNumber()) ) {
-				// add column to result set	
+				// add column to result set
 				relCol.add(column);
 			}
 		}
 		relCol.trimToSize();
 		relatedCols = relCol.toArray(new Column[relCol.size()]);
-		
+
 		// identify type of resource that is linked to the given row and or columns
 		res = s4M.getResource();
-		
+
 		// add relation to the related column
 		addRelatedResourceColumn(res, relatedCols);
-		
+
 	}
 
 	/**
 	 * For each <code>Column</code> in the array <code>relatedCols</code> add
-	 * a related resource 
+	 * a related resource
 	 * @param res the resource to add
 	 * @param relatedCols the column where to add the resource
 	 */
@@ -175,7 +176,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			/*
 			 * 	UNIT_OF_MEASUREMENT
 			 */
-			if (res instanceof 
+			if (res instanceof
 					org.n52.sos.importer.model.resources.UnitOfMeasurement) {
 				final RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
 				addNew = !isUOMInArray(relUOMs, colId);
@@ -192,7 +193,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			/*
 			 * 	OBSERVED_PROPERTY
 			 */
-			if (res instanceof 
+			if (res instanceof
 					org.n52.sos.importer.model.resources.ObservedProperty) {
 				final RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
 				addNew = !isObsPropInArray(relObsProps, colId);
@@ -209,7 +210,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Check if the column is already referenced.
 	 * @param relFois
@@ -221,14 +222,14 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 			logger.trace("isFoiInArray()");
 		}
 		for (final RelatedFOI relatedFOI : relFois) {
-			if (relatedFOI.isSetNumber() && 
+			if (relatedFOI.isSetNumber() &&
 					relatedFOI.getNumber() == colId) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private boolean isIntInArray(final int[] array, final int i) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\t\t\tisIntInArray()");
@@ -240,40 +241,40 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 		}
 		return false;
 	}
-	
+
 	private boolean isObsPropInArray(final RelatedObservedProperty[] relObsProps,
 			final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isObsPropInArray()");
 		}
 		for (final RelatedObservedProperty relatedObsProp : relObsProps) {
-			if (relatedObsProp.isSetNumber() && 
+			if (relatedObsProp.isSetNumber() &&
 					relatedObsProp.getNumber() == colId) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private boolean isSensorInArray(final RelatedSensor[] relSensors, final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isSensorInArray()");
 		}
 		for (final RelatedSensor relatedSensor : relSensors) {
-			if (relatedSensor.isSetNumber() && 
+			if (relatedSensor.isSetNumber() &&
 					relatedSensor.getNumber() == colId) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private boolean isUOMInArray(final RelatedUnitOfMeasurement[] relUOMs, final int colId) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("isUOMInArray()");
 		}
 		for (final RelatedUnitOfMeasurement relatedUOM : relUOMs) {
-			if (relatedUOM.isSetNumber() && 
+			if (relatedUOM.isSetNumber() &&
 					relatedUOM.getNumber() == colId) {
 				return true;
 			}

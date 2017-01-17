@@ -76,9 +76,9 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
 /**
  * Class holds the datafile and provides easy to use interfaces to get certain
  * required resources.
- * 
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class DataFile {
 
@@ -90,6 +90,12 @@ public class DataFile {
 
 	private final File file;
 
+	/**
+	 * <p>Constructor for DataFile.</p>
+	 *
+	 * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
+	 * @param file a {@link java.io.File} object.
+	 */
 	public DataFile(final Configuration configuration, final File file) {
 		this.configuration = configuration;
 		this.file = file;
@@ -99,7 +105,8 @@ public class DataFile {
 	 * Checks if the file is available and can be read. All errors like not
 	 * available, not a file, and not readable are logged to
 	 * <code>LOG.error()</code>.
-	 * @return <code>true</code>, if the Datafile is a file and can be read,<br />
+	 *
+	 * @return <code>true</code>, if the Datafile is a file and can be read,<br>
 	 * 			else <code>false</code>.
 	 */
 	public boolean isAvailable() {
@@ -166,8 +173,9 @@ public class DataFile {
 	/**
 	 * Returns a CSVReader instance for the current DataFile using the configuration
 	 * including the defined values for: first line with data, separator, escape, and text qualifier.
+	 *
 	 * @return a <code>CSVReader</code> instance
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public CsvParser getCSVReader() throws IOException {
 		LOG.trace("getCSVReader()");
@@ -209,19 +217,32 @@ public class DataFile {
 	}
 
 	/**
-	 * @see {@link Configuration#getMeasureValueColumnIds()}
+	 * <p>getMeasuredValueColumnIds.</p>
+	 *
+	 * @see Configuration#getMeasureValueColumnIds()
+	 * @return an array of int.
 	 */
 	public int[] getMeasuredValueColumnIds() {
 		return configuration.getMeasureValueColumnIds();
 	}
 
 	/**
-	 * @see {@link Configuration#getFirstLineWithData()}
+	 * <p>getFirstLineWithData.</p>
+	 *
+	 * @see Configuration#getFirstLineWithData()
+	 * @return a int.
 	 */
 	public int getFirstLineWithData() {
 		return configuration.getFirstLineWithData();
 	}
 
+	/**
+	 * <p>getSensorForColumn.</p>
+	 *
+	 * @param mvColumnId a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link Sensor} object.
+	 */
 	public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
 		LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
 		// check for sensor column and return new sensor
@@ -242,8 +263,10 @@ public class DataFile {
 			if (sensorType.getResource() instanceof GeneratedResourceType) {
 				final GeneratedResourceType gRT = (GeneratedResourceType) sensorType.getResource();
 				final String[] a = getUriAndNameFromGeneratedResourceType(
-						gRT.isSetConcatString()?gRT.getConcatString():null, // concatstring
-						gRT.isSetURI()?gRT.getURI().getStringValue():null, // uri
+						// concatstring
+						gRT.isSetConcatString()?gRT.getConcatString():null,
+						// uri
+						gRT.isSetURI()?gRT.getURI().getStringValue():null,
 						gRT.isSetURI()&&gRT.getURI().isSetUseAsPrefix()?gRT.getURI().getUseAsPrefix():false, // useUriAsPrefix
 						gRT.getNumberArray(),
 						values
@@ -259,6 +282,14 @@ public class DataFile {
 		return sensor;
 	}
 
+	/**
+	 * <p>getFoiForColumn.</p>
+	 *
+	 * @param mvColumnId a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link org.n52.sos.importer.feeder.model.FeatureOfInterest} object.
+	 * @throws java.text.ParseException if any.
+	 */
 	public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
 		LOG.trace(String.format("getFoiForColumn(%d,%s)",
 					mvColumnId,
@@ -315,7 +346,7 @@ public class DataFile {
 	}
 
 	/**
-	 * @return result[0] := newName<br /> result[1] := originaleName
+	 * @return result[0] := newName<br> result[1] := originaleName
 	 */
 	private String[] createCleanNCName(final Resource res) {
 		// implement check for NCName compliance and remove bad values
@@ -340,6 +371,14 @@ public class DataFile {
 		return result;
 	}
 
+	/**
+	 * <p>getValue.</p>
+	 *
+	 * @param mVColumn a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link java.lang.Object} object.
+	 * @throws java.text.ParseException if any.
+	 */
 	public Object getValue(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace(String.format("getValue(%s,%s)",
 				mVColumn,
@@ -378,6 +417,14 @@ public class DataFile {
 		return null;
 	}
 
+	/**
+	 * <p>getTimeStamp.</p>
+	 *
+	 * @param mVColumn a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+	 * @throws java.text.ParseException if any.
+	 */
 	public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
 		LOG.trace("getTimeStamp()");
 		// if RelatedDateTimeGroup is set for mvColumn -> get group id
@@ -472,9 +519,9 @@ public class DataFile {
 		ts.set(Long.parseLong(values[cols[0].getNumber()])*1000);
 	}
 
-	private boolean isUnixTime(final Column[] cols) { 
+	private boolean isUnixTime(final Column[] cols) {
 		// PRE: 1 column and TYPE DATE_TIME and metadata:type:UNIX_TIME
-		return cols.length == 1 && 
+		return cols.length == 1 &&
 				containsUnixTimeType(cols[0].getMetadataArray());
 	}
 
@@ -563,30 +610,29 @@ public class DataFile {
 	}
 
 	/**
-	 * Case A.1: RelatedUnitOfMeasurement is a IDref<br />
-	 * 			-> Case A.1.1 or A.1.2<br />
-	 * <br />
-	 * Case A.1.1: Related UOM resource is manual<br />
-	 * 			-> get code from name element <br />
-	 * 				UnitOfMeasurement.ManualResource.Name<br />
-	 * <br />
-	 * Case A.1.2: Related UOM resource is generated<br />
-	 * 			-> generate name and return its value<br />
-	 * <br />
+	 * Case A.1: RelatedUnitOfMeasurement is a IDref<br>
+	 * 			-&gt; Case A.1.1 or A.1.2<br>
+	 * <br>
+	 * Case A.1.1: Related UOM resource is manual<br>
+	 * 			-&gt; get code from name element <br>
+	 * 				UnitOfMeasurement.ManualResource.Name<br>
+	 * <br>
+	 * Case A.1.2: Related UOM resource is generated<br>
+	 * 			-&gt; generate name and return its value<br>
+	 * <br>
 	 *
-	 * Case A.2: RelatedUnitOfMeasurement is a number<br />
-	 * 			-> get information from the column<br />
-	 * 			-> return values[number]<br />
-	 * <br />
-	 * Case B: RelatedUnitOfMeasurement is not set<br />
-	 * 			-> Check for column with Type == "UOM"<br />
-	 * 			-> get number of this column<br />
-	 * 			-> return values[number]<br />
+	 * Case A.2: RelatedUnitOfMeasurement is a number<br>
+	 * 			-&gt; get information from the column<br>
+	 * 			-&gt; return values[number]<br>
+	 * <br>
+	 * Case B: RelatedUnitOfMeasurement is not set<br>
+	 * 			-&gt; Check for column with Type == "UOM"<br>
+	 * 			-&gt; get number of this column<br>
+	 * 			-&gt; return values[number]<br>
 	 *
-	 * @param mVColumnId
-	 * @param values
-	 * @return
-	 *
+	 * @param mVColumnId a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link UnitOfMeasurement} object.
 	 */
 	public UnitOfMeasurement getUnitOfMeasurement(final int mVColumnId, final String[] values) {
 		LOG.trace("getUnitOfMeasurement()");
@@ -643,30 +689,29 @@ public class DataFile {
 	}
 
 	/**
-	 * Case A.1: RelatedObserverdProperty is a IDref<br />
-	 * 			-> Case A.1.1 or A.1.2<br />
-	 * <br />
-	 * Case A.1.1: RelatedObserverdProperty resource is manual<br />
-	 * 			-> get code from name element <br />
-	 * 				ObserverdProperty.ManualResource.Name<br />
-	 * <br />
-	 * Case A.1.2: RelatedObserverdProperty resource is generated<br />
-	 * 			-> generate name and return its value<br />
-	 * <br />
+	 * Case A.1: RelatedObserverdProperty is a IDref<br>
+	 * 			-&gt; Case A.1.1 or A.1.2<br>
+	 * <br>
+	 * Case A.1.1: RelatedObserverdProperty resource is manual<br>
+	 * 			-&gt; get code from name element <br>
+	 * 				ObserverdProperty.ManualResource.Name<br>
+	 * <br>
+	 * Case A.1.2: RelatedObserverdProperty resource is generated<br>
+	 * 			-&gt; generate name and return its value<br>
+	 * <br>
 	 *
-	 * Case A.2: RelatedObserverdProperty is a number<br />
-	 * 			-> get information from the column<br />
-	 * 			-> return values[number]<br />
-	 * <br />
-	 * Case B: RelatedObserverdProperty is not set<br />
-	 * 			-> Check for column with Type == "UOM"<br />
-	 * 			-> get number of this column<br />
-	 * 			-> return values[number]<br />
+	 * Case A.2: RelatedObserverdProperty is a number<br>
+	 * 			-&gt; get information from the column<br>
+	 * 			-&gt; return values[number]<br>
+	 * <br>
+	 * Case B: RelatedObserverdProperty is not set<br>
+	 * 			-&gt; Check for column with Type == "UOM"<br>
+	 * 			-&gt; get number of this column<br>
+	 * 			-&gt; return values[number]<br>
 	 *
-	 * @param mVColumnId
-	 * @param values
-	 * @return
-	 *
+	 * @param mVColumnId a int.
+	 * @param values an array of {@link java.lang.String} objects.
+	 * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
 	 */
 	public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
 		LOG.trace("getObservedProperty()");
@@ -723,6 +768,12 @@ public class DataFile {
 		return null;
 	}
 
+	/**
+	 * <p>getOffering.</p>
+	 *
+	 * @param s a {@link Sensor} object.
+	 * @return a {@link Offering} object.
+	 */
 	public Offering getOffering(final Sensor s) {
 		final Offering off = configuration.getOffering(s);
 		if (!NcNameResolver.isNCName(off.getName())) {
@@ -738,18 +789,28 @@ public class DataFile {
 	}
 
 	/**
+	 * <p>getFileName.</p>
+	 *
 	 * @return the name of the data file. Not the whole path.
 	 */
 	public String getFileName() {
 		return file.getName();
 	}
 
+	/**
+	 * <p>getCanonicalPath.</p>
+	 *
+	 * @return a {@link String} object.
+	 * @throws IOException if any.
+	 */
 	public String getCanonicalPath() throws IOException {
 		return file.getCanonicalPath();
 	}
 
 	/**
-	 * @see {@link Configuration#getFileName()}
+	 * <p>getConfigurationFileName.</p>
+	 *
+	 * @return a {@link String} object.
 	 */
 	public String getConfigurationFileName() {
 		return configuration.getFileName();
@@ -869,7 +930,7 @@ public class DataFile {
 		Date date = null;
 		final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		sdf.setTimeZone(timeZone);
-		
+
 		if (timestampPart.indexOf('Z') != -1) {
 			timestampPart = timestampPart.replaceAll("Z", "+0100");
 		}
@@ -939,28 +1000,55 @@ public class DataFile {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return String.format("DataFile [file=%s, configuration=%s]",file,configuration);
 	}
 
+	/**
+	 * <p>getType.</p>
+	 *
+	 * @param mVColumnId a int.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getType(final int mVColumnId) {
 		return configuration.getType(mVColumnId);
 	}
 
+	/**
+	 * <p>getExpectedColumnCount.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getExpectedColumnCount()
 	{
 		return configuration.getExpectedColumnCount();
 	}
 
+	/**
+	 * <p>getHeaderLine.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getHeaderLine() {
 		return configuration.getHeaderLine();
 	}
 
+	/**
+	 * <p>getEncoding.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getEncoding() {
 		return configuration.getDataFileEncoding();
 	}
 
+	/**
+	 * <p>getSeparatorChar.</p>
+	 *
+	 * @return a char.
+	 */
 	public char getSeparatorChar() {
 		return configuration.getCsvSeparator();
 	}

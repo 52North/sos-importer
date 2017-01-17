@@ -26,6 +26,38 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
+
+/**
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * If the program is linked with libraries which are licensed under one of
+ * the following licenses, the combination of the program with the linked
+ * library is not considered a "derivative work" of the program:
+ *
+ *     - Apache License, version 2.0
+ *     - Apache Software License, version 1.0
+ *     - GNU Lesser General Public License, version 3
+ *     - Mozilla Public License, versions 1.0, 1.1 and 2.0
+ *     - Common Development and Distribution License (CDDL), version 1.0
+ *
+ * Therefore the distribution of the program linked with libraries licensed
+ * under the aforementioned licenses, is permitted by the copyright holders
+ * if the distribution is compliant with both the GNU General Public
+ * License version 2 and the aforementioned licenses.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ */
 package org.n52.sos.importer.view.resources;
 
 import java.awt.BorderLayout;
@@ -73,14 +105,13 @@ import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
 import org.n52.sos.importer.view.utils.ToolTips;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class MissingResourcePanel extends MissingComponentPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LoggerFactory.getLogger(MissingResourcePanel.class);
 
-	private EditableJComboBoxPanel manualResNameComboBox; 
-	private EditableJComboBoxPanel manualResUriComboBox; 
+	private EditableJComboBoxPanel manualResNameComboBox;
+	private EditableJComboBoxPanel manualResUriComboBox;
 
 	private JRadioButton manualResInputJRB;
 	private JRadioButton generatedResJRB;
@@ -94,17 +125,22 @@ public class MissingResourcePanel extends MissingComponentPanel {
 	private JList<String> columnList;
 	private JCheckBox useNameAfterPrefixCheckBox;
 
+	/**
+	 * <p>Constructor for MissingResourcePanel.</p>
+	 *
+	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+	 */
 	public MissingResourcePanel(final Resource resource) {
 		this.resource = resource;
 		String name = Lang.l().name();
 		final ModelStore ms = ModelStore.getInstance();
-		boolean disableManualInput = false, 
+		boolean disableManualInput = false,
 				disableGeneratedInput = false,
 				manualDefault = false;
 		final String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
 		final JPanel containerPanel = new JPanel();
 		containerPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		
+
 		containerPanel.add(initGeneratedResPanel(columnHeadingsWithId));
 		containerPanel.add(initManualResPanel(name));
 
@@ -413,6 +449,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		};
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		// manual or generate selected
@@ -420,7 +457,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		{
 			/*
 			 * GENERATED
-			 * 
+			 *
 			 * Check:
 			 * - Name -> column selection
 			 * - URI -> uriOrPrefix
@@ -432,10 +469,10 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString)) {
 				showNoInputAtAllDialog();
 				return false;
-			} 
+			}
 			else if (validUserInput(selectedColumns, uriOrPrefix)) {
 				return true;
-			} 
+			}
 			else {
 				showMissingInputDialog();
 				return false;
@@ -445,7 +482,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		{
 			/*
 			 * MANUAL
-			 * 
+			 *
 			 * Check:
 			 * - name
 			 * - URI
@@ -471,16 +508,16 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
 	private boolean validUserInput(final List<String> selectedColumns,
 			final String uriOrPrefix) {
-		return uriOrPrefix != null && 
-				!uriOrPrefix.isEmpty() && 
-				isUriValid(uriOrPrefix) && 
+		return uriOrPrefix != null &&
+				!uriOrPrefix.isEmpty() &&
+				isUriValid(uriOrPrefix) &&
 				isAtLeastOneColumnSelected(selectedColumns);
 	}
 
 	private boolean noUserInputAtAll(final List<String> selectedColumns,
 			final String uriOrPrefix,
 			final String concatString) {
-		return selectedColumns.size() < 1 && 
+		return selectedColumns.size() < 1 &&
 				(uriOrPrefix == null || uriOrPrefix.equalsIgnoreCase("")) &&
 				(concatString == null || concatString.equalsIgnoreCase(""));
 	}
@@ -514,7 +551,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		JOptionPane.showMessageDialog(null,
 				Lang.l().step6NoUserInput(),
 				Lang.l().infoDialogTitle(),
-				JOptionPane.INFORMATION_MESSAGE);		
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void showMissingInputDialog() {
@@ -524,7 +561,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		JOptionPane.showMessageDialog(null,
 				Lang.l().step6MissingUserInput(),
 				Lang.l().infoDialogTitle(),
-				JOptionPane.INFORMATION_MESSAGE);		
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void showInvalidURISyntaxDialog(final String uri) {
@@ -537,6 +574,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 				JOptionPane.WARNING_MESSAGE);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
 		URI uri = null;
@@ -562,7 +600,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			resource.setUriPrefix(uriPrefix);
 			resource.setConcatString(columnConcationationString.getText());
 			// get TableElements
-			final Column[] relatedCols = 
+			final Column[] relatedCols =
 					getColumnsFromSelection(columnList.getSelectedValuesList());
 			resource.setRelatedCols(relatedCols);
 		}
@@ -603,10 +641,11 @@ public class MissingResourcePanel extends MissingComponentPanel {
 			return new URI(uri);
 		} catch (final URISyntaxException e) {
 			logger.error("Given URI syntax not valid: " + uri, e);
-		}	
+		}
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
 		/*
@@ -623,11 +662,13 @@ public class MissingResourcePanel extends MissingComponentPanel {
 		resource.setUseNameAfterPrefixAsURI(false);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		return resource;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(final Component c) {
 		final Resource r = (Resource) c;

@@ -26,40 +26,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-/* Parts from http://java.sun.com/docs/books/tutorial/index.html */
-/*
- * Copyright (c) 2006 Sun Microsystems, Inc. All Rights Reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * -Redistribution of source code must retain the above copyright notice, this
- *  list of conditions and the following disclaimer.
- *
- * -Redistribution in binary form must reproduce the above copyright notice,
- *  this list of conditions and the following disclaimer in the documentation
- *  and/or other materials provided with the distribution.
- *
- * Neither the name of Sun Microsystems, Inc. or the names of contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * This software is provided "AS IS," without a warranty of any kind. ALL
- * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING
- * ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
- * OR NON-INFRINGEMENT, ARE HEREBY EXCLUDED. SUN MIDROSYSTEMS, INC. ("SUN")
- * AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE
- * AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS
- * DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE FOR ANY LOST
- * REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL,
- * INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND REGARDLESS OF THE THEORY
- * OF LIABILITY, ARISING OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE,
- * EVEN IF SUN HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- *
- * You acknowledge that this software is not designed, licensed or intended
- * for use in the design, construction, operation or maintenance of any
- * nuclear facility.
- */
 package org.n52.sos.importer.view.utils;
 
 import java.awt.datatransfer.DataFlavor;
@@ -78,27 +44,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author e.h.juerrens@52north.org
- * {@link http://www.java2s.com/Code/Java/Swing-JFC/DragListDemo.htm}
- *
- */
-/*
+ * Parts from http://www.java2s.com/Code/Java/Swing-JFC/DragListDemo.htm
+ * <br>
+ * and from http://java.sun.com/docs/books/tutorial/index.html
+ * <br>
  * Copyright (c) 2006 Sun Microsystems, Inc. All Rights Reserved.
- *
+ * <br>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
+ * <br>
  * -Redistribution of source code must retain the above copyright notice, this
  *  list of conditions and the following disclaimer.
- *
+ * <br>
  * -Redistribution in binary form must reproduce the above copyright notice,
  *  this list of conditions and the following disclaimer in the documentation
  *  and/or other materials provided with the distribution.
- *
+ * <br>
  * Neither the name of Sun Microsystems, Inc. or the names of contributors may
  * be used to endorse or promote products derived from this software without
  * specific prior written permission.
- *
+ * <br>
  * This software is provided "AS IS," without a warranty of any kind. ALL
  * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING
  * ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
@@ -110,17 +75,22 @@ import org.slf4j.LoggerFactory;
  * INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND REGARDLESS OF THE THEORY
  * OF LIABILITY, ARISING OUT OF THE USE OF OR INABILITY TO USE THIS SOFTWARE,
  * EVEN IF SUN HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- *
+ * <br>
  * You acknowledge that this software is not designed, licensed or intended
  * for use in the design, construction, operation or maintenance of any
  * nuclear facility.
+ *
+ * <p>ArrayListTransferHandler class.</p>
+ *
+ * @author e.h.juerrens@52north.org
+ * @version $Id: $Id
  */
 public class ArrayListTransferHandler extends TransferHandler {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ArrayListTransferHandler.class);
-	
+
 	DataFlavor localArrayListFlavor, serialArrayListFlavor;
 
 	String localArrayListType = DataFlavor.javaJVMLocalObjectMimeType
@@ -134,7 +104,10 @@ public class ArrayListTransferHandler extends TransferHandler {
 	int addIndex = -1; //Location where items were added
 
 	int addCount = 0; //Number of items added
-	
+
+	/**
+	 * <p>Constructor for ArrayListTransferHandler.</p>
+	 */
 	public ArrayListTransferHandler() {
 		try {
 			localArrayListFlavor = new DataFlavor(localArrayListType);
@@ -146,6 +119,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		serialArrayListFlavor = new DataFlavor(ArrayList.class, "ArrayList");
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public boolean importData(final JComponent c, final Transferable t) {
@@ -209,6 +183,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void exportDone(final JComponent c, final Transferable data, final int action) {
@@ -260,6 +235,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean canImport(final JComponent c, final DataFlavor[] flavors) {
 		if (hasLocalArrayListFlavor(flavors)) {
@@ -271,6 +247,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected Transferable createTransferable(final JComponent c) {
@@ -294,6 +271,7 @@ public class ArrayListTransferHandler extends TransferHandler {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getSourceActions(final JComponent c) {
 		return COPY_OR_MOVE;

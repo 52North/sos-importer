@@ -45,13 +45,15 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 
 /**
  * Called in the case of not having any date information in the file
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step6aModelHandler.class);
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step6aModel stepModel,
 			final SosImportConfiguration sosImportConf) {
@@ -61,7 +63,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 		/*
 		 *  we have a date time object and need to save it in a Metadata element
 		 *  with key Key.TIME
-		 *  
+		 *
 		 *  LOCAL FIELDS
 		 */
 		DateAndTime dAT;
@@ -90,7 +92,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 		}
 	}
 
-	private boolean addOrUpdateMetadata(final Enum key, 
+	private boolean addOrUpdateMetadata(final Enum key,
 			final String value,
 			final AdditionalMetadata addiMeta) {
 		if (logger.isTraceEnabled()) {
@@ -113,10 +115,10 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 		}
 		meta.setValue(value);
 		if (logger.isDebugEnabled()) {
-			logger.debug(addedOrUpdated + 
-					" additional metadata. Key: " + 
+			logger.debug(addedOrUpdated +
+					" additional metadata. Key: " +
 					key + "; " +
-					"Value: " + 
+					"Value: " +
 					value);
 		}
 		return (meta.getValue().equalsIgnoreCase(value));
@@ -145,11 +147,11 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 		 * 	LOCAL FIELDS
 		 */
 		GregorianCalendar cal;
-		int year = 1970, 
-				month = 0, 
-				dayOfMonth = 1, 
-				hourOfDay = 0, 
-				minute = 0, 
+		int year = 1970,
+				month = 0,
+				dayOfMonth = 1,
+				hourOfDay = 0,
+				minute = 0,
 				seconds = 0,
 				timezone = 0;
 		String timeStamp, timeZoneString, sign;

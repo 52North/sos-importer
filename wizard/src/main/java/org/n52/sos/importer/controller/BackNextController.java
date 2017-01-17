@@ -36,54 +36,81 @@ import org.slf4j.LoggerFactory;
 
 /**
  * controls the actions when the back or next button is pressed
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class BackNextController {
-	
+
 	private static BackNextController instance = null;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(BackNextController.class);
-	
+
 	private BackNextModel bNModel = null;
-	
+
 	private BackNextPanel backNextPanel = null;
-	
+
 	private BackNextController() {
 		bNModel = new BackNextModel();
 		backNextPanel = BackNextPanel.getInstance();
 	}
 
+	/**
+	 * <p>Getter for the field <code>instance</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.controller.BackNextController} object.
+	 */
 	public static BackNextController getInstance() {
 		if (instance == null) {
 			instance = new BackNextController();
 		}
 		return instance;
 	}
-	
+
+	/**
+	 * <p>setBackButtonVisible.</p>
+	 *
+	 * @param isBackButtonVisible a boolean.
+	 */
 	public void setBackButtonVisible(final boolean isBackButtonVisible) {
 		backNextPanel.setBackButtonVisible(isBackButtonVisible);
 	}
-	
+
 	/**
 	 * Change label of next button to become a finish button
 	 */
 	public void changeNextToFinish() {
 		backNextPanel.changeNextToFinish();
 	}
-	
+
+	/**
+	 * <p>changeFinishToNext.</p>
+	 */
 	public void changeFinishToNext() {
 		backNextPanel.changeFinishToNext();
 	}
-	
+
+	/**
+	 * <p>setFinishButtonEnabled.</p>
+	 *
+	 * @param isFinishButtonEnabled a boolean.
+	 */
 	public void setFinishButtonEnabled(final boolean isFinishButtonEnabled) {
 		backNextPanel.setFinishButtonEnabled(isFinishButtonEnabled);
 	}
-	
+
+	/**
+	 * <p>setNextButtonEnabled.</p>
+	 *
+	 * @param isNextButtonEnabled a boolean.
+	 */
 	public void setNextButtonEnabled(final boolean isNextButtonEnabled) {
 		backNextPanel.setNextButtonEnabled(isNextButtonEnabled);
 	}
-	
+
+	/**
+	 * <p>backButtonClicked.</p>
+	 */
 	public void backButtonClicked() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("backButtonClicked()\n\n");
@@ -96,7 +123,10 @@ public class BackNextController {
 		mC.setStepController(previousSC);
 		mC.removeProvider(currentSC.getModel());
 	}
-	
+
+	/**
+	 * <p>nextButtonClicked.</p>
+	 */
 	public void nextButtonClicked() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("nextButtonClicked()\n\n");
@@ -113,10 +143,10 @@ public class BackNextController {
 		}
 		//
 		currentSC.saveSettings();
-		
+
 		//show "back" button
 		BackNextController.getInstance().setBackButtonVisible(true);
-		
+
 		// update the XML model, too
 		mC.updateModel();
 		// put controller on stack
@@ -126,12 +156,12 @@ public class BackNextController {
 		final StepController followingSC = bNModel.getFollowingStepController();
 		if (followingSC != null && followingSC.isStillValid()) {
 			mC.setStepController(followingSC);
-		} else { 
+		} else {
 			//
 			// used to get 4a,b,c,d steps before getting 5a, for example
 			//
 			// next step controller of this type
-			StepController nextSC = currentSC.getNext(); 
+			StepController nextSC = currentSC.getNext();
 			if (nextSC != null) {
 				mC.setStepController(nextSC);
 			} else {
@@ -139,7 +169,7 @@ public class BackNextController {
 				// When step n+1 is called after step n
 				//
 				// next step controller of another type
-				nextSC = currentSC.getNextStepController();		
+				nextSC = currentSC.getNextStepController();
 
 				while (!nextSC.isNecessary()) {
 					nextSC = nextSC.getNextStepController();
@@ -150,21 +180,28 @@ public class BackNextController {
 		}
 		mC.removeProvider(currentSC.getModel());
 	}
-	
+
+	/**
+	 * <p>finishButtonClicked.</p>
+	 */
 	public void finishButtonClicked() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("finishButtonClicked()\n\n");
 		}
 		MainController.getInstance().exit();
 	}
-	
+
+	/**
+	 * <p>getModel.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.model.BackNextModel} object.
+	 */
 	public BackNextModel getModel() {
 		return bNModel;
 	}
 
 	/**
 	 * At least only required by Step 1 during the language switch.
-	 * 
 	 */
 	public void restartCurrentStep() {
 		final StepController currentSC = bNModel.getCurrentStepController();

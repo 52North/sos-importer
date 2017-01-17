@@ -39,7 +39,7 @@ import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 
 
 public class TimeSeriesRepositoryTest {
-	
+
 	@Test
 	public void shouldReturnRegisterSensorForCorrectSensor() {
 		TimeSeriesRepository tsr = new TimeSeriesRepository(2);

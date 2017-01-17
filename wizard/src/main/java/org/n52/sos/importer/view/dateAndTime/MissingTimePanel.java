@@ -46,7 +46,9 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for hour, minute and second
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingTimePanel extends MissingDateAndTimePanel {
 
@@ -56,7 +58,12 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 
 	private SpinnerDateModel timeModel;
 	private JSpinner timeSpinner;
-	
+
+	/**
+	 * <p>Constructor for MissingTimePanel.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public MissingTimePanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		timeModel = new SpinnerDateModel();
@@ -65,15 +72,16 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 		timeModel.setCalendarField(Calendar.HOUR_OF_DAY);
 		timeSpinner = new JSpinner(timeModel);
 		timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm:ss"));
-		
+
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
+
 		this.timeLabel = new JLabel(Lang.l().time() + ": ");
-		
+
 		this.add(timeLabel);
 		this.add(timeSpinner);
-	}	
-	
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
 		Calendar c = new GregorianCalendar();
@@ -83,18 +91,21 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 		dateAndTime.setSecond(new Second(c.get(Calendar.SECOND)));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
 		dateAndTime.setHour(null);
 		dateAndTime.setMinute(null);
-		dateAndTime.setSecond(null);	
+		dateAndTime.setSecond(null);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		Calendar c = new GregorianCalendar();
@@ -106,6 +117,7 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
 		return time;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(Component c) {
 		Time time = (Time)c;

@@ -75,8 +75,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * chooses a CSV file
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step1Panel extends JPanel {
 
@@ -87,7 +88,9 @@ public class Step1Panel extends JPanel {
 	private final String[] feedingTypes = new String[]{Lang.l().step1FeedTypeCSV(), Lang.l().step1FeedTypeFTP()};
 
 	// separation of type cases
+	/** Constant <code>CSV_FILE=0</code> */
 	public static final int CSV_FILE = 0;
+	/** Constant <code>FTP_FILE=1</code> */
 	public static final int FTP_FILE = 1;
 
 	private static final Logger logger = LoggerFactory.getLogger(Step1Panel.class);
@@ -107,6 +110,11 @@ public class Step1Panel extends JPanel {
 
 	private static final ResourceBundle welcomeRes = ResourceBundle.getBundle(welcomeResBunName);
 
+	/**
+	 * <p>Constructor for Step1Panel.</p>
+	 *
+	 * @param step1Controller a {@link org.n52.sos.importer.controller.Step1Controller} object.
+	 */
 	public Step1Panel(final Step1Controller step1Controller) {
 		super();
 		final JScrollPane welcomePanel = initWelcomePanel();
@@ -269,10 +277,20 @@ public class Step1Panel extends JPanel {
 		return 0;
 	}
 
+	/**
+	 * <p>getFeedingType.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getFeedingType() {
 		return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
 	}
 
+	/**
+	 * <p>setFeedingType.</p>
+	 *
+	 * @param feedingType a int.
+	 */
 	public void setFeedingType(final int feedingType) {
 		if (feedingType == CSV_FILE) {
 			((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
@@ -285,6 +303,11 @@ public class Step1Panel extends JPanel {
 		}
 	}
 
+	/**
+	 * <p>getUrl.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getUrl() {
 		final String protocollCheck = "ftp://";
 		final String result = jtfUrl.getText();
@@ -294,20 +317,40 @@ public class Step1Panel extends JPanel {
 		return result;
 	}
 
+	/**
+	 * <p>setUrl.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 */
 	public void setUrl(final String url) {
 		jtfUrl.setText(url);
 		inputTyped();
 	}
 
+	/**
+	 * <p>getUser.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getUser() {
 		return jtfUser.getText();
 	}
 
+	/**
+	 * <p>setUser.</p>
+	 *
+	 * @param user a {@link java.lang.String} object.
+	 */
 	public void setUser(final String user) {
 		jtfUser.setText(user);
 		inputTyped();
 	}
 
+	/**
+	 * <p>getPassword.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getPassword() {
 		String password = new String();
 		for (int i = 0; i < jpfPassword.getPassword().length; i++) {
@@ -316,48 +359,98 @@ public class Step1Panel extends JPanel {
 		return password;
 	}
 
+	/**
+	 * <p>setPassword.</p>
+	 *
+	 * @param password a {@link java.lang.String} object.
+	 */
 	public void setPassword(final String password) {
 		jpfPassword.setText(password);
 		inputTyped();
 	}
 
+	/**
+	 * <p>getRegexStatus.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean getRegexStatus() {
 		return jcbRegex.isSelected();
 	}
 
+	/**
+	 * <p>setRegexStatus.</p>
+	 *
+	 * @param isSelected a boolean.
+	 */
 	public void setRegexStatus(final boolean isSelected) {
 		jcbRegex.setSelected(isSelected);
 		inputTyped();
 	}
 
+	/**
+	 * <p>getDirectory.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getDirectory() {
 		return jtfDirectory.getText();
 	}
 
+	/**
+	 * <p>setDirectory.</p>
+	 *
+	 * @param directory a {@link java.lang.String} object.
+	 */
 	public void setDirectory(final String directory) {
 		jtfDirectory.setText(directory);
 		inputTyped();
 	}
 
+	/**
+	 * <p>getFilenameSchema.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFilenameSchema() {
 		return jtfFilenameSchema.getText();
 	}
 
+	/**
+	 * <p>setFilenameSchema.</p>
+	 *
+	 * @param filenameSchema a {@link java.lang.String} object.
+	 */
 	public void setFilenameSchema(final String filenameSchema) {
 		jtfFilenameSchema.setText(filenameSchema);
 		inputTyped();
 	}
 
+	/**
+	 * <p>setCSVFilePath.</p>
+	 *
+	 * @param filePath a {@link java.lang.String} object.
+	 */
 	public void setCSVFilePath(final String filePath) {
 		if (filePath != null && !filePath.isEmpty()) {
 			csvFileTextField.setText(filePath);
 		}
 	}
 
+	/**
+	 * <p>getCSVFilePath.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getCSVFilePath() {
 		return csvFileTextField.getText();
 	}
 
+	/**
+	 * <p>setFileEncoding.</p>
+	 *
+	 * @param encoding a {@link java.lang.String} object.
+	 */
 	public void setFileEncoding(final String encoding) {
 		try {
 			encodingCB.setSelectedIndex(getIndexOfEncoding(encoding));
@@ -366,6 +459,11 @@ public class Step1Panel extends JPanel {
 		}
 	}
 
+	/**
+	 * <p>getFileEncoding.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFileEncoding() {
 		return (String) encodingCB.getSelectedItem();
 	}

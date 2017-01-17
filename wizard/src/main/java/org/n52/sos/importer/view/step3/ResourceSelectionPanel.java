@@ -35,41 +35,53 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 
 /**
- * assigns or unassigns columns to Feature of Interests, Observed 
+ * assigns or unassigns columns to Feature of Interests, Observed
  * Properties, Units of Measurement and Sensors
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class ResourceSelectionPanel extends SelectionPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Resource resource;
 
+	/**
+	 * <p>Constructor for ResourceSelectionPanel.</p>
+	 *
+	 * @param containerPanel a {@link javax.swing.JPanel} object.
+	 * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+	 */
 	public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
 		super(containerPanel);
 		this.resource = resource;
 	}
 
+	/** {@inheritDoc} */
 	@Override
-	protected void setSelection(String s) {	
+	protected void setSelection(String s) {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getSelection() {
 		return "0";
 	}
 
+	/** {@inheritDoc} */
 	@Override
-	public void setDefaultSelection() {		
+	public void setDefaultSelection() {
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assign(TableElement tableElement) {
 		resource.setTableElement(tableElement);
 		ModelStore.getInstance().add(resource);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unAssign(TableElement tableElement) {
 		Resource resourceToRemove = null;
@@ -78,7 +90,7 @@ public class ResourceSelectionPanel extends SelectionPanel {
 				resourceToRemove = r;
 				break;
 			}
-				
+
 		ModelStore.getInstance().remove(resourceToRemove);
 	}
 }

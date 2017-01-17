@@ -29,11 +29,19 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Offering class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Offering extends Resource {
 
+	/**
+	 * <p>Constructor for Offering.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param uri a {@link java.lang.String} object.
+	 */
 	public Offering(final String name, final String uri) {
 		super(name, uri);
 	}

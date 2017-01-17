@@ -30,44 +30,52 @@ package org.n52.sos.importer.model.requests;
 
 /**
  * Collects all information for the RegisterSensor request
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class RegisterSensor {
 
 	private String sensorName;
-	
+
 	private String sensorURI;
-	
+
 	private String foiName;
-	
+
 	private String featureOfInterestURI;
-	
+
 	private String observedPropertyName;
-	
+
 	private String observedPropertyURI;
-	
+
 	private String offeringName;
 
 	private String unitOfMeasurementCode;
-	
+
 	private String epsgCode;
-	
+
 	private String latitudeValue;
-	
+
 	private String latitudeUnit;
-	
+
 	private String longitudeValue;
-	
+
 	private String longitudeUnit;
-	
+
 	private String altitudeValue;
-	
+
 	private String altitudeUnit;
 
 	private String defaultValue;
-	
+
 	private String offeringId;
-	
+
+	/**
+	 * <p>fillTemplate.</p>
+	 *
+	 * @param template a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String fillTemplate(String template) {
 		String filledTemplate = template;
 		// TODO move tags into config
@@ -88,62 +96,132 @@ public class RegisterSensor {
 		filledTemplate = filledTemplate.replaceAll("THISheightUnit", altitudeUnit);
 		filledTemplate = filledTemplate.replaceAll("THISepsgCode", epsgCode);
 		filledTemplate = filledTemplate.replaceAll("THISdefaultValue", getDefaultValue());
-		return filledTemplate; 
+		return filledTemplate;
 	}
-	
-	
+
+
+	/**
+	 * <p>Setter for the field <code>sensorName</code>.</p>
+	 *
+	 * @param sensorName a {@link java.lang.String} object.
+	 */
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>sensorURI</code>.</p>
+	 *
+	 * @param sensorURI a {@link java.lang.String} object.
+	 */
 	public void setSensorURI(String sensorURI) {
 		this.sensorURI = sensorURI;
 	}
 
+    /**
+     * <p>setFeatureOfInterstName.</p>
+     *
+     * @param foiName a {@link java.lang.String} object.
+     */
     public void setFeatureOfInterstName(String foiName) {
         this.foiName = foiName;
     }
 
+	/**
+	 * <p>Setter for the field <code>observedPropertyName</code>.</p>
+	 *
+	 * @param observedPropertyName a {@link java.lang.String} object.
+	 */
 	public void setObservedPropertyName(String observedPropertyName) {
 		this.observedPropertyName = observedPropertyName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>observedPropertyURI</code>.</p>
+	 *
+	 * @param observedPropertyURI a {@link java.lang.String} object.
+	 */
 	public void setObservedPropertyURI(String observedPropertyURI) {
 		this.observedPropertyURI = observedPropertyURI;
 	}
 
+	/**
+	 * <p>Setter for the field <code>offeringName</code>.</p>
+	 *
+	 * @param offeringName a {@link java.lang.String} object.
+	 */
 	public void setOfferingName(String offeringName) {
 		this.offeringName = offeringName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>unitOfMeasurementCode</code>.</p>
+	 *
+	 * @param unitOfMeasurementCode a {@link java.lang.String} object.
+	 */
 	public void setUnitOfMeasurementCode(String unitOfMeasurementCode) {
 		this.unitOfMeasurementCode = unitOfMeasurementCode;
 	}
 
+	/**
+	 * <p>Setter for the field <code>epsgCode</code>.</p>
+	 *
+	 * @param epsgCode a {@link java.lang.String} object.
+	 */
 	public void setEpsgCode(String epsgCode) {
 		this.epsgCode = epsgCode;
 	}
 
+	/**
+	 * <p>Setter for the field <code>latitudeValue</code>.</p>
+	 *
+	 * @param latitudeValue a {@link java.lang.String} object.
+	 */
 	public void setLatitudeValue(String latitudeValue) {
 		this.latitudeValue = latitudeValue;
 	}
 
+	/**
+	 * <p>Setter for the field <code>latitudeUnit</code>.</p>
+	 *
+	 * @param latitudeUnit a {@link java.lang.String} object.
+	 */
 	public void setLatitudeUnit(String latitudeUnit) {
 		this.latitudeUnit = latitudeUnit;
 	}
 
+	/**
+	 * <p>Setter for the field <code>longitudeValue</code>.</p>
+	 *
+	 * @param longitudeValue a {@link java.lang.String} object.
+	 */
 	public void setLongitudeValue(String longitudeValue) {
 		this.longitudeValue = longitudeValue;
 	}
 
+	/**
+	 * <p>Setter for the field <code>longitudeUnit</code>.</p>
+	 *
+	 * @param longitudeUnit a {@link java.lang.String} object.
+	 */
 	public void setLongitudeUnit(String longitudeUnit) {
 		this.longitudeUnit = longitudeUnit;
 	}
 
+	/**
+	 * <p>Setter for the field <code>altitudeValue</code>.</p>
+	 *
+	 * @param heightValue a {@link java.lang.String} object.
+	 */
 	public void setAltitudeValue(String heightValue) {
 		this.altitudeValue = heightValue;
 	}
 
+	/**
+	 * <p>Setter for the field <code>altitudeUnit</code>.</p>
+	 *
+	 * @param heightUnit a {@link java.lang.String} object.
+	 */
 	public void setAltitudeUnit(String heightUnit) {
 		this.altitudeUnit = heightUnit;
 	}
@@ -151,6 +229,7 @@ public class RegisterSensor {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "RegisterSensor [sensorName=" + sensorName + ", sensorURI="
@@ -170,6 +249,7 @@ public class RegisterSensor {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -219,6 +299,7 @@ public class RegisterSensor {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -347,6 +428,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>sensorName</code>.</p>
+	 *
 	 * @return the sensorName
 	 */
 	public String getSensorName() {
@@ -354,6 +437,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>sensorURI</code>.</p>
+	 *
 	 * @return the sensorURI
 	 */
 	public String getSensorURI() {
@@ -361,6 +446,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>getFeatureOfInterestName.</p>
+	 *
 	 * @return the foiName
 	 */
 	public String getFeatureOfInterestName() {
@@ -368,6 +455,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>observedPropertyName</code>.</p>
+	 *
 	 * @return the observedPropertyName
 	 */
 	public String getObservedPropertyName() {
@@ -375,6 +464,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>observedPropertyURI</code>.</p>
+	 *
 	 * @return the observedPropertyURI
 	 */
 	public String getObservedPropertyURI() {
@@ -382,6 +473,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>offeringName</code>.</p>
+	 *
 	 * @return the offeringName
 	 */
 	public String getOfferingName() {
@@ -389,6 +482,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>unitOfMeasurementCode</code>.</p>
+	 *
 	 * @return the unitOfMeasurementCode
 	 */
 	public String getUnitOfMeasurementCode() {
@@ -396,6 +491,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>epsgCode</code>.</p>
+	 *
 	 * @return the epsgCode
 	 */
 	public String getEpsgCode() {
@@ -403,6 +500,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>latitudeValue</code>.</p>
+	 *
 	 * @return the latitudeValue
 	 */
 	public String getLatitudeValue() {
@@ -410,6 +509,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>latitudeUnit</code>.</p>
+	 *
 	 * @return the latitudeUnit
 	 */
 	public String getLatitudeUnit() {
@@ -417,6 +518,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>longitudeValue</code>.</p>
+	 *
 	 * @return the longitudeValue
 	 */
 	public String getLongitudeValue() {
@@ -424,6 +527,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>longitudeUnit</code>.</p>
+	 *
 	 * @return the longitudeUnit
 	 */
 	public String getLongitudeUnit() {
@@ -431,6 +536,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>altitudeValue</code>.</p>
+	 *
 	 * @return the altitudeValue
 	 */
 	public String getAltitudeValue() {
@@ -438,6 +545,8 @@ public class RegisterSensor {
 	}
 
 	/**
+	 * <p>Getter for the field <code>altitudeUnit</code>.</p>
+	 *
 	 * @return the altitudeUnit
 	 */
 	public String getAltitudeUnit() {
@@ -446,6 +555,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Getter for the field <code>featureOfInterestURI</code>.</p>
+	 *
 	 * @return the featureOfInterestURI
 	 */
 	public String getFeatureOfInterestURI() {
@@ -454,6 +565,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Setter for the field <code>featureOfInterestURI</code>.</p>
+	 *
 	 * @param featureOfInterestURI the featureOfInterestURI to set
 	 */
 	public void setFeatureOfInterestURI(String featureOfInterestURI) {
@@ -462,6 +575,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Getter for the field <code>defaultValue</code>.</p>
+	 *
 	 * @return the defaultValue
 	 */
 	public String getDefaultValue() {
@@ -470,6 +585,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Setter for the field <code>defaultValue</code>.</p>
+	 *
 	 * @param defaultValue the defaultValue to set
 	 */
 	public void setDefaultValue(String defaultValue) {
@@ -478,6 +595,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Getter for the field <code>offeringId</code>.</p>
+	 *
 	 * @return the offeringId
 	 */
 	public String getOfferingId() {
@@ -486,6 +605,8 @@ public class RegisterSensor {
 
 
 	/**
+	 * <p>Setter for the field <code>offeringId</code>.</p>
+	 *
 	 * @param offeringId the offeringId to set
 	 */
 	public void setOfferingId(String offeringId) {

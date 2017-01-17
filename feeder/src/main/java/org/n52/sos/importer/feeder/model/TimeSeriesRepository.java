@@ -42,12 +42,23 @@ import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A {@link TimeSeriesRepository} is a management type for some {@link TimeSeries}.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ */
 public class TimeSeriesRepository {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TimeSeriesRepository.class);
 
 	private final Vector<TimeSeries> repo;
 
+	/**
+	 * <p>Constructor for TimeSeriesRepository.</p>
+	 *
+	 * @param numberOfTimeSeries a int.
+	 */
 	public TimeSeriesRepository(final int numberOfTimeSeries) {
 		repo = new Vector<TimeSeries>(numberOfTimeSeries);
 		for (int i = 0; i < numberOfTimeSeries; i++) {
@@ -56,7 +67,9 @@ public class TimeSeriesRepository {
 	}
 
 	/**
-	 * @param ios the {@link InsertObservation}s to add using the array index as timeseries id
+	 * <p>addObservations.</p>
+	 *
+	 * @param ios the {@link org.n52.sos.importer.feeder.model.requests.InsertObservation}s to add using the array index as timeseries id
 	 */
 	public void addObservations(final InsertObservation[] ios) {
 		if (ios.length != repo.capacity()) {
@@ -69,23 +82,28 @@ public class TimeSeriesRepository {
 		}
 	}
 
+	/**
+	 * <p>getTimeSeries.</p>
+	 *
+	 * @return a {@link java.util.Collection} object.
+	 */
 	public Collection<TimeSeries> getTimeSeries() {
 		return repo;
 	}
 
 	/**
+	 * <p>getRegisterSensor.</p>
+	 *
 	 * @param sensorURI the URI of the Sensor
-	 * 
-	 * @return A {@link RegisterSensor} using
+	 * @return A {@link org.n52.sos.importer.feeder.model.requests.RegisterSensor} using
 	 * 			<ul>
 	 * 				<li>ObservedProperty</li>
 	 * 				<li>MeasureValueType</li>
 	 * 				<li>UnitOfMeasurement</li>
 	 * 			</ul>
-	 * 			from all timeseries in this {@link TimeSeriesRepository} 
+	 * 			from all timeseries in this {@link org.n52.sos.importer.feeder.model.TimeSeriesRepository}
 	 * 			having the Sensor with given URI <code>sensorURI</code>.
-	 * 
-	 * @throws IllegalArgumentException if no timeseries for the given 
+	 * @throws java.lang.IllegalArgumentException if no timeseries for the given
 	 * 			<code>sensorURI</code> are available in this repository.
 	 */
 	public RegisterSensor getRegisterSensor(final String sensorURI) {
@@ -100,7 +118,7 @@ public class TimeSeriesRepository {
 			throw new IllegalArgumentException("Could not find any time series for sensor '" + sensorURI + "'");
 		}
 		final InsertObservation io = timeseries.get(0).getFirst();
-		
+
 		return new RegisterSensor(io,
 				getObservedProperties(timeseries),
 				getMeasuredValueTypes(timeseries),
@@ -135,6 +153,8 @@ public class TimeSeriesRepository {
 	}
 
 	/**
+	 * <p>isEmpty.</p>
+	 *
 	 * @return <code>true</code>, in the case of containing only empty time series
 	 */
 	public boolean isEmpty() {

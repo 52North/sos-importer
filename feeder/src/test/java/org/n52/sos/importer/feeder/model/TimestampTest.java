@@ -79,7 +79,7 @@ public class TimestampTest {
 		if (rawOffset>= 0) {
 			sign = "+";
 		}
-		final int offsetInHours = rawOffset / millisPerHour; 
+		final int offsetInHours = rawOffset / millisPerHour;
 		final int hours = 12 + offsetInHours;
 		final int minutes = (rawOffset - (offsetInHours * millisPerHour)) / millisPerMinute;
 		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
@@ -94,7 +94,7 @@ public class TimestampTest {
 				sign,
 				offsetInHoursString,
 				minutesString);
-		
+
 		// when
 		timestamp.set(UTC_12_01);
 

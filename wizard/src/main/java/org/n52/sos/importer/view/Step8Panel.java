@@ -55,8 +55,9 @@ import org.slf4j.LoggerFactory;
 /**
  * shows progress while assembling data, registering sensors
  * and inserting observations, provides a link to the log file
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step8Panel extends JPanel {
 
@@ -73,6 +74,12 @@ public class Step8Panel extends JPanel {
 
 	private final Step8Controller controller;
 
+	/**
+	 * <p>Constructor for Step8Panel.</p>
+	 *
+	 * @param s7M a {@link org.n52.sos.importer.model.Step7Model} object.
+	 * @param controller a {@link org.n52.sos.importer.controller.Step8Controller} object.
+	 */
 	public Step8Panel(final Step7Model s7M, final Step8Controller controller) {
 		this.controller = controller;
 		final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -195,7 +202,7 @@ public class Step8Panel extends JPanel {
 		gbc_configurationFileInstructions.gridx = 0;
 		gbc_configurationFileInstructions.gridy = 0;
 		configurationFilePanel.add(configurationFileInstructions, gbc_configurationFileInstructions);
-		
+
 		configFileButton = new JButton();
 		configFileButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		configFileButton.setText(Lang.l().step8ConfigFileButton());
@@ -212,7 +219,7 @@ public class Step8Panel extends JPanel {
 		});
 		configFileButton.setEnabled(true);
 		configFileButton.setVisible(true);
-		
+
 		final GridBagConstraints gbc_configFileButton = new GridBagConstraints();
 		gbc_configFileButton.anchor = GridBagConstraints.WEST;
 		gbc_configFileButton.insets = new Insets(0, 0, 0, 5);
@@ -264,6 +271,11 @@ public class Step8Panel extends JPanel {
 		return logfilePanel;
 	}
 
+	/**
+	 * <p>setLogFileURI.</p>
+	 *
+	 * @param uri a {@link java.net.URI} object.
+	 */
 	public void setLogFileURI(final URI uri) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("setLogFileURI(" + uri + ")");
@@ -282,10 +294,20 @@ public class Step8Panel extends JPanel {
 		});
 	}
 
+	/**
+	 * <p>setDirectImportExecuteButtonEnabled.</p>
+	 *
+	 * @param enabled a boolean.
+	 */
 	public void setDirectImportExecuteButtonEnabled(final boolean enabled) {
 		directImportExecuteButton.setEnabled(enabled);
 	}
 
+	/**
+	 * <p>Getter for the field <code>directImportOutputTextArea</code>.</p>
+	 *
+	 * @return a {@link javax.swing.JTextArea} object.
+	 */
 	public JTextArea getDirectImportOutputTextArea() {
 		return directImportOutputTextArea;
 	}

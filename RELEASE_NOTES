@@ -9,6 +9,7 @@ For a complete Release Notes overview visit
 
 ## Changes:
  * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
+ * Updated to latest 52N parent &rarr; javadoc and dependency plugin cause a lot of minor adjustments 
 
 ## Bugfixes:
  * #35: Could not parse ISO8601 timestamps with timezone "Z"

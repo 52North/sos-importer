@@ -41,17 +41,24 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single month
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingMonthPanel extends MissingDateAndTimePanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private JLabel monthLabel;
-	
+
 	private SpinnerNumberModel monthModel = new SpinnerNumberModel(1, 1, 12, 1);
 	private JSpinner monthSpinner = new JSpinner(monthModel);
-	
+
+	/**
+	 * <p>Constructor for MissingMonthPanel.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public MissingMonthPanel(DateAndTime dateAndTime) {
 		super(dateAndTime);
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -60,26 +67,31 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
 		this.add(monthSpinner);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
-		dateAndTime.setMonth(new Month(monthModel.getNumber().intValue()));	
+		dateAndTime.setMonth(new Month(monthModel.getNumber().intValue()));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
-		dateAndTime.setMonth(null);	
+		dateAndTime.setMonth(null);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		return new Month(monthModel.getNumber().intValue());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(Component c) {
 		monthModel.setValue(((Month)c).getValue());

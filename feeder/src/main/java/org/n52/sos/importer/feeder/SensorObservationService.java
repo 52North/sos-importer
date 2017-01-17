@@ -102,10 +102,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Handles connection to SOS and provides an easy to use interface.<br />
+ * Handles connection to SOS and provides an easy to use interface.<br>
  * Now this class supports only OGC SOS <b>1.0.0</b>
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public final class SensorObservationService {
 
@@ -170,9 +171,17 @@ public final class SensorObservationService {
 	private int sweArrayObservationTimeOutBuffer = 25000;
 
 	private int sampleSizeDivisor;
-	
+
 	private String skipReason = "";
 
+	/**
+	 * <p>Constructor for SensorObservationService.</p>
+	 *
+	 * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
+	 * @throws org.n52.oxf.ows.ExceptionReport if any.
+	 * @throws org.n52.oxf.OXFException if any.
+	 * @throws java.net.MalformedURLException if any.
+	 */
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
 		LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
 		this.configuration = config;
@@ -238,6 +247,11 @@ public final class SensorObservationService {
 				Binding.SOAP.name()));
 	}
 
+	/**
+	 * <p>isAvailable.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAvailable() {
 		return sosWrapper.getServiceDescriptor() != null;
 	}
@@ -246,7 +260,7 @@ public final class SensorObservationService {
 	 * Checks for <b>RegisterSensor</b> and <b>InsertObservation</b> operations.
 	 *
 	 * @return <code>true</code> if RegisterSensor and InsertObservation
-	 *         operations are listed in the capabilities of this SOS, <br />
+	 *         operations are listed in the capabilities of this SOS, <br>
 	 *         else <code>false</code>.
 	 */
 	public boolean isTransactional() {
@@ -270,6 +284,17 @@ public final class SensorObservationService {
 		return false;
 	}
 
+	/**
+	 * <p>importData.</p>
+	 *
+	 * @param dataFile a {@link org.n52.sos.importer.feeder.DataFile} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws java.io.IOException if any.
+	 * @throws org.n52.oxf.OXFException if any.
+	 * @throws org.apache.xmlbeans.XmlException if any.
+	 * @throws java.lang.IllegalArgumentException if any.
+	 * @throws java.text.ParseException if any.
+	 */
 	public List<InsertObservation> importData(final DataFile dataFile) throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
 		LOG.trace("importData()");
 		// 0 Get line
@@ -297,9 +322,9 @@ public final class SensorObservationService {
 			long startReadingFile = System.currentTimeMillis();
 			// for each line
 			while ((values = cr.readNext()) != null) {
-				if (!isLineIgnorable(values) && 
-						isSizeValid(dataFile, values) && 
-						containsData(values) && 
+				if (!isLineIgnorable(values) &&
+						isSizeValid(dataFile, values) &&
+						containsData(values) &&
 						!isHeaderLine(values)) {
 					LOG.debug(String.format("Handling CSV line #%d: %s",lineCounter+1,Arrays.toString(values)));
 					final InsertObservation[] ios = getInsertObservations(values,mVCols,dataFile);
@@ -348,7 +373,7 @@ public final class SensorObservationService {
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
 						isSampleBasedDataFile, isInSample, lineCounter, sampleStartLine, sampleSize, sampleDataOffset);
-					
+
 					if (isInSample && isSampleEndReached(sampleStartLine)) {
 						isInSample = false;
 						LOG.debug("Current sample left");
@@ -472,6 +497,12 @@ public final class SensorObservationService {
 		return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
 	}
 
+	/**
+	 * <p>isSampleEndReached.</p>
+	 *
+	 * @param sampleStartLine a int.
+	 * @return a boolean.
+	 */
 	public boolean isSampleEndReached(final int sampleStartLine) {
 		return sampleStartLine + sampleSize + sampleDataOffset == lineCounter;
 	}
@@ -1143,10 +1174,20 @@ public final class SensorObservationService {
 		return false;
 	}
 
+	/**
+	 * <p>Getter for the field <code>lastLine</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getLastLine() {
 		return lastLine;
 	}
 
+	/**
+	 * <p>Setter for the field <code>lastLine</code>.</p>
+	 *
+	 * @param lastLine a int.
+	 */
 	public void setLastLine(final int lastLine) {
 		LOG.debug("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
 		this.lastLine = lastLine;

@@ -47,29 +47,39 @@ import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * selection panel in step 3 for position combinations
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class PositionCombinationPanel extends CombinationPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Position position;
-	
+
+	/**
+	 * <p>Constructor for PositionCombinationPanel.</p>
+	 *
+	 * @param containerPanel a {@link javax.swing.JPanel} object.
+	 * @param firstLineWithData a int.
+	 */
 	public PositionCombinationPanel(JPanel containerPanel, int firstLineWithData) {
 		super(containerPanel, firstLineWithData);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] getGroupItems() {
 		return ComboBoxItems.getInstance().getPositionGroups();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DefaultComboBoxModel<String> getPatterns() {
 		return EditableComboBoxItems.getInstance().getPositionPatterns();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getTestValue() {
 		Latitude latitude = new Latitude(52.4, "°");
@@ -80,6 +90,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 		return p;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Combination getCombination() {
 		if (position == null) {
@@ -87,30 +98,34 @@ public class PositionCombinationPanel extends CombinationPanel {
 		}
 		return position;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getPatternToolTip() {
 		return ToolTips.get(ToolTips.POSITION_PATTERNS);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public String getGroupToolTip() {
 		return ToolTips.get(ToolTips.POSITION_GROUPS);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void assign(TableElement tableElement) {
     	String[] part = getSelection().split(Constants.SEPARATOR_STRING);
 		String pattern = part[0];
 		String group = part[1];
-	
+
 		Position position = new Position();
 		position.setGroup(group);
 		PositionController pc = new PositionController(position);
-		pc.assignPattern(pattern, tableElement);			
+		pc.assignPattern(pattern, tableElement);
 		ModelStore.getInstance().add(position);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unAssign(TableElement tableElement) {
 		Position positionToRemove = null;
@@ -119,7 +134,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 			Longitude lon = p.getLongitude();
 			Height alt = p.getHeight();
 			EPSGCode epsg = p.getEPSGCode();
-			
+
 			if ((lat != null && tableElement.equals(lat.getTableElement())) ||
 				(lon != null && tableElement.equals(lon.getTableElement())) ||
 				(alt != null && tableElement.equals(alt.getTableElement())) ||
@@ -128,7 +143,7 @@ public class PositionCombinationPanel extends CombinationPanel {
 				break;
 			}
 		}
-		
+
 		ModelStore.getInstance().remove(positionToRemove);
 	}
 }

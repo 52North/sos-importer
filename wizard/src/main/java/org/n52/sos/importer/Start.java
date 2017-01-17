@@ -33,11 +33,18 @@ import org.n52.sos.importer.controller.Step1Controller;
 
 /**
  * Starts the SOS-Importer
+ *
  * @author Raimund Schn&uuml;rer
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Start {
-	
+
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 */
 	public static void main(String[] args) {
 		MainController.getInstance().setStepController(new Step1Controller());
 	}

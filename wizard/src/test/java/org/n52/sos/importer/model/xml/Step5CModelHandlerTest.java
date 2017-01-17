@@ -45,11 +45,17 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 import org.x52North.sensorweb.sos.importer.x04.TypeDocument;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Step5CModelHandlerTest class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step5CModelHandlerTest {
 
+	/**
+	 * <p>testStoringOfAltitudeWithUnit.</p>
+	 */
 	@Test
 	public void testStoringOfAltitudeWithUnit() {
 		//given
@@ -77,10 +83,10 @@ public class Step5CModelHandlerTest {
 		meta = column.addNewMetadata();
 		meta.setKey(Key.PARSE_PATTERN);
 		meta.setValue(pattern);
-		
+
 		//when
 		new Step5cModelHandler().handleModel(stepModel, importConf);
-		
+
 		// then
 		Metadata altitudeMetadata = null;
 		for (Metadata metadata : importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {

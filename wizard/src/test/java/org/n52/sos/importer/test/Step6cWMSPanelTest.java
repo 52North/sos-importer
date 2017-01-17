@@ -44,22 +44,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Step6cWMSPanelTest class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step6cWMSPanelTest extends JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
-	
+
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 */
 	public static void main(final String[] args) {
 		Constants.GUI_DEBUG = true;
 		final FeatureOfInterest foi = new FeatureOfInterest();
 		foi.setName("testFOIname");
 		foi.setPosition(new Position());
 		final Step6cModel s6cM = new Step6cModel(foi);
-		
+
 		final JFrame frame = new Step6cWMSPanelTest(s6cM);
 		frame.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT));
 		frame.pack();
@@ -79,6 +87,11 @@ public class Step6cWMSPanelTest extends JFrame {
 		}
 	}
 
+	/**
+	 * <p>Constructor for Step6cWMSPanelTest.</p>
+	 *
+	 * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+	 */
 	public Step6cWMSPanelTest(final Step6cModel s6cM) {
 		getContentPane().add(new Step6cPanel("test description", "testFOIname", s6cM));
 	}

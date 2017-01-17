@@ -47,27 +47,30 @@ import org.x52North.sensorweb.sos.importer.x04.SpatialResourceType;
 
 /**
  * Store the position for each feature of interest
- * (either stored in a column or manually selected) 
+ * (either stored in a column or manually selected)
  * in case there are not any positions given in the CSV file. Add each to
  * <code>FOIPositions</code> element.
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 /*
  * How to identify in the current foi is not from file but from manual input or generated
- * 
- * foi.getTableElement() != null                               
+ *
+ * foi.getTableElement() != null
  * 		-> FOI is in a colum -> add position to foi positions
- * 
+ *
  * foi.getTableElement() == null && foi.isGenerated() == false
  * 		-> FOI is from manual input -> add position to FeatureOfInterest element
- * 
+ *
  * foi.getTableElement() == null && foi.isGenerated() == true
  * 		-> FOI is generated -> add position to FeatureOfInterest element
  */
 public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step6cModelHandler.class);
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step6cModel stepModel,
 			final SosImportConfiguration sosImportConf) {
@@ -91,14 +94,14 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 			}
 			addToFoiPositionsElement(foi,pos,sosImportConf);
 		} else {
-			// Feature of Interest is created from user input 
+			// Feature of Interest is created from user input
 			addToFeatureOfInterestElement(foi,pos,sosImportConf);
 		}
 	}
 
 	private void addToFeatureOfInterestElement(
-			final FeatureOfInterest foi, 
-			final org.n52.sos.importer.model.position.Position pos, 
+			final FeatureOfInterest foi,
+			final org.n52.sos.importer.model.position.Position pos,
 			final SosImportConfiguration sosImportConf) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("addToFeatureOfInterestElement()");
@@ -111,7 +114,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		// is foi generated or manual input
 		if (foi.isGenerated()) {
 			GeneratedSpatialResourceType foiGSRT = null;
-			if (foiXB.getResource() != null && 
+			if (foiXB.getResource() != null &&
 					foiXB.getResource() instanceof GeneratedSpatialResourceType) {
 				foiGSRT = (GeneratedSpatialResourceType) foiXB.getResource();
 			} else {
@@ -131,7 +134,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 			}
 		} else {
 			SpatialResourceType foiSRT = null;
-			if (foiXB.getResource() != null && 
+			if (foiXB.getResource() != null &&
 					foiXB.getResource() instanceof SpatialResourceType) {
 				foiSRT = (SpatialResourceType) foiXB.getResource();
 			} else {
@@ -153,11 +156,11 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	}
 
 	/**
-	 * Returns the FeatureOfInterest element identified by the given 
+	 * Returns the FeatureOfInterest element identified by the given
 	 * <code>xmlId</code> or <code>null</code> if the element is not found.
 	 * @param xmlId
 	 * @param sosImportConf
-	 * @return the FeatureOfInterest element identified by the given 
+	 * @return the FeatureOfInterest element identified by the given
 	 * 			<code>xmlId</code> or<br>
 	 * 			<code>null</code> if the element is not found.
 	 */
@@ -182,7 +185,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 							if (logger.isDebugEnabled()) {
 								logger.debug("foi found");
 							}
-							// return if found	
+							// return if found
 							return foi;
 						} else if (logger.isDebugEnabled()) {
 							logger.debug("foiRes has wrong id");
@@ -201,12 +204,12 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 	}
 
 	/**
-	 * Adds a new FOIPosition element to AdditionalMetadata in 
-	 * <code>sosImportConf</code> or updates an existing one for the given 
+	 * Adds a new FOIPosition element to AdditionalMetadata in
+	 * <code>sosImportConf</code> or updates an existing one for the given
 	 * <code>foi</code> with values from the <code>pos</code>.
 	 * @param foi
 	 * @param pos the {@link org.n52.sos.importer.model.position.Position}
-	 * @param sosImportConf 
+	 * @param sosImportConf
 	 */
 	private void addToFoiPositionsElement(final FeatureOfInterest foi,
 			final org.n52.sos.importer.model.position.Position pos,
@@ -259,7 +262,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 			if (logger.isDebugEnabled()) {
 				logger.debug("New foi pos added: " + foiPos.xmlText());
 			}
-		} 
+		}
 		// foi is there, update position
 		else {
 			updateXBPosition(foiPos.getPosition(), pos);
@@ -298,7 +301,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		longitude.setUnit(position.getLongitude().getUnit());
 		longitude.setFloatValue(new Double(position.getLongitude().getValue()).floatValue());
 		if (logger.isDebugEnabled()) {
-			logger.debug("XB pos created from model pos. Model Pos: " + 
+			logger.debug("XB pos created from model pos. Model Pos: " +
 					position.toString() + "; XB pos: " + pos.xmlText());
 		}
 		return pos;
@@ -355,7 +358,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 		loong.setFloatValue(new Double(pos.getLongitude().getValue()).floatValue());
 		loong.setUnit(pos.getLongitude().getUnit());
 		if (logger.isDebugEnabled()) {
-			logger.debug("XB pos updated from model pos. Model Pos: " + 
+			logger.debug("XB pos updated from model pos. Model Pos: " +
 					pos.toString() + "; XB pos: " + posXB.xmlText());
 		}
 	}

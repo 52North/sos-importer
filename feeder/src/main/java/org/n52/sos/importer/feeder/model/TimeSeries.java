@@ -54,16 +54,27 @@ import net.opengis.swe.x20.TextEncodingType;
 import net.opengis.swe.x20.TextType;
 import net.opengis.swe.x20.TimeType;
 
+/**
+ * Data holding class for all observations of a time series.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ */
 public class TimeSeries {
 
+	/** Constant <code>SENSOR_ID_NOT_SET="SENSOR_ID_NOT_SET"</code> */
 	public static final String SENSOR_ID_NOT_SET = "SENSOR_ID_NOT_SET";
 
+	/** Constant <code>OBSERVED_PROPERTY_NOT_SET</code> */
 	public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET = new ObservedProperty("OBSERVED_PROPERTY_NOT_SET", "OBSERVED_PROPERTY_NOT_SET");
 
+	/** Constant <code>UOM_CODE_NOT_SET="UOM_CODE_NOT_SET"</code> */
 	public static final String UOM_CODE_NOT_SET = "UOM_CODE_NOT_SET";
 
+	/** Constant <code>MV_TYPE_NOT_SET="MV_TYPE_NOT_SET"</code> */
 	public static final String MV_TYPE_NOT_SET = "MV_TYPE_NOT_SET";
 
+	/** Constant <code>SENSOR_NAME_NOT_SET="SENSOR_NAME_NOT_SET"</code> */
 	public static final String SENSOR_NAME_NOT_SET = "SENSOR_NAME_NOT_SET";
 
 	private final LinkedList<InsertObservation> timeseries = new LinkedList<>();
@@ -72,10 +83,21 @@ public class TimeSeries {
 
 	private final String blockSeparator = "@";
 
+	/**
+	 * <p>addObservation.</p>
+	 *
+	 * @param insertObservation a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+	 * @return a boolean.
+	 */
 	public boolean addObservation(final InsertObservation insertObservation) {
 		return timeseries.add(insertObservation);
 	}
 
+	/**
+	 * <p>getSensorURI.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSensorURI() {
 		if (timeseries.isEmpty()) {
 			return SENSOR_ID_NOT_SET;
@@ -87,6 +109,11 @@ public class TimeSeries {
 		return sensorURI;
 	}
 
+	/**
+	 * <p>getSensorName.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getSensorName() {
 		if (timeseries.isEmpty()) {
 			return SENSOR_NAME_NOT_SET;
@@ -98,6 +125,11 @@ public class TimeSeries {
 		return sensorName;
 	}
 
+	/**
+	 * <p>getFirst.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+	 */
 	public InsertObservation getFirst() {
 		if (timeseries.isEmpty()) {
 			return null;
@@ -105,6 +137,11 @@ public class TimeSeries {
 		return timeseries.getFirst();
 	}
 
+	/**
+	 * <p>getObservedProperty.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
+	 */
 	public ObservedProperty getObservedProperty() {
 		if (timeseries.isEmpty()) {
 			return OBSERVED_PROPERTY_NOT_SET;
@@ -116,6 +153,11 @@ public class TimeSeries {
 		return obsProp;
 	}
 
+	/**
+	 * <p>getUnitOfMeasurementCode.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getUnitOfMeasurementCode() {
 		if (timeseries.isEmpty()) {
 			return UOM_CODE_NOT_SET;
@@ -127,6 +169,11 @@ public class TimeSeries {
 		return uomCode;
 	}
 
+	/**
+	 * <p>getMeasuredValueType.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getMeasuredValueType() {
 		if (timeseries.isEmpty()) {
 			return MV_TYPE_NOT_SET;
@@ -138,11 +185,17 @@ public class TimeSeries {
 		return mVType;
 	}
 
+	/**
+	 * <p>getSweArrayObservation.</p>
+	 *
+	 * @param sosVersion a {@link java.lang.String} object.
+	 * @return a {@link org.n52.oxf.sos.request.InsertObservationParameters} object.
+	 */
 	public InsertObservationParameters getSweArrayObservation(final String sosVersion) {
 		final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
 		// add extension
 		obsParameter.addExtension("<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
-		
+
 		// OM_Observation
    		// procedure
 		obsParameter.addProcedure(getSensorURI());
@@ -200,7 +253,7 @@ public class TimeSeries {
 			xbBooleanType.setDefinition(getObservedProperty().getUri());
 			xbObsProperty.addNewAbstractDataComponent().set(xbBooleanType);
 			xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_BOOLEAN, BooleanType.type);
-			throw new RuntimeException("NO YET IMPLEMENTED");			
+			throw new RuntimeException("NO YET IMPLEMENTED");
 		} else {
 			final QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
 			xbQuantityWithUom.setDefinition(getObservedProperty().getUri());
@@ -308,6 +361,7 @@ public class TimeSeries {
 		return new StringBuffer(start.toString()).append("/").append(end.toString()).toString();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return String.format("TimeSeries [sensor=%s, observedProperty=%s, feature=%s]",
@@ -317,12 +371,19 @@ public class TimeSeries {
 	}
 
 	/**
-	 * @return <code>true</code>, if this time series contains no {@link InsertObservation} objects.
+	 * <p>isEmpty.</p>
+	 *
+	 * @return <code>true</code>, if this time series contains no {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} objects.
 	 */
 	public boolean isEmpty() {
 		return timeseries.isEmpty();
 	}
 
+	/**
+	 * <p>getInsertObservations.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<? extends InsertObservation> getInsertObservations() {
 		return Collections.unmodifiableList(timeseries);
 	}

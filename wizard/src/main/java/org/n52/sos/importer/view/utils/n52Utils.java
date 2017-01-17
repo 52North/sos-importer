@@ -37,15 +37,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>n52Utils class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class n52Utils {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
 
 	/**
+	 * <p>parseDouble.</p>
+	 *
 	 * @deprecated who is using this method?
+	 * @param text a {@link java.lang.String} object.
+	 * @return a {@link java.lang.Double} object.
 	 */
 	public static Double parseDouble(final String text){
 		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());

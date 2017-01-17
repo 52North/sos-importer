@@ -51,15 +51,19 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * provides all necessary functions for modifying the table
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class TableController {
 
 	private static TableController instance = null;
 
+	/** Constant <code>COLUMNS=1</code> */
 	public static final int COLUMNS = 1;
+	/** Constant <code>ROWS=2</code> */
 	public static final int ROWS = 2;
+	/** Constant <code>CELLS=3</code> */
 	public static final int CELLS = 3;
 
 	private final TablePanel tableView;
@@ -94,6 +98,11 @@ public class TableController {
 		allowMultipleSelection();
 	}
 
+	/**
+	 * <p>Getter for the field <code>instance</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.controller.TableController} object.
+	 */
 	public static TableController getInstance() {
 		if (instance == null) {
 			instance = new TableController(-1);
@@ -101,6 +110,11 @@ public class TableController {
 		return instance;
 	}
 
+	/**
+	 * <p>setContent.</p>
+	 *
+	 * @param content a {@link org.n52.sos.importer.model.CsvData} object.
+	 */
 	public void setContent(final CsvData content) {
 		final DefaultTableModel dtm = new EditableTableModel(false);
 
@@ -120,18 +134,35 @@ public class TableController {
 		table.setModel(dtm);
 	}
 
+	/**
+	 * <p>setColumnHeading.</p>
+	 *
+	 * @param column a int.
+	 * @param heading a {@link java.lang.String} object.
+	 */
 	public void setColumnHeading(final int column, final String heading) {
 		table.getColumnModel().getColumn(column).setHeaderValue(heading);
 	}
 
+	/**
+	 * <p>allowSingleSelection.</p>
+	 */
 	public void allowSingleSelection() {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
+	/**
+	 * <p>allowMultipleSelection.</p>
+	 */
 	public void allowMultipleSelection() {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
+	/**
+	 * <p>Setter for the field <code>tableSelectionMode</code>.</p>
+	 *
+	 * @param tableSelectionMode a int.
+	 */
 	public void setTableSelectionMode(final int tableSelectionMode) {
 		this.tableSelectionMode = tableSelectionMode;
 
@@ -157,36 +188,70 @@ public class TableController {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>tableSelectionMode</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getTableSelectionMode() {
 		return tableSelectionMode;
 	}
 
+	/**
+	 * <p>selectColumn.</p>
+	 *
+	 * @param number a int.
+	 */
 	public void selectColumn(final int number) {
 		table.addColumnSelectionInterval(number, number);
 	}
 
+	/**
+	 * <p>selectRow.</p>
+	 *
+	 * @param number a int.
+	 */
 	public void selectRow(final int number) {
 		table.addRowSelectionInterval(number, number);
 	}
 
+	/**
+	 * <p>deselectColumn.</p>
+	 *
+	 * @param number a int.
+	 */
 	public void deselectColumn(final int number) {
 		table.removeColumnSelectionInterval(number, number);
 	}
 
+	/**
+	 * <p>deselectRow.</p>
+	 *
+	 * @param number a int.
+	 */
 	public void deselectRow(final int number) {
 		table.removeRowSelectionInterval(number, number);
 	}
 
+	/**
+	 * <p>deselectAllColumns.</p>
+	 */
 	public void deselectAllColumns() {
 		final int columns = table.getColumnCount() - 1;
 		table.removeColumnSelectionInterval(0, columns);
 	}
 
+	/**
+	 * <p>deselectAllRows.</p>
+	 */
 	public void deselectAllRows() {
 		final int rows = table.getRowCount() - 1;
 		table.removeColumnSelectionInterval(0, rows);
 	}
 
+	/**
+	 * <p>turnSelectionOff.</p>
+	 */
 	public void turnSelectionOff() {
 		table.setRowSelectionAllowed(false);
 		table.setColumnSelectionAllowed(false);
@@ -194,6 +259,9 @@ public class TableController {
 		table.setFocusable(false);
 	}
 
+	/**
+	 * <p>turnSelectionOn.</p>
+	 */
 	public void turnSelectionOn() {
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
@@ -201,22 +269,47 @@ public class TableController {
 		table.setFocusable(true);
 	}
 
+	/**
+	 * <p>getSelectedColumns.</p>
+	 *
+	 * @return an array of int.
+	 */
 	public int[] getSelectedColumns() {
 		return table.getSelectedColumns();
 	}
 
+	/**
+	 * <p>getSelectedColumn.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSelectedColumn() {
 		return table.getSelectedColumn();
 	}
 
+	/**
+	 * <p>getSelectedRows.</p>
+	 *
+	 * @return an array of int.
+	 */
 	public int[] getSelectedRows() {
 		return table.getSelectedRows();
 	}
 
+	/**
+	 * <p>getSelectedRow.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
 
+	/**
+	 * <p>getMarkedValues.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getMarkedValues() {
 		final ArrayList<String> values = new ArrayList<String>();
 
@@ -250,64 +343,138 @@ public class TableController {
 		return values;
 	}
 
+	/**
+	 * <p>getSelectedCellValue.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSelectedCellValue() {
 		final int column = table.getSelectedColumn();
 		final int row = table.getSelectedRow();
 		return (String)table.getValueAt(row, column);
 	}
 
+	/**
+	 * <p>getValueAt.</p>
+	 *
+	 * @param c a {@link org.n52.sos.importer.model.table.Cell} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getValueAt(final Cell c) {
 		return (String) table.getValueAt(c.getRow(), c.getColumn());
 	}
 
+	/**
+	 * <p>getValueAt.</p>
+	 *
+	 * @param row a int.
+	 * @param column a int.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getValueAt(final int row, final int column) {
 		return (String) table.getValueAt(row, column);
 	}
 
+	/**
+	 * <p>getRowCount.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getRowCount() {
 		return table.getRowCount();
 	}
 
+	/**
+	 * <p>getColumnCount.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getColumnCount() {
 		return table.getColumnCount();
 	}
 
+	/**
+	 * <p>mark.</p>
+	 *
+	 * @param c a {@link org.n52.sos.importer.model.table.Column} object.
+	 */
 	public void mark(final Column c) {
 		tableMarker.addColumn(c);
 	}
 
+	/**
+	 * <p>mark.</p>
+	 *
+	 * @param r a {@link org.n52.sos.importer.model.table.Row} object.
+	 */
 	public void mark(final Row r) {
 		tableMarker.addRow(r);
 	}
 
+	/**
+	 * <p>mark.</p>
+	 *
+	 * @param c a {@link org.n52.sos.importer.model.table.Cell} object.
+	 */
 	public void mark(final Cell c) {
 		tableMarker.addCell(c);
 	}
 
+	/**
+	 * <p>clearMarkedTableElements.</p>
+	 */
 	public void clearMarkedTableElements() {
 		tableMarker.removeTableElements();
 	}
 
+	/**
+	 * <p>addSingleSelectionListener.</p>
+	 *
+	 * @param singleSelectionListener a {@link org.n52.sos.importer.controller.TableController.SingleSelectionListener} object.
+	 */
 	public void addSingleSelectionListener(final SingleSelectionListener singleSelectionListener) {
 		this.singleSelectionListener = singleSelectionListener;
 	}
 
+	/**
+	 * <p>addMultipleSelectionListener.</p>
+	 *
+	 * @param multipleSelectionListener a {@link org.n52.sos.importer.controller.TableController.MultipleSelectionListener} object.
+	 */
 	public void addMultipleSelectionListener(final MultipleSelectionListener multipleSelectionListener) {
 		this.multipleSelectionListener = multipleSelectionListener;
 	}
 
+	/**
+	 * <p>removeMultipleSelectionListener.</p>
+	 */
 	public void removeMultipleSelectionListener() {
 		multipleSelectionListener = null;
 	}
 
+	/**
+	 * <p>Setter for the field <code>orientation</code>.</p>
+	 *
+	 * @param orientation a int.
+	 */
 	public void setOrientation(final int orientation) {
 		this.orientation = orientation;
 	}
 
+	/**
+	 * <p>Getter for the field <code>orientation</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getOrientation() {
 		return orientation;
 	}
 
+	/**
+	 * <p>getOrientationString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOrientationString() {
 		switch(orientation) {
 			case COLUMNS: return Lang.l().column(); //"column";
@@ -441,6 +608,8 @@ public class TableController {
 	}
 
 	/**
+	 * <p>Getter for the field <code>firstLineWithData</code>.</p>
+	 *
 	 * @return the firstLineWithData
 	 */
 	public int getFirstLineWithData() {
@@ -448,20 +617,39 @@ public class TableController {
 	}
 
 	/**
+	 * <p>Setter for the field <code>firstLineWithData</code>.</p>
+	 *
 	 * @param firstLineWithData the firstLineWithData to set
 	 */
 	public void setFirstLineWithData(final int firstLineWithData) {
 		TableController.firstLineWithData = firstLineWithData;
 	}
 
+	/**
+	 * <p>getAllColumnHeadings.</p>
+	 *
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public String[] getAllColumnHeadings(){
 		return getColumnHeadingsFiltered(null,false);
 	}
 
+	/**
+	 * <p>getUsedColumnHeadings.</p>
+	 *
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public String[] getUsedColumnHeadings() {
 		return getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),false);
 	}
 
+	/**
+	 * <p>getColumnHeadingsFiltered.</p>
+	 *
+	 * @param typeToLeaveOut a {@link java.lang.String} object.
+	 * @param withColId a boolean.
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public String[] getColumnHeadingsFiltered(final String typeToLeaveOut, final boolean withColId) {
 		final int colCount = table.getColumnCount();
 		final TableColumnModel tcm = table.getColumnModel();
@@ -493,6 +681,11 @@ public class TableController {
 		return headings.toArray(new String[headings.size()]);
 	}
 
+	/**
+	 * <p>getUsedColumnHeadingsWithId.</p>
+	 *
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public String[] getUsedColumnHeadingsWithId() {
 		return getColumnHeadingsFiltered(Lang.l().step3ColTypeDoNotExport(),true);
 	}

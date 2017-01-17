@@ -39,32 +39,39 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>MissingPositionPanel class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class MissingPositionPanel extends JPanel{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private final Step6cModel s6cM;
-	
+
 	// GUI stuff
 	private final JPanel containerPanel;
 	private final JPanel manualInputPanel;
-	
+
+	/**
+	 * <p>Constructor for MissingPositionPanel.</p>
+	 *
+	 * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+	 */
 	public MissingPositionPanel(final Step6cModel s6cM) {
 		setLayout(new BorderLayout(0, 0));
-		
+
 		this.s6cM = s6cM;
-		
+
 		manualInputPanel = initManualInputPanel(s6cM);
-		
+
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new BorderLayout(0,0));
 		containerPanel.add(manualInputPanel,BorderLayout.CENTER);
-		
+
 		add(containerPanel,BorderLayout.CENTER);
-		
+
 		if (Constants.GUI_DEBUG) {
 			manualInputPanel.setBorder(Constants.DEBUG_BORDER);
 		}
@@ -81,6 +88,11 @@ public class MissingPositionPanel extends JPanel{
 		return manualInputPanel;
 	}
 
+	/**
+	 * <p>isFinished.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isFinished() {
 		final java.awt.Component[] subPanels = manualInputPanel.getComponents();
 		for (final java.awt.Component component : subPanels) {
@@ -94,6 +106,9 @@ public class MissingPositionPanel extends JPanel{
 		return true;
 	}
 
+	/**
+	 * <p>saveSettings.</p>
+	 */
 	public void saveSettings() {
 		final java.awt.Component[] subPanels = manualInputPanel.getComponents();
 		for (final java.awt.Component component : subPanels) {
@@ -103,7 +118,10 @@ public class MissingPositionPanel extends JPanel{
 			}
 		}
 	}
-	
+
+	/**
+	 * <p>loadSettings.</p>
+	 */
 	public void loadSettings() {
 		// load settings from model and set map and manual interface to model position
 		final Position p = s6cM.getPosition();
@@ -127,8 +145,8 @@ public class MissingPositionPanel extends JPanel{
 					final MissingEPSGCodePanel mcp = (MissingEPSGCodePanel) component;
 					mcp.setMissingComponent(p.getEPSGCode());
 				}
-			} 
-		} 
+			}
+		}
 	}
 
 }

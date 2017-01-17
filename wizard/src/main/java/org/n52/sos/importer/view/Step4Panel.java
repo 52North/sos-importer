@@ -39,17 +39,23 @@ import org.n52.sos.importer.Constants;
 
 /**
  * consists of a short instruction label and the table
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step4Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private JTextArea instructionsJTA;
-	
+
 	private JPanel tablePanel;
-	
+
+	/**
+	 * <p>Constructor for Step4Panel.</p>
+	 *
+	 * @param text a {@link java.lang.String} object.
+	 */
 	public Step4Panel(String text) {
 		super();
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -78,7 +84,7 @@ public class Step4Panel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		add(tablePanel,c);
-		
+
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.fill = GridBagConstraints.BOTH;

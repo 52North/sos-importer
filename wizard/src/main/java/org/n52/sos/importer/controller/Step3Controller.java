@@ -47,47 +47,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * lets the user identify different types of metadata 
+ * lets the user identify different types of metadata
  * for each column in the CSV file
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class Step3Controller extends StepController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step3Controller.class);
 
 	private Step3Panel step3Panel;
-	
+
 	/**
 	 * Step3Model of this Step3Controllers
 	 */
 	private final Step3Model step3Model;
-	
+
 	/**
 	 * reference to TableController singleton instance
 	 */
-	private final TableController tabCtrlr = TableController.getInstance();	
-	
-	public Step3Controller(final int currentColumn, 
-			final int firstLineWithData, 
+	private final TableController tabCtrlr = TableController.getInstance();
+
+	/**
+	 * <p>Constructor for Step3Controller.</p>
+	 *
+	 * @param currentColumn a int.
+	 * @param firstLineWithData a int.
+	 * @param useHeader a boolean.
+	 */
+	public Step3Controller(final int currentColumn,
+			final int firstLineWithData,
 			final boolean useHeader) {
-		step3Model = new Step3Model(currentColumn, 
-				firstLineWithData, 
-				useHeader);	
+		step3Model = new Step3Model(currentColumn,
+				firstLineWithData,
+				useHeader);
 		step3Panel = new Step3Panel(firstLineWithData);
 	}
-	
-	
+
+
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step3aDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step3Panel;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		if (logger.isTraceEnabled()) {
@@ -119,7 +130,8 @@ public class Step3Controller extends StepController {
 		tabCtrlr.setTableSelectionMode(TableController.COLUMNS);
 		tabCtrlr.turnSelectionOff();
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {
 		if (logger.isTraceEnabled()) {
@@ -149,21 +161,21 @@ public class Step3Controller extends StepController {
 		}
 		//
 		// when having reached the last column, merge positions and date&time
-		if (step3Model.getMarkedColumn() + 1 == 
-				tabCtrlr.getColumnCount()) {	
+		if (step3Model.getMarkedColumn() + 1 ==
+				tabCtrlr.getColumnCount()) {
 			final DateAndTimeController dtc = new DateAndTimeController();
 			dtc.mergeDateAndTimes();
 			//
 			final PositionController pc = new PositionController();
 			pc.mergePositions();
-		} 
+		}
 		// TODO if being date&time or position column: add group to table heading
 		tabCtrlr.setColumnHeading(number, selection.get(0));
 		tabCtrlr.clearMarkedTableElements();
 		tabCtrlr.setTableSelectionMode(TableController.CELLS);
 		tabCtrlr.turnSelectionOn();
 		step3Panel = null;
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("End:");
 			logger.debug("Step3Model: " + step3Model);
@@ -171,9 +183,10 @@ public class Step3Controller extends StepController {
 					"[" + step3Panel.hashCode() + "]"
 					:"null"));
 		}
-		
+
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public void back() {
 		final List<String> selection = new ArrayList<String>();
@@ -182,7 +195,7 @@ public class Step3Controller extends StepController {
 		final int number = step3Model.getMarkedColumn()-1;
 		if(number >= 0) {
 			// TODO if being date&time or position column: add group to table heading
-			tabCtrlr.setColumnHeading(number, selection.get(0));	
+			tabCtrlr.setColumnHeading(number, selection.get(0));
 			tabCtrlr.clearMarkedTableElements();
 			tabCtrlr.setTableSelectionMode(TableController.CELLS);
 			tabCtrlr.turnSelectionOn();
@@ -190,25 +203,28 @@ public class Step3Controller extends StepController {
 		step3Panel = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
-	public StepController getNextStepController() {		
-		return new Step4aController( new Step4aModel( null, step3Model.getFirstLineWithData() ) );	
+	public StepController getNextStepController() {
+		return new Step4aController( new Step4aModel( null, step3Model.getFirstLineWithData() ) );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		final List<String> currentSelection = new ArrayList<String>();
 		step3Panel.store(currentSelection);
 		// check if the current column is the last in the file
 		// if yes, check for at least one measured value column
-		if ( (step3Model.getMarkedColumn() + 1) == 
+		if ( (step3Model.getMarkedColumn() + 1) ==
 				TableController.getInstance().getColumnCount() &&
-				ModelStore.getInstance().getMeasuredValues().size() == 0 && 
+				ModelStore.getInstance().getMeasuredValues().size() == 0 &&
 				!currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
 			JOptionPane.showMessageDialog(null,
 					Lang.l().step3aMeasureValueColMissingDialogMessage(),
@@ -219,19 +235,21 @@ public class Step3Controller extends StepController {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		// check if we have reached the last column
-		// if not, return a new Step3aController 
+		// if not, return a new Step3aController
 		final int nextColumn = step3Model.getMarkedColumn() + 1;
 		if (nextColumn == tabCtrlr.getColumnCount()) {
 			return null;
 		}
-		return new Step3Controller(nextColumn, 
-				step3Model.getFirstLineWithData(), 
+		return new Step3Controller(nextColumn,
+				step3Model.getFirstLineWithData(),
 				step3Model.getUseHeader());
-	}	
-	
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean isStillValid() {
 		//TODO: check whether the CSV file parsing settings have been changed
@@ -241,6 +259,7 @@ public class Step3Controller extends StepController {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step3Model;

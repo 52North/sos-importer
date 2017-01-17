@@ -53,9 +53,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO if failed observations-> store in file
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * TODO if failed observations -&gt; store in file
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 // TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
 public class OneTimeFeeder implements Runnable {
@@ -66,10 +67,21 @@ public class OneTimeFeeder implements Runnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
 
+	/**
+	 * <p>Constructor for OneTimeFeeder.</p>
+	 *
+	 * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
+	 */
 	public OneTimeFeeder(final Configuration config) {
 		this.config = config;
 	}
 
+	/**
+	 * <p>Constructor for OneTimeFeeder.</p>
+	 *
+	 * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
+	 * @param datafile a {@link java.io.File} object.
+	 */
 	public OneTimeFeeder(final Configuration config, final File datafile) {
 		this.config = config;
 		dataFile = new DataFile(config, datafile);
@@ -145,6 +157,7 @@ public class OneTimeFeeder implements Runnable {
 		return new DataFile(config, dataFile);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void run() {
 		LOG.trace("run()");
@@ -241,6 +254,13 @@ public class OneTimeFeeder implements Runnable {
 		}
 	}
 
+	/**
+	 * <p>getLocalFilename.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 * @since 0.5.0
+	 */
 	protected String getLocalFilename() throws IOException {
 		return config.getConfigFile().getCanonicalPath() +
 				"_" +

@@ -42,7 +42,9 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single day
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingDayPanel extends MissingComponentPanel {
 
@@ -50,10 +52,15 @@ public class MissingDayPanel extends MissingComponentPanel {
 
 	private JLabel dayLabel;
 	private DateAndTime dateAndTime;
-	
+
 	private SpinnerNumberModel dayModel = new SpinnerNumberModel(1, 1, 31, 1);
 	private JSpinner daySpinner = new JSpinner(dayModel);
-	
+
+	/**
+	 * <p>Constructor for MissingDayPanel.</p>
+	 *
+	 * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+	 */
 	public MissingDayPanel(DateAndTime dateAndTime) {
 		super();
 		this.dateAndTime = dateAndTime;
@@ -63,26 +70,31 @@ public class MissingDayPanel extends MissingComponentPanel {
 		this.add(daySpinner);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void assignValues() {
-		dateAndTime.setDay(new Day(dayModel.getNumber().intValue()));	
+		dateAndTime.setDay(new Day(dayModel.getNumber().intValue()));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void unassignValues() {
-		dateAndTime.setDay(null);		
+		dateAndTime.setDay(null);
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean checkValues() {
 		return true;
 	}
-	
+
+	/** {@inheritDoc} */
 	@Override
 	public Component getMissingComponent() {
 		return new Day(dayModel.getNumber().intValue());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setMissingComponent(Component c) {
 		dayModel.setValue(((Day)c).getValue());

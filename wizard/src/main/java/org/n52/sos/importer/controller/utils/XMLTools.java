@@ -2,17 +2,19 @@
  * Copyright Aduna (http://www.aduna-software.com/) (c) 1997-2006.
  *
  * Licensed under the Aduna BSD-style license.
- * 
+ *
  * Author not defined!
  */
 package org.n52.sos.importer.controller.utils;
 
 /**
- * {@link http://www.java2s.com/Code/Java/XML/CheckswhetherthesuppliedStringisanNCNameNamespaceClassifiedName.htm}
- * 
+ * Detailshttp://www.java2s.com/Code/Java/XML/CheckswhetherthesuppliedStringisanNCNameNamespaceClassifiedName.htm
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * 
+ *
  * TODO replace by org.n52.oxf.xml.XMLTools when OXF is used by this implementation
+ *
+ * @version $Id: $Id
  */
 public class XMLTools {
 
@@ -21,6 +23,9 @@ public class XMLTools {
 	 * Name) as specified at
 	 * <a href="http://www.w3.org/TR/REC-xml-names/#NT-NCName">
 	 * http://www.w3.org/TR/REC-xml-names/#NT-NCName</a>.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a boolean.
 	 */
 	public static final boolean isNCName(String name) {
 		int nameLength = name.length();
@@ -48,8 +53,14 @@ public class XMLTools {
 		return false;
 	}
 
+	/**
+	 * <p>isNCNameChar.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isNCNameChar(char c) {
-		return 
+		return
 				_isAsciiBaseChar(c) ||
 				_isAsciiDigit(c) ||
 				c == '.' || c == '-' || c == '_' ||
@@ -60,6 +71,12 @@ public class XMLTools {
 				isExtender(c);
 	}
 
+	/**
+	 * <p>isLetter.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isLetter(char c) {
 		return
 				_isAsciiBaseChar(c) ||
@@ -277,6 +294,12 @@ public class XMLTools {
 				_charInRange(c, 0xAC00, 0xD7A3);
 	}
 
+	/**
+	 * <p>isIdeographic.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isIdeographic(char c) {
 		return
 				_charInRange(c, 0x4E00, 0x9FA5) ||
@@ -284,6 +307,12 @@ public class XMLTools {
 				_charInRange(c, 0x3021, 0x3029);
 	}
 
+	/**
+	 * <p>isCombiningChar.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isCombiningChar(char c) {
 		return
 				_charInRange(c, 0x0300, 0x0345) ||
@@ -383,6 +412,12 @@ public class XMLTools {
 				c == 0x309A;
 	}
 
+	/**
+	 * <p>isDigit.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isDigit(char c) {
 		return
 				_isAsciiDigit(c) ||
@@ -412,6 +447,12 @@ public class XMLTools {
 				_charInRange(c, 0x0F20, 0x0F29);
 	}
 
+	/**
+	 * <p>isExtender.</p>
+	 *
+	 * @param c a char.
+	 * @return a boolean.
+	 */
 	public static final boolean isExtender(char c) {
 		return
 				c == 0x00B7 ||

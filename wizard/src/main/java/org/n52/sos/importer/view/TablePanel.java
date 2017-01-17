@@ -43,18 +43,19 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * contains the table which is used by step panels 3, 4 and 5
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class TablePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static TablePanel instance = null;
-	
+
 	private final JTable table;
-	
-	private TablePanel() { 
+
+	private TablePanel() {
 		super();
 		setBorder(new TitledBorder(null, Lang.l().dataPreview(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -81,7 +82,12 @@ public class TablePanel extends JPanel {
 			scrollPane.setBorder(Constants.DEBUG_BORDER);
 		}
 	}
-	
+
+	/**
+	 * <p>Getter for the field <code>instance</code>.</p>
+	 *
+	 * @return a {@link org.n52.sos.importer.view.TablePanel} object.
+	 */
 	public static TablePanel getInstance() {
 		if (instance == null) {
 			instance = new TablePanel();
@@ -89,6 +95,11 @@ public class TablePanel extends JPanel {
 		return instance;
 	}
 
+	/**
+	 * <p>Getter for the field <code>table</code>.</p>
+	 *
+	 * @return a {@link javax.swing.JTable} object.
+	 */
 	public JTable getTable() {
 		return table;
 	}

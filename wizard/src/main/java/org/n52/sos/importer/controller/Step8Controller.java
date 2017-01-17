@@ -80,9 +80,10 @@ import org.slf4j.LoggerFactory;
  * displays the configuration,
  * and the log file
  * depending on the options from step 7.
+ *
  * @author Raimund
  * @author e.h.juerrens@52north.org
- *
+ * @version $Id: $Id
  */
 public class Step8Controller extends StepController {
 
@@ -92,10 +93,16 @@ public class Step8Controller extends StepController {
 
 	private final Step7Model step7Model;
 
+	/**
+	 * <p>Constructor for Step8Controller.</p>
+	 *
+	 * @param step7Model a {@link org.n52.sos.importer.model.Step7Model} object.
+	 */
 	public Step8Controller(final Step7Model step7Model) {
 		this.step7Model = step7Model;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void loadSettings() {
 		step8Panel = new Step8Panel(step7Model,this);
@@ -140,49 +147,61 @@ public class Step8Controller extends StepController {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void saveSettings() {}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getDescription() {
 		return Lang.l().step8Description();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public JPanel getStepPanel() {
 		return step8Panel;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNextStepController() {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isNecessary() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isFinished() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepController getNext() {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void back() {
 		BackNextController.getInstance().changeFinishToNext();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StepModel getModel() {
 		return step7Model;
 	}
 
+	/**
+	 * <p>directImport.</p>
+	 */
 	public void directImport() {
 		final StringBuilder pathToJavaExecutable = new StringBuilder(System.getProperty("java.home"));
 		pathToJavaExecutable.append(File.separator);

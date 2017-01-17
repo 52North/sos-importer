@@ -36,7 +36,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
+ * <p>Step2PanelTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 @Ignore("Requires display which is not available on remote build servers")
 public class Step2PanelTest {
@@ -45,43 +49,67 @@ public class Step2PanelTest {
 
 	private Step2Panel panel;
 
+	/**
+	 * <p>init.</p>
+	 */
 	@Before
 	public void init() {
 		panel = new Step2Panel(MAX_ROWS);
 	}
 
+	/**
+	 * <p>shouldReturnTrueIfIsSampleBasedIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnTrueIfIsSampleBasedIsSet() {
 		assertThat(panel.setSampleBased(true).isSampleBased(), is(true));
 	}
 
+	/**
+	 * <p>shouldReturnFalseAsDefaultValueForSampleBased.</p>
+	 */
 	@Test
 	public void shouldReturnFalseAsDefaultValueForSampleBased() {
 		assertThat(panel.isSampleBased(), is(false));
 	}
 
+	/**
+	 * <p>shouldReturnStringIfIsSampleBasedStartRegExIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
 		final String sampleBasedStartRegEx = "test-regex";
 		assertThat(panel.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
 	}
 
+	/**
+	 * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx.</p>
+	 */
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
 		assertThat(panel.getSampleBasedStartRegEx(), is(""));
 	}
 
+	/**
+	 * <p>shouldReturnValueIfIsSampleBasedDateOffsetIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
 		final int dateOffset = MAX_ROWS-5;
 		assertThat(panel.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
 	}
 
+	/**
+	 * <p>shouldReturnOneAsDefaultValueForDateOffset.</p>
+	 */
 	@Test
 	public void shouldReturnOneAsDefaultValueForDateOffset() {
 		assertThat(panel.getSampleBasedDateOffset(), is(1));
 	}
 
+	/**
+	 * <p>shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet() {
 		final String dateExtractionRegEx = "test-regex";
@@ -90,49 +118,76 @@ public class Step2PanelTest {
 				is(dateExtractionRegEx));
 	}
 
+	/**
+	 * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx.</p>
+	 */
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
 		assertThat(panel.getSampleBasedDateExtractionRegEx(), is(""));
 	}
 
+	/**
+	 * <p>shouldReturnStringIfIsSampleBasedDatePatternIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
 		final String datePattern = "test-regex";
 		assertThat(panel.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
 	}
 
+	/**
+	 * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern.</p>
+	 */
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
 		assertThat(panel.getSampleBasedDatePattern(), is(""));
 	}
 
+	/**
+	 * <p>shouldReturnValueIfIsSampleBasedDataOffsetIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
 		final int dataOffset = MAX_ROWS-5;
 		assertThat(panel.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
 	}
 
+	/**
+	 * <p>shouldReturnOneAsDefaultValueForDataOffset.</p>
+	 */
 	@Test
 	public void shouldReturnOneAsDefaultValueForDataOffset() {
 		assertThat(panel.getSampleBasedDataOffset(), is(1));
 	}
 
+	/**
+	 * <p>shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
 		final int sampleSizeOffset = MAX_ROWS-5;
 		assertThat(panel.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
 	}
 
+	/**
+	 * <p>shouldReturnOneAsDefaultValueForSampleSizeOffset.</p>
+	 */
 	@Test
 	public void shouldReturnOneAsDefaultValueForSampleSizeOffset() {
 		assertThat(panel.getSampleBasedSampleSizeOffset(), is(1));
 	}
 
+	/**
+	 * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx.</p>
+	 */
 	@Test
 	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
 		assertThat(panel.getSampleBasedSampleSizeRegEx(), is(""));
 	}
 
+	/**
+	 * <p>shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet.</p>
+	 */
 	@Test
 	public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
 		final String sampleSizeRegEx = "test-regex";

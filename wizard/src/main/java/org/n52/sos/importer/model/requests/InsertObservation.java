@@ -30,32 +30,40 @@ package org.n52.sos.importer.model.requests;
 
 /**
  * collects all information for the InsertObservation request
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class InsertObservation {
-	
+
 	private String sensorName;
-	
+
 	private String sensorURI;
-	
+
 	private String featureOfInterestName;
-	
+
 	private String featureOfInterestURI;
-	
+
 	private String observedPropertyURI;
-	
+
 	private String unitOfMeasurementCode;
-	
+
 	private String value;
-	
+
 	private String timeStamp;
-	
+
 	private String epsgCode;
-	
+
 	private String latitudeValue;
 
 	private String longitudeValue;
-	
+
+	/**
+	 * <p>fillTemplate.</p>
+	 *
+	 * @param template a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String fillTemplate(String template) {
 		String filledTemplate = template;
 		filledTemplate = filledTemplate.replaceAll("THISsensorName", sensorName);
@@ -71,52 +79,108 @@ public class InsertObservation {
 		filledTemplate = filledTemplate.replaceAll("THISlongitudeValue", longitudeValue);
 		return filledTemplate;
 	}
-	
+
+	/**
+	 * <p>Setter for the field <code>sensorName</code>.</p>
+	 *
+	 * @param sensorName a {@link java.lang.String} object.
+	 */
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>sensorURI</code>.</p>
+	 *
+	 * @param sensorURI a {@link java.lang.String} object.
+	 */
 	public void setSensorURI(String sensorURI) {
 		this.sensorURI = sensorURI;
 	}
 
+	/**
+	 * <p>Setter for the field <code>featureOfInterestName</code>.</p>
+	 *
+	 * @param featureOfInterestName a {@link java.lang.String} object.
+	 */
 	public void setFeatureOfInterestName(String featureOfInterestName) {
 		this.featureOfInterestName = featureOfInterestName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>featureOfInterestURI</code>.</p>
+	 *
+	 * @param featureOfInterestURI a {@link java.lang.String} object.
+	 */
 	public void setFeatureOfInterestURI(String featureOfInterestURI) {
 		this.featureOfInterestURI = featureOfInterestURI;
 	}
 
+	/**
+	 * <p>Setter for the field <code>observedPropertyURI</code>.</p>
+	 *
+	 * @param observedPropertyURI a {@link java.lang.String} object.
+	 */
 	public void setObservedPropertyURI(String observedPropertyURI) {
 		this.observedPropertyURI = observedPropertyURI;
 	}
 
+	/**
+	 * <p>Setter for the field <code>unitOfMeasurementCode</code>.</p>
+	 *
+	 * @param unitOfMeasurementCode a {@link java.lang.String} object.
+	 */
 	public void setUnitOfMeasurementCode(String unitOfMeasurementCode) {
 		this.unitOfMeasurementCode = unitOfMeasurementCode;
 	}
 
+	/**
+	 * <p>Setter for the field <code>value</code>.</p>
+	 *
+	 * @param value a {@link java.lang.String} object.
+	 */
 	public void setValue(String value) {
 		this.value = value;
 	}
 
+	/**
+	 * <p>Setter for the field <code>timeStamp</code>.</p>
+	 *
+	 * @param timeStamp a {@link java.lang.String} object.
+	 */
 	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
+	/**
+	 * <p>Setter for the field <code>epsgCode</code>.</p>
+	 *
+	 * @param epsgCode a {@link java.lang.String} object.
+	 */
 	public void setEpsgCode(String epsgCode) {
 		this.epsgCode = epsgCode;
 	}
 
+	/**
+	 * <p>Setter for the field <code>latitudeValue</code>.</p>
+	 *
+	 * @param latitudeValue a {@link java.lang.String} object.
+	 */
 	public void setLatitudeValue(String latitudeValue) {
 		this.latitudeValue = latitudeValue;
 	}
 
+	/**
+	 * <p>Setter for the field <code>longitudeValue</code>.</p>
+	 *
+	 * @param longitudeValue a {@link java.lang.String} object.
+	 */
 	public void setLongitudeValue(String longitudeValue) {
 		this.longitudeValue = longitudeValue;
 	}
-	
 
+
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "InsertObservation [sensorName=" + sensorName + ", sensorURI="
@@ -130,6 +194,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>sensorName</code>.</p>
+	 *
 	 * @return the sensorName
 	 */
 	public String getSensorName() {
@@ -137,6 +203,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>sensorURI</code>.</p>
+	 *
 	 * @return the sensorURI
 	 */
 	public String getSensorURI() {
@@ -144,6 +212,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>featureOfInterestName</code>.</p>
+	 *
 	 * @return the featureOfInterestName
 	 */
 	public String getFeatureOfInterestName() {
@@ -151,6 +221,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>featureOfInterestURI</code>.</p>
+	 *
 	 * @return the featureOfInterestURI
 	 */
 	public String getFeatureOfInterestURI() {
@@ -158,6 +230,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>observedPropertyURI</code>.</p>
+	 *
 	 * @return the observedPropertyURI
 	 */
 	public String getObservedPropertyURI() {
@@ -165,6 +239,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>unitOfMeasurementCode</code>.</p>
+	 *
 	 * @return the unitOfMeasurementCode
 	 */
 	public String getUnitOfMeasurementCode() {
@@ -172,6 +248,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
 	 * @return the value
 	 */
 	public String getValue() {
@@ -179,6 +257,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>timeStamp</code>.</p>
+	 *
 	 * @return the timeStamp
 	 */
 	public String getTimeStamp() {
@@ -186,6 +266,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>epsgCode</code>.</p>
+	 *
 	 * @return the epsgCode
 	 */
 	public String getEpsgCode() {
@@ -193,6 +275,8 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>latitudeValue</code>.</p>
+	 *
 	 * @return the latitudeValue
 	 */
 	public String getLatitudeValue() {
@@ -200,10 +284,12 @@ public class InsertObservation {
 	}
 
 	/**
+	 * <p>Getter for the field <code>longitudeValue</code>.</p>
+	 *
 	 * @return the longitudeValue
 	 */
 	public String getLongitudeValue() {
 		return longitudeValue;
 	}
-	
+
 }

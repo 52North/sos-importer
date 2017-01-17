@@ -42,7 +42,7 @@ public class OfferingTest {
 		final Offering offering = new Offering(name, null);
 		assertThat(offering.getName(), is(name));
 	}
-	
+
 	@Test
 	public void should_set_uri_for_offering()
 	{

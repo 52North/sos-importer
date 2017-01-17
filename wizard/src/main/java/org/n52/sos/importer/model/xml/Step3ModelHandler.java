@@ -75,15 +75,17 @@ import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
  * <li>SOS_SENSOR</li>
  * <li>OTHER</li>
  * </ul>
- * For the latest configuration set-up and schema check: {@link
- * 52n-sos-importer-bindings/src/main/xsd/}
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * For the latest configuration set-up and schema check:
+ * 52n-sos-importer-bindings/src/main/xsd/
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step3ModelHandler implements ModelHandler<Step3Model> {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Step3ModelHandler.class);
 
+	/** {@inheritDoc} */
 	@Override
 	public void handleModel(final Step3Model stepModel,
 			final SosImportConfiguration sosImportConf) {
@@ -204,10 +206,10 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 		return null;
 	}
 	/**
-	 * Date & Time:<br />
-	 * Combination, Pattern <- parse pattern SEP Group<br />
+	 * Date & Time:<br>
+	 * Combination, Pattern <- parse pattern SEP Group<br>
 	 * UNIX TIME
-	 * 
+	 *
 	 * @param col
 	 * @param type
 	 * @param encodedMetadata
@@ -241,14 +243,14 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 			Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.UNIX_TIME,col);
 		}
 	}
-	
+
 	/**
-	 * Measured Value:<br />
-	 * Numeric, .SEP, (decimal and thousands separator)<br />
-	 * Count, 0<br />
-	 * Boolean, 0<br />
-	 * Text, 0<br />
-	 * 
+	 * Measured Value:<br>
+	 * Numeric, .SEP, (decimal and thousands separator)<br>
+	 * Count, 0<br>
+	 * Boolean, 0<br>
+	 * Text, 0<br>
+	 *
 	 * @param col
 	 * @param type
 	 *            Numeric, Count, Boolean, or Text
@@ -260,7 +262,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 			logger.trace("\t\tsetComplexColumnTypeMeasuredValue()");
 		}
 		col.setType(Type.MEASURED_VALUE);
-		
+
 		String value = null;
 		//
 		if (type.equalsIgnoreCase(Lang.l().step3MeasuredValNumericValue())) {
@@ -274,10 +276,10 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 		}
 		Helper.addOrUpdateColumnMetadata(Key.TYPE, value, col);
 	}
-	
+
 	/**
 	 * Position: Combination, Pattern <- parse pattern SEP Group
-	 * 
+	 *
 	 * @param col
 	 * @param type
 	 *            Combination
@@ -330,7 +332,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
 		} else if (type.equalsIgnoreCase(Lang.l().featureOfInterest())) {
 			col.setType(Type.FOI);
 		} else if (type.equalsIgnoreCase(Lang.l().step3ColTypeDateTime())) {
-			setComplexColumnTypeDateAndTime(col, 
+			setComplexColumnTypeDateAndTime(col,
 					Lang.l().step3DateAndTimeUnixTime(), null);
 		} else {
 			logger.error("Type not known to schema : " + type);

@@ -63,11 +63,10 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 /**
  * In this class the XML model for an CSV file is stored for later re-use by
  * another application.
- * 
+ *
  * @author e.h.juerrens@52north.org
  * @since 0.2
- * @version
- * 
+ * @version $Id: $Id
  */
 public class Model {
 
@@ -86,13 +85,13 @@ public class Model {
 
 	/**
 	 * Create model based on xml file
-	 * 
+	 *
 	 * @param xmlFileWithModel
 	 *            the file containing the <code>Model</code>
-	 * @throws XmlException
+	 * @throws org.apache.xmlbeans.XmlException
 	 *             thrown while parsing the file &rarr; <code>Model</code>
 	 *             file is <b>not</b> valid.
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 *             having any problems while reading file
 	 */
 	public Model(final File xmlFileWithModel) throws XmlException, IOException {
@@ -103,13 +102,18 @@ public class Model {
 
 	/**
 	 * Create model based on an existing one
-	 * 
-	 * @param sosImpConf
+	 *
+	 * @param sosImpConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
 	 */
 	public Model(final SosImportConfiguration sosImpConf) {
 		this.sosImpConf = sosImpConf;
 	}
 
+	/**
+	 * <p>getFileName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFileName() {
 		if (logger.isTraceEnabled()) {
 			logger.trace("getFileName()");
@@ -130,9 +134,15 @@ public class Model {
 		return result;
 	}
 
+	/**
+	 * <p>registerProvider.</p>
+	 *
+	 * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
+	 * @return a boolean.
+	 */
 	public boolean registerProvider(final StepModel sm) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("registerProvider(" + 
+			logger.trace("registerProvider(" +
 					(sm.getClass().getSimpleName()==null?
 							sm.getClass():
 								sm.getClass().getSimpleName()) +
@@ -148,12 +158,18 @@ public class Model {
 		return result;
 	}
 
+	/**
+	 * <p>removeProvider.</p>
+	 *
+	 * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
+	 * @return a boolean.
+	 */
 	public boolean removeProvider(final StepModel sm) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("removeProvider(" +  
-					(sm.getClass().getSimpleName()==null? 
-							sm.getClass(): 
-								sm.getClass().getSimpleName()) + 
+			logger.trace("removeProvider(" +
+					(sm.getClass().getSimpleName()==null?
+							sm.getClass():
+								sm.getClass().getSimpleName()) +
 								")");
 		}
 		//
@@ -166,13 +182,20 @@ public class Model {
 		return result;
 	}
 
+	/**
+	 * <p>save.</p>
+	 *
+	 * @param file a {@link java.io.File} object.
+	 * @return a boolean.
+	 * @throws java.io.IOException if any.
+	 */
 	public boolean save(final File file) throws IOException {
 		if (logger.isTraceEnabled()) {
 			logger.trace("save(" + file!=null?file.getName():file + ")");
 		}
 		// laxValidate or validate?
 		if (!laxValidate() ||
-				sosImpConf.getCsvMetadata() == null || 
+				sosImpConf.getCsvMetadata() == null ||
 				sosImpConf.getDataFile() == null ||
 				sosImpConf.getSosMetadata() == null) {
 			return false;
@@ -195,7 +218,7 @@ public class Model {
 			}
 			if (file.isFile()) {
 				if (file.canWrite()) {
-					final SosImportConfigurationDocument doc = 
+					final SosImportConfigurationDocument doc =
 						SosImportConfigurationDocument.Factory.newInstance();
 					// insert schema location
 					final XmlCursor c = sosImpConf.newCursor();
@@ -237,7 +260,7 @@ public class Model {
 		 * check each provider and update the internal model
 		 * using ModelHandler for each StepModel
 		 */
-		
+
 		if (stepModells != null && stepModells.length > 0) {
 			//
 			for (final StepModel sm : stepModells) {
@@ -308,8 +331,8 @@ public class Model {
 
 	/**
 	 * Should be called after final step to validate the final model.
-	 * 
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean validate() {
 		if (logger.isTraceEnabled()) {
@@ -324,7 +347,12 @@ public class Model {
 		}
 		return modelValid;
 	}
-	
+
+	/**
+	 * <p>laxValidate.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean laxValidate() {
 		final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
 		doc.setSosImportConfiguration(sosImpConf);

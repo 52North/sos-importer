@@ -41,15 +41,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author e.h.juerrens@52north.org
+ * <p>Step4bTest class.</p>
  *
+ * @author e.h.juerrens@52north.org
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step4bTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(Step4bTest.class);
 
 	/**
-	 * @param args
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
 	 */
 	public static void main(final String[] args) {
 		if (logger.isTraceEnabled()) {

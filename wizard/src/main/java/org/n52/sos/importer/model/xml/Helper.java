@@ -43,24 +43,26 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 
 /**
  * Offering methods used by different ModelHandler classes.
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Helper {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Helper.class);
-	
+
 	/**
-	 * Checks, if a Metadata element with the given <b>key</b> exists,<br />
-	 * 		if <b>yes</b>, update this one, <br />
+	 * Checks, if a Metadata element with the given <b>key</b> exists,<br>
+	 * 		if <b>yes</b>, update this one, <br>
 	 * 		<b>else</b> add a new metadata element.
-	 * @param key
-	 * @param value
-	 * @param col
-	 * @return
+	 *
+	 * @param key a {@link org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum} object.
+	 * @param value a {@link java.lang.String} object.
+	 * @param col a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
+	 * @return a boolean.
 	 */
-	protected static boolean addOrUpdateColumnMetadata(final Enum key, 
-			final String value, 
+	protected static boolean addOrUpdateColumnMetadata(final Enum key,
+			final String value,
 			final Column col) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("\t\taddOrUpdateColumnMetadata()");
@@ -87,9 +89,11 @@ public class Helper {
 		}
 		return (meta.getValue().equalsIgnoreCase(value));
 	}
-	
+
 	/**
-	 * @param tabElem
+	 * <p>getColumnIdFromTableElement.</p>
+	 *
+	 * @param tabElem a {@link org.n52.sos.importer.model.table.TableElement} object.
 	 * @return the id of the column of this TableElement or -1
 	 */
 	protected static int getColumnIdFromTableElement(final TableElement tabElem) {
@@ -112,10 +116,12 @@ public class Helper {
 		}
 		return -1;
 	}
-	
+
 	/**
-	 * @param columnId
-	 * @param sosImportConf
+	 * <p>getColumnById.</p>
+	 *
+	 * @param columnId a int.
+	 * @param sosImportConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
 	 * @return the Column from the configuration having id columnId
 	 */
 	protected static Column getColumnById(final int columnId,
@@ -141,12 +147,14 @@ public class Helper {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * @param relatedSensors
-	 * @param sensorXmlId
-	 * @return <b>true</b>, if the <code>sensorXmlId</code> is contained in the 
-	 * 		given <code>RelatedSensors[]</code> , <br />
+	 * <p>isSensorInArray.</p>
+	 *
+	 * @param relatedSensors an array of {@link org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor} objects.
+	 * @param sensorXmlId a {@link java.lang.String} object.
+	 * @return <b>true</b>, if the <code>sensorXmlId</code> is contained in the
+	 * 		given <code>RelatedSensors[]</code> , <br>
 	 * 		else <b>false</b>
 	 */
 	protected static boolean isSensorInArray(final RelatedSensor[] relatedSensors,
@@ -155,15 +163,15 @@ public class Helper {
 			logger.trace("isSensorInArray()");
 		}
 		for (final RelatedSensor relatedSensorFromArray : relatedSensors) {
-			if (relatedSensorFromArray.isSetIdRef() && 
+			if (relatedSensorFromArray.isSetIdRef() &&
 					relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId) ) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
+
+
 
 
 }

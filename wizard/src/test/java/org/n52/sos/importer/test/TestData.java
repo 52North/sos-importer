@@ -48,8 +48,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>TestData class.</p>
+ *
  * @author e.h.juerrens@52north.org
  * This class holds shared test data for the other test classes.
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class TestData {
 
@@ -65,17 +69,20 @@ public class TestData {
 		return csv;
 	}
 
+	/** Constant <code>EXAMPLE_TABLE_MINI</code> */
 	public static final CsvData EXAMPLE_TABLE_MINI = convert(new String[][]{
 			{"01/06/2010", "11:45", "12,12", "23,123"},
 			{"01/06/2010", "23:45", "323,123", "432,123"}
 	});
 
+	/** Constant <code>EXAMPLE_TABLE_MINI_ONLY_STRINGS</code> */
 	public static final CsvData EXAMPLE_TABLE_MINI_ONLY_STRINGS = convert(new String[][]{
 		{"bla", "bla2"},
 		{"bla3", "bla4"},
 		{"bla5", "bla6"}
 	});
 
+	/** Constant <code>EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY</code> */
 	public static final CsvData EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY = convert(new String[][] {
 			{"Datum", "Station", "Komp", "Wert/myg/m3"},
 			{"01.01.03", "Klinthal", "PM10", "-999"},
@@ -85,8 +92,8 @@ public class TestData {
 	});
 
 	/**
-	 * Example GLDAS data set with 7 columns:<br />
-	 * <code>"Id"; "X_1"; "Y_1"; "Temp";          "_Date"; "Hour"; "Minute"</code><br />
+	 * Example GLDAS data set with 7 columns:<br>
+	 * <code>"Id"; "X_1"; "Y_1"; "Temp";          "_Date"; "Hour"; "Minute"</code><br>
 	 * <code>0,00; 11,87; 50,12;   0,46;1.1.2006 00:00:00;   0,00; 0,00</code>
 	 */
 	public static final CsvData EXMAPLE_TABLE_GLDAS = convert(new String[][]{
@@ -123,8 +130,8 @@ public class TestData {
 	});
 
 	/**
-	 * Example data set with 8 columns<br />
-	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Feature UOM Value</code><br />
+	 * Example data set with 8 columns<br>
+	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Feature UOM Value</code><br>
 	 * <code>2012-04-23 11:52:23 Thermometer Temperature Münster degC 14.5 Berlin degC 14.5</code>
 	 */
 	public static final CsvData EXAMPLE_TABLE = convert(new String[][]{
@@ -144,8 +151,8 @@ public class TestData {
 				});
 
 	/**
-	 * Example data set with many columns<br />
-	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Feature UOM Value ...</code><br />
+	 * Example data set with many columns<br>
+	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Feature UOM Value ...</code><br>
 	 * <code>2012-04-23 11:52:23 Thermometer Temperature Münster degC 14.5 Berlin degC 14.5 ...</code>
 	 */
 	public static final CsvData EXAMPLE_TABLE_MANY_MANY_COLUMNS = convert(new String[][]{
@@ -160,8 +167,8 @@ public class TestData {
 				});
 
 	/**
-	 * Example data set with 9 columns<br />
-	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Timestamp Feature UOM Value</code><br />
+	 * Example data set with 9 columns<br>
+	 * <code>Timestamp Sensor Phenomenon Feature UOM Value Timestamp Feature UOM Value</code><br>
 	 * <code>2012-04-23 11:52:23 Thermometer Temperature Münster degC 14.5 2012-04-23 10:52:23 London degC 14.5</code>
 	 */
 	public static final CsvData EXAMPLE_TABLE_MULTIPLE_DATE_TIME = convert(new String[][]{
@@ -181,7 +188,7 @@ public class TestData {
 		});
 
 	/**
-	 * <code>"Timestamp","Sensor","Phenomenon","Feature","Value"</code><br />
+	 * <code>"Timestamp","Sensor","Phenomenon","Feature","Value"</code><br>
 	 * <code>"2012-04-23 11:52:23", "Thermometer", "Temperature", "Münster", "14.5"</code>
 	 */
 	public static final CsvData EXAMPLE_TABLE_NO_UOM =  convert(new String[][]{
@@ -288,7 +295,7 @@ public class TestData {
 	}
 
 	/**
-	 * Example measure value of type numeric. Related table element is: col 1, flwd 1.<br />
+	 * Example measure value of type numeric. Related table element is: col 1, flwd 1.<br>
 	 * To change the related column call <code>mv.setTableElement(new Column(newColumnId, firstlinewithData);</code>
 	 */
 	public static final MeasuredValue EXAMPLE_MEASURED_VALUE_NUMERIC = TestData.exampleMVnumeric();
