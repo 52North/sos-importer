@@ -48,8 +48,24 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
-    private static final int millisPerHour = 1000 * 60 * 60;
-    private static final int millisPerDay = millisPerHour * 24;
+    /**
+     * 
+     */
+    private static final String PARAMETER_TIME_STAMP_IS_MANDATORY = "parameter timeStamp is mandatory.";
+    /**
+     * 
+     */
+    private static final String SS = "ss";
+    /**
+     * 
+     */
+    private static final String MM = "mm:";
+    /**
+     * 
+     */
+    private static final String ZERO_ZERO = ":00";
+    private static final int MILLIS_PER_HOUR = 1000 * 60 * 60;
+    private static final int MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
     private short year = Short.MIN_VALUE;
     private byte month = Byte.MIN_VALUE;
     private byte day = Byte.MIN_VALUE;
@@ -70,31 +86,31 @@ public class Timestamp {
             }
         }
         if (month != Byte.MIN_VALUE) {
-            ts.append(month<10?"0"+month:month);
+            ts.append(month < 10 ? "0" + month : month);
             if (day != Byte.MIN_VALUE) {
                 ts.append("-");
             }
         }
         if (day != Byte.MIN_VALUE) {
-            ts.append(day<10?"0"+day:day);
+            ts.append(day < 10 ? "0" + day : day);
         }
-        if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
+        if ((year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE)
                 && (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
             ts.append("T");
         }
         if (hour != Byte.MIN_VALUE) {
-            ts.append(hour<10?"0"+hour:hour);
+            ts.append(hour < 10 ? "0" + hour : hour);
             if (minute != Byte.MIN_VALUE) {
                 ts.append(":");
             }
         }
         if (minute != Byte.MIN_VALUE) {
-            ts.append( (minute<10?"0"+minute:minute)+":");
+            ts.append((minute < 10 ? "0" + minute : minute) + ":");
         } else if (hour != Byte.MIN_VALUE) {
             ts.append("00:");
         }
-        if (seconds != Byte.MIN_VALUE ) {
-            ts.append(seconds<10?"0"+seconds:seconds);
+        if (seconds != Byte.MIN_VALUE) {
+            ts.append(seconds < 10 ? "0" + seconds : seconds);
         } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
             ts.append("00");
         }
@@ -108,15 +124,15 @@ public class Timestamp {
     private String convertTimeZone(final int timeZone) {
         if (timeZone >= 0) {
             if (timeZone >= 10) {
-                return "+" + timeZone + ":00";
+                return "+" + timeZone + ZERO_ZERO;
             } else {
-                return "+0" + timeZone + ":00";
+                return "+0" + timeZone + ZERO_ZERO;
             }
         } else {
             if (timeZone <= -10) {
-                return timeZone + ":00";
+                return timeZone + ZERO_ZERO;
             } else {
-                return "-0" + Math.abs(timeZone) + ":00";
+                return "-0" + Math.abs(timeZone) + ZERO_ZERO;
             }
         }
     }
@@ -130,16 +146,16 @@ public class Timestamp {
     public Timestamp set(final long dateToSet) {
         final Calendar cal = new GregorianCalendar();
         if (timezone != Byte.MIN_VALUE) {
-            cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs(timezone*millisPerHour)[0]));
+            cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs(timezone * MILLIS_PER_HOUR)[0]));
         }
         cal.setTimeInMillis(dateToSet);
         year = (short) cal.get(Calendar.YEAR);
-        month = (byte) (cal.get(Calendar.MONTH)+1);
+        month = (byte) (cal.get(Calendar.MONTH) + 1);
         day = (byte) cal.get(Calendar.DAY_OF_MONTH);
         hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
         minute = (byte) cal.get(Calendar.MINUTE);
         seconds = (byte) cal.get(Calendar.SECOND);
-        timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/millisPerHour);
+        timezone = (byte) (cal.getTimeZone().getOffset(dateToSet) / MILLIS_PER_HOUR);
         return this;
     }
 
@@ -181,7 +197,7 @@ public class Timestamp {
                 setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
             }
             if (dateInfoPattern.indexOf("M") > -1) {
-                setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+                setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH) + 1)));
             }
             if (dateInfoPattern.indexOf("d") > -1) {
                 setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
@@ -203,126 +219,24 @@ public class Timestamp {
     }
 
     /**
-     * <p>toDate.</p>
-     *
-     * @return a {@link java.util.Date} object.
-     */
-    protected Date toDate() {
-        final String datePattern = getDatePattern();
-        try {
-            return new SimpleDateFormat(datePattern).parse(toString());
-        } catch (final ParseException e) {
-            throw new RuntimeException("Could not execute toDate()",e);
-        }
-    }
-
-    private String getDatePattern() {
-        // "yyyy-MM-dd'T'HH:mm:ssX";
-        final StringBuffer ts = new StringBuffer(31);
-        if (year != Short.MIN_VALUE) {
-            ts.append("yyyy");
-            if (month != Byte.MIN_VALUE) {
-                ts.append("-");
-            }
-        }
-        if (month != Byte.MIN_VALUE) {
-            ts.append("MM");
-            if (day != Byte.MIN_VALUE) {
-                ts.append("-");
-            }
-        }
-        if (day != Byte.MIN_VALUE) {
-            ts.append("dd");
-        }
-        if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
-                && (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-            ts.append("'T'");
-        }
-        if (hour != Byte.MIN_VALUE) {
-            ts.append("HH");
-            if (minute != Byte.MIN_VALUE) {
-                ts.append(":");
-            }
-        }
-        if (minute != Byte.MIN_VALUE) {
-            ts.append("mm:");
-        } else if (hour != Byte.MIN_VALUE) {
-            ts.append("mm:");
-        }
-        if (seconds != Byte.MIN_VALUE ) {
-            ts.append("ss");
-        } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
-            ts.append("ss");
-        }
-        if (timezone != Byte.MIN_VALUE &&
-                (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-            ts.append("X");
-        }
-        final String datePattern = ts.toString();
-        if (datePattern.isEmpty()) {
-            return "yyyy-MM-dd'T'HH:mm:ssX";
-        }
-        return datePattern;
-    }
-
-    /**
-     * <p>after.</p>
-     *
-     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
-     * @return a boolean.
-     */
-    public boolean after(final Timestamp timeStamp) {
-        if (timeStamp == null) {
-            throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-        }
-        return toDate().after(timeStamp.toDate());
-    }
-
-    /**
-     * <p>before.</p>
-     *
-     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
-     * @return a boolean.
-     */
-    public boolean before(final Timestamp timeStamp) {
-        if (timeStamp == null) {
-            throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-        }
-        return toDate().before(timeStamp.toDate());
-    }
-
-    /**
      * <p>enrich.</p>
      *
      * @param lastModified long
      * @param lastModifiedDelta -1, if it should be ignored, else &gt; 0.
-     * @param lastModifiedDelta -1, if it should be ignored, else &gt; 0.
      * @return a {@link Timestamp} object.
      */
-    public Timestamp enrich(long lastModified,
+    public Timestamp enrich(
+            final long lastModified,
             final int lastModifiedDelta) {
         final GregorianCalendar cal = new GregorianCalendar();
+        long lastModifiedTmp = lastModified;
         if (lastModifiedDelta > 0) {
-            lastModified = lastModified - (lastModifiedDelta * millisPerDay);
+            lastModifiedTmp = lastModified - (lastModifiedDelta * MILLIS_PER_DAY);
         }
-        cal.setTime(new Date(lastModified));
+        cal.setTime(new Date(lastModifiedTmp));
         setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
-        setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
+        setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH) + 1)));
         setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
-        return this;
-    }
-
-    /**
-     * <p>applyDayDelta.</p>
-     *
-     * @param daysToAdd a int.
-     * @return a {@link Timestamp} object.
-     */
-    public Timestamp applyDayDelta(final int daysToAdd) {
-        final Timestamp tmp = new Timestamp().set(toDate().getTime() + (daysToAdd * millisPerDay));
-        setYear(tmp.getYear());
-        setMonth(tmp.getMonth());
-        setDay(tmp.getDay());
         return this;
     }
 
@@ -356,6 +270,109 @@ public class Timestamp {
                 setTimezone(other.getTimezone());
             }
         }
+        return this;
+    }
+
+    /**
+     * <p>toDate.</p>
+     *
+     * @return a {@link java.util.Date} object.
+     */
+    protected Date toDate() {
+        final String datePattern = getDatePattern();
+        try {
+            return new SimpleDateFormat(datePattern).parse(toString());
+        } catch (final ParseException e) {
+            throw new RuntimeException("Could not execute toDate()", e);
+        }
+    }
+
+    private String getDatePattern() {
+        // "yyyy-MM-dd'T'HH:mm:ssX";
+        final StringBuffer ts = new StringBuffer(31);
+        if (year != Short.MIN_VALUE) {
+            ts.append("yyyy");
+            if (month != Byte.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (month != Byte.MIN_VALUE) {
+            ts.append("MM");
+            if (day != Byte.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (day != Byte.MIN_VALUE) {
+            ts.append("dd");
+        }
+        if ((year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE)
+                && (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+            ts.append("'T'");
+        }
+        if (hour != Byte.MIN_VALUE) {
+            ts.append("HH");
+            if (minute != Byte.MIN_VALUE) {
+                ts.append(":");
+            }
+        }
+        if (minute != Byte.MIN_VALUE) {
+            ts.append(MM);
+        } else if (hour != Byte.MIN_VALUE) {
+            ts.append(MM);
+        }
+        if (seconds != Byte.MIN_VALUE) {
+            ts.append(SS);
+        } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
+            ts.append(SS);
+        }
+        if (timezone != Byte.MIN_VALUE &&
+                (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
+            ts.append("X");
+        }
+        final String datePattern = ts.toString();
+        if (datePattern.isEmpty()) {
+            return "yyyy-MM-dd'T'HH:mm:ssX";
+        }
+        return datePattern;
+    }
+
+    /**
+     * <p>after.</p>
+     *
+     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     * @return a boolean.
+     */
+    public boolean after(final Timestamp timeStamp) {
+        if (timeStamp == null) {
+            throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
+        }
+        return toDate().after(timeStamp.toDate());
+    }
+
+    /**
+     * <p>before.</p>
+     *
+     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     * @return a boolean.
+     */
+    public boolean before(final Timestamp timeStamp) {
+        if (timeStamp == null) {
+            throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
+        }
+        return toDate().before(timeStamp.toDate());
+    }
+
+    /**
+     * <p>applyDayDelta.</p>
+     *
+     * @param daysToAdd a int.
+     * @return a {@link Timestamp} object.
+     */
+    public Timestamp applyDayDelta(final int daysToAdd) {
+        final Timestamp tmp = new Timestamp().set(toDate().getTime() + (daysToAdd * MILLIS_PER_DAY));
+        setYear(tmp.getYear());
+        setMonth(tmp.getMonth());
+        setDay(tmp.getDay());
         return this;
     }
 

@@ -62,11 +62,14 @@ import net.opengis.swe.x20.TimeType;
  */
 public class TimeSeries {
 
+    public static final String OBSERVED_PROPERTY_NOT_SET_CONST = "OBSERVED_PROPERTY_NOT_SET";
+
     /** Constant <code>SENSOR_ID_NOT_SET="SENSOR_ID_NOT_SET"</code> */
     public static final String SENSOR_ID_NOT_SET = "SENSOR_ID_NOT_SET";
 
     /** Constant <code>OBSERVED_PROPERTY_NOT_SET</code> */
-    public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET = new ObservedProperty("OBSERVED_PROPERTY_NOT_SET", "OBSERVED_PROPERTY_NOT_SET");
+    public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET = 
+            new ObservedProperty(OBSERVED_PROPERTY_NOT_SET_CONST, OBSERVED_PROPERTY_NOT_SET_CONST);
 
     /** Constant <code>UOM_CODE_NOT_SET="UOM_CODE_NOT_SET"</code> */
     public static final String UOM_CODE_NOT_SET = "UOM_CODE_NOT_SET";
@@ -77,6 +80,8 @@ public class TimeSeries {
     /** Constant <code>SENSOR_NAME_NOT_SET="SENSOR_NAME_NOT_SET"</code> */
     public static final String SENSOR_NAME_NOT_SET = "SENSOR_NAME_NOT_SET";
 
+    private static final String N_M_STRING = "%s %s";
+    
     private final LinkedList<InsertObservation> timeseries = new LinkedList<>();
 
     private final String tokenSeparator = ";";
@@ -194,7 +199,9 @@ public class TimeSeries {
     public InsertObservationParameters getSweArrayObservation(final String sosVersion) {
         final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
         // add extension
-        obsParameter.addExtension("<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
+        obsParameter.addExtension(
+                "<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" "
+                + "definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
 
         // OM_Observation
         // procedure
@@ -211,7 +218,9 @@ public class TimeSeries {
             obsParameter.addPhenomenonTime(getPhenomenonTime());
             // temporal bbox for result time
             obsParameter.addResultTime(getResultTime());
-            return new org.n52.oxf.sos.request.v200.InsertObservationParameters(obsParameter, Collections.singletonList(getFirst().getOffering().getUri()));
+            return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
+                    obsParameter,
+                    Collections.singletonList(getFirst().getOffering().getUri()));
         }
 
         obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + getFirst().getEpsgCode());
@@ -313,20 +322,20 @@ public class TimeSeries {
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
         // position
         boolean eastingFirst = false;
-        if (Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode()) == null) {
-            Configuration.EPSG_EASTING_FIRST_MAP.get("default");
+        if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
+            Configuration.getEpsgEastingFirstMap().get("default");
         } else {
-            eastingFirst = Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode());
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
         }
-        String pos = eastingFirst?
-                String.format("%s %s",
+        String pos = eastingFirst ?
+                String.format(N_M_STRING,
                 io.getLongitudeValue(),
                 io.getLatitudeValue()) :
-                    String.format("%s %s",
+                    String.format(N_M_STRING,
                             io.getLatitudeValue(),
                             io.getLongitudeValue());
         if (io.isSetAltitudeValue()) {
-            pos = String.format("%s %s", pos, io.getAltitudeValue());
+            pos = String.format(N_M_STRING, pos, io.getAltitudeValue());
         }
         obsParameter.addFoiPosition(pos);
     }
@@ -373,7 +382,7 @@ public class TimeSeries {
     /**
      * <p>isEmpty.</p>
      *
-     * @return <code>true</code>, if this time series contains no {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} objects.
+     * @return <code>true</code>, if this time series contains no {@link InsertObservation} objects.
      */
     public boolean isEmpty() {
         return timeseries.isEmpty();

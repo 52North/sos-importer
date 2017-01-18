@@ -69,7 +69,7 @@ public class TimeSeriesRepository {
     /**
      * <p>addObservations.</p>
      *
-     * @param ios the {@link org.n52.sos.importer.feeder.model.requests.InsertObservation}s to add using the array index as timeseries id
+     * @param ios the {@link InsertObservation}s to add using the array index as timeseries id
      */
     public void addObservations(final InsertObservation[] ios) {
         if (ios.length != repo.capacity()) {
@@ -127,7 +127,8 @@ public class TimeSeriesRepository {
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(List<TimeSeries> timeseries) {
         LOG.trace("getUnitsOfMeasurement(...)");
-        final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(timeseries.size());
+        final Map<ObservedProperty, String> unitsOfMeasurement = 
+                new HashMap<ObservedProperty, String>(timeseries.size());
         for (final TimeSeries ts : timeseries) {
             unitsOfMeasurement.put(ts.getObservedProperty(), ts.getUnitOfMeasurementCode());
         }
@@ -136,7 +137,8 @@ public class TimeSeriesRepository {
 
     private Map<ObservedProperty, String> getMeasuredValueTypes(List<TimeSeries> timeseries) {
         LOG.trace("getMeasuredValueTypes(...)");
-        final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(timeseries.size());
+        final Map<ObservedProperty, String> measuredValueTypes = 
+                new HashMap<ObservedProperty, String>(timeseries.size());
         for (final TimeSeries ts : timeseries) {
             measuredValueTypes.put(ts.getObservedProperty(), ts.getMeasuredValueType());
         }
@@ -147,7 +149,7 @@ public class TimeSeriesRepository {
         LOG.trace("getObservedProperties(...)");
         final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(timeseries.size());
         for (final TimeSeries ts : timeseries) {
-                observedProperties.add(ts.getObservedProperty());
+            observedProperties.add(ts.getObservedProperty());
         }
         return observedProperties;
     }

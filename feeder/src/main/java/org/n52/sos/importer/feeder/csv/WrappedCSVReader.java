@@ -56,9 +56,9 @@ public class WrappedCSVReader implements CsvParser {
     public void init(final BufferedReader bufferedReader,
             final Configuration configuration) {
         final int flwd = configuration.getFirstLineWithData();
-        final char separator = configuration.getCsvSeparator(),
-                quotechar = configuration.getCsvQuoteChar(),
-                escape = configuration.getCsvEscape();
+        final char separator = configuration.getCsvSeparator();
+        final char quotechar = configuration.getCsvQuoteChar();
+        final char escape = configuration.getCsvEscape();
         csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
     }
 
