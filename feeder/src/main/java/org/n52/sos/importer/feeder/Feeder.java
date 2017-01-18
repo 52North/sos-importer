@@ -28,8 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import static java.lang.Integer.parseInt;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,16 +52,21 @@ import org.slf4j.LoggerFactory;
  */
 public final class Feeder {
 
+    private static final String NEW_LINE_WITH_TABS = "\n\t\t";
+
     private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
 
     private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
     /**
-     * <p>main.</p>
+     * Method to start the application using various commandline parameters.
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
+    // Fix for uncommented main method error of checkstyle because I need this entry point
     public static void main(final String[] args) {
+      //CHECKSTYLE:ON
         LOG.trace("main()");
         logApplicationMetadata();
         if (checkArgs(args)) {
@@ -75,27 +78,24 @@ public final class Feeder {
                 // data file
                 if (args.length == 2) {
                     // Case: one time feeding with defined configuration
-                    new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
-                }
-                else if (args.length == 4) {
+                    new Thread(new OneTimeFeeder(c), OneTimeFeeder.class.getSimpleName()).start();
+                } else if (args.length == 4) {
                     // Case: one time feeding with file override or period with file from configuration
                     if (isFileOverride(args[2])) {
                         // Case: file override
-                        new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
+                        new Thread(new OneTimeFeeder(c,
+                                new File(args[3])),
+                                OneTimeFeeder.class.getCanonicalName()).start();
 
-                    }
-                    else if (isTimePeriodSet(args[2]))  {
+                    } else if (isTimePeriodSet(args[2]))  {
                         // Case: repeated feeding
-                        repeatedFeeding(c,parseInt(args[3]));
+                        repeatedFeeding(c, Integer.parseInt(args[3]));
                     }
-                }
-                else if (args.length == 6) {
+                } else if (args.length == 6) {
                     // Case: repeated feeding with file override
-                    repeatedFeeding(c,new File(args[3]),parseInt(args[5]));
+                    repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
                 }
-            }
-            catch (final XmlException e)
-            {
+            } catch (final XmlException e) {
                 final String errorMsg =
                         String.format("Configuration file '%s' could not be " +
                                 "parsed. Exception thrown: %s",
@@ -103,30 +103,25 @@ public final class Feeder {
                                 e.getMessage());
                 LOG.error(errorMsg);
                 LOG.debug("", e);
-            }
-            catch (final IOException e)
-            {
+            } catch (final IOException e) {
                 LOG.error("Exception thrown: {}", e.getMessage());
                 LOG.debug("", e);
-            }
-            catch (final IllegalArgumentException iae)
-            {
+            } catch (final IllegalArgumentException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
-                LOG.debug("Exception Stack Trace:",iae);
+                LOG.debug("Exception Stack Trace:", iae);
             }
-        }
-        else {
+        } else {
             showUsage();
         }
     }
 
     private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
         final Timer t = new Timer("FeederTimer");
-        t.schedule(new RepeatedFeeder(c,f,periodInMinutes), 1, periodInMinutes*1000*60);
+        t.schedule(new RepeatedFeeder(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60);
     }
 
     private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
-        repeatedFeeding(c,c.getDataFile(),periodInMinutes);
+        repeatedFeeding(c, c.getDataFile(), periodInMinutes);
     }
 
     /**
@@ -153,7 +148,7 @@ public final class Feeder {
      *              specified form.
      */
     private static boolean checkArgs(final String[] args) {
-        LOG.trace("checkArgs({})",Arrays.toString(args));
+        LOG.trace("checkArgs({})", Arrays.toString(args));
         if (args == null) {
             LOG.error("no parameters defined. null received as args!");
             return false;
@@ -164,7 +159,7 @@ public final class Feeder {
         } else if (args.length == 4) {
             if (isConfigFileSet(args[0]) && (
                     isFileOverride(args[2]) ||
-                    isTimePeriodSet(args[2]) ) ) {
+                    isTimePeriodSet(args[2]))) {
                 return true;
             }
         } else if (args.length == 6) {
@@ -178,18 +173,15 @@ public final class Feeder {
         return false;
     }
 
-    private static boolean isConfigFileSet(final String parameter)
-    {
+    private static boolean isConfigFileSet(final String parameter) {
         return ALLOWED_PARAMETERS[0].equals(parameter);
     }
 
-    private static boolean isFileOverride(final String parameter)
-    {
+    private static boolean isFileOverride(final String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[1]);
     }
 
-    private static boolean isTimePeriodSet(final String parameter)
-    {
+    private static boolean isTimePeriodSet(final String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[2]);
     }
 
@@ -199,7 +191,8 @@ public final class Feeder {
     private static void logApplicationMetadata() {
         LOG.trace("logApplicationMetadata()");
         final StringBuffer logMessage = new StringBuffer("Application started");
-        final InputStream manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
+        final InputStream manifestStream = 
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
         try {
             final Manifest manifest = new Manifest(manifestStream);
             final Attributes attributes = manifest.getMainAttributes();
@@ -207,19 +200,18 @@ public final class Feeder {
             for (final Object object : keys) {
                 if (object instanceof Name) {
                     final Name key = (Name) object;
-                    logMessage.append("\n\t\t")
+                    logMessage.append(NEW_LINE_WITH_TABS)
                         .append(key)
                         .append(": ")
                         .append(attributes.getValue(key));
                 }
             }
             // add heap information
-            logMessage.append("\n\t\t")
+            logMessage.append(NEW_LINE_WITH_TABS)
                 .append(heapSizeInformation())
-                .append("\n\t\t")
+                .append(NEW_LINE_WITH_TABS)
                 .append(operatingSystemInformation());
-        }
-        catch(final IOException ex) {
+        } catch (final IOException ex) {
             LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
         }
         LOG.info(logMessage.toString());
