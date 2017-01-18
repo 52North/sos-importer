@@ -187,8 +187,7 @@ public class InsertObservation {
      *
      * @return a double.
      */
-    public double getAltitudeValue()
-    {
+    public double getAltitudeValue() {
         return featureOfInterest.getPosition().getAltitude();
     }
 
@@ -198,8 +197,7 @@ public class InsertObservation {
      *
      * @return a boolean.
      */
-    public boolean isSetAltitudeValue()
-    {
+    public boolean isSetAltitudeValue() {
         return featureOfInterest != null && featureOfInterest.getPosition().getAltitude() != Position.VALUE_NOT_SET;
     }
 

@@ -177,8 +177,7 @@ public class RegisterSensor {
      * @param observedProperty a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      * @return a {@link java.lang.String} object.
      */
-    public String getMeasuredValueType(final ObservedProperty observedProperty)
-    {
+    public String getMeasuredValueType(final ObservedProperty observedProperty) {
         return measuredValueTypes.get(observedProperty);
     }
 
@@ -187,8 +186,7 @@ public class RegisterSensor {
      *
      * @return a {@link java.util.Collection} object.
      */
-    public Collection<ObservedProperty> getObservedProperties()
-    {
+    public Collection<ObservedProperty> getObservedProperties() {
         return observedProperties;
     }
 

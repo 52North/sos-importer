@@ -45,10 +45,13 @@ public class UnitOfMeasurement extends Resource {
     public UnitOfMeasurement(String code, String uri) {
         super(code, uri);
     }
+    
     /**
      * <p>getCode.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getCode() { return getName(); }
+    public String getCode() {
+        return getName();
+    }
 }
