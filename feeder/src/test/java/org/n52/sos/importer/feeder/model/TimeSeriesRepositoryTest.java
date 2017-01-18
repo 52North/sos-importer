@@ -28,9 +28,6 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -53,14 +50,16 @@ public class TimeSeriesRepositoryTest {
         Timestamp timeStamp = new Timestamp().set(System.currentTimeMillis());
         Offering off = new Offering("offering-name", "offering-uri");
         String mvType = "mv-type";
-        InsertObservation io = new InsertObservation(sensor, foi, value, timeStamp, uom , observedProperty1, off, mvType);
+        InsertObservation io = 
+                new InsertObservation(sensor, foi, value, timeStamp, uom , observedProperty1, off, mvType);
         InsertObservation io2 = new InsertObservation(sensor, foi, 2, timeStamp, uom, observedProperty2, off, mvType);
         InsertObservation[] ios = {io, io2 };
         tsr.addObservations(ios);
         RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
-        assertThat(registerSensor.getSensorURI(), is(sensorURI));
-        assertThat(registerSensor.getObservedProperties(), hasSize(2));
-        assertThat(registerSensor.getObservedProperties(), Matchers.containsInAnyOrder(observedProperty1,observedProperty2));
+        org.junit.Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
+        org.junit.Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
+        org.junit.Assert.assertThat(registerSensor.getObservedProperties(), 
+                Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
     }
 
 }

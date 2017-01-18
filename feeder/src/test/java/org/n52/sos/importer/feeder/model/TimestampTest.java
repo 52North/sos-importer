@@ -28,9 +28,6 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
@@ -43,7 +40,7 @@ public class TimestampTest {
     // 12:01 UTZ in millis
     private static final int UTC_12_01 = 43260000;
 
-    private static final int millisPerDay = 1000 * 60 * 60 * 24;
+    private static final int MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
     private Timestamp timestamp;
 
@@ -76,18 +73,19 @@ public class TimestampTest {
         // given
         String sign = "-";
         int rawOffset = tz.getRawOffset();
-        if (rawOffset>= 0) {
+        if (rawOffset >= 0) {
             sign = "+";
         }
         final int offsetInHours = rawOffset / millisPerHour;
         final int hours = 12 + offsetInHours;
         final int minutes = (rawOffset - (offsetInHours * millisPerHour)) / millisPerMinute;
-        final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
-        final String hoursString = String.format("%02d", hours);
+        final String minutesString = minutes < 10 ? "0" + minutes : minutes < 60 ? Integer.toString(minutes) : "00";
+        final String DECIMAL = "%02d";
+        final String hoursString = String.format(DECIMAL, hours);
         // why minutes+1?
-        final int minutesTime = Integer.parseInt(minutesString)+1;
-        final String timeMinutesString = minutesTime < 10? "0"+minutesTime : Integer.toString(minutesTime);
-        final String offsetInHoursString = String.format("%02d", Math.abs(offsetInHours));
+        final int minutesTime = Integer.parseInt(minutesString) + 1;
+        final String timeMinutesString = minutesTime < 10 ? "0" + minutesTime : Integer.toString(minutesTime);
+        final String offsetInHoursString = String.format(DECIMAL, Math.abs(offsetInHours));
         final String asExpected = String.format("1970-01-01T%s:%s:00%s%s:%s",
                 hoursString,
                 timeMinutesString,
@@ -99,7 +97,7 @@ public class TimestampTest {
         timestamp.set(UTC_12_01);
 
         // then
-        assertThat(timestamp.toString(),is(asExpected));
+        org.junit.Assert.assertThat(timestamp.toString(), org.hamcrest.CoreMatchers.is(asExpected));
     }
 
     @Test public void
@@ -107,7 +105,7 @@ public class TimestampTest {
         final long time = UTC_12_01;
         final Date dateFromTimestamp = timestamp.set(time).toDate();
         final Date dateFromSystem = new Date(time);
-        assertThat(dateFromTimestamp.compareTo(dateFromSystem), is(0));
+        org.junit.Assert.assertThat(dateFromTimestamp.compareTo(dateFromSystem), org.hamcrest.CoreMatchers.is(0));
 
     }
 
@@ -117,9 +115,9 @@ public class TimestampTest {
         final String fileName = "test-sensor_20140615.csv";
         final Timestamp ts = new Timestamp();
 
-        ts.enrich(fileName,"test-sensor_(\\d{8})\\.csv","yyyyMMdd");
+        ts.enrich(fileName, "test-sensor_(\\d{8})\\.csv", "yyyyMMdd");
 
-        assertThat(ts.toString(), is("2014-06-15"));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is("2014-06-15"));
     }
 
     @Test public final void
@@ -127,27 +125,27 @@ public class TimestampTest {
             throws ParseException {
         Timestamp ts = new Timestamp();
         ts.enrich(null, null, null);
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
 
         ts = new Timestamp();
         ts.enrich("", null, null);
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
 
         ts = new Timestamp();
         ts.enrich("-", null, null);
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
 
         ts = new Timestamp();
         ts.enrich("-", "", null);
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
 
         ts = new Timestamp();
         ts.enrich("-", "-", null);
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
 
         ts = new Timestamp();
         ts.enrich("-", "-", "");
-        assertThat(ts.toString(), is(""));
+        org.junit.Assert.assertThat(ts.toString(), org.hamcrest.CoreMatchers.is(""));
     }
 
     @Test public final void
@@ -155,9 +153,9 @@ public class TimestampTest {
         final long lastModified = UTC_12_01;
         timestamp.enrich(lastModified, -1);
         final Timestamp expected = new Timestamp().set(lastModified);
-        assertThat(timestamp.getYear(), is(expected.getYear()));
-        assertThat(timestamp.getMonth(), is(expected.getMonth()));
-        assertThat(timestamp.getDay(), is(expected.getDay()));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is(expected.getYear()));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is(expected.getMonth()));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is(expected.getDay()));
     }
 
     @Test public final void
@@ -165,23 +163,23 @@ public class TimestampTest {
         final long lastModified = UTC_12_01;
         final int lastModifiedDelta = 2;
         timestamp.enrich(lastModified, lastModifiedDelta);
-        final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+        final long expectedMillis = lastModified - (lastModifiedDelta * MILLIS_PER_DAY);
         final Timestamp expected = new Timestamp().set(expectedMillis);
-        assertThat(timestamp.getYear(), is(expected.getYear()));
-        assertThat(timestamp.getMonth(), is(expected.getMonth()));
-        assertThat(timestamp.getDay(), is(expected.getDay()));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is(expected.getYear()));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is(expected.getMonth()));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is(expected.getDay()));
     }
 
     @Test public final void
     shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
         final long lastModified = 0;
         final int lastModifiedDelta = 2;
-        final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
+        final long expectedMillis = lastModified - (lastModifiedDelta * MILLIS_PER_DAY);
         timestamp.enrich(lastModified, lastModifiedDelta);
         final Timestamp expected = new Timestamp().set(expectedMillis);
-        assertThat(timestamp.getYear(), is(expected.getYear()));
-        assertThat(timestamp.getMonth(), is(expected.getMonth()));
-        assertThat(timestamp.getDay(), is(expected.getDay()));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is(expected.getYear()));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is(expected.getMonth()));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is(expected.getDay()));
     }
 
     @Test public final void
@@ -189,37 +187,37 @@ public class TimestampTest {
         final Timestamp other = new Timestamp().set(UTC_12_01);
         timestamp.set(0).enrich(other);
 
-        assertThat(timestamp.getYear(), is(other.getYear()));
-        assertThat(timestamp.getMonth(), is(other.getMonth()));
-        assertThat(timestamp.getDay(), is(other.getDay()));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is(other.getYear()));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is(other.getMonth()));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is(other.getDay()));
     }
 
     @Test public void
     shouldAddDayDelta() {
         timestamp.set(0).applyDayDelta(2);
 
-        assertThat(timestamp.getYear(), is((short)1970));
-        assertThat(timestamp.getMonth(), is((byte)1));
-        assertThat(timestamp.getDay(), is((byte)3));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is((short) 1970));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is((byte) 1));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is((byte) 3));
 
         timestamp.set(0).applyDayDelta(-2);
 
-        assertThat(timestamp.getYear(), is((short)1969));
-        assertThat(timestamp.getMonth(), is((byte)12));
-        assertThat(timestamp.getDay(), is((byte)30));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is((short) 1969));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is((byte) 12));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is((byte) 30));
     }
 
     @Test public void
     shouldWorkWithoutTimezonesAddDayDelta() throws ParseException {
         timestamp.enrich(new Timestamp().enrich("1970-01-01", "(\\d{4}-\\d{2}-\\d{2})", "yyyy-MM-dd").applyDayDelta(1));
 
-        assertThat(timestamp.getYear(), is((short)1970));
-        assertThat(timestamp.getMonth(), is((byte)1));
-        assertThat(timestamp.getDay(), is((byte)2));
-        assertThat(timestamp.getSeconds(), is(Byte.MIN_VALUE));
-        assertThat(timestamp.getMinute(), is(Byte.MIN_VALUE));
-        assertThat(timestamp.getHour(), is(Byte.MIN_VALUE));
-        assertThat(timestamp.getTimezone(), is(Byte.MIN_VALUE));
+        org.junit.Assert.assertThat(timestamp.getYear(), org.hamcrest.CoreMatchers.is((short) 1970));
+        org.junit.Assert.assertThat(timestamp.getMonth(), org.hamcrest.CoreMatchers.is((byte) 1));
+        org.junit.Assert.assertThat(timestamp.getDay(), org.hamcrest.CoreMatchers.is((byte) 2));
+        org.junit.Assert.assertThat(timestamp.getSeconds(), org.hamcrest.CoreMatchers.is(Byte.MIN_VALUE));
+        org.junit.Assert.assertThat(timestamp.getMinute(), org.hamcrest.CoreMatchers.is(Byte.MIN_VALUE));
+        org.junit.Assert.assertThat(timestamp.getHour(), org.hamcrest.CoreMatchers.is(Byte.MIN_VALUE));
+        org.junit.Assert.assertThat(timestamp.getTimezone(), org.hamcrest.CoreMatchers.is(Byte.MIN_VALUE));
     }
 
 }

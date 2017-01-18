@@ -28,26 +28,21 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
 public class OfferingTest {
 
     @Test
-    public void should_set_name_for_offering()
-    {
+    public void should_set_name_for_offering() {
         final String name = "name";
         final Offering offering = new Offering(name, null);
-        assertThat(offering.getName(), is(name));
+        org.junit.Assert.assertThat(offering.getName(), org.hamcrest.CoreMatchers.is(name));
     }
 
     @Test
-    public void should_set_uri_for_offering()
-    {
+    public void should_set_uri_for_offering() {
         final String uri = "uri";
         final Offering offering = new Offering(null, uri);
-        assertThat(offering.getUri(), is(uri));
+        org.junit.Assert.assertThat(offering.getUri(), org.hamcrest.CoreMatchers.is(uri));
     }
 }
