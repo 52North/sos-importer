@@ -1018,10 +1018,10 @@ public final class SensorObservationService {
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
         // position
         boolean eastingFirst = false;
-        if (Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode()) == null) {
-            Configuration.EPSG_EASTING_FIRST_MAP.get("default");
+        if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
+            Configuration.getEpsgEastingFirstMap().get("default");
         } else {
-            eastingFirst = Configuration.EPSG_EASTING_FIRST_MAP.get(io.getEpsgCode());
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
         }
         String pos = eastingFirst ?
                 String.format(N_M_FORMAT,

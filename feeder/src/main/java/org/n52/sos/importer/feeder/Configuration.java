@@ -77,21 +77,19 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  */
 public final class Configuration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
-    private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
-    private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
-    private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
-    private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
+    /** 
+     * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
+     */
     // TODO read from configuration file
-    /** Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code> */
     public static final String SOS_200_EPSG_CODE_PREFIX = "http://www.opengis.net/def/crs/EPSG/0/";
+    
     /** Constant <code>SOS_100_EPSG_CODE_PREFIX="urn:ogc:def:crs:EPSG::"</code> */
     public static final String SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
     /** Constant <code>REGISTER_SENSOR_SML_SYSTEM_TEMPLATE="./SML_1.0.1_System_template.xml"</code> */
     public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
-    private static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
-    private static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
+    public static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
+    public static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
     /** Constant <code>QN_SOS_1_0_OFFERING</code> */
     public static final QName QN_SOS_1_0_OFFERING = new QName(NS_SOS_1_0_0, "offering");
     /** Constant <code>QN_SOS_1_0_ID</code> */
@@ -99,11 +97,11 @@ public final class Configuration {
     /** Constant <code>QN_SOS_1_0_NAME</code> */
     public static final QName QN_SOS_1_0_NAME = new QName(NS_SOS_1_0_0, "name");
     /** Constant <code>QN_SWE_1_0_1_SIMPLE_DATA_RECORD</code> */
-    public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName(NS_SWE_1_0_1,"SimpleDataRecord");
+    public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName(NS_SWE_1_0_1, "SimpleDataRecord");
     /** Constant <code>QN_SWE_1_0_1_DATA_RECORD</code> */
-    public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName (NS_SWE_1_0_1,"DataRecord");
+    public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName (NS_SWE_1_0_1, "DataRecord");
     /** Constant <code>QN_SWE_1_0_1_ENVELOPE</code> */
-    public static final QName QN_SWE_1_0_1_ENVELOPE = new QName (NS_SWE_1_0_1,"Envelope");
+    public static final QName QN_SWE_1_0_1_ENVELOPE = new QName (NS_SWE_1_0_1, "Envelope");
     /** Constant <code>SML_ATTRIBUTE_VERSION="version"</code> */
     public static final String SML_ATTRIBUTE_VERSION = "version";
     /** Constant <code>SML_VERSION="1.0.1"</code> */
@@ -112,8 +110,6 @@ public final class Configuration {
     public static final char UNICODE_REPLACER = '_';
     /** Constant <code>UNICODE_ONLY_REPLACER_LEFT_PATTERN</code> */
     public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
-    private static final String COLUMN_SEPARATOR_SPACE = "Space";
-    private static final String COLUMN_SEPARATOR_TAB = "Tab";
     /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START="Sensor with ID"</code> */
     public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
     /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END="is already registered at this SOS"</code> */
@@ -136,31 +132,66 @@ public final class Configuration {
     public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
     /** Constant <code>OGC_DISCOVERY_SHORT_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:shortNam"{trunked}</code> */
     public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
-    /** Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION="urn:ogc:def:classifier:OGC:1.0:applicat"{trunked}</code> */
-    public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION = "urn:ogc:def:classifier:OGC:1.0:application";
-    /** Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION="urn:ogc:def:property:OGC:1.0:observedBB"{trunked}</code> */
-    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = "urn:ogc:def:property:OGC:1.0:observedBBOX";
+    /** 
+     * Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION = 
+     * "urn:ogc:def:classifier:OGC:1.0:application"</code>
+     */
+    public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION =
+            "urn:ogc:def:classifier:OGC:1.0:application";
+    /**
+     * Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = 
+     * "urn:ogc:def:property:OGC:1.0:observedBBox"</code>
+     */
+    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = 
+            "urn:ogc:def:property:OGC:1.0:observedBBOX";
 
-    /** Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED="This observation is already contained i"{trunked}</code> */
-    public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = "This observation is already contained in SOS database!";
+    /** 
+     * Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = 
+     * "This observation is already contained in SOS database!"</code>
+     */
+    public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = 
+            "This observation is already contained in SOS database!";
     /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START="The offering with the identifier"</code> */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START = "The offering with the identifier";
-    /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END="still exists in this service and it is "{trunked}</code> */
-    public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
-    /** Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT="observation_featureofinterestid_observa"{trunked}</code> */
-    public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = "observation_featureofinterestid_observablepropertyid_proced_key";
+    /** 
+     * Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = 
+     * "still exists in this service and it is not allowed to insert more than one procedure to an offering!"</code>
+     */
+    public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = 
+            "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
+    /**
+     * Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = 
+     * "observation_featureofinterestid_observablepropertyid_proced_key"</code> */
+    public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = 
+            "observation_featureofinterestid_observablepropertyid_proced_key";
     /** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
     public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
 
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
-    public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
+    private static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
+
+    private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
+
+    private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
+    private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
+    private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
+    private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
+    private static final String COLUMN_SEPARATOR_SPACE = "Space";
+    private static final String COLUMN_SEPARATOR_TAB = "Tab";
+    private static final String DEG = "deg";
+    private static final String M = "m";
+    private static final String FT = "ft";
+    private static final String MI = "mi";
+    private static final String KM = "km";
+
+    
+    
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
         EPSG_EASTING_FIRST_MAP.put("default", false);
-        EPSG_EASTING_FIRST_MAP.put("4326",false);
-        EPSG_EASTING_FIRST_MAP.put("4979",false);
-        EPSG_EASTING_FIRST_MAP.put("21037",true);
-
+        EPSG_EASTING_FIRST_MAP.put("4326", false);
+        EPSG_EASTING_FIRST_MAP.put("4979", false);
+        EPSG_EASTING_FIRST_MAP.put("21037", true);
     }
 
     public enum ImportStrategy {
@@ -180,7 +211,21 @@ public final class Configuration {
     private SosImportConfiguration importConf;
     private final File configFile;
 
-    private Pattern localeFilePattern = null;
+    private Pattern localeFilePattern;
+
+    /**
+     * For testing only!
+     *
+     * @param importConf a {@link SosImportConfiguration} object.
+     */
+    protected Configuration(final SosImportConfiguration importConf) {
+        if (importConf == null) {
+            throw new IllegalArgumentException("SosImportConfiguration MUST NOT be null or INVALID");
+        }
+        this.importConf = importConf;
+        configFile = null;
+        setLocaleFilePattern();
+    }
 
     /**
      * <p>Constructor for Configuration.</p>
@@ -190,7 +235,7 @@ public final class Configuration {
      * @throws java.io.IOException if any.
      */
     public Configuration(final String pathToFile) throws XmlException, IOException {
-        LOG.trace("Configuration({})",pathToFile);
+        LOG.trace("Configuration({})", pathToFile);
         configFile = new File(pathToFile);
         final SosImportConfigurationDocument sosImportDoc =
                 SosImportConfigurationDocument.Factory.parse(configFile);
@@ -222,26 +267,12 @@ public final class Configuration {
 
     private void setLocaleFilePattern() {
         if (isRegularExpressionForLocalFileAvailable()) {
-            localeFilePattern  = Pattern.compile(importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames());
+            final String pattern = importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames();
+            localeFilePattern  = Pattern.compile(pattern);
         }
     }
 
-    /**
-     * For testing only!
-     *
-     * @param importConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
-     */
-    protected Configuration(final SosImportConfiguration importConf) {
-        if (importConf == null) {
-            throw new IllegalArgumentException("SosImportConfiguration MUST NOT be null or INVALID");
-        }
-        this.importConf = importConf;
-        configFile = null;
-        setLocaleFilePattern();
-    }
-
-    private boolean isRegularExpressionForLocalFileAvailable()
-    {
+    private boolean isRegularExpressionForLocalFileAvailable() {
         return importConf.getDataFile().isSetLocalFile() &&
                 importConf.getDataFile().getLocalFile().isSetRegularExpresssionForAllowedFileNames() &&
                 importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames() != null &&
@@ -260,7 +291,7 @@ public final class Configuration {
         LOG.trace("getDataFile()");
         if (importConf.getDataFile() != null &&
                 importConf.getDataFile().isSetLocalFile() &&
-                !importConf.getDataFile().getLocalFile().getPath().equalsIgnoreCase("") ) {
+                !importConf.getDataFile().getLocalFile().getPath().equalsIgnoreCase("")) {
             // Path for LocalFile set to something, so return a new File using is
             return new File(importConf.getDataFile().getLocalFile().getPath());
         }
@@ -308,14 +339,13 @@ public final class Configuration {
         String result = "";
         // certain file
         if (!isFtpUrlRegex()) {
-            for (int i = 1; i < splitString.length-1; i++) {
+            for (int i = 1; i < splitString.length - 1; i++) {
                 result += splitString[i];
             }
-        } else
-        // regular expression
-        {
+        } /*else {
+            // regular expression
             // TODO
-        }
+        }*/
 
         return result;
     }
@@ -330,10 +360,9 @@ public final class Configuration {
         String result;
         // certain file
         if (!isFtpUrlRegex()) {
-            result = splitString[splitString.length-1];
-        } else
-        // regular expression
-        {
+            result = splitString[splitString.length - 1];
+        } else {
+            // regular expression
             // TODO
             result = null;
         }
@@ -358,7 +387,7 @@ public final class Configuration {
      */
     public URL getSosUrl() throws MalformedURLException {
         LOG.trace("getSosUrl()");
-        if (!importConf.getSosMetadata().getURL().equalsIgnoreCase("") ){
+        if (!importConf.getSosMetadata().getURL().equalsIgnoreCase("")) {
             return new URL(importConf.getSosMetadata().getURL());
         }
         LOG.error("SosMetadata.URL not set!");
@@ -437,7 +466,7 @@ public final class Configuration {
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         final ArrayList<Integer> ids = new ArrayList<Integer>();
         for (final Column column : cols) {
-            if (column.getType().equals(Type.MEASURED_VALUE)){
+            if (column.getType().equals(Type.MEASURED_VALUE)) {
                 LOG.debug("Found measured value column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
@@ -463,7 +492,7 @@ public final class Configuration {
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         final ArrayList<Integer> ids = new ArrayList<Integer>();
         for (final Column column : cols) {
-            if (column.getType().equals(Type.DO_NOT_EXPORT)){
+            if (column.getType().equals(Type.DO_NOT_EXPORT)) {
                 LOG.debug("Found ignored column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
@@ -503,7 +532,7 @@ public final class Configuration {
                 return rS.getNumber();
             } else if (rS.isSetIdRef()) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("Found RelatedSensor %s is not a column but a Resource.", rS.getIdRef() ));
+                    LOG.debug(String.format("Found RelatedSensor %s is not a column but a Resource.", rS.getIdRef()));
                 }
             } else {
                 LOG.error(String.format("RelatedSensor element not set properly: %s", rS.xmlText()));
@@ -532,7 +561,7 @@ public final class Configuration {
      * @return a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
      */
     public Column getColumnById(final int mvColumnId) {
-        LOG.trace(String.format("getColumnById(%d)",mvColumnId));
+        LOG.trace(String.format("getColumnById(%d)", mvColumnId));
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column column : cols) {
             if (column.getNumber() == mvColumnId) {
@@ -569,7 +598,7 @@ public final class Configuration {
                     importConf.getAdditionalMetadata().getSensorArray() != null &&
                     importConf.getAdditionalMetadata().getSensorArray().length > 0) {
                 for (final SensorType s : importConf.getAdditionalMetadata().getSensorArray()) {
-                    if (s.getResource() != null && s.getResource().getID() != null && s.getResource().getID().equals(sensorXmlId)) {
+                    if (isSensorIdMatching(sensorXmlId, s)) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug(String.format("Sensor found for id '%s': %s",
                                     sensorXmlId,
@@ -588,6 +617,12 @@ public final class Configuration {
         LOG.debug(String.format("RelatedSensor element not found for given measured value column id %s",
                 mvColumnId));
         return null;
+    }
+
+    private boolean isSensorIdMatching(final String sensorXmlId, final SensorType s) {
+        return s.getResource() != null &&
+                s.getResource().getID() != null &&
+                s.getResource().getID().equals(sensorXmlId);
     }
 
     /**
@@ -609,7 +644,7 @@ public final class Configuration {
                         rF.getNumber()));
                 return rF.getNumber();
             } else if (rF.isSetIdRef()) {
-                LOG.debug(String.format("Found RelatedFOI %s is not a column but a Resource.", rF.getIdRef() ));
+                LOG.debug(String.format("Found RelatedFOI %s is not a column but a Resource.", rF.getIdRef()));
             } else {
                 LOG.error(String.format("RelatedFOI element not set properly: %s", rF.xmlText()));
             }
@@ -645,7 +680,7 @@ public final class Configuration {
             for (final FOIPosition pos : foiPos) {
                 if (pos.getURI() != null &&
                         pos.getURI().getStringValue() != null &&
-                        pos.getURI().getStringValue().equals(foiUri)){
+                        pos.getURI().getStringValue().equals(foiUri)) {
                     // if element is found -> fill position
                     final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p = pos.getPosition();
                     if (p.isSetAlt() &&
@@ -707,7 +742,7 @@ public final class Configuration {
                     importConf.getAdditionalMetadata().getFeatureOfInterestArray() != null &&
                     importConf.getAdditionalMetadata().getFeatureOfInterestArray().length > 0) {
                 for (final FeatureOfInterestType foi : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
-                    if (foi.getResource() != null && foi.getResource().getID() != null && foi.getResource().getID().equals(foiXmlId)) {
+                    if (isFoiIdMatching(foiXmlId, foi)) {
                         LOG.debug(String.format("Feature of Interest found for id '%s': %s",
                                 foiXmlId,
                                 foi.xmlText()));
@@ -724,6 +759,12 @@ public final class Configuration {
         LOG.debug(String.format("RelatedFOI element not found for given measured value column id %s",
                 mvColumnId));
         return null;
+    }
+
+    private boolean isFoiIdMatching(final String foiXmlId, final FeatureOfInterestType foi) {
+        return foi.getResource() != null &&
+                foi.getResource().getID() != null &&
+                foi.getResource().getID().equals(foiXmlId);
     }
 
     /**
@@ -767,7 +808,7 @@ public final class Configuration {
         int epsgCode = -1;
         for (final Column c : cols) {
             for (final Metadata m : c.getMetadataArray()) {
-               if (m.getKey().equals(Key.PARSE_PATTERN)) {
+                if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
                     pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LATITUDE, "{0}");
                     pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LONGITUDE, "{1}");
@@ -786,7 +827,9 @@ public final class Configuration {
                         throw new NumberFormatException();
                     }
 
-                    Object[] latitude, longitude, height;
+                    Object[] latitude;
+                    Object[] longitude;
+                    Object[] height;
 
                     if (tokens.length > 0 && tokens[0] != null) {
                         latitude = parseLat((String) tokens[0]);
@@ -794,40 +837,36 @@ public final class Configuration {
                         units[Position.LAT] = (String) latitude[1];
                     }
                     if (tokens.length > 1 && tokens[1] != null) {
-                        longitude = parseLon((String)tokens[1]);
+                        longitude = parseLon((String) tokens[1]);
                         posValues[Position.LONG] = (Double) longitude[0];
                         units[Position.LONG] = (String) longitude[1];
                     }
                     if (tokens.length > 2 && tokens[2] != null) {
-                        height = parseAlt((String)tokens[2]);
+                        height = parseAlt((String) tokens[2]);
                         posValues[Position.ALT] = (Double) height[0];
                         units[Position.ALT] = (String) height[1];
                     }
                     if (tokens.length > 3 && tokens[3] != null) {
-                        epsgCode = Integer.valueOf((String)tokens[3]);
+                        epsgCode = Integer.valueOf((String) tokens[3]);
                     }
-                }
-                // get additional information
-                // LATITUDE
-                else if (m.getKey().equals(Key.POSITION_LATITUDE)) {
+                    // get additional information
+                } else if (m.getKey().equals(Key.POSITION_LATITUDE)) {
+                    // LATITUDE
                     final Object[] latitude = parseLat(m.getValue());
                     posValues[Position.LAT] = (Double) latitude[0];
                     units[Position.LAT] = (String) latitude[1];
-                }
-                // LONGITUDE
-                else if (m.getKey().equals(Key.POSITION_LONGITUDE)) {
+                } else if (m.getKey().equals(Key.POSITION_LONGITUDE)) {
+                    // LONGITUDE
                     final Object[] longitude = parseLon(m.getValue());
                     posValues[Position.LONG] = (Double) longitude[0];
                     units[Position.LONG] = (String) longitude[1];
-                }
-                // ALTITUDE
-                else if (m.getKey().equals(Key.POSITION_ALTITUDE)) {
+                } else if (m.getKey().equals(Key.POSITION_ALTITUDE)) {
+                    // ALTITUDE
                     final Object[] altitude = parseAlt(m.getValue());
                     posValues[Position.ALT] = (Double) altitude[0];
                     units[Position.ALT] = (String) altitude[1];
-                }
-                // EPSG
-                else if (m.getKey().equals(Key.POSITION_EPSG_CODE)) {
+                } else if (m.getKey().equals(Key.POSITION_EPSG_CODE)) {
+                    // EPSG
                     epsgCode = Integer.valueOf(m.getValue());
                 }
             }
@@ -843,26 +882,22 @@ public final class Configuration {
         String unit = Position.UNIT_NOT_SET;
 
         String number;
-        if (alt.contains("km")) {
-            unit = "km";
-            number = alt.replace("km", "");
-        }
-        else if (alt.contains("mi")) {
-            unit = "mi";
-            number = alt.replace("mi", "");
-        }
-        else if (alt.contains("m")) {
-            unit = "m";
-            number = alt.replace("m", "");
-        }
-        else if (alt.contains("ft")) {
-            unit = "ft";
-            number = alt.replace("ft", "");
-        }
-        else {
+        if (alt.contains(KM)) {
+            unit = KM;
+            number = alt.replace(KM, "");
+        } else if (alt.contains(MI)) {
+            unit = MI;
+            number = alt.replace(MI, "");
+        } else if (alt.contains(M)) {
+            unit = M;
+            number = alt.replace(M, "");
+        } else if (alt.contains(FT)) {
+            unit = FT;
+            number = alt.replace(FT, "");
+        } else {
             number = alt;
             // we are assuming "m" as default value
-            unit = "m";
+            unit = M;
         }
         value = parseToDouble(number);
 
@@ -881,9 +916,9 @@ public final class Configuration {
             unit = "°";
             final String[] part = lon.split("°");
             number = part[0];
-        } else if (lon.contains("m")) {
-            unit = "m";
-            number = lon.replace("m", "");
+        } else if (lon.contains(M)) {
+            unit = M;
+            number = lon.replace(M, "");
         } else {
             number = lon;
         }
@@ -891,10 +926,9 @@ public final class Configuration {
 
         if (unit.equals("")) {
             if (value <= 180.0 && value >= -180.0) {
-                unit = "deg";
-            }
-            else {
-                unit = "m";
+                unit = DEG;
+            } else {
+                unit = M;
             }
         }
 
@@ -914,9 +948,9 @@ public final class Configuration {
             unit = "°";
             final String[] part = lat.split("°");
             number = part[0];
-        } else if (lat.contains("m")) {
-            unit = "m";
-            number = lat.replace("m", "");
+        } else if (lat.contains(M)) {
+            unit = M;
+            number = lat.replace(M, "");
         } else {
             number = lat;
         }
@@ -924,10 +958,9 @@ public final class Configuration {
 
         if (unit.equals("")) {
             if (value <= 90.0 && value >= -90.0) {
-                unit = "deg";
-            }
-            else {
-                unit = "m";
+                unit = DEG;
+            } else {
+                unit = M;
             }
         }
 
@@ -942,7 +975,7 @@ public final class Configuration {
      * @return a double.
      * @throws java.text.ParseException if any.
      */
-    public double parseToDouble(final String number) throws ParseException{
+    public double parseToDouble(final String number) throws ParseException {
         LOG.trace(String.format("parseToDouble(%s)",
                 number));
         final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -983,12 +1016,14 @@ public final class Configuration {
      */
     public Column[] getAllColumnsForGroup(final String group, final Enum t) {
         LOG.trace("getAllColumnsForGroup()");
-        if (group == null) { return null; }
+        if (group == null) {
+            return null;
+        }
         final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         final ArrayList<Column> tmpResultSet = new ArrayList<Column>(allCols.length);
         for (final Column col : allCols) {
             if (col.getType() != null &&
-                    col.getType().equals(t) ) {
+                    col.getType().equals(t)) {
                 // we have a position or dateTime
                 // check the Metadata kvps
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
@@ -1019,7 +1054,7 @@ public final class Configuration {
         LOG.trace("getFirstDateTimeGroup()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column col : cols) {
-            if (col.getType().equals(Type.DATE_TIME)){
+            if (col.getType().equals(Type.DATE_TIME)) {
                 // it's DATE_TIME -> get group id from metadata[]
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
                     for (final Metadata m : col.getMetadataArray()) {
@@ -1124,12 +1159,12 @@ public final class Configuration {
      */
     public Offering getOffering(final Sensor s) {
         LOG.trace("getOffering()");
-        if( importConf.getSosMetadata().getOffering().isSetGenerate() &&
+        if (importConf.getSosMetadata().getOffering().isSetGenerate() &&
                 importConf.getSosMetadata().getOffering().getGenerate()) {
             return new Offering(s.getName(), s.getUri());
         } else {
             final String o = importConf.getSosMetadata().getOffering().getStringValue();
-            return new Offering(o,o);
+            return new Offering(o, o);
         }
     }
 
@@ -1188,7 +1223,7 @@ public final class Configuration {
      * @return a boolean.
      */
     public boolean isOneMvColumn() {
-        return (getMeasureValueColumnIds().length == 1);
+        return getMeasureValueColumnIds().length == 1;
     }
 
     /**
@@ -1208,8 +1243,7 @@ public final class Configuration {
      */
     public String getSosBinding() {
         LOG.trace("getSosBinding()");
-        if (importConf.getSosMetadata().isSetBinding())
-        {
+        if (importConf.getSosMetadata().isSetBinding()) {
             return importConf.getSosMetadata().getBinding();
         }
         LOG.info("Optional SosMetadata.Binding not set!");
@@ -1443,16 +1477,18 @@ public final class Configuration {
     /**
      * <p>getImportStrategy.</p>
      *
-     * @return The {@link org.n52.sos.importer.feeder.Configuration.ImportStrategy} that could be configured in
-     *         <code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
-     *         <br>Default if nothing matching is found: {@link org.n52.sos.importer.feeder.Configuration.ImportStrategy#SingleObservation}
+     * @return The {@link ImportStrategy} that could be configured in
+     *         <code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=
+     *         IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
+     *         <br>Default if nothing matching is found: {@link ImportStrategy#SingleObservation}.
      */
     public ImportStrategy getImportStrategy() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
             for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
                 final Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
                 if (metadata.getKey().equals(Key.IMPORT_STRATEGY)) {
-                    if (metadata.getValue().equalsIgnoreCase(ImportStrategy.SweArrayObservationWithSplitExtension.name())) {
+                    if (metadata.getValue().equalsIgnoreCase(
+                            ImportStrategy.SweArrayObservationWithSplitExtension.name())) {
                         return ImportStrategy.SweArrayObservationWithSplitExtension;
                     } else {
                         return ImportStrategy.SingleObservation;
@@ -1477,7 +1513,10 @@ public final class Configuration {
                         return Integer.parseInt(metadata.getValue());
                     } catch (final NumberFormatException nfe) {
                         LOG.error(
-                                String.format("Value of metadata element with key '%s' could not be parsed to int: '%s'. Ignoring it.",
+                                String.format(
+                                        "Value of metadata element with key "
+                                        + "'%s' could not be parsed to int: "
+                                        + "'%s'. Ignoring it.",
                                         Key.HUNK_SIZE.toString()),
                                 nfe);
                     }
@@ -1535,7 +1574,8 @@ public final class Configuration {
         if (isInsertSweArrayObservationTimeoutBufferSet()) {
             return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
         }
-        throw new IllegalArgumentException("Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
+        throw new IllegalArgumentException(
+                "Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
     }
 
     /**
@@ -1565,7 +1605,13 @@ public final class Configuration {
      * @return a {@link java.lang.String} object.
      */
     public String getCsvParser() {
-        return isCsvParserDefined()?importConf.getCsvMetadata().getCsvParserClass():WrappedCSVReader.class.getName();
+        return isCsvParserDefined()
+                ? importConf.getCsvMetadata().getCsvParserClass()
+                : WrappedCSVReader.class.getName();
+    }
+
+    public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
+        return EPSG_EASTING_FIRST_MAP;
     }
 
 }
