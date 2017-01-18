@@ -53,18 +53,28 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
  */
-public class RepeatedFeeder extends TimerTask{
+public class RepeatedFeeder extends TimerTask {
 
+    /**
+     * 
+     */
+    private static final String EXCEPTION_THROWN = "Exception thrown: {}";
+    /**
+     * 
+     */
+    private static final String PROPERTIES_FILE_EXTENSION = ".properties";
+    /**
+     * 
+     */
+    private static final String LAST_FEED_FILE = "lastFeedFile";
+    private static File lastUsedDateFile;
     private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
+    private static final Lock ONE_FEEDER_LOCK = new ReentrantLock(true);
 
     private final Configuration configuration;
     private final File file;
 
     private final int periodInMinutes;
-
-    final private static Lock oneFeederLock = new ReentrantLock(true);
-
-    private static File lastUsedDateFile;
 
     /**
      * <p>Constructor for RepeatedFeeder.</p>
@@ -84,8 +94,8 @@ public class RepeatedFeeder extends TimerTask{
     public void run() {
         LOG.trace("run()");
         File datafile;
-         // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
-        oneFeederLock.lock();
+        // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
+        ONE_FEEDER_LOCK.lock();
         try {
             /*
              * save last feeded file incl. counter
@@ -103,17 +113,15 @@ public class RepeatedFeeder extends TimerTask{
                 }
                 addNewerFiles(filesToFeed);
                 for (final File fileToFeed : filesToFeed) {
-                    LOG.info("Start feeding file {}",fileToFeed.getName());
+                    LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
                         new OneTimeFeeder(configuration, fileToFeed).run();
                         lastUsedDateFile = fileToFeed;
                         saveLastFeedFile();
-                        LOG.info("Finished feeding file {}.",fileToFeed.getName());
-                    }
-                    catch (final InvalidColumnCountException iae) {
+                        LOG.info("Finished feeding file {}.", fileToFeed.getName());
+                    } catch (final InvalidColumnCountException iae) {
                         // Exception is already logged -> nothing to do
-                    }
-                    catch (final JavaApiBugJDL6203387Exception e) {
+                    } catch (final JavaApiBugJDL6203387Exception e) {
                         // Exception is already logged -> nothing to do
                     }
                 }
@@ -124,19 +132,17 @@ public class RepeatedFeeder extends TimerTask{
                 LOG.info("Finished feeding file {}. Next run in {} minute{}.",
                         datafile.getName(),
                         periodInMinutes,
-                        periodInMinutes>1?"s":"");
+                        periodInMinutes > 1 ? "s" : "");
             }
-        }
-        catch (final InvalidColumnCountException iae) {
+        } catch (final InvalidColumnCountException iae) {
             // Exception is already logged -> nothing to do
-        }
-        catch (final JavaApiBugJDL6203387Exception e) {
+        } catch (final JavaApiBugJDL6203387Exception e) {
             // Exception is already logged -> nothing to do
         } catch (final Exception e) {
             LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());
-            LOG.debug("StackTrace:",e);
+            LOG.debug("StackTrace:", e);
         } finally {
-            oneFeederLock.unlock();
+            ONE_FEEDER_LOCK.unlock();
         }
     }
 
@@ -148,35 +154,40 @@ public class RepeatedFeeder extends TimerTask{
             public boolean accept(final File pathname) {
                 return pathname.isFile() &&
                         pathname.canRead() &&
-                        (configuration.getLocaleFilePattern() != null?
-                        configuration.getLocaleFilePattern().matcher(pathname.getName()).matches():true);
+                        (configuration.getLocaleFilePattern() != null
+                        ? configuration.getLocaleFilePattern().matcher(pathname.getName()).matches()
+                                : true);
             }
         });
         if (files != null) {
-
-            for (final File file : files) {
-                if (lastUsedDateFile == null || file.lastModified() >= lastUsedDateFile.lastModified()) {
-                    filesToFeed.add(file);
+            for (final File fileToCheck : files) {
+                if (lastUsedDateFile == null || fileToCheck.lastModified() >= lastUsedDateFile.lastModified()) {
+                    filesToFeed.add(fileToCheck);
                 }
             }
             if (filesToFeed.size() < 1) {
                 LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
                         file.getAbsolutePath(),
-                        lastUsedDateFile!=null?lastUsedDateFile.getName():"none");
+                        lastUsedDateFile != null
+                        ? lastUsedDateFile.getName()
+                                : "none");
             }
         } else {
-            LOG.error("No file found in directory '{}'",file.getAbsolutePath());
+            LOG.error("No file found in directory '{}'", file.getAbsolutePath());
         }
     }
 
     private void saveLastFeedFile() {
         final Properties prop = new Properties();
-        prop.put("lastFeedFile", lastUsedDateFile.getAbsolutePath());
+        prop.put(LAST_FEED_FILE, lastUsedDateFile.getAbsolutePath());
         try {
-            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + ".properties"), null);
+            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + 
+                    FileHelper.cleanPathToCreateFileName(
+                            configuration.getConfigFile().getAbsolutePath()) + PROPERTIES_FILE_EXTENSION),
+                    null);
             LOG.info("Saved last used data file: {}", lastUsedDateFile.getName());
         } catch (final IOException e) {
-            LOG.error("Exception thrown: {}", e.getMessage(), e);
+            LOG.error(EXCEPTION_THROWN, e.getMessage(), e);
         }
     }
 
@@ -187,15 +198,16 @@ public class RepeatedFeeder extends TimerTask{
             lastFeedFilePropertiesPath = new StringBuffer(FileHelper.getHome().getAbsolutePath())
                 .append(File.separator)
                 .append(FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()))
-                .append(".properties")
+                .append(PROPERTIES_FILE_EXTENSION)
                 .toString();
             prop.load(new FileReader(lastFeedFilePropertiesPath));
         } catch (final FileNotFoundException fnfe) {
-            LOG.debug(String.format("Last feed file properties not found: %s",lastFeedFilePropertiesPath));
+            LOG.debug(String.format("Last feed file properties not found: %s", lastFeedFilePropertiesPath));
         } catch (final IOException e) {
-            LOG.debug("Exception thrown: {}", e.getMessage(), e); // only on DEBUG because it is not a problem if this file does not exist
+            // only on DEBUG because it is not a problem if this file does not exist
+            LOG.debug(EXCEPTION_THROWN, e.getMessage(), e); 
         }
-        final String lastFeedFileName = prop.getProperty("lastFeedFile");
+        final String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
         if (lastFeedFileName == null) {
             return;
         }
