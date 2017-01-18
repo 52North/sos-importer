@@ -82,52 +82,64 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  */
 public class DataFile {
 
+    /**
+     * 
+     */
+    private static final String NAME = "name: %s";
+
+    /**
+     * 
+     */
+    private static final String OS_NAME = "os.name";
+
     private static final Logger LOG = LoggerFactory.getLogger(DataFile.class);
 
     private static final int MILLIES_PER_HOUR = 1000 * 60 * 60;
 
     private final Configuration configuration;
 
-    private final File file;
+    private final File dataFile;
 
     /**
      * <p>Constructor for DataFile.</p>
      *
      * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param file a {@link java.io.File} object.
+     * @param dataFile a {@link java.io.File} object.
      */
     public DataFile(final Configuration configuration, final File file) {
         this.configuration = configuration;
-        this.file = file;
+        this.dataFile = file;
     }
 
     /**
-     * Checks if the file is available and can be read. All errors like not
-     * available, not a file, and not readable are logged to
+     * Checks if the dataFile is available and can be read. All errors like not
+     * available, not a dataFile, and not readable are logged to
      * <code>LOG.error()</code>.
      *
-     * @return <code>true</code>, if the Datafile is a file and can be read,<br>
+     * @return <code>true</code>, if the Datafile is a dataFile and can be read,<br>
      *          else <code>false</code>.
      */
     public boolean isAvailable() {
         LOG.trace("isAvailable()");
-        if (!file.exists()) {
-            LOG.error(String.format("Data file '%s' specified in '%s' does not exist.",
-                    file.getAbsolutePath(),
+        if (!dataFile.exists()) {
+            LOG.error(String.format("Data dataFile '%s' specified in '%s' does not exist.",
+                    dataFile.getAbsolutePath(),
                     configuration.getConfigFile().getAbsolutePath()));
-        } else if (!file.isFile()){
-            LOG.error(String.format("Data file '%s' is not a file!",
-                    file.getAbsolutePath()));
-        } else if (!file.canRead()) {
-            LOG.error(String.format("Data file '%s' can not be accessed, please check file permissions!",
-                    file.getAbsolutePath()));
-        } else if (checkWindowsJavaApiBugJDK6203387(file)){
-            LOG.error(String.format("Data file '%s' can not be accessed, because another process blocked read access!",
-                    file.getAbsolutePath()));
-            throw new JavaApiBugJDL6203387Exception(file.getName());
+        } else if (!dataFile.isFile()) {
+            LOG.error(String.format("Data dataFile '%s' is not a dataFile!",
+                    dataFile.getAbsolutePath()));
+        } else if (!dataFile.canRead()) {
+            LOG.error(String.format("Data dataFile '%s' can not be accessed, please check dataFile permissions!",
+                    dataFile.getAbsolutePath()));
+        } else if (checkWindowsJavaApiBugJDK6203387(dataFile)) {
+            LOG.error(
+                    String.format("Data dataFile '%s' can not be accessed, "
+                            + "because another process blocked read access!",
+                    dataFile.getAbsolutePath()));
+            throw new JavaApiBugJDL6203387Exception(dataFile.getName());
         } else {
-            LOG.debug(String.format("Data file '%s' is a file and read permission is available.",
-                        file.getAbsolutePath()));
+            LOG.debug(String.format("Data dataFile '%s' is a dataFile and read permission is available.",
+                        dataFile.getAbsolutePath()));
             return true;
         }
         return false;
@@ -138,22 +150,21 @@ public class DataFile {
             FileReader fr = null;
             try {
                 fr = new FileReader(file);
-            }
-            catch (final FileNotFoundException fnfe) {
+            } catch (final FileNotFoundException fnfe) {
                 // TODO add more language specific versions of this error message
                 if (
                         (
-                            fnfe.getMessage().indexOf("Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird")>=0
+                            fnfe.getMessage().indexOf("Der Prozess kann nicht auf die Datei zugreifen, "
+                                    + "da sie von einem anderen Prozess verwendet wird") >= 0
                             ||
-                            fnfe.getMessage().indexOf("The process cannot access the file because it is being used by another process")>=0
+                            fnfe.getMessage().indexOf("The process cannot access the dataFile "
+                                    + "because it is being used by another process") >= 0
                         )
-                    &&
-                        fnfe.getMessage().indexOf(file.getName()) >=0)
-                {
+                        &&
+                        fnfe.getMessage().indexOf(file.getName()) >= 0) {
                     return true;
                 }
-            }
-            finally {
+            } finally {
                 if (fr != null) {
                     try {
                         fr.close();
@@ -167,7 +178,8 @@ public class DataFile {
     }
 
     private boolean isWindows() {
-        return System.getProperty("os.name").indexOf("Windows")>=0||System.getProperty("os.name").indexOf("windows")>=0;
+        return System.getProperty(OS_NAME).indexOf("Windows") >= 0 || 
+                System.getProperty(OS_NAME).indexOf("windows") >= 0;
     }
 
     /**
@@ -179,14 +191,14 @@ public class DataFile {
      */
     public CsvParser getCSVReader() throws IOException {
         LOG.trace("getCSVReader()");
-        final FileReader fr = new FileReader(file);
+        final FileReader fr = new FileReader(dataFile);
         final BufferedReader br = new BufferedReader(fr);
         CsvParser cr = null;
         if (configuration.isCsvParserDefined()) {
             final String csvParser = configuration.getCsvParser();
             try {
                 final Class<?> clazz = Class.forName(csvParser);
-                final Constructor<?> constructor = clazz.getConstructor((Class<?>[])null);
+                final Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
                 final Object instance = constructor.newInstance();
                 if (CsvParser.class.isAssignableFrom(instance.getClass())) {
                     cr = (CsvParser) instance;
@@ -198,7 +210,9 @@ public class DataFile {
                     IllegalAccessException |
                     IllegalArgumentException |
                     InvocationTargetException e) {
-                final String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. Cancel import", csvParser);
+                final String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. "
+                        + "Cancel import",
+                        csvParser);
                 LOG.error(errorMsg);
                 LOG.debug("Exception thrown: {}", e.getMessage(), e);
                 try {
@@ -206,7 +220,7 @@ public class DataFile {
                 } catch (final IOException e1) {
                     LOG.error("Could not close BufferedReader: {}", e1.getMessage(), e1);
                 }
-                throw new IllegalArgumentException(errorMsg,e);
+                throw new IllegalArgumentException(errorMsg, e);
             }
         }
         if (cr == null) {
@@ -246,7 +260,7 @@ public class DataFile {
     public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
         LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
         // check for sensor column and return new sensor
-        Sensor sensor = getSensorFromColumn(mvColumnId,values);
+        Sensor sensor = getSensorFromColumn(mvColumnId, values);
         if (sensor == null) {
             LOG.debug("Could not find sensor column for column id {}", mvColumnId);
         } else {
@@ -264,14 +278,22 @@ public class DataFile {
                 final GeneratedResourceType gRT = (GeneratedResourceType) sensorType.getResource();
                 final String[] a = getUriAndNameFromGeneratedResourceType(
                         // concatstring
-                        gRT.isSetConcatString()?gRT.getConcatString():null,
-                        // uri
-                        gRT.isSetURI()?gRT.getURI().getStringValue():null,
-                        gRT.isSetURI()&&gRT.getURI().isSetUseAsPrefix()?gRT.getURI().getUseAsPrefix():false, // useUriAsPrefix
-                        gRT.getNumberArray(),
-                        values
+                        gRT.isSetConcatString()
+                        ? gRT.getConcatString()
+                                : null,
+                                // uri
+                                gRT.isSetURI()
+                        ? gRT.getURI().getStringValue()
+                                : null,
+                                // useUriAsPrefix
+                                gRT.isSetURI() && 
+                                gRT.getURI().isSetUseAsPrefix()
+                                ? gRT.getURI().getUseAsPrefix()
+                                        : false,
+                                        gRT.getNumberArray(),
+                                        values
                         );
-                sensor = new Sensor(a[0],a[1]);
+                sensor = new Sensor(a[0], a[1]);
             } else if (sensorType.getResource() instanceof ManualResourceType) {
                 // manual sensor
                 final ManualResourceType mRT = (ManualResourceType) sensorType.getResource();
@@ -295,7 +317,7 @@ public class DataFile {
                     mvColumnId,
                     Arrays.toString(values)));
         // check for foi column and return new foi
-        FeatureOfInterest foi = getFoiColumn(mvColumnId,values);
+        FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
         if (foi == null) {
             LOG.debug(String.format("Could not find foi column for column id %d",
                     mvColumnId));
@@ -316,24 +338,34 @@ public class DataFile {
                 final GeneratedSpatialResourceType gSRT =
                         (GeneratedSpatialResourceType) foiT.getResource();
                 final String[] a = getUriAndNameFromGeneratedResourceType(
-                        gSRT.isSetConcatString()?gSRT.getConcatString():null, // concatstring
-                                gSRT.isSetURI()?gSRT.getURI().getStringValue():null, // uri
-                                        gSRT.isSetURI()&&gSRT.getURI().isSetUseAsPrefix()?gSRT.getURI().getUseAsPrefix():false, // useUriAsPrefix
+                        // concatstring
+                        gSRT.isSetConcatString()
+                        ? gSRT.getConcatString()
+                                : null,
+                                // uri
+                                gSRT.isSetURI()
+                                ? gSRT.getURI().getStringValue()
+                                        : null,
+                                        gSRT.isSetURI() &&
+                                        // useUriAsPrefix
+                                        gSRT.getURI().isSetUseAsPrefix()
+                                        ? gSRT.getURI().getUseAsPrefix()
+                                                : false,
                                                 gSRT.getNumberArray(),
                                                 values
                         );
-                final Position p = getPosition(gSRT.getPosition(),values);
-                foi = new FeatureOfInterest(a[0],a[1],p);
+                final Position p = getPosition(gSRT.getPosition(), values);
+                foi = new FeatureOfInterest(a[0], a[1], p);
             } else if (foiT.getResource() instanceof SpatialResourceType) {
                 // manual foi
                 final SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
-                final Position p = getPosition(mSRT.getPosition(),values);
+                final Position p = getPosition(mSRT.getPosition(), values);
                 foi = new FeatureOfInterest(mSRT.getName(),
                         mSRT.getURI().getStringValue(),
                         p);
             }
         }
-        if (!NcNameResolver.isNCName(foi.getName())){
+        if (!NcNameResolver.isNCName(foi.getName())) {
             final String[] a = createCleanNCName(foi);
             foi.setName(a[0]);
             if (!a[0].equals(a[1])) {
@@ -398,18 +430,15 @@ public class DataFile {
                 if (m.getValue().equals("BOOLEAN")) {
                     if (value.equalsIgnoreCase("0")) {
                         value = "false";
-                    }
-                    else if (value.equalsIgnoreCase("1")) {
+                    } else if (value.equalsIgnoreCase("1")) {
                         value = "true";
                     }
                     return Boolean.parseBoolean(value);
-                }
-                // COUNT
-                else if (m.getValue().equals("COUNT")) {
+                } else if (m.getValue().equals("COUNT")) {
+                    // COUNT
                     return Integer.parseInt(value);
-                }
-                // NUMERIC
-                else if (m.getValue().equals("NUMERIC")) {
+                } else if (m.getValue().equals("NUMERIC")) {
+                    // NUMERIC
                     return configuration.parseToDouble(value);
                 }
             }
@@ -444,19 +473,17 @@ public class DataFile {
             TimeZone timeZone = getTimeZone(cols);
             if (isUnixTime(cols)) {
                 handleUnixTime(values, cols, ts);
-            }
-            else {
+            } else {
                 handleDateTimeCombination(values, cols, ts, timeZone);
             }
             if (configuration.isDateInfoExtractionFromFileNameSetupValid()) {
                 ts.enrich(
-                    file.getName(),
-                    configuration.getRegExDateInfoInFileName(),
-                    configuration.getDateInfoPattern()
-                    );
+                        dataFile.getName(),
+                        configuration.getRegExDateInfoInFileName(),
+                        configuration.getDateInfoPattern());
             }
             if (configuration.isUseDateInfoFromFileModificationSet()) {
-                ts.enrich(file.lastModified(), configuration.getLastModifiedDelta());
+                ts.enrich(dataFile.lastModified(), configuration.getLastModifiedDelta());
             }
             return ts;
         }
@@ -480,33 +507,33 @@ public class DataFile {
                                 timeZone);
                 // add to timestamp object
                 switch (field) {
-                case GregorianCalendar.YEAR:
-                    ts.setYear(value);
-                    break;
-                case GregorianCalendar.MONTH:
-                    // java starts month counting at 0 -> +1 for each month
-                    ts.setMonth((byte) (value+1));
-                    break;
-                case GregorianCalendar.DAY_OF_MONTH:
-                    ts.setDay((byte) value);
-                    break;
-                case GregorianCalendar.HOUR_OF_DAY:
-                    ts.setHour((byte) value);
-                    break;
-                case GregorianCalendar.MINUTE:
-                    ts.setMinute((byte) value);
-                    break;
-                case GregorianCalendar.SECOND:
-                    ts.setSeconds((byte) value);
-                    break;
-                case GregorianCalendar.ZONE_OFFSET:
-                    ts.setTimezone((byte) value);
-                    break;
-                default:
-                    break;
+                    case GregorianCalendar.YEAR:
+                        ts.setYear(value);
+                        break;
+                    case GregorianCalendar.MONTH:
+                        // java starts month counting at 0 -> +1 for each month
+                        ts.setMonth((byte) (value + 1));
+                        break;
+                    case GregorianCalendar.DAY_OF_MONTH:
+                        ts.setDay((byte) value);
+                        break;
+                    case GregorianCalendar.HOUR_OF_DAY:
+                        ts.setHour((byte) value);
+                        break;
+                    case GregorianCalendar.MINUTE:
+                        ts.setMinute((byte) value);
+                        break;
+                    case GregorianCalendar.SECOND:
+                        ts.setSeconds((byte) value);
+                        break;
+                    case GregorianCalendar.ZONE_OFFSET:
+                        ts.setTimezone((byte) value);
+                        break;
+                    default:
+                        break;
                 }
             }
-            enrichTimestampWithColumnMetadata(ts,column);
+            enrichTimestampWithColumnMetadata(ts, column);
         }
     }
 
@@ -515,8 +542,8 @@ public class DataFile {
         // handle unix time:
         // DO: TZ := UTC; value from one single column (should be an integer)
         timeZone = TimeZone.getTimeZone("UTC");
-        ts.setTimezone((byte)(timeZone.getRawOffset()/MILLIES_PER_HOUR));
-        ts.set(Long.parseLong(values[cols[0].getNumber()])*1000);
+        ts.setTimezone((byte) (timeZone.getRawOffset() / MILLIES_PER_HOUR));
+        ts.set(Long.parseLong(values[cols[0].getNumber()]) * 1000);
     }
 
     private boolean isUnixTime(final Column[] cols) {
@@ -549,7 +576,8 @@ public class DataFile {
             for (final Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
                     try {
-                        for (final String zoneId : TimeZone.getAvailableIDs(Integer.parseInt(meta.getValue())*MILLIES_PER_HOUR) ) {
+                        for (final String zoneId : 
+                                TimeZone.getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
                             return TimeZone.getTimeZone(zoneId);
                         }
                     } catch (final NumberFormatException nfe) {
@@ -578,31 +606,31 @@ public class DataFile {
         if (col.getMetadataArray() != null) {
             for (final Metadata m : col.getMetadataArray()) {
                 if (m.getKey().equals(Key.TIME_ZONE)) {
-                    ts.setTimezone( Byte.parseByte( m.getValue() ) );
+                    ts.setTimezone(Byte.parseByte(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_YEAR)) {
-                    ts.setYear( Short.parseShort( m.getValue() ) );
+                    ts.setYear(Short.parseShort(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_MONTH)) {
-                    ts.setMonth( Byte.parseByte( m.getValue() ) );
+                    ts.setMonth(Byte.parseByte(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_DAY)) {
-                    ts.setDay( Byte.parseByte( m.getValue() ) );
+                    ts.setDay(Byte.parseByte(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_HOUR)) {
-                    ts.setHour( Byte.parseByte( m.getValue() ) );
+                    ts.setHour(Byte.parseByte(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_MINUTE)) {
-                    ts.setMinute( Byte.parseByte( m.getValue() ) );
+                    ts.setMinute(Byte.parseByte(m.getValue()));
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_SECOND)) {
-                    ts.setSeconds( Byte.parseByte( m.getValue() ) );
+                    ts.setSeconds(Byte.parseByte(m.getValue()));
                     continue;
                 }
             }
@@ -661,8 +689,9 @@ public class DataFile {
                         final GeneratedResourceType uomGRT =
                                 (GeneratedResourceType) uom.getResource();
                         final String[] a = getUriAndNameFromGeneratedResourceType(
-                                uomGRT.isSetConcatString()?
-                                        uomGRT.getConcatString():"",
+                                uomGRT.isSetConcatString()
+                                ? uomGRT.getConcatString()
+                                        : "",
                                 "",
                                 false,
                                 uomGRT.getNumberArray(),
@@ -674,14 +703,14 @@ public class DataFile {
 
             // Case A.2: number
             if (relUom.isSetNumber() && !relUom.isSetIdRef()) {
-                return new UnitOfMeasurement(values[relUom.getNumber()],values[relUom.getNumber()]);
+                return new UnitOfMeasurement(values[relUom.getNumber()], values[relUom.getNumber()]);
             }
         }
 
         // Case B: Information stored in another column
         final int uomColumnId = configuration.getColumnIdForUom(mVColumnId);
         if (uomColumnId > -1) {
-            return new UnitOfMeasurement(values[uomColumnId],values[uomColumnId]);
+            return new UnitOfMeasurement(values[uomColumnId], values[uomColumnId]);
         }
 
         // no UOM found
@@ -732,7 +761,7 @@ public class DataFile {
                     if (op.getResource() instanceof ManualResourceType) {
                         final ManualResourceType opMRT =
                                 (ManualResourceType) op.getResource();
-                        return new ObservedProperty(opMRT.getName(),opMRT.getURI().getStringValue());
+                        return new ObservedProperty(opMRT.getName(), opMRT.getURI().getStringValue());
 
                     }
 
@@ -741,10 +770,13 @@ public class DataFile {
                         final GeneratedResourceType opGRT =
                                 (GeneratedResourceType) op.getResource();
                         final String[] a = getUriAndNameFromGeneratedResourceType(
-                                opGRT.isSetConcatString()?
-                                        opGRT.getConcatString():"",
+                                opGRT.isSetConcatString()
+                                ? opGRT.getConcatString()
+                                        : "",
                                 opGRT.getURI().getStringValue(),
-                                opGRT.getURI().isSetUseAsPrefix()?opGRT.getURI().getUseAsPrefix():false,
+                                opGRT.getURI().isSetUseAsPrefix()
+                                ? opGRT.getURI().getUseAsPrefix()
+                                        : false,
                                 opGRT.getNumberArray(),
                                 values);
                         return new ObservedProperty(a[0], a[1]);
@@ -754,14 +786,14 @@ public class DataFile {
 
             // Case A.2: number
             if (relOp.isSetNumber() && !relOp.isSetIdRef()) {
-                return new ObservedProperty(values[relOp.getNumber()],values[relOp.getNumber()]);
+                return new ObservedProperty(values[relOp.getNumber()], values[relOp.getNumber()]);
             }
         }
 
         // Case B: Information stored in another column
         final int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
         if (opColumnId > -1) {
-            return new ObservedProperty(values[opColumnId],values[opColumnId]);
+            return new ObservedProperty(values[opColumnId], values[opColumnId]);
         }
 
         // no OP found
@@ -791,10 +823,10 @@ public class DataFile {
     /**
      * <p>getFileName.</p>
      *
-     * @return the name of the data file. Not the whole path.
+     * @return the name of the data dataFile. Not the whole path.
      */
     public String getFileName() {
-        return file.getName();
+        return dataFile.getName();
     }
 
     /**
@@ -804,7 +836,7 @@ public class DataFile {
      * @throws IOException if any.
      */
     public String getCanonicalPath() throws IOException {
-        return file.getCanonicalPath();
+        return dataFile.getCanonicalPath();
     }
 
     /**
@@ -820,8 +852,9 @@ public class DataFile {
      * <code>String[] result = {name,uri};</code>
      * @return <code>String[] result = {name,uri};</code>
      */
-    private String[] getUriAndNameFromGeneratedResourceType(String concatString,
-            String uri,
+    private String[] getUriAndNameFromGeneratedResourceType(
+            final String concatString,
+            final String uri,
             final boolean useUriAsPrefixAfterNameAsUri,
             final int[] columnIds,
             final String[] values) {
@@ -833,39 +866,39 @@ public class DataFile {
                 Arrays.toString(values)));
         String name = "";
         // first the name
+        String glue = concatString;
         if (concatString == null) {
-            concatString = "";
+            glue = "";
         }
         for (int i = 0; i < columnIds.length; i++) {
             if (i > 0) {
-                name = name + concatString + values[columnIds[i]];
+                name = name + glue + values[columnIds[i]];
             } else {
                 name = values[columnIds[i]];
             }
-            LOG.trace(String.format("name: %s", name));
+            LOG.trace(String.format(NAME, name));
         }
-        LOG.debug(String.format("name: %s", name));
+        LOG.debug(String.format(NAME, name));
         // than the uri
+        String myUri = name;
         if (uri != null && useUriAsPrefixAfterNameAsUri) {
-            uri = uri + name;
-        } else {
-            uri = name;
+            myUri = uri + name;
         }
         LOG.debug(String.format("uri: %s", uri));
-        final String[] result = {name,uri};
+        final String[] result = {name, myUri};
         return result;
     }
 
     private Sensor getSensorFromColumn(final int mvColumnId, final String[] values) {
         LOG.trace(String.format("getSensorColumn(%d,%s)",
-            mvColumnId,
-            Arrays.toString(values)));
+                mvColumnId,
+                Arrays.toString(values)));
         final int i = configuration.getColumnIdForSensor(mvColumnId);
         if (i < 0) {
-            // sensor is not in the data file -> return null
+            // sensor is not in the data dataFile -> return null
             return null;
         } else {
-            final Sensor s = new Sensor(values[i],values[i]);
+            final Sensor s = new Sensor(values[i], values[i]);
             LOG.debug(String.format("Sensor found in datafile: %s", s));
             return s;
         }
@@ -876,14 +909,13 @@ public class DataFile {
                     mvColumnId));
         final int i = configuration.getColumnIdForFoi(mvColumnId);
         if (i < 0) {
-            // foi is not in the data file -> return null
+            // foi is not in the data dataFile -> return null
             return null;
         } else {
             Position p = configuration.getFoiPosition(values[i]);
             if (p == null && configuration.getMeasureValueColumnIds().length == 1) {
                 p = configuration.getPosition(values);
-            }
-            else {
+            } else {
                 LOG.error(String.format("Could not find position for foi '%s'", values[i]));
             }
             final FeatureOfInterest s = new FeatureOfInterest(values[i],
@@ -907,22 +939,23 @@ public class DataFile {
                 p.isSetLat() &&
                 p.isSetLong()) {
             return configuration.getModelPositionXBPosition(p);
-        }
-        // Case B: Position is in data file (and configuration [missing values])
-        else if (p.isSetGroup() &&
+        } else if (p.isSetGroup() &&
                 //!p.isSetAlt() &&
                 !p.isSetEPSGCode() &&
                 !p.isSetLat() &&
                 !p.isSetLong()) {
-            return configuration.getPosition(p.getGroup(),values);
+            // Case B: Position is in data dataFile (and configuration [missing values])
+            return configuration.getPosition(p.getGroup(), values);
         }
         return null;
     }
 
-    private short parseTimestampComponent(String timestampPart,
+    private short parseTimestampComponent(
+            final String timestampPart,
             final String pattern,
             final int field,
-            final TimeZone timeZone) throws ParseException {
+            final TimeZone timeZone)
+                    throws ParseException {
         LOG.trace(String.format("parseTimestampComponent(%s,%s,%d)",
                     timestampPart,
                     pattern,
@@ -931,11 +964,12 @@ public class DataFile {
         final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         sdf.setTimeZone(timeZone);
 
+        String parsebleTimestamp = timestampPart;
         if (timestampPart.indexOf('Z') != -1) {
-            timestampPart = timestampPart.replaceAll("Z", "+0100");
+            parsebleTimestamp = timestampPart.replaceAll("Z", "+0100");
         }
 
-        date = sdf.parse(timestampPart);
+        date = sdf.parse(parsebleTimestamp);
 
         final GregorianCalendar gc = new GregorianCalendar(timeZone);
         gc.setTime(date);
@@ -1003,7 +1037,7 @@ public class DataFile {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return String.format("DataFile [file=%s, configuration=%s]",file,configuration);
+        return String.format("DataFile [dataFile=%s, configuration=%s]", dataFile, configuration);
     }
 
     /**
@@ -1021,8 +1055,7 @@ public class DataFile {
      *
      * @return a int.
      */
-    public int getExpectedColumnCount()
-    {
+    public int getExpectedColumnCount() {
         return configuration.getExpectedColumnCount();
     }
 
