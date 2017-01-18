@@ -116,17 +116,17 @@ public final class SensorObservationService {
 
     private static final String EXCEPTION_CODE_STRING = "ExceptionCode: '%s' because of '%s'\n";
 
-    private static final String SOS_2_0_INSERT_OBSERVATION_RESPONSE = 
+    private static final String SOS_2_0_INSERT_OBSERVATION_RESPONSE =
             "SOS 2.0 InsertObservation doesn't return the assigned id";
 
     private static final String INSERT_OBSERVATION_FAILED = "Insert observation failed for sensor '%s'[%s]. Store: %s";
 
     private static final String SENSOR_REGISTERED_WITH_ID = "Sensor registered at SOS  '%s' with assigned id '%s'";
 
-    private static final String OBSERVATION_INSERTED_SUCCESSFULLY = 
+    private static final String OBSERVATION_INSERTED_SUCCESSFULLY =
             "Observation inserted successfully.";
 
-    private static final String OBSERVATION_INSERTED_SUCCESSFULLY_WITH_ID = 
+    private static final String OBSERVATION_INSERTED_SUCCESSFULLY_WITH_ID =
             "Observation inserted successfully. Returned id: %s";
 
     private static final String SOS_VERSION_100 = "1.0.0";
@@ -137,7 +137,7 @@ public final class SensorObservationService {
 
     private static final String SML_101_FORMAT_URI = "http://www.opengis.net/sensorML/1.0.1";
 
-    private static final String OM_200_SAMPLING_FEATURE = 
+    private static final String OM_200_SAMPLING_FEATURE =
             "http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint";
 
     private final URL sosUrl;
@@ -206,7 +206,7 @@ public final class SensorObservationService {
      * @throws org.n52.oxf.OXFException if any.
      * @throws java.net.MalformedURLException if any.
      */
-    public SensorObservationService(final Configuration config) 
+    public SensorObservationService(final Configuration config)
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
         this.configuration = config;
@@ -358,9 +358,9 @@ public final class SensorObservationService {
                         sampleStartLine = processSampleStart(cr);
                         continue;
                     }
-                    if (!isLineIgnorable(values) && 
-                            containsData(values) && 
-                            isSizeValid(dataFile, values) && 
+                    if (!isLineIgnorable(values) &&
+                            containsData(values) &&
+                            isSizeValid(dataFile, values) &&
                             !isHeaderLine(values)) {
                         logLine(values);
                         final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
@@ -383,7 +383,7 @@ public final class SensorObservationService {
                                 + "sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
                                 isSampleBasedDataFile, isInSample, lineCounter,
                                 sampleStartLine, sampleSize, sampleDataOffset);
-    
+
                         if (isInSample && isSampleEndReached(sampleStartLine)) {
                             isInSample = false;
                             LOG.debug("Current sample left");
@@ -417,7 +417,7 @@ public final class SensorObservationService {
                 lastLine = lineCounter;
                 logTiming(startReadingFile);
                 break;
-            default: 
+            default:
                 LOG.error("Not supported strategy given '{}'.",
                         configuration.getImportStrategy());
                 break;
@@ -809,7 +809,7 @@ public final class SensorObservationService {
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 unitsOfMeasurement.put(
-                        insertObservation.getObservedProperty(), 
+                        insertObservation.getObservedProperty(),
                         insertObservation.getUnitOfMeasurementCode());
             }
         }
@@ -861,7 +861,7 @@ public final class SensorObservationService {
                 sosWrapper.setReadTimeout(readTimeout);
                 if (sosVersion.equals(SOS_VERSION_100)) {
                     try {
-                        final InsertObservationResponse response = 
+                        final InsertObservationResponse response =
                                 InsertObservationResponseDocument.Factory.parse(
                                         opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
                         LOG.debug(String.format(OBSERVATION_INSERTED_SUCCESSFULLY_WITH_ID,
@@ -941,7 +941,7 @@ public final class SensorObservationService {
                 opResult = sosWrapper.doInsertObservation(parameters);
                 if (sosVersion.equals(SOS_VERSION_100)) {
                     try {
-                        final InsertObservationResponse response = 
+                        final InsertObservationResponse response =
                                 InsertObservationResponseDocument.Factory.parse(
                                         opResult.getIncomingResultAsAutoCloseStream()).getInsertObservationResponse();
                         LOG.debug(String.format(OBSERVATION_INSERTED_SUCCESSFULLY_WITH_ID,
@@ -1057,7 +1057,7 @@ public final class SensorObservationService {
                 final RegisterSensorParameters regSensorParameter = createRegisterSensorParametersFromRS(rs);
                 setMimetype(regSensorParameter);
                 final OperationResult opResult = sosWrapper.doRegisterSensor(regSensorParameter);
-                final RegisterSensorResponseDocument response = 
+                final RegisterSensorResponseDocument response =
                         RegisterSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
                 LOG.debug("RegisterSensorResponse parsed");
                 return response.getRegisterSensorResponse().getAssignedSensorId();
@@ -1068,7 +1068,7 @@ public final class SensorObservationService {
                 }
                 setMimetype(insSensorParams);
                 final OperationResult opResult = sosWrapper.doInsertSensor(insSensorParams);
-                final InsertSensorResponseDocument response = 
+                final InsertSensorResponseDocument response =
                         InsertSensorResponseDocument.Factory.parse(opResult.getIncomingResultAsAutoCloseStream());
                 LOG.debug("InsertSensorResponse parsed");
                 offerings.put(
@@ -1078,7 +1078,7 @@ public final class SensorObservationService {
             }
         } catch (final ExceptionReport e) {
             /*
-             *  Handle already registered sensor case here (happens when the 
+             *  Handle already registered sensor case here (happens when the
              *  sensor is registered but not listed in the capabilities):
              */
             final Iterator<OWSException> iter = e.getExceptionsIterator();
@@ -1182,10 +1182,10 @@ public final class SensorObservationService {
 
     private RegisterSensorParameters createRegisterSensorParametersFromRS(
             final RegisterSensor registerSensor) throws OXFException, XmlException, IOException {
-        /* 
+        /*
          * create SensorML
          *
-         * create template --> within the 52N 1.0.0 SOS implementation this 
+         * create template --> within the 52N 1.0.0 SOS implementation this
          * template is somehow ignored
          * --> take first observed property to get values for template
          */
@@ -1204,7 +1204,7 @@ public final class SensorObservationService {
                 org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
             observationTemplate = ObservationTemplateBuilder.createObservationTemplateBuilderForTypeTruth();
         } else {
-            observationTemplate = 
+            observationTemplate =
                     ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(
                             registerSensor.getUnitOfMeasurementCode(firstObservedProperty));
         }

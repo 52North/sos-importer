@@ -78,12 +78,12 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
 public final class Configuration {
 
 
-    /** 
+    /**
      * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
      */
     // TODO read from configuration file
     public static final String SOS_200_EPSG_CODE_PREFIX = "http://www.opengis.net/def/crs/EPSG/0/";
-    
+
     /** Constant <code>SOS_100_EPSG_CODE_PREFIX="urn:ogc:def:crs:EPSG::"</code> */
     public static final String SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
     /** Constant <code>REGISTER_SENSOR_SML_SYSTEM_TEMPLATE="./SML_1.0.1_System_template.xml"</code> */
@@ -132,37 +132,37 @@ public final class Configuration {
     public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
     /** Constant <code>OGC_DISCOVERY_SHORT_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:shortNam"{trunked}</code> */
     public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
-    /** 
-     * Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION = 
+    /**
+     * Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION =
      * "urn:ogc:def:classifier:OGC:1.0:application"</code>
      */
     public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION =
             "urn:ogc:def:classifier:OGC:1.0:application";
     /**
-     * Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = 
+     * Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION =
      * "urn:ogc:def:property:OGC:1.0:observedBBox"</code>
      */
-    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = 
+    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION =
             "urn:ogc:def:property:OGC:1.0:observedBBOX";
 
-    /** 
-     * Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = 
+    /**
+     * Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED =
      * "This observation is already contained in SOS database!"</code>
      */
-    public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED = 
+    public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED =
             "This observation is already contained in SOS database!";
     /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START="The offering with the identifier"</code> */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START = "The offering with the identifier";
-    /** 
-     * Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = 
+    /**
+     * Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END =
      * "still exists in this service and it is not allowed to insert more than one procedure to an offering!"</code>
      */
-    public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END = 
+    public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END =
             "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
     /**
-     * Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = 
+     * Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT =
      * "observation_featureofinterestid_observablepropertyid_proced_key"</code> */
-    public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT = 
+    public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT =
             "observation_featureofinterestid_observablepropertyid_proced_key";
     /** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
     public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
@@ -184,8 +184,8 @@ public final class Configuration {
     private static final String MI = "mi";
     private static final String KM = "km";
 
-    
-    
+
+
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
         EPSG_EASTING_FIRST_MAP.put("default", false);

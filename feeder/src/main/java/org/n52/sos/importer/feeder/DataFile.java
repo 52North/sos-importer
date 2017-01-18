@@ -83,12 +83,12 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
 public class DataFile {
 
     /**
-     * 
+     *
      */
     private static final String NAME = "name: %s";
 
     /**
-     * 
+     *
      */
     private static final String OS_NAME = "os.name";
 
@@ -178,7 +178,7 @@ public class DataFile {
     }
 
     private boolean isWindows() {
-        return System.getProperty(OS_NAME).indexOf("Windows") >= 0 || 
+        return System.getProperty(OS_NAME).indexOf("Windows") >= 0 ||
                 System.getProperty(OS_NAME).indexOf("windows") >= 0;
     }
 
@@ -286,7 +286,7 @@ public class DataFile {
                         ? gRT.getURI().getStringValue()
                                 : null,
                                 // useUriAsPrefix
-                                gRT.isSetURI() && 
+                                gRT.isSetURI() &&
                                 gRT.getURI().isSetUseAsPrefix()
                                 ? gRT.getURI().getUseAsPrefix()
                                         : false,
@@ -576,7 +576,7 @@ public class DataFile {
             for (final Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
                     try {
-                        for (final String zoneId : 
+                        for (final String zoneId :
                                 TimeZone.getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
                             return TimeZone.getTimeZone(zoneId);
                         }

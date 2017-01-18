@@ -191,7 +191,7 @@ public final class Feeder {
     private static void logApplicationMetadata() {
         LOG.trace("logApplicationMetadata()");
         final StringBuffer logMessage = new StringBuffer("Application started");
-        final InputStream manifestStream = 
+        final InputStream manifestStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
         try {
             final Manifest manifest = new Manifest(manifestStream);
