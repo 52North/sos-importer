@@ -28,8 +28,6 @@
  */
 package org.n52.sos.importer.feeder.util;
 
-import static org.n52.sos.importer.feeder.Configuration.*;
-
 import java.io.IOException;
 
 import org.apache.xmlbeans.XmlException;
@@ -48,6 +46,8 @@ import org.slf4j.LoggerFactory;
  */
 public class DescriptionBuilder {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
+
     private final boolean shouldAddOfferingMetadataToOutputs;
 
     /**
@@ -65,8 +65,6 @@ public class DescriptionBuilder {
     public DescriptionBuilder() {
         this(true);
     }
-
-    private static final Logger LOG = LoggerFactory.getLogger(DescriptionBuilder.class);
 
     /**
      * <p>createSML.</p>
@@ -103,11 +101,14 @@ public class DescriptionBuilder {
                 rs.getLatitudeValue(), rs.getLongitudeUnit(),
                 rs.getLongitudeValue(), rs.getLatitudeUnit(),
                 rs.getLatitudeValue(),
-                rs.getEpsgCode().equalsIgnoreCase(Integer.toString(4979))?
-                        Integer.toString(4326):
-                            rs.getEpsgCode());
+                rs.getEpsgCode().equalsIgnoreCase(Integer.toString(4979))
+                ? Integer.toString(4326)
+                        : rs.getEpsgCode());
 
-        builder.addCapability("offerings",rs.getOfferingName(),"urn:ogc:def:identifier:OGC:1.0:offeringID",rs.getOfferingUri());
+        builder.addCapability("offerings",
+                rs.getOfferingName(),
+                "urn:ogc:def:identifier:OGC:1.0:offeringID",
+                rs.getOfferingUri());
 
         // set position data
         builder.setPosition("sensorPosition",
@@ -121,25 +122,25 @@ public class DescriptionBuilder {
             // add inputs
             builder.addInput(observedProperty.getName(), observedProperty.getUri());
             // add outputs
-            if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_TEXT)) {
+            if (rs.getMeasuredValueType(observedProperty).equals(
+                    org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
                 builder.addOutputText(observedProperty.getName(),
                         observedProperty.getUri(),
                         rs.getOfferingUri(),
                         rs.getOfferingName());
-            }
-            else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_BOOLEAN)) {
+            } else if (rs.getMeasuredValueType(observedProperty).equals(
+                    org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
                 builder.addOutputBoolean(observedProperty.getName(),
                         observedProperty.getUri(),
                         rs.getOfferingUri(),
                         rs.getOfferingName());
-            }
-            else if (rs.getMeasuredValueType(observedProperty).equals(SOS_OBSERVATION_TYPE_COUNT)) {
+            } else if (rs.getMeasuredValueType(observedProperty).equals(
+                    org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
                 builder.addOutputCount(observedProperty.getName(),
                         observedProperty.getUri(),
                         rs.getOfferingUri(),
                         rs.getOfferingName());
-            }
-            else {
+            } else {
                 builder.addOutputMeasurement(observedProperty.getName(),
                         observedProperty.getUri(),
                         rs.getOfferingUri(),
@@ -153,10 +154,10 @@ public class DescriptionBuilder {
         }
 
         // add all classifier
-        builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length()-2));
+        builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length() - 2));
 
         // add validTime starting from now
-        builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(),"unknown");
+        builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(), "unknown");
 
         return builder.buildSensorDescription();
     }

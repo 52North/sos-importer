@@ -84,7 +84,7 @@ public class FileHelper {
             LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
             return shortString;
         } catch (final NoSuchAlgorithmException e) {
-            LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
+            LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.", longString);
             LOG.debug("Exception thrown: {}", e.getMessage(), e);
             return longString;
         }
