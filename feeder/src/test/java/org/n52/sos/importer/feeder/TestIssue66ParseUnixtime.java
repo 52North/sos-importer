@@ -62,13 +62,13 @@ public class TestIssue66ParseUnixtime {
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
-        Assert.assertThat(timeStamp.getYear(), Is.is((short)2016));
-        Assert.assertThat(timeStamp.getMonth(), Is.is((byte)6));
-        Assert.assertThat(timeStamp.getDay(), Is.is((byte)9));
-        Assert.assertThat(timeStamp.getHour(), Is.is((byte)10));
-        Assert.assertThat(timeStamp.getMinute(), Is.is((byte)29));
-        Assert.assertThat(timeStamp.getSeconds(), Is.is((byte)40));
-        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte)0));
+        Assert.assertThat(timeStamp.getYear(), Is.is((short) 2016));
+        Assert.assertThat(timeStamp.getMonth(), Is.is((byte) 6));
+        Assert.assertThat(timeStamp.getDay(), Is.is((byte) 9));
+        Assert.assertThat(timeStamp.getHour(), Is.is((byte) 10));
+        Assert.assertThat(timeStamp.getMinute(), Is.is((byte) 29));
+        Assert.assertThat(timeStamp.getSeconds(), Is.is((byte) 40));
+        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte) 0));
     }
 
 }

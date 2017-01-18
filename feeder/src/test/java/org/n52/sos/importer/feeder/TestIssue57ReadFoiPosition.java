@@ -57,17 +57,20 @@ public class TestIssue57ReadFoiPosition {
 
         // when
         int mvColumnId = 4;
-        String[] values = { "SE10_0AB_1", "Sensor1", "51.48790", "0.00441", "0.71", "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "" };
+        final String foiId = "SE10_0AB_1";
+        String[] values = { foiId, "Sensor1", "51.48790", "0.00441", "0.71",
+                "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "", };
         FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
 
         // then
+        final String deg = "deg";
         Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-        Assert.assertThat(foi.getUri(), Is.is("SE10_0AB_1"));
+        Assert.assertThat(foi.getUri(), Is.is(foiId));
         Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
         Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
         Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
-        Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
+        Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is(deg));
         Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
-        Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
+        Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is(deg));
     }
 }
