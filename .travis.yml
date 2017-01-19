@@ -2,7 +2,6 @@ language: java
 #notifications:
 # email: false
 jdk:
-    - openjdk8
     - oraclejdk8
 install: true
 script: mvn clean install
