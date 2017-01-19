@@ -61,7 +61,8 @@ public class MissingLatitudePanel extends MissingComponentPanel {
     private final JLabel latitudeLabel;
     private final JTextField latitudeTextField = new JTextField(8);
     private final JLabel latitudeUnitLabel;
-    private final JComboBox<String> latitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
+    private final JComboBox<String> latitudeUnitComboBox = 
+            new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
 
     /**
      * <p>Constructor for MissingLatitudePanel.</p>
@@ -74,10 +75,12 @@ public class MissingLatitudePanel extends MissingComponentPanel {
         latitudeTextField.setText("0");
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        latitudeLabel = new JLabel("   " + Lang.l().latitudeNorthing() + ": ");
+        final String labelSpacer = "   ";
+        final String colon = ": ";
+        latitudeLabel = new JLabel(labelSpacer + Lang.l().latitudeNorthing() + colon);
         this.add(latitudeLabel);
         this.add(latitudeTextField);
-        latitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+        latitudeUnitLabel = new JLabel(labelSpacer + Lang.l().unit() + colon);
         this.add(latitudeUnitLabel);
         this.add(latitudeUnitComboBox);
     }
@@ -126,7 +129,7 @@ public class MissingLatitudePanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
-        final Latitude latitude = (Latitude)c;
+        final Latitude latitude = (Latitude) c;
         latitudeTextField.setText(latitude.getValue() + "");
         latitudeUnitComboBox.setSelectedItem(latitude.getUnit());
     }

@@ -61,7 +61,8 @@ public class MissingLongitudePanel extends MissingComponentPanel {
     private final JLabel longitudeLabel;
     private final JTextField longitudeTextField = new JTextField(8);
     private final JLabel longitudeUnitLabel;
-    private final JComboBox<String> longitudeUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
+    private final JComboBox<String> longitudeUnitComboBox = 
+            new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
 
     /**
      * <p>Constructor for MissingLongitudePanel.</p>
@@ -74,10 +75,12 @@ public class MissingLongitudePanel extends MissingComponentPanel {
         longitudeTextField.setText("0");
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        longitudeLabel = new JLabel("   " + Lang.l().longitudeEasting() + ": ");
+        final String labelSpacer = "   ";
+        final String colon = ": ";
+        longitudeLabel = new JLabel(labelSpacer + Lang.l().longitudeEasting() + colon);
         this.add(longitudeLabel);
         this.add(longitudeTextField);
-        longitudeUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+        longitudeUnitLabel = new JLabel(labelSpacer + Lang.l().unit() + colon);
         this.add(longitudeUnitLabel);
         this.add(longitudeUnitComboBox);
     }
@@ -126,7 +129,7 @@ public class MissingLongitudePanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
-        final Longitude longitude = (Longitude)c;
+        final Longitude longitude = (Longitude) c;
         longitudeTextField.setText(longitude.getValue() + "");
         longitudeUnitComboBox.setSelectedItem(longitude.getUnit());
     }

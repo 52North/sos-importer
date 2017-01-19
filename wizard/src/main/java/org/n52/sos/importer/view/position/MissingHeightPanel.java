@@ -53,10 +53,9 @@ import org.slf4j.LoggerFactory;
 public class MissingHeightPanel extends MissingComponentPanel {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
 
     private final Position position;
-
-    private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
 
     private final JLabel heightLabel;
     private final JTextField heightTextField = new JTextField(8);
@@ -75,8 +74,10 @@ public class MissingHeightPanel extends MissingComponentPanel {
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        heightLabel = new JLabel("   " + Lang.l().altitude() + ": ");
-        heightUnitLabel = new JLabel("   " + Lang.l().unit() + ": ");
+        final String labelSpacer = "   ";
+        final String colon = ": ";
+        heightLabel = new JLabel(labelSpacer + Lang.l().altitude() + colon);
+        heightUnitLabel = new JLabel(labelSpacer + Lang.l().unit() + colon);
 
         this.add(heightLabel);
         this.add(heightTextField);
@@ -127,7 +128,7 @@ public class MissingHeightPanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
-        final Height height = (Height)c;
+        final Height height = (Height) c;
         heightTextField.setText(height.getValue() + "");
         heightUnitComboBox.setSelectedItem(height.getUnit());
     }

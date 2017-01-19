@@ -44,7 +44,7 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
  */
-public class MissingPositionPanel extends JPanel{
+public class MissingPositionPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,13 +64,13 @@ public class MissingPositionPanel extends JPanel{
 
         this.s6cM = s6cM;
 
-        manualInputPanel = initManualInputPanel(s6cM);
+        manualInputPanel = initManualInputPanel();
 
         containerPanel = new JPanel();
-        containerPanel.setLayout(new BorderLayout(0,0));
-        containerPanel.add(manualInputPanel,BorderLayout.CENTER);
+        containerPanel.setLayout(new BorderLayout(0, 0));
+        containerPanel.add(manualInputPanel, BorderLayout.CENTER);
 
-        add(containerPanel,BorderLayout.CENTER);
+        add(containerPanel, BorderLayout.CENTER);
 
         if (Constants.isGuiDebug()) {
             manualInputPanel.setBorder(Constants.DEBUG_BORDER);
@@ -78,14 +78,14 @@ public class MissingPositionPanel extends JPanel{
         setVisible(true);
     }
 
-    private JPanel initManualInputPanel(final Step6cModel s6cM) {
-        final JPanel manualInputPanel = new JPanel();
-        manualInputPanel.setLayout(new GridLayout(4, 1));
-        manualInputPanel.add(new MissingLatitudePanel(s6cM.getPosition()));
-        manualInputPanel.add(new MissingLongitudePanel(s6cM.getPosition()));
-        manualInputPanel.add(new MissingHeightPanel(s6cM.getPosition()));
-        manualInputPanel.add(new MissingEPSGCodePanel(s6cM.getPosition()));
-        return manualInputPanel;
+    private JPanel initManualInputPanel() {
+        final JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1));
+        panel.add(new MissingLatitudePanel(s6cM.getPosition()));
+        panel.add(new MissingLongitudePanel(s6cM.getPosition()));
+        panel.add(new MissingHeightPanel(s6cM.getPosition()));
+        panel.add(new MissingEPSGCodePanel(s6cM.getPosition()));
+        return panel;
     }
 
     /**
