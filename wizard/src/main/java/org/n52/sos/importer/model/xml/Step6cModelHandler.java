@@ -68,6 +68,9 @@ import org.x52North.sensorweb.sos.importer.x04.SpatialResourceType;
  */
 public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 
+    private static final String XB_POS = "; XB pos: ";
+    private static final String FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT =
+            "FeatureOfInterest element not defined correct: ";
     private static final Logger logger = LoggerFactory.getLogger(Step6cModelHandler.class);
 
     /** {@inheritDoc} */
@@ -89,13 +92,14 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         if (tabE != null) {
             // Feature of Interest is from file
             // set name for foi, if from file to get the relation between the foi and its position
-            if (stepModel.getFeatureOfInterestName() != null && !stepModel.getFeatureOfInterestName().equalsIgnoreCase("")) {
+            if (stepModel.getFeatureOfInterestName() != null &&
+                    !stepModel.getFeatureOfInterestName().equalsIgnoreCase("")) {
                 foi.setName(stepModel.getFeatureOfInterestName());
             }
-            addToFoiPositionsElement(foi,pos,sosImportConf);
+            addToFoiPositionsElement(foi, pos, sosImportConf);
         } else {
             // Feature of Interest is created from user input
-            addToFeatureOfInterestElement(foi,pos,sosImportConf);
+            addToFeatureOfInterestElement(foi, pos, sosImportConf);
         }
     }
 
@@ -109,7 +113,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         // Get Foi by foi.getXMLId()
         final String xmlId = foi.getXMLId();
         FeatureOfInterestType foiXB;
-        foiXB = getFoiByXmlId(xmlId,sosImportConf);
+        foiXB = getFoiByXmlId(xmlId, sosImportConf);
         Position posXB;
         // is foi generated or manual input
         if (foi.isGenerated()) {
@@ -118,7 +122,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                     foiXB.getResource() instanceof GeneratedSpatialResourceType) {
                 foiGSRT = (GeneratedSpatialResourceType) foiXB.getResource();
             } else {
-                logger.error("FeatureOfInterest element not defined correct: " +
+                logger.error(FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT +
                         foiXB.xmlText());
                 // TODO how to handle this case?
                 return;
@@ -138,7 +142,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                     foiXB.getResource() instanceof SpatialResourceType) {
                 foiSRT = (SpatialResourceType) foiXB.getResource();
             } else {
-                logger.error("FeatureOfInterest element not defined correct: " +
+                logger.error(FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT +
                         foiXB.xmlText());
                 // TODO how to handle this case?
                 return;
@@ -158,8 +162,6 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
     /**
      * Returns the FeatureOfInterest element identified by the given
      * <code>xmlId</code> or <code>null</code> if the element is not found.
-     * @param xmlId
-     * @param sosImportConf
      * @return the FeatureOfInterest element identified by the given
      *          <code>xmlId</code> or<br>
      *          <code>null</code> if the element is not found.
@@ -179,7 +181,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                     // compare ids
                     if (!foi.isNil() && foi.getResource() != null) {
                         final ResourceType foiRes = foi.getResource();
-                        if (foiRes.getID()!= null &&
+                        if (foiRes.getID() != null &&
                                 !foiRes.getID().equalsIgnoreCase("") &&
                                 foiRes.getID().equalsIgnoreCase(xmlId)) {
                             if (logger.isDebugEnabled()) {
@@ -207,9 +209,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
      * Adds a new FOIPosition element to AdditionalMetadata in
      * <code>sosImportConf</code> or updates an existing one for the given
      * <code>foi</code> with values from the <code>pos</code>.
-     * @param foi
      * @param pos the {@link org.n52.sos.importer.model.position.Position}
-     * @param sosImportConf
      */
     private void addToFoiPositionsElement(final FeatureOfInterest foi,
             final org.n52.sos.importer.model.position.Position pos,
@@ -220,8 +220,8 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         FOIPosition[] foiPositions;
         FOIPosition foiPos = null;
         AdditionalMetadata addiMeta;
-        boolean addNewFoi = true,
-                addNewMeta = false;
+        boolean addNewFoi = true;
+        boolean addNewMeta = false;
         String name;
         //
         // Check, if position for foi is already contained in additional metadata
@@ -262,9 +262,8 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             if (logger.isDebugEnabled()) {
                 logger.debug("New foi pos added: " + foiPos.xmlText());
             }
-        }
-        // foi is there, update position
-        else {
+            // foi is there, update position
+        } else {
             updateXBPosition(foiPos.getPosition(), pos);
             if (logger.isDebugEnabled()) {
                 logger.debug("foi pos updated: " + foiPos.xmlText());
@@ -302,7 +301,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         longitude.setFloatValue(new Double(position.getLongitude().getValue()).floatValue());
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos created from model pos. Model Pos: " +
-                    position.toString() + "; XB pos: " + pos.xmlText());
+                    position.toString() + XB_POS + pos.xmlText());
         }
         return pos;
     }
@@ -312,7 +311,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         if (logger.isTraceEnabled()) {
             logger.trace("\t\t\tupdateXBPosition()");
         }
-        if(posXB == null || pos == null) {
+        if (posXB == null || pos == null) {
             logger.error("at least one parameter is null but MUST NOT: pos? {}; posXB? {}", pos, posXB);
             return;
         }
@@ -359,7 +358,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         loong.setUnit(pos.getLongitude().getUnit());
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos updated from model pos. Model Pos: " +
-                    pos.toString() + "; XB pos: " + posXB.xmlText());
+                    pos.toString() + XB_POS + posXB.xmlText());
         }
     }
 }

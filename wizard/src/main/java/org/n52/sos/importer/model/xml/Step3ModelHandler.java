@@ -147,13 +147,11 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
                 type = value.get(0);
                 encodedMetadata = value.get(2);
                 // delete old metadata
-                {
-                    Metadata[] metadata = col.getMetadataArray();
-                    if (metadata != null && metadata.length > 0) {
-                        col.removeMetadata(0);
-                    }
-                    metadata = null;
+                Metadata[] metadata = col.getMetadataArray();
+                if (metadata != null && metadata.length > 0) {
+                    col.removeMetadata(0);
                 }
+                metadata = null;
                 //
                 /*
                  * DATE & TIME
@@ -184,6 +182,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             logger.debug("handling of Step3Model finished");
         }
     }
+    
     /**
      * @param number
      *            the number of the column in the data file
@@ -205,14 +204,12 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         }
         return null;
     }
+    
     /**
      * Date & Time:<br>
      * Combination, Pattern <- parse pattern SEP Group<br>
      * UNIX TIME
      *
-     * @param col
-     * @param type
-     * @param encodedMetadata
      */
     private void setComplexColumnTypeDateAndTime(final Column col, final String type,
             final String encodedMetadata) {
@@ -225,13 +222,14 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         if (type.equalsIgnoreCase(Lang.l().step3DateAndTimeCombination())) {
             String[] splittedMetadata = encodedMetadata
                     .split(Constants.SEPARATOR_STRING);
-            String parsePattern = splittedMetadata[0], group = splittedMetadata[1];
+            String parsePattern = splittedMetadata[0];
+            String group = splittedMetadata[1];
             //
             Helper.addOrUpdateColumnMetadata(Key.GROUP, group, col);
             //
-            Helper.addOrUpdateColumnMetadata(Key.PARSE_PATTERN,parsePattern, col);
+            Helper.addOrUpdateColumnMetadata(Key.PARSE_PATTERN, parsePattern, col);
             //
-            Helper.addOrUpdateColumnMetadata(Key.TYPE,Constants.COMBINATION,col);
+            Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.COMBINATION, col);
             //
             splittedMetadata = null;
             parsePattern = null;
@@ -240,7 +238,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             if (logger.isDebugEnabled()) {
                 logger.debug("Unix time selected");
             }
-            Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.UNIX_TIME,col);
+            Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.UNIX_TIME, col);
         }
     }
 
@@ -251,10 +249,8 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      * Boolean, 0<br>
      * Text, 0<br>
      *
-     * @param col
      * @param type
      *            Numeric, Count, Boolean, or Text
-     * @param encodedMetadata
      */
     private void setComplexColumnTypeMeasuredValue(final Column col, final String type,
             final String encodedMetadata) {
@@ -280,7 +276,6 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
     /**
      * Position: Combination, Pattern <- parse pattern SEP Group
      *
-     * @param col
      * @param type
      *            Combination
      * @param encodedMetadata
@@ -299,7 +294,8 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         if (type.equalsIgnoreCase(Lang.l().step3PositionCombination())) {
             final String[] splittedEncodedMetadat = encodedMetadata
                     .split(Constants.SEPARATOR_STRING);
-            final String parsePattern = splittedEncodedMetadat[0], group = splittedEncodedMetadat[1];
+            final String parsePattern = splittedEncodedMetadat[0];
+            final String group = splittedEncodedMetadat[1];
             //
             meta.setValue(Constants.COMBINATION);
             //
@@ -313,10 +309,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         }
         meta = null;
     }
-    /**
-     * @param col
-     * @param type
-     */
+    
     private void setSimpleColumnType(final Column col, final String type) {
         if (logger.isTraceEnabled()) {
             logger.trace("\t\tsetSimpleColumnType()");

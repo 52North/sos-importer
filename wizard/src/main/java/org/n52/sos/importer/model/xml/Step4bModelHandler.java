@@ -55,6 +55,10 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
+    /**
+     * 
+     */
+    private static final String ERROR_INSTRUCTIONS = "step 4; should not happen. Please check the log file!";
     private static final Logger logger = LoggerFactory.getLogger(Step4bModelHandler.class);
 
     /** {@inheritDoc} */
@@ -70,7 +74,8 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
         int[] relatedColumnsIds;
         CsvMetadata csvMeta;
         ColumnAssignments colAssignmts;
-        Column[] availableCols, relatedCols;
+        Column[] availableCols;
+        Column[] relatedCols;
         ArrayList<Column> relCol;
         Resource res;
         // get related columns
@@ -83,20 +88,19 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
         }
         colAssignmts = csvMeta.getColumnAssignments();
         if (colAssignmts == null) {
-            logger.error("CsvMetadata.ColumnAssignments element not set in " +
-                    "step 4; should not happen. Please check the log file!");
+            logger.error("CsvMetadata.ColumnAssignments element not set in " + ERROR_INSTRUCTIONS);
             return;
         }
         availableCols = colAssignmts.getColumnArray();
         if (availableCols == null) {
             logger.error("CsvMetadata.ColumnAssignments.Column elements not set in " +
-                    "step 4; should not happen. Please check the log file!");
+                    ERROR_INSTRUCTIONS);
             return;
         }
         relCol = new ArrayList<Column>(availableCols.length);
         for (final Column column : availableCols) {
             // check for correct column id
-            if(isIntInArray(relatedColumnsIds, column.getNumber()) ) {
+            if (isIntInArray(relatedColumnsIds, column.getNumber())) {
                 // add column to result set
                 relCol.add(column);
             }
@@ -156,11 +160,10 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                     logger.debug("Related foi was already there");
                 }
                 result = result && isFoiColIdInArray(relFois, colId);
-            } else
-            /*
-             *  SENSOR
-             */
-            if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
+                /*
+                 *  SENSOR
+                 */
+            } else if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
                 final RelatedSensor[] relSensors = column.getRelatedSensorArray();
                 addNew = !isSensorInArray(relSensors, colId);
                 if (addNew) {
@@ -172,11 +175,10 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                     logger.debug("Related sensor was already there");
                 }
                 result = result && isSensorInArray(relSensors, colId);
-            } else
-            /*
-             *  UNIT_OF_MEASUREMENT
-             */
-            if (res instanceof
+                /*
+                 *  UNIT_OF_MEASUREMENT
+                 */
+            } else if (res instanceof
                     org.n52.sos.importer.model.resources.UnitOfMeasurement) {
                 final RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
                 addNew = !isUOMInArray(relUOMs, colId);
@@ -189,11 +191,10 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                     logger.debug("Related UOM was already there");
                 }
                 result = result && isUOMInArray(relUOMs, colId);
-            } else
-            /*
-             *  OBSERVED_PROPERTY
-             */
-            if (res instanceof
+                /*
+                 *  OBSERVED_PROPERTY
+                 */
+            } else if (res instanceof
                     org.n52.sos.importer.model.resources.ObservedProperty) {
                 final RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
                 addNew = !isObsPropInArray(relObsProps, colId);
@@ -213,9 +214,6 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
     /**
      * Check if the column is already referenced.
-     * @param relFois
-     * @param colId
-     * @return
      */
     private boolean isFoiColIdInArray(final RelatedFOI[] relFois, final int colId) {
         if (logger.isTraceEnabled()) {
@@ -281,6 +279,4 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
         }
         return false;
     }
-
-
 }

@@ -85,7 +85,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
             if (dF.getLocalFile() != null) {
                 dF.setLocalFile(null);
             }
-            final RemoteFile rF = (dF.getRemoteFile() == null)? dF.addNewRemoteFile() : dF.getRemoteFile();
+            final RemoteFile rF = (dF.getRemoteFile() == null) ? dF.addNewRemoteFile() : dF.getRemoteFile();
             String url = stepModel.getUrl();
             if (stepModel.getDirectory() != null && url.charAt(url.length() - 1) != '/'
                     && stepModel.getDirectory().charAt(0) != '/') {
@@ -97,7 +97,7 @@ public class Step1ModelHandler implements ModelHandler<Step1Model> {
             }
             url += stepModel.getFilenameSchema();
             rF.setURL(url);
-            final Credentials cDoc = (rF.getCredentials() == null)? rF.addNewCredentials() : rF.getCredentials();
+            final Credentials cDoc = (rF.getCredentials() == null) ? rF.addNewCredentials() : rF.getCredentials();
             cDoc.setUserName(stepModel.getUser());
             cDoc.setPassword(stepModel.getPassword());
         }

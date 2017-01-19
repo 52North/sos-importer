@@ -103,7 +103,7 @@ public class Model {
     /**
      * Create model based on an existing one
      *
-     * @param sosImpConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
+     * @param sosImpConf a {@link SosImportConfiguration} object.
      */
     public Model(final SosImportConfiguration sosImpConf) {
         this.sosImpConf = sosImpConf;
@@ -124,11 +124,11 @@ public class Model {
             if (df.isSetLocalFile()) {
                 final LocalFile lf = df.getLocalFile();
                 result = lf.getPath();
-                result = result.substring(result.lastIndexOf(File.separatorChar)+1);
+                result = result.substring(result.lastIndexOf(File.separatorChar) + 1);
             } else if (df.isSetRemoteFile()) {
                 final RemoteFile rf = df.getRemoteFile();
                 result = rf.getURL();
-                result = result.substring(result.lastIndexOf("/")+1);
+                result = result.substring(result.lastIndexOf("/") + 1);
             }
         }
         return result;
@@ -143,9 +143,9 @@ public class Model {
     public boolean registerProvider(final StepModel sm) {
         if (logger.isTraceEnabled()) {
             logger.trace("registerProvider(" +
-                    (sm.getClass().getSimpleName()==null?
-                            sm.getClass():
-                                sm.getClass().getSimpleName()) +
+                    (sm.getClass().getSimpleName() == null
+                    ? sm.getClass()
+                            : sm.getClass().getSimpleName()) +
                     ")");
         }
         //
@@ -167,9 +167,9 @@ public class Model {
     public boolean removeProvider(final StepModel sm) {
         if (logger.isTraceEnabled()) {
             logger.trace("removeProvider(" +
-                    (sm.getClass().getSimpleName()==null?
-                            sm.getClass():
-                                sm.getClass().getSimpleName()) +
+                    (sm.getClass().getSimpleName() == null
+                    ? sm.getClass()
+                            : sm.getClass().getSimpleName()) +
                                 ")");
         }
         //
@@ -191,7 +191,7 @@ public class Model {
      */
     public boolean save(final File file) throws IOException {
         if (logger.isTraceEnabled()) {
-            logger.trace("save(" + file!=null?file.getName():file + ")");
+            logger.trace("save(" + file != null ? file.getName() : file + ")");
         }
         // laxValidate or validate?
         if (!laxValidate() ||
@@ -204,22 +204,23 @@ public class Model {
         // check write access to file
         if (file != null) {
             if (!file.exists()) {
+                final String fileString = "File ";
                 if (logger.isDebugEnabled()) {
-                    logger.debug("File " + file
+                    logger.debug(fileString + file
                             + " does not exist. Try to create it.");
                 }
                 if (!file.createNewFile()) {
                     logger.error("Could not create file " + file);
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("File " + file + " created");
+                        logger.debug(fileString + file + " created");
                     }
                 }
             }
             if (file.isFile()) {
                 if (file.canWrite()) {
                     final SosImportConfigurationDocument doc =
-                        SosImportConfigurationDocument.Factory.newInstance();
+                            SosImportConfigurationDocument.Factory.newInstance();
                     // insert schema location
                     final XmlCursor c = sosImpConf.newCursor();
                     c.toFirstChild();
@@ -228,9 +229,9 @@ public class Model {
                     c.insertAttributeWithValue(Constants.XML_SCHEMALOCATION_QNAME,
                             Constants.XML_SOS_IMPORTER_SCHEMA_LOCATION);
                     final XmlOptions xmlOpts = new XmlOptions()
-                        .setSavePrettyPrint()
-                        .setSavePrettyPrintIndent(4)
-                        .setUseDefaultNamespace();
+                            .setSavePrettyPrint()
+                            .setSavePrettyPrintIndent(4)
+                            .setUseDefaultNamespace();
                     doc.setSosImportConfiguration(sosImpConf);
                     doc.save(file, xmlOpts);
                     return true;
@@ -358,9 +359,9 @@ public class Model {
         doc.setSosImportConfiguration(sosImpConf);
         final Collection<XmlError> exs = XMLBeansParser.validate(doc);
         for (final XmlError xmlError : exs) {
-            logger.error("Xml error: ",xmlError);
+            logger.error("Xml error: ", xmlError);
         }
-        return (exs.size() == 0)? true : false;
+        return (exs.size() == 0) ? true : false;
     }
 
     /*

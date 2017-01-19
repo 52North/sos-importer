@@ -61,6 +61,10 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialModel> {
 
+    /**
+     * 
+     */
+    private static final String AND_OBS_PROP = " and obsProp";
     private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialModelHandler.class);
 
     /** {@inheritDoc} */
@@ -86,10 +90,10 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                 logger.debug("Added new AdditionalMetadata element");
             }
         } else {
-             sensorsXB = addiMeta.getSensorArray();
+            sensorsXB = addiMeta.getSensorArray();
 
-             findSensor:
-             for (final SensorType aSensor : sensorsXB) {
+            findSensor:
+                for (final SensorType aSensor : sensorsXB) {
                 if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
                     sensorXB = aSensor;
                     if (logger.isDebugEnabled()) {
@@ -173,7 +177,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                 }
                 sensorRT.setID(sensor.getXMLId());
                 sensorRT.setName(sensor.getName());
-                sensorRT.addNewURI().setStringValue(sensor.getURI()+"");
+                sensorRT.addNewURI().setStringValue(sensor.getURI().toString());
                 if (logger.isDebugEnabled()) {
                     logger.debug("Added new manual sensor");
                 }
@@ -196,7 +200,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                             "[" + measuredValue.hashCode() + "]" +
                             " for foi" +
                             "[" + foi.getXMLId() + "]" +
-                            " and obsProp" +
+                            AND_OBS_PROP +
                             "[" + obsProp.getXMLId() + "]");
                 }
             }
@@ -205,7 +209,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
         if (relatedMVs.size() < 1) {
             logger.error("No related MeasuredValues found for foi" +
                     "[" + foi.getXMLId() + "]" +
-                    " and obsProp" +
+                    AND_OBS_PROP +
                     "[" + obsProp.getXMLId() + "]");
         }
         /*
@@ -217,7 +221,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
             final org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column
                         mvColumn = Helper.getColumnById(mvColId, sosImportConf);
             final RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
-            if (!Helper.isSensorInArray(relSensors,sensor.getXMLId())) {
+            if (!Helper.isSensorInArray(relSensors, sensor.getXMLId())) {
                 final RelatedSensor relSensor = mvColumn.addNewRelatedSensor();
                 relSensor.setIdRef(sensor.getXMLId());
                 if (logger.isDebugEnabled()) {

@@ -76,7 +76,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
         columnId = Helper.getColumnIdFromTableElement(tabElem);
         //
         // 2. get the right element from configuration
-        col = Helper.getColumnById(columnId,sosImportConf);
+        col = Helper.getColumnById(columnId, sosImportConf);
         //
         // 3. check group
         key = Key.GROUP;
@@ -87,10 +87,10 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
         if (dat.getTimeZone() != null &&
                 dat.getTimeZone().getTableElement() == null) {
             val = dat.getTimeZone().getValue();
-            if(val != Constants.NO_INPUT_INT) {
+            if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_ZONE;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.2 check day
@@ -100,7 +100,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_DAY;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.3 check hour
@@ -110,7 +110,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_HOUR;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.4 check minute
@@ -120,7 +120,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_MINUTE;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.5 check month
@@ -130,7 +130,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_MONTH;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.6 check seconds
@@ -140,7 +140,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_SECOND;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.7 check year
@@ -150,7 +150,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.TIME_YEAR;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
     }
@@ -192,10 +192,7 @@ public class Step5aModelHandler implements ModelHandler<Step5aModel> {
                 && dat.getYear().getTableElement() != null) {
 
             tabElem = dat.getYear().getTableElement();
-
         }
         return tabElem;
     }
-
-
 }

@@ -72,12 +72,12 @@ public class Helper {
         String addedOrUpdated = "Updated";
         // check if there is already a element with the given key
         for (final Metadata metadata : metaElems) {
-            if (metadata.getKey().equals(key) ) {
+            if (metadata.getKey().equals(key)) {
                 meta = metadata;
                 break;
             }
         }
-        if(meta == null) {
+        if (meta == null) {
             meta = col.addNewMetadata();
             meta.setKey(key);
             addedOrUpdated = "Added";
@@ -87,7 +87,7 @@ public class Helper {
             logger.debug(String.format("%s column metadata. Key: '%s'; Value: '%s' in column '%d'.",
                     addedOrUpdated, key, value, col.getNumber()));
         }
-        return (meta.getValue().equalsIgnoreCase(value));
+        return meta.getValue().equalsIgnoreCase(value);
     }
 
     /**
@@ -121,7 +121,7 @@ public class Helper {
      * <p>getColumnById.</p>
      *
      * @param columnId a int.
-     * @param sosImportConf a {@link org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration} object.
+     * @param sosImportConf a {@link SosImportConfiguration} object.
      * @return the Column from the configuration having id columnId
      */
     protected static Column getColumnById(final int columnId,
@@ -151,7 +151,7 @@ public class Helper {
     /**
      * <p>isSensorInArray.</p>
      *
-     * @param relatedSensors an array of {@link org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor} objects.
+     * @param relatedSensors an array of {@link RelatedSensor} objects.
      * @param sensorXmlId a {@link java.lang.String} object.
      * @return <b>true</b>, if the <code>sensorXmlId</code> is contained in the
      *      given <code>RelatedSensors[]</code> , <br>
@@ -164,14 +164,10 @@ public class Helper {
         }
         for (final RelatedSensor relatedSensorFromArray : relatedSensors) {
             if (relatedSensorFromArray.isSetIdRef() &&
-                    relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId) ) {
+                    relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId)) {
                 return true;
             }
         }
         return false;
     }
-
-
-
-
 }

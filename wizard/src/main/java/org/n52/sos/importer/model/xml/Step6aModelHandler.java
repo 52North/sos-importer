@@ -78,16 +78,16 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
          * else -> create new element
          */
         AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
-        if(addiMeta == null) {
+        if (addiMeta == null) {
             addiMeta = sosImportConf.addNewAdditionalMetadata();
         }
         // get metadata array and check for Key.TIME
-        if(addOrUpdateMetadata(key, timeStamp, addiMeta)) {
+        if (addOrUpdateMetadata(key, timeStamp, addiMeta)) {
             if (logger.isInfoEnabled()) {
                 logger.info("Timestamp in additional metadata updated/added: "
                         + timeStamp);
             }
-        }else {
+        } else {
             logger.error("Timestamp element could not be updated");
         }
     }
@@ -103,12 +103,12 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
         String addedOrUpdated = "Updated";
         // check if there is already a element with the given key
         for (final Metadata metadata : metaElems) {
-            if (metadata.getKey().equals(key) ) {
+            if (metadata.getKey().equals(key)) {
                 meta = metadata;
                 break;
             }
         }
-        if(meta == null) {
+        if (meta == null) {
             meta = addiMeta.addNewMetadata();
             meta.setKey(key);
             addedOrUpdated = "Added";
@@ -121,7 +121,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
                     "Value: " +
                     value);
         }
-        return (meta.getValue().equalsIgnoreCase(value));
+        return meta.getValue().equalsIgnoreCase(value);
     }
 
     /**
@@ -133,90 +133,91 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
      * Used format: <code>"yyyy-MM-dd'T'HH:mm:ssZ"</code><br/>
      * The colon bug is fixed, so the time zone looks like "<code>+02:00</code>" for example.<br/>
      * Default value is: "<code>1970-01-01T00:00:00:+00:00</code>"
-     * @param dAT
      * @return a String or null, if dAT is null.
      */
     private String getTimeStampFromDateAndTime(final DateAndTime dAT) {
         if (logger.isTraceEnabled()) {
             logger.trace("getTimeStampFromDateAndTime()");
         }
-        if(dAT == null) {
+        if (dAT == null) {
             return null;
         }
         /*
          *  LOCAL FIELDS
          */
         GregorianCalendar cal;
-        int year = 1970,
-                month = 0,
-                dayOfMonth = 1,
-                hourOfDay = 0,
-                minute = 0,
-                seconds = 0,
-                timezone = 0;
-        String timeStamp, timeZoneString, sign;
+        int year = 1970;
+        int month = 0;
+        int dayOfMonth = 1;
+        int hourOfDay = 0;
+        int minute = 0;
+        int seconds = 0;
+        int timezone = 0;
+        String timeStamp;
+        String timeZoneString;
+        String sign;
         SimpleDateFormat format;
         TimeZone tz;
         /*
          *  YEAR
          */
-        if(dAT.getYear() != null) {
-            if(dAT.getYear().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getYear() != null) {
+            if (dAT.getYear().getValue() != Integer.MIN_VALUE) {
                 year = dAT.getYear().getValue();
             }
         }
         /*
          *  MONTH
          */
-        if(dAT.getMonth() != null) {
-            if(dAT.getMonth().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getMonth() != null) {
+            if (dAT.getMonth().getValue() != Integer.MIN_VALUE) {
                 month = dAT.getMonth().getValue();
             }
         }
         /*
          * DAY OF MONTH
          */
-        if(dAT.getDay() != null) {
-            if(dAT.getDay().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getDay() != null) {
+            if (dAT.getDay().getValue() != Integer.MIN_VALUE) {
                 dayOfMonth = dAT.getDay().getValue();
             }
         }
         /*
          * HOUR OF DAY
          */
-        if(dAT.getHour() != null) {
-            if(dAT.getHour().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getHour() != null) {
+            if (dAT.getHour().getValue() != Integer.MIN_VALUE) {
                 hourOfDay = dAT.getHour().getValue();
             }
         }
         /*
          *  MINUTE
          */
-        if(dAT.getMinute() != null) {
-            if(dAT.getMinute().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getMinute() != null) {
+            if (dAT.getMinute().getValue() != Integer.MIN_VALUE) {
                 minute = dAT.getMinute().getValue();
             }
         }
         /*
          * SECONDS
          */
-        if(dAT.getSeconds() != null) {
-            if(dAT.getSeconds().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getSeconds() != null) {
+            if (dAT.getSeconds().getValue() != Integer.MIN_VALUE) {
                 seconds = dAT.getSeconds().getValue();
             }
         }
         /*
          *  TIMEZONE
          */
-        if(dAT.getTimeZone() != null) {
-            if(dAT.getTimeZone().getValue() != Integer.MIN_VALUE) {
+        if (dAT.getTimeZone() != null) {
+            if (dAT.getTimeZone().getValue() != Integer.MIN_VALUE) {
                 timezone = dAT.getTimeZone().getValue();
             }
         }
         // Get right timezone
         timeZoneString = "GMT";
         sign = "+";
-        if(timezone <= 0) {
+        if (timezone <= 0) {
             sign = "";
         }
         timeZoneString = timeZoneString + sign + timezone;
@@ -240,7 +241,7 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
         /*
          *  FIX colon bug
          */
-        timeStamp = timeStamp.substring(0, timeStamp.length()-2) + ":" + timeStamp.substring(timeStamp.length()-2);
+        timeStamp = timeStamp.substring(0, timeStamp.length() - 2) + ":" + timeStamp.substring(timeStamp.length() - 2);
         return timeStamp;
     }
 

@@ -51,7 +51,10 @@ public class Step4aModelHandler implements ModelHandler<Step4aModel> {
         if (logger.isTraceEnabled()) {
             logger.trace("handleModel()");
         }
-        // for each element in s4aM.selectedRowsOrColumns -> set RelatedDateTimeGroup to s4aM.dateAndTimeModel.getGroup()
+        /*
+         * for each element in s4aM.selectedRowsOrColumns
+         *      -> set RelatedDateTimeGroup to s4aM.dateAndTimeModel.getGroup()
+         */
         for (final int mvColumnId : s4aM.getSelectedRowsOrColumns()) {
             final Column c = Helper.getColumnById(mvColumnId, sosImportConf);
             if (c.isSetRelatedDateTimeGroup() && logger.isDebugEnabled()) {

@@ -70,7 +70,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
         columnId = Helper.getColumnIdFromTableElement(tabElem);
         //
         // 2. get the right element from configuration
-        col = Helper.getColumnById(columnId,sosImportConf);
+        col = Helper.getColumnById(columnId, sosImportConf);
         // 3. check group
         key = Key.GROUP;
         value = pos.getGroup();
@@ -83,7 +83,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.POSITION_LATITUDE;
                 value = val + " " + pos.getLatitude().getParsedUnit();
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.2 check longitude
@@ -93,7 +93,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.POSITION_LONGITUDE;
                 value = val + " " + pos.getLongitude().getParsedUnit();
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.3 check altitude
@@ -103,7 +103,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.POSITION_ALTITUDE;
                 value = val + " " + pos.getHeight().getParsedUnit();
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
         // 4.4 check EPSG code
@@ -113,7 +113,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
             if (val != Constants.NO_INPUT_INT) {
                 key = Key.POSITION_EPSG_CODE;
                 value = val + "";
-                Helper.addOrUpdateColumnMetadata(key,value,col);
+                Helper.addOrUpdateColumnMetadata(key, value, col);
             }
         }
     }
@@ -139,9 +139,7 @@ public class Step5cModelHandler implements ModelHandler<Step5cModel> {
         } else if (pos.getHeight() != null && pos.getHeight().getTableElement() != null) {
 
             tabElem = pos.getHeight().getTableElement();
-
         }
         return tabElem;
     }
-
 }

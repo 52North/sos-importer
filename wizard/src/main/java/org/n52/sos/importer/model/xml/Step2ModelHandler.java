@@ -72,7 +72,7 @@ public class Step2ModelHandler implements ModelHandler<Step2Model> {
         }
         csvMetadata.setFirstLineWithData(stepModel.getFirstLineWithData());
         csvMetadata.setUseHeader(stepModel.isUseHeader());
-        csvMetadata.setDecimalSeparator(stepModel.getDecimalSeparator()+"");
+        csvMetadata.setDecimalSeparator(stepModel.getDecimalSeparator() + "");
         parameter.setCommentIndicator(stepModel.getCommentIndicator());
         parameter.setColumnSeparator(stepModel.getColumnSeparator());
         parameter.setTextIndicator(stepModel.getTextQualifier());
