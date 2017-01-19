@@ -41,7 +41,22 @@ import org.n52.sos.importer.Constants;
  */
 public class De extends Lang {
 
-    private final static Locale locale = Locale.GERMAN;
+    private static final String BEENDEN = "Beenden";
+    private static final String DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI =
+            "Die Konfiguration konnte nicht in der Datei\n\"";
+    private static final String REGISTRIERE = "Registriere ";
+    private static final String ÖFFNEN = "Öffnen";
+    private static final String VERSION = "Version";
+    private static final String AQUOT_NL = "\"\n";
+    private static final String NL_AQUOT = "\n\"";
+    private static final String PFAD = "Pfad";
+    private static final String DER = "Der ";
+    private static final String KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN =
+            " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+    private static final String FEHLER = "Fehler";
+    private static final String DIE = "Die ";
+    private static final String BINDING = "Binding";
+    private static final Locale LOCALE = Locale.GERMAN;
 
     /** {@inheritDoc} */
     @Override
@@ -63,9 +78,8 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String binding()
-    {
-        return "Binding";
+    public String binding() {
+        return BINDING;
     }
 
     /** {@inheritDoc} */
@@ -119,25 +133,25 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String epsgCodeWarningDialogNaturalNumber() {
-        return "Die " + epsgCode() + " muss eine natürliche Zahl sein.";
+        return DIE + epsgCode() + " muss eine natürliche Zahl sein.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String epsgCodeWarningDialogOutOfRange() {
-        return "Die " + epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
+        return DIE + epsgCode() + " sollte größer als 0 und kleiner als 32767 sein.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String error() {
-        return "Fehler";
+        return FEHLER;
     }
 
     /** {@inheritDoc} */
     @Override
     public String errorDialogTitle() {
-        return "Fehler";
+        return FEHLER;
     }
 
     /** {@inheritDoc} */
@@ -154,7 +168,9 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String exitDialogTitle() { return "Beenden"; }
+    public String exitDialogTitle() {
+        return BEENDEN;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -171,7 +187,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String finishButtonLabel() {
-        return "Beenden";
+        return BEENDEN;
     }
 
     /** {@inheritDoc} */
@@ -189,7 +205,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public Locale getLocale() {
-        return De.locale;
+        return De.LOCALE;
     }
 
     /** {@inheritDoc} */
@@ -201,7 +217,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String heightWarningDialogDecimalNumber() {
-        return "Die " + altitude() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+        return DIE + altitude() + KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN;
     }
 
     /** {@inheritDoc} */
@@ -219,7 +235,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String latitudeDialogDecimalValue() {
-        return "Der " + latitudeNorthing() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+        return DER + latitudeNorthing() + KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN;
     }
 
     /** {@inheritDoc} */
@@ -231,7 +247,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String longitudeDialogDecimalValue() {
-        return "Der " + longitudeEasting() + " kann zur Zeit nur als Dezimalzahl angegeben werden.";
+        return DER + longitudeEasting() + KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN;
     }
 
     /** {@inheritDoc} */
@@ -303,7 +319,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String path() {
-        return "Pfad";
+        return PFAD;
     }
 
     /** {@inheritDoc} */
@@ -344,8 +360,7 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String specificationVersion()
-    {
+    public String specificationVersion() {
         return "Spezifikations-Version";
     }
 
@@ -370,7 +385,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step1Directory() {
-        return "Pfad";
+        return PFAD;
     }
 
     /** {@inheritDoc} */
@@ -566,7 +581,8 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step2SampleBasedSampleSizeOffsetToolTip() {
-        return "Der Abstand ziwschem dem Start einer Messreihe und der Zeile mit der Anzahl der Zeilen in der aktuellen Reihe.";
+        return "Der Abstand zwischem dem Start einer Messreihe und "
+                + "der Zeile mit der Anzahl der Zeilen in der aktuellen Reihe.";
     }
 
     /** {@inheritDoc} */
@@ -1032,7 +1048,9 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step7OfferingNameNotValid(final String offeringName) {
-        return String.format("Der Name '%s' für das Offering ist nicht erlaubt. Er muss der Spezifikation für XML-NCName entsprechen.", offeringName);
+        return String.format("Der Name '%s' für das Offering ist nicht erlaubt. "
+                + "Er muss der Spezifikation für XML-NCName entsprechen.",
+                offeringName);
     }
 
     /** {@inheritDoc} */
@@ -1043,22 +1061,21 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step7SosBindingInstructions()
-    {
+    public String step7SosBindingInstructions() {
         return "Geben Sie das Binding (Kommunikationprotokoll) an.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step7SosBindingLabel() {
-        return "Binding";
+        return BINDING;
     }
 
     /** {@inheritDoc} */
     @Override
     public String step7SOSConncetionStart(final String strURL) {
         return "Um mit dem Verbindungstest zu dem " + sos() +
-                "\n\"" + strURL + "\"\n" +
+                NL_AQUOT + strURL + AQUOT_NL +
                 "zu starten, wählen Sie JA.\n" +
                 "Falls Sie Einstellungen ändern möchten, dann wählen Sie NEIN.";
     }
@@ -1080,7 +1097,7 @@ public class De extends Lang {
             final int readTimeoutSeconds,
             final int connectTimeoutSeconds) {
         return "Verbindung zu " + sos() +
-                "\n\"" + strURL + "\"\n" +
+                NL_AQUOT + strURL + AQUOT_NL +
                 "fehlgeschlagen nach " + connectTimeoutSeconds + " Sekunden Verindungs- und " +
                 readTimeoutSeconds + " Sekunden Lese-Timeout.\n" +
                 "Grund: " + message;
@@ -1101,13 +1118,13 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step7SosVersionLabel() {
-        return "Version";
+        return VERSION;
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8ConfigFileButton() {
-        return "Öffnen";
+        return ÖFFNEN;
     }
 
     /** {@inheritDoc} */
@@ -1125,13 +1142,15 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8DirectImportInstructions() {
-        return "Klicken Sie auf ".concat(step8DirectImportStartButton()).concat(" um einmalig die Daten in den SOS zu laden.");
+        return "Klicken Sie auf "
+                + step8DirectImportStartButton()
+                + " um einmalig die Daten in den SOS zu laden.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8DirectImportLabel() {
-        return "Registriere " + sensor() +
+        return REGISTRIERE + sensor() +
                 "en und lade " + observation() +
                 "en in den " + sos();
     }
@@ -1157,9 +1176,9 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar)
-    {
-        return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n'%s'.\nKlicken sie auf JA um die Datei auszuwählen!",
+    public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar) {
+        return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n"
+                + "'%s'.\nKlicken sie auf JA um die Datei auszuwählen!",
                 pathToDirectoryWithFeederJar);
     }
 
@@ -1178,32 +1197,33 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8LogFileButton() {
-        return "Öffnen";
+        return ÖFFNEN;
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8LogFileInstructions() {
-        return "Klicken Sie auf den Button um zusätzliche Informationen zu bekommen, die während des Vorgangs gesammelt wurden.";
+        return "Klicken Sie auf den Button um zusätzliche Informationen zu bekommen, "
+                + "die während des Vorgangs gesammelt wurden.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8RegisterSensorLabel(final int i) {
-        return "Registriere " + i + " " + sensor() + "(en)...";
+        return REGISTRIERE + i + " " + sensor() + "(en)...";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8SaveModelFailed(final File f) {
-        return "Die Konfiguration konnte nicht in der Datei\n\"" +
+        return DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI +
                 f.getAbsolutePath();
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8SaveModelFailed(final File f, final String exceptionText) {
-        return "Die Konfiguration konnte nicht in der Datei\n\"" +
+        return DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI +
                 f.getAbsolutePath() +
                 "\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
                 exceptionText +
@@ -1266,9 +1286,8 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String version()
-    {
-        return "Version";
+    public String version() {
+        return VERSION;
     }
 
     /** {@inheritDoc} */

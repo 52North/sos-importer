@@ -42,7 +42,18 @@ import org.n52.sos.importer.Constants;
  */
 public class En extends Lang {
 
-    private final static Locale locale = Locale.ENGLISH;
+    private static final Locale LOCALE = Locale.ENGLISH;
+    private static final String THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE = 
+            "The configuration could not be saved to file\n\"";
+    private static final String OPEN = "Open";
+    private static final String VERSION = "Version";
+    private static final String AQUOT_NL = "\"\n";
+    private static final String NL_AQUOT = "\n\"";
+    private static final String WHAT_IS_THE = "What is the ";
+    private static final String CAN_ONLY_BE_A_DECIMAL_NUMBER_SO_FAR = " can only be a decimal number so far.";
+    private static final String ERROR = "Error";
+    private static final String THE = "The ";
+    private static final String BINDING = "Binding";
 
     /** {@inheritDoc} */
     @Override
@@ -64,9 +75,8 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String binding()
-    {
-        return "Binding";
+    public String binding() {
+        return BINDING;
     }
 
     /** {@inheritDoc} */
@@ -120,7 +130,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String epsgCodeWarningDialogNaturalNumber() {
-        return "The " + Lang.l().epsgCode() + " has to be a natural number.";
+        return THE + Lang.l().epsgCode() + " has to be a natural number.";
     }
 
     /** {@inheritDoc} */
@@ -132,13 +142,13 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String error() {
-        return "Error";
+        return ERROR;
     }
 
     /** {@inheritDoc} */
     @Override
     public String errorDialogTitle() {
-        return "Error";
+        return ERROR;
     }
 
     /** {@inheritDoc} */
@@ -155,7 +165,9 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String exitDialogTitle() { return "Exit"; }
+    public String exitDialogTitle() {
+        return "Exit";
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -193,7 +205,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public Locale getLocale() {
-        return En.locale;
+        return En.LOCALE;
     }
 
     /** {@inheritDoc} */
@@ -205,7 +217,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String heightWarningDialogDecimalNumber() {
-        return "The " + altitude() + " has to be a decimal number.";
+        return THE + altitude() + " has to be a decimal number.";
     }
 
     /** {@inheritDoc} */
@@ -223,7 +235,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String latitudeDialogDecimalValue() {
-        return "The " + latitudeNorthing() + " can only be a decimal number so far.";
+        return THE + latitudeNorthing() + CAN_ONLY_BE_A_DECIMAL_NUMBER_SO_FAR;
     }
 
     /** {@inheritDoc} */
@@ -235,7 +247,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String longitudeDialogDecimalValue() {
-        return "The " + longitudeEasting() + " can only be a decimal number so far.";
+        return THE + longitudeEasting() + CAN_ONLY_BE_A_DECIMAL_NUMBER_SO_FAR;
     }
 
     /** {@inheritDoc} */
@@ -348,14 +360,15 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String specificationVersion()
-    {
+    public String specificationVersion() {
         return "Specification Version";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step() { return "Step"; }
+    public String step() {
+        return "Step";
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -868,7 +881,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step6bSpecialModelDescription() {
-        return "What is the " + sensor().toLowerCase(En.locale) + " for";
+        return WHAT_IS_THE + sensor().toLowerCase(En.LOCALE) + " for";
     }
 
     /** {@inheritDoc} */
@@ -886,7 +899,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step6cDescription() {
-        return step() + " 6c: Add missing " + position().toLowerCase(En.locale) + "s";
+        return step() + " 6c: Add missing " + position().toLowerCase(En.LOCALE) + "s";
     }
 
     /** {@inheritDoc} */
@@ -898,13 +911,13 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step6cInfoToolTooltip() {
-         return "Set the position by clicking on the map";
+        return "Set the position by clicking on the map";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step6cModelDescription() {
-        return "What is the " + position().toLowerCase(En.locale) + " of";
+        return WHAT_IS_THE + position().toLowerCase(En.LOCALE) + " of";
     }
 
     /** {@inheritDoc} */
@@ -1038,7 +1051,8 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step7OfferingNameNotValid(final String offeringName) {
-        return String.format("The given offering '%s' is not valid. It should match XML-NCName specification.", offeringName);
+        return String.format("The given offering '%s' is not valid. It should match XML-NCName specification.",
+                offeringName);
     }
 
     /** {@inheritDoc} */
@@ -1049,22 +1063,21 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step7SosBindingInstructions()
-    {
+    public String step7SosBindingInstructions() {
         return "Please specify the binding.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step7SosBindingLabel() {
-        return "Binding";
+        return BINDING;
     }
 
     /** {@inheritDoc} */
     @Override
     public String step7SOSConncetionStart(final String strURL) {
         return "To start connection testing to URL" +
-                "\n\"" + strURL + "\"\n" +
+                NL_AQUOT + strURL + AQUOT_NL +
                 "select YES. For changing values select NO.";
     }
 
@@ -1085,7 +1098,7 @@ public class En extends Lang {
             final int readTimeoutSeconds,
             final int connectTimeoutSeconds) {
         return "Connection to " + sos() +
-                "\n\"" + strURL + "\"\n" +
+                NL_AQUOT + strURL + AQUOT_NL +
                 "failed after " + connectTimeoutSeconds + " seconds connect and " +
                 readTimeoutSeconds + " seconds read timeout.\n" +
                 "Reason: " + message;
@@ -1099,21 +1112,21 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step7SosVersionInstructions()
-    {
-        return "Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.";
+    public String step7SosVersionInstructions() {
+        return "Please specify the specification version that is implemented by the "
+                + "SOS instance specified by the URL in the field above.";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step7SosVersionLabel() {
-        return "Version";
+        return VERSION;
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8ConfigFileButton() {
-        return "Open";
+        return OPEN;
     }
 
     /** {@inheritDoc} */
@@ -1131,7 +1144,8 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8DirectImportInstructions() {
-        return "For importing the content of the data file one time, just click ".concat(step8DirectImportStartButton());
+        return "For importing the content of the data file one time, just click "
+                + step8DirectImportStartButton();
     }
 
     /** {@inheritDoc} */
@@ -1161,8 +1175,7 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar)
-    {
+    public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar) {
         return String.format("Could not find jar file here:\n'%s'\nPlease select YES for selecting the file manually.",
                 pathToDirectoryWithFeederJar);
     }
@@ -1182,7 +1195,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8LogFileButton() {
-        return "Open";
+        return OPEN;
     }
 
     /** {@inheritDoc} */
@@ -1200,14 +1213,15 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8SaveModelFailed(final File f) {
-        return "The configuration could not be saved to file\n\"" +
-                f.getAbsolutePath();
+        return THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE +
+                f.getAbsolutePath() + 
+                "\".";
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8SaveModelFailed(final File f, final String exceptionText) {
-        return "The configuration could not be saved to file\n\"" +
+        return THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE +
                 f.getAbsolutePath() +
                 "\".\nAn Exception occurred:\n" +
                 exceptionText +
@@ -1270,9 +1284,8 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String version()
-    {
-        return "Version";
+    public String version() {
+        return VERSION;
     }
 
     /** {@inheritDoc} */
