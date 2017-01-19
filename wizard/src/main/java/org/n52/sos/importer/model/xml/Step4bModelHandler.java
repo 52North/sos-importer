@@ -55,9 +55,6 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
-    /**
-     * 
-     */
     private static final String ERROR_INSTRUCTIONS = "step 4; should not happen. Please check the log file!";
     private static final Logger logger = LoggerFactory.getLogger(Step4bModelHandler.class);
 

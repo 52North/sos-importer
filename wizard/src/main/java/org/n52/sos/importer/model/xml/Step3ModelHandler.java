@@ -182,7 +182,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             logger.debug("handling of Step3Model finished");
         }
     }
-    
+
     /**
      * @param number
      *            the number of the column in the data file
@@ -204,7 +204,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         }
         return null;
     }
-    
+
     /**
      * Date & Time:<br>
      * Combination, Pattern <- parse pattern SEP Group<br>
@@ -309,7 +309,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         }
         meta = null;
     }
-    
+
     private void setSimpleColumnType(final Column col, final String type) {
         if (logger.isTraceEnabled()) {
             logger.trace("\t\tsetSimpleColumnType()");

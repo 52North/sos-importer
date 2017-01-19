@@ -101,7 +101,7 @@ public class ParseTestLabel extends JLabel {
     }
 
     private class ParserThread implements Runnable {
-        
+
         private static final String HTML_CLOSE = "</html>";
         private static final String HTML_OPEN = "<html>";
 

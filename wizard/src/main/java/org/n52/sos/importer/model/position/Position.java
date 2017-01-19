@@ -69,44 +69,13 @@ import org.slf4j.LoggerFactory;
 
 public class Position extends Combination {
 
-    /**
-     * 
-     */
     private static final String EPSG = "EPSG";
-
-    /**
-     * 
-     */
     private static final String ALT = "ALT";
-
-    /**
-     * 
-     */
     private static final String LON = "LON";
-
-    /**
-     * 
-     */
     private static final String LAT = "LAT";
-
-    /**
-     * 
-     */
     private static final String FROM = " from ";
-
-    /**
-     * 
-     */
     private static final String REMOVE = "Remove ";
-
-    /**
-     * 
-     */
     private static final String TO = " to ";
-
-    /**
-     * 
-     */
     private static final String ADD = "Add ";
 
     private static final Logger logger = LoggerFactory.getLogger(Position.class);

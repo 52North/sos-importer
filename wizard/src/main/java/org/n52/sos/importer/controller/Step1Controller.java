@@ -361,7 +361,7 @@ public class Step1Controller extends StepController {
     public StepModel getModel() {
         return step1Model;
     }
-    
+
 
     private class CSVFileFilter extends FileFilter {
         @Override
@@ -369,7 +369,7 @@ public class Step1Controller extends StepController {
             return file.isDirectory() ||
                    file.getName().toLowerCase().endsWith(".csv");
         }
-        
+
         @Override
         public String getDescription() {
             return "CSV files";

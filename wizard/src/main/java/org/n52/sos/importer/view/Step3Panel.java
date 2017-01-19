@@ -97,8 +97,8 @@ public class Step3Panel extends JPanel {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBorder(new TitledBorder(null,
-                Lang.l().column().substring(0, 1).toUpperCase() 
-                + Lang.l().column().substring(1) + " " 
+                Lang.l().column().substring(0, 1).toUpperCase()
+                + Lang.l().column().substring(1) + " "
                         + Lang.l().metadata(),
                         TitledBorder.LEADING,
                         TitledBorder.TOP,

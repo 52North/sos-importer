@@ -160,7 +160,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
                 final List<ObservedProperty> ops = ms.getObservedProperties();
                 name = Lang.l().code();
                 if (ops != null && ops.size() == 1) {
-                    /* 
+                    /*
                      * in the case of having one observed property column
                      *  -> set generation as default (having table element of type Column set)
                      *
@@ -170,7 +170,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
                     /*
                      * disableManualInput = true;
                      * generated is default!
-                     * in the case of having one manual observed property 
+                     * in the case of having one manual observed property
                      * -> disable generated (having no table element and generated set to false)
                      */
                     if (op.getTableElement() == null && !op.isGenerated()) {

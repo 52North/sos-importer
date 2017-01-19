@@ -65,7 +65,7 @@ public abstract class StepController {
      * finished, saves all settings of this step in the model
      * and releases all views.
      * <br>
-     * Called before {@link #getNextStepController()} in 
+     * Called before {@link #getNextStepController()} in
      * {@link org.n52.sos.importer.controller.BackNextController#nextButtonClicked()}
      */
     public abstract void saveSettings();

@@ -69,7 +69,7 @@ public class JTextFieldFilter extends PlainDocument {
     public JTextFieldFilter() {
         this(ALPHA_NUMERIC);
     }
-    
+
     /**
      * <p>Constructor for JTextFieldFilter.</p>
      *

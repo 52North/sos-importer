@@ -43,7 +43,7 @@ import org.n52.sos.importer.Constants;
 public class En extends Lang {
 
     private static final Locale LOCALE = Locale.ENGLISH;
-    private static final String THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE = 
+    private static final String THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE =
             "The configuration could not be saved to file\n\"";
     private static final String OPEN = "Open";
     private static final String VERSION = "Version";
@@ -1214,7 +1214,7 @@ public class En extends Lang {
     @Override
     public String step8SaveModelFailed(final File f) {
         return THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE +
-                f.getAbsolutePath() + 
+                f.getAbsolutePath() +
                 "\".";
     }
 

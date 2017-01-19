@@ -84,7 +84,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
         EPSGCodeComboBox.setPartnerComboBox(referenceSystemNameComboBox);
         referenceSystemNameComboBox.setPartnerComboBox(EPSGCodeComboBox);
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void assignValues() {

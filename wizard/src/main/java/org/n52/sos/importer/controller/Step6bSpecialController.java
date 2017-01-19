@@ -194,7 +194,7 @@ public class Step6bSpecialController extends StepController {
                             final ObservedProperty op = mv.getObservedProperty().forThis(cell);
                             final Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
                             /*
-                             * check, if for the column of foi and obsProp a model is 
+                             * check, if for the column of foi and obsProp a model is
                              * available and if the sensor is generated in this model
                              */
                             for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {

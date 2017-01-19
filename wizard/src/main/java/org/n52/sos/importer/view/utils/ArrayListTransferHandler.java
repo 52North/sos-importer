@@ -92,7 +92,7 @@ public class ArrayListTransferHandler extends TransferHandler {
     private static final Logger logger = LoggerFactory.getLogger(ArrayListTransferHandler.class);
 
     private DataFlavor localArrayListFlavor;
-    
+
     private DataFlavor serialArrayListFlavor;
 
     private String localArrayListType = DataFlavor.javaJVMLocalObjectMimeType
@@ -107,7 +107,7 @@ public class ArrayListTransferHandler extends TransferHandler {
     private int addIndex = -1;
 
     //Number of items added
-    private int addCount; 
+    private int addCount;
 
     /**
      * <p>Constructor for ArrayListTransferHandler.</p>

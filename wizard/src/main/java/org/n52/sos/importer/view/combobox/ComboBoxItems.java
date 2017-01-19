@@ -51,101 +51,30 @@ import org.slf4j.LoggerFactory;
  */
 public final class ComboBoxItems {
 
-    /**
-     * 
-     */
     private static final String SOS_PROPERTIES_COULD_NOT_BE_SAVED = "SOS properties could not be saved.";
-
-    /**
-     * 
-     */
     private static final String SENSOR_URIS = "sensorURIs";
-
-    /**
-     * 
-     */
     private static final String UNIT_OF_MEASUREMENT_URIS = "unitOfMeasurementURIs";
-
-    /**
-     * 
-     */
     private static final String OBSERVED_PROPERTY_URIS = "observedPropertyURIs";
-
-    /**
-     * 
-     */
     private static final String FEATURE_OF_INTEREST_URIS = "featureOfInterestURIs";
-
-    /**
-     * 
-     */
     private static final String SENSOR_NAMES = "sensorNames";
-
-    /**
-     * 
-     */
     private static final String UNIT_OF_MEASUREMENT_CODES = "unitOfMeasurementCodes";
-
-    /**
-     * 
-     */
     private static final String OBSERVED_PROPERTY_NAMES = "observedPropertyNames";
-
-    /**
-     * 
-     */
     private static final String FEATURE_OF_INTEREST_NAMES = "featureOfInterestNames";
-
-    /**
-     * 
-     */
     private static final String SOS_UR_LS = "sosURLs";
-
-    /**
-     * 
-     */
     private static final String REFERENCE_SYSTEM_NAMES = "referenceSystemNames";
-
-    /**
-     * 
-     */
     private static final String EPSG_CODES = "epsgCodes";
-
-    /**
-     * 
-     */
     private static final String POSITION_PATTERNS = "positionPatterns";
-
-    /**
-     * 
-     */
     private static final String DATE_AND_TIME_PATTERNS = "dateAndTimePatterns";
-
-    /**
-     * 
-     */
     private static final String TEXT_QUALIFIERS = "textQualifiers";
-
-    /**
-     * 
-     */
     private static final String COMMENT_INDICATORS = "commentIndicators";
-
-    /**
-     * 
-     */
     private static final String COLUMN_SEPARATORS = "columnSeparators";
-
-    /**
-     * 
-     */
     private static final String LOAD_DEFAULT_SETTINGS_FROM_JAR_FILE = "Load default settings from jar file";
 
     private static final Logger logger = LoggerFactory.getLogger(ComboBoxItems.class);
 
     private static ComboBoxItems instance;
 
-    private static final String EXTERNAL_FILE_PATH = 
+    private static final String EXTERNAL_FILE_PATH =
             System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 
     private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";

@@ -119,7 +119,7 @@ public class DateAndTimeController {
          *
          * whole time is missing
          */
-        /* 
+        /*
          * Disabled because the user might enter observations on year,
          * month, or day level without giving a specific time
         if (dateAndTime.getHour() == null &&

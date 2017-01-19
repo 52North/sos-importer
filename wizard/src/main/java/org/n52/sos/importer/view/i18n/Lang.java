@@ -97,7 +97,7 @@ public abstract class Lang {
         }
         return instance;
     }
-    
+
     /**
      * <p>Setter for the field <code>currentLocale</code>.</p>
      *
@@ -113,168 +113,168 @@ public abstract class Lang {
             Lang.instance = availableLocales.get(newLocale);
         }
     }
-    
+
     /**
      * <p>altitude.</p>
      *
      * @return Altitude / Height
      */
     public abstract String altitude();
-    
+
     /**
      * <p>and.</p>
      *
      * @return and
      */
     public abstract String and();
-    
+
     /**
      * <p>backButtonLabel.</p>
      *
      * @return Back
      */
     public abstract String backButtonLabel();
-    
+
     /**
      * <p>binding.</p>
      *
      * @return Binding
      */
     public abstract String binding();
-    
+
     /**
      * <p>code.</p>
      *
      * @return Code
      */
     public abstract String code();
-    
+
     /**
      * <p>column.</p>
      *
      * @return column
      */
     public abstract String column();
-    
+
     /**
      * <p>dataPreview.</p>
      *
      * @return a {@link java.lang.String} object.
      */
     public abstract String dataPreview();
-    
+
     /**
      * <p>date.</p>
      *
      * @return Date
      */
     public abstract String date();
-    
+
     /**
      * <p>day.</p>
      *
      * @return Day
      */
     public abstract String day();
-    
+
     /**
      * <p>editableComboBoxDeleteItemButton.</p>
      *
      * @return Delete the selected item from the list
      */
     public abstract String editableComboBoxDeleteItemButton();
-    
+
     /**
      * <p>editableComboBoxNewItemButton.</p>
      *
      * @return Add a new item to the list
      */
     public abstract String editableComboBoxNewItemButton();
-    
+
     /**
      * <p>epsgCode.</p>
      *
      * @return EPSG-Code
      */
     public abstract String epsgCode();
-    
+
     /**
      * <p>epsgCodeWarningDialogNaturalNumber.</p>
      *
      * @return The EPSG-Code has to be a natural number.
      */
     public abstract String epsgCodeWarningDialogNaturalNumber();
-    
+
     /**
      * <p>epsgCodeWarningDialogOutOfRange.</p>
      *
      * @return The EPSG-Code has to be in the range of 0 and 32767.
      */
     public abstract String epsgCodeWarningDialogOutOfRange();
-    
+
     /**
      * <p>error.</p>
      *
      * @return Error
      */
     public abstract String error();
-    
+
     /**
      * <p>errorDialogTitle.</p>
      *
      * @return Error
      */
     public abstract String errorDialogTitle();
-    
+
     /**
      * <p>example.</p>
      *
      * @return Example
      */
     public abstract String example();
-    
+
     /**
      * <p>exitDialogQuestion.</p>
      *
      * @return Do you really want to exit?\n
      */
     public abstract String exitDialogQuestion();
-    
+
     /**
      * <p>exitDialogTitle.</p>
      *
      * @return Exit
      */
     public abstract String exitDialogTitle();
-    
+
     /**
      * <p>featureOfInterest.</p>
      *
      * @return Feature of Interest
      */
     public abstract String featureOfInterest();
-    
+
     /**
      * <p>file.</p>
      *
      * @return file
      */
     public abstract String file();
-    
+
     /**
      * <p>finishButtonLabel.</p>
      *
      * @return Finish
      */
     public abstract String finishButtonLabel();
-    
+
     /**
      * <p>format.</p>
      *
      * @return Format
      */
     public abstract String format();
-    
+
     /**
      * <p>frameTitle.</p>
      *
@@ -283,7 +283,7 @@ public abstract class Lang {
     public String frameTitle() {
         return "SOS Importer " + Constants.VERSION;
     }
-    
+
     /**
      * <p>frameTitleExtension.</p>
      *
@@ -294,381 +294,381 @@ public abstract class Lang {
     public String frameTitleExtension(final String file, final String path) {
         return " - " + file() + ":\"" + file + "\" (" + path() + ": \"" + path + "\")";
     }
-    
+
     /**
      * <p>generated.</p>
      *
      * @return generated
      */
     public abstract String generated();
-    
+
     /**
      * <p>getLocale.</p>
      *
      * @return a {@link java.util.Locale} object.
      */
     public abstract Locale getLocale();
-    
+
     /**
      * <p>group.</p>
      *
      * @return Group
      */
     public abstract String group();
-    
+
     /**
      * <p>heightWarningDialogDecimalNumber.</p>
      *
      * @return The height has to be a decimal number.
      */
     public abstract String heightWarningDialogDecimalNumber();
-    
+
     /**
      * <p>hours.</p>
      *
      * @return Hours
      */
     public abstract String hours();
-    
+
     /**
      * <p>infoDialogTitle.</p>
      *
      * @return Information
      */
     public abstract String infoDialogTitle();
-    
+
     /**
      * <p>latitudeDialogDecimalValue.</p>
      *
      * @return The latitude/northing can only be a decimal number so far.
      */
     public abstract String latitudeDialogDecimalValue();
-    
+
     /**
      * <p>latitudeNorthing.</p>
      *
      * @return Latitude / Northing
      */
     public abstract String latitudeNorthing();
-    
+
     /**
      * <p>longitudeDialogDecimalValue.</p>
      *
      * @return The longitude/easting can only be a decimal number so far.
      */
     public abstract String longitudeDialogDecimalValue();
-    
+
     /**
      * <p>longitudeEasting.</p>
      *
      * @return Longitude / Easting
      */
     public abstract String longitudeEasting();
-    
+
     /**
      * <p>measuredValue.</p>
      *
      * @return measured value
      */
     public abstract String measuredValue();
-    
+
     /**
      * <p>metadata.</p>
      *
      * @return a {@link java.lang.String} object.
      */
     public abstract String metadata();
-    
+
     /**
      * <p>minutes.</p>
      *
      * @return Minutes
      */
     public abstract String minutes();
-    
+
     /**
      * <p>month.</p>
      *
      * @return Month
      */
     public abstract String month();
-    
+
     /**
      * <p>name.</p>
      *
      * @return Name
      */
     public abstract String name();
-    
+
     /**
      * <p>nextButtonLabel.</p>
      *
      * @return Next
      */
     public abstract String nextButtonLabel();
-    
+
     /**
      * <p>numValuePanelThousandsSeparator.</p>
      *
      * @return a {@link java.lang.String} object.
      */
     public abstract String numValuePanelThousandsSeparator();
-    
+
     /**
      * <p>observation.</p>
      *
      * @return Observation
      */
     public abstract String observation();
-    
+
     /**
      * <p>observedProperty.</p>
      *
      * @return Observed Property
      */
     public abstract String observedProperty();
-    
+
     /**
      * <p>offering.</p>
      *
      * @return Offering
      */
     public abstract String offering();
-    
+
     /**
      * <p>path.</p>
      *
      * @return path
      */
     public abstract String path();
-    
+
     /**
      * <p>position.</p>
      *
      * @return Position
      */
     public abstract String position();
-    
+
     /**
      * <p>referenceSystem.</p>
      *
      * @return Reference System
      */
     public abstract String referenceSystem();
-    
+
     /**
      * <p>row.</p>
      *
      * @return row
      */
     public abstract String row();
-    
+
     /**
      * <p>seconds.</p>
      *
      * @return Seconds
      */
     public abstract String seconds();
-    
+
     /**
      * <p>sensor.</p>
      *
      * @return Sensor
      */
     public abstract String sensor();
-    
+
     /**
      * <p>sos.</p>
      *
      * @return Sensor Observation Service
      */
     public String sos() {
-    
+
         return "Sensor Observation Service";
     }
-    
+
     /**
      * <p>spaceString.</p>
      *
      * @return Space
      */
     public abstract String spaceString();
-    
+
     /**
      * <p>specificationVersion.</p>
      *
      * @return Specification Version
      */
     public abstract String specificationVersion();
-    
+
     /**
      * <p>step.</p>
      *
      * @return Step
      */
     public abstract String step();
-    
+
     /**
      * <p>step1BrowseButton.</p>
      *
      * @return Select
      */
     public abstract String step1BrowseButton();
-    
+
     /**
      * <p>step1Description.</p>
      *
      * @return Step 1: Choose CSV file
      */
     public abstract String step1Description();
-    
+
     /**
      * <p>step1Directory.</p>
      *
      * @return Remote Directory
      */
     public abstract String step1Directory();
-    
+
     /**
      * <p>step1EncodingLabel.</p>
      *
      * @return Please select the input file encoding
      */
     public abstract String step1EncodingLabel();
-    
+
     /**
      * <p>step1FeedTypeCSV.</p>
      *
      * @return CSV Feed Type
      */
     public abstract String step1FeedTypeCSV();
-    
+
     /**
      * <p>step1FeedTypeFTP.</p>
      *
      * @return FTP Feed type
      */
     public abstract String step1FeedTypeFTP();
-    
+
     /**
      * <p>step1File.</p>
      *
      * @return CSV File
      */
     public abstract String step1File();
-    
+
     /**
      * <p>step1FileSchema.</p>
      *
      * @return Remote File Schema
      */
     public abstract String step1FileSchema();
-    
+
     /**
      * <p>step1FtpServer.</p>
      *
      * @return FTP Server
      */
     public abstract String step1FtpServer();
-    
+
     /**
      * <p>step1InstructionLabel.</p>
      *
      * @return Please select the CSV file
      */
     public abstract String step1InstructionLabel();
-    
+
     /**
      * <p>step1Introduction.</p>
      *
      * @return a {@link java.lang.String} object.
      */
     public abstract String step1Introduction();
-    
+
     /**
      * <p>step1Password.</p>
      *
      * @return Password (FTP Server authentification)
      */
     public abstract String step1Password();
-    
+
     /**
      * <p>step1Regex.</p>
      *
      * @return Regular Expression
      */
     public abstract String step1Regex();
-    
+
     /**
      * <p>step1RegexDescription.</p>
      *
      * @return Regular Expression Description
      */
     public abstract String step1RegexDescription();
-    
+
     /**
      * <p>step1SelectLanguage.</p>
      *
      * @return Change language
      */
     public abstract String step1SelectLanguage();
-    
+
     /**
      * <p>step1User.</p>
      *
      * @return User (FTP Server authentification)
      */
     public abstract String step1User();
-    
+
     /**
      * <p>step2ColumnSeparator.</p>
      *
      * @return Column separator
      */
     public abstract String step2ColumnSeparator();
-    
+
     /**
      * <p>step2CommentIndicator.</p>
      *
      * @return Comment indicator
      */
     public abstract String step2CommentIndicator();
-    
+
     /**
      * <p>step2DataPreviewLabel.</p>
      *
      * @return CSV-Data-Preview
      */
     public abstract String step2DataPreviewLabel();
-    
+
     /**
      * <p>step2DecimalSeparator.</p>
      *
      * @return Decimal separator
      */
     public abstract String step2DecimalSeparator();
-    
+
     /**
      * <p>step2Description.</p>
      *
      * @return Step 2: Import CSV file
      */
     public abstract String step2Description();
-    
+
     /**
      * <p>step2FirstLineWithData.</p>
      *
      * @return Ignore data until line
      */
     public abstract String step2FirstLineWithData();
-    
+
     /**
      * <p>step2IsSampleBased.</p>
      *
      * @return Is data file sample based
      */
     public abstract String step2IsSampleBased();
-    
+
     /**
      * <p>step2ParseHeader.</p>
      *
@@ -961,7 +961,7 @@ public abstract class Lang {
     /**
      * <p>step4aModelDescription.</p>
      *
-     * @return Select all measured value <code>Constants.STRING_REPLACER</code>s 
+     * @return Select all measured value <code>Constants.STRING_REPLACER</code>s
      *      where the marked Date &amp; Time group corresponds to.
      */
     public abstract String step4aModelDescription();
@@ -981,14 +981,14 @@ public abstract class Lang {
      * @see Lang#step4aInfoMeasuredValue()
      */
     public abstract String step4bInfoNotMeasuredValue();
-    
+
     /**
      * <p>step4bInfoResourceAlreadySetText.</p>
      *
      * @return a java.lang.String object.
      */
     public abstract String step4bInfoResourceAlreadySetText();
-    
+
     /**
      * <p>step4bInfoResoureAlreadySet.</p>
      *
@@ -1008,7 +1008,7 @@ public abstract class Lang {
         }
         return res + step4bInfoResourceAlreadySetText() + measuredValue();
     }
-    
+
     /**
      *
      * List how to replace the
@@ -1031,56 +1031,56 @@ public abstract class Lang {
      * all of them with pressed CTRL key.
      */
     public abstract String step4bModelDescription();
-    
+
     /**
      * <p>step5aDescription.</p>
      *
      * @return Step 5a: Complete time data
      */
     public abstract String step5aDescription();
-    
+
     /**
      * <p>step5aModelDescription.</p>
      *
      * @return Complete missing information for the marked date and time.
      */
     public abstract String step5aModelDescription();
-    
+
     /**
      * <p>step5cDescription.</p>
      *
      * @return Step 5c: Complete position data
      */
     public abstract String step5cDescription();
-    
+
     /**
      * <p>step5cModelDescription.</p>
      *
      * @return Complete missing information for the marked position.
      */
     public abstract String step5cModelDescription();
-    
+
     /**
      * <p>step6aDescription.</p>
      *
      * @return Step 6a: Add missing dates and times
      */
     public abstract String step6aDescription();
-    
+
     /**
      * <p>step6aModelDescription.</p>
      *
      * @return What is the Date &amp; Time for all measured values?
      */
     public abstract String step6aModelDescription();
-    
+
     /**
      * <p>step6bDefineConcatString.</p>
      *
      * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
      */
     public abstract String step6bDefineConcatString();
-    
+
     /**
      * <p>step6bDescription.</p>
      *
@@ -1091,7 +1091,7 @@ public abstract class Lang {
     /**
      * Replacements: Resource &rarr; Orientation
      *
-     * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; 
+     * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt;
      *      for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
      */
     public abstract String step6bModelDescription();
@@ -1351,7 +1351,7 @@ public abstract class Lang {
      *
      * @param strURL a {@link java.lang.String} object.
      * @param responseCode a int.
-     * @return Could not connect to Sensor Observation Service: <code>strURL</code>. 
+     * @return Could not connect to Sensor Observation Service: <code>strURL</code>.
      *      HTTP Response Code: <code>responseCode</code>
      */
     public abstract String step7SOSconnectionFailed(String strURL, int responseCode);
@@ -1384,7 +1384,7 @@ public abstract class Lang {
     /**
      * <p>step7SosVersionInstructions.</p>
      *
-     * @return Please specify the specification version that is implemented by 
+     * @return Please specify the specification version that is implemented by
      *      the SOS instance specified by the URL in the field above.
      */
     public abstract String step7SosVersionInstructions();

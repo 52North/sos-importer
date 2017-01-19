@@ -74,9 +74,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  */
 public class Step7Panel extends JPanel {
 
-    /**
-     * 
-     */
     private static final String TITLED_BORDER_BORDER = "TitledBorder.border";
 
     private static final String[] SUPPORTED_SOS_VERSIONS = new String[] { "1.0.0", "2.0.0" };

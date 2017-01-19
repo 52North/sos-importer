@@ -170,8 +170,8 @@ public class PositionController {
     }
 
     /**
-     * @return returns <tt>true</tt>, 
-     *      if height is allowed, or 
+     * @return returns <tt>true</tt>,
+     *      if height is allowed, or
      *      we could not say:"it is not allowed" because of parsing errors...
      */
     private boolean shouldHeightPanelBeAddedForEPSG(final EPSGCode epsgCode) {

@@ -68,19 +68,8 @@ import org.slf4j.LoggerFactory;
 
 public abstract class PositionComponent extends Component {
 
-    /**
-     * 
-     */
     private static final String DEGREE = "degree";
-
-    /**
-     * 
-     */
     private static final String FT = "ft";
-
-    /**
-     * 
-     */
     private static final String N_A = "n/a";
 
     private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);

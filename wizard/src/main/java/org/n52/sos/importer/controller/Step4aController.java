@@ -89,7 +89,7 @@ public class Step4aController extends StepController {
             tableController.selectColumn(number);
         }
 
-        final DateAndTimeController dateAndTimeController = 
+        final DateAndTimeController dateAndTimeController =
                 new DateAndTimeController(step4aModel.getDateAndTimeModel());
         dateAndTimeController.markComponents();
     }

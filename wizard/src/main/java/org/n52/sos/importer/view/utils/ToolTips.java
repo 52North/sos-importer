@@ -111,7 +111,7 @@ public final class ToolTips {
     private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
     private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips";
     private static ResourceBundle res;
-    
+
     private ToolTips() {}
 
     /**

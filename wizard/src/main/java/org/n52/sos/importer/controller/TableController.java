@@ -323,7 +323,7 @@ public final class TableController {
                     }
                 }
                 break;
-    
+
             case ROWS:
                 final int columnCount = table.getColumnCount();
                 for (final Row r: tableMarker.getRows()) {
@@ -332,7 +332,7 @@ public final class TableController {
                     }
                 }
                 break;
-    
+
             case CELLS:
                 for (final Cell c: tableMarker.getCells()) {
                     values.add(getValueAt(c));
@@ -432,7 +432,7 @@ public final class TableController {
     /**
      * <p>addSingleSelectionListener.</p>
      *
-     * @param additionalSingleSelectionListener 
+     * @param additionalSingleSelectionListener
      *          a {@link org.n52.sos.importer.controller.TableController.SingleSelectionListener} object.
      */
     public void addSingleSelectionListener(final SingleSelectionListener additionalSingleSelectionListener) {
@@ -442,7 +442,7 @@ public final class TableController {
     /**
      * <p>addMultipleSelectionListener.</p>
      *
-     * @param additionalMultipleSelectionListener 
+     * @param additionalMultipleSelectionListener
      *          a {@link org.n52.sos.importer.controller.TableController.MultipleSelectionListener} object.
      */
     public void addMultipleSelectionListener(final MultipleSelectionListener additionalMultipleSelectionListener) {

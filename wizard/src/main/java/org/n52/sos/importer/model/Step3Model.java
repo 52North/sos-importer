@@ -117,7 +117,7 @@ public class Step3Model implements StepModel {
         }
         return addedValue == selection && addedValue.equals(selection);
     }
-    
+
     /**
      * Returns the stored selection (column assignment) for the given column
      *
@@ -134,7 +134,7 @@ public class Step3Model implements StepModel {
         }
         return value;
     }
-    
+
     /**
      * Returns all selections (column assignments) stored in this model
      *
@@ -146,7 +146,7 @@ public class Step3Model implements StepModel {
         }
         return columnAssignments;
     }
-    
+
     /*
      *  simple getter and setter
      */
@@ -158,7 +158,7 @@ public class Step3Model implements StepModel {
     public int getFirstLineWithData() {
         return firstLineWithData;
     }
-    
+
     /**
      * <p>Getter for the field <code>markedColumn</code>.</p>
      *
@@ -167,7 +167,7 @@ public class Step3Model implements StepModel {
     public int getMarkedColumn() {
         return markedColumn;
     }
-    
+
     /**
      * <p>Setter for the field <code>markedColumn</code>.</p>
      *
@@ -176,7 +176,7 @@ public class Step3Model implements StepModel {
     public void setMarkedColumn(final int colIndex) {
         markedColumn = colIndex;
     }
-    
+
     /**
      * <p>Getter for the field <code>useHeader</code>.</p>
      *

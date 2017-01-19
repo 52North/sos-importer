@@ -74,7 +74,7 @@ public abstract class Resource extends Component {
     public void setName(final String name) {
         this.name = name;
     }
-    
+
     /**
      * <p>Getter for the field <code>name</code>.</p>
      *
@@ -83,7 +83,7 @@ public abstract class Resource extends Component {
     public String getName() {
         return name;
     }
-    
+
     /**
      * <p>setURI.</p>
      *
@@ -92,7 +92,7 @@ public abstract class Resource extends Component {
     public void setURI(final URI newUri) {
         this.uri = newUri;
     }
-    
+
     /**
      * <p>getURI.</p>
      *
@@ -273,7 +273,7 @@ public abstract class Resource extends Component {
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());
         return result;
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -313,7 +313,7 @@ public abstract class Resource extends Component {
         }
         return true;
     }
-    
+
     /**
      * <p>Getter for the field <code>uriPrefix</code>.</p>
      *
@@ -322,7 +322,7 @@ public abstract class Resource extends Component {
     public String getUriPrefix() {
         return uriPrefix;
     }
-    
+
     /**
      * <p>Setter for the field <code>uriPrefix</code>.</p>
      *
@@ -331,7 +331,7 @@ public abstract class Resource extends Component {
     public void setUriPrefix(final String uriPrefix) {
         this.uriPrefix = uriPrefix;
     }
-    
+
     /**
      * <p>Getter for the field <code>relatedCols</code>.</p>
      *
@@ -340,7 +340,7 @@ public abstract class Resource extends Component {
     public TableElement[] getRelatedCols() {
         return relatedCols;
     }
-    
+
     /**
      * <p>Setter for the field <code>relatedCols</code>.</p>
      *
@@ -349,7 +349,7 @@ public abstract class Resource extends Component {
     public void setRelatedCols(final TableElement[] relatedCols) {
         this.relatedCols = relatedCols;
     }
-    
+
     /**
      * <p>Getter for the field <code>concatString</code>.</p>
      *
@@ -358,7 +358,7 @@ public abstract class Resource extends Component {
     public String getConcatString() {
         return concatString;
     }
-    
+
     /**
      * <p>Setter for the field <code>concatString</code>.</p>
      *
@@ -367,7 +367,7 @@ public abstract class Resource extends Component {
     public void setConcatString(final String concatString) {
         this.concatString = concatString;
     }
-    
+
     /**
      * <p>isUseNameAfterPrefixAsURI.</p>
      *
@@ -376,7 +376,7 @@ public abstract class Resource extends Component {
     public boolean isUseNameAfterPrefixAsURI() {
         return useNameAfterPrefixAsURI;
     }
-    
+
     /**
      * <p>Setter for the field <code>useNameAfterPrefixAsURI</code>.</p>
      *
@@ -385,7 +385,7 @@ public abstract class Resource extends Component {
     public void setUseNameAfterPrefixAsURI(final boolean useNameAfterPrefixAsURI) {
         this.useNameAfterPrefixAsURI = useNameAfterPrefixAsURI;
     }
-    
+
     /**
      * If <code>true</code> this Resource is generated from other elements
      * contained in the data file.
@@ -395,7 +395,7 @@ public abstract class Resource extends Component {
     public boolean isGenerated() {
         return generated;
     }
-    
+
     /**
      * <p>Setter for the field <code>generated</code>.</p>
      *

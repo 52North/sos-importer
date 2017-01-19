@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 public final class ModelStore {
 
     /**
-     * 
+     *
      */
     private static final String AQUOT = "\"";
 

@@ -76,14 +76,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class MeasuredValue implements Parseable {
 
-    /**
-     * 
-     */
     private static final String TO = " to ";
-
-    /**
-     * 
-     */
     private static final String ASSIGN = "Assign ";
 
     private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);

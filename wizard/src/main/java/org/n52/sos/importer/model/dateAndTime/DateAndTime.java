@@ -70,24 +70,9 @@ import org.slf4j.LoggerFactory;
 
 public class DateAndTime extends Combination {
 
-    /**
-     * 
-     */
     private static final String FROM = " from ";
-
-    /**
-     * 
-     */
     private static final String REMOVE = "Remove ";
-
-    /**
-     * 
-     */
     private static final String TO = " to ";
-
-    /**
-     * 
-     */
     private static final String ADD = "Add ";
 
     private static final Logger logger = LoggerFactory.getLogger(DateAndTime.class);
@@ -108,7 +93,7 @@ public class DateAndTime extends Combination {
     public Year getYear() {
         return year;
     }
-    
+
     /**
      * <p>Setter for the field <code>year</code>.</p>
      *
@@ -124,7 +109,7 @@ public class DateAndTime extends Combination {
         }
         this.year = year;
     }
-    
+
     /**
      * <p>Getter for the field <code>month</code>.</p>
      *
@@ -133,7 +118,7 @@ public class DateAndTime extends Combination {
     public Month getMonth() {
         return month;
     }
-    
+
     /**
      * <p>Setter for the field <code>month</code>.</p>
      *
@@ -149,7 +134,7 @@ public class DateAndTime extends Combination {
         }
         this.month = month;
     }
-    
+
     /**
      * <p>Getter for the field <code>day</code>.</p>
      *
@@ -158,7 +143,7 @@ public class DateAndTime extends Combination {
     public Day getDay() {
         return day;
     }
-    
+
     /**
      * <p>Setter for the field <code>day</code>.</p>
      *
@@ -174,7 +159,7 @@ public class DateAndTime extends Combination {
         }
         this.day = day;
     }
-    
+
     /**
      * <p>Getter for the field <code>hour</code>.</p>
      *
@@ -183,7 +168,7 @@ public class DateAndTime extends Combination {
     public Hour getHour() {
         return hour;
     }
-    
+
     /**
      * <p>Setter for the field <code>hour</code>.</p>
      *
@@ -199,7 +184,7 @@ public class DateAndTime extends Combination {
         }
         this.hour = hour;
     }
-    
+
     /**
      * <p>Getter for the field <code>minute</code>.</p>
      *
@@ -208,7 +193,7 @@ public class DateAndTime extends Combination {
     public Minute getMinute() {
         return minute;
     }
-    
+
     /**
      * <p>Setter for the field <code>minute</code>.</p>
      *
@@ -224,7 +209,7 @@ public class DateAndTime extends Combination {
         }
         this.minute = minute;
     }
-    
+
     /**
      * <p>getSeconds.</p>
      *
@@ -233,7 +218,7 @@ public class DateAndTime extends Combination {
     public Second getSeconds() {
         return second;
     }
-    
+
     /**
      * <p>Setter for the field <code>second</code>.</p>
      *
@@ -249,7 +234,7 @@ public class DateAndTime extends Combination {
         }
         this.second = second;
     }
-    
+
     /**
      * <p>Getter for the field <code>timeZone</code>.</p>
      *
@@ -258,7 +243,7 @@ public class DateAndTime extends Combination {
     public TimeZone getTimeZone() {
         return timeZone;
     }
-    
+
     /**
      * <p>Setter for the field <code>timeZone</code>.</p>
      *
@@ -300,7 +285,7 @@ public class DateAndTime extends Combination {
 
         return dateString;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public String toString() {

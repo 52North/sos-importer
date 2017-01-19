@@ -231,7 +231,7 @@ public class Step8Controller extends StepController {
                     "-c",
                     step7Model.getConfigFile().getAbsolutePath());
             builder.redirectErrorStream(true);
-            final DirectImportWorker directImporter = 
+            final DirectImportWorker directImporter =
                     new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(), builder);
             directImporter.execute();
         }

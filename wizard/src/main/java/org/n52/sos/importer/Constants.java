@@ -105,20 +105,20 @@ public class Constants {
     /** Constant <code>SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START</code> */
     public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_START = "Sensor with ID: '";
     /** Constant <code>SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END</code> */
-    public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END = 
+    public static final CharSequence SOS_RESPONSE_EXCEPTION_SENSOR_ALREADY_REGISTERED_END =
             "' is already registered at ths SOS!";
     /** Constant <code>SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE</code> */
-    public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE = 
+    public static final CharSequence SOS_RESPONSE_EXCEPTION_CODE_NO_APPLICABLE_CODE =
             "exceptionCode=\"NoApplicableCode\"";
     /** Constant <code>XML_SCHEMA_PREFIX="xsi"</code> */
     public static final String XML_SCHEMA_PREFIX = "xsi";
     /** Constant <code>XML_SCHEMA_NAMESPACE="http://www.w3.org/2001/XMLSchema-instan"{trunked}</code> */
     public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
     /** Constant <code>XML_SCHEMALOCATION_QNAME</code> */
-    public static final QName XML_SCHEMALOCATION_QNAME = 
+    public static final QName XML_SCHEMALOCATION_QNAME =
             new QName(XML_SCHEMA_NAMESPACE, "schemaLocation", XML_SCHEMA_PREFIX);
     /** Constant <code>XML_SOS_IMPORTER_SCHEMA_LOCATION="https://raw.githubusercontent.com/52Nor"{trunked}</code> */
-    public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION = 
+    public static final String XML_SOS_IMPORTER_SCHEMA_LOCATION =
             "https://raw.githubusercontent.com/52North/sos-importer/"
             + "master/bindings/src/main/resources/import-configuration.xsd";
     /** Constant <code>UNICODE_OFFERING_PREFIX="_offering-"</code> */
@@ -152,7 +152,7 @@ public class Constants {
     /** Constant <code>QNAME_GENERATED_RESOURCE</code> */
     public static final QName QNAME_GENERATED_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedResource");
     /** Constant <code>QNAME_GENERATED_SPATIAL_RESOURCE</code> */
-    public static final QName QNAME_GENERATED_SPATIAL_RESOURCE = 
+    public static final QName QNAME_GENERATED_SPATIAL_RESOURCE =
             new QName(XML_BINDINGS_NAMESPACE, "GeneratedSpatialResource");
     /** Constant <code>QNAME_MANUAL_RESOURCE</code> */
     public static final QName QNAME_MANUAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "ManualResource");

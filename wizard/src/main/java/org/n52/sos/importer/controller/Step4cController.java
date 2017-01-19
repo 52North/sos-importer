@@ -60,29 +60,29 @@ public class Step4cController extends StepController {
     public Step4cController(final int firstLineWithData) {
         this.firstLineWithData = firstLineWithData;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void loadSettings() {
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void saveSettings() {
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return null;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return null;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
@@ -111,19 +111,19 @@ public class Step4cController extends StepController {
         throw new RuntimeException("NOT YET IMPLEMENTED");
         // return true;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return false;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public StepModel getModel() {

@@ -56,9 +56,6 @@ import org.slf4j.LoggerFactory;
  */
 public class MainFrame extends JFrame {
 
-    /**
-     * 
-     */
     private static final String AQUOT = "\"";
 
     private static final long serialVersionUID = 1L;
@@ -190,22 +187,22 @@ public class MainFrame extends JFrame {
         public void windowClosing(final WindowEvent arg0) {
             mainController.exit();
         }
-        
+
         @Override
         public void windowDeactivated(final WindowEvent arg0) {}
-        
+
         @Override
         public void windowDeiconified(final WindowEvent arg0) {}
-        
+
         @Override
         public void windowIconified(final WindowEvent arg0) {}
-        
+
         @Override
         public void windowOpened(final WindowEvent arg0) {}
-        
+
         @Override
         public void windowActivated(final WindowEvent arg0) {}
-        
+
         @Override
         public void windowClosed(final WindowEvent arg0) {}
     }

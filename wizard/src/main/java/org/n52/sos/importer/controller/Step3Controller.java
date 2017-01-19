@@ -55,19 +55,8 @@ import org.slf4j.LoggerFactory;
  */
 public class Step3Controller extends StepController {
 
-    /**
-     * 
-     */
     private static final String STEP3_MODEL = "Step3Model: ";
-
-    /**
-     * 
-     */
     private static final String STEP3_PANEL = "Step3Panel: ";
-
-    /**
-     * 
-     */
     private static final String NULL_STRING = "null";
 
     private static final Logger logger = LoggerFactory.getLogger(Step3Controller.class);

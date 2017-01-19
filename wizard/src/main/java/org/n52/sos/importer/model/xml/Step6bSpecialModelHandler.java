@@ -61,9 +61,6 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialModel> {
 
-    /**
-     * 
-     */
     private static final String AND_OBS_PROP = " and obsProp";
     private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialModelHandler.class);
 
