@@ -55,17 +55,8 @@ import org.slf4j.LoggerFactory;
  */
 public class RepeatedFeeder extends TimerTask {
 
-    /**
-     * 
-     */
     private static final String EXCEPTION_THROWN = "Exception thrown: {}";
-    /**
-     * 
-     */
     private static final String PROPERTIES_FILE_EXTENSION = ".properties";
-    /**
-     * 
-     */
     private static final String LAST_FEED_FILE = "lastFeedFile";
     private static File lastUsedDateFile;
     private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
@@ -73,7 +64,6 @@ public class RepeatedFeeder extends TimerTask {
 
     private final Configuration configuration;
     private final File file;
-
     private final int periodInMinutes;
 
     /**
@@ -181,7 +171,7 @@ public class RepeatedFeeder extends TimerTask {
         final Properties prop = new Properties();
         prop.put(LAST_FEED_FILE, lastUsedDateFile.getAbsolutePath());
         try {
-            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator + 
+            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator +
                     FileHelper.cleanPathToCreateFileName(
                             configuration.getConfigFile().getAbsolutePath()) + PROPERTIES_FILE_EXTENSION),
                     null);
@@ -205,7 +195,7 @@ public class RepeatedFeeder extends TimerTask {
             LOG.debug(String.format("Last feed file properties not found: %s", lastFeedFilePropertiesPath));
         } catch (final IOException e) {
             // only on DEBUG because it is not a problem if this file does not exist
-            LOG.debug(EXCEPTION_THROWN, e.getMessage(), e); 
+            LOG.debug(EXCEPTION_THROWN, e.getMessage(), e);
         }
         final String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
         if (lastFeedFileName == null) {

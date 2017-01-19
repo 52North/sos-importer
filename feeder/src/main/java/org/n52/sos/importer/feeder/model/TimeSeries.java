@@ -68,7 +68,7 @@ public class TimeSeries {
     public static final String SENSOR_ID_NOT_SET = "SENSOR_ID_NOT_SET";
 
     /** Constant <code>OBSERVED_PROPERTY_NOT_SET</code> */
-    public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET = 
+    public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET =
             new ObservedProperty(OBSERVED_PROPERTY_NOT_SET_CONST, OBSERVED_PROPERTY_NOT_SET_CONST);
 
     /** Constant <code>UOM_CODE_NOT_SET="UOM_CODE_NOT_SET"</code> */
@@ -81,7 +81,7 @@ public class TimeSeries {
     public static final String SENSOR_NAME_NOT_SET = "SENSOR_NAME_NOT_SET";
 
     private static final String N_M_STRING = "%s %s";
-    
+
     private final LinkedList<InsertObservation> timeseries = new LinkedList<>();
 
     private final String tokenSeparator = ";";

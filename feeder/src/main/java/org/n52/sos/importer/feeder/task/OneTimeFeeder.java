@@ -59,22 +59,10 @@ import org.slf4j.LoggerFactory;
  */
 // TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
 public class OneTimeFeeder implements Runnable {
-    
-    /**
-     * 
-     */
+
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
-
-    /**
-     * 
-     */
     private static final String COUNTER_FILE_POSTFIX = "_counter";
-
-    /**
-     * 
-     */
     private static final String PROXY_PORT = "proxyPort";
-
     private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
 
     private final Configuration config;

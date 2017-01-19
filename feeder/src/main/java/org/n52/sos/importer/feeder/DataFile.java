@@ -104,7 +104,7 @@ public class DataFile {
      * <p>Constructor for DataFile.</p>
      *
      * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param dataFile a {@link java.io.File} object.
+     * @param file a {@link java.io.File} object.
      */
     public DataFile(final Configuration configuration, final File file) {
         this.configuration = configuration;

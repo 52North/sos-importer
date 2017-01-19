@@ -50,7 +50,7 @@ public class TimeSeriesRepositoryTest {
         Timestamp timeStamp = new Timestamp().set(System.currentTimeMillis());
         Offering off = new Offering("offering-name", "offering-uri");
         String mvType = "mv-type";
-        InsertObservation io = 
+        InsertObservation io =
                 new InsertObservation(sensor, foi, value, timeStamp, uom , observedProperty1, off, mvType);
         InsertObservation io2 = new InsertObservation(sensor, foi, 2, timeStamp, uom, observedProperty2, off, mvType);
         InsertObservation[] ios = {io, io2 };
@@ -58,7 +58,7 @@ public class TimeSeriesRepositoryTest {
         RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
         org.junit.Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
         org.junit.Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
-        org.junit.Assert.assertThat(registerSensor.getObservedProperties(), 
+        org.junit.Assert.assertThat(registerSensor.getObservedProperties(),
                 Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
     }
 

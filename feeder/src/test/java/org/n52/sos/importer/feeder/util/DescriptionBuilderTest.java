@@ -93,15 +93,15 @@ public class DescriptionBuilderTest {
     private final String sensorUri = "sensor-uri";
     private final String sensorName = "sensor-name";
     private final Sensor sensor = new Sensor(sensorName, sensorUri);
-    private final Map<ObservedProperty, String> unitOfMeasurements = 
+    private final Map<ObservedProperty, String> unitOfMeasurements =
             java.util.Collections.singletonMap(obsProp, uom.getCode());
-    private final Map<ObservedProperty, String> measuredValueTypes = 
+    private final Map<ObservedProperty, String> measuredValueTypes =
             java.util.Collections.singletonMap(obsProp, mvType);
-    private final Collection<ObservedProperty> observedProperties = 
+    private final Collection<ObservedProperty> observedProperties =
             java.util.Collections.singletonList(obsProp);
-    private final InsertObservation io = 
+    private final InsertObservation io =
             new InsertObservation(sensor, foi, value, timeStamp, uom, obsProp, off, mvType);
-    private final RegisterSensor rs = 
+    private final RegisterSensor rs =
             new RegisterSensor(io, observedProperties, measuredValueTypes, unitOfMeasurements);
     private SystemType system;
 
@@ -154,9 +154,9 @@ public class DescriptionBuilderTest {
         org.junit.Assert.assertThat(vector.getCoordinateArray().length, org.hamcrest.Matchers.is(3));
 
         org.junit.Assert.assertThat(vector.getCoordinateArray(0).getName(), org.hamcrest.Matchers.is(easting));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getAxisID(), 
+        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getAxisID(),
                 org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("x")));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getUom().getCode(), 
+        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getUom().getCode(),
                 org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
         org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getValue(),
                 org.hamcrest.Matchers.is(longitude));
@@ -170,9 +170,9 @@ public class DescriptionBuilderTest {
                 org.hamcrest.Matchers.is(latitude));
 
         org.junit.Assert.assertThat(vector.getCoordinateArray(2).getName(), org.hamcrest.Matchers.is("altitude"));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getAxisID(), 
+        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getAxisID(),
                 org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("z")));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getUom().getCode(), 
+        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getUom().getCode(),
                 org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(meter)));
         org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getValue(),
                 org.hamcrest.Matchers.is(altitude));
@@ -183,7 +183,7 @@ public class DescriptionBuilderTest {
         org.junit.Assert.assertThat(system.isSetInputs(), org.hamcrest.Matchers.is(true));
         org.junit.Assert.assertThat(
                 system.getInputs().getInputList().getInputArray().length, org.hamcrest.Matchers.is(1));
-        org.junit.Assert.assertThat(system.getInputs().getInputList().getInputArray(0).getName(), 
+        org.junit.Assert.assertThat(system.getInputs().getInputList().getInputArray(0).getName(),
                 org.hamcrest.Matchers.is(obsPropName));
         org.junit.Assert.assertThat(
                 system.getInputs().getInputList().getInputArray(0).getObservableProperty().getDefinition(),
@@ -222,7 +222,7 @@ public class DescriptionBuilderTest {
         final DataComponentPropertyType field = ((DataRecordType) features.getAbstractDataRecord()).getFieldArray(0);
         org.junit.Assert.assertThat(field.getName(), org.hamcrest.Matchers.is("featureOfInterestID"));
         org.junit.Assert.assertThat(field.isSetText(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(field.getText().getDefinition(), 
+        org.junit.Assert.assertThat(field.getText().getDefinition(),
                 org.hamcrest.Matchers.is("http://www.opengis.net/def/featureOfInterest/identifier"));
         org.junit.Assert.assertThat(field.getText().getValue(), org.hamcrest.Matchers.is(featureUri));
     }
@@ -232,7 +232,7 @@ public class DescriptionBuilderTest {
              throws XmlException, IOException {
         final String observedBBox = "observedBBOX";
         final Capabilities observedBBOX = getCapabilitiesByName(observedBBox);
-        final DataComponentPropertyType field = 
+        final DataComponentPropertyType field =
                 ((DataRecordType) observedBBOX.getAbstractDataRecord()).getFieldArray(0);
         org.junit.Assert.assertThat(field.getName(), org.hamcrest.Matchers.is(observedBBox));
         final EnvelopeType envelope = EnvelopeType.Factory.parse(field.getAbstractDataRecord().newInputStream());
@@ -285,7 +285,7 @@ public class DescriptionBuilderTest {
         final TimePeriodType validTime = system.getValidTime().getTimePeriod();
         org.junit.Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
                 org.hamcrest.Matchers.is(org.hamcrest.Matchers.notNullValue()));
-        final long durationMillis = 
+        final long durationMillis =
                 new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
                         System.currentTimeMillis()).toDurationMillis();
         org.junit.Assert.assertThat(durationMillis,

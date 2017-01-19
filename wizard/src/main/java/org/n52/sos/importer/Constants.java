@@ -47,7 +47,7 @@ import org.n52.sos.importer.view.i18n.Lang;
  */
 public class Constants {
 
-    public static enum ImportStrategy {
+    public enum ImportStrategy {
         /**
          * Each value will be inserted as single observation into the SOS.
          */
@@ -70,7 +70,7 @@ public class Constants {
     /** Constant <code>DATE_FORMAT_STRING="yyyy-MM-dd'T'HH:mm:ssZ"</code> */
     public static final String DATE_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
     /** Constant <code>DEBUG_BORDER</code> */
-    public static final Border DEBUG_BORDER = new LineBorder(Color.RED,1,true);
+    public static final Border DEBUG_BORDER = new LineBorder(Color.RED, 1, true);
     private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_BLUE = 238;
     private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_GREEN = 238;
     private static final int DEFAULT__COLOR_BACKGROUND_COMPONENT_RED = 238;

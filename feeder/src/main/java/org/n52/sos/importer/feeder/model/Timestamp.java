@@ -48,21 +48,9 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
-    /**
-     * 
-     */
     private static final String PARAMETER_TIME_STAMP_IS_MANDATORY = "parameter timeStamp is mandatory.";
-    /**
-     * 
-     */
     private static final String SS = "ss";
-    /**
-     * 
-     */
     private static final String MM = "mm:";
-    /**
-     * 
-     */
     private static final String ZERO_ZERO = ":00";
     private static final int MILLIS_PER_HOUR = 1000 * 60 * 60;
     private static final int MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;

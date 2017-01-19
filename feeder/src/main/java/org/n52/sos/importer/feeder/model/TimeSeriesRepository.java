@@ -127,7 +127,7 @@ public class TimeSeriesRepository {
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(List<TimeSeries> timeseries) {
         LOG.trace("getUnitsOfMeasurement(...)");
-        final Map<ObservedProperty, String> unitsOfMeasurement = 
+        final Map<ObservedProperty, String> unitsOfMeasurement =
                 new HashMap<ObservedProperty, String>(timeseries.size());
         for (final TimeSeries ts : timeseries) {
             unitsOfMeasurement.put(ts.getObservedProperty(), ts.getUnitOfMeasurementCode());
@@ -137,7 +137,7 @@ public class TimeSeriesRepository {
 
     private Map<ObservedProperty, String> getMeasuredValueTypes(List<TimeSeries> timeseries) {
         LOG.trace("getMeasuredValueTypes(...)");
-        final Map<ObservedProperty, String> measuredValueTypes = 
+        final Map<ObservedProperty, String> measuredValueTypes =
                 new HashMap<ObservedProperty, String>(timeseries.size());
         for (final TimeSeries ts : timeseries) {
             measuredValueTypes.put(ts.getObservedProperty(), ts.getMeasuredValueType());

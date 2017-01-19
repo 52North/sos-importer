@@ -39,10 +39,10 @@ public class InsertObservationTest {
     @Test public void
     shouldReturnTrueIfAltitudeIsAvailable() {
         final double alt = 2.0;
-        final FeatureOfInterest foi = 
+        final FeatureOfInterest foi =
                 new FeatureOfInterest(null, null,
                         new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
-        final InsertObservation insertObservation = 
+        final InsertObservation insertObservation =
                 new InsertObservation(null, foi, null, null, null, null, null, null);
         org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(true));
         org.junit.Assert.assertThat(insertObservation.getAltitudeValue(), org.hamcrest.CoreMatchers.is(alt));
@@ -50,7 +50,7 @@ public class InsertObservationTest {
 
     @Test public void
     shouldReturnFalseIfAltitudeIsNotAvailable() {
-        final FeatureOfInterest foi = 
+        final FeatureOfInterest foi =
                 new FeatureOfInterest(null, null,
                         new Position(
                                 new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},

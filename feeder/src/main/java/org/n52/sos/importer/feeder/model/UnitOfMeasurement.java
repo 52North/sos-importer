@@ -45,7 +45,7 @@ public class UnitOfMeasurement extends Resource {
     public UnitOfMeasurement(String code, String uri) {
         super(code, uri);
     }
-    
+
     /**
      * <p>getCode.</p>
      *
