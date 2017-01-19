@@ -75,7 +75,13 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-public class FeatureOfInterest extends Resource implements Comparable<FeatureOfInterest>{
+
+public class FeatureOfInterest extends Resource implements Comparable<FeatureOfInterest> {
+
+    private static final String FROM = " from ";
+    private static final String UNASSIGN = "Unassign ";
+    private static final String TO = " to ";
+    private static final String ASSIGN = "Assign ";
 
     private static final Logger logger = LoggerFactory.getLogger(FeatureOfInterest.class);
 
@@ -83,7 +89,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     private Position position;
 
     /** corresponding positions for each feature of interest in this column/row */
-    private final HashMap<String,Position> positions = new HashMap<String, Position>();
+    private final HashMap<String, Position> positions = new HashMap<String, Position>();
 
     /** {@inheritDoc} */
     @Override
@@ -195,11 +201,11 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     /**
      * <p>assignPosition.</p>
      *
-     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     * @param newPosition a {@link org.n52.sos.importer.model.position.Position} object.
      */
-    public void assignPosition(final Position position) {
-        logger.info("Assign " + position + " to " + this);
-        setPosition(position);
+    public void assignPosition(final Position newPosition) {
+        logger.info(ASSIGN + newPosition + TO + this);
+        setPosition(newPosition);
     }
 
     /**
@@ -207,7 +213,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
      */
     public void unassignPosition() {
         if (position != null) {
-            logger.info("Unassign " + position + " from " + this);
+            logger.info(UNASSIGN + position + FROM + this);
             setPosition(null);
         }
     }
@@ -216,11 +222,11 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
      * <p>setPositionFor.</p>
      *
      * @param featureOfInterestName a {@link java.lang.String} object.
-     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     * @param newPosition a {@link org.n52.sos.importer.model.position.Position} object.
      */
-    public void setPositionFor(final String featureOfInterestName, final Position position) {
-        logger.info("Assign " + position + " to " + featureOfInterestName);
-        positions.put(featureOfInterestName, position);
+    public void setPositionFor(final String featureOfInterestName, final Position newPosition) {
+        logger.info(ASSIGN + newPosition + TO + featureOfInterestName);
+        positions.put(featureOfInterestName, newPosition);
     }
 
     /**
@@ -231,7 +237,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     public void removePositionFor(final String featureOfInterestName) {
         final Position p = getPositionFor(featureOfInterestName);
         if (p != null) {
-            logger.info("Unassign " + p + " from " + featureOfInterestName);
+            logger.info(UNASSIGN + p + FROM + featureOfInterestName);
         }
         positions.remove(featureOfInterestName);
     }

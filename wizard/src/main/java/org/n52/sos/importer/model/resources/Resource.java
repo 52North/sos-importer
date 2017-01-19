@@ -71,25 +71,36 @@ public abstract class Resource extends Component {
      *
      * @param name a {@link java.lang.String} object.
      */
-    public void setName(final String name) { this.name = name; }
+    public void setName(final String name) {
+        this.name = name;
+    }
+    
     /**
      * <p>Getter for the field <code>name</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
+    
     /**
      * <p>setURI.</p>
      *
-     * @param uri a {@link java.net.URI} object.
+     * @param newUri a {@link java.net.URI} object.
      */
-    public void setURI(final URI uri) { this.uri = uri; }
+    public void setURI(final URI newUri) {
+        this.uri = newUri;
+    }
+    
     /**
      * <p>getURI.</p>
      *
      * @return a {@link java.net.URI} object.
      */
-    public URI getURI() { return uri; }
+    public URI getURI() {
+        return uri;
+    }
 
     /**
      * XML prefix for resources.
@@ -262,6 +273,7 @@ public abstract class Resource extends Component {
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());
         return result;
     }
+    
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -301,6 +313,7 @@ public abstract class Resource extends Component {
         }
         return true;
     }
+    
     /**
      * <p>Getter for the field <code>uriPrefix</code>.</p>
      *
@@ -309,6 +322,7 @@ public abstract class Resource extends Component {
     public String getUriPrefix() {
         return uriPrefix;
     }
+    
     /**
      * <p>Setter for the field <code>uriPrefix</code>.</p>
      *
@@ -317,6 +331,7 @@ public abstract class Resource extends Component {
     public void setUriPrefix(final String uriPrefix) {
         this.uriPrefix = uriPrefix;
     }
+    
     /**
      * <p>Getter for the field <code>relatedCols</code>.</p>
      *
@@ -325,6 +340,7 @@ public abstract class Resource extends Component {
     public TableElement[] getRelatedCols() {
         return relatedCols;
     }
+    
     /**
      * <p>Setter for the field <code>relatedCols</code>.</p>
      *
@@ -333,6 +349,7 @@ public abstract class Resource extends Component {
     public void setRelatedCols(final TableElement[] relatedCols) {
         this.relatedCols = relatedCols;
     }
+    
     /**
      * <p>Getter for the field <code>concatString</code>.</p>
      *
@@ -341,6 +358,7 @@ public abstract class Resource extends Component {
     public String getConcatString() {
         return concatString;
     }
+    
     /**
      * <p>Setter for the field <code>concatString</code>.</p>
      *
@@ -349,6 +367,7 @@ public abstract class Resource extends Component {
     public void setConcatString(final String concatString) {
         this.concatString = concatString;
     }
+    
     /**
      * <p>isUseNameAfterPrefixAsURI.</p>
      *
@@ -357,6 +376,7 @@ public abstract class Resource extends Component {
     public boolean isUseNameAfterPrefixAsURI() {
         return useNameAfterPrefixAsURI;
     }
+    
     /**
      * <p>Setter for the field <code>useNameAfterPrefixAsURI</code>.</p>
      *
@@ -365,6 +385,7 @@ public abstract class Resource extends Component {
     public void setUseNameAfterPrefixAsURI(final boolean useNameAfterPrefixAsURI) {
         this.useNameAfterPrefixAsURI = useNameAfterPrefixAsURI;
     }
+    
     /**
      * If <code>true</code> this Resource is generated from other elements
      * contained in the data file.
@@ -374,6 +395,7 @@ public abstract class Resource extends Component {
     public boolean isGenerated() {
         return generated;
     }
+    
     /**
      * <p>Setter for the field <code>generated</code>.</p>
      *
@@ -382,6 +404,4 @@ public abstract class Resource extends Component {
     public void setGenerated(final boolean generated) {
         this.generated = generated;
     }
-
-
 }

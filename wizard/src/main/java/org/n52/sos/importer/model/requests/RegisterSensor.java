@@ -121,10 +121,10 @@ public class RegisterSensor {
     /**
      * <p>setFeatureOfInterstName.</p>
      *
-     * @param foiName a {@link java.lang.String} object.
+     * @param newFoiName a {@link java.lang.String} object.
      */
-    public void setFeatureOfInterstName(String foiName) {
-        this.foiName = foiName;
+    public void setFeatureOfInterstName(String newFoiName) {
+        this.foiName = newFoiName;
     }
 
     /**

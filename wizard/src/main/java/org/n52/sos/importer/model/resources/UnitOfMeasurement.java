@@ -70,6 +70,7 @@ import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class UnitOfMeasurement extends Resource {
 
     /** {@inheritDoc} */
