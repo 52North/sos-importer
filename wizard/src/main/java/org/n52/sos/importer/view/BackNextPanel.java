@@ -46,11 +46,11 @@ import org.n52.sos.importer.view.i18n.Lang;
  * @author Raimund
  * @version $Id: $Id
  */
-public class BackNextPanel extends JPanel {
+public final class BackNextPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private static BackNextPanel instance = null;
+    private static BackNextPanel instance;
 
     private JButton back;
     private JButton next;
@@ -58,10 +58,10 @@ public class BackNextPanel extends JPanel {
 
     private BackNextPanel() {
         super();
-        if(Constants.isGuiDebug()) {
+        if (Constants.isGuiDebug()) {
             setBorder(Constants.DEBUG_BORDER);
         }
-        GridLayout layout = new GridLayout(1,3);
+        GridLayout layout = new GridLayout(1, 3);
         setLayout(layout);
         /*
          *  BACK button on the left

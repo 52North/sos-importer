@@ -56,6 +56,11 @@ import org.slf4j.LoggerFactory;
  */
 public class MainFrame extends JFrame {
 
+    /**
+     * 
+     */
+    private static final String AQUOT = "\"";
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
@@ -108,28 +113,26 @@ public class MainFrame extends JFrame {
     }
 
     private void initLookAndFeel() {
-        //
         // try to set system look and feel, to nothing on error, should use
         // some default look and feel than.
         String lookNFeelClassName = "";
+        final String errorMessage = "System Look and Feel could not be set to \"";
         try {
             lookNFeelClassName = UIManager.getSystemLookAndFeelClassName();
             UIManager.setLookAndFeel(lookNFeelClassName);
         } catch (final ClassNotFoundException e) {
-            logger.error("System Look and Feel could not be set to \"" +
-                    lookNFeelClassName + "\". Class not found.",e);
+            logger.error(errorMessage +
+                    lookNFeelClassName + "\". Class not found.", e);
         } catch (final InstantiationException e) {
-            logger.error("System Look and Feel could not be set to \"" +
-                    lookNFeelClassName + "\". Could not instantiate class.",e);
+            logger.error(errorMessage +
+                    lookNFeelClassName + "\". Could not instantiate class.", e);
         } catch (final IllegalAccessException e) {
-            logger.error("System Look and Feel could not be set to \"" +
-                    lookNFeelClassName + "\"",e);
+            logger.error(errorMessage +
+                    lookNFeelClassName + AQUOT, e);
         } catch (final UnsupportedLookAndFeelException e) {
-            logger.error("System Look and Feel could not be set to \"" +
-                    lookNFeelClassName + "\"",e);
+            logger.error(errorMessage +
+                    lookNFeelClassName + AQUOT, e);
         }
-        //
-        //
     }
 
     /**
@@ -162,35 +165,16 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private class WindowChanged implements WindowListener {
-        @Override
-        public void windowClosing(final WindowEvent arg0) {
-            mainController.exit();
-        }
-        @Override
-        public void windowDeactivated(final WindowEvent arg0) {}
-        @Override
-        public void windowDeiconified(final WindowEvent arg0) {}
-        @Override
-        public void windowIconified(final WindowEvent arg0) {}
-        @Override
-        public void windowOpened(final WindowEvent arg0) {}
-        @Override
-        public void windowActivated(final WindowEvent arg0) {}
-        @Override
-        public void windowClosed(final WindowEvent arg0) {}
-    }
-
     /**
      * <p>updateTitle.</p>
      *
      * @param csvFilePath a {@link java.lang.String} object.
      */
     public void updateTitle(final String csvFilePath) {
-        final int endOfPath = csvFilePath.lastIndexOf(File.separatorChar)+1;
+        final int endOfPath = csvFilePath.lastIndexOf(File.separatorChar) + 1;
         final String file = csvFilePath.substring(endOfPath);
-        final String path = csvFilePath.substring(0,endOfPath);
-        final String newTitle = frameTitle + Lang.l().frameTitleExtension(file,path);
+        final String path = csvFilePath.substring(0, endOfPath);
+        final String newTitle = frameTitle + Lang.l().frameTitleExtension(file, path);
         setTitle(newTitle);
     }
 
@@ -199,5 +183,30 @@ public class MainFrame extends JFrame {
     public void repaint() {
         backNextPanel.repaint();
         super.repaint();
+    }
+
+    private class WindowChanged implements WindowListener {
+        @Override
+        public void windowClosing(final WindowEvent arg0) {
+            mainController.exit();
+        }
+        
+        @Override
+        public void windowDeactivated(final WindowEvent arg0) {}
+        
+        @Override
+        public void windowDeiconified(final WindowEvent arg0) {}
+        
+        @Override
+        public void windowIconified(final WindowEvent arg0) {}
+        
+        @Override
+        public void windowOpened(final WindowEvent arg0) {}
+        
+        @Override
+        public void windowActivated(final WindowEvent arg0) {}
+        
+        @Override
+        public void windowClosed(final WindowEvent arg0) {}
     }
 }

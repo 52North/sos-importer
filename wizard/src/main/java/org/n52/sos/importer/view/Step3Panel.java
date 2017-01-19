@@ -96,7 +96,14 @@ public class Step3Panel extends JPanel {
         columnTypeRadioButtonPanel.getContainerPanel().add(columnTypeRadioButtonPanel);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.setBorder(new TitledBorder(null, Lang.l().column().substring(0,1).toUpperCase() + Lang.l().column().substring(1) + " " + Lang.l().metadata(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        buttonPanel.setBorder(new TitledBorder(null,
+                Lang.l().column().substring(0, 1).toUpperCase() 
+                + Lang.l().column().substring(1) + " " 
+                        + Lang.l().metadata(),
+                        TitledBorder.LEADING,
+                        TitledBorder.TOP,
+                        null,
+                        null));
         buttonPanel.add(columnTypeJP);
         buttonPanel.add(columnSubTypeJP);
         buttonPanel.add(columnSubTypeMetadataJP);
@@ -164,16 +171,28 @@ public class Step3Panel extends JPanel {
          * column type
          * @param firstLineWithData required for the test parsing results
          */
-        public ColumnTypePanel(int firstLineWithData) {
+        ColumnTypePanel(int firstLineWithData) {
             super(columnTypeJP);
             addRadioButton(Lang.l().step3ColTypeDoNotExport());
-            addRadioButton(Lang.l().step3ColTypeMeasuredValue(), ToolTips.get(ToolTips.MEASURED_VALUE), new MeasuredValuePanel(firstLineWithData));
-            addRadioButton(Lang.l().step3ColTypeDateTime(), ToolTips.get(ToolTips.DATE_AND_TIME), new DateAndTimePanel(firstLineWithData));
+            addRadioButton(Lang.l().step3ColTypeMeasuredValue(),
+                    ToolTips.get(ToolTips.MEASURED_VALUE),
+                    new MeasuredValuePanel(firstLineWithData));
+            addRadioButton(Lang.l().step3ColTypeDateTime(),
+                    ToolTips.get(ToolTips.DATE_AND_TIME),
+                    new DateAndTimePanel(firstLineWithData));
             addRadioButton(Lang.l().position(), ToolTips.get(ToolTips.POSITION), new PositionPanel(firstLineWithData));
-            addRadioButton(Lang.l().featureOfInterest(), ToolTips.get(ToolTips.FEATURE_OF_INTEREST), new ResourceSelectionPanel(columnSubTypeJP, new FeatureOfInterest()));
-            addRadioButton(Lang.l().observedProperty(), ToolTips.get(ToolTips.OBSERVED_PROPERTY), new ResourceSelectionPanel(columnSubTypeJP, new ObservedProperty()));
-            addRadioButton(Lang.l().unitOfMeasurement(), ToolTips.get(ToolTips.UNIT_OF_MEASUREMENT), new ResourceSelectionPanel(columnSubTypeJP, new UnitOfMeasurement()));
-            addRadioButton(Lang.l().sensor(), ToolTips.get(ToolTips.SENSOR), new ResourceSelectionPanel(columnSubTypeJP, new Sensor()));
+            addRadioButton(Lang.l().featureOfInterest(),
+                    ToolTips.get(ToolTips.FEATURE_OF_INTEREST),
+                    new ResourceSelectionPanel(columnSubTypeJP, new FeatureOfInterest()));
+            addRadioButton(Lang.l().observedProperty(),
+                    ToolTips.get(ToolTips.OBSERVED_PROPERTY),
+                    new ResourceSelectionPanel(columnSubTypeJP, new ObservedProperty()));
+            addRadioButton(Lang.l().unitOfMeasurement(),
+                    ToolTips.get(ToolTips.UNIT_OF_MEASUREMENT),
+                    new ResourceSelectionPanel(columnSubTypeJP, new UnitOfMeasurement()));
+            addRadioButton(Lang.l().sensor(),
+                    ToolTips.get(ToolTips.SENSOR),
+                    new ResourceSelectionPanel(columnSubTypeJP, new Sensor()));
         }
 
         private class MeasuredValuePanel extends RadioButtonPanel {
@@ -184,12 +203,22 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the measure value type
              * @param firstLineWithData required for the test parsing results
              */
-            public MeasuredValuePanel(int firstLineWithData) {
+            MeasuredValuePanel(int firstLineWithData) {
                 super(columnSubTypeJP);
-                addRadioButton(Lang.l().step3MeasuredValNumericValue(), ToolTips.get(ToolTips.NUMERIC_VALUE), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new NumericValue(), firstLineWithData));
-                addRadioButton(Lang.l().step3MeasuredValCount(), ToolTips.get(ToolTips.COUNT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(),firstLineWithData));
-                addRadioButton(Lang.l().step3MeasuredValBoolean(), ToolTips.get(ToolTips.BOOLEAN), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(),firstLineWithData));
-                addRadioButton(Lang.l().step3MeasuredValText(), ToolTips.get(ToolTips.TEXT), new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Text(),firstLineWithData));
+                addRadioButton(Lang.l().step3MeasuredValNumericValue(),
+                        ToolTips.get(ToolTips.NUMERIC_VALUE),
+                        new MeasuredValueSelectionPanel(columnSubTypeMetadataJP,
+                                new NumericValue(),
+                                firstLineWithData));
+                addRadioButton(Lang.l().step3MeasuredValCount(),
+                        ToolTips.get(ToolTips.COUNT),
+                        new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Count(), firstLineWithData));
+                addRadioButton(Lang.l().step3MeasuredValBoolean(),
+                        ToolTips.get(ToolTips.BOOLEAN),
+                        new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Boolean(), firstLineWithData));
+                addRadioButton(Lang.l().step3MeasuredValText(),
+                        ToolTips.get(ToolTips.TEXT),
+                        new MeasuredValueSelectionPanel(columnSubTypeMetadataJP, new Text(), firstLineWithData));
             }
         }
 
@@ -201,7 +230,7 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the date time type
              * @param firstLineWithData required for the test parsing results
              */
-            public DateAndTimePanel(int firstLineWithData) {
+            DateAndTimePanel(int firstLineWithData) {
                 super(columnSubTypeJP);
                 addRadioButton(
                         Lang.l().step3DateAndTimeCombination(),
@@ -222,7 +251,7 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the position type
              * @param firstLineWithData required for the test parsing results
              */
-            public PositionPanel(int firstLineWithData) {
+            PositionPanel(int firstLineWithData) {
                 super(columnSubTypeJP);
                 addRadioButton(
                         Lang.l().step3PositionCombination(),

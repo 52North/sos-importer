@@ -83,7 +83,7 @@ public class Step4Panel extends JPanel {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 1;
-        add(tablePanel,c);
+        add(tablePanel, c);
 
         JPanel panel = new JPanel();
         GridBagConstraints gbc_panel = new GridBagConstraints();

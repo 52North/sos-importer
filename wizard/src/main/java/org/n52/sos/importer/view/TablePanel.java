@@ -47,11 +47,11 @@ import org.n52.sos.importer.view.i18n.Lang;
  * @author Raimund
  * @version $Id: $Id
  */
-public class TablePanel extends JPanel {
+public final class TablePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private static TablePanel instance = null;
+    private static TablePanel instance;
 
     private final JTable table;
 
@@ -65,7 +65,8 @@ public class TablePanel extends JPanel {
         gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};*/
         setLayout(gridBagLayout);
         table = new JTable();
-        table.setPreferredScrollableViewportSize(new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT-450));
+        table.setPreferredScrollableViewportSize(
+                new Dimension(Constants.DIALOG_WIDTH - 100, Constants.DIALOG_HEIGHT - 450));
         table.setAutoscrolls(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         final JScrollPane scrollPane = new JScrollPane(table);

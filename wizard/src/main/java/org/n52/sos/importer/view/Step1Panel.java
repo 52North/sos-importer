@@ -77,15 +77,10 @@ import org.slf4j.LoggerFactory;
  * chooses a CSV file
  *
  * @author Raimund
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
  */
 public class Step1Panel extends JPanel {
-
-    private static final String DEFAULT_FILE_ENCODING = "utf-8";
-    static final long serialVersionUID = 1L;
-    private final Step1Controller step1Controller;
-
-    private final String[] feedingTypes = new String[]{Lang.l().step1FeedTypeCSV(), Lang.l().step1FeedTypeFTP()};
 
     // separation of type cases
     /** Constant <code>CSV_FILE=0</code> */
@@ -93,7 +88,18 @@ public class Step1Panel extends JPanel {
     /** Constant <code>FTP_FILE=1</code> */
     public static final int FTP_FILE = 1;
 
+    private static final String AQUOT = "\"";
+    private static final String REPETITIVE = "repetitive";
+    private static final String ONETIME = "onetime";
+    private static final String UTF_8 = "UTF-8";
+    private static final String DEFAULT_FILE_ENCODING = UTF_8;
     private static final Logger logger = LoggerFactory.getLogger(Step1Panel.class);
+    private static final long serialVersionUID = 1L;
+    private static final String WELCOME_RESOURCE_BUNDLE_NAME = "org.n52.sos.importer.html.welcome";
+    private static final ResourceBundle WELCOME_RESOURCE = ResourceBundle.getBundle(WELCOME_RESOURCE_BUNDLE_NAME);
+
+    private final String[] feedingTypes = new String[]{Lang.l().step1FeedTypeCSV(), Lang.l().step1FeedTypeFTP()};
+    private final Step1Controller step1Controller;
     private final JTextField csvFileTextField = new JTextField(25);
     private final JTextField jtfUrl = new JTextField();
     private final JTextField jtfUser = new JTextField();
@@ -104,11 +110,8 @@ public class Step1Panel extends JPanel {
     private final JComboBox<String> jcbChooseInputType = new JComboBox<String>(feedingTypes);
     private final Step1Panel _this = this;
     private final JPanel cardPanel = new JPanel(new CardLayout());
+
     private JComboBox<String> encodingCB;
-
-    private static final String welcomeResBunName = "org.n52.sos.importer.html.welcome"; //$NON-NLS-1$
-
-    private static final ResourceBundle welcomeRes = ResourceBundle.getBundle(welcomeResBunName);
 
     /**
      * <p>Constructor for Step1Panel.</p>
@@ -122,7 +125,7 @@ public class Step1Panel extends JPanel {
         final JPanel csvPanel = initCsvPanel();
         this.step1Controller = step1Controller;
 
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(languagePanel);
         add(csvPanel);
         add(welcomePanel);
@@ -226,17 +229,17 @@ public class Step1Panel extends JPanel {
         repetitiveFeed.add(jtfFilenameSchema, gbcInput);
 
         // feeding type chooser section
-        cardPanel.add(oneTimeFeed, "onetime");
-        cardPanel.add(repetitiveFeed, "repetitive");
+        cardPanel.add(oneTimeFeed, ONETIME);
+        cardPanel.add(repetitiveFeed, REPETITIVE);
 
         jcbChooseInputType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent ae) {
                 if (jcbChooseInputType.getSelectedIndex() == 0) {
-                    ((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
+                    ((CardLayout) cardPanel.getLayout()).show(cardPanel, ONETIME);
                     step1Controller.checkInputFileValue();
                 } else {
-                    ((CardLayout) cardPanel.getLayout()).show(cardPanel, "repetitive");
+                    ((CardLayout) cardPanel.getLayout()).show(cardPanel, REPETITIVE);
                     inputTyped();
                 }
             }
@@ -259,14 +262,15 @@ public class Step1Panel extends JPanel {
             final SortedMap<String, Charset> availableCharsets = Charset.availableCharsets();
             return availableCharsets.keySet();
         } catch (final Exception e) {
-            return Collections.singleton("UTF-8");
+            return Collections.singleton(UTF_8);
         }
     }
 
-    private int getIndexOfEncoding(String encodingName) {
+    private int getIndexOfEncoding(final String givenEncodingName) {
         int index = 0;
-        if (encodingName == null || encodingName.isEmpty()) {
-            encodingName = "UTF-8";
+        String encodingName = givenEncodingName;
+        if (givenEncodingName == null || givenEncodingName.isEmpty()) {
+            encodingName = UTF_8;
         }
         for (final String string : getCharsets()) {
             if (string.equalsIgnoreCase(encodingName)) {
@@ -283,7 +287,7 @@ public class Step1Panel extends JPanel {
      * @return a int.
      */
     public int getFeedingType() {
-        return (jcbChooseInputType.getSelectedIndex() == CSV_FILE)? CSV_FILE : FTP_FILE;
+        return (jcbChooseInputType.getSelectedIndex() == CSV_FILE) ? CSV_FILE : FTP_FILE;
     }
 
     /**
@@ -293,11 +297,11 @@ public class Step1Panel extends JPanel {
      */
     public void setFeedingType(final int feedingType) {
         if (feedingType == CSV_FILE) {
-            ((CardLayout) cardPanel.getLayout()).show(cardPanel, "onetime");
+            ((CardLayout) cardPanel.getLayout()).show(cardPanel, ONETIME);
             step1Controller.checkInputFileValue();
             jcbChooseInputType.setSelectedIndex(0);
         } else {
-            ((CardLayout) cardPanel.getLayout()).show(cardPanel, "repetitive");
+            ((CardLayout) cardPanel.getLayout()).show(cardPanel, REPETITIVE);
             inputTyped();
             jcbChooseInputType.setSelectedIndex(1);
         }
@@ -478,8 +482,8 @@ public class Step1Panel extends JPanel {
         jcb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final JComboBox<?> cb = (JComboBox<?>)e.getSource();
-                final Locale selectedLocale = (Locale)cb.getSelectedItem();
+                final JComboBox<?> cb = (JComboBox<?>) e.getSource();
+                final Locale selectedLocale = (Locale) cb.getSelectedItem();
                 Lang.setCurrentLocale(selectedLocale);
                 ToolTips.loadSettings();
                 // restart application drawing -> BUG 619
@@ -498,10 +502,10 @@ public class Step1Panel extends JPanel {
      * using a <code>JEditorPane</code>
      * {@link javax.swing.JEditorPane }
      */
-    private JScrollPane initWelcomePanel(){
+    private JScrollPane initWelcomePanel() {
         final JEditorPane pane  = new JEditorPane();
         final JScrollPane scrollPane = new JScrollPane(pane);
-        final String t = welcomeRes.getString(Constants.language());
+        final String t = WELCOME_RESOURCE.getString(Constants.language());
         //
         pane.setEditable(false);
         pane.setContentType(Constants.WELCOME_RES_CONTENT_TYPE);
@@ -514,34 +518,46 @@ public class Step1Panel extends JPanel {
             @Override
             public void hyperlinkUpdate(final HyperlinkEvent e) {
                 if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                      // try to start system browser with link
-                    if(Desktop.isDesktopSupported()) {
+                    // try to start system browser with link
+                    if (Desktop.isDesktopSupported()) {
                         try {
                             if (e.getURL() != null) {
                                 Desktop.getDesktop().browse(e.getURL().toURI());
                             }
                         } catch (final IOException e1) {
-                            final String error = "Could not start system browser with URL: \"" + e.getURL() + "\"";
+                            final String error = "Could not start system browser with URL: \"" + e.getURL() + AQUOT;
                             logger.error(error, e1);
-                            JOptionPane.showMessageDialog(_this, error, "Error Opening Browser", JOptionPane.ERROR_MESSAGE);
+                            showErrorDialog(error);
                         } catch (final URISyntaxException e1) {
-                            final String error = "Syntax error in URL: \"" + e.getURL() + "\"";
+                            final String error = "Syntax error in URL: \"" + e.getURL() + AQUOT;
                             logger.error(error, e1);
-                            JOptionPane.showMessageDialog(_this, error, "Error Opening Browser", JOptionPane.ERROR_MESSAGE);
+                            showErrorDialog(error);
                         }
                     }
                 }
+            }
+
+            private void showErrorDialog(final String error) {
+                JOptionPane.showMessageDialog(_this,
+                        error,
+                        "Error Opening Browser",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
         //
         //
         pane.setCaretPosition(0);
         //Put the editor pane in a scroll pane.
-        scrollPane.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH-20, 400));
+        scrollPane.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH - 20, 400));
         scrollPane.setAutoscrolls(true);
-        scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().step1Introduction(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"),
+                Lang.l().step1Introduction(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                new Color(0, 0, 0)));
         scrollPane.setWheelScrollingEnabled(true);
-        if(Constants.isGuiDebug()) {
+        if (Constants.isGuiDebug()) {
             scrollPane.setBorder(Constants.DEBUG_BORDER);
         }
         return scrollPane;

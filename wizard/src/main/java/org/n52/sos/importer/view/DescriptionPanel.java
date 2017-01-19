@@ -40,11 +40,11 @@ import org.n52.sos.importer.Constants;
  * @author Raimund
  * @version $Id: $Id
  */
-public class DescriptionPanel extends JPanel {
+public final class DescriptionPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private static DescriptionPanel instance = null;
+    private static DescriptionPanel instance;
 
     private final JLabel descriptionLabel = new JLabel();
 
@@ -64,8 +64,9 @@ public class DescriptionPanel extends JPanel {
      * @return a {@link org.n52.sos.importer.view.DescriptionPanel} object.
      */
     public static DescriptionPanel getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new DescriptionPanel();
+        }
         return instance;
     }
 

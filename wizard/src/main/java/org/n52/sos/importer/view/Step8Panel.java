@@ -119,7 +119,12 @@ public class Step8Panel extends JPanel {
 
     private JPanel initDirectImportPanel() {
         final JPanel directImportPanel = new JPanel();
-        directImportPanel.setBorder(new TitledBorder(null, Lang.l().step8DirectImportStartButton(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        directImportPanel.setBorder(new TitledBorder(null,
+                Lang.l().step8DirectImportStartButton(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
 
         final GridBagLayout gbl_directImportPanel = new GridBagLayout();
         gbl_directImportPanel.columnWidths = new int[] {700, 0, 0};
@@ -179,7 +184,12 @@ public class Step8Panel extends JPanel {
 
     private JPanel initConfigurationFilePanel(final Step7Model s7M) {
         final JPanel configurationFilePanel = new JPanel();
-        configurationFilePanel.setBorder(new TitledBorder(null, Lang.l().step7ConfigurationFile(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        configurationFilePanel.setBorder(new TitledBorder(null,
+                Lang.l().step7ConfigurationFile(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
 
         final GridBagLayout gbl_configurationFilePanel = new GridBagLayout();
         gbl_configurationFilePanel.columnWidths = new int[]{450, 0, 0};
@@ -232,7 +242,12 @@ public class Step8Panel extends JPanel {
 
     private JPanel initLogFilePanel() {
         final JPanel logfilePanel = new JPanel();
-        logfilePanel.setBorder(new TitledBorder(null, Lang.l().step8LogFile(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        logfilePanel.setBorder(new TitledBorder(null,
+                Lang.l().step8LogFile(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
 
         final GridBagLayout gbl_logfilePanel = new GridBagLayout();
         gbl_logfilePanel.columnWidths = new int[]{177, 95, 0};

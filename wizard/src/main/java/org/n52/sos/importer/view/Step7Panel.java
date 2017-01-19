@@ -74,7 +74,12 @@ import org.n52.sos.importer.view.utils.ToolTips;
  */
 public class Step7Panel extends JPanel {
 
-    private static final String[] SUPPORTED_SOS_VERSIONS = new String[] { "1.0.0","2.0.0" };
+    /**
+     * 
+     */
+    private static final String TITLED_BORDER_BORDER = "TitledBorder.border";
+
+    private static final String[] SUPPORTED_SOS_VERSIONS = new String[] { "1.0.0", "2.0.0" };
 
     private static final String[] SUPPORTED_BINDINGS = new String[] {"POX" };
 
@@ -131,7 +136,12 @@ public class Step7Panel extends JPanel {
      * <p>Constructor for Step7Panel.</p>
      */
     public Step7Panel() {
-        setBorder(new TitledBorder(null, "Sensor Observation Service", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        setBorder(new TitledBorder(null,
+                "Sensor Observation Service",
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         final GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[]{750, 0};
         gridBagLayout.rowHeights = new int[]{80, 0, 0, 43, 74, 0, 0};
@@ -221,7 +231,12 @@ public class Step7Panel extends JPanel {
         metaPanel.add(fillLabel);
 
         final JPanel importStrategyPanel = new JPanel();
-        importStrategyPanel.setBorder(new TitledBorder(null, Lang.l().step7ImportStrategyBorderLabel(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        importStrategyPanel.setBorder(new TitledBorder(null,
+                Lang.l().step7ImportStrategyBorderLabel(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         final GridBagConstraints gbc_importStrategyPanel = new GridBagConstraints();
         gbc_importStrategyPanel.insets = new Insets(0, 0, 5, 0);
         gbc_importStrategyPanel.fill = GridBagConstraints.BOTH;
@@ -335,7 +350,12 @@ public class Step7Panel extends JPanel {
         }
         tmp = tmp + configFileName;
         configFilePanel = new JPanel();
-        configFilePanel.setBorder(new TitledBorder(null, Lang.l().step7ConfigurationFile(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        configFilePanel.setBorder(new TitledBorder(null,
+                Lang.l().step7ConfigurationFile(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         final GridBagLayout gbl_configFilePanel = new GridBagLayout();
         gbl_configFilePanel.columnWidths = new int[] {50, 50, 0};
         gbl_configFilePanel.rowHeights = new int[]{23, 0, 0};
@@ -372,7 +392,7 @@ public class Step7Panel extends JPanel {
                 final JFileChooser fc = new JFileChooser();
                 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 if (fc.showDialog(Step7Panel.this, Lang.l().step7ConfigFileDialogTitel())
-                        == JFileChooser.APPROVE_OPTION){
+                        == JFileChooser.APPROVE_OPTION) {
                     if (fc.getSelectedFile().isDirectory() && fc.getSelectedFile().canWrite()) {
                         configFilePath  = fc.getSelectedFile().getAbsolutePath();
                         configFileSelectedFolderLabel.setText(configFilePath + File.separatorChar);
@@ -393,7 +413,7 @@ public class Step7Panel extends JPanel {
         configFileNameJT = new JTextField(50);
         configFileNameJT.setText(tmp);
 
-        configFileNameLabel = new JLabel(new StringBuffer().append(Lang.l().name().substring(0,1).toUpperCase())
+        configFileNameLabel = new JLabel(new StringBuffer().append(Lang.l().name().substring(0, 1).toUpperCase())
                 .append(Lang.l().name().substring(1)).
                 append(":").toString());
         configFileNameLabel.setLabelFor(configFileNameJT);
@@ -436,7 +456,12 @@ public class Step7Panel extends JPanel {
         offeringInputTextField.setVisible(false);
 
         offeringPanel = new JPanel();
-        offeringPanel.setBorder(new TitledBorder(null, Lang.l().offering(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        offeringPanel.setBorder(new TitledBorder(null,
+                Lang.l().offering(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         offeringPanel.setToolTipText(ToolTips.get(ToolTips.OFFERING));
         offeringPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
 
@@ -448,7 +473,12 @@ public class Step7Panel extends JPanel {
 
     private void initSosUrlPanel() {
         sosURLPanel = new JPanel();
-        sosURLPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().url(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        sosURLPanel.setBorder(new TitledBorder(UIManager.getBorder(TITLED_BORDER_BORDER),
+                Lang.l().url(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                new Color(0, 0, 0)));
         final GridBagLayout gbl_sosURLPanel = new GridBagLayout();
         gbl_sosURLPanel.columnWidths = new int[]{750, 0};
         gbl_sosURLPanel.rowHeights = new int[]{30, 0, 0};
@@ -475,7 +505,7 @@ public class Step7Panel extends JPanel {
     private void initSosVersionPanel() {
         metaPanel = new JPanel();
         metaPanel.setBorder(
-                new TitledBorder(UIManager.getBorder("TitledBorder.border"),
+                new TitledBorder(UIManager.getBorder(TITLED_BORDER_BORDER),
                         Lang.l().specificationVersion(),
                         TitledBorder.LEADING,
                         TitledBorder.TOP,
@@ -521,8 +551,8 @@ public class Step7Panel extends JPanel {
      */
     public void setConfigFile(final String configFile) {
         // split String by last index of File.separatorChar and save to fields
-        configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar)+1);
-        configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar)+1);
+        configFilePath = configFile.substring(0, configFile.lastIndexOf(File.separatorChar) + 1);
+        configFileName = configFile.substring(configFile.lastIndexOf(File.separatorChar) + 1);
     }
 
     /**
@@ -644,16 +674,16 @@ public class Step7Panel extends JPanel {
      */
     public Step7Panel setImportStrategy(final ImportStrategy importStrategy) {
         switch (importStrategy) {
-        case SweArrayObservationWithSplitExtension:
-            singleObservationRadioButton.setSelected(false);
-            sweArrayObservationBufferRadioButton.setSelected(true);
-            setVisibleSweArrayObservationStrategyGuiElements(true);
-            break;
-        default:
-            singleObservationRadioButton.setSelected(true);
-            sweArrayObservationBufferRadioButton.setSelected(false);
-            setVisibleSweArrayObservationStrategyGuiElements(false);
-            break;
+            case SweArrayObservationWithSplitExtension:
+                singleObservationRadioButton.setSelected(false);
+                sweArrayObservationBufferRadioButton.setSelected(true);
+                setVisibleSweArrayObservationStrategyGuiElements(true);
+                break;
+            default:
+                singleObservationRadioButton.setSelected(true);
+                sweArrayObservationBufferRadioButton.setSelected(false);
+                setVisibleSweArrayObservationStrategyGuiElements(false);
+                break;
         }
         return this;
     }
