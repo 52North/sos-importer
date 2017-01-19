@@ -105,6 +105,7 @@ import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
 import org.n52.sos.importer.view.utils.ToolTips;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public class MissingResourcePanel extends MissingComponentPanel {
 
     private static final long serialVersionUID = 1L;
@@ -134,9 +135,9 @@ public class MissingResourcePanel extends MissingComponentPanel {
         this.resource = resource;
         String name = Lang.l().name();
         final ModelStore ms = ModelStore.getInstance();
-        boolean disableManualInput = false,
-                disableGeneratedInput = false,
-                manualDefault = false;
+        boolean disableManualInput = false;
+        boolean disableGeneratedInput = false;
+        boolean manualDefault = false;
         final String[] columnHeadingsWithId = TableController.getInstance().getUsedColumnHeadingsWithId();
         final JPanel containerPanel = new JPanel();
         containerPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -144,8 +145,8 @@ public class MissingResourcePanel extends MissingComponentPanel {
         containerPanel.add(initGeneratedResPanel(columnHeadingsWithId));
         containerPanel.add(initManualResPanel(name));
 
-        add(initRadioButtonPanel(),BorderLayout.NORTH);
-        add(containerPanel,BorderLayout.CENTER);
+        add(initRadioButtonPanel(), BorderLayout.NORTH);
+        add(containerPanel, BorderLayout.CENTER);
 
         if (resource.getName() == null && !resource.isGenerated()) {
             if (resource instanceof FeatureOfInterest) {
@@ -159,15 +160,20 @@ public class MissingResourcePanel extends MissingComponentPanel {
                 final List<ObservedProperty> ops = ms.getObservedProperties();
                 name = Lang.l().code();
                 if (ops != null && ops.size() == 1) {
-                    // in the case of having one observed property column -> set generation as default (having table element of type Column set)
-                    // in the case of having one generated observed property -> set generation as default
+                    /* 
+                     * in the case of having one observed property column
+                     *  -> set generation as default (having table element of type Column set)
+                     *
+                     * in the case of having one generated observed property -> set generation as default
+                     */
                     final ObservedProperty op = ops.get(0);
-                    if (op.isGenerated()) {
-                        // disableManualInput = true;
-                        // generated is default!
-                    }
-                    // in the case of having one manual observed property -> disable generated (having no table element and generated set to false)
-                    else if (op.getTableElement() == null && !op.isGenerated()) {
+                    /*
+                     * disableManualInput = true;
+                     * generated is default!
+                     * in the case of having one manual observed property 
+                     * -> disable generated (having no table element and generated set to false)
+                     */
+                    if (op.getTableElement() == null && !op.isGenerated()) {
                         disableGeneratedInput = true;
                     }
                     // in the case of having no observed property -> can this happen?
@@ -180,13 +186,17 @@ public class MissingResourcePanel extends MissingComponentPanel {
                 if (fois != null && fois.size() == 1 && ops != null && ops.size() == 1) {
                     final FeatureOfInterest foi = fois.get(0);
                     final ObservedProperty op = ops.get(0);
-                    if (!foi.isGenerated() && foi.getTableElement() == null && !op.isGenerated() && op.getTableElement() == null) {
+                    if (!foi.isGenerated() &&
+                            foi.getTableElement() == null
+                            && !op.isGenerated() &&
+                            op.getTableElement() == null) {
                         disableGeneratedInput = true;
                     }
                 }
                 // else -> generated as default and manual as optional
             }
-        } else { // Case: Back button hit -> set values from resource
+            // Case: Back button hit -> set values from resource
+        } else {
             if (resource.isGenerated()) {
                 manualDefault = false;
                 // URI
@@ -269,7 +279,12 @@ public class MissingResourcePanel extends MissingComponentPanel {
         gbl_generatedResURIPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
         gbl_generatedResURIPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         final JPanel generatedResURIPanel = new JPanel();
-        generatedResURIPanel.setBorder(new TitledBorder(null, Lang.l().uri(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        generatedResURIPanel.setBorder(new TitledBorder(null,
+                Lang.l().uri(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         generatedResURIPanel.setToolTipText(ToolTips.get(ToolTips.URI));
         generatedResURIPanel.setLayout(gbl_generatedResURIPanel);
 
@@ -310,7 +325,12 @@ public class MissingResourcePanel extends MissingComponentPanel {
     private JPanel initGeneratedNamePanel(final String[] columnHeadingsWithId) {
         final JPanel generatedNamePanel = new JPanel();
         generatedNamePanel.setToolTipText(ToolTips.get(ToolTips.NAME));
-        generatedNamePanel.setBorder(new TitledBorder(null, Lang.l().name(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+        generatedNamePanel.setBorder(new TitledBorder(null,
+                Lang.l().name(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
         generatedNamePanel.setFont(Constants.DEFAULT_LABEL_FONT);
 
         final GridBagLayout gbl_generatedNamePanel = new GridBagLayout();
@@ -453,8 +473,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
     @Override
     public boolean checkValues() {
         // manual or generate selected
-        if (generatedResJRB.isSelected())
-        {
+        if (generatedResJRB.isSelected()) {
             /*
              * GENERATED
              *
@@ -469,17 +488,13 @@ public class MissingResourcePanel extends MissingComponentPanel {
             if (noUserInputAtAll(selectedColumns, uriOrPrefix, concatString)) {
                 showNoInputAtAllDialog();
                 return false;
-            }
-            else if (validUserInput(selectedColumns, uriOrPrefix)) {
+            } else if (validUserInput(selectedColumns, uriOrPrefix)) {
                 return true;
-            }
-            else {
+            } else {
                 showMissingInputDialog();
                 return false;
             }
-        }
-        else if (manualResInputJRB.isSelected())
-        {
+        } else if (manualResInputJRB.isSelected()) {
             /*
              * MANUAL
              *
@@ -490,7 +505,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
             final String name = manualResNameComboBox.getSelectedItem().toString().trim();
             final String uri = manualResUriComboBox.getSelectedItem().toString().trim();
 
-            if(!isUriValid(uri)) {
+            if (!isUriValid(uri)) {
                 return false;
             }
 
@@ -623,7 +638,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
         for (final Object obj : list) {
             if (obj instanceof String) {
                 final String s = (String) obj;
-                final int index = Integer.parseInt(s.substring(0,s.indexOf(":")));
+                final int index = Integer.parseInt(s.substring(0, s.indexOf(":")));
                 final Column c = new Column(index, fLWD);
                 result.add(c);
             }
@@ -636,11 +651,10 @@ public class MissingResourcePanel extends MissingComponentPanel {
         if (logger.isTraceEnabled()) {
             logger.trace("toURI()");
         }
-        uri = uri.trim();
         try {
-            return new URI(uri);
+            return new URI(uri.trim());
         } catch (final URISyntaxException e) {
-            logger.error("Given URI syntax not valid: " + uri, e);
+            logger.error("Given URI syntax not valid: '" + uri + "'", e);
         }
         return null;
     }

@@ -43,19 +43,14 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  * @version $Id: $Id
  */
-public class ToolTips {
+public final class ToolTips {
 
-    private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
-
-    private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips"; //$NON-NLS-1$
-
-    private static ResourceBundle res;
 
     /*
      * For the following keys tooltips are available
      */
-    /** Constant <code>CSV_File="CSVFile"</code> */
-    public static final String CSV_File = "CSVFile";
+    /** Constant <code>CSV_FILE="CSVFile"</code> */
+    public static final String CSV_FILE = "CSVFile";
     /** Constant <code>COLUMN_SEPARATOR="ColumnSeparator"</code> */
     public static final String COLUMN_SEPARATOR = "ColumnSeparator";
     /** Constant <code>COMMENT_INDICATOR="CommentIndicator"</code> */
@@ -113,6 +108,10 @@ public class ToolTips {
     /** Constant <code>OFFERING="Offering"</code> */
     public static final String OFFERING = "Offering";
 
+    private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
+    private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips";
+    private static ResourceBundle res;
+    
     private ToolTips() {}
 
     /**
@@ -132,7 +131,7 @@ public class ToolTips {
                         key +
                         "\" not found in resource bundle \""
                         + res
-                        + "\".",e);
+                        + "\".", e);
             return '!' + key + '!';
         }
     }

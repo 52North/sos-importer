@@ -52,10 +52,9 @@ import org.slf4j.LoggerFactory;
 public abstract class RadioButtonPanel extends SelectionPanel {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(RadioButtonPanel.class);
 
     protected ButtonGroup group = new ButtonGroup();
-
-    private static final Logger logger = LoggerFactory.getLogger(RadioButtonPanel.class);
 
     /**
      * <p>Constructor for RadioButtonPanel.</p>
@@ -110,7 +109,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
     public void setSelection(final String s) {
         ButtonModel m = null;
         final Enumeration<AbstractButton> e = group.getElements();
-        while(e.hasMoreElements()) {
+        while (e.hasMoreElements()) {
             final JRadioButton b = (JRadioButton) e.nextElement();
             if (s.equals(b.getText())) {
                 m = b.getModel();
@@ -132,7 +131,7 @@ public abstract class RadioButtonPanel extends SelectionPanel {
     @Override
     public String getSelection() {
         final Enumeration<AbstractButton> e = group.getElements();
-        while(e.hasMoreElements()) {
+        while (e.hasMoreElements()) {
             final JRadioButton b = (JRadioButton) e.nextElement();
             if (b.isSelected()) {
                 return b.getText();
@@ -154,9 +153,9 @@ public abstract class RadioButtonPanel extends SelectionPanel {
      * @author Raimund
      */
     private class AddChildPanel implements ActionListener {
-        SelectionPanel childPanel;
+        private SelectionPanel childPanel;
 
-        public AddChildPanel(final SelectionPanel childPanel) {
+        AddChildPanel(final SelectionPanel childPanel) {
             this.childPanel = childPanel;
         }
 

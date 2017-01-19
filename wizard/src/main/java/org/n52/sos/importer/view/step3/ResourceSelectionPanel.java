@@ -85,12 +85,12 @@ public class ResourceSelectionPanel extends SelectionPanel {
     @Override
     public void unAssign(TableElement tableElement) {
         Resource resourceToRemove = null;
-        for (Resource r: resource.getList())
+        for (Resource r: resource.getList()) {
             if (tableElement.equals(r.getTableElement())) {
                 resourceToRemove = r;
                 break;
             }
-
+        }
         ModelStore.getInstance().remove(resourceToRemove);
     }
 }

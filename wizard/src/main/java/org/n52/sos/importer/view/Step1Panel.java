@@ -169,7 +169,7 @@ public class Step1Panel extends JPanel {
         oneTimeFeed.add(encodingLabel, gbcOneTimeFeed);
         gbcOneTimeFeed.gridx = 1;
         oneTimeFeed.add(encodingCB, gbcOneTimeFeed);
-        csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_File));
+        csvFileTextField.setToolTipText(ToolTips.get(ToolTips.CSV_FILE));
 
         // repetitive feed
         final RepetitiveFeedKeyListener keyListener = new RepetitiveFeedKeyListener();

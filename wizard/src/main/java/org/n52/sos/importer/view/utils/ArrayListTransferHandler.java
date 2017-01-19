@@ -91,19 +91,23 @@ public class ArrayListTransferHandler extends TransferHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ArrayListTransferHandler.class);
 
-    DataFlavor localArrayListFlavor, serialArrayListFlavor;
+    private DataFlavor localArrayListFlavor;
+    
+    private DataFlavor serialArrayListFlavor;
 
-    String localArrayListType = DataFlavor.javaJVMLocalObjectMimeType
+    private String localArrayListType = DataFlavor.javaJVMLocalObjectMimeType
             + ";class=java.util.ArrayList";
 
     @SuppressWarnings("rawtypes")
-    JList source = null;
+    private JList source;
 
-    int[] indices = null;
+    private int[] indices;
 
-    int addIndex = -1; //Location where items were added
+    //Location where items were added
+    private int addIndex = -1;
 
-    int addCount = 0; //Number of items added
+    //Number of items added
+    private int addCount; 
 
     /**
      * <p>Constructor for ArrayListTransferHandler.</p>
@@ -138,10 +142,10 @@ public class ArrayListTransferHandler extends TransferHandler {
                 return false;
             }
         } catch (final UnsupportedFlavorException ufe) {
-            logger.error("importData: unsupported data flavor",ufe);
+            logger.error("importData: unsupported data flavor", ufe);
             return false;
         } catch (final IOException ioe) {
-            logger.error("importData: I/O exception",ioe);
+            logger.error("importData: I/O exception", ioe);
             return false;
         }
 
@@ -278,7 +282,7 @@ public class ArrayListTransferHandler extends TransferHandler {
     }
 
     public class ArrayListTransferable implements Transferable {
-        ArrayList<?> data;
+        private ArrayList<?> data;
 
         public ArrayListTransferable(final ArrayList<?> alist) {
             data = alist;
@@ -296,7 +300,7 @@ public class ArrayListTransferHandler extends TransferHandler {
         @Override
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[] { localArrayListFlavor,
-                    serialArrayListFlavor };
+                serialArrayListFlavor, };
         }
 
         @Override

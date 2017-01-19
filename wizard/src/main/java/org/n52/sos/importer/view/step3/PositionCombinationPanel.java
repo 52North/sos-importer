@@ -118,11 +118,11 @@ public class PositionCombinationPanel extends CombinationPanel {
         String pattern = part[0];
         String group = part[1];
 
-        Position position = new Position();
-        position.setGroup(group);
-        PositionController pc = new PositionController(position);
+        Position newPosition = new Position();
+        newPosition.setGroup(group);
+        PositionController pc = new PositionController(newPosition);
         pc.assignPattern(pattern, tableElement);
-        ModelStore.getInstance().add(position);
+        ModelStore.getInstance().add(newPosition);
     }
 
     /** {@inheritDoc} */
@@ -136,9 +136,9 @@ public class PositionCombinationPanel extends CombinationPanel {
             EPSGCode epsg = p.getEPSGCode();
 
             if ((lat != null && tableElement.equals(lat.getTableElement())) ||
-                (lon != null && tableElement.equals(lon.getTableElement())) ||
-                (alt != null && tableElement.equals(alt.getTableElement())) ||
-                (epsg != null && tableElement.equals(epsg.getTableElement()))) {
+                    (lon != null && tableElement.equals(lon.getTableElement())) ||
+                    (alt != null && tableElement.equals(alt.getTableElement())) ||
+                    (epsg != null && tableElement.equals(epsg.getTableElement()))) {
                 positionToRemove = p;
                 break;
             }

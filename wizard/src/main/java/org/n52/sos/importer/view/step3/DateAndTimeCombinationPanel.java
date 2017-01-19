@@ -71,7 +71,7 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
      */
     public DateAndTimeCombinationPanel(JPanel containerPanel,
             int firstLineWithData) {
-        super(containerPanel,firstLineWithData);
+        super(containerPanel, firstLineWithData);
         this.dateAndTime = new DateAndTime();
     }
 
@@ -143,12 +143,12 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
             TimeZone timeZone = dtm.getTimeZone();
 
             if ((second != null && tableElement.equals(second.getTableElement())) ||
-                (minute != null && tableElement.equals(minute.getTableElement())) ||
-                (hour != null && tableElement.equals(hour.getTableElement())) ||
-                (day != null && tableElement.equals(day.getTableElement())) ||
-                (month != null && tableElement.equals(month.getTableElement())) ||
-                (year != null && tableElement.equals(year.getTableElement())) ||
-                (timeZone != null && tableElement.equals(timeZone.getTableElement()))) {
+                    (minute != null && tableElement.equals(minute.getTableElement())) ||
+                    (hour != null && tableElement.equals(hour.getTableElement())) ||
+                    (day != null && tableElement.equals(day.getTableElement())) ||
+                    (month != null && tableElement.equals(month.getTableElement())) ||
+                    (year != null && tableElement.equals(year.getTableElement())) ||
+                    (timeZone != null && tableElement.equals(timeZone.getTableElement()))) {
                 dateAndTimeToRemove = dtm;
                 break;
             }

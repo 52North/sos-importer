@@ -57,10 +57,10 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
      * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
      * @param firstLineWithData a int.
      */
-    public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue,int firstLineWithData) {
+    public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue, int firstLineWithData) {
         super(containerPanel);
         this.measuredValue = measuredValue;
-        parseTestLabel = new ParseTestLabel(measuredValue,firstLineWithData);
+        parseTestLabel = new ParseTestLabel(measuredValue, firstLineWithData);
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
         this.add(parseTestLabel);
     }
@@ -71,7 +71,9 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
 
     /** {@inheritDoc} */
     @Override
-    protected String getSelection() { return "0"; }
+    protected String getSelection() {
+        return "0";
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -95,12 +97,12 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
     @Override
     public void unAssign(TableElement tableElement) {
         MeasuredValue measuredValueToRemove = null;
-        for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
+        for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
             if (tableElement.equals(mv.getTableElement())) {
                 measuredValueToRemove = mv;
                 break;
             }
-
+        }
         ModelStore.getInstance().remove(measuredValueToRemove);
     }
 }

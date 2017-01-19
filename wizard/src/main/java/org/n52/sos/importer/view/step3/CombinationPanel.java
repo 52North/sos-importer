@@ -84,11 +84,11 @@ public abstract class CombinationPanel extends SelectionPanel {
      * @param containerPanel a {@link javax.swing.JPanel} object.
      * @param firstLineWithData a int.
      */
-    public CombinationPanel(final JPanel containerPanel,final int firstLineWithData) {
+    public CombinationPanel(final JPanel containerPanel, final int firstLineWithData) {
         super(containerPanel);
 
-        parseTestLabel = new ParseTestLabel(getCombination(),firstLineWithData);
-        patternComboBox= new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
+        parseTestLabel = new ParseTestLabel(getCombination(), firstLineWithData);
+        patternComboBox = new EditableJComboBoxPanel(getPatterns(), Lang.l().format(), getPatternToolTip());
         exampleFormatLabel =  new ExampleFormatLabel(getCombination());
         patternComboBox.addActionListener(new FormatChanged());
         groupComboBox.setToolTipText(getGroupToolTip());
@@ -98,12 +98,13 @@ public abstract class CombinationPanel extends SelectionPanel {
         formatPanel.add(patternComboBox);
 
         final JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        groupLabel = new JLabel(Lang.l().group() + ": ");
+        final String colon = ": ";
+        groupLabel = new JLabel(Lang.l().group() + colon);
         groupPanel.add(groupLabel);
         groupPanel.add(groupComboBox);
 
         final JPanel examplePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        exampleLabel = new JLabel(Lang.l().example() + ": ");
+        exampleLabel = new JLabel(Lang.l().example() + colon);
         examplePanel.add(exampleLabel);
         examplePanel.add(exampleFormatLabel);
 

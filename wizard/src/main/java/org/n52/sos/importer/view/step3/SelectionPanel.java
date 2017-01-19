@@ -115,8 +115,9 @@ public abstract class SelectionPanel extends JPanel {
     public void restoreDefault() {
         setDefaultSelection();
 
-        for (SelectionPanel sp: childPanels.values())
+        for (SelectionPanel sp: childPanels.values()) {
             sp.restoreDefault();
+        }
     }
 
     /**
@@ -136,8 +137,9 @@ public abstract class SelectionPanel extends JPanel {
         selections.add(s);
         // ask my child panels if one is
         SelectionPanel childPanel = childPanels.get(s);
-        if (childPanel != null)
+        if (childPanel != null) {
             childPanel.store(selections);
+        }
     }
 
     /**
@@ -208,8 +210,9 @@ public abstract class SelectionPanel extends JPanel {
     public void removeFromContainerPanel() {
         getContainerPanel().removeAll();
 
-        for (SelectionPanel sp: childPanels.values())
+        for (SelectionPanel sp: childPanels.values()) {
             sp.removeFromContainerPanel();
+        }
     }
 
     /**

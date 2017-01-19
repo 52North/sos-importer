@@ -51,13 +51,13 @@ import org.slf4j.LoggerFactory;
  */
 public class ParseTestLabel extends JLabel {
 
+    private static final String STRING = "].";
+    private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
     private static final long serialVersionUID = 1L;
 
     private final Parseable parser;
 
-    private int firstLineWithData = 0;
-
-    private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
+    private int firstLineWithData;
 
     private final ParseTestLabel _this;
 
@@ -85,26 +85,30 @@ public class ParseTestLabel extends JLabel {
     /**
      * <p>parseValues.</p>
      *
-     * @param values a {@link java.util.List} object.
+     * @param valuesToParse a {@link java.util.List} object.
      */
-    public void parseValues(final List<String> values) {
+    public void parseValues(final List<String> valuesToParse) {
         if (logger.isTraceEnabled()) {
-            logger.trace("[" + hashCode() + "]." +
+            logger.trace("[" + hashCode() + STRING +
                     "parseValues()");
         }
         setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
                 "</u></html>");
-        this.values = values;
+        this.values = valuesToParse;
         BackNextController.getInstance().setNextButtonEnabled(false);
         // call invokeLater()
         SwingUtilities.invokeLater(parserThread);
     }
 
-    private class ParserThread implements Runnable{
+    private class ParserThread implements Runnable {
+        
+        private static final String HTML_CLOSE = "</html>";
+        private static final String HTML_OPEN = "<html>";
+
         @Override
         public void run() {
             if (logger.isTraceEnabled()) {
-                logger.trace("[" + hashCode() + "]." +
+                logger.trace("[" + hashCode() + STRING +
                         "run() <- parsing values ###########################################################");
             }
             int notParseableValues = 0;
@@ -113,13 +117,13 @@ public class ParseTestLabel extends JLabel {
             String text = "";
             final Set<String> notParseableStrings = new HashSet<String>();
             //
-            notParseable.append("<html>");
+            notParseable.append(HTML_OPEN);
             // do the test parsing
             for (final String value: values) {
-                if(currentLine >= firstLineWithData) {
+                if (currentLine >= firstLineWithData) {
                     try {
                         parser.parse(value);
-                    } catch (final Exception e) { // $codepro.audit.disable
+                    } catch (final Exception e) {
                         if (notParseableStrings.add(value)) {
                             notParseable.append(value + "<br>");
                         }
@@ -143,8 +147,8 @@ public class ParseTestLabel extends JLabel {
                 text = Lang.l().step3aParseTestNFailed(notParseableValues);
                 _this.setForeground(Color.red);
             }
-            _this.setText("<html>" + text+ "</html>");
-            notParseable.append("</html>");
+            _this.setText(HTML_OPEN + text + HTML_CLOSE);
+            notParseable.append(HTML_CLOSE);
             _this.setToolTipText(notParseable.toString());
             // enabled next button after parsing
             // TODO maybe add check if no value could be parsed -> dialog and not enabling next

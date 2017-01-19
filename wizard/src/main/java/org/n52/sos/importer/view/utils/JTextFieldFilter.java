@@ -40,28 +40,28 @@ import javax.swing.text.PlainDocument;
  */
 public class JTextFieldFilter extends PlainDocument {
 
-    private static final long serialVersionUID = 1L;
     /** Constant <code>LOWERCASE="abcdefghijklmnopqrstuvwxyz"</code> */
     public static final String LOWERCASE  =
-        "abcdefghijklmnopqrstuvwxyz";
+            "abcdefghijklmnopqrstuvwxyz";
     /** Constant <code>UPPERCASE="ABCDEFGHIJKLMNOPQRSTUVWXYZ"</code> */
     public static final String UPPERCASE  =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     /** Constant <code>ALPHA="LOWERCASE + UPPERCASE"</code> */
     public static final String ALPHA   =
-        LOWERCASE + UPPERCASE;
+            LOWERCASE + UPPERCASE;
     /** Constant <code>NUMERIC="0123456789"</code> */
     public static final String NUMERIC =
-        "0123456789";
+            "0123456789";
     /** Constant <code>FLOAT="NUMERIC + ."</code> */
     public static final String FLOAT =
-        NUMERIC + ".";
+            NUMERIC + ".";
     /** Constant <code>ALPHA_NUMERIC="ALPHA + NUMERIC"</code> */
     public static final String ALPHA_NUMERIC =
-        ALPHA + NUMERIC;
+            ALPHA + NUMERIC;
 
-    protected String acceptedChars = null;
-    protected boolean negativeAccepted = false;
+    private static final long serialVersionUID = 1L;
+    protected String acceptedChars;
+    protected boolean negativeAccepted;
 
     /**
      * <p>Constructor for JTextFieldFilter.</p>
@@ -69,6 +69,7 @@ public class JTextFieldFilter extends PlainDocument {
     public JTextFieldFilter() {
         this(ALPHA_NUMERIC);
     }
+    
     /**
      * <p>Constructor for JTextFieldFilter.</p>
      *
@@ -86,26 +87,30 @@ public class JTextFieldFilter extends PlainDocument {
     public void setNegativeAccepted(boolean negativeaccepted) {
         if (acceptedChars.equals(NUMERIC) ||
                 acceptedChars.equals(FLOAT) ||
-                acceptedChars.equals(ALPHA_NUMERIC)){
+                acceptedChars.equals(ALPHA_NUMERIC)) {
             negativeAccepted = negativeaccepted;
             acceptedChars += "-";
         }
     }
 
     /** {@inheritDoc} */
-    public void insertString
-    (int offset, String  str, AttributeSet attr)
-    throws BadLocationException {
-        if (str == null) return;
+    @Override
+    public void insertString(int offset, final String  string, final AttributeSet attr) throws BadLocationException {
+        if (string == null) {
+            return;
+        }
 
-        if (acceptedChars.equals(UPPERCASE))
+        String str = string;
+        if (acceptedChars.equals(UPPERCASE)) {
             str = str.toUpperCase();
-        else if (acceptedChars.equals(LOWERCASE))
+        } else if (acceptedChars.equals(LOWERCASE)) {
             str = str.toLowerCase();
+        }
 
-        for (int i=0; i < str.length(); i++) {
-            if (acceptedChars.indexOf(String.valueOf(str.charAt(i))) == -1)
+        for (int i = 0; i < str.length(); i++) {
+            if (acceptedChars.indexOf(String.valueOf(str.charAt(i))) == -1) {
                 return;
+            }
         }
 
         if (acceptedChars.equals(FLOAT) ||
@@ -118,7 +123,7 @@ public class JTextFieldFilter extends PlainDocument {
         }
 
         if (negativeAccepted && str.indexOf("-") != -1) {
-            if (str.indexOf("-") != 0 || offset != 0 ) {
+            if (str.indexOf("-") != 0 || offset != 0) {
                 return;
             }
         }

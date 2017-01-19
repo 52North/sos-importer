@@ -60,9 +60,9 @@ public class ExampleFormatLabel extends JLabel {
         super();
         if (logger.isTraceEnabled()) {
             logger.trace("ExampleFormatLabel(formatter: " +
-                    (formatter!=null?
-                            formatter.getClass().getSimpleName():
-                                formatter)
+                    (formatter != null
+                    ? formatter.getClass().getSimpleName()
+                            : formatter)
                     + ")");
         }
         this.formatter = formatter;
