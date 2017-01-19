@@ -186,8 +186,7 @@ public abstract class DateAndTimeComponent extends Component {
         final GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(date);
 
-        final int value = gc.get(getGregorianCalendarField());
-        return value;
+        return gc.get(getGregorianCalendarField());
     }
 
     /**

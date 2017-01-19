@@ -66,6 +66,7 @@ import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingSecondPanel;
+
 public class Second extends DateAndTimeComponent {
 
     /**
@@ -102,6 +103,6 @@ public class Second extends DateAndTimeComponent {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
-        return new MissingSecondPanel((DateAndTime)c);
+        return new MissingSecondPanel((DateAndTime) c);
     }
 }

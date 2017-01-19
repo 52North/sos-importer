@@ -67,7 +67,28 @@ import java.util.Date;
 import org.n52.sos.importer.model.Combination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public class DateAndTime extends Combination {
+
+    /**
+     * 
+     */
+    private static final String FROM = " from ";
+
+    /**
+     * 
+     */
+    private static final String REMOVE = "Remove ";
+
+    /**
+     * 
+     */
+    private static final String TO = " to ";
+
+    /**
+     * 
+     */
+    private static final String ADD = "Add ";
 
     private static final Logger logger = LoggerFactory.getLogger(DateAndTime.class);
 
@@ -87,6 +108,7 @@ public class DateAndTime extends Combination {
     public Year getYear() {
         return year;
     }
+    
     /**
      * <p>Setter for the field <code>year</code>.</p>
      *
@@ -95,13 +117,14 @@ public class DateAndTime extends Combination {
     public void setYear(final Year year) {
         if (getGroup() != null) {
             if (year != null) {
-                logger.info("Add " + year + " to " + this);
+                logger.info(ADD + year + TO + this);
             } else {
-                logger.info("Remove " + this.year + " from " + this);
+                logger.info(REMOVE + this.year + FROM + this);
             }
         }
         this.year = year;
     }
+    
     /**
      * <p>Getter for the field <code>month</code>.</p>
      *
@@ -110,6 +133,7 @@ public class DateAndTime extends Combination {
     public Month getMonth() {
         return month;
     }
+    
     /**
      * <p>Setter for the field <code>month</code>.</p>
      *
@@ -118,13 +142,14 @@ public class DateAndTime extends Combination {
     public void setMonth(final Month month) {
         if (getGroup() != null) {
             if (month != null) {
-                logger.info("Add " + month + " to " + this);
+                logger.info(ADD + month + TO + this);
             } else {
-                logger.info("Remove " + this.month + " from " + this);
+                logger.info(REMOVE + this.month + FROM + this);
             }
         }
         this.month = month;
     }
+    
     /**
      * <p>Getter for the field <code>day</code>.</p>
      *
@@ -133,6 +158,7 @@ public class DateAndTime extends Combination {
     public Day getDay() {
         return day;
     }
+    
     /**
      * <p>Setter for the field <code>day</code>.</p>
      *
@@ -141,13 +167,14 @@ public class DateAndTime extends Combination {
     public void setDay(final Day day) {
         if (getGroup() != null) {
             if (day != null) {
-                logger.info("Add " + day + " to " + this);
+                logger.info(ADD + day + TO + this);
             } else {
-                logger.info("Remove " + this.day + " from " + this);
+                logger.info(REMOVE + this.day + FROM + this);
             }
         }
         this.day = day;
     }
+    
     /**
      * <p>Getter for the field <code>hour</code>.</p>
      *
@@ -156,6 +183,7 @@ public class DateAndTime extends Combination {
     public Hour getHour() {
         return hour;
     }
+    
     /**
      * <p>Setter for the field <code>hour</code>.</p>
      *
@@ -164,13 +192,14 @@ public class DateAndTime extends Combination {
     public void setHour(final Hour hour) {
         if (getGroup() != null) {
             if (hour != null) {
-                logger.info("Add " + hour + " to " + this);
+                logger.info(ADD + hour + TO + this);
             } else {
-                logger.info("Remove " + this.hour + " from " + this);
+                logger.info(REMOVE + this.hour + FROM + this);
             }
         }
         this.hour = hour;
     }
+    
     /**
      * <p>Getter for the field <code>minute</code>.</p>
      *
@@ -179,6 +208,7 @@ public class DateAndTime extends Combination {
     public Minute getMinute() {
         return minute;
     }
+    
     /**
      * <p>Setter for the field <code>minute</code>.</p>
      *
@@ -187,13 +217,14 @@ public class DateAndTime extends Combination {
     public void setMinute(final Minute minute) {
         if (getGroup() != null) {
             if (minute != null) {
-                logger.info("Add " + minute + " to " + this);
+                logger.info(ADD + minute + TO + this);
             } else {
-                logger.info("Remove " + this.minute + " from " + this);
+                logger.info(REMOVE + this.minute + FROM + this);
             }
         }
         this.minute = minute;
     }
+    
     /**
      * <p>getSeconds.</p>
      *
@@ -202,6 +233,7 @@ public class DateAndTime extends Combination {
     public Second getSeconds() {
         return second;
     }
+    
     /**
      * <p>Setter for the field <code>second</code>.</p>
      *
@@ -210,13 +242,14 @@ public class DateAndTime extends Combination {
     public void setSecond(final Second second) {
         if (getGroup() != null) {
             if (second != null) {
-                logger.info("Add " + second + " to " + this);
+                logger.info(ADD + second + TO + this);
             } else {
-                logger.info("Remove " + this.second + " from " + this);
+                logger.info(REMOVE + this.second + FROM + this);
             }
         }
         this.second = second;
     }
+    
     /**
      * <p>Getter for the field <code>timeZone</code>.</p>
      *
@@ -225,6 +258,7 @@ public class DateAndTime extends Combination {
     public TimeZone getTimeZone() {
         return timeZone;
     }
+    
     /**
      * <p>Setter for the field <code>timeZone</code>.</p>
      *
@@ -233,9 +267,9 @@ public class DateAndTime extends Combination {
     public void setTimeZone(final TimeZone timeZone) {
         if (getGroup() != null) {
             if (timeZone != null) {
-                logger.info("Add " + timeZone + " to " + this);
+                logger.info(ADD + timeZone + TO + this);
             } else {
-                logger.info("Remove " + this.timeZone + " from " + this);
+                logger.info(REMOVE + this.timeZone + FROM + this);
             }
         }
         this.timeZone = timeZone;
@@ -247,7 +281,7 @@ public class DateAndTime extends Combination {
         Date dateTime = null;
         final String currentPattern = getPattern();
         final SimpleDateFormat formatter =
-               new SimpleDateFormat(currentPattern);
+                new SimpleDateFormat(currentPattern);
         try {
             dateTime = formatter.parse(s);
         } catch (final ParseException e) {
@@ -259,13 +293,14 @@ public class DateAndTime extends Combination {
     /** {@inheritDoc} */
     @Override
     public String format(final Object o) {
-        final Date date = (Date)o;
+        final Date date = (Date) o;
         final SimpleDateFormat formatter =
-               new SimpleDateFormat(getPattern());
+                new SimpleDateFormat(getPattern());
         final String dateString = formatter.format(date);
 
         return dateString;
     }
+    
     /** {@inheritDoc} */
     @Override
     public String toString() {

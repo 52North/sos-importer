@@ -104,6 +104,6 @@ public class Time extends Component {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
-        return new MissingTimePanel((DateAndTime)c);
+        return new MissingTimePanel((DateAndTime) c);
     }
 }

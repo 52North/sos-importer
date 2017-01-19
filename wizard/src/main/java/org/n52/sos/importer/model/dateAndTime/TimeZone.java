@@ -77,6 +77,6 @@ public class TimeZone extends DateAndTimeComponent {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
-        return new MissingTimeZonePanel((DateAndTime)c);
+        return new MissingTimeZonePanel((DateAndTime) c);
     }
 }
