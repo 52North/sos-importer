@@ -66,6 +66,7 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingHeightPanel;
+
 public class Height extends PositionComponent {
 
     /**
@@ -97,7 +98,7 @@ public class Height extends PositionComponent {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
-        return new MissingHeightPanel((Position)c);
+        return new MissingHeightPanel((Position) c);
     }
 
     /**
@@ -112,23 +113,30 @@ public class Height extends PositionComponent {
         String unit = "m";
 
         String number;
-        if (s.contains("km")) {
-            unit = "km";
-            number = s.replace("km", "");
-        } else if (s.contains("mi")) {
-            unit = "mi";
-            number = s.replace("mi", "");
-        } else if (s.contains("m")) {
-            unit = "m";
-            number = s.replace("m", "");
-        } else if (s.contains("ft")) {
-            unit = "ft";
-            number = s.replace("ft", "");
-        } else
-            number = s;
+        final String km = "km";
+        if (s.contains(km)) {
+            unit = km;
+            number = s.replace(km, "");
+        } else {
+            final String mi = "mi";
+            if (s.contains(mi)) {
+                unit = mi;
+                number = s.replace(mi, "");
+            } else if (s.contains("m")) {
+                unit = "m";
+                number = s.replace("m", "");
+            } else {
+                final String ft = "ft";
+                if (s.contains(ft)) {
+                    unit = ft;
+                    number = s.replace(ft, "");
+                } else {
+                    number = s;
+                }
+            }
+        }
 
         NumericValue nv = new NumericValue();
-
         value = nv.parse(number);
 
         return new Height(value, unit);
@@ -137,9 +145,9 @@ public class Height extends PositionComponent {
     /** {@inheritDoc} */
     @Override
     public Height forThis(Cell featureOfInterestPosition) {
-        if (getTableElement() == null)
+        if (getTableElement() == null) {
             return new Height(getValue(), getParsedUnit());
-        else {
+        } else {
             String heightString = getTableElement().getValueFor(featureOfInterestPosition);
             return Height.parse(heightString);
         }

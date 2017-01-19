@@ -65,7 +65,23 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public abstract class PositionComponent extends Component {
+
+    /**
+     * 
+     */
+    private static final String DEGREE = "degree";
+
+    /**
+     * 
+     */
+    private static final String FT = "ft";
+
+    /**
+     * 
+     */
+    private static final String N_A = "n/a";
 
     private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);
 
@@ -75,7 +91,7 @@ public abstract class PositionComponent extends Component {
 
     private double value = -1;
 
-    private String unit = null;
+    private String unit;
 
     /**
      * <p>Constructor for PositionComponent.</p>
@@ -171,15 +187,15 @@ public abstract class PositionComponent extends Component {
      */
     public String getParsedUnit() {
         if (unit == null || unit.equals("")) {
-            return "n/a";
+            return N_A;
         } else if (unit.equals("m") || unit.equals("meters")) {
             return "m";
-        } else if (unit.equals("ft") || unit.equals("feet")) {
-            return "ft";
-        } else if (unit.equals("degree") || unit.equals("°")) {
-            return "degree";
+        } else if (unit.equals(FT) || unit.equals("feet")) {
+            return FT;
+        } else if (unit.equals(DEGREE) || unit.equals("°")) {
+            return DEGREE;
         }
-        return "n/a";
+        return N_A;
     }
 
     /** {@inheritDoc} */

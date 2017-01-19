@@ -66,6 +66,7 @@ import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
+
 public class Latitude extends PositionComponent {
 
     /**
@@ -97,7 +98,7 @@ public class Latitude extends PositionComponent {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
-        return new MissingLatitudePanel((Position)c);
+        return new MissingLatitudePanel((Position) c);
     }
 
     /**
@@ -120,18 +121,21 @@ public class Latitude extends PositionComponent {
         } else if (s.contains("m")) {
             unit = "m";
             number = s.replace("m", "");
-        } else
+        } else {
             number = s;
+        }
 
         NumericValue nv = new NumericValue();
 
         value = nv.parse(number);
 
-        if (unit.equals(""))
-            if (value <= 90.0 && value >= -90.0)
+        if (unit.equals("")) {
+            if (value <= 90.0 && value >= -90.0) {
                 unit = "°";
-            else
+            } else {
                 unit = "m";
+            }
+        }
 
         return new Latitude(value, unit);
     }
@@ -139,9 +143,9 @@ public class Latitude extends PositionComponent {
     /** {@inheritDoc} */
     @Override
     public Latitude forThis(Cell featureOfInterestPosition) {
-        if (getTableElement() == null)
+        if (getTableElement() == null) {
             return new Latitude(getValue(), getParsedUnit());
-        else {
+        } else {
             String latitudeString = getTableElement().getValueFor(featureOfInterestPosition);
             return Latitude.parse(latitudeString);
         }

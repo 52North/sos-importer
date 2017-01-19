@@ -68,6 +68,7 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.position.MissingEPSGCodePanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public class EPSGCode extends Component {
 
     private static final Logger logger = LoggerFactory.getLogger(EPSGCode.class);
@@ -163,10 +164,11 @@ public class EPSGCode extends Component {
     /** {@inheritDoc} */
     @Override
     public String toString() {
+        final String epsgCode = "EPSG-Code ";
         if (getTableElement() == null) {
-            return "EPSG-Code "  + getValue();
+            return epsgCode + getValue();
         } else {
-            return "EPSG-Code " + getTableElement();
+            return epsgCode + getTableElement();
         }
     }
 
@@ -191,7 +193,7 @@ public class EPSGCode extends Component {
     /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(final Combination c) {
-        return new MissingEPSGCodePanel((Position)c);
+        return new MissingEPSGCodePanel((Position) c);
     }
 
     /**
