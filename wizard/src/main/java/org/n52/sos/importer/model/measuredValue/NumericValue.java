@@ -66,6 +66,7 @@ import java.text.ParseException;
 
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Formatable;
+
 public class NumericValue extends MeasuredValue implements Formatable {
 
     /** {@inheritDoc} */
@@ -90,7 +91,7 @@ public class NumericValue extends MeasuredValue implements Formatable {
     /** {@inheritDoc} */
     @Override
     public String format(Object o) {
-        double number = (Double)o;
+        double number = (Double) o;
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator(Constants.getDecimalSeparator());
@@ -112,5 +113,6 @@ public class NumericValue extends MeasuredValue implements Formatable {
     @Override
     public void setPattern(String formatPattern) {
         // do nothing, it's Java base type wrapper
+        return;
     }
 }

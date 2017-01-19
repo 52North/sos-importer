@@ -59,6 +59,7 @@
  * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
+
 public class Boolean extends MeasuredValue {
 
     /** {@inheritDoc} */
@@ -69,23 +70,24 @@ public class Boolean extends MeasuredValue {
 
     /** {@inheritDoc} */
     @Override
-    public Object parse(String s) {
-        s = s.trim();
-        if (s.equals("0") || s.equalsIgnoreCase("false")) {
+    public Object parse(final String s) {
+        String encodedString = s.trim();
+        if (encodedString.equals("0") || encodedString.equalsIgnoreCase("false")) {
             return false;
-        } else
-        if (s.equals("1") || s.equalsIgnoreCase("true")) {
+        } else if (encodedString.equals("1") || encodedString.equalsIgnoreCase("true")) {
             return true;
-        }
-        else throw new NumberFormatException(
-                "value of String should be: 0,1,true,false. " +
+        } else {
+            throw new NumberFormatException(
+                "Value of String should be: 0,1,true,false. " +
                 "Regarding the last two case is ignored. " +
-                "Given value is: " + s);
+                "Given value is: " + encodedString);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper
+        return;
     }
 }

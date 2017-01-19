@@ -73,7 +73,18 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public abstract class MeasuredValue implements Parseable {
+
+    /**
+     * 
+     */
+    private static final String TO = " to ";
+
+    /**
+     * 
+     */
+    private static final String ASSIGN = "Assign ";
 
     private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);
 
@@ -98,7 +109,7 @@ public abstract class MeasuredValue implements Parseable {
         if (featureOfInterest == null) {
             logger.info("Unassign Feature Of Interest from " + this);
         } else {
-            logger.info("Assign " + featureOfInterest + " to " + this);
+            logger.info(ASSIGN + featureOfInterest + TO + this);
         }
         this.featureOfInterest = featureOfInterest;
     }
@@ -119,7 +130,7 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setObservedProperty(final ObservedProperty observedProperty) {
         if (observedProperty != null) {
-            logger.info("Assign " + observedProperty + " to " + this);
+            logger.info(ASSIGN + observedProperty + TO + this);
         } else {
             logger.info("Unassign Observed Property from " + this);
         }
@@ -142,7 +153,7 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setUnitOfMeasurement(final UnitOfMeasurement unitOfMeasurement) {
         if (unitOfMeasurement != null) {
-            logger.info("Assign " + unitOfMeasurement + " to " + this);
+            logger.info(ASSIGN + unitOfMeasurement + TO + this);
         } else {
             logger.info("Unassign Unit of Measurement from " + this);
         }
@@ -165,7 +176,7 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setSensor(final Sensor sensor) {
         if (sensor != null) {
-            logger.info("Assign " + sensor + " to " + this);
+            logger.info(ASSIGN + sensor + TO + this);
         } else {
             logger.info("Unassign Sensor from " + this);
         }
@@ -207,7 +218,7 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setDateAndTime(final DateAndTime dateAndTime) {
         if (dateAndTime != null) {
-            logger.info("Assign " + dateAndTime + " to " + this);
+            logger.info(ASSIGN + dateAndTime + TO + this);
         } else {
             logger.info("Unassign " + this.dateAndTime + " from " + this);
         }
@@ -234,13 +245,13 @@ public abstract class MeasuredValue implements Parseable {
      */
     public Sensor getSensorFor(final String featureOfInterestName, final String observedPropertyName) {
         final Iterator<Step6bSpecialModel> iterator =
-            ModelStore.getInstance().getStep6bSpecialModels().iterator();
+                ModelStore.getInstance().getStep6bSpecialModels().iterator();
 
         Step6bSpecialModel step6bSpecialModel;
         while (iterator.hasNext()) {
             step6bSpecialModel = iterator.next();
             if (step6bSpecialModel.getFeatureOfInterest().getName().equals(featureOfInterestName) &&
-                step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName)) {
+                    step6bSpecialModel.getObservedProperty().getName().equals(observedPropertyName)) {
                 return step6bSpecialModel.getSensor();
             }
         }
