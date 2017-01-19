@@ -146,17 +146,22 @@ public class Cell extends TableElement {
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (!(obj instanceof Cell))
+        }
+        if (!(obj instanceof Cell)) {
             return false;
+        }
         Cell other = (Cell) obj;
-        if (column != other.column)
+        if (column != other.column) {
             return false;
-        if (row != other.row)
+        }
+        if (row != other.row) {
             return false;
+        }
         return true;
     }
 

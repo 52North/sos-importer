@@ -117,15 +117,19 @@ public class Row extends TableElement {
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (!(obj instanceof Row))
+        }
+        if (!(obj instanceof Row)) {
             return false;
+        }
         Row other = (Row) obj;
-        if (number != other.number)
+        if (number != other.number) {
             return false;
+        }
         return true;
     }
 }
