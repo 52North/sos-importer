@@ -49,7 +49,6 @@ import org.n52.sos.importer.view.position.MissingHeightPanel;
 import org.n52.sos.importer.view.position.MissingLatitudePanel;
 import org.n52.sos.importer.view.position.MissingLongitudePanel;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,13 +132,13 @@ public class PositionController {
      * @return a {@link org.n52.sos.importer.model.position.Position} object.
      */
     public Position getNextPositionWithMissingValues() {
-        List<MissingComponentPanel> missingComponentPanels;
+        List<MissingComponentPanel> missingComponentPanelsTmp;
 
-        for (final Position position: ModelStore.getInstance().getPositions()) {
-            setPosition(position);
-            missingComponentPanels = getMissingComponentPanels();
-            if (missingComponentPanels.size() > 0) {
-                return position;
+        for (final Position positionTmp : ModelStore.getInstance().getPositions()) {
+            setPosition(positionTmp);
+            missingComponentPanelsTmp = getMissingComponentPanels();
+            if (missingComponentPanelsTmp.size() > 0) {
+                return positionTmp;
             }
         }
         return null;
@@ -171,7 +170,9 @@ public class PositionController {
     }
 
     /**
-     * @return returns <tt>true</tt>, if height is allowed, or we could not say:"it is not allowed" because of parsing errors...
+     * @return returns <tt>true</tt>, 
+     *      if height is allowed, or 
+     *      we could not say:"it is not allowed" because of parsing errors...
      */
     private boolean shouldHeightPanelBeAddedForEPSG(final EPSGCode epsgCode) {
         if (epsgCode == null) {
@@ -181,37 +182,26 @@ public class PositionController {
         // 1 try to create CRS object
         String epsgString = "EPSG:";
         final TableElement epsgCodeTableElem = epsgCode.getTableElement();
-        if (epsgCodeTableElem != null && epsgCodeTableElem instanceof Column)
-        {
-            final int row = ((Column)epsgCodeTableElem).getFirstLineWithData();
-            final int column = ((Column)epsgCodeTableElem).getNumber();
-            final String cellValue = TableController.getInstance().getValueAt(row,column);
+        if (epsgCodeTableElem != null && epsgCodeTableElem instanceof Column) {
+            final int row = ((Column) epsgCodeTableElem).getFirstLineWithData();
+            final int column = ((Column) epsgCodeTableElem).getNumber();
+            final String cellValue = TableController.getInstance().getValueAt(row, column);
             epsgString = epsgString.concat(cellValue);
-        }
-        else if (epsgCode.getValue() > 0)
-        {
+        } else if (epsgCode.getValue() > 0) {
             epsgString = epsgString.concat(Integer.toString(epsgCode.getValue()));
         }
-        try
-        {
+        try {
             logger.debug(String.format("Trying to decode CRS from EPSG string : '%s'", epsgString));
             final CoordinateReferenceSystem crs = CRS.decode(epsgString);
             // 2 check for axis Z -> if present -> yes
-            logger.debug(String.format("CRS decoded to '%s' with %s dimensions.",crs.getName(),crs.getCoordinateSystem().getDimension()));
-            if (crs.getCoordinateSystem().getDimension() == 3)
-            {
+            logger.debug(String.format("CRS decoded to '%s' with %s dimensions.",
+                    crs.getName(),
+                    crs.getCoordinateSystem().getDimension()));
+            if (crs.getCoordinateSystem().getDimension() == 3) {
                 return true;
             }
-        }
-        // TODO what about user feedback?
-        catch (final NoSuchAuthorityCodeException e)
-        {
-            logger.error(String.format("Exception thrown: %s",
-                    e.getMessage()),
-                    e);
-        }
-        catch (final FactoryException e)
-        {
+            // TODO what about user feedback?
+        } catch (final FactoryException e) {
             logger.error(String.format("Exception thrown: %s",
                     e.getMessage()),
                     e);

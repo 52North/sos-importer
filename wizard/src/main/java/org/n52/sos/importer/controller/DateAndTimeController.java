@@ -119,7 +119,9 @@ public class DateAndTimeController {
          *
          * whole time is missing
          */
-        /* Disabled because the user might enter observations on year, month, or day level without giving a specific time
+        /* 
+         * Disabled because the user might enter observations on year,
+         * month, or day level without giving a specific time
         if (dateAndTime.getHour() == null &&
                 dateAndTime.getMinute() == null &&
                 dateAndTime.getSeconds() == null) {
@@ -144,7 +146,7 @@ public class DateAndTimeController {
         if (dateAndTime.getTimeZone() == null && (
                 (dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null) ||
                 (dateAndTime.getMinute() != null && dateAndTime.getMinute().getTableElement() != null) ||
-                (dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null)) ) {
+                (dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null))) {
             missingComponentPanels.add(new MissingTimeZonePanel(dateAndTime));
         }
         //
@@ -233,7 +235,11 @@ public class DateAndTimeController {
         if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
             dateAndTime.setDay(new Day(tableElement, pattern));
         }
-        if (pattern.indexOf("H") != -1 || pattern.indexOf("k") != -1 || ((pattern.indexOf("K") != -1 || (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
+        if (pattern.indexOf("H") != -1 ||
+                pattern.indexOf("k") != -1 ||
+                ((pattern.indexOf("K") != -1 ||
+                (pattern.indexOf("h") != -1) &&
+                pattern.indexOf("a") != -1))) {
             dateAndTime.setHour(new Hour(tableElement, pattern));
         }
         if (pattern.indexOf("m") != -1) {
@@ -253,13 +259,13 @@ public class DateAndTimeController {
      * @return a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
      */
     public DateAndTime getNextDateAndTimeWithMissingValues() {
-        List<MissingComponentPanel> missingComponentPanels;
+        List<MissingComponentPanel> missingComponentPanelsTmp;
 
-        for (final DateAndTime dateAndTime: ModelStore.getInstance().getDateAndTimes()) {
-            setDateAndTime(dateAndTime);
-            missingComponentPanels = getMissingComponentPanels();
-            if (missingComponentPanels.size() > 0) {
-                return dateAndTime;
+        for (final DateAndTime dateAndTimeTmp: ModelStore.getInstance().getDateAndTimes()) {
+            setDateAndTime(dateAndTimeTmp);
+            missingComponentPanelsTmp = getMissingComponentPanels();
+            if (missingComponentPanelsTmp.size() > 0) {
+                return dateAndTimeTmp;
             }
         }
         return null;
@@ -300,15 +306,29 @@ public class DateAndTimeController {
      * @throws java.text.ParseException if any.
      */
     public String forThis(final Cell measuredValuePosition) throws ParseException {
-        final int second = dateAndTime.getSeconds()!=null?dateAndTime.getSeconds().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-        final int minute = dateAndTime.getMinute()!=null?dateAndTime.getMinute().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-        final int hour = dateAndTime.getHour()!=null?dateAndTime.getHour().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-        final int day = dateAndTime.getDay()!=null?dateAndTime.getDay().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-        final int month = dateAndTime.getMonth()!=null?dateAndTime.getMonth().getParsedValue(measuredValuePosition) + 1:Integer.MIN_VALUE;
-        final int year = dateAndTime.getYear()!=null?dateAndTime.getYear().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-        final int timezone = dateAndTime.getTimeZone()!=null?dateAndTime.getTimeZone().getParsedValue(measuredValuePosition):Integer.MIN_VALUE;
-
-        final StringBuffer ts = new StringBuffer(25); // <- yyyy-mm-ddThh:mm:ss+hh:mm
+        final int second = dateAndTime.getSeconds() != null
+                ? dateAndTime.getSeconds().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        final int minute = dateAndTime.getMinute() != null
+                ? dateAndTime.getMinute().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        final int hour = dateAndTime.getHour() != null
+                ? dateAndTime.getHour().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        final int day = dateAndTime.getDay() != null
+                ? dateAndTime.getDay().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        final int month = dateAndTime.getMonth() != null
+                ? dateAndTime.getMonth().getParsedValue(measuredValuePosition) + 1
+                        : Integer.MIN_VALUE;
+        final int year = dateAndTime.getYear() != null
+                ? dateAndTime.getYear().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        final int timezone = dateAndTime.getTimeZone() != null
+                ? dateAndTime.getTimeZone().getParsedValue(measuredValuePosition)
+                        : Integer.MIN_VALUE;
+        // yyyy-mm-ddThh:mm:ss+hh:mm
+        final StringBuffer ts = new StringBuffer(25);
         if (year != Integer.MIN_VALUE) {
             ts.append(year);
             if (month != Integer.MIN_VALUE) {
@@ -316,35 +336,35 @@ public class DateAndTimeController {
             }
         }
         if (month != Integer.MIN_VALUE) {
-            ts.append(month<10?"0"+month:month);
+            ts.append(month < 10 ? "0" + month : month);
             if (day != Integer.MIN_VALUE) {
                 ts.append("-");
             }
         }
         if (day != Integer.MIN_VALUE) {
-            ts.append(day<10?"0"+day:day);
+            ts.append(day < 10 ? "0" + day : day);
         }
-        if ( (year != Integer.MIN_VALUE || month != Integer.MIN_VALUE || day != Integer.MIN_VALUE )
-                && (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) ) {
+        if ((year != Integer.MIN_VALUE || month != Integer.MIN_VALUE || day != Integer.MIN_VALUE)
+                && (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE)) {
             ts.append("T");
         }
         if (hour != Integer.MIN_VALUE) {
-            ts.append(hour<10?"0"+hour:hour);
+            ts.append(hour < 10 ? "0" + hour : hour);
             if (minute != Integer.MIN_VALUE) {
                 ts.append(":");
             }
         }
         if (minute != Integer.MIN_VALUE) {
-            ts.append(minute<10?"0"+minute:minute);
+            ts.append(minute < 10 ? "0" + minute : minute);
             if (second != Integer.MIN_VALUE) {
                 ts.append("");
             }
         }
         if (second != Integer.MIN_VALUE) {
-            ts.append(second<10?"0"+second:second);
+            ts.append(second < 10 ? "0" + second : second);
         }
         if (timezone != Integer.MIN_VALUE &&
-                (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE) ) {
+                (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || second != Integer.MIN_VALUE)) {
             ts.append(convertTimeZone(timezone));
         }
 
@@ -352,17 +372,18 @@ public class DateAndTimeController {
     }
 
     private String convertTimeZone(final int timeZone) {
+        final String zeros = ":00";
         if (timeZone >= 0) {
             if (timeZone >= 10) {
-                return "+" + timeZone + ":00";
+                return "+" + timeZone + zeros;
             } else {
-                return "+0" + timeZone + ":00";
+                return "+0" + timeZone + zeros;
             }
         } else {
             if (timeZone <= -10) {
-                return timeZone + ":00";
+                return timeZone + zeros;
             } else {
-                return "-0" + Math.abs(timeZone) + ":00";
+                return "-0" + Math.abs(timeZone) + zeros;
             }
         }
     }

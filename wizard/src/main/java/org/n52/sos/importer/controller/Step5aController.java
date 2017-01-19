@@ -79,7 +79,7 @@ public class Step5aController extends StepController {
      * @param step5aModel a {@link org.n52.sos.importer.model.Step5aModel} object.
      * @param firstLineWithData a int.
      */
-    public Step5aController(final Step5aModel step5aModel,final int firstLineWithData) {
+    public Step5aController(final Step5aModel step5aModel, final int firstLineWithData) {
         this(firstLineWithData);
         this.step5aModel = step5aModel;
     }
@@ -152,7 +152,7 @@ public class Step5aController extends StepController {
 
         if (dtm == null) {
             logger.info("Skip Step 5a since there are not any Date&Times" +
-                " with missing values");
+                    " with missing values");
             return false;
         }
 
@@ -166,7 +166,7 @@ public class Step5aController extends StepController {
         dateAndTimeController = new DateAndTimeController();
         final DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
         if (dtm != null) {
-            return new Step5aController(new Step5aModel(dtm),firstLineWithData);
+            return new Step5aController(new Step5aModel(dtm), firstLineWithData);
         }
 
         dateAndTimeController = null;

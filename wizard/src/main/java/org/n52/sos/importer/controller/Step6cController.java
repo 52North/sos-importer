@@ -79,7 +79,8 @@ public class Step6cController extends StepController {
         final FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
         String name = step6cModel.getFeatureOfInterestName();
         // TODO is this assumption still valid? better check for TableElement?!
-        if (name == null) { //when this feature is not contained in the table
+        //when this feature is not contained in the table
+        if (name == null) {
             name = foi.getNameString();
             foi.unassignPosition();
         } else {
@@ -89,7 +90,7 @@ public class Step6cController extends StepController {
         final String description = step6cModel.getDescription();
         step6cPanel = new Step6cPanel(description,
                 // to indicate to the user, that this resource is generated
-                (foi.isGenerated()?Lang.l().generated() + ": " + name:name),
+                foi.isGenerated() ? Lang.l().generated() + ": " + name : name,
                 step6cModel);
         step6cPanel.loadSettings();
     }
@@ -101,7 +102,8 @@ public class Step6cController extends StepController {
 
         final String name = step6cModel.getFeatureOfInterestName();
         final Position position = step6cModel.getPosition();
-        if (name == null) {//when this feature is not contained in the table
+        //when this feature is not contained in the table
+        if (name == null) {
             step6cModel.getFeatureOfInterest().assignPosition(position);
         } else {
             step6cModel.getFeatureOfInterest().setPositionFor(name, position);
@@ -146,10 +148,9 @@ public class Step6cController extends StepController {
 
             if (foi.getTableElement() == null) {
                 // FIXME implement handling of generated fois
-                if (foi.getPosition() == null)
-                 {
+                if (foi.getPosition() == null) {
                     return new Step6cModel(foi);
-                //otherwise the feature has already a position
+                    //otherwise the feature has already a position
                 }
             } else {
                 if (foi.getPosition() == null) {

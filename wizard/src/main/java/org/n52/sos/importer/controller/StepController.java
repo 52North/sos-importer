@@ -60,10 +60,13 @@ public abstract class StepController {
 
     /**
      * Sets the missing values in the step model using a method of GUI elements.
-     * <br>Called when the Next button is pressed and the step is
+     * <br>
+     * Called when the Next button is pressed and the step is
      * finished, saves all settings of this step in the model
      * and releases all views.
-     * <br>Called before {@link #getNextStepController()} in {@link org.n52.sos.importer.controller.BackNextController#nextButtonClicked()}
+     * <br>
+     * Called before {@link #getNextStepController()} in 
+     * {@link org.n52.sos.importer.controller.BackNextController#nextButtonClicked()}
      */
     public abstract void saveSettings();
 
@@ -120,7 +123,9 @@ public abstract class StepController {
      *
      * @return a boolean.
      */
-    public boolean isStillValid() { return false; }
+    public boolean isStillValid() {
+        return false;
+    }
 
     /**
      * Returns the model of this step

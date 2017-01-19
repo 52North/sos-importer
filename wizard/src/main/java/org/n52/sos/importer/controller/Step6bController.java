@@ -88,7 +88,7 @@ public class Step6bController extends StepController {
      * @param step6bModel a {@link org.n52.sos.importer.model.Step6bModel} object.
      * @param firstLineWithData a int.
      */
-    public Step6bController(final Step6bModel step6bModel,final int firstLineWithData) {
+    public Step6bController(final Step6bModel step6bModel, final int firstLineWithData) {
         this(firstLineWithData);
         this.step6bModel = step6bModel;
     }
@@ -209,7 +209,7 @@ public class Step6bController extends StepController {
     public StepController getNext() {
         final Step6bModel model = getMissingResourceForMeasuredValue();
         if (model != null) {
-            return new Step6bController(model,firstLineWithData);
+            return new Step6bController(model, firstLineWithData);
         }
 
         return null;
@@ -235,8 +235,8 @@ public class Step6bController extends StepController {
         }
 
         if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-            ModelStore.getInstance().getObservedPropertiesInTable().size() == 0 &&
-            ModelStore.getInstance().getSensorsInTable().size() == 0) {
+                ModelStore.getInstance().getObservedPropertiesInTable().size() == 0 &&
+                ModelStore.getInstance().getSensorsInTable().size() == 0) {
             for (final MeasuredValue mv: measuredValues) {
                 if (mv.getSensor() == null) {
                     return new Step6bModel(mv, new Sensor());

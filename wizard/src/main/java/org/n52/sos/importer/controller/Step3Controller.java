@@ -55,6 +55,21 @@ import org.slf4j.LoggerFactory;
  */
 public class Step3Controller extends StepController {
 
+    /**
+     * 
+     */
+    private static final String STEP3_MODEL = "Step3Model: ";
+
+    /**
+     * 
+     */
+    private static final String STEP3_PANEL = "Step3Panel: ";
+
+    /**
+     * 
+     */
+    private static final String NULL_STRING = "null";
+
     private static final Logger logger = LoggerFactory.getLogger(Step3Controller.class);
 
     private Step3Panel step3Panel;
@@ -105,22 +120,22 @@ public class Step3Controller extends StepController {
             logger.trace("loadSettings()");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("Step3Model: " + step3Model);
-            logger.debug("Step3Panel: " + (step3Panel!=null?
-                    "[" + step3Panel.hashCode() + "]"
-                    :"null"));
+            logger.debug(STEP3_MODEL + step3Model);
+            logger.debug(STEP3_PANEL + (step3Panel != null
+                    ? "[" + step3Panel.hashCode() + "]"
+                    : NULL_STRING));
         }
         final int number = step3Model.getMarkedColumn();
         if (logger.isDebugEnabled()) {
             logger.debug("Loading settings for column# " + number);
         }
         final int fLWData = step3Model.getFirstLineWithData();
-        final Column column = new Column(number,fLWData);
+        final Column column = new Column(number, fLWData);
         final List<String> selection = step3Model.getSelectionForColumn(number);
         if (step3Panel == null) {
             step3Panel = new Step3Panel(step3Model.getFirstLineWithData());
         }
-        if(selection != null) {
+        if (selection != null) {
             step3Panel.restore(selection);
         }
         step3Panel.getLastChildPanel().unAssign(column);
@@ -139,10 +154,10 @@ public class Step3Controller extends StepController {
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Start:");
-            logger.debug("Step3Model: " + step3Model);
-            logger.debug("Step3Panel: " + (step3Panel!=null?
-                    "[" + step3Panel.hashCode() + "]"
-                    :"null"));
+            logger.debug(STEP3_MODEL + step3Model);
+            logger.debug(STEP3_PANEL + (step3Panel != null
+                    ? "[" + step3Panel.hashCode() + "]"
+                    : NULL_STRING));
         }
         //
         final List<String> selection = new ArrayList<String>();
@@ -153,8 +168,8 @@ public class Step3Controller extends StepController {
         step3Panel.store(selection);
         step3Model.addSelection(selection);
         selP = step3Panel.getLastChildPanel();
-        selP.assign(new Column(number,firstLineWithData));
-        if (selection.size() == 2 && selection.get(1).equals("UNIX time")){
+        selP.assign(new Column(number, firstLineWithData));
+        if (selection.size() == 2 && selection.get(1).equals("UNIX time")) {
             DateAndTime dtm = new DateAndTime();
             dtm.setGroup("1");
             ModelStore.getInstance().add(dtm);
@@ -178,10 +193,10 @@ public class Step3Controller extends StepController {
 
         if (logger.isDebugEnabled()) {
             logger.debug("End:");
-            logger.debug("Step3Model: " + step3Model);
-            logger.debug("Step3Panel: " + (step3Panel!=null?
-                    "[" + step3Panel.hashCode() + "]"
-                    :"null"));
+            logger.debug(STEP3_MODEL + step3Model);
+            logger.debug(STEP3_PANEL + (step3Panel != null
+                    ? "[" + step3Panel.hashCode() + "]"
+                    : NULL_STRING));
         }
 
     }
@@ -192,8 +207,8 @@ public class Step3Controller extends StepController {
         final List<String> selection = new ArrayList<String>();
         step3Panel.store(selection);
         step3Model.addSelection(selection);
-        final int number = step3Model.getMarkedColumn()-1;
-        if(number >= 0) {
+        final int number = step3Model.getMarkedColumn() - 1;
+        if (number >= 0) {
             // TODO if being date&time or position column: add group to table heading
             tabCtrlr.setColumnHeading(number, selection.get(0));
             tabCtrlr.clearMarkedTableElements();
@@ -206,7 +221,7 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
-        return new Step4aController( new Step4aModel( null, step3Model.getFirstLineWithData() ) );
+        return new Step4aController(new Step4aModel(null, step3Model.getFirstLineWithData()));
     }
 
     /** {@inheritDoc} */
@@ -222,7 +237,7 @@ public class Step3Controller extends StepController {
         step3Panel.store(currentSelection);
         // check if the current column is the last in the file
         // if yes, check for at least one measured value column
-        if ( (step3Model.getMarkedColumn() + 1) ==
+        if ((step3Model.getMarkedColumn() + 1) ==
                 TableController.getInstance().getColumnCount() &&
                 ModelStore.getInstance().getMeasuredValues().size() == 0 &&
                 !currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {

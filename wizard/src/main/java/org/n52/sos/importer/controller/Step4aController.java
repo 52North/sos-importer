@@ -83,13 +83,14 @@ public class Step4aController extends StepController {
 
         final int[] selectedRowsOrColumns = step4aModel.getSelectedRowsOrColumns();
         for (final int number: selectedRowsOrColumns) {
-            final Column c = new Column(number,fLWData);
+            final Column c = new Column(number, fLWData);
             final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
             mv.setDateAndTime(null);
             tableController.selectColumn(number);
         }
 
-        final DateAndTimeController dateAndTimeController = new DateAndTimeController(step4aModel.getDateAndTimeModel());
+        final DateAndTimeController dateAndTimeController = 
+                new DateAndTimeController(step4aModel.getDateAndTimeModel());
         dateAndTimeController.markComponents();
     }
 
@@ -102,7 +103,7 @@ public class Step4aController extends StepController {
         final int fLWData = step4aModel.getFirstLineWithData();
 
         for (final int number: selectedRowsOrColumns) {
-            final Column c = new Column(number,fLWData);
+            final Column c = new Column(number, fLWData);
             final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
             mv.setDateAndTime(dateAndTime);
         }
@@ -123,7 +124,7 @@ public class Step4aController extends StepController {
         tableController.removeMultipleSelectionListener();
 
         step4Panel = null;
-    };
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -158,7 +159,7 @@ public class Step4aController extends StepController {
         }
 
         final DateAndTime dtm = getNextUnassignedDateAndTime();
-        step4aModel = new Step4aModel(dtm,step4aModel.getFirstLineWithData());
+        step4aModel = new Step4aModel(dtm, step4aModel.getFirstLineWithData());
         return true;
     }
 
@@ -168,8 +169,8 @@ public class Step4aController extends StepController {
         final DateAndTime dtm = getNextUnassignedDateAndTime();
         if (dtm != null) {
             // this method is called after a Step4aController has existed before
-            final Step4aModel step4aModel = new Step4aModel(dtm,this.step4aModel.getFirstLineWithData());
-            return new Step4aController(step4aModel);
+            final Step4aModel step4aModelTmp = new Step4aModel(dtm, this.step4aModel.getFirstLineWithData());
+            return new Step4aController(step4aModelTmp);
         }
 
         return null;
@@ -213,18 +214,30 @@ public class Step4aController extends StepController {
         return false;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public StepModel getModel() {
+        return step4aModel;
+    }
+
     private class SelectionChanged implements TableController.MultipleSelectionListener {
 
         private final int firstLineWithData;
 
-        public SelectionChanged(final int fLWData) {
+        SelectionChanged(final int fLWData) {
             firstLineWithData = fLWData;
         }
 
         @Override
         public void columnSelectionChanged(final int[] selectedColumns) {
             for (final int number: selectedColumns) {
-                final Column c = new Column(number,firstLineWithData);
+                final Column c = new Column(number, firstLineWithData);
                 final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(c);
                 if (mv == null) {
                     JOptionPane.showMessageDialog(null,
@@ -253,15 +266,4 @@ public class Step4aController extends StepController {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public StepModel getModel() {
-        return step4aModel;
-    }
 }

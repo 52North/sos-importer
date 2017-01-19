@@ -149,7 +149,7 @@ public class Step6bSpecialController extends StepController {
         }
 
         if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-            ModelStore.getInstance().getObservedPropertiesInTable().size() == 0) {
+                ModelStore.getInstance().getObservedPropertiesInTable().size() == 0) {
             logger.info("Skip 6b (Special) since there are not any features of interest" +
                     "and observed properties in the table.");
             return false;
@@ -177,7 +177,7 @@ public class Step6bSpecialController extends StepController {
                 rowsLoop:
                     for (int i = flwd; i < rows; i++) {
                         //test if the measuredValue can be parsed
-                        final Cell cell = new Cell(i, ((Column)mv.getTableElement()).getNumber());
+                        final Cell cell = new Cell(i, ((Column) mv.getTableElement()).getNumber());
                         final String value = tableController.getValueAt(cell);
                         if (i >= firstLineWithData) {
                             try {
@@ -186,17 +186,23 @@ public class Step6bSpecialController extends StepController {
                                 if (logger.isTraceEnabled()) {
                                     logger.trace("Value could not be parsed: " + value, e);
                                 }
-                                continue rowsLoop; // it okay this way because parsing test happened during step 3
+                                // it okay this way because parsing test happened during step 3
+                                continue rowsLoop;
                             }
 
                             final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
                             final ObservedProperty op = mv.getObservedProperty().forThis(cell);
                             final Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
-                            // check, if for the column of foi and obsProp a model is available and if the sensor is generated in this model
+                            /*
+                             * check, if for the column of foi and obsProp a model is 
+                             * available and if the sensor is generated in this model
+                             */
                             for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
                                 if (s6bsM.getSensor().isGenerated() &&
-                                        s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) && // XXX maybe own equals
-                                        s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) { // XXX check if foi and obsprop
+                                        // XXX maybe own equals
+                                        s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) &&
+                                        // XXX check if foi and obsprop
+                                        s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) {
                                     continue mvLoop;
                                 }
                             }
@@ -218,9 +224,9 @@ public class Step6bSpecialController extends StepController {
     /** {@inheritDoc} */
     @Override
     public StepController getNext() {
-        final Step6bSpecialModel step6bSpecialModel = getNextModel();
-        if (step6bSpecialModel != null) {
-            return new Step6bSpecialController(step6bSpecialModel,firstLineWithData);
+        final Step6bSpecialModel step6bSpecialModelTmp = getNextModel();
+        if (step6bSpecialModelTmp != null) {
+            return new Step6bSpecialController(step6bSpecialModelTmp, firstLineWithData);
         }
 
         return null;

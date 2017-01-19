@@ -105,7 +105,7 @@ public class Step8Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void loadSettings() {
-        step8Panel = new Step8Panel(step7Model,this);
+        step8Panel = new Step8Panel(step7Model, this);
         BackNextController.getInstance().changeNextToFinish();
         File logFile = null;
 
@@ -141,7 +141,7 @@ public class Step8Controller extends StepController {
         } catch (final IOException e) {
             logger.error(new StringBuffer("Exception thrown: ").append(e.getMessage()).toString(), e);
             JOptionPane.showMessageDialog(step8Panel,
-                    Lang.l().step8SaveModelFailed(logFile,e.getLocalizedMessage()),
+                    Lang.l().step8SaveModelFailed(logFile, e.getLocalizedMessage()),
                     Lang.l().errorDialogTitle(),
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -231,7 +231,8 @@ public class Step8Controller extends StepController {
                     "-c",
                     step7Model.getConfigFile().getAbsolutePath());
             builder.redirectErrorStream(true);
-            final DirectImportWorker directImporter = new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(),builder);
+            final DirectImportWorker directImporter = 
+                    new DirectImportWorker(step8Panel.getDirectImportOutputTextArea(), builder);
             directImporter.execute();
         }
     }
@@ -248,28 +249,26 @@ public class Step8Controller extends StepController {
             final String[] files = directoryWithFeederJar.list(new FilenameFilter() {
                 @Override
                 public boolean accept(final File dir, final String name) {
-                    return (name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar"));
+                    return name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar");
                 }
             });
-            if (files != null && files.length > 0)
-            {
-                return files[0]; // returns the first matching feeder.jar
-            }
-            else {
+            if (files != null && files.length > 0) {
+                // returns the first matching feeder.jar
+                return files[0];
+            } else {
                 final int userChoice = JOptionPane.showConfirmDialog(step8Panel,
                         Lang.l().step8FeederJarNotFoundSelectByUser(pathToDirectoryWithFeederJar),
                         Lang.l().errorDialogTitle(), JOptionPane.YES_NO_OPTION);
-                if (userChoice == JOptionPane.YES_OPTION)
-                {
+                if (userChoice == JOptionPane.YES_OPTION) {
                     final JFileChooser chooser = new JFileChooser(pathToDirectoryWithFeederJar);
-                    final FileNameExtensionFilter filter = new FileNameExtensionFilter("Java ARchives - *.jar","jar");
+                    final FileNameExtensionFilter filter = new FileNameExtensionFilter("Java ARchives - *.jar", "jar");
                     chooser.setFileFilter(filter);
                     chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     chooser.setMultiSelectionEnabled(false);
                     final int returnVal = chooser.showOpenDialog(step8Panel);
-                    if(returnVal == JFileChooser.APPROVE_OPTION) {
-                       logger.debug(String.format("Choosen file: %s",chooser.getSelectedFile().getAbsolutePath()));
-                       return chooser.getSelectedFile().getAbsolutePath();
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        logger.debug(String.format("Choosen file: %s", chooser.getSelectedFile().getAbsolutePath()));
+                        return chooser.getSelectedFile().getAbsolutePath();
                     }
                 }
             }
@@ -277,12 +276,12 @@ public class Step8Controller extends StepController {
         return pathToDirectoryWithFeederJar;
     }
 
-    private class DirectImportWorker extends SwingWorker<String, String>{
+    private class DirectImportWorker extends SwingWorker<String, String> {
 
         private final JTextArea processOutPut;
         private final ProcessBuilder procBuilder;
 
-        public DirectImportWorker(final JTextArea processOutPut,
+        DirectImportWorker(final JTextArea processOutPut,
                 final ProcessBuilder procBuilder) {
             this.processOutPut = processOutPut;
             this.procBuilder = procBuilder;
@@ -304,18 +303,18 @@ public class Step8Controller extends StepController {
                 final InputStream res = importProcess.getInputStream();
                 final byte[] buffer = new byte[128];
                 int len;
-                while ( (len=res.read(buffer,0,buffer.length))!=-1) {
-                    publish(new String(buffer,0,len));
+                while ((len = res.read(buffer, 0, buffer.length)) != -1) {
+                    publish(new String(buffer, 0, len));
                     if (isCancelled()) {
                         importProcess.destroy();
-                        return "";
+                        return "Cancelled";
                     }
                 }
+            } catch (final Exception e) {
+                logger.error("Exception thrown: {}", e.getMessage());
+                logger.debug("Exception", e);
             }
-            catch (final Exception e) {
-                e.printStackTrace();
-            }
-            return "";
+            return "Finished";
         }
 
         @Override

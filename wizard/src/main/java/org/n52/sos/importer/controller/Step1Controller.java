@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.SocketException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -58,6 +57,8 @@ import org.slf4j.LoggerFactory;
  * @version $Id: $Id
  */
 public class Step1Controller extends StepController {
+
+    private static final String ERROR = "Error";
 
     private static final Logger logger = LoggerFactory.getLogger(Step1Controller.class);
 
@@ -85,22 +86,20 @@ public class Step1Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void loadSettings() {
-        //if (step1Panel == null) {
-            step1Panel = new Step1Panel(this);
+        step1Panel = new Step1Panel(this);
 
-            //disable "back" button
-            BackNextController.getInstance().setBackButtonVisible(false);
+        //disable "back" button
+        BackNextController.getInstance().setBackButtonVisible(false);
 
-            final String csvFilePath = step1Model.getCSVFilePath();
-            step1Panel.setCSVFilePath(csvFilePath);
+        final String csvFilePath = step1Model.getCSVFilePath();
+        step1Panel.setCSVFilePath(csvFilePath);
 
-            if(step1Panel.getCSVFilePath() == null ||
-                    step1Panel.getCSVFilePath().equals("")) {
-                BackNextController.getInstance().setNextButtonEnabled(false);
-            } else {
-                BackNextController.getInstance().setNextButtonEnabled(true);
-            }
-        //}
+        if (step1Panel.getCSVFilePath() == null ||
+                step1Panel.getCSVFilePath().equals("")) {
+            BackNextController.getInstance().setNextButtonEnabled(false);
+        } else {
+            BackNextController.getInstance().setNextButtonEnabled(true);
+        }
         step1Panel.setFeedingType(step1Model.getFeedingType());
         step1Panel.setCSVFilePath(step1Model.getCSVFilePath());
         step1Panel.setUrl(step1Model.getUrl());
@@ -160,18 +159,6 @@ public class Step1Controller extends StepController {
         }
     }
 
-    private class CSVFileFilter extends FileFilter {
-        @Override
-        public boolean accept(final File file) {
-            return file.isDirectory() ||
-                   file.getName().toLowerCase().endsWith(".csv");
-        }
-        @Override
-        public String getDescription() {
-            return "CSV files";
-        }
-    }
-
     /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
@@ -190,18 +177,13 @@ public class Step1Controller extends StepController {
 
         if (step1Panel != null &&  step1Panel.getFeedingType() == Step1Panel.CSV_FILE) {
             final String filePath = step1Panel.getCSVFilePath();
-            if (filePath == null) {
-                JOptionPane.showMessageDialog(null,
-                        "Please choose a CSV file.",
-                        "File missing",
-                        JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
+            final String instruction = "Please choose a CSV file.";
+            final String title = "File missing";
             // checks one-time feed input data for validity
-            if (filePath.equals("")) {
+            if (filePath == null || filePath.equals("")) {
                 JOptionPane.showMessageDialog(null,
-                        "Please choose a CSV file.",
-                        "File missing",
+                        instruction,
+                        title,
                         JOptionPane.WARNING_MESSAGE);
                 return false;
             }
@@ -210,7 +192,7 @@ public class Step1Controller extends StepController {
             if (!dataFile.exists()) {
                 JOptionPane.showMessageDialog(null,
                         "The specified file does not exist.",
-                        "Error",
+                        ERROR,
                         JOptionPane.ERROR_MESSAGE);
                 return false;
             }
@@ -218,7 +200,7 @@ public class Step1Controller extends StepController {
             if (!dataFile.isFile()) {
                 JOptionPane.showMessageDialog(null,
                         "Please specify a file, not a directory.",
-                        "Error",
+                        ERROR,
                         JOptionPane.ERROR_MESSAGE);
                 return false;
             }
@@ -226,11 +208,11 @@ public class Step1Controller extends StepController {
             if (!dataFile.canRead()) {
                 JOptionPane.showMessageDialog(null,
                         "No reading access on the specified file.",
-                        "Error",
+                        ERROR,
                         JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            readFile(dataFile,step1Panel.getFileEncoding());
+            readFile(dataFile, step1Panel.getFileEncoding());
         } else if (step1Panel != null && (step1Panel.getFeedingType() == Step1Panel.FTP_FILE)) {
             // checks repetitive feed input data for validity
             if (step1Panel.getUrl() == null || step1Panel.getUrl().equals("")) {
@@ -253,13 +235,14 @@ public class Step1Controller extends StepController {
             FTPClient client;
 
             // proxy
-            final String pHost = System.getProperty("proxyHost","proxy");
+            final String pHost = System.getProperty("proxyHost", "proxy");
             int pPort = -1;
-            if (System.getProperty("proxyPort") != null) {
-                pPort = Integer.parseInt(System.getProperty("proxyPort"));
+            final String proxyPort = "proxyPort";
+            if (System.getProperty(proxyPort) != null) {
+                pPort = Integer.parseInt(System.getProperty(proxyPort));
             }
-            final String pUser = System.getProperty( "http.proxyUser");
-            final String pPassword = System.getProperty( "http.proxyPassword");
+            final String pUser = System.getProperty("http.proxyUser");
+            final String pPassword = System.getProperty("http.proxyPassword");
             if (pHost != null && pPort != -1) {
                 if (pUser != null && pPassword != null) {
                     client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
@@ -270,7 +253,7 @@ public class Step1Controller extends StepController {
             }
 
             // get first file
-            if(step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
+            if (step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
                 final String csvFilePath = System.getProperty("user.home")
                         + File.separator + ".SOSImporter" + File.separator + "tmp_"
                         + step1Panel.getFilenameSchema();
@@ -286,7 +269,8 @@ public class Step1Controller extends StepController {
                     if (login) {
                         // download file
                         final int result = client.cwd(step1Panel.getDirectory());
-                        if (result == 250) { // successfully connected
+                        // successfully connected
+                        if (result == 250) {
                             final File outputFile = new File(csvFilePath);
                             final FileOutputStream fos = new FileOutputStream(outputFile);
                             client.retrieveFile(step1Panel.getFilenameSchema(), fos);
@@ -304,25 +288,18 @@ public class Step1Controller extends StepController {
                     final File csv = new File(csvFilePath);
                     if (csv.length() != 0) {
                         step1Panel.setCSVFilePath(csvFilePath);
-                        readFile(new File(csvFilePath),step1Panel.getFileEncoding());
+                        readFile(new File(csvFilePath), step1Panel.getFileEncoding());
                     } else {
                         csv.delete();
                         throw new IOException();
                     }
 
 
-                } catch (final SocketException e) {
-                    System.err.println(e);
-                    JOptionPane.showMessageDialog(null,
-                            "The file you specified cannot be obtained.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return false;
                 } catch (final IOException e) {
                     System.err.println(e);
                     JOptionPane.showMessageDialog(null,
                             "The file you specified cannot be obtained.",
-                            "Error",
+                            ERROR,
                             JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
@@ -373,7 +350,7 @@ public class Step1Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
-        final Step2Model s2m = new Step2Model(tmpCSVFileContent,csvFileRowCount);
+        final Step2Model s2m = new Step2Model(tmpCSVFileContent, csvFileRowCount);
         tmpCSVFileContent = null;
 
         return new Step2Controller(s2m);
@@ -384,4 +361,19 @@ public class Step1Controller extends StepController {
     public StepModel getModel() {
         return step1Model;
     }
+    
+
+    private class CSVFileFilter extends FileFilter {
+        @Override
+        public boolean accept(final File file) {
+            return file.isDirectory() ||
+                   file.getName().toLowerCase().endsWith(".csv");
+        }
+        
+        @Override
+        public String getDescription() {
+            return "CSV files";
+        }
+    }
+
 }

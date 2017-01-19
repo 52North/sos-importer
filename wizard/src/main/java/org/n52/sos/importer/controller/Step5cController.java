@@ -78,7 +78,7 @@ public class Step5cController extends StepController {
      * @param step5cModel a {@link org.n52.sos.importer.model.Step5cModel} object.
      * @param firstLineWithData a int.
      */
-    public Step5cController(final Step5cModel step5cModel,final int firstLineWithData) {
+    public Step5cController(final Step5cModel step5cModel, final int firstLineWithData) {
         this(firstLineWithData);
         this.step5cModel = step5cModel;
     }
@@ -166,7 +166,7 @@ public class Step5cController extends StepController {
         positionController = new PositionController();
         final Position p = positionController.getNextPositionWithMissingValues();
         if (p != null) {
-            return new Step5cController(new Step5cModel(p),firstLineWithData);
+            return new Step5cController(new Step5cModel(p), firstLineWithData);
         }
 
         positionController = null;

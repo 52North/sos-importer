@@ -79,7 +79,7 @@ public class Step4bController extends StepController {
      * @param step4bModel a {@link org.n52.sos.importer.model.Step4bModel} object.
      * @param firstLineWithData a int.
      */
-    public Step4bController(final Step4bModel step4bModel,final int firstLineWithData) {
+    public Step4bController(final Step4bModel step4bModel, final int firstLineWithData) {
         this(firstLineWithData);
         this.step4bModel = step4bModel;
     }
@@ -122,7 +122,7 @@ public class Step4bController extends StepController {
         tableController.addMultipleSelectionListener(new SelectionChanged());
 
         for (final int number: selectedRowsOrColumns) {
-            final Column column = new Column(number,fLWData);
+            final Column column = new Column(number, fLWData);
             final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
             resource.unassign(mv);
             tableController.selectColumn(number);
@@ -140,7 +140,7 @@ public class Step4bController extends StepController {
         step4bModel.setSelectedColumns(selectedColumns);
 
         for (final int number: selectedColumns) {
-            final Column column = new Column(number,fLWData);
+            final Column column = new Column(number, fLWData);
             final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
             resource.assign(mv);
         }
@@ -162,41 +162,6 @@ public class Step4bController extends StepController {
         tableController.removeMultipleSelectionListener();
 
         step4Panel = null;
-    };
-
-    private class SelectionChanged implements TableController.MultipleSelectionListener {
-
-        @Override
-        public void columnSelectionChanged(final int[] selectedColumns) {
-            for (final int number: selectedColumns) {
-                final int fLWData = step4bModel.getFirstLineWithData();
-                final Column column = new Column(number,fLWData);
-                final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
-                if (mv == null) {
-                    JOptionPane.showMessageDialog(null,
-                            Lang.l().step4bInfoNotMeasuredValue(),
-                            Lang.l().infoDialogTitle(),
-                            JOptionPane.INFORMATION_MESSAGE);
-                    tableController.deselectColumn(number);
-                    return;
-                }
-
-                final Resource resource = step4bModel.getResource();
-                if (resource.isAssigned(mv)) {
-                    JOptionPane.showMessageDialog(null,
-                            Lang.l().step4bInfoResoureAlreadySet(resource),
-                            Lang.l().infoDialogTitle(),
-                            JOptionPane.INFORMATION_MESSAGE);
-                    tableController.deselectColumn(number);
-                    return;
-                }
-            }
-        }
-
-        @Override
-        public void rowSelectionChanged(final int[] selectedRows) {
-            // Do nothing -> only columns are used.
-        }
     }
 
     /** {@inheritDoc} */
@@ -231,9 +196,10 @@ public class Step4bController extends StepController {
         while (resourceType != null) {
             final int number = resourceType.getList().size();
             // in case there is just one resource of this type:
+            final String skipStep = "Skip Step 4b for ";
             if (number == 1) {
                 final Resource oneResource = resourceType.getList().get(0);
-                logger.info("Skip Step 4b for " + resourceType + "s" +
+                logger.info(skipStep + resourceType + "s" +
                         " since there is just " + oneResource);
 
                 for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
@@ -241,16 +207,17 @@ public class Step4bController extends StepController {
                 }
 
             //in case there are more than two resources of this type:
-            } else if (resource == null && number >= 2){
+            } else if (resource == null && number >= 2) {
                 resource = getNextUnassignedResource(resourceType);
-            } else { //number == 0
-                logger.info("Skip Step 4b for " + resourceType + "s" +
+            } else {
+                //number == 0
+                logger.info(skipStep + resourceType + "s" +
                         " since there are not any " + resourceType + "s");
             }
             resourceType = resourceType.getNextResourceType();
         }
 
-        step4bModel = new Step4bModel(resource,firstLineWithData);
+        step4bModel = new Step4bModel(resource, firstLineWithData);
         return resource != null;
     }
 
@@ -263,7 +230,7 @@ public class Step4bController extends StepController {
         while (resourceType != null) {
             nextResource = getNextUnassignedResource(resourceType);
             if (nextResource != null) {
-                return new Step4bController(new Step4bModel(nextResource,firstLineWithData),firstLineWithData);
+                return new Step4bController(new Step4bModel(nextResource, firstLineWithData), firstLineWithData);
             }
 
             resourceType = resourceType.getNextResourceType();
@@ -313,5 +280,40 @@ public class Step4bController extends StepController {
     @Override
     public StepModel getModel() {
         return step4bModel;
+    }
+
+    private class SelectionChanged implements TableController.MultipleSelectionListener {
+
+        @Override
+        public void columnSelectionChanged(final int[] selectedColumns) {
+            for (final int number: selectedColumns) {
+                final int fLWData = step4bModel.getFirstLineWithData();
+                final Column column = new Column(number, fLWData);
+                final MeasuredValue mv = ModelStore.getInstance().getMeasuredValueAt(column);
+                if (mv == null) {
+                    JOptionPane.showMessageDialog(null,
+                            Lang.l().step4bInfoNotMeasuredValue(),
+                            Lang.l().infoDialogTitle(),
+                            JOptionPane.INFORMATION_MESSAGE);
+                    tableController.deselectColumn(number);
+                    return;
+                }
+
+                final Resource resource = step4bModel.getResource();
+                if (resource.isAssigned(mv)) {
+                    JOptionPane.showMessageDialog(null,
+                            Lang.l().step4bInfoResoureAlreadySet(resource),
+                            Lang.l().infoDialogTitle(),
+                            JOptionPane.INFORMATION_MESSAGE);
+                    tableController.deselectColumn(number);
+                    return;
+                }
+            }
+        }
+
+        @Override
+        public void rowSelectionChanged(final int[] selectedRows) {
+            // Do nothing -> only columns are used.
+        }
     }
 }

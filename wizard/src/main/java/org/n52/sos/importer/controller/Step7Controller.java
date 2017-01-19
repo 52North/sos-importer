@@ -81,15 +81,21 @@ public class Step7Controller extends StepController {
                 s7P.setSosVersion(s7M.getVersion());
             }
             switch (s7M.getImportStrategy()) {
-            case SweArrayObservationWithSplitExtension:
-                s7P.setHunkSize(s7M.getHunkSize());
-                s7P.setSendBuffer(s7M.getSendBuffer());
-            default:
-                s7P.setImportStrategy(s7M.getImportStrategy());
-                break;
+                case SweArrayObservationWithSplitExtension:
+                    loadImportStrategyBasedSettings();
+                    break;
+                default:
+                    loadImportStrategyBasedSettings();
+                    s7P.setImportStrategy(s7M.getImportStrategy());
+                    break;
             }
         }
         BackNextController.getInstance().changeFinishToNext();
+    }
+
+    private void loadImportStrategyBasedSettings() {
+        s7P.setHunkSize(s7M.getHunkSize());
+        s7P.setSendBuffer(s7M.getSendBuffer());
     }
 
     /** {@inheritDoc} */
@@ -103,10 +109,10 @@ public class Step7Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void saveSettings() {
-        final String sosURL = s7P.getSOSURL(),
-                offering = s7P.getOfferingName(),
-                binding = s7P.getSosBinding(),
-                version = s7P.getSosVersion();
+        final String sosURL = s7P.getSOSURL();
+        final String offering = s7P.getOfferingName();
+        final String binding = s7P.getSosBinding();
+        final String version = s7P.getSosVersion();
         final boolean generateOfferingFromSensorName = s7P.isGenerateOfferingFromSensorName();
         final File configFile = new File(s7P.getConfigFile());
         if (s7M == null) {
@@ -127,13 +133,19 @@ public class Step7Controller extends StepController {
             }
         }
         switch (s7P.getImportStrategy()) {
-        case SweArrayObservationWithSplitExtension:
-            s7M.setHunkSize(s7P.getHunkSize());
-            s7M.setSendBuffer(s7P.getSendBuffer());
-        default:
-            s7M.setImportStrategy(s7P.getImportStrategy());
-            break;
+            case SweArrayObservationWithSplitExtension:
+                loadImportStrategyBasedSetting();
+                break;
+            default:
+                loadImportStrategyBasedSetting();
+                s7M.setImportStrategy(s7P.getImportStrategy());
+                break;
         }
+    }
+
+    private void loadImportStrategyBasedSetting() {
+        s7M.setHunkSize(s7P.getHunkSize());
+        s7M.setSendBuffer(s7P.getSendBuffer());
     }
 
     /** {@inheritDoc} */
@@ -166,7 +178,7 @@ public class Step7Controller extends StepController {
         if (isOfferingNameNotGiven()) {
             // user decided to give input but (s)he did NOT, so tell him
             return showErrorDialogAndLogIt(Lang.l().step7OfferingNameNotGiven());
-        } else if (isOfferingNameInvalid() ) {
+        } else if (isOfferingNameInvalid()) {
             // user gave input but it is not valid
             return showErrorDialogAndLogIt(Lang.l().step7OfferingNameNotValid(s7P.getOfferingName()));
         } else if (isSosVersionNotGiven()) {
@@ -188,7 +200,7 @@ public class Step7Controller extends StepController {
         if (configFile.exists()) {
             return !configFile.canWrite();
         } else {
-            File configFileFolder = new File(configPath.substring(0,configPath.lastIndexOf(File.separatorChar)));
+            File configFileFolder = new File(configPath.substring(0, configPath.lastIndexOf(File.separatorChar)));
             if (configFileFolder.exists()) {
                 return !configFileFolder.canWrite();
             } else {
@@ -198,7 +210,9 @@ public class Step7Controller extends StepController {
     }
 
     private boolean isBindingNotGivenButRequired() {
-        return s7P.getSosVersion() != null && s7P.getSosVersion().equalsIgnoreCase("2.0.0") && (s7P.getSosBinding() == null || s7P.getSosBinding().isEmpty());
+        return s7P.getSosVersion() != null &&
+                s7P.getSosVersion().equalsIgnoreCase("2.0.0") &&
+                (s7P.getSosBinding() == null || s7P.getSosBinding().isEmpty());
     }
 
     private boolean isSosVersionNotGiven() {

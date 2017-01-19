@@ -46,9 +46,9 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * @author Raimund
  * @version $Id: $Id
  */
-public class MainController {
+public final class MainController {
 
-    private static MainController instance = null;
+    private static MainController instance;
 
     private final MainFrame mainFrame = new MainFrame(this);
 

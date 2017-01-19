@@ -81,7 +81,7 @@ public class Step6aController extends StepController {
      * @param step6aModel a {@link org.n52.sos.importer.model.Step6aModel} object.
      * @param firstLineWithData a int.
      */
-    public Step6aController(final Step6aModel step6aModel,final int firstLineWithData) {
+    public Step6aController(final Step6aModel step6aModel, final int firstLineWithData) {
         this(firstLineWithData);
         this.step6aModel = step6aModel;
     }

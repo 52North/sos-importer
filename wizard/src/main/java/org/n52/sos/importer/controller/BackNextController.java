@@ -40,15 +40,15 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  * @version $Id: $Id
  */
-public class BackNextController {
+public final class BackNextController {
 
-    private static BackNextController instance = null;
+    private static BackNextController instance;
 
     private static final Logger logger = LoggerFactory.getLogger(BackNextController.class);
 
-    private BackNextModel bNModel = null;
+    private BackNextModel bNModel;
 
-    private BackNextPanel backNextPanel = null;
+    private BackNextPanel backNextPanel;
 
     private BackNextController() {
         bNModel = new BackNextModel();
@@ -133,7 +133,7 @@ public class BackNextController {
         }
         final StepController currentSC = bNModel.getCurrentStepController();
         // handle potential language switch
-        if(currentSC instanceof Step1Controller) {
+        if (currentSC instanceof Step1Controller) {
             backNextPanel = BackNextPanel.getInstance();
         }
         final MainController mC = MainController.getInstance();
