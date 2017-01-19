@@ -62,6 +62,7 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step4aModel implements StepModel {
 
     private final String description = Lang.l().step4aModelDescription();

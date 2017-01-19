@@ -65,6 +65,7 @@ import java.util.List;
 
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step5aModel implements StepModel {
 
 
@@ -85,10 +86,10 @@ public class Step5aModel implements StepModel {
     /**
      * <p>setDateAndTimeModel.</p>
      *
-     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     * @param newDateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
      */
-    public void setDateAndTimeModel(DateAndTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
+    public void setDateAndTimeModel(DateAndTime newDateAndTime) {
+        this.dateAndTime = newDateAndTime;
     }
 
     /**

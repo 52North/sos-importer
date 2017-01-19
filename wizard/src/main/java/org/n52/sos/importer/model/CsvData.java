@@ -44,7 +44,7 @@ import java.util.List;
 public class CsvData {
 
     private List<String[]> lines = new LinkedList<>();
-    private int columns = 0;
+    private int columns;
 
     /**
      * <p>Setter for the field <code>lines</code>.</p>

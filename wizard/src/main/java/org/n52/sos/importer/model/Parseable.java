@@ -45,12 +45,12 @@ public interface Parseable {
      * @param s a {@link java.lang.String} object.
      * @return a {@link java.lang.Object} object.
      */
-    public Object parse(String s);
+    Object parse(String s);
 
     /**
      * set the pattern to be used by parse(String s);
      *
      * @param parsePattern a {@link java.lang.String} object.
      */
-    public void setPattern(String parsePattern);
+    void setPattern(String parsePattern);
 }

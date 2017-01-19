@@ -64,6 +64,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6bSpecialModel implements StepModel {
 
     private final FeatureOfInterest foi;
@@ -130,23 +131,30 @@ public class Step6bSpecialModel implements StepModel {
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (!(obj instanceof Step6bSpecialModel))
+        }
+        if (!(obj instanceof Step6bSpecialModel)) {
             return false;
+        }
         Step6bSpecialModel other = (Step6bSpecialModel) obj;
         if (foi == null) {
-            if (other.foi != null)
+            if (other.foi != null) {
                 return false;
-        } else if (!foi.equals(other.foi))
+            }
+        } else if (!foi.equals(other.foi)) {
             return false;
+        }
         if (obsProp == null) {
-            if (other.obsProp != null)
+            if (other.obsProp != null) {
                 return false;
-        } else if (!obsProp.equals(other.obsProp))
+            }
+        } else if (!obsProp.equals(other.obsProp)) {
             return false;
+        }
         return true;
     }
 

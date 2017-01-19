@@ -42,9 +42,11 @@ import org.slf4j.LoggerFactory;
  */
 public class BackNextModel {
 
-    private final Stack<StepController> previousStepControllers;
+    private static final String CLOSING_BRACES = "])";
 
     private static final Logger logger = LoggerFactory.getLogger(BackNextModel.class);
+
+    private final Stack<StepController> previousStepControllers;
 
     private final Stack<StepController> followingStepControllers;
 
@@ -70,8 +72,8 @@ public class BackNextModel {
         final StepController sc = previousStepControllers.pop();
         if (logger.isTraceEnabled()) {
             logger.trace("result: " +
-                    (sc!=null?sc.getClass().getSimpleName():sc) +
-                    "[" + (sc!=null?sc.hashCode():sc) + "])");
+                    (sc != null ? sc.getClass().getSimpleName() : sc) +
+                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
         }
         return sc;
     }
@@ -84,8 +86,8 @@ public class BackNextModel {
     public void addPreviousStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addPreviousStepController(" +
-                    (sc!=null?sc.getClass().getSimpleName():sc) +
-                    "[" + (sc!=null?sc.hashCode():sc) + "])");
+                    (sc != null ? sc.getClass().getSimpleName() : sc) +
+                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
         }
         previousStepControllers.push(sc);
     }
@@ -99,7 +101,7 @@ public class BackNextModel {
         if (logger.isTraceEnabled()) {
             logger.trace("setCurrentStepController(" +
                     currentSC.getClass().getSimpleName() +
-                    "[" + currentSC.hashCode() + "])");
+                    "[" + currentSC.hashCode() + CLOSING_BRACES);
         }
         currentStepController = currentSC;
     }
@@ -112,9 +114,9 @@ public class BackNextModel {
     public StepController getCurrentStepController() {
         if (logger.isTraceEnabled()) {
             logger.trace("getCurrentStepController()" +
-                    (currentStepController != null? ": result:" +
+                    (currentStepController != null ? ": result:" +
                     currentStepController.getClass().getSimpleName() +
-                    "[" + currentStepController.hashCode() + "]":""));
+                    "[" + currentStepController.hashCode() + "]" : ""));
         }
         return currentStepController;
     }
@@ -134,11 +136,9 @@ public class BackNextModel {
         }
         if (logger.isTraceEnabled()) {
             logger.trace("followingSC: " +
-                    (sc!=null?
-                            sc.getClass().getSimpleName() +
-                            "[" + sc.hashCode() + "]"
-                            :sc)
-                    );
+                    (sc != null
+                    ? sc.getClass().getSimpleName() + "[" + sc.hashCode() + "]"
+                            : sc));
         }
         return sc;
     }
@@ -151,8 +151,8 @@ public class BackNextModel {
     public void addFollowingStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addFollowingStepController(" +
-                    (sc!=null?sc.getClass().getSimpleName():sc) +
-                    "[" + (sc!=null?sc.hashCode():sc) + "])");
+                    (sc != null ? sc.getClass().getSimpleName() : sc) +
+                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
         }
         followingStepControllers.push(sc);
     }

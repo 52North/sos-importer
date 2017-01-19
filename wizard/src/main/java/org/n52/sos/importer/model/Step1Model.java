@@ -59,9 +59,14 @@
  * @version $Id: $Id
  */
 package org.n52.sos.importer.model;
-public class Step1Model implements StepModel{
 
-    private String url, user, password, directory, filenameSchema;
+public class Step1Model implements StepModel {
+
+    private String url;
+    private String user;
+    private String password;
+    private String directory;
+    private String filenameSchema;
     private boolean regex;
     private int feedingType;
     private String csvFilePath = "";
@@ -196,10 +201,10 @@ public class Step1Model implements StepModel{
     /**
      * <p>setCSVFilePath.</p>
      *
-     * @param csvFilePath a {@link java.lang.String} object.
+     * @param newCsvFilePath a {@link java.lang.String} object.
      */
-    public void setCSVFilePath(final String csvFilePath) {
-        this.csvFilePath = csvFilePath;
+    public void setCSVFilePath(final String newCsvFilePath) {
+        this.csvFilePath = newCsvFilePath;
     }
 
     /**

@@ -84,13 +84,13 @@ public class XMLTools {
                 isIdeographic(c);
     }
 
-    private static final boolean _isAsciiBaseChar(char c) {
+    private static boolean _isAsciiBaseChar(char c) {
         return
                 _charInRange(c, 0x0041, 0x005A) ||
                 _charInRange(c, 0x0061, 0x007A);
     }
 
-    private static final boolean _isNonAsciiBaseChar(char c) {
+    private static boolean _isNonAsciiBaseChar(char c) {
         return
                 _charInRange(c, 0x00C0, 0x00D6) ||
                 _charInRange(c, 0x00D8, 0x00F6) ||
@@ -424,12 +424,12 @@ public class XMLTools {
                 _isNonAsciiDigit(c);
     }
 
-    private static final boolean _isAsciiDigit(char c) {
+    private static boolean _isAsciiDigit(char c) {
         return
                 _charInRange(c, 0x0030, 0x0039);
     }
 
-    private static final boolean _isNonAsciiDigit(char c) {
+    private static boolean _isNonAsciiDigit(char c) {
         return
                 _charInRange(c, 0x0660, 0x0669) ||
                 _charInRange(c, 0x06F0, 0x06F9) ||
@@ -468,7 +468,7 @@ public class XMLTools {
                 _charInRange(c, 0x30FC, 0x30FE);
     }
 
-    private static final boolean _charInRange(char c, int start, int end) {
+    private static boolean _charInRange(char c, int start, int end) {
         return c >= start && c <= end;
     }
 

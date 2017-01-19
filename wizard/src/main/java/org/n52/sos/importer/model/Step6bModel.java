@@ -63,6 +63,7 @@ package org.n52.sos.importer.model;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6bModel implements StepModel {
 
     private MeasuredValue measuredValue;

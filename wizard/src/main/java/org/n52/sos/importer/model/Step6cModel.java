@@ -66,6 +66,7 @@ import java.util.List;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6cModel implements StepModel {
 
     private FeatureOfInterest featureOfInterest;
@@ -84,7 +85,9 @@ public class Step6cModel implements StepModel {
      */
     public Step6cModel(FeatureOfInterest featureOfInterest) {
         this.featureOfInterest = featureOfInterest;
-        position = this.featureOfInterest.getPosition()!=null?this.featureOfInterest.getPosition():new Position();
+        position = this.featureOfInterest.getPosition() != null
+                ? this.featureOfInterest.getPosition()
+                        : new Position();
         missingPositionComponents = new ArrayList<Component>();
     }
 

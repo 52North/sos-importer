@@ -65,6 +65,7 @@ import java.util.List;
 
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step5cModel implements StepModel {
 
     private Position position;

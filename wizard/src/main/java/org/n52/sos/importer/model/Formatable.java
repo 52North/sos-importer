@@ -44,12 +44,12 @@ public interface Formatable {
      * @param o the object to format
      * @return a {@link java.lang.String} object.
      */
-    public String format(Object o);
+    String format(Object o);
 
     /**
      * set the pattern to be used by format(String s);
      *
      * @param formatPattern a {@link java.lang.String} object.
      */
-    public void setPattern(String formatPattern);
+    void setPattern(String formatPattern);
 }

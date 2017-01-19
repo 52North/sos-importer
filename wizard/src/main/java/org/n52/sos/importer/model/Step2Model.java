@@ -61,6 +61,7 @@
 package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
+
 public class Step2Model implements StepModel {
 
     private String csvFileContent;
@@ -83,15 +84,15 @@ public class Step2Model implements StepModel {
 
     private String sampleBasedStartRegEx = "";
 
-    private int dateOffset = 0;
+    private int dateOffset;
 
     private String sampleBasedDateExtractionRegEx = "";
 
     private String sampleBasedDatePattern = "";
 
-    private int dataOffset = 0;
+    private int dataOffset;
 
-    private int sampleSizeOffset = 0;
+    private int sampleSizeOffset;
 
     private String sampleBasedSampleSizeRegEx = "";
 
@@ -284,11 +285,11 @@ public class Step2Model implements StepModel {
     /**
      * <p>setSampleBased.</p>
      *
-     * @param isSampleBased a boolean.
+     * @param newIsSampleBased a boolean.
      * @return a {@link org.n52.sos.importer.model.Step2Model} object.
      */
-    public Step2Model setSampleBased(final boolean isSampleBased) {
-        this.isSampleBased = isSampleBased;
+    public Step2Model setSampleBased(final boolean newIsSampleBased) {
+        this.isSampleBased = newIsSampleBased;
         return this;
     }
 
@@ -315,11 +316,11 @@ public class Step2Model implements StepModel {
     /**
      * <p>setSampleBasedDateOffset.</p>
      *
-     * @param dateOffset a int.
+     * @param newDateOffset a int.
      * @return a {@link org.n52.sos.importer.model.Step2Model} object.
      */
-    public Step2Model setSampleBasedDateOffset(final int dateOffset) {
-        this.dateOffset = dateOffset;
+    public Step2Model setSampleBasedDateOffset(final int newDateOffset) {
+        this.dateOffset = newDateOffset;
         return this;
     }
 
@@ -375,11 +376,11 @@ public class Step2Model implements StepModel {
     /**
      * <p>setSampleBasedDataOffset.</p>
      *
-     * @param dataOffset a int.
+     * @param newDataOffset a int.
      * @return a {@link org.n52.sos.importer.model.Step2Model} object.
      */
-    public Step2Model setSampleBasedDataOffset(final int dataOffset) {
-        this.dataOffset = dataOffset;
+    public Step2Model setSampleBasedDataOffset(final int newDataOffset) {
+        this.dataOffset = newDataOffset;
         return this;
     }
 
@@ -395,11 +396,11 @@ public class Step2Model implements StepModel {
     /**
      * <p>setSampleBasedSampleSizeOffset.</p>
      *
-     * @param sampleSizeOffset a int.
+     * @param newSampleSizeOffset a int.
      * @return a {@link org.n52.sos.importer.model.Step2Model} object.
      */
-    public Step2Model setSampleBasedSampleSizeOffset(final int sampleSizeOffset) {
-        this.sampleSizeOffset = sampleSizeOffset;
+    public Step2Model setSampleBasedSampleSizeOffset(final int newSampleSizeOffset) {
+        this.sampleSizeOffset = newSampleSizeOffset;
         return this;
     }
 

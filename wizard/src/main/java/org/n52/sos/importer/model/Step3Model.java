@@ -65,7 +65,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-public class Step3Model implements StepModel{
+
+public class Step3Model implements StepModel {
 
     private static final Logger logger = LoggerFactory.getLogger(Step3Model.class);
 
@@ -107,23 +108,25 @@ public class Step3Model implements StepModel{
         columnAssignments.put(markedColumn, selection);
         final List<String> addedValue = columnAssignments.get(markedColumn);
         if (logger.isDebugEnabled()) {
+            final String aquot = "\"; ";
             logger.debug("Next two values should be equal: " +
-                    "addedValue: \"" + addedValue + "\"; " +
-                    "selection : \"" + selection + "\"; " +
-                    "aV==sel? " + (addedValue==selection) +
+                    "addedValue: \"" + addedValue + aquot +
+                    "selection : \"" + selection + aquot +
+                    "aV==sel? " + (addedValue == selection) +
                     "; aV.equals(sel)? " + addedValue.equals(selection));
         }
-        return (addedValue == selection && addedValue.equals(selection));
+        return addedValue == selection && addedValue.equals(selection);
     }
+    
     /**
      * Returns the stored selection (column assignment) for the given column
      *
      * @param colIndex index of the column
      * @return a <code>List&lt;String&gt;</code>
      */
-    public List<String> getSelectionForColumn(final int colIndex){
+    public List<String> getSelectionForColumn(final int colIndex) {
         if (logger.isTraceEnabled()) {
-            logger.trace("getSelectionForColumn(colIndex:=" + colIndex +")");
+            logger.trace("getSelectionForColumn(colIndex:=" + colIndex + ")");
         }
         final List<String> value = columnAssignments.get(colIndex);
         if (logger.isDebugEnabled()) {
@@ -131,17 +134,19 @@ public class Step3Model implements StepModel{
         }
         return value;
     }
+    
     /**
      * Returns all selections (column assignments) stored in this model
      *
      * @return a <code>HashMap&lt;Integer,List&lt;String&gt;&gt;</code>
      */
-    public HashMap<Integer,List<String>> getAllSelections(){
+    public HashMap<Integer, List<String>> getAllSelections() {
         if (logger.isTraceEnabled()) {
             logger.trace("getAllSelections()");
         }
         return columnAssignments;
     }
+    
     /*
      *  simple getter and setter
      */
@@ -150,25 +155,36 @@ public class Step3Model implements StepModel{
      *
      * @return a int.
      */
-    public int getFirstLineWithData() { return firstLineWithData; }
+    public int getFirstLineWithData() {
+        return firstLineWithData;
+    }
+    
     /**
      * <p>Getter for the field <code>markedColumn</code>.</p>
      *
      * @return a int.
      */
-    public int getMarkedColumn() { return markedColumn; }
+    public int getMarkedColumn() {
+        return markedColumn;
+    }
+    
     /**
      * <p>Setter for the field <code>markedColumn</code>.</p>
      *
      * @param colIndex a int.
      */
-    public void setMarkedColumn(final int colIndex) { markedColumn = colIndex; }
+    public void setMarkedColumn(final int colIndex) {
+        markedColumn = colIndex;
+    }
+    
     /**
      * <p>Getter for the field <code>useHeader</code>.</p>
      *
      * @return a boolean.
      */
-    public boolean getUseHeader() { return useHeader; }
+    public boolean getUseHeader() {
+        return useHeader;
+    }
 
     /** {@inheritDoc} */
     @Override

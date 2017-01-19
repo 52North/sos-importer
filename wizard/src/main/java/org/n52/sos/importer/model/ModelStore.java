@@ -54,11 +54,16 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  * @version $Id: $Id
  */
-public class ModelStore {
+public final class ModelStore {
+
+    /**
+     * 
+     */
+    private static final String AQUOT = "\"";
 
     private static final Logger logger = LoggerFactory.getLogger(ModelStore.class);
 
-    private static ModelStore instance = null;
+    private static ModelStore instance;
 
     private final List<MeasuredValue> measuredValues;
 
@@ -115,6 +120,89 @@ public class ModelStore {
     }
 
     /**
+     * <p>add.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public void add(final DateAndTime dateAndTime) {
+        dateAndTimes.add(dateAndTime);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public void add(final Resource resource) {
+        if (resource instanceof FeatureOfInterest) {
+            add((FeatureOfInterest) resource);
+        } else if (resource instanceof ObservedProperty) {
+            add((ObservedProperty) resource);
+        } else if (resource instanceof UnitOfMeasurement) {
+            add((UnitOfMeasurement) resource);
+        } else if (resource instanceof Sensor) {
+            add((Sensor) resource);
+        }
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
+     */
+    public void add(final FeatureOfInterest featureOfInterest) {
+        featureOfInterests.add(featureOfInterest);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
+     */
+    public void add(final ObservedProperty observedProperty) {
+        observedProperties.add(observedProperty);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
+     */
+    public void add(final UnitOfMeasurement unitOfMeasurement) {
+        unitOfMeasurements.add(unitOfMeasurement);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
+     */
+    public void add(final Sensor sensor) {
+        sensors.add(sensor);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public void add(final Position position) {
+        positions.add(position);
+    }
+
+    /**
+     * <p>add.</p>
+     *
+     * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
+     */
+    public void add(final Step6bSpecialModel step6bSpecialModel) {
+        logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
+                step6bSpecialModel.getFeatureOfInterest().getName() + "\" and Observed Property \"" +
+                step6bSpecialModel.getObservedProperty().getName() + AQUOT);
+        step6bSpecialModels.add(step6bSpecialModel);
+    }
+
+    /**
      * <p>Getter for the field <code>measuredValues</code>.</p>
      *
      * @return a {@link java.util.List} object.
@@ -149,12 +237,99 @@ public class ModelStore {
     }
 
     /**
-     * <p>add.</p>
+     * <p>remove.</p>
      *
      * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
      */
-    public void add(final DateAndTime dateAndTime) {
-        dateAndTimes.add(dateAndTime);
+    public void remove(final DateAndTime dateAndTime) {
+        dateAndTimes.remove(dateAndTime);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public void remove(final Resource resource) {
+        if (resource instanceof FeatureOfInterest) {
+            remove((FeatureOfInterest) resource);
+        } else if (resource instanceof ObservedProperty) {
+            remove((ObservedProperty) resource);
+        } else if (resource instanceof UnitOfMeasurement) {
+            remove((UnitOfMeasurement) resource);
+        } else if (resource instanceof Sensor) {
+            remove((Sensor) resource);
+        }
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
+     */
+    public void remove(final FeatureOfInterest featureOfInterest) {
+        featureOfInterests.remove(featureOfInterest);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
+     */
+    public void remove(final ObservedProperty observedProperty) {
+        observedProperties.remove(observedProperty);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
+     */
+    public void remove(final UnitOfMeasurement unitOfMeasurement) {
+        unitOfMeasurements.remove(unitOfMeasurement);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
+     */
+    public void remove(final Sensor sensor) {
+        sensors.remove(sensor);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public void remove(final Position position) {
+        positions.remove(position);
+    }
+
+    /**
+     * <p>remove.</p>
+     *
+     * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
+     */
+    public void remove(final Step6bSpecialModel step6bSpecialModel) {
+        if (step6bSpecialModel.getSensor().getName() != null ||
+                step6bSpecialModel.getSensor().getURI() != null) {
+            logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
+                    step6bSpecialModel.getFeatureOfInterest().getName() + " and Observed Property \"" +
+                    step6bSpecialModel.getObservedProperty().getName() + AQUOT);
+        }
+        step6bSpecialModels.remove(step6bSpecialModel);
+    }
+
+    /**
+     * <p>Getter for the field <code>unitOfMeasurements</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
+    public List<UnitOfMeasurement> getUnitOfMeasurements() {
+        ((ArrayList<UnitOfMeasurement>) unitOfMeasurements).trimToSize();
+        return unitOfMeasurements;
     }
 
     /**
@@ -177,67 +352,6 @@ public class ModelStore {
     }
 
     /**
-     * <p>remove.</p>
-     *
-     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
-     */
-    public void remove(final DateAndTime dateAndTime) {
-        dateAndTimes.remove(dateAndTime);
-    }
-
-    /**
-     * <p>add.</p>
-     *
-     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-     */
-    public void add(final Resource resource) {
-        if (resource instanceof FeatureOfInterest) {
-            add((FeatureOfInterest) resource);
-        } else if (resource instanceof ObservedProperty) {
-            add((ObservedProperty) resource);
-        } else if (resource instanceof UnitOfMeasurement) {
-            add((UnitOfMeasurement) resource);
-        } else if (resource instanceof Sensor) {
-            add((Sensor) resource);
-        }
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
-     */
-    public void remove(final Resource resource) {
-        if (resource instanceof FeatureOfInterest) {
-            remove((FeatureOfInterest) resource);
-        } else if (resource instanceof ObservedProperty) {
-            remove((ObservedProperty) resource);
-        } else if (resource instanceof UnitOfMeasurement) {
-            remove((UnitOfMeasurement) resource);
-        } else if (resource instanceof Sensor) {
-            remove((Sensor) resource);
-        }
-    }
-
-    /**
-     * <p>add.</p>
-     *
-     * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-     */
-    public void add(final FeatureOfInterest featureOfInterest) {
-        featureOfInterests.add(featureOfInterest);
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-     */
-    public void remove(final FeatureOfInterest featureOfInterest) {
-        featureOfInterests.remove(featureOfInterest);
-    }
-
-    /**
      * <p>Getter for the field <code>featureOfInterests</code>.</p>
      *
      * @return a {@link java.util.List} object.
@@ -254,24 +368,6 @@ public class ModelStore {
     }
 
     /**
-     * <p>add.</p>
-     *
-     * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
-     */
-    public void add(final ObservedProperty observedProperty) {
-        observedProperties.add(observedProperty);
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param observedProperty a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
-     */
-    public void remove(final ObservedProperty observedProperty) {
-        observedProperties.remove(observedProperty);
-    }
-
-    /**
      * <p>Getter for the field <code>observedProperties</code>.</p>
      *
      * @return a {@link java.util.List} object.
@@ -282,52 +378,6 @@ public class ModelStore {
     }
 
     /**
-     * <p>add.</p>
-     *
-     * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
-     */
-    public void add(final UnitOfMeasurement unitOfMeasurement) {
-        unitOfMeasurements.add(unitOfMeasurement);
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param unitOfMeasurement a {@link org.n52.sos.importer.model.resources.UnitOfMeasurement} object.
-     */
-    public void remove(final UnitOfMeasurement unitOfMeasurement) {
-        unitOfMeasurements.remove(unitOfMeasurement);
-    }
-
-    /**
-     * <p>Getter for the field <code>unitOfMeasurements</code>.</p>
-     *
-     * @return a {@link java.util.List} object.
-     */
-    public List<UnitOfMeasurement> getUnitOfMeasurements() {
-        ((ArrayList<UnitOfMeasurement>) unitOfMeasurements).trimToSize();
-        return unitOfMeasurements;
-    }
-
-    /**
-     * <p>add.</p>
-     *
-     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
-     */
-    public void add(final Sensor sensor) {
-        sensors.add(sensor);
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
-     */
-    public void remove(final Sensor sensor) {
-        sensors.remove(sensor);
-    }
-
-    /**
      * <p>Getter for the field <code>sensors</code>.</p>
      *
      * @return a {@link java.util.List} object.
@@ -335,15 +385,6 @@ public class ModelStore {
     public List<Sensor> getSensors() {
         ((ArrayList<Sensor>) sensors).trimToSize();
         return sensors;
-    }
-
-    /**
-     * <p>add.</p>
-     *
-     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-     */
-    public void add(final Position position) {
-        positions.add(position);
     }
 
     /**
@@ -416,15 +457,6 @@ public class ModelStore {
     }
 
     /**
-     * <p>remove.</p>
-     *
-     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
-     */
-    public void remove(final Position position) {
-        positions.remove(position);
-    }
-
-    /**
      * <p>getFeatureOfInterestsInTable.</p>
      *
      * @return a {@link java.util.List} object.
@@ -470,33 +502,6 @@ public class ModelStore {
         }
         opsInTable.trimToSize();
         return opsInTable;
-    }
-
-    /**
-     * <p>add.</p>
-     *
-     * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
-     */
-    public void add(final Step6bSpecialModel step6bSpecialModel) {
-        logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
-                step6bSpecialModel.getFeatureOfInterest().getName() + "\" and Observed Property \"" +
-                step6bSpecialModel.getObservedProperty().getName() + "\"");
-        step6bSpecialModels.add(step6bSpecialModel);
-    }
-
-    /**
-     * <p>remove.</p>
-     *
-     * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
-     */
-    public void remove(final Step6bSpecialModel step6bSpecialModel) {
-        if (step6bSpecialModel.getSensor().getName() != null ||
-                step6bSpecialModel.getSensor().getURI() != null) {
-            logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
-                step6bSpecialModel.getFeatureOfInterest().getName() + " and Observed Property \"" +
-                step6bSpecialModel.getObservedProperty().getName()+ "\"");
-        }
-        step6bSpecialModels.remove(step6bSpecialModel);
     }
 
     /**

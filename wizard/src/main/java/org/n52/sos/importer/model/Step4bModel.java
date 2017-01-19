@@ -62,6 +62,7 @@ package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step4bModel implements StepModel {
 
     private Resource resource;

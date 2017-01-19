@@ -44,6 +44,7 @@ public abstract class Combination implements Formatable, Parseable {
     private String group;
 
     /** {@inheritDoc} */
+    @Override
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }

@@ -63,6 +63,7 @@ package org.n52.sos.importer.model;
 import java.io.File;
 
 import org.n52.sos.importer.Constants.ImportStrategy;
+
 public class Step7Model implements StepModel {
 
     private String sosURL;
@@ -111,7 +112,7 @@ public class Step7Model implements StepModel {
      * <p>Constructor for Step7Model.</p>
      */
     public Step7Model() {
-        this(null,null,true,null,null,null);
+        this(null, null, true, null, null, null);
     }
 
     /**
@@ -199,10 +200,10 @@ public class Step7Model implements StepModel {
     /**
      * <p>setSosVersion.</p>
      *
-     * @param version a {@link java.lang.String} object.
+     * @param newVersion a {@link java.lang.String} object.
      */
-    public void setSosVersion(final String version) {
-        this.version = version;
+    public void setSosVersion(final String newVersion) {
+        this.version = newVersion;
     }
 
     /**
@@ -217,10 +218,10 @@ public class Step7Model implements StepModel {
     /**
      * <p>setSosBinding.</p>
      *
-     * @param binding a {@link java.lang.String} object.
+     * @param newBinding a {@link java.lang.String} object.
      */
-    public void setSosBinding(final String binding) {
-        this.binding = binding;
+    public void setSosBinding(final String newBinding) {
+        this.binding = newBinding;
     }
 
     /**
