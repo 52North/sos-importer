@@ -96,8 +96,8 @@ public class Step7TestGLDAS {
         //
         final ModelStore ms = ModelStore.getInstance();
         final TableController tc = TableController.getInstance();
-        Constants.DECIMAL_SEPARATOR = ',';
-        Constants.THOUSANDS_SEPARATOR = '.';
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
         tc.setContent(TestData.EXMAPLE_TABLE_GLDAS);
         final int firstLineWithData = 1;
         tc.setFirstLineWithData(firstLineWithData);

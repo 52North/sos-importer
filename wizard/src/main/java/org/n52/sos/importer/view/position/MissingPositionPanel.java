@@ -72,7 +72,7 @@ public class MissingPositionPanel extends JPanel{
 
         add(containerPanel,BorderLayout.CENTER);
 
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             manualInputPanel.setBorder(Constants.DEBUG_BORDER);
         }
         setVisible(true);

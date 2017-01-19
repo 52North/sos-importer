@@ -541,7 +541,7 @@ public class Step1Panel extends JPanel {
         scrollPane.setAutoscrolls(true);
         scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), Lang.l().step1Introduction(), TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         scrollPane.setWheelScrollingEnabled(true);
-        if(Constants.GUI_DEBUG) {
+        if(Constants.isGuiDebug()) {
             scrollPane.setBorder(Constants.DEBUG_BORDER);
         }
         return scrollPane;

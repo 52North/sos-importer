@@ -62,7 +62,7 @@ public class Step6cWMSPanelTest extends JFrame {
      * @param args an array of {@link java.lang.String} objects.
      */
     public static void main(final String[] args) {
-        Constants.GUI_DEBUG = true;
+        Constants.setGuiDebug(true);
         final FeatureOfInterest foi = new FeatureOfInterest();
         foi.setName("testFOIname");
         foi.setPosition(new Position());
@@ -73,7 +73,7 @@ public class Step6cWMSPanelTest extends JFrame {
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             final long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
             Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener() {
                 @Override

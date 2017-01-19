@@ -101,7 +101,7 @@ public class Step6bSpecialTest {
         int i = 0;
         MeasuredValue mv;
         Column markedColumn;
-        Constants.GUI_DEBUG = false;
+        Constants.setGuiDebug(false);
         Step3Model s3M;
         Step6bSpecialModel s6bSM = null;
         List<String> selection;

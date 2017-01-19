@@ -77,7 +77,7 @@ public class TablePanel extends JPanel {
         c.weightx = 1.0;
         c.weighty = 1.0;
         add(scrollPane, c);
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             setBorder(Constants.DEBUG_BORDER);
             scrollPane.setBorder(Constants.DEBUG_BORDER);
         }

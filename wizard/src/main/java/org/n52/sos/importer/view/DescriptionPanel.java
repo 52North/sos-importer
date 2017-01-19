@@ -53,7 +53,7 @@ public class DescriptionPanel extends JPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER));
         descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
         add(descriptionLabel);
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             setBorder(Constants.DEBUG_BORDER);
         }
     }

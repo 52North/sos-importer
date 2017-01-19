@@ -95,7 +95,7 @@ public class Step6bTestFoiWithPositionInFile {
         Step6bModel s6bM;
         MeasuredValue mv;
         Column markedColumn;
-        Constants.GUI_DEBUG = false;
+        Constants.setGuiDebug(false);
         //
         markedColumn = new Column(4,firstLineWithData );
         tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI_BUT_POSITION);

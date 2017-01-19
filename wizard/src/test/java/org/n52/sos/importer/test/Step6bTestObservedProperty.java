@@ -85,7 +85,7 @@ public class Step6bTestObservedProperty {
     public static void main(final String[] args) {
         final MainController f = MainController.getInstance();
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
-        Constants.GUI_DEBUG = false;
+        Constants.setGuiDebug(false);
 
         final DateAndTime dtm1 = new DateAndTime();
         dtm1.setGroup("1");

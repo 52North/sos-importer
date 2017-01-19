@@ -76,7 +76,7 @@ public class Step6cPanel extends JPanel {
 
             mpp = new MissingPositionPanel(s6cM);
             add(mpp);
-            if (Constants.GUI_DEBUG) {
+            if (Constants.isGuiDebug()) {
                 descriptionPanel.setBorder(Constants.DEBUG_BORDER);
                 mpp.setBorder(Constants.DEBUG_BORDER);
             }

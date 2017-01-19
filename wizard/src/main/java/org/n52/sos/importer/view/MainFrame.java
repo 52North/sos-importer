@@ -94,7 +94,7 @@ public class MainFrame extends JFrame {
         cp.add(stepContainerPanel, BorderLayout.CENTER);
         cp.add(backNextPanel, BorderLayout.SOUTH);
 
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             descriptionPanel.setBorder(Constants.DEBUG_BORDER);
             stepContainerPanel.setBorder(Constants.DEBUG_BORDER);
             backNextPanel.setBorder(Constants.DEBUG_BORDER);

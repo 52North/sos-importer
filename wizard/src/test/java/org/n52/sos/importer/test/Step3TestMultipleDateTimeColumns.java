@@ -74,8 +74,8 @@ public class Step3TestMultipleDateTimeColumns {
      */
     public static void main(final String[] args) {
         final MainController f = MainController.getInstance();
-        Constants.DECIMAL_SEPARATOR = '.';
-        Constants.THOUSANDS_SEPARATOR = ',';
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
         final TableController tc = TableController.getInstance();
         tc.setContent(TestData.EXAMPLE_TABLE_MULTIPLE_DATE_TIME);
         final int markedColumn = 0;

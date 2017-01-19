@@ -72,8 +72,8 @@ public class NumericValue extends MeasuredValue implements Formatable {
     @Override
     public Double parse(String s) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
-        symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
+        symbols.setDecimalSeparator(Constants.getDecimalSeparator());
+        symbols.setGroupingSeparator(Constants.getThousandsSeparator());
 
         Number n;
         try {
@@ -93,8 +93,8 @@ public class NumericValue extends MeasuredValue implements Formatable {
         double number = (Double)o;
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator(Constants.DECIMAL_SEPARATOR);
-        symbols.setGroupingSeparator(Constants.THOUSANDS_SEPARATOR);
+        symbols.setDecimalSeparator(Constants.getDecimalSeparator());
+        symbols.setGroupingSeparator(Constants.getThousandsSeparator());
 
         DecimalFormat formatter = new DecimalFormat();
         formatter.setDecimalFormatSymbols(symbols);

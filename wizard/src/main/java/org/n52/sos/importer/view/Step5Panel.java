@@ -101,7 +101,7 @@ public class Step5Panel extends JPanel {
         gbc_containerPanel.fill = GridBagConstraints.BOTH;
         add(containerPanel, gbc_containerPanel);
 
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             descriptionPanel.setBorder(Constants.DEBUG_BORDER);
             containerPanel.setBorder(Constants.DEBUG_BORDER);
         }

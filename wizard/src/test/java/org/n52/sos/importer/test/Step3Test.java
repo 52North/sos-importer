@@ -74,9 +74,9 @@ public class Step3Test {
      */
     public static void main(final String[] args) {
         final MainController f = MainController.getInstance();
-        Constants.DECIMAL_SEPARATOR = '.';
-        Constants.THOUSANDS_SEPARATOR = ',';
-        Constants.GUI_DEBUG = false;
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
+        Constants.setGuiDebug(false);
         final TableController tc = TableController.getInstance();
         tc.setContent(TestData.EXAMPLE_TABLE);
         final int markedColumn = 0;

@@ -229,7 +229,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
             generatedResJRB.setSelected(false);
             generatedResJRB.setVisible(false);
         }
-        if (Constants.GUI_DEBUG) {
+        if (Constants.isGuiDebug()) {
             setBorder(Constants.DEBUG_BORDER);
             manualResPanel.setBorder(Constants.DEBUG_BORDER);
             generatedResPanel.setBorder(Constants.DEBUG_BORDER);

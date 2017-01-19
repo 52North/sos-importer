@@ -74,9 +74,9 @@ public class Step3TestManyManyColumns {
      */
     public static void main(final String[] args) {
         final MainController f = MainController.getInstance();
-        Constants.DECIMAL_SEPARATOR = '.';
-        Constants.THOUSANDS_SEPARATOR = ',';
-        Constants.GUI_DEBUG = false;
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
+        Constants.setGuiDebug(false);
         final TableController tc = TableController.getInstance();
         tc.setContent(TestData.EXAMPLE_TABLE_MANY_MANY_COLUMNS);
         final int markedColumn = 0;

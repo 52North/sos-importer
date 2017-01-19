@@ -74,8 +74,8 @@ public class Step3TestPositionInTable {
      */
     public static void main(final String[] args) {
         final MainController f = MainController.getInstance();
-        Constants.DECIMAL_SEPARATOR = ',';
-        Constants.THOUSANDS_SEPARATOR = '.';
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
         final TableController tc = TableController.getInstance();
         tc.setContent(TestData.EXMAPLE_TABLE_GLDAS);
         final int markedColumn = 0;

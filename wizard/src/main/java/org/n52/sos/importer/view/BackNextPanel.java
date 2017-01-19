@@ -58,7 +58,7 @@ public class BackNextPanel extends JPanel {
 
     private BackNextPanel() {
         super();
-        if(Constants.GUI_DEBUG) {
+        if(Constants.isGuiDebug()) {
             setBorder(Constants.DEBUG_BORDER);
         }
         GridLayout layout = new GridLayout(1,3);

@@ -204,11 +204,11 @@ public class Step2Controller extends StepController {
         final String decimalSeparator = step2Panel.getDecimalSeparator();
         step2Model.setDecimalSeparator(decimalSeparator.charAt(0));
         // Update global decimal separator
-        Constants.DECIMAL_SEPARATOR = decimalSeparator.charAt(0);
-        if (Constants.DECIMAL_SEPARATOR == '.') {
-            Constants.THOUSANDS_SEPARATOR = ',';
+        Constants.setDecimalSeparator(decimalSeparator.charAt(0));
+        if (Constants.getDecimalSeparator() == '.') {
+            Constants.setThousandsSeparator(',');
         } else {
-            Constants.THOUSANDS_SEPARATOR = '.';
+            Constants.setThousandsSeparator('.');
         }
 
         if (step2Panel.isSampleBased()) {
