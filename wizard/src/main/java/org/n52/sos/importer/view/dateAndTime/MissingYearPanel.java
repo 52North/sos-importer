@@ -93,7 +93,8 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setMissingComponent(Component c) {
-        yearModel.setValue(((Year)c).getValue());
+        yearModel.setValue(((Year) c).getValue());
     }
 }

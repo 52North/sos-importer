@@ -94,6 +94,6 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        monthModel.setValue(((Month)c).getValue());
+        monthModel.setValue(((Month) c).getValue());
     }
 }

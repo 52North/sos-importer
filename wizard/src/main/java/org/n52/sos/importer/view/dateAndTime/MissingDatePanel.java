@@ -120,7 +120,7 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        org.n52.sos.importer.model.dateAndTime.Date date = (org.n52.sos.importer.model.dateAndTime.Date)c;
+        org.n52.sos.importer.model.dateAndTime.Date date = (org.n52.sos.importer.model.dateAndTime.Date) c;
         int year = date.getYear().getValue();
         int month = date.getMonth().getValue() - 1;
         int day = date.getDay().getValue();

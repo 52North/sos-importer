@@ -120,7 +120,7 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        Time time = (Time)c;
+        Time time = (Time) c;
         int hour = time.getHour().getValue();
         int minute = time.getMinute().getValue();
         int second = time.getSecond().getValue();

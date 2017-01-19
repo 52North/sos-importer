@@ -94,6 +94,6 @@ public class MissingMinutePanel extends MissingDateAndTimePanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        minuteModel.setValue(((Minute)c).getValue());
+        minuteModel.setValue(((Minute) c).getValue());
     }
 }

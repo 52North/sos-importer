@@ -97,6 +97,6 @@ public class MissingDayPanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        dayModel.setValue(((Day)c).getValue());
+        dayModel.setValue(((Day) c).getValue());
     }
 }

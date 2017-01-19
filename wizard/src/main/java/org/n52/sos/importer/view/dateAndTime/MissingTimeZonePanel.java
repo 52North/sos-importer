@@ -96,6 +96,6 @@ public class MissingTimeZonePanel extends MissingDateAndTimePanel {
     /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
-        timeZoneModel.setValue(((TimeZone)c).getValue());
+        timeZoneModel.setValue(((TimeZone) c).getValue());
     }
 }
