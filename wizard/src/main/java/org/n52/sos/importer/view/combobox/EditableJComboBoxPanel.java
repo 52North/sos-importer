@@ -86,9 +86,9 @@ public class EditableJComboBoxPanel extends JPanel {
 
     private EditableJComboBoxPanel partnerComboBox;
 
-    private boolean secondComboBox = false;
+    private boolean secondComboBox;
 
-    private boolean enterPressed = false;
+    private boolean enterPressed;
 
     /**
      * <p>Constructor for EditableJComboBoxPanel.</p>
@@ -97,7 +97,9 @@ public class EditableJComboBoxPanel extends JPanel {
      * @param labelName a {@link java.lang.String} object.
      * @param toolTip a {@link java.lang.String} object.
      */
-    public EditableJComboBoxPanel(final DefaultComboBoxModel<String> model, final String labelName, final String toolTip) {
+    public EditableJComboBoxPanel(final DefaultComboBoxModel<String> model,
+            final String labelName,
+            final String toolTip) {
         super();
         this.model = model;
         label = new JLabel(labelName + ":   ");
@@ -138,13 +140,14 @@ public class EditableJComboBoxPanel extends JPanel {
      *
      * @param i a int.
      */
-    public void setSelectedIndex(int i) {
+    public void setSelectedIndex(final int i) {
         final int max = comboBox.getModel().getSize();
         // fixing bug when having selected element nr 2 and deleting element nr 1
-        if (i > max) {
-            i = max;
+        int index = i;
+        if (index > max) {
+            index = max;
         }
-        comboBox.setSelectedIndex(i);
+        comboBox.setSelectedIndex(index);
     }
 
 
@@ -242,7 +245,8 @@ public class EditableJComboBoxPanel extends JPanel {
     public void saveNewItem() {
         String newItem = comboBox.getEditor().getItem().toString().trim();
 
-        if (newItem.equals("")) { //whitespace entered
+        //whitespace entered
+        if (newItem.equals("")) {
             if (getPartnerComboBox() == null || !isSecondComboBox()) {
                 comboBox.setEditable(false);
                 comboBox.setSelectedItem(lastSelectedItem);
@@ -251,12 +255,15 @@ public class EditableJComboBoxPanel extends JPanel {
                     getPartnerComboBox().enableButtons();
                 }
                 return;
-            } else { //when it is the second combobox
-                newItem = getNextBiggestWhiteSpace(); //since no duplicate values are allowed
+                // when it is the second combobox
+            } else {
+                // since no duplicate values are allowed
+                newItem = getNextBiggestWhiteSpace();
             }
         } else if (model.getSize() == 1 && model.getIndexOf(WHITESPACE) != -1) {
             model.removeElement(WHITESPACE);
-        } else if (model.getIndexOf(newItem) != -1) { //element already in list
+            // element already in list
+        } else if (model.getIndexOf(newItem) != -1) {
             if (getPartnerComboBox() != null) {
                 comboBox.setEditable(false);
                 if (isSecondComboBox()) {
@@ -269,7 +276,8 @@ public class EditableJComboBoxPanel extends JPanel {
                 getPartnerComboBox().enableButtons();
                 return;
             }
-        } else if (lastSelectedItem.trim().length() == 0) { //when last element was an empty string
+            // when last element was an empty string
+        } else if (lastSelectedItem.trim().length() == 0) {
             if (getPartnerComboBox() != null && !isSecondComboBox()) {
                 //put element at the place of the old element
                 final int index = model.getIndexOf(lastSelectedItem);
@@ -331,8 +339,7 @@ public class EditableJComboBoxPanel extends JPanel {
         if (model.getIndexOf(WHITESPACE) != -1) {
             model.removeElement(WHITESPACE);
             return " ";
-        }
-        else {
+        } else {
             int maxWhiteSpaces = 0;
             int whiteSpaces = 0;
             for (int i = 0; i < model.getSize(); i++) {

@@ -36,9 +36,9 @@ import javax.swing.DefaultComboBoxModel;
  * @author Raimund
  * @version $Id: $Id
  */
-public class EditableComboBoxItems {
+public final class EditableComboBoxItems {
 
-    private static EditableComboBoxItems instance = null;
+    private static EditableComboBoxItems instance;
 
     private DefaultComboBoxModel<String> columnSeparators;
 
@@ -114,8 +114,9 @@ public class EditableComboBoxItems {
      * @return a {@link org.n52.sos.importer.view.combobox.EditableComboBoxItems} object.
      */
     public static EditableComboBoxItems getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new EditableComboBoxItems();
+        }
         return instance;
     }
 

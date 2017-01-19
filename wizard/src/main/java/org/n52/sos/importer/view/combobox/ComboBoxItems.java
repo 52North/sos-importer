@@ -49,13 +49,104 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  * @version $Id: $Id
  */
-public class ComboBoxItems {
+public final class ComboBoxItems {
+
+    /**
+     * 
+     */
+    private static final String SOS_PROPERTIES_COULD_NOT_BE_SAVED = "SOS properties could not be saved.";
+
+    /**
+     * 
+     */
+    private static final String SENSOR_URIS = "sensorURIs";
+
+    /**
+     * 
+     */
+    private static final String UNIT_OF_MEASUREMENT_URIS = "unitOfMeasurementURIs";
+
+    /**
+     * 
+     */
+    private static final String OBSERVED_PROPERTY_URIS = "observedPropertyURIs";
+
+    /**
+     * 
+     */
+    private static final String FEATURE_OF_INTEREST_URIS = "featureOfInterestURIs";
+
+    /**
+     * 
+     */
+    private static final String SENSOR_NAMES = "sensorNames";
+
+    /**
+     * 
+     */
+    private static final String UNIT_OF_MEASUREMENT_CODES = "unitOfMeasurementCodes";
+
+    /**
+     * 
+     */
+    private static final String OBSERVED_PROPERTY_NAMES = "observedPropertyNames";
+
+    /**
+     * 
+     */
+    private static final String FEATURE_OF_INTEREST_NAMES = "featureOfInterestNames";
+
+    /**
+     * 
+     */
+    private static final String SOS_UR_LS = "sosURLs";
+
+    /**
+     * 
+     */
+    private static final String REFERENCE_SYSTEM_NAMES = "referenceSystemNames";
+
+    /**
+     * 
+     */
+    private static final String EPSG_CODES = "epsgCodes";
+
+    /**
+     * 
+     */
+    private static final String POSITION_PATTERNS = "positionPatterns";
+
+    /**
+     * 
+     */
+    private static final String DATE_AND_TIME_PATTERNS = "dateAndTimePatterns";
+
+    /**
+     * 
+     */
+    private static final String TEXT_QUALIFIERS = "textQualifiers";
+
+    /**
+     * 
+     */
+    private static final String COMMENT_INDICATORS = "commentIndicators";
+
+    /**
+     * 
+     */
+    private static final String COLUMN_SEPARATORS = "columnSeparators";
+
+    /**
+     * 
+     */
+    private static final String LOAD_DEFAULT_SETTINGS_FROM_JAR_FILE = "Load default settings from jar file";
 
     private static final Logger logger = LoggerFactory.getLogger(ComboBoxItems.class);
 
-    private static ComboBoxItems instance = null;
+    private static ComboBoxItems instance;
 
-    private static final String EXTERNAL_FILE_PATH = System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
+    private static final String EXTERNAL_FILE_PATH = 
+            System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 
     private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";
 
@@ -130,13 +221,13 @@ public class ComboBoxItems {
             String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
             final File file = new File(filePath);
             if (!file.exists()) {
-                logger.info("Load default settings from jar file");
+                logger.info(LOAD_DEFAULT_SETTINGS_FROM_JAR_FILE);
                 filePath = INTERNAL_FILE_PATH + FILE_NAME;
                 is = getClass().getResourceAsStream(filePath);
             } else if (!file.canRead()) {
                 logger.warn("Could not load settings.");
                 logger.warn("No reading permissions for " + file);
-                logger.info("Load default settings from jar file");
+                logger.info(LOAD_DEFAULT_SETTINGS_FROM_JAR_FILE);
                 filePath = INTERNAL_FILE_PATH + FILE_NAME;
                 is = getClass().getResourceAsStream(filePath);
             } else {
@@ -159,23 +250,23 @@ public class ComboBoxItems {
         dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
         positionGroups = parse(props.getProperty("positionGroups"));
 
-        columnSeparators = parse(props.getProperty("columnSeparators"));
-        commentIndicators = parse(props.getProperty("commentIndicators"));
-        textQualifiers = parse(props.getProperty("textQualifiers"));
-        dateAndTimePatterns = parse(props.getProperty("dateAndTimePatterns"));
-        positionPatterns = parse(props.getProperty("positionPatterns"));
-        epsgCodes = parse(props.getProperty("epsgCodes"));
-        referenceSystemNames = parse(props.getProperty("referenceSystemNames"));
-        sosURLs = parse(props.getProperty("sosURLs"));
+        columnSeparators = parse(props.getProperty(COLUMN_SEPARATORS));
+        commentIndicators = parse(props.getProperty(COMMENT_INDICATORS));
+        textQualifiers = parse(props.getProperty(TEXT_QUALIFIERS));
+        dateAndTimePatterns = parse(props.getProperty(DATE_AND_TIME_PATTERNS));
+        positionPatterns = parse(props.getProperty(POSITION_PATTERNS));
+        epsgCodes = parse(props.getProperty(EPSG_CODES));
+        referenceSystemNames = parse(props.getProperty(REFERENCE_SYSTEM_NAMES));
+        sosURLs = parse(props.getProperty(SOS_UR_LS));
 
-        featureOfInterestNames = parse(props.getProperty("featureOfInterestNames"));
-        observedPropertyNames = parse(props.getProperty("observedPropertyNames"));
-        unitOfMeasurementCodes = parse(props.getProperty("unitOfMeasurementCodes"));
-        sensorNames = parse(props.getProperty("sensorNames"));
-        featureOfInterestURIs = parse(props.getProperty("featureOfInterestURIs"));
-        observedPropertyURIs = parse(props.getProperty("observedPropertyURIs"));
-        unitOfMeasurementURIs = parse(props.getProperty("unitOfMeasurementURIs"));
-        sensorURIs = parse(props.getProperty("sensorURIs"));
+        featureOfInterestNames = parse(props.getProperty(FEATURE_OF_INTEREST_NAMES));
+        observedPropertyNames = parse(props.getProperty(OBSERVED_PROPERTY_NAMES));
+        unitOfMeasurementCodes = parse(props.getProperty(UNIT_OF_MEASUREMENT_CODES));
+        sensorNames = parse(props.getProperty(SENSOR_NAMES));
+        featureOfInterestURIs = parse(props.getProperty(FEATURE_OF_INTEREST_URIS));
+        observedPropertyURIs = parse(props.getProperty(OBSERVED_PROPERTY_URIS));
+        unitOfMeasurementURIs = parse(props.getProperty(UNIT_OF_MEASUREMENT_URIS));
+        sensorURIs = parse(props.getProperty(SENSOR_URIS));
     }
 
     /**
@@ -196,30 +287,37 @@ public class ComboBoxItems {
      * <p>save.</p>
      */
     public void save() {
-        props.setProperty("columnSeparators", format(EditableComboBoxItems.getInstance().getColumnSeparators()));
-        props.setProperty("commentIndicators", format(EditableComboBoxItems.getInstance().getCommentIndicators()));
-        props.setProperty("textQualifiers", format(EditableComboBoxItems.getInstance().getTextQualifiers()));
-        props.setProperty("dateAndTimePatterns", format(EditableComboBoxItems.getInstance().getDateAndTimePatterns()));
-        props.setProperty("positionPatterns", format(EditableComboBoxItems.getInstance().getPositionPatterns()));
-        props.setProperty("epsgCodes", format(EditableComboBoxItems.getInstance().getEPSGCodes()));
-        props.setProperty("referenceSystemNames", format(EditableComboBoxItems.getInstance().getReferenceSystemNames()));
-        props.setProperty("sosURLs", format(EditableComboBoxItems.getInstance().getSosURLs()));
+        props.setProperty(COLUMN_SEPARATORS, format(EditableComboBoxItems.getInstance().getColumnSeparators()));
+        props.setProperty(COMMENT_INDICATORS, format(EditableComboBoxItems.getInstance().getCommentIndicators()));
+        props.setProperty(TEXT_QUALIFIERS, format(EditableComboBoxItems.getInstance().getTextQualifiers()));
+        props.setProperty(DATE_AND_TIME_PATTERNS, format(EditableComboBoxItems.getInstance().getDateAndTimePatterns()));
+        props.setProperty(POSITION_PATTERNS, format(EditableComboBoxItems.getInstance().getPositionPatterns()));
+        props.setProperty(EPSG_CODES, format(EditableComboBoxItems.getInstance().getEPSGCodes()));
+        props.setProperty(REFERENCE_SYSTEM_NAMES,
+                format(EditableComboBoxItems.getInstance().getReferenceSystemNames()));
+        props.setProperty(SOS_UR_LS, format(EditableComboBoxItems.getInstance().getSosURLs()));
 
-        props.setProperty("featureOfInterestNames", format(EditableComboBoxItems.getInstance().getFeatureOfInterestNames()));
-        props.setProperty("observedPropertyNames", format(EditableComboBoxItems.getInstance().getObservedPropertyNames()));
-        props.setProperty("unitOfMeasurementCodes", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes()));
-        props.setProperty("sensorNames", format(EditableComboBoxItems.getInstance().getSensorNames()));
-        props.setProperty("featureOfInterestURIs", format(EditableComboBoxItems.getInstance().getFeatureOfInterestURIs()));
-        props.setProperty("observedPropertyURIs", format(EditableComboBoxItems.getInstance().getObservedPropertyURIs()));
-        props.setProperty("unitOfMeasurementURIs", format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
-        props.setProperty("sensorURIs", format(EditableComboBoxItems.getInstance().getSensorURIs()));
+        props.setProperty(FEATURE_OF_INTEREST_NAMES,
+                format(EditableComboBoxItems.getInstance().getFeatureOfInterestNames()));
+        props.setProperty(OBSERVED_PROPERTY_NAMES,
+                format(EditableComboBoxItems.getInstance().getObservedPropertyNames()));
+        props.setProperty(UNIT_OF_MEASUREMENT_CODES,
+                format(EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes()));
+        props.setProperty(SENSOR_NAMES, format(EditableComboBoxItems.getInstance().getSensorNames()));
+        props.setProperty(FEATURE_OF_INTEREST_URIS,
+                format(EditableComboBoxItems.getInstance().getFeatureOfInterestURIs()));
+        props.setProperty(OBSERVED_PROPERTY_URIS,
+                format(EditableComboBoxItems.getInstance().getObservedPropertyURIs()));
+        props.setProperty(UNIT_OF_MEASUREMENT_URIS,
+                format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
+        props.setProperty(SENSOR_URIS, format(EditableComboBoxItems.getInstance().getSensorURIs()));
 
         final File folder = new File(EXTERNAL_FILE_PATH);
         if (!folder.exists()) {
 
             final boolean successful = folder.mkdir();
             if (!successful) {
-                logger.warn("SOS properties could not be saved.");
+                logger.warn(SOS_PROPERTIES_COULD_NOT_BE_SAVED);
                 logger.warn("No writing permissions at " + folder);
                 return;
             }
@@ -228,11 +326,12 @@ public class ComboBoxItems {
         final File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
         logger.info("Save settings at " + file.getAbsolutePath());
 
-        try { //save properties
+        //save properties
+        try {
             final OutputStream os = new FileOutputStream(file);
             props.store(os, null);
         } catch (final IOException e) {
-            logger.error("SOS properties could not be saved.", e);
+            logger.error(SOS_PROPERTIES_COULD_NOT_BE_SAVED, e);
         }
     }
 
