@@ -43,7 +43,7 @@ import org.junit.Test;
 public class Step2ModelTest {
 
     private static final String TEST_REGEX = "test-regex";
-    
+
     private Step2Model model;
 
     /**

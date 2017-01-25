@@ -908,7 +908,8 @@ public final class SensorObservationService {
     }
 
     private void logException(final Exception e) {
-        logException(e);
+        LOG.error("Exception thrown: {}", e.getMessage());
+        LOG.debug("More details:", e);
     }
 
     private boolean isObservationAlreadyContained(final OWSException owsEx) {

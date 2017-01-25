@@ -277,7 +277,7 @@ public class TestData {
 
     /**
      * Example observed property created from manual input. Related table element: col 3, flwd 1</br>
-     * To change the related column call 
+     * To change the related column call
      * <code>obsProp.setTableElement(new Column(newColumnId, firstlinewithData);</code>
      */
     public static final ObservedProperty EXAMPLE_OBS_PROP = TestData.exampleObsProp();

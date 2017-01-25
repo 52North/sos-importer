@@ -76,7 +76,7 @@ public class Step2ControllerTest {
     private static final String TEST_REGEX_2 = "(test)-regex-2";
     private static final String TEST_REGEX = "test-regex";
     private static final String AQUOT = "\"";
-    
+
     private Step2Controller controller;
 
     /**

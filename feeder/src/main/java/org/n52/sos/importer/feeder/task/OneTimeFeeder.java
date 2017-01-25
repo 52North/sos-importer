@@ -170,6 +170,8 @@ public class OneTimeFeeder implements Runnable {
         }
         if (dataFile == null) {
             LOG.error("No datafile was found!");
+            // no data -> nothing to do
+            return;
         }
         if (dataFile.isAvailable()) {
             try {

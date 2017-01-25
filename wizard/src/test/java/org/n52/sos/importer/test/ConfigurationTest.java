@@ -81,7 +81,7 @@ public class ConfigurationTest {
     private static final String AQUOT = "\"";
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
     private static final File TEST_CONFIG = new File("src/test/xml/configuration-test.xml");
-    
+
     /**
      * <p>main.</p>
      *

@@ -1517,7 +1517,8 @@ public final class Configuration {
                                         "Value of metadata element with key "
                                         + "'%s' could not be parsed to int: "
                                         + "'%s'. Ignoring it.",
-                                        Key.HUNK_SIZE.toString()),
+                                        Key.HUNK_SIZE.toString(),
+                                        metadata.getValue()),
                                 nfe);
                     }
                 }

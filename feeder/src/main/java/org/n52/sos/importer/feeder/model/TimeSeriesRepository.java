@@ -75,10 +75,8 @@ public class TimeSeriesRepository {
         if (ios.length != repo.capacity()) {
             throw new IllegalArgumentException("Number of InsertObservations is not matching number of timeseries!");
         }
-        if (ios != null) {
-            for (int i = 0; i < ios.length; i++) {
-                repo.get(i).addObservation(ios[i]);
-            }
+        for (int i = 0; i < ios.length; i++) {
+            repo.get(i).addObservation(ios[i]);
         }
     }
 

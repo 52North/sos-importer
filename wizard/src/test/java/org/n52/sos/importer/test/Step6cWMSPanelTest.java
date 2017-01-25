@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public class Step6cWMSPanelTest extends JFrame {
 
     /**
-     * 
+     *
      */
     private static final String TEST_FOI_NAME = "testFOIname";
 

@@ -106,9 +106,15 @@ public class NSAMParser implements CsvParser {
         skipLines(br, METADATA_OFFSET);
         // 1.1 start date => # of timeseries (columns)
         final String startDateLine = br.readLine();
+        if (startDateLine == null) {
+            throw new IOException("Could not read 'start date' line.");
+        }
         final String[] startDates = getStartDates(startDateLine);
         // 1.2 start time pro zeitreihe einlesen
         String startTimeLine = br.readLine();
+        if (startTimeLine == null) {
+            throw new IOException("Could not read 'start time' line.");
+        }
         final String startTime = startTimeLine.substring(
                 METADATA_TIME_BEGIN_INDEX,
                 METADATA_TIME_BEGIN_INDEX + METADATA_TIME_LENGTH);

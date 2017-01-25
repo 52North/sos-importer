@@ -74,7 +74,7 @@ public class CsvDataTest {
     private static final String COL1 = "col1";
     private static final String COL2 = "col2";
     private static final String COL3 = "col3";
-    
+
     private CsvData data;
 
     /**

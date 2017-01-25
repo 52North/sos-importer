@@ -66,7 +66,7 @@ public final class TableController {
 
     private static TableController instance;
 
-    
+
     private int firstLineWithData = -1;
 
     private final TablePanel tableView;

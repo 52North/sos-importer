@@ -71,7 +71,7 @@ public class Step5CModelHandlerTest {
         position.setGroup("A");
         final Step5cModel stepModel = new Step5cModel(position);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column = 
+        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column =
                 importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
         column.setNumber(positionColumnId);
         column.setType(TypeDocument.Type.POSITION);
@@ -90,7 +90,7 @@ public class Step5CModelHandlerTest {
 
         // then
         Metadata altitudeMetadata = null;
-        for (Metadata metadata : 
+        for (Metadata metadata :
                 importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
             if (metadata.getKey().equals(Key.POSITION_ALTITUDE)) {
                 altitudeMetadata = metadata;

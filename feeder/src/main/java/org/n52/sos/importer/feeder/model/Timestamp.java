@@ -52,8 +52,8 @@ public class Timestamp {
     private static final String SS = "ss";
     private static final String MM = "mm:";
     private static final String ZERO_ZERO = ":00";
-    private static final int MILLIS_PER_HOUR = 1000 * 60 * 60;
-    private static final int MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
+    private static final long MILLIS_PER_HOUR = 1000 * 60 * 60;
+    private static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
     private short year = Short.MIN_VALUE;
     private byte month = Byte.MIN_VALUE;
     private byte day = Byte.MIN_VALUE;
@@ -134,7 +134,7 @@ public class Timestamp {
     public Timestamp set(final long dateToSet) {
         final Calendar cal = new GregorianCalendar();
         if (timezone != Byte.MIN_VALUE) {
-            cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs(timezone * MILLIS_PER_HOUR)[0]));
+            cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs((int) (timezone * MILLIS_PER_HOUR))[0]));
         }
         cal.setTimeInMillis(dateToSet);
         year = (short) cal.get(Calendar.YEAR);
