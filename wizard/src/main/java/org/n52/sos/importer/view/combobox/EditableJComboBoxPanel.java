@@ -78,7 +78,7 @@ public class EditableJComboBoxPanel extends JPanel {
 
     private final DefaultComboBoxModel<String> model;
 
-    private final ActionListener selectionChanged;
+    private ActionListener selectionChanged;
 
     private final JButton newItemButton;
 

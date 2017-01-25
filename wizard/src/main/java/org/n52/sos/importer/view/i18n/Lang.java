@@ -62,7 +62,7 @@ public abstract class Lang {
     // Add default locale En
     static {
         Lang.availableLocales.put(Locale.ENGLISH, new En());
-        En.setCurrentLocale(Locale.ENGLISH);
+        Lang.setCurrentLocale(Locale.ENGLISH);
         Lang.availableLocales.put(Locale.GERMAN, new De());
     }
 

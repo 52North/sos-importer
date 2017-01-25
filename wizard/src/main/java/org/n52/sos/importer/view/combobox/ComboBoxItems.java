@@ -124,7 +124,7 @@ public final class ComboBoxItems {
                 logger.info("Load settings from " + file);
                 is = new FileInputStream(file);
             }
-        
+
             props.load(is);
         } catch (final FileNotFoundException e) {
             logExceptionAndThrowRuntimeException(e, "SOS Importer Settings not found");
@@ -140,13 +140,13 @@ public final class ComboBoxItems {
                 }
             }
         }
-        
+
         decimalSeparators = parse(props.getProperty("decimalSeparators"));
         latLonUnits = parse(props.getProperty("latLonUnits"));
         heightUnits = parse(props.getProperty("heightUnits"));
         dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
         positionGroups = parse(props.getProperty("positionGroups"));
-        
+
         columnSeparators = parse(props.getProperty(COLUMN_SEPARATORS));
         commentIndicators = parse(props.getProperty(COMMENT_INDICATORS));
         textQualifiers = parse(props.getProperty(TEXT_QUALIFIERS));
@@ -155,7 +155,7 @@ public final class ComboBoxItems {
         epsgCodes = parse(props.getProperty(EPSG_CODES));
         referenceSystemNames = parse(props.getProperty(REFERENCE_SYSTEM_NAMES));
         sosURLs = parse(props.getProperty(SOS_UR_LS));
-        
+
         featureOfInterestNames = parse(props.getProperty(FEATURE_OF_INTEREST_NAMES));
         observedPropertyNames = parse(props.getProperty(OBSERVED_PROPERTY_NAMES));
         unitOfMeasurementCodes = parse(props.getProperty(UNIT_OF_MEASUREMENT_CODES));
