@@ -65,7 +65,9 @@ public final class TableController {
     public static final int CELLS = 3;
 
     private static TableController instance;
-    private static int firstLineWithData = -1;
+
+    
+    private int firstLineWithData = -1;
 
     private final TablePanel tableView;
 
@@ -84,7 +86,7 @@ public final class TableController {
     private int orientation = COLUMNS;
 
     private TableController(final int firstLineWithData) {
-        TableController.firstLineWithData = firstLineWithData;
+        this.firstLineWithData = firstLineWithData;
         tableView = TablePanel.getInstance();
         table = tableView.getTable();
         tableMarker = new ColoredTableCellRenderer();
@@ -507,7 +509,7 @@ public final class TableController {
      * @param firstLineWithData the firstLineWithData to set
      */
     public void setFirstLineWithData(final int firstLineWithData) {
-        TableController.firstLineWithData = firstLineWithData;
+        this.firstLineWithData = firstLineWithData;
     }
 
     /**

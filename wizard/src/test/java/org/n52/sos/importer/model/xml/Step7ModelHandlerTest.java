@@ -150,7 +150,7 @@ public class Step7ModelHandlerTest {
                 return metadata.getValue();
             }
         }
-        throw new NoSuchElementException(String.format("Element with Key '%' not found", key));
+        throw new NoSuchElementException(String.format("Element with Key '%s' not found", key));
     }
 
 }
