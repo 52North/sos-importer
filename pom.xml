@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>parent</artifactId>
         <groupId>org.n52</groupId>
@@ -92,9 +93,9 @@
         </contributor>
     </contributors>
     <properties>
-    	<currentYear>2016</currentYear> <!-- manual setting -->
-    	<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
-    	<currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
+        <currentYear>2016</currentYear> <!-- manual setting -->
+        <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+        <currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
@@ -204,12 +205,12 @@
             <dependency>
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-referencing</artifactId>
-                <version>${geotools.version}</version>    
+                <version>${geotools.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-opengis</artifactId>
-                <version>${geotools.version}</version>    
+                <version>${geotools.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools</groupId>
@@ -227,14 +228,14 @@
                 </exclusions>
             </dependency>
             <dependency>
-            	<groupId>java3d</groupId>
-            	<artifactId>vecmath</artifactId>
-            	<version>1.5.2</version>
+                <groupId>java3d</groupId>
+                <artifactId>vecmath</artifactId>
+                <version>1.5.2</version>
             </dependency>
             <dependency>
-            	<groupId>stax</groupId>
-            	<artifactId>stax-api</artifactId>
-            	<version>1.0.1</version>
+                <groupId>stax</groupId>
+                <artifactId>stax-api</artifactId>
+                <version>1.0.1</version>
             </dependency>
             <dependency>
                 <groupId>xml-apis</groupId>
@@ -286,76 +287,116 @@
         </dependencies>
     </dependencyManagement>
     <build>
-       <pluginManagement>
-           <plugins>
-               <plugin>
-                   <groupId>org.jasig.maven</groupId>
-                   <artifactId>maven-notice-plugin</artifactId>
-                   <version>1.0.6.1</version>
-                   <configuration>
-                       <noticeTemplate>src/main/resources/NOTICE.template</noticeTemplate>
-                       <licenseMapping>
-                           <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
-                       </licenseMapping>
-                   </configuration>
-               </plugin>
-               <plugin>
-			<groupId>com.mycila</groupId>
-			<artifactId>license-maven-plugin</artifactId>
-			<version>2.6</version>
-			<inherited>false</inherited>
-			<configuration>
-				<header>src/main/resources/52n_license_header.txt</header>
-				<aggregate>true</aggregate>
-				<properties>
-					<inceptionYear>${project.inceptionYear}</inceptionYear>
-				        <latestYearOfContribution>${currentYear}</latestYearOfContribution>
-					<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
-				</properties>
-				<includes>
-					<include>src/**/*.java</include>
-					<include>src/**/*.xml</include>
-					<include>src/**/*.xsd</include>
-					<include>src/**/*.properties</include>
-				</includes>
-				<excludes>
-					<exclude>**/logback.xml</exclude>
-					<exclude>**/logback-test.xml</exclude>
-					<exclude>**/src/test/resources/**</exclude>
-					<exclude>**/*.txt</exclude>
-					<exclude>**/*.odt</exclude>
-					<exclude>**/THIRD-PARTY.properties</exclude>
-					<exclude>**/NOTICE.template</exclude>
-					<exclude>**/*.md</exclude>
-					<exclude>**/RELEASE_NOTES</exclude>
-					<exclude>**/LICENSE.gpl-2.0</exclude>
-					<exclude>**/XMLTools.java</exclude>
-				</excludes>
-				<licenseMerges>
-					<licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
-					<licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
-					<licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
-					<licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
-					<licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
-					<licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
-					<licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
-					<licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
-				</licenseMerges>
-			</configuration>
-			<executions>
-				<execution>
-					<id>check-license</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
-           </plugins>
-       </pluginManagement>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jasig.maven</groupId>
+                    <artifactId>maven-notice-plugin</artifactId>
+                    <version>1.0.6.1</version>
+                    <configuration>
+                        <noticeTemplate>src/main/resources/NOTICE.template</noticeTemplate>
+                        <licenseMapping>
+                            <param>http://52north.github.io/cdn/licenses/license-mappings.xml</param>
+                        </licenseMapping>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>2.6</version>
+                    <inherited>false</inherited>
+                    <configuration>
+                        <header>src/main/resources/52n_license_header.txt</header>
+                        <aggregate>true</aggregate>
+                        <properties>
+                            <inceptionYear>${project.inceptionYear}</inceptionYear>
+                            <latestYearOfContribution>${currentYear}</latestYearOfContribution>
+                            <!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
+                        </properties>
+                        <includes>
+                            <include>src/**/*.java</include>
+                            <include>src/**/*.xml</include>
+                            <include>src/**/*.xsd</include>
+                            <include>src/**/*.properties</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/logback.xml</exclude>
+                            <exclude>**/logback-test.xml</exclude>
+                            <exclude>**/src/test/resources/**</exclude>
+                            <exclude>**/*.txt</exclude>
+                            <exclude>**/*.odt</exclude>
+                            <exclude>**/THIRD-PARTY.properties</exclude>
+                            <exclude>**/NOTICE.template</exclude>
+                            <exclude>**/*.md</exclude>
+                            <exclude>**/RELEASE_NOTES</exclude>
+                            <exclude>**/LICENSE.gpl-2.0</exclude>
+                            <exclude>**/XMLTools.java</exclude>
+                        </excludes>
+                        <licenseMerges>
+                            <licenseMerge>The Apache Software License, Version 2.0|Apache
+                                2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+                            <licenseMerge>The Apache Software License|Apache Software
+                                License|Apache Software Licenses|Apache License</licenseMerge>
+                            <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC
+                                LICENSE Version 2, June 1991|GNU General Public License, Version
+                                2.0|GNU General Public License v2.0 only</licenseMerge>
+                            <licenseMerge>Common Development and Distribution License (CDDL),
+                                version 1.0| Common Development and Distribution License (CDDL)
+                                v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version
+                                1.0</licenseMerge>
+                            <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL
+                                2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+                            <licenseMerge>GNU Lesser General Public License|GNU LESSER
+                                GENERAL PUBLIC LICENSE</licenseMerge>
+                            <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+                            <licenseMerge>BSD Style License|BSD License|BSD style|BSD style
+                                License|Aduna BSD-style license</licenseMerge>
+                        </licenseMerges>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>check-license</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <rules>
+                            <requireNoRepositories>
+                                <banRepositories>false</banRepositories>
+                                <banPluginRepositories>false</banPluginRepositories>
+                                <allowedRepositories>
+                                    <id>sonatype-nexus-snapshots</id>
+                                    <id>boundless</id>
+                                    <id>osgeo</id>
+                                </allowedRepositories>
+                                <allowedPluginRepositories>
+                                    <id>sonatype-nexus-snapshots</id>
+                                    <id>boundless</id>
+                                    <id>osgeo</id>
+                                </allowedPluginRepositories>
+                                <allowSnapshotRepositories>true</allowSnapshotRepositories>
+                                <allowSnapshotPluginRepositories>true</allowSnapshotPluginRepositories>
+                            </requireNoRepositories>
+                        </rules>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
-    <!-- 
     <repositories>
         <repository>
             <id>osgeo</id>
@@ -380,7 +421,6 @@
             </snapshots>
         </repository>
     </repositories>
-    -->
     <profiles>
         <profile>
             <id>release</id>
@@ -401,41 +441,51 @@
                 </plugins>
             </build>
         </profile>
-		<profile>
-			<id>create-license-list</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>license-maven-plugin</artifactId>
-						<version>1.5</version>
-						<configuration>
-							<useMissingFile>true</useMissingFile>
-							<!--<fileTemplate>misc/licenses/license-as-csv.ftl</fileTemplate>-->
-							<licenseMerges>
-							    <licenseMerge>The Apache Software License, Version 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
-							    <licenseMerge>The Apache Software License|Apache Software License|Apache Software Licenses|Apache License</licenseMerge>
-							    <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License v2.0 only</licenseMerge>
-							    <licenseMerge>Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0</licenseMerge>
-							    <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
-							    <licenseMerge>GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE</licenseMerge>
-							    <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
-							    <licenseMerge>BSD Style License|BSD License|BSD style|BSD style License|Aduna BSD-style license</licenseMerge>
-							</licenseMerges>
-							<excludedScopes>test</excludedScopes>
-						</configuration>
-						<executions>
-							<execution>
-								<id>first</id>
-								<goals>
-									<goal>aggregate-add-third-party</goal>
-								</goals>
-								<phase>generate-resources</phase>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>create-license-list</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <configuration>
+                            <useMissingFile>true</useMissingFile>
+                            <!--<fileTemplate>misc/licenses/license-as-csv.ftl</fileTemplate> -->
+                            <licenseMerges>
+                                <licenseMerge>The Apache Software License, Version 2.0|Apache
+                                    2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+                                <licenseMerge>The Apache Software License|Apache Software
+                                    License|Apache Software Licenses|Apache License</licenseMerge>
+                                <licenseMerge>GNU General Public License, v2.0|GNU GENERAL
+                                    PUBLIC LICENSE Version 2, June 1991|GNU General Public License,
+                                    Version 2.0|GNU General Public License v2.0 only</licenseMerge>
+                                <licenseMerge>Common Development and Distribution License
+                                    (CDDL), version 1.0| Common Development and Distribution
+                                    License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE
+                                    (CDDL), Version 1.0</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public License, version
+                                    2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public License|GNU LESSER
+                                    GENERAL PUBLIC LICENSE</licenseMerge>
+                                <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+                                <licenseMerge>BSD Style License|BSD License|BSD style|BSD style
+                                    License|Aduna BSD-style license</licenseMerge>
+                            </licenseMerges>
+                            <excludedScopes>test</excludedScopes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>first</id>
+                                <goals>
+                                    <goal>aggregate-add-third-party</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
