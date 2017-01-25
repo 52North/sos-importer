@@ -1169,14 +1169,14 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {
-        return String.format("Could not find jar file!\nPlease place it there:\n'%s'",
+        return String.format("Could not find jar file!%nPlease place it there:%n'%s'",
                 expectedAbsolutePathToFeederJar);
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar) {
-        return String.format("Could not find jar file here:\n'%s'\nPlease select YES for selecting the file manually.",
+        return String.format("Could not find jar file here:%n'%s'%nPlease select YES for selecting the file manually.",
                 pathToDirectoryWithFeederJar);
     }
 

@@ -1170,15 +1170,15 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {
-        return String.format("Konnte JAR-Datei nicht finden!\nBitte dort ablegen:\n'%s'",
+        return String.format("Konnte JAR-Datei nicht finden!%nBitte dort ablegen:%n'%s'",
                 expectedAbsolutePathToFeederJar);
     }
 
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar) {
-        return String.format("Konnte JAR-Datei nicht finden hier nicht finden:\n"
-                + "'%s'.\nKlicken sie auf JA um die Datei auszuwählen!",
+        return String.format("Konnte JAR-Datei nicht finden hier nicht finden:%n"
+                + "'%s'.%nKlicken sie auf JA um die Datei auszuwählen!",
                 pathToDirectoryWithFeederJar);
     }
 
