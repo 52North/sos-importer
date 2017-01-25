@@ -28,9 +28,8 @@
  */
 package org.n52.sos.importer.view;
 
-
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -64,7 +63,7 @@ public class Step7PanelTest {
      */
     @Test
     public void shouldReturnSosVersion100AsDefault() {
-        assertThat(panel.getSosVersion(), org.hamcrest.CoreMatchers.is(  V_10));
+        Assert.assertThat(panel.getSosVersion(), Is.is(V_10));
     }
 
     /**
@@ -73,7 +72,7 @@ public class Step7PanelTest {
     @Test
     public void shouldReturnSosVersion() {
         panel.setSosVersion(V_20);
-        assertThat(panel.getSosVersion(), org.hamcrest.CoreMatchers.is(  V_20));
+        Assert.assertThat(panel.getSosVersion(), Is.is(V_20));
     }
 
     /**
@@ -81,7 +80,7 @@ public class Step7PanelTest {
      */
     @Test
     public void shouldReturnBindingPOXAsDefault() {
-        assertThat(panel.getSosBinding(), org.hamcrest.CoreMatchers.is(  POX));
+        Assert.assertThat(panel.getSosBinding(), Is.is(POX));
     }
 
     /**
@@ -90,7 +89,7 @@ public class Step7PanelTest {
     @Test
     public void shouldReturnBinding() {
         panel.setBinding(POX);
-        assertThat(panel.getSosBinding(), org.hamcrest.CoreMatchers.is(  POX));
+        Assert.assertThat(panel.getSosBinding(), Is.is(POX));
     }
 
     /**
@@ -98,7 +97,7 @@ public class Step7PanelTest {
      */
     @Test
     public void shouldReturnImportStrategySingleObservationByDefault() {
-        assertThat(panel.getImportStrategy(), org.hamcrest.CoreMatchers.is(  Constants.ImportStrategy.SingleObservation));
+        Assert.assertThat(panel.getImportStrategy(), Is.is(Constants.ImportStrategy.SingleObservation));
     }
 
     /**
@@ -107,7 +106,9 @@ public class Step7PanelTest {
     @Test
     public void shouldReturnImportStrategySweArrayIfSet() {
         panel.setImportStrategy(Constants.ImportStrategy.SweArrayObservationWithSplitExtension);
-        assertThat(panel.getImportStrategy(), org.hamcrest.CoreMatchers.is(  Constants.ImportStrategy.SweArrayObservationWithSplitExtension));
+        Assert.assertThat(
+                panel.getImportStrategy(),
+                Is.is(Constants.ImportStrategy.SweArrayObservationWithSplitExtension));
     }
 
     /**
@@ -115,7 +116,7 @@ public class Step7PanelTest {
      */
     @Test
     public void shouldReturn5000AsDefaultHunksize() {
-        assertThat(panel.getHunkSize(), org.hamcrest.CoreMatchers.is(  5000));
+        Assert.assertThat(panel.getHunkSize(), Is.is(5000));
     }
 
     /**
@@ -125,7 +126,7 @@ public class Step7PanelTest {
     public void shouldReturnHunksize() {
         final int hunkSize = 2500;
         panel.setHunkSize(hunkSize);
-        assertThat(panel.getHunkSize(), org.hamcrest.CoreMatchers.is(  hunkSize));
+        Assert.assertThat(panel.getHunkSize(), Is.is(hunkSize));
     }
 
     /**
@@ -133,7 +134,7 @@ public class Step7PanelTest {
      */
     @Test
     public void shouldReturn25AsDefaultSweArraySendBuffer() {
-        assertThat(panel.getSendBuffer(), org.hamcrest.CoreMatchers.is(  25));
+        Assert.assertThat(panel.getSendBuffer(), Is.is(25));
     }
 
     /**
@@ -143,6 +144,6 @@ public class Step7PanelTest {
     public void shouldReturnSweArraySendBuffe() {
         final int buffer = 42;
         panel.setSendBuffer(buffer);
-        assertThat(panel.getSendBuffer(), org.hamcrest.CoreMatchers.is(  buffer));
+        Assert.assertThat(panel.getSendBuffer(), Is.is(buffer));
     }
 }
