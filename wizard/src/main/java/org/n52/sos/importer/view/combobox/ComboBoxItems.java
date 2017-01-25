@@ -84,69 +84,30 @@ public final class ComboBoxItems {
     private final Properties props = new Properties();
 
     private String[] decimalSeparators;
-
     private String[] latLonUnits;
-
     private String[] heightUnits;
-
     private String[] dateAndTimeGroups;
-
     private String[] positionGroups;
-
     private String[] columnSeparators;
-
     private String[] commentIndicators;
-
     private String[] textQualifiers;
-
     private String[] dateAndTimePatterns;
-
     private String[] positionPatterns;
-
     private String[] epsgCodes;
-
     private String[] referenceSystemNames;
-
     private String[] sosURLs;
-
     private String[] featureOfInterestNames;
-
     private String[] observedPropertyNames;
-
     private String[] unitOfMeasurementCodes;
-
     private String[] sensorNames;
-
     private String[] featureOfInterestURIs;
-
     private String[] observedPropertyURIs;
-
     private String[] unitOfMeasurementURIs;
-
     private String[] sensorURIs;
 
     private ComboBoxItems() {
-        load();
-    }
-
-    /**
-     * <p>Getter for the field <code>instance</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.view.combobox.ComboBoxItems} object.
-     */
-    public static ComboBoxItems getInstance() {
-        if (instance == null) {
-            instance = new ComboBoxItems();
-        }
-        return instance;
-    }
-
-    /**
-     * <p>load.</p>
-     */
-    public void load() {
+        InputStream is = null;
         try {
-            InputStream is;
             String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
             final File file = new File(filePath);
             if (!file.exists()) {
@@ -163,22 +124,29 @@ public final class ComboBoxItems {
                 logger.info("Load settings from " + file);
                 is = new FileInputStream(file);
             }
-
+        
             props.load(is);
         } catch (final FileNotFoundException e) {
-            logger.error("SOS Importer Settings not found", e);
-            System.exit(1);
+            logExceptionAndThrowRuntimeException(e, "SOS Importer Settings not found");
         } catch (final IOException e) {
-            logger.error("SOS Importer Settings not readable.", e);
-            System.exit(1);
+            logExceptionAndThrowRuntimeException(e, "SOS Importer Settings not readable.");
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    logger.error("Exception thrown!", e.getMessage());
+                    logger.debug("Stacktrace", e);
+                }
+            }
         }
-
+        
         decimalSeparators = parse(props.getProperty("decimalSeparators"));
         latLonUnits = parse(props.getProperty("latLonUnits"));
         heightUnits = parse(props.getProperty("heightUnits"));
         dateAndTimeGroups = parse(props.getProperty("dateAndTimeGroups"));
         positionGroups = parse(props.getProperty("positionGroups"));
-
+        
         columnSeparators = parse(props.getProperty(COLUMN_SEPARATORS));
         commentIndicators = parse(props.getProperty(COMMENT_INDICATORS));
         textQualifiers = parse(props.getProperty(TEXT_QUALIFIERS));
@@ -187,7 +155,7 @@ public final class ComboBoxItems {
         epsgCodes = parse(props.getProperty(EPSG_CODES));
         referenceSystemNames = parse(props.getProperty(REFERENCE_SYSTEM_NAMES));
         sosURLs = parse(props.getProperty(SOS_UR_LS));
-
+        
         featureOfInterestNames = parse(props.getProperty(FEATURE_OF_INTEREST_NAMES));
         observedPropertyNames = parse(props.getProperty(OBSERVED_PROPERTY_NAMES));
         unitOfMeasurementCodes = parse(props.getProperty(UNIT_OF_MEASUREMENT_CODES));
@@ -196,6 +164,24 @@ public final class ComboBoxItems {
         observedPropertyURIs = parse(props.getProperty(OBSERVED_PROPERTY_URIS));
         unitOfMeasurementURIs = parse(props.getProperty(UNIT_OF_MEASUREMENT_URIS));
         sensorURIs = parse(props.getProperty(SENSOR_URIS));
+    }
+
+    private void logExceptionAndThrowRuntimeException(final IOException e, String message) {
+        logger.error(message, e);
+        logger.debug("Stacktrace", e);
+        throw new RuntimeException(message, e);
+    }
+
+    /**
+     * <p>Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.view.combobox.ComboBoxItems} object.
+     */
+    public static ComboBoxItems getInstance() {
+        if (instance == null) {
+            instance = new ComboBoxItems();
+        }
+        return instance;
     }
 
     /**
@@ -256,11 +242,21 @@ public final class ComboBoxItems {
         logger.info("Save settings at " + file.getAbsolutePath());
 
         //save properties
+        OutputStream os = null;
         try {
-            final OutputStream os = new FileOutputStream(file);
+            os = new FileOutputStream(file);
             props.store(os, null);
         } catch (final IOException e) {
             logger.error(SOS_PROPERTIES_COULD_NOT_BE_SAVED, e);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    logger.error("Exception thrown!", e.getMessage());
+                    logger.debug("Stacktrace", e);
+                }
+            }
         }
     }
 
@@ -284,7 +280,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getFeatureOfInterestNames() {
-        return featureOfInterestNames;
+        return featureOfInterestNames.clone();
     }
 
     /**
@@ -293,7 +289,7 @@ public final class ComboBoxItems {
      * @param featureOfInterestNames an array of {@link java.lang.String} objects.
      */
     public void setFeatureOfInterestNames(final String[] featureOfInterestNames) {
-        this.featureOfInterestNames = featureOfInterestNames;
+        this.featureOfInterestNames = featureOfInterestNames.clone();
     }
 
     /**
@@ -302,7 +298,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getObservedPropertyNames() {
-        return observedPropertyNames;
+        return observedPropertyNames.clone();
     }
 
     /**
@@ -311,7 +307,7 @@ public final class ComboBoxItems {
      * @param observedPropertyNames an array of {@link java.lang.String} objects.
      */
     public void setObservedPropertyNames(final String[] observedPropertyNames) {
-        this.observedPropertyNames = observedPropertyNames;
+        this.observedPropertyNames = observedPropertyNames.clone();
     }
 
     /**
@@ -320,7 +316,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getUnitOfMeasurementCodes() {
-        return unitOfMeasurementCodes;
+        return unitOfMeasurementCodes.clone();
     }
 
     /**
@@ -329,7 +325,7 @@ public final class ComboBoxItems {
      * @param unitOfMeasurementCodes an array of {@link java.lang.String} objects.
      */
     public void setUnitOfMeasurementCodes(final String[] unitOfMeasurementCodes) {
-        this.unitOfMeasurementCodes = unitOfMeasurementCodes;
+        this.unitOfMeasurementCodes = unitOfMeasurementCodes.clone();
     }
 
     /**
@@ -338,7 +334,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getSensorNames() {
-        return sensorNames;
+        return sensorNames.clone();
     }
 
     /**
@@ -347,7 +343,7 @@ public final class ComboBoxItems {
      * @param sensorNames an array of {@link java.lang.String} objects.
      */
     public void setSensorNames(final String[] sensorNames) {
-        this.sensorNames = sensorNames;
+        this.sensorNames = sensorNames.clone();
     }
 
     /**
@@ -356,7 +352,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getFeatureOfInterestURIs() {
-        return featureOfInterestURIs;
+        return featureOfInterestURIs.clone();
     }
 
     /**
@@ -365,7 +361,7 @@ public final class ComboBoxItems {
      * @param featureOfInterestURIs an array of {@link java.lang.String} objects.
      */
     public void setFeatureOfInterestURIs(final String[] featureOfInterestURIs) {
-        this.featureOfInterestURIs = featureOfInterestURIs;
+        this.featureOfInterestURIs = featureOfInterestURIs.clone();
     }
 
     /**
@@ -374,7 +370,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getObservedPropertyURIs() {
-        return observedPropertyURIs;
+        return observedPropertyURIs.clone();
     }
 
     /**
@@ -383,7 +379,7 @@ public final class ComboBoxItems {
      * @param observedPropertyURIs an array of {@link java.lang.String} objects.
      */
     public void setObservedPropertyURIs(final String[] observedPropertyURIs) {
-        this.observedPropertyURIs = observedPropertyURIs;
+        this.observedPropertyURIs = observedPropertyURIs.clone();
     }
 
     /**
@@ -392,7 +388,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getUnitOfMeasurementURIs() {
-        return unitOfMeasurementURIs;
+        return unitOfMeasurementURIs.clone();
     }
 
     /**
@@ -401,7 +397,7 @@ public final class ComboBoxItems {
      * @param unitOfMeasurementURIs an array of {@link java.lang.String} objects.
      */
     public void setUnitOfMeasurementURIs(final String[] unitOfMeasurementURIs) {
-        this.unitOfMeasurementURIs = unitOfMeasurementURIs;
+        this.unitOfMeasurementURIs = unitOfMeasurementURIs.clone();
     }
 
     /**
@@ -410,7 +406,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getSensorURIs() {
-        return sensorURIs;
+        return sensorURIs.clone();
     }
 
     /**
@@ -419,7 +415,7 @@ public final class ComboBoxItems {
      * @param sensorURIs an array of {@link java.lang.String} objects.
      */
     public void setSensorURIs(final String[] sensorURIs) {
-        this.sensorURIs = sensorURIs;
+        this.sensorURIs = sensorURIs.clone();
     }
 
     /**
@@ -428,7 +424,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getDecimalSeparators() {
-        return decimalSeparators;
+        return decimalSeparators.clone();
     }
 
     /**
@@ -437,7 +433,7 @@ public final class ComboBoxItems {
      * @param decimalSeparators an array of {@link java.lang.String} objects.
      */
     public void setDecimalSeparators(final String[] decimalSeparators) {
-        this.decimalSeparators = decimalSeparators;
+        this.decimalSeparators = decimalSeparators.clone();
     }
 
     /**
@@ -446,7 +442,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getLatLonUnits() {
-        return latLonUnits;
+        return latLonUnits.clone();
     }
 
     /**
@@ -455,7 +451,7 @@ public final class ComboBoxItems {
      * @param latLonUnits an array of {@link java.lang.String} objects.
      */
     public void setLatLonUnits(final String[] latLonUnits) {
-        this.latLonUnits = latLonUnits;
+        this.latLonUnits = latLonUnits.clone();
     }
 
     /**
@@ -464,7 +460,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getHeightUnits() {
-        return heightUnits;
+        return heightUnits.clone();
     }
 
     /**
@@ -473,7 +469,7 @@ public final class ComboBoxItems {
      * @param heightUnits an array of {@link java.lang.String} objects.
      */
     public void setHeightUnits(final String[] heightUnits) {
-        this.heightUnits = heightUnits;
+        this.heightUnits = heightUnits.clone();
     }
 
     /**
@@ -482,7 +478,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getColumnSeparators() {
-        return columnSeparators;
+        return columnSeparators.clone();
     }
 
     /**
@@ -491,7 +487,7 @@ public final class ComboBoxItems {
      * @param columnSeparators an array of {@link java.lang.String} objects.
      */
     public void setColumnSeparators(final String[] columnSeparators) {
-        this.columnSeparators = columnSeparators;
+        this.columnSeparators = columnSeparators.clone();
     }
 
     /**
@@ -500,7 +496,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getCommentIndicators() {
-        return commentIndicators;
+        return commentIndicators.clone();
     }
 
     /**
@@ -509,7 +505,7 @@ public final class ComboBoxItems {
      * @param commentIndicators an array of {@link java.lang.String} objects.
      */
     public void setCommentIndicators(final String[] commentIndicators) {
-        this.commentIndicators = commentIndicators;
+        this.commentIndicators = commentIndicators.clone();
     }
 
     /**
@@ -518,7 +514,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getTextQualifiers() {
-        return textQualifiers;
+        return textQualifiers.clone();
     }
 
     /**
@@ -527,7 +523,7 @@ public final class ComboBoxItems {
      * @param textQualifiers an array of {@link java.lang.String} objects.
      */
     public void setTextQualifiers(final String[] textQualifiers) {
-        this.textQualifiers = textQualifiers;
+        this.textQualifiers = textQualifiers.clone();
     }
 
     /**
@@ -536,7 +532,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getDateAndTimePatterns() {
-        return dateAndTimePatterns;
+        return dateAndTimePatterns.clone();
     }
 
     /**
@@ -545,7 +541,7 @@ public final class ComboBoxItems {
      * @param dateAndTimePatterns an array of {@link java.lang.String} objects.
      */
     public void setDateAndTimePatterns(final String[] dateAndTimePatterns) {
-        this.dateAndTimePatterns = dateAndTimePatterns;
+        this.dateAndTimePatterns = dateAndTimePatterns.clone();
     }
 
     /**
@@ -554,7 +550,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getEpsgCodes() {
-        return epsgCodes;
+        return epsgCodes.clone();
     }
 
     /**
@@ -563,7 +559,7 @@ public final class ComboBoxItems {
      * @param epsgCodes an array of {@link java.lang.String} objects.
      */
     public void setEpsgCodes(final String[] epsgCodes) {
-        this.epsgCodes = epsgCodes;
+        this.epsgCodes = epsgCodes.clone();
     }
 
     /**
@@ -572,7 +568,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getSosURLs() {
-        return sosURLs;
+        return sosURLs.clone();
     }
 
     /**
@@ -581,7 +577,7 @@ public final class ComboBoxItems {
      * @param sosURLs an array of {@link java.lang.String} objects.
      */
     public void setSosURLs(final String[] sosURLs) {
-        this.sosURLs = sosURLs;
+        this.sosURLs = sosURLs.clone();
     }
 
     /**
@@ -590,7 +586,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getDateAndTimeGroups() {
-        return dateAndTimeGroups;
+        return dateAndTimeGroups.clone();
     }
 
     /**
@@ -599,7 +595,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getPositionGroups() {
-        return positionGroups;
+        return positionGroups.clone();
     }
 
     /**
@@ -608,7 +604,7 @@ public final class ComboBoxItems {
      * @param positionPatterns an array of {@link java.lang.String} objects.
      */
     public void setPositionPatterns(final String[] positionPatterns) {
-        this.positionPatterns = positionPatterns;
+        this.positionPatterns = positionPatterns.clone();
     }
 
     /**
@@ -617,7 +613,7 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getPositionPatterns() {
-        return positionPatterns;
+        return positionPatterns.clone();
     }
 
     /**
@@ -626,7 +622,7 @@ public final class ComboBoxItems {
      * @param referenceSystemNames an array of {@link java.lang.String} objects.
      */
     public void setReferenceSystemNames(final String[] referenceSystemNames) {
-        this.referenceSystemNames = referenceSystemNames;
+        this.referenceSystemNames = referenceSystemNames.clone();
     }
 
     /**
@@ -635,6 +631,6 @@ public final class ComboBoxItems {
      * @return an array of {@link java.lang.String} objects.
      */
     public String[] getReferenceSystemNames() {
-        return referenceSystemNames;
+        return referenceSystemNames.clone();
     }
 }
