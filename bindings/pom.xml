@@ -16,6 +16,9 @@
             <url>http://www.spdx.org/licenses/GPL-2.0</url>
         </license>
     </licenses>
+    <properties>
+        <checkstyle.skip>true</checkstyle.skip>
+    </properties>
     <build>
         <plugins>
             <plugin>
