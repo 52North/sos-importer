@@ -72,7 +72,6 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
     public DateAndTimeCombinationPanel(JPanel containerPanel,
             int firstLineWithData) {
         super(containerPanel, firstLineWithData);
-        this.dateAndTime = new DateAndTime();
     }
 
     /** {@inheritDoc} */

@@ -53,7 +53,9 @@ import org.slf4j.LoggerFactory;
 /**
  * chooses a CSV file
  *
- * @author Raimund
+ * @author Raimund Schnürer
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @author Eric Fiedler
  * @version $Id: $Id
  */
 public class Step1Controller extends StepController {
@@ -260,9 +262,12 @@ public class Step1Controller extends StepController {
 
                 // if back button was used: delete old file
                 if (new File(csvFilePath).exists()) {
-                    new File(csvFilePath).delete();
+                    if (!new File(csvFilePath).delete()) {
+                        logger.error("Could not delete file '{}'. Check permissions", csvFilePath);
+                    }
                 }
 
+                FileOutputStream fos = null;
                 try {
                     client.connect(step1Panel.getUrl());
                     final boolean login = client.login(step1Panel.getUser(), step1Panel.getPassword());
@@ -272,7 +277,7 @@ public class Step1Controller extends StepController {
                         // successfully connected
                         if (result == 250) {
                             final File outputFile = new File(csvFilePath);
-                            final FileOutputStream fos = new FileOutputStream(outputFile);
+                            fos = new FileOutputStream(outputFile);
                             client.retrieveFile(step1Panel.getFilenameSchema(), fos);
                             fos.flush();
                             fos.close();
@@ -286,15 +291,15 @@ public class Step1Controller extends StepController {
                     }
 
                     final File csv = new File(csvFilePath);
-                    if (csv.length() != 0) {
+                    if (csv.exists() && csv.isFile()) {
                         step1Panel.setCSVFilePath(csvFilePath);
                         readFile(new File(csvFilePath), step1Panel.getFileEncoding());
                     } else {
-                        csv.delete();
+                        if (!csv.delete()) {
+                            logger.error("Could not delete CSV file '{}'", csvFilePath);
+                        }
                         throw new IOException();
                     }
-
-
                 } catch (final IOException e) {
                     System.err.println(e);
                     JOptionPane.showMessageDialog(null,
@@ -302,6 +307,15 @@ public class Step1Controller extends StepController {
                             ERROR,
                             JOptionPane.ERROR_MESSAGE);
                     return false;
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            logger.error("Exception thrown", e.getMessage());
+                            logger.debug("Stackstrace", e);
+                        }
+                    }
                 }
             }
         }
@@ -363,7 +377,7 @@ public class Step1Controller extends StepController {
     }
 
 
-    private class CSVFileFilter extends FileFilter {
+    private static class CSVFileFilter extends FileFilter {
         @Override
         public boolean accept(final File file) {
             return file.isDirectory() ||
