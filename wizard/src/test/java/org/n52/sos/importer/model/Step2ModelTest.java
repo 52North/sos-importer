@@ -28,9 +28,8 @@
  */
 package org.n52.sos.importer.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,6 +42,8 @@ import org.junit.Test;
  */
 public class Step2ModelTest {
 
+    private static final String TEST_REGEX = "test-regex";
+    
     private Step2Model model;
 
     /**
@@ -58,7 +59,7 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnTrueIfIsSampleBasedIsSet() {
-        assertThat(model.setSampleBased(true).isSampleBased(), is(true));
+        Assert.assertThat(model.setSampleBased(true).isSampleBased(), CoreMatchers.is(true));
     }
 
     /**
@@ -66,7 +67,7 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnFalseAsDefaultValueForSampleBased() {
-        assertThat(model.isSampleBased(), is(false));
+        Assert.assertThat(model.isSampleBased(), CoreMatchers.is(false));
     }
 
     /**
@@ -74,8 +75,10 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
-        final String sampleBasedStartRegEx = "test-regex";
-        assertThat(model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
+        final String sampleBasedStartRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(),
+                CoreMatchers.is(sampleBasedStartRegEx));
     }
 
     /**
@@ -83,7 +86,7 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
-        assertThat(model.getSampleBasedStartRegEx(), is(""));
+        Assert.assertThat(model.getSampleBasedStartRegEx(), CoreMatchers.is(""));
     }
 
     /**
@@ -92,7 +95,9 @@ public class Step2ModelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
         final int dateOffset = 25;
-        assertThat(model.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
+        Assert.assertThat(
+                model.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(),
+                CoreMatchers.is(dateOffset));
     }
 
     /**
@@ -100,7 +105,7 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnZeroAsDefaultValueForSampleBasedDateOffset() {
-        assertThat(model.getSampleBasedDateOffset(), is(0));
+        Assert.assertThat(model.getSampleBasedDateOffset(), CoreMatchers.is(0));
     }
 
     /**
@@ -108,8 +113,11 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet() {
-        final String sampleBasedDateExtractionRegEx = "test-regex";
-        assertThat(model.setSampleBasedDateExtractionRegEx(sampleBasedDateExtractionRegEx).getSampleBasedDateExtractionRegEx(), is(sampleBasedDateExtractionRegEx));
+        final String sampleBasedDateExtractionRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedDateExtractionRegEx(
+                        sampleBasedDateExtractionRegEx).getSampleBasedDateExtractionRegEx(),
+                CoreMatchers.is(sampleBasedDateExtractionRegEx));
     }
 
     /**
@@ -117,7 +125,7 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
-        assertThat(model.getSampleBasedDateExtractionRegEx(), is(""));
+        Assert.assertThat(model.getSampleBasedDateExtractionRegEx(), CoreMatchers.is(""));
     }
 
     /**
@@ -125,8 +133,10 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
-        final String datePattern = "test-regex";
-        assertThat(model.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
+        final String datePattern = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(),
+                CoreMatchers.is(datePattern));
     }
 
     /**
@@ -134,7 +144,9 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
-        assertThat(model.getSampleBasedDatePattern(), is(""));
+        Assert.assertThat(
+                model.getSampleBasedDatePattern(),
+                CoreMatchers.is(""));
     }
 
     /**
@@ -143,7 +155,9 @@ public class Step2ModelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
         final int dataOffset = 25;
-        assertThat(model.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
+        Assert.assertThat(
+                model.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(),
+                CoreMatchers.is(dataOffset));
     }
 
     /**
@@ -151,7 +165,9 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnZeroAsDefaultValueForSampleBasedDataOffset() {
-        assertThat(model.getSampleBasedDataOffset(), is(0));
+        Assert.assertThat(
+                model.getSampleBasedDataOffset(),
+                CoreMatchers.is(0));
     }
 
     /**
@@ -160,7 +176,9 @@ public class Step2ModelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
         final int sampleSizeOffset = 25;
-        assertThat(model.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
+        Assert.assertThat(
+                model.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(),
+                CoreMatchers.is(sampleSizeOffset));
     }
 
     /**
@@ -168,7 +186,9 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset() {
-        assertThat(model.getSampleBasedSampleSizeOffset(), is(0));
+        Assert.assertThat(
+                model.getSampleBasedSampleSizeOffset(),
+                CoreMatchers.is(0));
     }
 
     /**
@@ -176,8 +196,10 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
-        final String sampleBasedSampleSizeRegEx = "test-regex";
-        assertThat(model.setSampleBasedSampleSizeRegEx(sampleBasedSampleSizeRegEx).getSampleBasedSampleSizeRegEx(), is(sampleBasedSampleSizeRegEx));
+        final String sampleBasedSampleSizeRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedSampleSizeRegEx(sampleBasedSampleSizeRegEx).getSampleBasedSampleSizeRegEx(),
+                CoreMatchers.is(sampleBasedSampleSizeRegEx));
     }
 
     /**
@@ -185,6 +207,6 @@ public class Step2ModelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
-        assertThat(model.getSampleBasedSampleSizeRegEx(), is(""));
+        Assert.assertThat(model.getSampleBasedSampleSizeRegEx(), CoreMatchers.is(""));
     }
 }

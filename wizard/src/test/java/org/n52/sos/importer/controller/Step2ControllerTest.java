@@ -61,9 +61,6 @@
  */
 package org.n52.sos.importer.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -75,6 +72,11 @@ import org.n52.sos.importer.model.Step2Model;
 @Ignore("Requires display which is not available on remote build servers")
 public class Step2ControllerTest {
 
+    private static final String TEST_PATTERN = "test-pattern";
+    private static final String TEST_REGEX_2 = "(test)-regex-2";
+    private static final String TEST_REGEX = "test-regex";
+    private static final String AQUOT = "\"";
+    
     private Step2Controller controller;
 
     /**
@@ -90,14 +92,14 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfStartRegExIsMissing() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -105,15 +107,15 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfDateOffsetIsMissing() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex");
+            .setSampleBasedStartRegEx(TEST_REGEX);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -121,19 +123,19 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfDateExtractionRegExIsMissing() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedStartRegEx(TEST_REGEX)
             .setSampleBasedDateOffset(5);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
-        ((Step2Model)controller.getModel()).setSampleBasedDateExtractionRegEx("test-regex");
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
+        ((Step2Model) controller.getModel()).setSampleBasedDateExtractionRegEx(TEST_REGEX);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -141,17 +143,17 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfDatePatternIsMissing() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedStartRegEx(TEST_REGEX)
             .setSampleBasedDateOffset(5)
-            .setSampleBasedDateExtractionRegEx("(test)-regex-2");
+            .setSampleBasedDateExtractionRegEx(TEST_REGEX_2);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -159,18 +161,18 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfDataOffsetIsMissing() {
-        ((Step2Model)controller.getModel())
-        .setColumnSeparator(",")
-        .setCommentIndicator("#")
-        .setDecimalSeparator('.')
-        .setTextQualifier("\"")
-        .setSampleBased(true)
-        .setSampleBasedStartRegEx("test-regex")
-        .setSampleBasedDateOffset(5)
-        .setSampleBasedDateExtractionRegEx("(test)-regex-2")
-        .setSampleBasedDatePattern("test-pattern");
-    controller.loadSettings();
-    assertThat(controller.isFinished(), is(false));
+        ((Step2Model) controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier(AQUOT)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx(TEST_REGEX)
+            .setSampleBasedDateOffset(5)
+            .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+            .setSampleBasedDatePattern(TEST_PATTERN);
+        controller.loadSettings();
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -178,19 +180,19 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfSampleSizeOffsetIsMissing() {
-        ((Step2Model)controller.getModel())
-        .setColumnSeparator(",")
-        .setCommentIndicator("#")
-        .setDecimalSeparator('.')
-        .setTextQualifier("\"")
-        .setSampleBased(true)
-        .setSampleBasedStartRegEx("test-regex")
-        .setSampleBasedDateOffset(5)
-        .setSampleBasedDateExtractionRegEx("(test)-regex-2")
-        .setSampleBasedDatePattern("test-pattern")
-        .setSampleBasedDataOffset(6);
-    controller.loadSettings();
-    assertThat(controller.isFinished(), is(false));
+        ((Step2Model) controller.getModel())
+            .setColumnSeparator(",")
+            .setCommentIndicator("#")
+            .setDecimalSeparator('.')
+            .setTextQualifier(AQUOT)
+            .setSampleBased(true)
+            .setSampleBasedStartRegEx(TEST_REGEX)
+            .setSampleBasedDateOffset(5)
+            .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+            .setSampleBasedDatePattern(TEST_PATTERN)
+            .setSampleBasedDataOffset(6);
+        controller.loadSettings();
+        org.junit.Assert. assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -198,23 +200,23 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnFalseIfSampleSizeRegExIsMissing() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedStartRegEx(TEST_REGEX)
             .setSampleBasedDateOffset(5)
-            .setSampleBasedDateExtractionRegEx("(test)-regex-2")
-            .setSampleBasedDatePattern("test-pattern")
+            .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+            .setSampleBasedDatePattern(TEST_PATTERN)
             .setSampleBasedDataOffset(6)
             .setSampleBasedSampleSizeOffset(7);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
-        ((Step2Model)controller.getModel()).setSampleBasedSampleSizeRegEx("test-regex");
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
+        ((Step2Model) controller.getModel()).setSampleBasedSampleSizeRegEx(TEST_REGEX);
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(false));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(false));
     }
 
     /**
@@ -222,13 +224,13 @@ public class Step2ControllerTest {
      */
     @Test
     public void shouldReturnTrueIfSampleBasedValuesAreSet() {
-        ((Step2Model)controller.getModel())
+        ((Step2Model) controller.getModel())
             .setColumnSeparator(",")
             .setCommentIndicator("#")
             .setDecimalSeparator('.')
-            .setTextQualifier("\"")
+            .setTextQualifier(AQUOT)
             .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
+            .setSampleBasedStartRegEx(TEST_REGEX)
             .setSampleBasedDateOffset(5)
             .setSampleBasedDateExtractionRegEx("(test)-regex2-with-one-group")
             .setSampleBasedDatePattern("date-pattern")
@@ -237,7 +239,7 @@ public class Step2ControllerTest {
             .setSampleBasedSampleSizeRegEx("(test-regex)-with-one-group");
         // TODO extend with other sample based parameters
         controller.loadSettings();
-        assertThat(controller.isFinished(), is(true));
+        org.junit.Assert.assertThat(controller.isFinished(), org.hamcrest.CoreMatchers.is(true));
     }
 
 }

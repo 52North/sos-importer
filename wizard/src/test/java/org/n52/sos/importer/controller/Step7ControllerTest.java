@@ -28,9 +28,6 @@
  */
 package org.n52.sos.importer.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -68,7 +65,9 @@ public class Step7ControllerTest {
             .setHunkSize(42)
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
-        assertThat(((Step7Model) controller.getModel()).getHunkSize(), is(42));
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getHunkSize(),
+                org.hamcrest.CoreMatchers.is(42));
     }
 
     /**
@@ -81,7 +80,9 @@ public class Step7ControllerTest {
             .setSendBuffer(42)
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
-        assertThat(((Step7Model) controller.getModel()).getSendBuffer(), is(42));
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getSendBuffer(),
+                org.hamcrest.CoreMatchers.is(42));
     }
 
     /**
@@ -93,7 +94,9 @@ public class Step7ControllerTest {
         ((Step7Panel) controller.getStepPanel())
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
-        assertThat(((Step7Model) controller.getModel()).getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getImportStrategy(),
+                org.hamcrest.CoreMatchers.is(ImportStrategy.SweArrayObservationWithSplitExtension));
     }
 
 }

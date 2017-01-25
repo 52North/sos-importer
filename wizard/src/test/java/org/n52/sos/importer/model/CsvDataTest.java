@@ -61,16 +61,20 @@
  */
 package org.n52.sos.importer.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.LinkedList;
 import java.util.List;
 
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 public class CsvDataTest {
 
+    private static final String COL1 = "col1";
+    private static final String COL2 = "col2";
+    private static final String COL3 = "col3";
+    
     private CsvData data;
 
     /**
@@ -86,7 +90,7 @@ public class CsvDataTest {
      */
     @Test
     public void shouldReturnRowCountZeroIfLinesNotSet() {
-        assertThat(data.getRowCount(), is(0));
+        Assert.assertThat(data.getRowCount(), Is.is(0));
     }
 
     /**
@@ -94,7 +98,7 @@ public class CsvDataTest {
      */
     @Test
     public void shouldReturnColumnCountZeroIfLinesNotSet() {
-        assertThat(data.getColumnCount(), is(0));
+        Assert.assertThat(data.getColumnCount(), Is.is(0));
     }
 
     /**
@@ -104,8 +108,8 @@ public class CsvDataTest {
     public void shouldReturnZeroForCountsIfLinesIsNull() {
         data.setLines(null);
 
-        assertThat(data.getRowCount(), is(0));
-        assertThat(data.getColumnCount(), is(0));
+        Assert.assertThat(data.getRowCount(), Is.is(0));
+        Assert.assertThat(data.getColumnCount(), Is.is(0));
     }
 
     /**
@@ -114,13 +118,13 @@ public class CsvDataTest {
     @Test
     public void shouldReturnCorrectColumnCount() {
         final List<String[]> testData = new LinkedList<>();
-        testData.add(new String[] {"col1","col2"});
-        testData.add(new String[] {"col1"});
-        testData.add(new String[] {"col1","col2", "col3"});
+        testData.add(new String[] {COL1, COL2});
+        testData.add(new String[] {COL1});
+        testData.add(new String[] {COL1, COL2, COL3});
         data.setLines(testData);
 
-        assertThat(data.getColumnCount(), is(3));
-        assertThat(data.getRowCount(), is(3));
+        Assert.assertThat(data.getColumnCount(), Is.is(3));
+        Assert.assertThat(data.getRowCount(), Is.is(3));
     }
 
     /**
@@ -129,15 +133,15 @@ public class CsvDataTest {
     @Test
     public void shouldReturnLineFilledWithEmptyStringsIfColumnContainedLessValuesThanColumnCount() {
         final List<String[]> testData = new LinkedList<>();
-        testData.add(new String[] {"col1","col2"});
-        testData.add(new String[] {"col1"});
-        testData.add(new String[] {"col1","col2", "col3"});
+        testData.add(new String[] {COL1, COL2});
+        testData.add(new String[] {COL1});
+        testData.add(new String[] {COL1, COL2, COL3});
         data.setLines(testData);
 
-        assertThat(data.getLine(1).length, is(data.getColumnCount()));
+        Assert.assertThat(data.getLine(1).length, Is.is(data.getColumnCount()));
         for (int i = 1; i < data.getLine(1).length; i++) {
             final String string = data.getLine(1)[i];
-            assertThat(string, is(""));
+            Assert.assertThat(string, Is.is(""));
         }
     }
 }

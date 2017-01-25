@@ -28,9 +28,8 @@
  */
 package org.n52.sos.importer.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
@@ -59,7 +58,7 @@ public class Step7ModelTest {
      */
     @Test
     public void shouldReturnSingleObservationAsDefaultImportStrategie() {
-        assertThat(model.getImportStrategy(), is(ImportStrategy.SingleObservation));
+        Assert.assertThat(model.getImportStrategy(), Is.is(ImportStrategy.SingleObservation));
     }
 
     /**
@@ -68,7 +67,9 @@ public class Step7ModelTest {
     @Test
     public void shouldReturnImportStrategie() {
         model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-        assertThat(model.getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
+        Assert.assertThat(
+                model.getImportStrategy(),
+                Is.is(ImportStrategy.SweArrayObservationWithSplitExtension));
     }
 
     /**
@@ -76,7 +77,7 @@ public class Step7ModelTest {
      */
     @Test
     public void shouldReturn25AsDefaultSendBuffer() {
-        assertThat(model.getSendBuffer(), is(25));
+        Assert.assertThat(model.getSendBuffer(), Is.is(25));
     }
 
     /**
@@ -85,7 +86,7 @@ public class Step7ModelTest {
     @Test
     public void shouldReturnSendBuffer() {
         model.setSendBuffer(42);
-        assertThat(model.getSendBuffer(), is(42));
+        Assert.assertThat(model.getSendBuffer(), Is.is(42));
     }
 
     /**
@@ -93,7 +94,7 @@ public class Step7ModelTest {
      */
     @Test
     public void shouldReturn5000AsDefaultHunkSize() {
-        assertThat(model.getHunkSize(), is(5000));
+        Assert.assertThat(model.getHunkSize(), Is.is(5000));
     }
 
     /**
@@ -102,6 +103,6 @@ public class Step7ModelTest {
     @Test
     public void shouldReturnHunkSize() {
         model.setHunkSize(52);
-        assertThat(model.getHunkSize(), is(52));
+        Assert.assertThat(model.getHunkSize(), Is.is(52));
     }
 }

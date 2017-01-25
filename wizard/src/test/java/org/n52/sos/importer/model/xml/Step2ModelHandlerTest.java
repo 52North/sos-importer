@@ -28,9 +28,8 @@
  */
 package org.n52.sos.importer.model.xml;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step2Model;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
@@ -44,20 +43,26 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  */
 public class Step2ModelHandlerTest {
 
+    private static final String TEST_REGEX = "test-regex";
+    private static final String TEST_REGEX_2 = "test-regex-2";
+    private static final String TEST_PATTERN = "test-pattern";
+
     /**
      * <p>shouldSetSampleBasedStartRegEx.</p>
      */
     @Test
     public void shouldSetSampleBasedStartRegEx() {
-        final String sampleBasedStartRegEx = "test-regex";
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx(sampleBasedStartRegEx);
+        final String sampleBasedStartRegEx = TEST_REGEX;
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(sampleBasedStartRegEx);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleStartRegEx(), is(true));
-        assertThat(importConf.getDataFile().getSampleStartRegEx(), is(sampleBasedStartRegEx));
+        Assert.assertThat(importConf.getDataFile().isSetSampleStartRegEx(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(
+                importConf.getDataFile().getSampleStartRegEx(),
+                org.hamcrest.CoreMatchers.is(sampleBasedStartRegEx));
     }
 
     /**
@@ -66,15 +71,15 @@ public class Step2ModelHandlerTest {
     @Test
     public void shouldSetSampleBasedDateOffset() {
         final int dateOffset = 25;
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(dateOffset);
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(dateOffset);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleDateOffset(), is(true));
-        assertThat(importConf.getDataFile().getSampleDateOffset(), is(dateOffset));
+        Assert.assertThat(importConf.getDataFile().isSetSampleDateOffset(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(importConf.getDataFile().getSampleDateOffset(), org.hamcrest.CoreMatchers.is(dateOffset));
     }
 
     /**
@@ -82,17 +87,21 @@ public class Step2ModelHandlerTest {
      */
     @Test
     public void shouldSetSampleBasedDateExtractionRegEx() {
-        final String dateExtractionRegEx = "test-regex-2";
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(25)
-            .setSampleBasedDateExtractionRegEx(dateExtractionRegEx);
+        final String dateExtractionRegEx = TEST_REGEX_2;
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(25)
+                .setSampleBasedDateExtractionRegEx(dateExtractionRegEx);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleDateExtractionRegEx(), is(true));
-        assertThat(importConf.getDataFile().getSampleDateExtractionRegEx(), is(dateExtractionRegEx));
+        Assert.assertThat(
+                importConf.getDataFile().isSetSampleDateExtractionRegEx(),
+                org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(
+                importConf.getDataFile().getSampleDateExtractionRegEx(),
+                org.hamcrest.CoreMatchers.is(dateExtractionRegEx));
     }
 
     /**
@@ -100,18 +109,18 @@ public class Step2ModelHandlerTest {
      */
     @Test
     public void shouldSetSampleBasedDatePattern() {
-        final String datePattern = "test-regex-2";
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(25)
-            .setSampleBasedDateExtractionRegEx("test-regex-2")
-            .setSampleBasedDatePattern(datePattern);
+        final String datePattern = TEST_REGEX_2;
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(25)
+                .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+                .setSampleBasedDatePattern(datePattern);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleDatePattern(), is(true));
-        assertThat(importConf.getDataFile().getSampleDatePattern(), is(datePattern));
+        Assert.assertThat(importConf.getDataFile().isSetSampleDatePattern(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(importConf.getDataFile().getSampleDatePattern(), org.hamcrest.CoreMatchers.is(datePattern));
     }
 
     /**
@@ -120,18 +129,18 @@ public class Step2ModelHandlerTest {
     @Test
     public void shouldSetSampleBasedDataOffset() {
         final int dataOffset = 42;
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(25)
-            .setSampleBasedDateExtractionRegEx("test-regex-2")
-            .setSampleBasedDatePattern("test-pattern")
-            .setSampleBasedDataOffset(dataOffset);
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(25)
+                .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+                .setSampleBasedDatePattern(TEST_PATTERN)
+                .setSampleBasedDataOffset(dataOffset);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleDataOffset(), is(true));
-        assertThat(importConf.getDataFile().getSampleDataOffset(), is(dataOffset));
+        Assert.assertThat(importConf.getDataFile().isSetSampleDataOffset(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(importConf.getDataFile().getSampleDataOffset(), org.hamcrest.CoreMatchers.is(dataOffset));
     }
 
     /**
@@ -140,19 +149,21 @@ public class Step2ModelHandlerTest {
     @Test
     public void shouldSetSampleBasedSampleSizeOffset() {
         final int sampleSizeOffset = 42;
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(25)
-            .setSampleBasedDateExtractionRegEx("test-regex-2")
-            .setSampleBasedDatePattern("test-pattern")
-            .setSampleBasedDataOffset(6)
-            .setSampleBasedSampleSizeOffset(sampleSizeOffset);
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(25)
+                .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+                .setSampleBasedDatePattern(TEST_PATTERN)
+                .setSampleBasedDataOffset(6)
+                .setSampleBasedSampleSizeOffset(sampleSizeOffset);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleSizeOffset(), is(true));
-        assertThat(importConf.getDataFile().getSampleSizeOffset(), is(sampleSizeOffset));
+        Assert.assertThat(importConf.getDataFile().isSetSampleSizeOffset(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(
+                importConf.getDataFile().getSampleSizeOffset(),
+                org.hamcrest.CoreMatchers.is(sampleSizeOffset));
     }
 
     /**
@@ -160,21 +171,23 @@ public class Step2ModelHandlerTest {
      */
     @Test
     public void shouldSetSampleBasedSampleSizeRegEx() {
-        final String sampleSizeRegEx = "test-regex";
-        final Step2Model stepModel = new Step2Model("",2)
-            .setSampleBased(true)
-            .setSampleBasedStartRegEx("test-regex")
-            .setSampleBasedDateOffset(25)
-            .setSampleBasedDateExtractionRegEx("test-regex-2")
-            .setSampleBasedDatePattern("test-pattern")
-            .setSampleBasedDataOffset(6)
-            .setSampleBasedSampleSizeOffset(42)
-            .setSampleBasedSampleSizeRegEx(sampleSizeRegEx);
+        final String sampleSizeRegEx = TEST_REGEX;
+        final Step2Model stepModel = new Step2Model("", 2)
+                .setSampleBased(true)
+                .setSampleBasedStartRegEx(TEST_REGEX)
+                .setSampleBasedDateOffset(25)
+                .setSampleBasedDateExtractionRegEx(TEST_REGEX_2)
+                .setSampleBasedDatePattern(TEST_PATTERN)
+                .setSampleBasedDataOffset(6)
+                .setSampleBasedSampleSizeOffset(42)
+                .setSampleBasedSampleSizeRegEx(sampleSizeRegEx);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step2ModelHandler().handleModel(stepModel, importConf);
 
-        assertThat(importConf.getDataFile().isSetSampleSizeRegEx(), is(true));
-        assertThat(importConf.getDataFile().getSampleSizeRegEx(), is(sampleSizeRegEx));
+        Assert.assertThat(importConf.getDataFile().isSetSampleSizeRegEx(), org.hamcrest.CoreMatchers.is(true));
+        Assert.assertThat(
+                importConf.getDataFile().getSampleSizeRegEx(),
+                org.hamcrest.CoreMatchers.is(sampleSizeRegEx));
     }
 
 }

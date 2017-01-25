@@ -65,13 +65,14 @@ public class Step5CModelHandlerTest {
         final int positionColumnId = 3;
         Position position = new Position(
                 new Latitude(new Column(positionColumnId, 0), pattern),
-                new Longitude(new Column(positionColumnId, 0),pattern),
+                new Longitude(new Column(positionColumnId, 0), pattern),
                 new Height(altitude, unit),
                 new EPSGCode(4326));
         position.setGroup("A");
         final Step5cModel stepModel = new Step5cModel(position);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column = importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
+        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column = 
+                importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
         column.setNumber(positionColumnId);
         column.setType(TypeDocument.Type.POSITION);
         Metadata meta = column.addNewMetadata();
@@ -89,7 +90,8 @@ public class Step5CModelHandlerTest {
 
         // then
         Metadata altitudeMetadata = null;
-        for (Metadata metadata : importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
+        for (Metadata metadata : 
+                importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
             if (metadata.getKey().equals(Key.POSITION_ALTITUDE)) {
                 altitudeMetadata = metadata;
                 break;

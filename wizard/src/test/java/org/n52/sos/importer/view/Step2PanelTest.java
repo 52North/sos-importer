@@ -28,7 +28,7 @@
  */
 package org.n52.sos.importer.view;
 
-import static org.hamcrest.CoreMatchers.is;
+
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
@@ -62,7 +62,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnTrueIfIsSampleBasedIsSet() {
-        assertThat(panel.setSampleBased(true).isSampleBased(), is(true));
+        assertThat(panel.setSampleBased(true).isSampleBased(), org.hamcrest.CoreMatchers.is(  true));
     }
 
     /**
@@ -70,7 +70,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnFalseAsDefaultValueForSampleBased() {
-        assertThat(panel.isSampleBased(), is(false));
+        assertThat(panel.isSampleBased(), org.hamcrest.CoreMatchers.is(  false));
     }
 
     /**
@@ -79,7 +79,7 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
         final String sampleBasedStartRegEx = "test-regex";
-        assertThat(panel.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
+        assertThat(panel.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), org.hamcrest.CoreMatchers.is(  sampleBasedStartRegEx));
     }
 
     /**
@@ -87,7 +87,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
-        assertThat(panel.getSampleBasedStartRegEx(), is(""));
+        assertThat(panel.getSampleBasedStartRegEx(), org.hamcrest.CoreMatchers.is(  ""));
     }
 
     /**
@@ -96,7 +96,7 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
         final int dateOffset = MAX_ROWS-5;
-        assertThat(panel.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
+        assertThat(panel.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), org.hamcrest.CoreMatchers.is(  dateOffset));
     }
 
     /**
@@ -104,7 +104,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnOneAsDefaultValueForDateOffset() {
-        assertThat(panel.getSampleBasedDateOffset(), is(1));
+        assertThat(panel.getSampleBasedDateOffset(), org.hamcrest.CoreMatchers.is(  1));
     }
 
     /**
@@ -115,7 +115,7 @@ public class Step2PanelTest {
         final String dateExtractionRegEx = "test-regex";
         assertThat(panel.setSampleBasedDateExtractionRegEx(dateExtractionRegEx)
                 .getSampleBasedDateExtractionRegEx(),
-                is(dateExtractionRegEx));
+                org.hamcrest.CoreMatchers.is(  dateExtractionRegEx));
     }
 
     /**
@@ -123,7 +123,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
-        assertThat(panel.getSampleBasedDateExtractionRegEx(), is(""));
+        assertThat(panel.getSampleBasedDateExtractionRegEx(), org.hamcrest.CoreMatchers.is(  ""));
     }
 
     /**
@@ -132,7 +132,7 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
         final String datePattern = "test-regex";
-        assertThat(panel.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
+        assertThat(panel.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), org.hamcrest.CoreMatchers.is(  datePattern));
     }
 
     /**
@@ -140,7 +140,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
-        assertThat(panel.getSampleBasedDatePattern(), is(""));
+        assertThat(panel.getSampleBasedDatePattern(), org.hamcrest.CoreMatchers.is(  ""));
     }
 
     /**
@@ -149,7 +149,7 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
         final int dataOffset = MAX_ROWS-5;
-        assertThat(panel.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
+        assertThat(panel.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), org.hamcrest.CoreMatchers.is(  dataOffset));
     }
 
     /**
@@ -157,7 +157,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnOneAsDefaultValueForDataOffset() {
-        assertThat(panel.getSampleBasedDataOffset(), is(1));
+        assertThat(panel.getSampleBasedDataOffset(), org.hamcrest.CoreMatchers.is(  1));
     }
 
     /**
@@ -166,7 +166,7 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
         final int sampleSizeOffset = MAX_ROWS-5;
-        assertThat(panel.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
+        assertThat(panel.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), org.hamcrest.CoreMatchers.is(  sampleSizeOffset));
     }
 
     /**
@@ -174,7 +174,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnOneAsDefaultValueForSampleSizeOffset() {
-        assertThat(panel.getSampleBasedSampleSizeOffset(), is(1));
+        assertThat(panel.getSampleBasedSampleSizeOffset(), org.hamcrest.CoreMatchers.is(  1));
     }
 
     /**
@@ -182,7 +182,7 @@ public class Step2PanelTest {
      */
     @Test
     public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
-        assertThat(panel.getSampleBasedSampleSizeRegEx(), is(""));
+        assertThat(panel.getSampleBasedSampleSizeRegEx(), org.hamcrest.CoreMatchers.is(  ""));
     }
 
     /**
@@ -191,6 +191,6 @@ public class Step2PanelTest {
     @Test
     public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
         final String sampleSizeRegEx = "test-regex";
-        assertThat(panel.setSampleBasedSampleSizeRegEx(sampleSizeRegEx).getSampleBasedSampleSizeRegEx(), is(sampleSizeRegEx));
+        assertThat(panel.setSampleBasedSampleSizeRegEx(sampleSizeRegEx).getSampleBasedSampleSizeRegEx(), org.hamcrest.CoreMatchers.is(  sampleSizeRegEx));
     }
 }

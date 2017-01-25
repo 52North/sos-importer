@@ -34,6 +34,7 @@ import java.text.ParseException;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
@@ -64,7 +65,7 @@ public class TestIssue57ReadFoiPosition {
 
         // then
         final String deg = "deg";
-        Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
+        Assert.assertThat(foi.getPosition(), Is.is(IsNull.notNullValue()));
         Assert.assertThat(foi.getUri(), Is.is(foiId));
         Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
         Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
