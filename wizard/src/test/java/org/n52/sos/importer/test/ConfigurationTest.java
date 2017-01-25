@@ -62,6 +62,7 @@
 package org.n52.sos.importer.test;
 
 import java.io.File;
+
 import java.io.IOException;
 
 import org.apache.xmlbeans.XmlException;
@@ -74,11 +75,13 @@ import org.x52North.sensorweb.sos.importer.x04.OfferingDocument.Offering;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 import org.x52North.sensorweb.sos.importer.x04.SosMetadataDocument.SosMetadata;
+
 public class ConfigurationTest {
 
+    private static final String AQUOT = "\"";
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
-
-    private static final File testConfig = new File("src/test/xml/configuration-test.xml");
+    private static final File TEST_CONFIG = new File("src/test/xml/configuration-test.xml");
+    
     /**
      * <p>main.</p>
      *
@@ -86,17 +89,20 @@ public class ConfigurationTest {
      * @throws java.io.IOException if any.
      * @throws org.apache.xmlbeans.XmlException if any.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) throws XmlException, IOException {
+        //CHECKSTYLE_ON
         if (logger.isDebugEnabled()) {
             logger.debug("Starting configuration test.");
             logger.debug("try loading file \"" +
-                    testConfig.getAbsolutePath() + "\"");
+                    TEST_CONFIG.getAbsolutePath() + AQUOT);
         }
-        final SosImportConfigurationDocument importerConfiguration = SosImportConfigurationDocument.Factory.parse(testConfig);
+        final SosImportConfigurationDocument importerConfiguration =
+                SosImportConfigurationDocument.Factory.parse(TEST_CONFIG);
         final SosImportConfiguration importConf = importerConfiguration.getSosImportConfiguration();
-        if(importConf.getDataFile().isSetLocalFile()) {
+        if (importConf.getDataFile().isSetLocalFile()) {
             final String path = importConf.getDataFile().getLocalFile().getPath();
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Path for datafile: " + path);
             }
         }
@@ -124,7 +130,7 @@ public class ConfigurationTest {
                         column.getType().toString() +
                         "; metadata?: " +
                         column.sizeOfMetadataArray());
-                if(column.sizeOfMetadataArray() > 0) {
+                if (column.sizeOfMetadataArray() > 0) {
                     colMetadata = column.getMetadataArray();
                     for (final Metadata m : colMetadata) {
                         logger.debug("\tKey: " +
@@ -144,13 +150,13 @@ public class ConfigurationTest {
             final Offering sosOff = sosMeta.getOffering();
             final String offeringInfo = sosOff.getStringValue();
             //
-            if(sosOff.isSetGenerate()) {
+            if (sosOff.isSetGenerate()) {
                 offeringAutogenerate = sosOff.getGenerate();
             }
             //
             logger.debug("sosURL: " + sosUrl);
             logger.debug("autogenerate Offering?: " + offeringAutogenerate);
-            logger.debug("offeringInfo: \"" + offeringInfo + "\"");
+            logger.debug("offeringInfo: \"" + offeringInfo + AQUOT);
         }
     }
 

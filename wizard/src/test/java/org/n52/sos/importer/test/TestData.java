@@ -50,16 +50,19 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>TestData class.</p>
  *
- * @author e.h.juerrens@52north.org
  * This class holds shared test data for the other test classes.
+ *
+ * @author e.h.juerrens@52north.org
  * @version $Id: $Id
  * @since 0.5.0
  */
 public class TestData {
 
+//CHECKSTYLE:OFF
+
     private static final Logger logger = LoggerFactory.getLogger(TestData.class);
 
-    private static final CsvData convert(final String[][] data) {
+    private static CsvData convert(final String[][] data) {
         final CsvData csv = new CsvData();
         final List<String[]> lines = new LinkedList<>();
         for (final String[] line : data) {
@@ -72,14 +75,14 @@ public class TestData {
     /** Constant <code>EXAMPLE_TABLE_MINI</code> */
     public static final CsvData EXAMPLE_TABLE_MINI = convert(new String[][]{
             {"01/06/2010", "11:45", "12,12", "23,123"},
-            {"01/06/2010", "23:45", "323,123", "432,123"}
+            {"01/06/2010", "23:45", "323,123", "432,123"},
     });
 
     /** Constant <code>EXAMPLE_TABLE_MINI_ONLY_STRINGS</code> */
     public static final CsvData EXAMPLE_TABLE_MINI_ONLY_STRINGS = convert(new String[][]{
         {"bla", "bla2"},
         {"bla3", "bla4"},
-        {"bla5", "bla6"}
+        {"bla5", "bla6"},
     });
 
     /** Constant <code>EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY</code> */
@@ -88,7 +91,7 @@ public class TestData {
             {"01.01.03", "Klinthal", "PM10", "-999"},
             {"02.01.03", "Klinthal", "PM10", "-999"},
             {"03.01.03", "Zwickau", "PM10", "-999"},
-            {"04.01.03", "Zwickau", "PM12", "-999"}
+            {"04.01.03", "Zwickau", "PM12", "-999"},
     });
 
     /**
@@ -274,7 +277,8 @@ public class TestData {
 
     /**
      * Example observed property created from manual input. Related table element: col 3, flwd 1</br>
-     * To change the related column call <code>obsProp.setTableElement(new Column(newColumnId, firstlinewithData);</code>
+     * To change the related column call 
+     * <code>obsProp.setTableElement(new Column(newColumnId, firstlinewithData);</code>
      */
     public static final ObservedProperty EXAMPLE_OBS_PROP = TestData.exampleObsProp();
 
@@ -309,4 +313,5 @@ public class TestData {
         nv.setTableElement(new Column(1, 1));
         return nv;
     }
+    //CHECKSTYLE:ON
 }

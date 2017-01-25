@@ -52,19 +52,35 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6cWMSPanelTest extends JFrame {
 
+    /**
+     * 
+     */
+    private static final String TEST_FOI_NAME = "testFOIname";
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
+
+    /**
+     * <p>Constructor for Step6cWMSPanelTest.</p>
+     *
+     * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+     */
+    public Step6cWMSPanelTest(final Step6cModel s6cM) {
+        getContentPane().add(new Step6cPanel("test description", TEST_FOI_NAME, s6cM));
+    }
 
     /**
      * <p>main.</p>
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         Constants.setGuiDebug(true);
         final FeatureOfInterest foi = new FeatureOfInterest();
-        foi.setName("testFOIname");
+        foi.setName(TEST_FOI_NAME);
         foi.setPosition(new Position());
         final Step6cModel s6cM = new Step6cModel(foi);
 
@@ -75,25 +91,15 @@ public class Step6cWMSPanelTest extends JFrame {
         frame.setVisible(true);
         if (Constants.isGuiDebug()) {
             final long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
-            Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener() {
+            Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
                 @Override
-                public void eventDispatched(final AWTEvent e)
-                {
-                    if (logger.isDebugEnabled() && e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
-                        logger.debug("AWTEvent: {}",e);
+                public void eventDispatched(final AWTEvent e) {
+                    if (logger.isDebugEnabled() &&
+                            e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
+                        logger.debug("AWTEvent: {}", e);
                     }
                 }
             }, eventMask);
         }
     }
-
-    /**
-     * <p>Constructor for Step6cWMSPanelTest.</p>
-     *
-     * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
-     */
-    public Step6cWMSPanelTest(final Step6cModel s6cM) {
-        getContentPane().add(new Step6cPanel("test description", "testFOIname", s6cM));
-    }
-
 }

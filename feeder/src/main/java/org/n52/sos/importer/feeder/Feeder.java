@@ -63,10 +63,10 @@ public final class Feeder {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
-    //CHECKSTYLE:OFF
     // Fix for uncommented main method error of checkstyle because I need this entry point
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
-      //CHECKSTYLE:ON
+        //CHECKSTYLE:ON
         LOG.trace("main()");
         logApplicationMetadata();
         if (checkArgs(args)) {

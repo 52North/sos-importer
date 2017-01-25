@@ -54,14 +54,18 @@ public class PositionControllerTest {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        //CHECKSTYLE:ON
         if (logger.isDebugEnabled()) {
             logger.debug("Start Test");
         }
         final int firstLineWithData = 1;
-        final String g = "1",
-                pa1 = "LAT",
-                pa2 = "LON";
+        final String g = "1";
+        final String pa1 = "LAT";
+        final String pa2 = "LON";
         //
         // first element
         final Column c1 = new Column(0, firstLineWithData);

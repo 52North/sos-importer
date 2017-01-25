@@ -82,6 +82,7 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6cTestGeneratedFoi {
 
     /**
@@ -89,14 +90,16 @@ public class Step6cTestGeneratedFoi {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController mC = MainController.getInstance();
 
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
         final int firstLineWithData = 0;
         final DateAndTime dtm = new DateAndTime();
         final DateAndTimeController dtc = new DateAndTimeController(dtm);
-        dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
+        dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0, firstLineWithData));
         dtm.setSecond(new Second(0));
         dtm.setTimeZone(new TimeZone(1));
 
@@ -106,9 +109,9 @@ public class Step6cTestGeneratedFoi {
         final UnitOfMeasurement uom = new UnitOfMeasurement();
         uom.setName("Degree Celsius");
 
-        final Column c1 = new Column(1,firstLineWithData),
-                c2 = new Column(2,firstLineWithData);
-        final Column[] cols = {c1,c2};
+        final Column c1 = new Column(1, firstLineWithData);
+        final Column  c2 = new Column(2, firstLineWithData);
+        final Column[] cols = {c1, c2};
 
         final FeatureOfInterest foi = new FeatureOfInterest();
         foi.setGenerated(true);
@@ -153,7 +156,7 @@ public class Step6cTestGeneratedFoi {
         mC.registerProvider(s3M);
         mC.updateModel();
         mC.removeProvider(s3M);
-        final Step6bModel s6bM = new Step6bModel(nv1,foi);
+        final Step6bModel s6bM = new Step6bModel(nv1, foi);
         mC.registerProvider(s6bM);
         mC.updateModel();
         mC.removeProvider(s6bM);

@@ -76,6 +76,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step6cTestManualFoi {
 
     /**
@@ -83,12 +84,14 @@ public class Step6cTestManualFoi {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
         final int firstLineWithData = 0;
         final DateAndTime dtm = new DateAndTime();
         final DateAndTimeController dtc = new DateAndTimeController(dtm);
-        dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0,firstLineWithData));
+        dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0, firstLineWithData));
         dtm.setSecond(new Second(0));
         dtm.setTimeZone(new TimeZone(1));
 
@@ -102,7 +105,7 @@ public class Step6cTestManualFoi {
         sn.setName("Thermometer xy");
 
         final NumericValue nv1 = new NumericValue();
-        nv1.setTableElement(new Column(1,firstLineWithData));
+        nv1.setTableElement(new Column(1, firstLineWithData));
         nv1.setDateAndTime(dtm);
         nv1.setObservedProperty(op);
         nv1.setFeatureOfInterest(foi);
@@ -110,7 +113,7 @@ public class Step6cTestManualFoi {
         nv1.setUnitOfMeasurement(uom);
 
         final NumericValue nv2 = new NumericValue();
-        nv2.setTableElement(new Column(2,firstLineWithData));
+        nv2.setTableElement(new Column(2, firstLineWithData));
         nv2.setDateAndTime(dtm);
         nv2.setObservedProperty(op);
         nv2.setFeatureOfInterest(foi);

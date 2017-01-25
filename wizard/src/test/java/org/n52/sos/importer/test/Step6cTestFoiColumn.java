@@ -77,6 +77,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step6cTestFoiColumn {
 
     /**
@@ -84,24 +85,26 @@ public class Step6cTestFoiColumn {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController f = MainController.getInstance();
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
         final int firstLineWithData = 0;
 
         final DateAndTime dtm = new DateAndTime();
         final DateAndTimeController dtc = new DateAndTimeController(dtm);
-        dtc.assignPattern("dd.MM.yy", new Column(0,firstLineWithData));
+        dtc.assignPattern("dd.MM.yy", new Column(0, firstLineWithData));
         dtm.setHour(new Hour(0));
         dtm.setMinute(new Minute(0));
         dtm.setSecond(new Second(0));
         dtm.setTimeZone(new TimeZone(1));
 
         final FeatureOfInterest foi = new FeatureOfInterest();
-        foi.setTableElement(new Column(1,firstLineWithData));
+        foi.setTableElement(new Column(1, firstLineWithData));
 
         final ObservedProperty op = new ObservedProperty();
-        op.setTableElement(new Column(2,firstLineWithData));
+        op.setTableElement(new Column(2, firstLineWithData));
 
         final UnitOfMeasurement uom = new UnitOfMeasurement();
         uom.setName("myg/m3");
@@ -109,7 +112,7 @@ public class Step6cTestFoiColumn {
         sn.setName("PM10Sensor");
 
         final NumericValue nv1 = new NumericValue();
-        nv1.setTableElement(new Column(3,firstLineWithData));
+        nv1.setTableElement(new Column(3, firstLineWithData));
         nv1.setDateAndTime(dtm);
         nv1.setFeatureOfInterest(foi);
         nv1.setObservedProperty(op);

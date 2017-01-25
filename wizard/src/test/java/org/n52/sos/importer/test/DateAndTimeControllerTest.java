@@ -57,7 +57,11 @@ public class DateAndTimeControllerTest {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        // CHECKSTYLE_ON
         if (logger.isDebugEnabled()) {
             logger.debug("Start Test");
         }
@@ -68,9 +72,9 @@ public class DateAndTimeControllerTest {
         final String p1 = "d.M.yyyy";
         final Column c1 = new Column(0, firstLineWithData);
         final DateAndTime dt1 = new DateAndTime();
-        dt1.setDay(new Day(c1,p1));
-        dt1.setMonth(new Month(c1,p1));
-        dt1.setYear(new Year(c1,p1));
+        dt1.setDay(new Day(c1, p1));
+        dt1.setMonth(new Month(c1, p1));
+        dt1.setYear(new Year(c1, p1));
         dt1.setGroup(g);
         //
         // second element

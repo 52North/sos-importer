@@ -68,6 +68,7 @@ import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step5aTest {
 
     /**
@@ -75,19 +76,21 @@ public class Step5aTest {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController f = MainController.getInstance();
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_ONLY_STRINGS);
         final int firstLineWithData = 0;
 
         final DateAndTime dtm1 = new DateAndTime();
         DateAndTimeController dtc = new DateAndTimeController(dtm1);
-        dtc.assignPattern("HH-mm-ss", new Column(0,firstLineWithData));
+        dtc.assignPattern("HH-mm-ss", new Column(0, firstLineWithData));
         ModelStore.getInstance().add(dtm1);
 
         final DateAndTime dtm2 = new DateAndTime();
         dtc = new DateAndTimeController(dtm2);
-        dtc.assignPattern("dd-MM-yyyy", new Column(1,firstLineWithData));
+        dtc.assignPattern("dd-MM-yyyy", new Column(1, firstLineWithData));
         ModelStore.getInstance().add(dtm2);
 
         final Step5aController controller = new Step5aController(firstLineWithData);

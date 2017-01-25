@@ -75,6 +75,7 @@ import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step6bTestObservedProperty {
 
     /**
@@ -82,7 +83,9 @@ public class Step6bTestObservedProperty {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController f = MainController.getInstance();
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI_MISSING_OBSERVED_PROPERTY);
         Constants.setGuiDebug(false);
@@ -91,7 +94,7 @@ public class Step6bTestObservedProperty {
         dtm1.setGroup("1");
         final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
         final int firstLineWithData = 0;
-        dtc1.assignPattern("dd.MM.yy", new Column(0,firstLineWithData ));
+        dtc1.assignPattern("dd.MM.yy", new Column(0, firstLineWithData));
         dtm1.setHour(new Hour(0));
         dtm1.setMinute(new Minute(0));
         dtm1.setSecond(new Second(0));
@@ -99,7 +102,7 @@ public class Step6bTestObservedProperty {
         ModelStore.getInstance().add(dtm1);
 
         final FeatureOfInterest foi = new FeatureOfInterest();
-        foi.setTableElement(new Column(1,firstLineWithData));
+        foi.setTableElement(new Column(1, firstLineWithData));
         ModelStore.getInstance().add(foi);
 
         //ObservedProperty op = new ObservedProperty();
@@ -107,7 +110,7 @@ public class Step6bTestObservedProperty {
         //ModelStore.getInstance().add(op);
 
         final NumericValue nv = new NumericValue();
-        nv.setTableElement(new Column(3,firstLineWithData));
+        nv.setTableElement(new Column(3, firstLineWithData));
         nv.setDateAndTime(dtm1);
         nv.setFeatureOfInterest(foi);
         //nv.setObservedProperty(op);

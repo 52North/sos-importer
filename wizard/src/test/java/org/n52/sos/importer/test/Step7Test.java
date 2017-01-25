@@ -83,26 +83,29 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step7Test {
     /**
      * <p>main.</p>
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         TableController.getInstance().setContent(TestData.EXAMPLE_TABLE_MINI);
         final int firstLineWithData = 0;
 
         final DateAndTime dtm1 = new DateAndTime();
         dtm1.setGroup("1");
         final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-        dtc1.assignPattern("dd/MM/yyyy", new Column(0,firstLineWithData));
+        dtc1.assignPattern("dd/MM/yyyy", new Column(0, firstLineWithData));
         ModelStore.getInstance().add(dtm1);
 
         final DateAndTime dtm2 = new DateAndTime();
         dtm2.setGroup("1");
         final DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
-        dtc2.assignPattern("HH:mm", new Column(1,firstLineWithData));
+        dtc2.assignPattern("HH:mm", new Column(1, firstLineWithData));
         ModelStore.getInstance().add(dtm2);
 
         dtc2.mergeDateAndTimes();
@@ -140,7 +143,7 @@ public class Step7Test {
         }
 
         final NumericValue nv1 = new NumericValue();
-        nv1.setTableElement(new Column(1,firstLineWithData));
+        nv1.setTableElement(new Column(1, firstLineWithData));
         nv1.setDateAndTime(dtm);
         nv1.setObservedProperty(op);
         nv1.setFeatureOfInterest(foi);
@@ -148,7 +151,7 @@ public class Step7Test {
         nv1.setUnitOfMeasurement(uom);
 
         final NumericValue nv2 = new NumericValue();
-        nv2.setTableElement(new Column(2,firstLineWithData));
+        nv2.setTableElement(new Column(2, firstLineWithData));
         nv2.setDateAndTime(dtm);
         nv2.setObservedProperty(op);
         nv2.setFeatureOfInterest(foi);

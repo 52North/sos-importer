@@ -77,6 +77,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6bTestUOM {
 
     /**
@@ -84,7 +85,9 @@ public class Step6bTestUOM {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController mC = MainController.getInstance();
         final TableController tc = TableController.getInstance();
         final ModelStore ms = ModelStore.getInstance();
@@ -95,7 +98,7 @@ public class Step6bTestUOM {
         Column markedColumn;
         Constants.setGuiDebug(false);
         //
-        markedColumn = new Column(4,firstLineWithData );
+        markedColumn = new Column(4, firstLineWithData);
         tc.setContent(TestData.EXAMPLE_TABLE_NO_UOM);
         tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
         tc.setColumnHeading(++i, Lang.l().sensor());
@@ -123,9 +126,9 @@ public class Step6bTestUOM {
         mC.removeProvider(s3M);
         // add observed property to Modelstore
         final ObservedProperty op = new ObservedProperty();
-        op.setTableElement(new Column(2,firstLineWithData));
+        op.setTableElement(new Column(2, firstLineWithData));
         ms.add(op);
         //
-        mC.setStepController(new Step6bController(s6bM,firstLineWithData));
+        mC.setStepController(new Step6bController(s6bM, firstLineWithData));
     }
 }

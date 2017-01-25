@@ -79,6 +79,7 @@ import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6bTestFoiWithPositionInFile {
 
     /**
@@ -86,7 +87,9 @@ public class Step6bTestFoiWithPositionInFile {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController mC = MainController.getInstance();
         final TableController tc = TableController.getInstance();
         final ModelStore ms = ModelStore.getInstance();
@@ -97,7 +100,7 @@ public class Step6bTestFoiWithPositionInFile {
         Column markedColumn;
         Constants.setGuiDebug(false);
         //
-        markedColumn = new Column(4,firstLineWithData );
+        markedColumn = new Column(4, firstLineWithData);
         tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI_BUT_POSITION);
         tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
         tc.setColumnHeading(++i, Lang.l().sensor());
@@ -133,7 +136,8 @@ public class Step6bTestFoiWithPositionInFile {
         selection = new ArrayList<String>(3);
         selection.add(Lang.l().position());
         selection.add(Lang.l().step3PositionCombination());
-        selection.add(pattern + Constants.SEPARATOR_STRING + group); // set parse pattern and group separated by
+        // set parse pattern and group separated by
+        selection.add(pattern + Constants.SEPARATOR_STRING + group);
         Position position = new Position();
         position.setGroup(group);
         PositionController pc = new PositionController(position);
@@ -152,18 +156,20 @@ public class Step6bTestFoiWithPositionInFile {
         selection = new ArrayList<String>(3);
         selection.add(Lang.l().position());
         selection.add(Lang.l().step3PositionCombination());
-        selection.add(pattern + Constants.SEPARATOR_STRING + group); // set parse pattern and group separated by
+        // set parse pattern and group separated by
+        selection.add(pattern + Constants.SEPARATOR_STRING + group);
         position = new Position();
         position.setGroup(group);
         pc = new PositionController(position);
         pc.assignPattern(pattern, tabE);
         ModelStore.getInstance().add(position);
         s3M.addSelection(selection);
-        new PositionController().mergePositions(); // before update with last model
+        // before update with last model
+        new PositionController().mergePositions();
         mC.registerProvider(s3M);
         mC.updateModel();
         mC.removeProvider(s3M);
         //
-        mC.setStepController(new Step6bController(s6bM,firstLineWithData));
+        mC.setStepController(new Step6bController(s6bM, firstLineWithData));
     }
 }

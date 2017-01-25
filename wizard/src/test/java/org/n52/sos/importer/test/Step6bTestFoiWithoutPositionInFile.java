@@ -76,6 +76,7 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
+
 public class Step6bTestFoiWithoutPositionInFile {
 
     /**
@@ -83,7 +84,9 @@ public class Step6bTestFoiWithoutPositionInFile {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final MainController mC = MainController.getInstance();
         final TableController tc = TableController.getInstance();
         final ModelStore ms = ModelStore.getInstance();
@@ -94,7 +97,7 @@ public class Step6bTestFoiWithoutPositionInFile {
         Column markedColumn;
         Constants.setGuiDebug(false);
         //
-        markedColumn = new Column(4,firstLineWithData );
+        markedColumn = new Column(4, firstLineWithData);
         tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI);
         tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
         tc.setColumnHeading(++i, Lang.l().sensor());
@@ -119,6 +122,6 @@ public class Step6bTestFoiWithoutPositionInFile {
         mC.updateModel();
         mC.removeProvider(s3M);
         //
-        mC.setStepController(new Step6bController(s6bM,firstLineWithData));
+        mC.setStepController(new Step6bController(s6bM, firstLineWithData));
     }
 }

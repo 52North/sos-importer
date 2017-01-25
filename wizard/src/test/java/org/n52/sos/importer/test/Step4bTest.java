@@ -56,12 +56,14 @@ public class Step4bTest {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         if (logger.isTraceEnabled()) {
             logger.trace("main()");
         }
         final MainController f = MainController.getInstance();
-//      Lang.setCurrentLocale(Locale.GERMAN);
+        // Lang.setCurrentLocale(Locale.GERMAN);
         final int firstLineWithData = 1;
         int i = 0;
         final FeatureOfInterest foi = TestData.EXAMPLE_FOI;
@@ -78,7 +80,8 @@ public class Step4bTest {
         tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
 
         final ModelStore ms = ModelStore.getInstance();
-        final NumericValue nV1 = new NumericValue(), nV2 = new NumericValue();
+        final NumericValue nV1 = new NumericValue();
+        final NumericValue nV2 = new NumericValue();
         nV1.setTableElement(new Column(5, firstLineWithData));
         nV2.setTableElement(new Column(8, firstLineWithData));
 
@@ -87,6 +90,6 @@ public class Step4bTest {
 
         f.setStepController(
                 new Step4bController(
-                        new Step4bModel(foi,firstLineWithData),firstLineWithData));
+                        new Step4bModel(foi, firstLineWithData), firstLineWithData));
     }
 }

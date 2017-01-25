@@ -84,6 +84,7 @@ import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
+
 public class Step7TestGLDAS {
     /**
      * <p>main.</p>
@@ -91,7 +92,9 @@ public class Step7TestGLDAS {
      * @param args an array of {@link java.lang.String} objects.
      * @throws java.net.URISyntaxException if any.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) throws URISyntaxException {
+        //CHECKSTLYE:ON
         // init logger
         //
         final ModelStore ms = ModelStore.getInstance();
@@ -105,19 +108,19 @@ public class Step7TestGLDAS {
         final DateAndTime dtm1 = new DateAndTime();
         dtm1.setGroup("1");
         final DateAndTimeController dtc1 = new DateAndTimeController(dtm1);
-        dtc1.assignPattern("d.M.yyyy", new Column(4,firstLineWithData));
+        dtc1.assignPattern("d.M.yyyy", new Column(4, firstLineWithData));
         ms.add(dtm1);
 
         final DateAndTime dtm2 = new DateAndTime();
         dtm2.setGroup("1");
         final DateAndTimeController dtc2 = new DateAndTimeController(dtm1);
-        dtc2.assignPattern("H,00", new Column(5,firstLineWithData));
+        dtc2.assignPattern("H,00", new Column(5, firstLineWithData));
         ms.add(dtm2);
 
         final DateAndTime dtm3 = new DateAndTime();
         dtm3.setGroup("1");
         final DateAndTimeController dtc3 = new DateAndTimeController(dtm1);
-        dtc3.assignPattern("m,00", new Column(6,firstLineWithData));
+        dtc3.assignPattern("m,00", new Column(6, firstLineWithData));
         ms.add(dtm3);
 
         dtc2.mergeDateAndTimes();
@@ -128,8 +131,10 @@ public class Step7TestGLDAS {
 
         final Position p = new Position();
         p.setGroup("A");
-        final Latitude lat = new Latitude(new Column(2, firstLineWithData),"LAT");
-        final Longitude lon = new Longitude(new Column(1,firstLineWithData),"LON");
+        final String LAT = "LAT";
+        final Latitude lat = new Latitude(new Column(2, firstLineWithData), LAT);
+        final String LON = "LON";
+        final Longitude lon = new Longitude(new Column(1, firstLineWithData),LON);
         final Height h = new Height(100, "m");
         final EPSGCode epsgCode = new EPSGCode(4326);
         p.setLatitude(lat);
@@ -163,7 +168,7 @@ public class Step7TestGLDAS {
         sn.setURI(new URI("http://nasa.gov/gldas"));
 
         final NumericValue nv1 = new NumericValue();
-        nv1.setTableElement(new Column(3,firstLineWithData));
+        nv1.setTableElement(new Column(3, firstLineWithData));
         nv1.setDateAndTime(dtm);
         nv1.setObservedProperty(op);
         nv1.setFeatureOfInterest(foi);

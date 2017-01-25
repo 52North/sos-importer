@@ -69,6 +69,7 @@ import javax.swing.JFrame;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step8Controller;
 import org.n52.sos.importer.model.Step7Model;
+
 public class Step8Test {
 
     /**
@@ -76,13 +77,15 @@ public class Step8Test {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
+    //CHECKSTYLE:OFF
     public static void main(final String[] args) {
+        //CHECKSTYLE:ON
         final JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(new JFrame()) == JFileChooser.APPROVE_OPTION) {
             final File configFile = fc.getSelectedFile();
 
             final Step7Model s7M = new Step7Model("http://localhost:8080/ImportTestSOS/sos",
-                    configFile, true, null,"1.0.0",null);
+                    configFile, true, null, "1.0.0", null);
             final MainController f = MainController.getInstance();
 
             f.setStepController(new Step8Controller(s7M));
