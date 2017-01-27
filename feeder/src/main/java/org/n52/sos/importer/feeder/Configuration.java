@@ -170,6 +170,8 @@ public final class Configuration {
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     private static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
 
+    public static final String DEFAULT_CHARSET = "UTF-8";
+
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
     private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
@@ -183,8 +185,6 @@ public final class Configuration {
     private static final String FT = "ft";
     private static final String MI = "mi";
     private static final String KM = "km";
-
-
 
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();

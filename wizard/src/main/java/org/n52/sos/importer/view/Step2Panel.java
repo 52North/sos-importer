@@ -346,7 +346,7 @@ public class Step2Panel extends JPanel {
 
     private void addDecimalSeparator(final JPanel csvSettingsPanel, final int gridY) {
         final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-        decimalSeparatorCombobox = new JComboBox<String>(Constants.DECIMAL_SEPARATORS);
+        decimalSeparatorCombobox = new JComboBox<String>((String[]) Constants.DECIMAL_SEPARATORS.toArray());
         decimalSeparatorCombobox.setSelectedIndex(0);
         final JPanel decimalSeparatorPanel = new JPanel();
         decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -472,12 +472,12 @@ public class Step2Panel extends JPanel {
         useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         useHeaderPanel.add(useHeaderJL);
         useHeaderPanel.add(useHeaderJCB);
-        final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
-        gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
-        gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
-        gbc_useHeaderPanel.gridx = 0;
-        gbc_useHeaderPanel.gridy = gridY;
         // TODO uncomment to enable useHeader
+        // final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
+        // gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
+        // gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
+        // gbc_useHeaderPanel.gridx = 0;
+        // gbc_useHeaderPanel.gridy = gridY;
         // csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
     }
 

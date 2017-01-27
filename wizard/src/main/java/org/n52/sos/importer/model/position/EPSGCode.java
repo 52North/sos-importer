@@ -203,7 +203,7 @@ public class EPSGCode extends Component {
      * @return a {@link org.n52.sos.importer.model.position.EPSGCode} object.
      */
     public static EPSGCode parse(final String s) {
-        final int value = Integer.valueOf(s);
+        final int value = Integer.parseInt(s);
         return new EPSGCode(value);
     }
 

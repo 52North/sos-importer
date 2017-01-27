@@ -30,6 +30,9 @@ package org.n52.sos.importer;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.swing.border.Border;
@@ -159,7 +162,7 @@ public class Constants {
     /** Constant <code>QNAME_MANUAL_SPATIAL_RESOURCE</code> */
     public static final QName QNAME_MANUAL_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "SpatialResource");
     /** Constant <code>DECIMAL_SEPARATORS="{.,,}"</code> */
-    public static final String[] DECIMAL_SEPARATORS = {".", ","};
+    public static final List<String> DECIMAL_SEPARATORS = Collections.unmodifiableList(Arrays.asList(".", ","));
     /** Constant <code>DEFAULT_LATITUDE_UNIT="deg"</code> */
     public static final String DEFAULT_LATITUDE_UNIT = DEG;
     /** Constant <code>DEFAULT_LONGITUDE_UNIT="deg"</code> */
@@ -240,5 +243,8 @@ public class Constants {
     public static String language() {
         return Lang.l().getClass().getSimpleName();
     }
+
+    public static final String UTF_8 = "UTF-8";
+    public static final String DEFAULT_FILE_ENCODING = UTF_8;
 
 }

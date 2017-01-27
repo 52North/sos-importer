@@ -338,7 +338,7 @@ public abstract class Resource extends Component {
      * @return the relatedCols
      */
     public TableElement[] getRelatedCols() {
-        return relatedCols;
+        return relatedCols.clone();
     }
 
     /**
@@ -347,7 +347,7 @@ public abstract class Resource extends Component {
      * @param relatedCols the relatedCols to set
      */
     public void setRelatedCols(final TableElement[] relatedCols) {
-        this.relatedCols = relatedCols;
+        this.relatedCols = relatedCols == null ? new TableElement[0] : relatedCols.clone();
     }
 
     /**

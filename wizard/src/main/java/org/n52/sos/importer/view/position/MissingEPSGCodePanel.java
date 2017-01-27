@@ -88,7 +88,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public void assignValues() {
-        final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+        final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
         position.setEPSGCode(new EPSGCode(code));
     }
 
@@ -103,7 +103,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
     public boolean checkValues() {
         int code = 0;
         try {
-            code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+            code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
         } catch (final NumberFormatException e) {
             JOptionPane.showMessageDialog(null,
                     Lang.l().epsgCodeWarningDialogNaturalNumber(),
@@ -128,7 +128,7 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
     /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
-        final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
+        final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
         return new EPSGCode(code);
     }
 

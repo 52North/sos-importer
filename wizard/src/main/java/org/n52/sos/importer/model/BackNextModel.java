@@ -66,14 +66,12 @@ public class BackNextModel {
      * @return a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public StepController getPreviousStepController() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getPreviousStepController()");
-        }
+        logger.trace("getPreviousStepController()");
         final StepController sc = previousStepControllers.pop();
         if (logger.isTraceEnabled()) {
             logger.trace("result: " +
-                    (sc != null ? sc.getClass().getSimpleName() : sc) +
-                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : "null") +
+                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
         }
         return sc;
     }
@@ -86,8 +84,8 @@ public class BackNextModel {
     public void addPreviousStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addPreviousStepController(" +
-                    (sc != null ? sc.getClass().getSimpleName() : sc) +
-                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : "null") +
+                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
         }
         previousStepControllers.push(sc);
     }
@@ -138,7 +136,7 @@ public class BackNextModel {
             logger.trace("followingSC: " +
                     (sc != null
                     ? sc.getClass().getSimpleName() + "[" + sc.hashCode() + "]"
-                            : sc));
+                            : "null"));
         }
         return sc;
     }
@@ -151,8 +149,8 @@ public class BackNextModel {
     public void addFollowingStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addFollowingStepController(" +
-                    (sc != null ? sc.getClass().getSimpleName() : sc) +
-                    "[" + (sc != null ? sc.hashCode() : sc) + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : "null") +
+                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
         }
         followingStepControllers.push(sc);
     }

@@ -30,7 +30,6 @@ package org.n52.sos.importer.feeder.task;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -38,6 +37,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
@@ -107,8 +107,9 @@ public class OneTimeFeeder implements Runnable {
             LOG.info("Using proxy for FTP connection!");
             if (pUser != null && pPassword != null) {
                 client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
+            } else {
+                client = new FTPHTTPClient(pHost, pPort);
             }
-            client = new FTPHTTPClient(pHost, pPort);
         } else {
             LOG.info("Using no proxy for FTP connection!");
             client = new FTPClient();
@@ -120,9 +121,12 @@ public class OneTimeFeeder implements Runnable {
 
         // if back button was used: delete old file
         if (file.exists()) {
-            file.delete();
+            if (!file.delete()) {
+                LOG.error("Could not delete file '{}'", file.getAbsolutePath());
+            }
         }
 
+        FileOutputStream fos = null;
         try {
             client.connect(config.getFtpHost());
             final boolean login = client.login(config.getUser(), config.getPassword());
@@ -133,7 +137,7 @@ public class OneTimeFeeder implements Runnable {
                 LOG.info("FTP: go into directory...");
                 // successfully connected
                 if (result == 250) {
-                    final FileOutputStream fos = new FileOutputStream(file);
+                    fos = new FileOutputStream(file);
                     LOG.info("FTP: download file...");
                     client.retrieveFile(config.getFtpFile(), fos);
                     fos.flush();
@@ -152,6 +156,14 @@ public class OneTimeFeeder implements Runnable {
         } catch (final IOException e) {
             LOG.error("The file you specified cannot be obtained.");
             return null;
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    log(e);
+                }
+            }
         }
 
         return new DataFile(config, file);
@@ -203,7 +215,7 @@ public class OneTimeFeeder implements Runnable {
                     // read already inserted line count
                     if (counterFile.exists()) {
                         LOG.debug("Read already read lines from file");
-                        try (Scanner sc = new Scanner(counterFile)) {
+                        try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
                             final int count = sc.nextInt();
                             sos.setLastLine(count);
                         }
@@ -229,8 +241,9 @@ public class OneTimeFeeder implements Runnable {
                     }
                     // override counter file
                     try (
-                        FileWriter counterFileWriter = new FileWriter(counterFile.getAbsoluteFile());
-                        PrintWriter out = new PrintWriter(counterFileWriter);) {
+                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(counterFile.getAbsoluteFile(),
+                                    Configuration.DEFAULT_CHARSET);
+                            PrintWriter out = new PrintWriter(counterFileWriter);) {
                         out.println(lastLine);
                     }
 

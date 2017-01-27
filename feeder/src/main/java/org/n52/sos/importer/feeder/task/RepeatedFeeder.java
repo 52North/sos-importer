@@ -30,16 +30,17 @@ package org.n52.sos.importer.feeder.task;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
@@ -58,7 +59,8 @@ public class RepeatedFeeder extends TimerTask {
     private static final String EXCEPTION_THROWN = "Exception thrown: {}";
     private static final String PROPERTIES_FILE_EXTENSION = ".properties";
     private static final String LAST_FEED_FILE = "lastFeedFile";
-    private static File lastUsedDateFile;
+    private static File lastUsedDataFile;
+
     private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
     private static final Lock ONE_FEEDER_LOCK = new ReentrantLock(true);
 
@@ -84,7 +86,7 @@ public class RepeatedFeeder extends TimerTask {
     public void run() {
         LOG.trace("run()");
         File datafile;
-        // used to sync access to lastUsedDateFile and to not have more than one feeder at a time.
+        // used to sync access to lastUsedDataFile and to not have more than one feeder at a time.
         ONE_FEEDER_LOCK.lock();
         try {
             /*
@@ -98,15 +100,15 @@ public class RepeatedFeeder extends TimerTask {
             if (file.isDirectory()) {
                 final ArrayList<File> filesToFeed = new ArrayList<File>();
                 getLastFeedFile();
-                if (lastUsedDateFile != null) {
-                    filesToFeed.add(lastUsedDateFile);
+                if (getLastUsedDataFile() != null) {
+                    filesToFeed.add(getLastUsedDataFile());
                 }
                 addNewerFiles(filesToFeed);
                 for (final File fileToFeed : filesToFeed) {
                     LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
                         new OneTimeFeeder(configuration, fileToFeed).run();
-                        lastUsedDateFile = fileToFeed;
+                        setLastUsedDataFile(fileToFeed);
                         saveLastFeedFile();
                         LOG.info("Finished feeding file {}.", fileToFeed.getName());
                     } catch (final InvalidColumnCountException iae) {
@@ -151,15 +153,15 @@ public class RepeatedFeeder extends TimerTask {
         });
         if (files != null) {
             for (final File fileToCheck : files) {
-                if (lastUsedDateFile == null || fileToCheck.lastModified() >= lastUsedDateFile.lastModified()) {
+                if (getLastUsedDataFile() == null || fileToCheck.lastModified() >= getLastUsedDataFile().lastModified()) {
                     filesToFeed.add(fileToCheck);
                 }
             }
             if (filesToFeed.size() < 1) {
                 LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
                         file.getAbsolutePath(),
-                        lastUsedDateFile != null
-                        ? lastUsedDateFile.getName()
+                        getLastUsedDataFile() != null
+                        ? getLastUsedDataFile().getName()
                                 : "none");
             }
         } else {
@@ -169,13 +171,14 @@ public class RepeatedFeeder extends TimerTask {
 
     private void saveLastFeedFile() {
         final Properties prop = new Properties();
-        prop.put(LAST_FEED_FILE, lastUsedDateFile.getAbsolutePath());
-        try {
-            prop.store(new FileWriter(FileHelper.getHome().getAbsolutePath() + File.separator +
-                    FileHelper.cleanPathToCreateFileName(
-                            configuration.getConfigFile().getAbsolutePath()) + PROPERTIES_FILE_EXTENSION),
-                    null);
-            LOG.info("Saved last used data file: {}", lastUsedDateFile.getName());
+        prop.put(LAST_FEED_FILE, getLastUsedDataFile().getAbsolutePath());
+        try (FileWriterWithEncoding fw = new FileWriterWithEncoding(
+                    FileHelper.getHome().getAbsolutePath() + File.separator +
+                    FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + 
+                    PROPERTIES_FILE_EXTENSION,
+                Configuration.DEFAULT_CHARSET)){
+            prop.store(fw, null);
+            LOG.info("Saved last used data file: {}", getLastUsedDataFile().getName());
         } catch (final IOException e) {
             LOG.error(EXCEPTION_THROWN, e.getMessage(), e);
         }
@@ -183,30 +186,40 @@ public class RepeatedFeeder extends TimerTask {
 
     private void getLastFeedFile() {
         final Properties prop = new Properties();
-        String lastFeedFilePropertiesPath = "";
-        try {
-            lastFeedFilePropertiesPath = new StringBuffer(FileHelper.getHome().getAbsolutePath())
-                .append(File.separator)
-                .append(FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()))
-                .append(PROPERTIES_FILE_EXTENSION)
-                .toString();
-            prop.load(new FileReader(lastFeedFilePropertiesPath));
-        } catch (final FileNotFoundException fnfe) {
-            LOG.debug(String.format("Last feed file properties not found: %s", lastFeedFilePropertiesPath));
-        } catch (final IOException e) {
-            // only on DEBUG because it is not a problem if this file does not exist
-            LOG.debug(EXCEPTION_THROWN, e.getMessage(), e);
-        }
-        final String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
-        if (lastFeedFileName == null) {
-            return;
-        }
-        final File lastFeedFile = new File(lastFeedFileName);
-        if (lastFeedFile.canRead()) {
-            lastUsedDateFile = lastFeedFile;
+        String lastFeedFilePropertiesPath = FileHelper.getHome().getAbsolutePath() + File.separator + 
+                FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) +
+                PROPERTIES_FILE_EXTENSION;
+        File lastFeedPropertiesFile = new File(lastFeedFilePropertiesPath);
+        if (lastFeedPropertiesFile.exists()) {
+            try (Reader fr = new InputStreamReader(
+                    new FileInputStream(lastFeedPropertiesFile), Configuration.DEFAULT_CHARSET)){
+                prop.load(fr);
+            } catch (final IOException e) {
+                // only on DEBUG because it is not a problem if this file does not exist
+                LOG.debug(EXCEPTION_THROWN, e.getMessage(), e);
+            }
+            final String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
+            if (lastFeedFileName == null) {
+                return;
+            }
+            final File lastFeedFile = new File(lastFeedFileName);
+            if (lastFeedFile.canRead()) {
+                setLastUsedDataFile(lastFeedFile);
+            } else {
+                setLastUsedDataFile(null);
+            }
         } else {
-            lastUsedDateFile = null;
+            LOG.debug(String.format("Last feed file properties not found: %s", lastFeedFilePropertiesPath));
         }
     }
+    
+    private static synchronized File getLastUsedDataFile() {
+        return lastUsedDataFile;
+    }
+
+    private static synchronized void setLastUsedDataFile(File lastUsedDataFile) {
+        RepeatedFeeder.lastUsedDataFile = lastUsedDataFile;
+    }
+
 
 }

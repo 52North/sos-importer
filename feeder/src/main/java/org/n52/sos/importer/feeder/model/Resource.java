@@ -126,7 +126,4 @@ public abstract class Resource {
         }
         return true;
     }
-
-
-
 }

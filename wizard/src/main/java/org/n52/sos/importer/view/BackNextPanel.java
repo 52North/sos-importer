@@ -151,19 +151,19 @@ public final class BackNextPanel extends JPanel {
         next.setEnabled(isNextEnabled);
     }
 
-    private class BackButtonClicked implements ActionListener {
+    private static class BackButtonClicked implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             BackNextController.getInstance().backButtonClicked();
         }
     }
 
-    private class NextButtonClicked implements ActionListener {
+    private static class NextButtonClicked implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             BackNextController.getInstance().nextButtonClicked();
         }
     }
 
-    private class FinishButtonClicked implements ActionListener {
+    private static class FinishButtonClicked implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             BackNextController.getInstance().finishButtonClicked();
         }

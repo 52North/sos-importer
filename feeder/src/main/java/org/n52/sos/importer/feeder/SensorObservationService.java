@@ -112,9 +112,9 @@ public final class SensorObservationService {
 
     private static final String PROBLEM_WITH_OXF_EXCEPTION_THROWN = "Problem with OXF. Exception thrown: %s";
 
-    private static final String EXCEPTION_THROWN = "Exception thrown: %s\n%s";
+    private static final String EXCEPTION_THROWN = "Exception thrown: %s%n%s";
 
-    private static final String EXCEPTION_CODE_STRING = "ExceptionCode: '%s' because of '%s'\n";
+    private static final String EXCEPTION_CODE_STRING = "ExceptionCode: '%s' because of '%s'%n";
 
     private static final String SOS_2_0_INSERT_OBSERVATION_RESPONSE =
             "SOS 2.0 InsertObservation doesn't return the assigned id";
@@ -1020,7 +1020,7 @@ public final class SensorObservationService {
         // position
         boolean eastingFirst = false;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
-            Configuration.getEpsgEastingFirstMap().get("default");
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get("default");
         } else {
             eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
         }

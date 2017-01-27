@@ -276,7 +276,7 @@ public class Step8Controller extends StepController {
         return pathToDirectoryWithFeederJar;
     }
 
-    private class DirectImportWorker extends SwingWorker<String, String> {
+    private static class DirectImportWorker extends SwingWorker<String, String> {
 
         private final JTextArea processOutPut;
         private final ProcessBuilder procBuilder;
@@ -304,7 +304,7 @@ public class Step8Controller extends StepController {
                 final byte[] buffer = new byte[128];
                 int len;
                 while ((len = res.read(buffer, 0, buffer.length)) != -1) {
-                    publish(new String(buffer, 0, len));
+                    publish(new String(buffer, 0, len, Constants.UTF_8));
                     if (isCancelled()) {
                         importProcess.destroy();
                         return "Cancelled";

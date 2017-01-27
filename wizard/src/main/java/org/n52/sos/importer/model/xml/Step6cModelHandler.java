@@ -282,7 +282,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
          */
         final Alt altitude = pos.addNewAlt();
         altitude.setUnit(position.getHeight().getUnit());
-        altitude.setFloatValue(new Double(position.getHeight().getValue()).floatValue());
+        altitude.setFloatValue((float) position.getHeight().getValue());
         /*
          *  EPSG_CODE
          */
@@ -292,13 +292,13 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
          */
         final Lat latitude = pos.addNewLat();
         latitude.setUnit(position.getLatitude().getUnit());
-        latitude.setFloatValue(new Double(position.getLatitude().getValue()).floatValue());
+        latitude.setFloatValue((float) position.getLatitude().getValue());
         /*
          *  LONGITUDE
          */
         final Long longitude = pos.addNewLong();
         longitude.setUnit(position.getLongitude().getUnit());
-        longitude.setFloatValue(new Double(position.getLongitude().getValue()).floatValue());
+        longitude.setFloatValue((float) position.getLongitude().getValue());
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos created from model pos. Model Pos: " +
                     position.toString() + XB_POS + pos.xmlText());
@@ -330,7 +330,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                 logger.debug("Added new Alt element to Position element");
             }
         }
-        alt.setFloatValue(new Double(pos.getHeight().getValue()).floatValue());
+        alt.setFloatValue((float) pos.getHeight().getValue());
         alt.setUnit(pos.getHeight().getUnit());
         /*
          *  LATITUDE
@@ -342,20 +342,20 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                 logger.debug("Added new Lat element to Position element");
             }
         }
-        lat.setFloatValue(new Double(pos.getLatitude().getValue()).floatValue());
+        lat.setFloatValue((float) pos.getLatitude().getValue());
         lat.setUnit(pos.getLatitude().getUnit());
         /*
          *  LONGITUDE
          */
-        Long loong = posXB.getLong();
-        if (loong == null) {
-            loong = posXB.addNewLong();
+        Long longitude = posXB.getLong();
+        if (longitude == null) {
+            longitude = posXB.addNewLong();
             if (logger.isDebugEnabled()) {
                 logger.debug("Added new Long element to Position element");
             }
         }
-        loong.setFloatValue(new Double(pos.getLongitude().getValue()).floatValue());
-        loong.setUnit(pos.getLongitude().getUnit());
+        longitude.setFloatValue((float) pos.getLongitude().getValue());
+        longitude.setUnit(pos.getLongitude().getUnit());
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos updated from model pos. Model Pos: " +
                     pos.toString() + XB_POS + posXB.xmlText());

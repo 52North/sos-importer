@@ -35,6 +35,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serializable;
 import java.net.URL;
 
 import javax.swing.BoxLayout;
@@ -357,12 +358,12 @@ public class EditableJComboBoxPanel extends JPanel {
                 }
             }
 
-            String newBiggestWhiteSpace = " ";
+            StringBuffer newBiggestWhiteSpace = new StringBuffer(" ");
             for (int j = 0; j < maxWhiteSpaces; j++) {
-                newBiggestWhiteSpace += " ";
+                newBiggestWhiteSpace.append(" ");
             }
-
-            return newBiggestWhiteSpace;
+            newBiggestWhiteSpace.trimToSize();
+            return newBiggestWhiteSpace.toString();
         }
     }
 
@@ -562,7 +563,9 @@ public class EditableJComboBoxPanel extends JPanel {
         }
     }
 
-    private class SelectionChanged implements ActionListener {
+    private class SelectionChanged implements ActionListener, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public void actionPerformed(final ActionEvent e) {

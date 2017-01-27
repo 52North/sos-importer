@@ -109,7 +109,7 @@ public class Step4aModel implements StepModel {
      * @param selectedRowsOrColumns an array of int.
      */
     public void setSelectedRowsOrColumns(int[] selectedRowsOrColumns) {
-        this.selectedRowsOrColumns = selectedRowsOrColumns;
+        this.selectedRowsOrColumns = selectedRowsOrColumns.clone();
     }
 
     /**
@@ -118,7 +118,7 @@ public class Step4aModel implements StepModel {
      * @return an array of int.
      */
     public int[] getSelectedRowsOrColumns() {
-        return selectedRowsOrColumns;
+        return selectedRowsOrColumns.clone();
     }
 
     /**

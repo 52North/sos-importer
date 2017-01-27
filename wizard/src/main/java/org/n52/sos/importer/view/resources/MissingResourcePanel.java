@@ -158,7 +158,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
                 manualDefault = true;
             } else if (resource instanceof UnitOfMeasurement) {
                 final List<ObservedProperty> ops = ms.getObservedProperties();
-                name = Lang.l().code();
                 if (ops != null && ops.size() == 1) {
                     /*
                      * in the case of having one observed property column

@@ -116,7 +116,7 @@ public class Step4bModel implements StepModel {
      * @param selectedColumns an array of int.
      */
     public void setSelectedColumns(int[] selectedColumns) {
-        this.selectedColumns = selectedColumns;
+        this.selectedColumns = selectedColumns.clone();
     }
 
     /**
@@ -125,7 +125,7 @@ public class Step4bModel implements StepModel {
      * @return an array of int.
      */
     public int[] getSelectedColumns() {
-        return selectedColumns;
+        return selectedColumns.clone();
     }
 
     /**

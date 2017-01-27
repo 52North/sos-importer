@@ -324,7 +324,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             if (alt == null) {
                 alt = posXB.addNewAlt();
             }
-            alt.setFloatValue(new Double(pos.getHeight().getValue()).floatValue());
+            alt.setFloatValue((float) pos.getHeight().getValue());
             /*
              *  LATITUDE
              */
@@ -332,7 +332,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             if (lat == null) {
                 lat = posXB.addNewLat();
             }
-            lat.setFloatValue(new Double(pos.getLatitude().getValue()).floatValue());
+            lat.setFloatValue((float) pos.getLatitude().getValue());
             /*
              *  LONGITUDE
              */
@@ -340,7 +340,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             if (lon == null) {
                 lon = posXB.addNewLong();
             }
-            lon.setFloatValue(new Double(pos.getLongitude().getValue()).floatValue());
+            lon.setFloatValue((float) pos.getLongitude().getValue());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("AFTER: posXB: " + posXB);

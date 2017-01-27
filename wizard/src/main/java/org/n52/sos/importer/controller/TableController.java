@@ -650,7 +650,7 @@ public final class TableController {
         }
     }
 
-    private class EditableTableModel extends DefaultTableModel {
+    private static class EditableTableModel extends DefaultTableModel {
 
         private static final long serialVersionUID = 1L;
 

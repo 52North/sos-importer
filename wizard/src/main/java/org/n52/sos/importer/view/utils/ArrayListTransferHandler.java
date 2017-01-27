@@ -265,9 +265,6 @@ public class ArrayListTransferHandler extends TransferHandler {
             final ArrayList<String> alist = new ArrayList<String>(values.size());
             for (final Object o : values) {
                 String str = o.toString();
-                if (str == null) {
-                    str = "";
-                }
                 alist.add(str);
             }
             return new ArrayListTransferable(alist);

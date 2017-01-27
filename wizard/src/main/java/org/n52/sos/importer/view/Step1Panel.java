@@ -91,8 +91,6 @@ public class Step1Panel extends JPanel {
     private static final String AQUOT = "\"";
     private static final String REPETITIVE = "repetitive";
     private static final String ONETIME = "onetime";
-    private static final String UTF_8 = "UTF-8";
-    private static final String DEFAULT_FILE_ENCODING = UTF_8;
     private static final Logger logger = LoggerFactory.getLogger(Step1Panel.class);
     private static final long serialVersionUID = 1L;
     private static final String WELCOME_RESOURCE_BUNDLE_NAME = "org.n52.sos.importer.html.welcome";
@@ -154,7 +152,7 @@ public class Step1Panel extends JPanel {
         encodingLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
         final Set<String> charsets = getCharsets();
         encodingCB = new JComboBox<String>(charsets.toArray(new String[charsets.size()]));
-        encodingCB.setSelectedIndex(getIndexOfEncoding(DEFAULT_FILE_ENCODING));
+        encodingCB.setSelectedIndex(getIndexOfEncoding(Constants.DEFAULT_FILE_ENCODING));
 
         final GridBagConstraints gbcOneTimeFeed =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(2,
@@ -262,7 +260,7 @@ public class Step1Panel extends JPanel {
             final SortedMap<String, Charset> availableCharsets = Charset.availableCharsets();
             return availableCharsets.keySet();
         } catch (final Exception e) {
-            return Collections.singleton(UTF_8);
+            return Collections.singleton(Constants.UTF_8);
         }
     }
 
@@ -270,7 +268,7 @@ public class Step1Panel extends JPanel {
         int index = 0;
         String encodingName = givenEncodingName;
         if (givenEncodingName == null || givenEncodingName.isEmpty()) {
-            encodingName = UTF_8;
+            encodingName = Constants.UTF_8;
         }
         for (final String string : getCharsets()) {
             if (string.equalsIgnoreCase(encodingName)) {
@@ -356,11 +354,12 @@ public class Step1Panel extends JPanel {
      * @return a {@link java.lang.String} object.
      */
     public String getPassword() {
-        String password = new String();
+        StringBuffer password = new StringBuffer();
         for (int i = 0; i < jpfPassword.getPassword().length; i++) {
-            password += jpfPassword.getPassword()[i];
+            password.append(jpfPassword.getPassword()[i]);
         }
-        return password;
+        password.trimToSize();
+        return password.toString();
     }
 
     /**
@@ -459,7 +458,7 @@ public class Step1Panel extends JPanel {
         try {
             encodingCB.setSelectedIndex(getIndexOfEncoding(encoding));
         } catch (final IllegalArgumentException iae) {
-            encodingCB.setSelectedIndex(getIndexOfEncoding(DEFAULT_FILE_ENCODING));
+            encodingCB.setSelectedIndex(getIndexOfEncoding(Constants.DEFAULT_FILE_ENCODING));
         }
     }
 

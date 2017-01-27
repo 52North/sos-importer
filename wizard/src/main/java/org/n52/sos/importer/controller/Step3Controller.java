@@ -183,9 +183,7 @@ public class Step3Controller extends StepController {
         if (logger.isDebugEnabled()) {
             logger.debug("End:");
             logger.debug(STEP3_MODEL + step3Model);
-            logger.debug(STEP3_PANEL + (step3Panel != null
-                    ? "[" + step3Panel.hashCode() + "]"
-                    : NULL_STRING));
+            logger.debug(STEP3_PANEL + NULL_STRING);
         }
 
     }
