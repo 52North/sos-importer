@@ -70,8 +70,11 @@ public final class Position {
      * @param epsgCode a int.
      */
     public Position(final double[] values, final String[] units, final int epsgCode) {
-        this.values = values;
-        this.units = units;
+        if (values == null || units == null) {
+            throw new IllegalArgumentException("values/units must not be null");
+        }
+        this.values = values.clone();
+        this.units = units.clone();
         this.epsgCode = epsgCode;
     }
 

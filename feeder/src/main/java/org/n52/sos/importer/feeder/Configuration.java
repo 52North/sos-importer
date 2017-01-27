@@ -336,18 +336,18 @@ public final class Configuration {
      */
     public String getFtpSubdirectory() {
         final String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
-        String result = "";
+        StringBuffer result = new StringBuffer();
         // certain file
         if (!isFtpUrlRegex()) {
             for (int i = 1; i < splitString.length - 1; i++) {
-                result += splitString[i];
+                result.append(splitString[i]);
             }
         } /*else {
             // regular expression
             // TODO
         }*/
-
-        return result;
+        result.trimToSize();
+        return result.toString();
     }
 
     /**
@@ -847,7 +847,7 @@ public final class Configuration {
                         units[Position.ALT] = (String) height[1];
                     }
                     if (tokens.length > 3 && tokens[3] != null) {
-                        epsgCode = Integer.valueOf((String) tokens[3]);
+                        epsgCode = Integer.parseInt((String) tokens[3]);
                     }
                     // get additional information
                 } else if (m.getKey().equals(Key.POSITION_LATITUDE)) {
@@ -867,7 +867,7 @@ public final class Configuration {
                     units[Position.ALT] = (String) altitude[1];
                 } else if (m.getKey().equals(Key.POSITION_EPSG_CODE)) {
                     // EPSG
-                    epsgCode = Integer.valueOf(m.getValue());
+                    epsgCode = Integer.parseInt(m.getValue());
                 }
             }
 

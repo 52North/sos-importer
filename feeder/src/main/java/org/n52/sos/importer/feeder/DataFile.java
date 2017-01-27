@@ -82,14 +82,8 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  */
 public class DataFile {
 
-    /**
-     *
-     */
     private static final String NAME = "name: %s";
 
-    /**
-     *
-     */
     private static final String OS_NAME = "os.name";
 
     private static final Logger LOG = LoggerFactory.getLogger(DataFile.class);
@@ -383,7 +377,7 @@ public class DataFile {
     private String[] createCleanNCName(final Resource res) {
         // implement check for NCName compliance and remove bad values
         String name = res.getName();
-        final String origName = new String(name);
+        final String origName = name;
         // clean rest of string using Constants.UNICODE_REPLACER
         final char[] foiNameChars = name.toCharArray();
         for (int i = 0; i < foiNameChars.length; i++) {
@@ -422,7 +416,7 @@ public class DataFile {
                 // check various types of observation
                 // TEXT
                 if (m.getValue().equals("TEXT")) {
-                    return new String(value);
+                    return value;
                 }
                 // text is done -> clean string before parsing to other types
                 value = value.trim();
@@ -974,7 +968,7 @@ public class DataFile {
         final GregorianCalendar gc = new GregorianCalendar(timeZone);
         gc.setTime(date);
 
-        return new Integer(gc.get(field)).shortValue();
+        return (short) gc.get(field);
     }
 
     private int[] getGregorianCalendarFields(final String pattern) {

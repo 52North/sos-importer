@@ -80,13 +80,13 @@ public class TimeSeries {
     /** Constant <code>SENSOR_NAME_NOT_SET="SENSOR_NAME_NOT_SET"</code> */
     public static final String SENSOR_NAME_NOT_SET = "SENSOR_NAME_NOT_SET";
 
+    private static final String TOKEN_SEPARATOR = ";";
+
+    private static final String BLOCK_SEPARATOR = "@";
+
     private static final String N_M_STRING = "%s %s";
 
     private final LinkedList<InsertObservation> timeseries = new LinkedList<>();
-
-    private final String tokenSeparator = ";";
-
-    private final String blockSeparator = "@";
 
     /**
      * <p>addObservation.</p>
@@ -281,9 +281,9 @@ public class TimeSeries {
         // encoding
         final TextEncodingType textEncoding = TextEncodingType.Factory.newInstance();
         // token
-        textEncoding.setTokenSeparator(tokenSeparator);
+        textEncoding.setTokenSeparator(TOKEN_SEPARATOR);
         // block seperator
-        textEncoding.setBlockSeparator(blockSeparator);
+        textEncoding.setBlockSeparator(BLOCK_SEPARATOR);
         xbDataArray.addNewEncoding().addNewAbstractEncoding().set(textEncoding);
         xbDataArray
             .getEncoding().getAbstractEncoding()
@@ -300,16 +300,16 @@ public class TimeSeries {
         int counter = 0;
         for (final InsertObservation io : timeseries) {
             sb.append(io.getTimeStamp().toString());
-            sb.append(tokenSeparator);
+            sb.append(TOKEN_SEPARATOR);
             sb.append(io.getResultValue());
-            sb.append(blockSeparator);
+            sb.append(BLOCK_SEPARATOR);
             if (counter > 0 && counter++ % 100 == 0) {
                 sb.append("\n");
             }
         }
         sb.trimToSize();
         String valueString = sb.toString();
-        valueString = valueString.substring(0, valueString.lastIndexOf(blockSeparator));
+        valueString = valueString.substring(0, valueString.lastIndexOf(BLOCK_SEPARATOR));
         final XmlString xbValueString = XmlString.Factory.newInstance();
         xbValueString.setStringValue(valueString);
         return xbValueString;
@@ -323,7 +323,7 @@ public class TimeSeries {
         // position
         boolean eastingFirst = false;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
-            Configuration.getEpsgEastingFirstMap().get("default");
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get("default");
         } else {
             eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
         }
