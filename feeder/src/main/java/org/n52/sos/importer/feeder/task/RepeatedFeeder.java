@@ -174,7 +174,7 @@ public class RepeatedFeeder extends TimerTask {
         prop.put(LAST_FEED_FILE, getLastUsedDataFile().getAbsolutePath());
         try (FileWriterWithEncoding fw = new FileWriterWithEncoding(
                     FileHelper.getHome().getAbsolutePath() + File.separator +
-                    FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) + 
+                    FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) +
                     PROPERTIES_FILE_EXTENSION,
                 Configuration.DEFAULT_CHARSET)){
             prop.store(fw, null);
@@ -186,7 +186,7 @@ public class RepeatedFeeder extends TimerTask {
 
     private void getLastFeedFile() {
         final Properties prop = new Properties();
-        String lastFeedFilePropertiesPath = FileHelper.getHome().getAbsolutePath() + File.separator + 
+        String lastFeedFilePropertiesPath = FileHelper.getHome().getAbsolutePath() + File.separator +
                 FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) +
                 PROPERTIES_FILE_EXTENSION;
         File lastFeedPropertiesFile = new File(lastFeedFilePropertiesPath);
@@ -212,7 +212,7 @@ public class RepeatedFeeder extends TimerTask {
             LOG.debug(String.format("Last feed file properties not found: %s", lastFeedFilePropertiesPath));
         }
     }
-    
+
     private static synchronized File getLastUsedDataFile() {
         return lastUsedDataFile;
     }

@@ -47,7 +47,7 @@ public class ParserThread implements Runnable {
 
         private static final String HTML_CLOSE = "</html>";
         private static final String HTML_OPEN = "<html>";
-        
+
         private final Parseable parser;
 
         private int firstLineWithData;
@@ -55,7 +55,7 @@ public class ParserThread implements Runnable {
         private final ParseTestLabel parseTestLabel;
 
         private List<String> values;
-        
+
         private static final Logger logger = LoggerFactory.getLogger(ParserThread.class);
 
         public ParserThread(ParseTestLabel parseTestLabel, Parseable parser, int firstLineWithData) {
@@ -63,7 +63,7 @@ public class ParserThread implements Runnable {
             this.parser = parser;
             this.firstLineWithData = firstLineWithData;
         }
-        
+
         public void setValues(List<String> values) {
             this.values = values;
         }
