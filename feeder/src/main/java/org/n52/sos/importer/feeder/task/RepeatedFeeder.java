@@ -153,7 +153,8 @@ public class RepeatedFeeder extends TimerTask {
         });
         if (files != null) {
             for (final File fileToCheck : files) {
-                if (getLastUsedDataFile() == null || fileToCheck.lastModified() >= getLastUsedDataFile().lastModified()) {
+                if (getLastUsedDataFile() == null ||
+                        fileToCheck.lastModified() >= getLastUsedDataFile().lastModified()) {
                     filesToFeed.add(fileToCheck);
                 }
             }
@@ -176,7 +177,7 @@ public class RepeatedFeeder extends TimerTask {
                     FileHelper.getHome().getAbsolutePath() + File.separator +
                     FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) +
                     PROPERTIES_FILE_EXTENSION,
-                Configuration.DEFAULT_CHARSET)){
+                Configuration.DEFAULT_CHARSET)) {
             prop.store(fw, null);
             LOG.info("Saved last used data file: {}", getLastUsedDataFile().getName());
         } catch (final IOException e) {
@@ -192,7 +193,7 @@ public class RepeatedFeeder extends TimerTask {
         File lastFeedPropertiesFile = new File(lastFeedFilePropertiesPath);
         if (lastFeedPropertiesFile.exists()) {
             try (Reader fr = new InputStreamReader(
-                    new FileInputStream(lastFeedPropertiesFile), Configuration.DEFAULT_CHARSET)){
+                    new FileInputStream(lastFeedPropertiesFile), Configuration.DEFAULT_CHARSET)) {
                 prop.load(fr);
             } catch (final IOException e) {
                 // only on DEBUG because it is not a problem if this file does not exist

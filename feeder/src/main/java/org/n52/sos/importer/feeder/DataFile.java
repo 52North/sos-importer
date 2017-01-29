@@ -30,9 +30,12 @@ package org.n52.sos.importer.feeder;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
@@ -141,9 +144,9 @@ public class DataFile {
 
     private boolean checkWindowsJavaApiBugJDK6203387(final File file) {
         if (isWindows()) {
-            FileReader fr = null;
+            Reader fr = null;
             try {
-                fr = new FileReader(file);
+                fr = new InputStreamReader(new FileInputStream(file), Configuration.DEFAULT_CHARSET);
             } catch (final FileNotFoundException fnfe) {
                 // TODO add more language specific versions of this error message
                 if (
@@ -158,17 +161,24 @@ public class DataFile {
                         fnfe.getMessage().indexOf(file.getName()) >= 0) {
                     return true;
                 }
+            } catch (UnsupportedEncodingException e) {
+                log(e);
             } finally {
                 if (fr != null) {
                     try {
                         fr.close();
                     } catch (IOException e) {
-                        LOG.error("Exception thrown!", e);
+                        log(e);
                     }
                 }
             }
         }
         return false;
+    }
+
+    private void log(Exception e) {
+        LOG.error("Exception thrown!", e);
+        LOG.debug("Stackstrace", e);
     }
 
     private boolean isWindows() {
@@ -185,7 +195,7 @@ public class DataFile {
      */
     public CsvParser getCSVReader() throws IOException {
         LOG.trace("getCSVReader()");
-        final FileReader fr = new FileReader(dataFile);
+        final Reader fr = new InputStreamReader(new FileInputStream(dataFile), Configuration.DEFAULT_CHARSET);
         final BufferedReader br = new BufferedReader(fr);
         CsvParser cr = null;
         if (configuration.isCsvParserDefined()) {

@@ -201,6 +201,9 @@ public class Constants {
     /** Constant <code>WMS_DEFAULT_BACKGROUND_LAYER_NAME="OSMBackground"</code> */
     public static final String WMS_DEFAULT_BACKGROUND_LAYER_NAME = "OSMBackground";
 
+    public static final String UTF_8 = "UTF-8";
+    public static final String DEFAULT_FILE_ENCODING = UTF_8;
+
     /*
      * CHANGEABLE VALUES
      */
@@ -243,8 +246,4 @@ public class Constants {
     public static String language() {
         return Lang.l().getClass().getSimpleName();
     }
-
-    public static final String UTF_8 = "UTF-8";
-    public static final String DEFAULT_FILE_ENCODING = UTF_8;
-
 }

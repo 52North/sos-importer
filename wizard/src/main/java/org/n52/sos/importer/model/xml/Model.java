@@ -144,7 +144,7 @@ public class Model {
         if (logger.isTraceEnabled()) {
             logger.trace("registerProvider(" +
                     (sm == null
-                    ? "null"
+                    ? null
                             : sm.getClass().getSimpleName()) +
                     ")");
         }
@@ -168,7 +168,7 @@ public class Model {
         if (logger.isTraceEnabled()) {
             logger.trace("removeProvider(" +
                     (sm == null
-                    ? "null"
+                    ? null
                             : sm.getClass().getSimpleName()) +
                                 ")");
         }
@@ -191,7 +191,7 @@ public class Model {
      */
     public boolean save(final File file) throws IOException {
         if (logger.isTraceEnabled()) {
-            logger.trace("save(" + (file != null ? file.getName() : "null") + ")");
+            logger.trace("save(" + (file != null ? file.getName() : null) + ")");
         }
         // laxValidate or validate?
         if (!laxValidate() ||

@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class ComboBoxItems {
 
+    private static final String STACKTRACE = "Stacktrace";
     private static final String SOS_PROPERTIES_COULD_NOT_BE_SAVED = "SOS properties could not be saved.";
     private static final String SENSOR_URIS = "sensorURIs";
     private static final String UNIT_OF_MEASUREMENT_URIS = "unitOfMeasurementURIs";
@@ -135,8 +136,7 @@ public final class ComboBoxItems {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    logger.error("Exception thrown!", e.getMessage());
-                    logger.debug("Stacktrace", e);
+                    log(e);
                 }
             }
         }
@@ -166,9 +166,14 @@ public final class ComboBoxItems {
         sensorURIs = parse(props.getProperty(SENSOR_URIS));
     }
 
+    private void log(IOException e) {
+        logger.error("Exception thrown!", e.getMessage());
+        logger.debug(STACKTRACE, e);
+    }
+
     private void logExceptionAndThrowRuntimeException(final IOException e, String message) {
         logger.error(message, e);
-        logger.debug("Stacktrace", e);
+        logger.debug(STACKTRACE, e);
         throw new RuntimeException(message, e);
     }
 
@@ -253,8 +258,7 @@ public final class ComboBoxItems {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    logger.error("Exception thrown!", e.getMessage());
-                    logger.debug("Stacktrace", e);
+                    log(e);
                 }
             }
         }

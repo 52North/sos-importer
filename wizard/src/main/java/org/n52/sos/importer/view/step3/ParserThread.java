@@ -45,80 +45,77 @@ import org.slf4j.LoggerFactory;
  */
 public class ParserThread implements Runnable {
 
-        private static final String HTML_CLOSE = "</html>";
-        private static final String HTML_OPEN = "<html>";
+    private static final Logger logger = LoggerFactory.getLogger(ParserThread.class);
+    private static final String HTML_CLOSE = "</html>";
+    private static final String HTML_OPEN = "<html>";
+    private final Parseable parser;
 
-        private final Parseable parser;
+    private final ParseTestLabel parseTestLabel;
 
-        private int firstLineWithData;
+    private int firstLineWithData;
+    private List<String> values;
 
-        private final ParseTestLabel parseTestLabel;
-
-        private List<String> values;
-
-        private static final Logger logger = LoggerFactory.getLogger(ParserThread.class);
-
-        public ParserThread(ParseTestLabel parseTestLabel, Parseable parser, int firstLineWithData) {
-            this.parseTestLabel = parseTestLabel;
-            this.parser = parser;
-            this.firstLineWithData = firstLineWithData;
-        }
-
-        public void setValues(List<String> values) {
-            this.values = values;
-        }
-
-        @Override
-        public void run() {
-            if (logger.isTraceEnabled()) {
-                logger.trace("[" + hashCode() + "]." +
-                        "run() <- parsing values ###########################################################");
-            }
-            if (values == null) {
-                logger.error("Nothing to parser, hence stopped. Values: 'null'");
-                return;
-            }
-            int notParseableValues = 0;
-            int currentLine = 0;
-            final StringBuilder notParseable = new StringBuilder();
-            String text = "";
-            final Set<String> notParseableStrings = new HashSet<String>();
-            //
-            notParseable.append(HTML_OPEN);
-            // do the test parsing
-            for (final String value: values) {
-                if (currentLine >= firstLineWithData) {
-                    try {
-                        parser.parse(value);
-                    } catch (final Exception e) {
-                        if (notParseableStrings.add(value)) {
-                            notParseable.append(value + "<br>");
-                        }
-                        notParseableValues++;
-                    }
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("skipping line to parse #" + currentLine);
-                    }
-                }
-                currentLine++;
-            }
-            // handle the results of the test parsing
-            if (notParseableValues == 0) {
-                text = Lang.l().step3aParseTestAllOk();
-                parseTestLabel.setForeground(Color.blue);
-            } else if (notParseableValues == 1) {
-                text = Lang.l().step3aParseTest1Failed();
-                parseTestLabel.setForeground(Color.red);
-            } else {
-                text = Lang.l().step3aParseTestNFailed(notParseableValues);
-                parseTestLabel.setForeground(Color.red);
-            }
-            parseTestLabel.setText(HTML_OPEN + text + HTML_CLOSE);
-            notParseable.append(HTML_CLOSE);
-            parseTestLabel.setToolTipText(notParseable.toString());
-            // enabled next button after parsing
-            // TODO maybe add check if no value could be parsed -> dialog and not enabling next
-            BackNextController.getInstance().setNextButtonEnabled(true);
-        }
+    public ParserThread(ParseTestLabel parseTestLabel, Parseable parser, int firstLineWithData) {
+        this.parseTestLabel = parseTestLabel;
+        this.parser = parser;
+        this.firstLineWithData = firstLineWithData;
     }
+
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
+
+    @Override
+    public void run() {
+        if (logger.isTraceEnabled()) {
+            logger.trace("[" + hashCode() + "]." +
+                    "run() <- parsing values ###########################################################");
+        }
+        if (values == null) {
+            logger.error("Nothing to parser, hence stopped. Values: 'null'");
+            return;
+        }
+        int notParseableValues = 0;
+        int currentLine = 0;
+        final StringBuilder notParseable = new StringBuilder();
+        String text = "";
+        final Set<String> notParseableStrings = new HashSet<String>();
+        //
+        notParseable.append(HTML_OPEN);
+        // do the test parsing
+        for (final String value: values) {
+            if (currentLine >= firstLineWithData) {
+                try {
+                    parser.parse(value);
+                } catch (final Exception e) {
+                    if (notParseableStrings.add(value)) {
+                        notParseable.append(value + "<br>");
+                    }
+                    notParseableValues++;
+                }
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("skipping line to parse #" + currentLine);
+                }
+            }
+            currentLine++;
+        }
+        // handle the results of the test parsing
+        if (notParseableValues == 0) {
+            text = Lang.l().step3aParseTestAllOk();
+            parseTestLabel.setForeground(Color.blue);
+        } else if (notParseableValues == 1) {
+            text = Lang.l().step3aParseTest1Failed();
+            parseTestLabel.setForeground(Color.red);
+        } else {
+            text = Lang.l().step3aParseTestNFailed(notParseableValues);
+            parseTestLabel.setForeground(Color.red);
+        }
+        parseTestLabel.setText(HTML_OPEN + text + HTML_CLOSE);
+        notParseable.append(HTML_CLOSE);
+        parseTestLabel.setToolTipText(notParseable.toString());
+        // enabled next button after parsing
+        // TODO maybe add check if no value could be parsed -> dialog and not enabling next
+        BackNextController.getInstance().setNextButtonEnabled(true);
+    }
+}

@@ -167,10 +167,10 @@ public final class Configuration {
     /** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
     public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
 
+    public static final String DEFAULT_CHARSET = "UTF-8";
+
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     private static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
-
-    public static final String DEFAULT_CHARSET = "UTF-8";
 
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
@@ -1471,7 +1471,7 @@ public final class Configuration {
             return importConf.getDataFile().getLocalFile().getEncoding();
         }
         LOG.debug("Using default encoding 'UTF-8'");
-        return "UTF-8";
+        return DEFAULT_CHARSET;
     }
 
     /**

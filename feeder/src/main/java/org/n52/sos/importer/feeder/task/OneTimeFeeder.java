@@ -241,7 +241,8 @@ public class OneTimeFeeder implements Runnable {
                     }
                     // override counter file
                     try (
-                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(counterFile.getAbsoluteFile(),
+                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
+                                    counterFile.getAbsoluteFile(),
                                     Configuration.DEFAULT_CHARSET);
                             PrintWriter out = new PrintWriter(counterFileWriter);) {
                         out.println(lastLine);

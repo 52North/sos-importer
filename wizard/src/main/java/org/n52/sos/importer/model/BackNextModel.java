@@ -70,8 +70,8 @@ public class BackNextModel {
         final StepController sc = previousStepControllers.pop();
         if (logger.isTraceEnabled()) {
             logger.trace("result: " +
-                    (sc != null ? sc.getClass().getSimpleName() : "null") +
-                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : null) +
+                    "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }
         return sc;
     }
@@ -84,8 +84,8 @@ public class BackNextModel {
     public void addPreviousStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addPreviousStepController(" +
-                    (sc != null ? sc.getClass().getSimpleName() : "null") +
-                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : null) +
+                    "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }
         previousStepControllers.push(sc);
     }
@@ -136,7 +136,7 @@ public class BackNextModel {
             logger.trace("followingSC: " +
                     (sc != null
                     ? sc.getClass().getSimpleName() + "[" + sc.hashCode() + "]"
-                            : "null"));
+                            : null));
         }
         return sc;
     }
@@ -149,8 +149,8 @@ public class BackNextModel {
     public void addFollowingStepController(final StepController sc) {
         if (logger.isTraceEnabled()) {
             logger.trace("addFollowingStepController(" +
-                    (sc != null ? sc.getClass().getSimpleName() : "null") +
-                    "[" + (sc != null ? sc.hashCode() : "null") + CLOSING_BRACES);
+                    (sc != null ? sc.getClass().getSimpleName() : null) +
+                    "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }
         followingStepControllers.push(sc);
     }

@@ -868,7 +868,7 @@ public final class SensorObservationService {
                                 response.getAssignedObservationId()));
                         return response.getAssignedObservationId();
                     } catch (final XmlException | IOException e) {
-                        logException(e);
+                        log(e);
                     }
                 } else if (sosVersion.equals(SOS_200_VERSION)) {
                     try {
@@ -877,7 +877,7 @@ public final class SensorObservationService {
                         LOG.debug(OBSERVATION_INSERTED_SUCCESSFULLY);
                         return SOS_2_0_INSERT_OBSERVATION_RESPONSE;
                     } catch (final XmlException | IOException e) {
-                        logException(e);
+                        log(e);
                     }
                 }
             } catch (final ExceptionReport e) {
@@ -907,9 +907,9 @@ public final class SensorObservationService {
         return null;
     }
 
-    private void logException(final Exception e) {
+    private void log(final Exception e) {
         LOG.error("Exception thrown: {}", e.getMessage());
-        LOG.debug("More details:", e);
+        LOG.debug("Stacktrace:", e);
     }
 
     private boolean isObservationAlreadyContained(final OWSException owsEx) {
@@ -949,9 +949,9 @@ public final class SensorObservationService {
                                 response.getAssignedObservationId()));
                         return response.getAssignedObservationId();
                     } catch (final XmlException e) {
-                        logException(e);
+                        log(e);
                     } catch (final IOException e) {
-                        logException(e);
+                        log(e);
                     }
                 } else if (sosVersion.equals(SOS_200_VERSION)) {
                     try {
@@ -961,7 +961,7 @@ public final class SensorObservationService {
                         LOG.debug(OBSERVATION_INSERTED_SUCCESSFULLY);
                         return SOS_2_0_INSERT_OBSERVATION_RESPONSE;
                     } catch (final XmlException e) {
-                        LOG.error("Exception thrown: {}", e.getMessage(), e);
+                        log(e);
                     }
                 }
             } catch (final ExceptionReport e) {
@@ -1109,9 +1109,9 @@ public final class SensorObservationService {
                 }
 
             }
-            logException(e);
+            log(e);
         } catch (final OXFException | XmlException | IOException e) {
-            logException(e);
+            log(e);
         }
         return null;
     }
