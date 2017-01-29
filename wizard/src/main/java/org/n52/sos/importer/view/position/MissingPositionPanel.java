@@ -39,96 +39,114 @@ import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>MissingPositionPanel class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
-public class MissingPositionPanel extends JPanel{
+public class MissingPositionPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Step6cModel s6cM;
-	
-	// GUI stuff
-	private final JPanel containerPanel;
-	private final JPanel manualInputPanel;
-	
-	public MissingPositionPanel(final Step6cModel s6cM) {
-		setLayout(new BorderLayout(0, 0));
-		
-		this.s6cM = s6cM;
-		
-		manualInputPanel = initManualInputPanel(s6cM);
-		
-		containerPanel = new JPanel();
-		containerPanel.setLayout(new BorderLayout(0,0));
-		containerPanel.add(manualInputPanel,BorderLayout.CENTER);
-		
-		add(containerPanel,BorderLayout.CENTER);
-		
-		if (Constants.GUI_DEBUG) {
-			manualInputPanel.setBorder(Constants.DEBUG_BORDER);
-		}
-		setVisible(true);
-	}
+    private static final long serialVersionUID = 1L;
 
-	private JPanel initManualInputPanel(final Step6cModel s6cM) {
-		final JPanel manualInputPanel = new JPanel();
-		manualInputPanel.setLayout(new GridLayout(4, 1));
-		manualInputPanel.add(new MissingLatitudePanel(s6cM.getPosition()));
-		manualInputPanel.add(new MissingLongitudePanel(s6cM.getPosition()));
-		manualInputPanel.add(new MissingHeightPanel(s6cM.getPosition()));
-		manualInputPanel.add(new MissingEPSGCodePanel(s6cM.getPosition()));
-		return manualInputPanel;
-	}
+    private final Step6cModel s6cM;
 
-	public boolean isFinished() {
-		final java.awt.Component[] subPanels = manualInputPanel.getComponents();
-		for (final java.awt.Component component : subPanels) {
-			if (component instanceof MissingComponentPanel) {
-				final MissingComponentPanel mcp = (MissingComponentPanel) component;
-				if (!mcp.checkValues()) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+    // GUI stuff
+    private final JPanel containerPanel;
+    private final JPanel manualInputPanel;
 
-	public void saveSettings() {
-		final java.awt.Component[] subPanels = manualInputPanel.getComponents();
-		for (final java.awt.Component component : subPanels) {
-			if (component instanceof MissingComponentPanel) {
-				final MissingComponentPanel mcp = (MissingComponentPanel) component;
-				mcp.assignValues();
-			}
-		}
-	}
-	
-	public void loadSettings() {
-		// load settings from model and set map and manual interface to model position
-		final Position p = s6cM.getPosition();
-		if (p.getEPSGCode() == null && p.getHeight() == null && p.getLatitude() == null && p.getLongitude() == null) {
-			// on init -> set to default
-			return;
-		}
-		if (p.getEPSGCode() != null && p.getEPSGCode().getValue() != Constants.DEFAULT_EPSG_CODE) {
-			final java.awt.Component[] subPanels = manualInputPanel.getComponents();
-			for (final java.awt.Component component : subPanels) {
-				if (component instanceof MissingLatitudePanel) {
-					final MissingLatitudePanel mcp = (MissingLatitudePanel) component;
-					mcp.setMissingComponent(p.getLatitude());
-				} else if (component instanceof MissingLongitudePanel) {
-					final MissingLongitudePanel mcp = (MissingLongitudePanel) component;
-					mcp.setMissingComponent(p.getLongitude());
-				} else if (component instanceof MissingHeightPanel) {
-					final MissingHeightPanel mcp = (MissingHeightPanel) component;
-					mcp.setMissingComponent(p.getHeight());
-				} else if (component instanceof MissingEPSGCodePanel) {
-					final MissingEPSGCodePanel mcp = (MissingEPSGCodePanel) component;
-					mcp.setMissingComponent(p.getEPSGCode());
-				}
-			} 
-		} 
-	}
+    /**
+     * <p>Constructor for MissingPositionPanel.</p>
+     *
+     * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+     */
+    public MissingPositionPanel(final Step6cModel s6cM) {
+        setLayout(new BorderLayout(0, 0));
+
+        this.s6cM = s6cM;
+
+        manualInputPanel = initManualInputPanel();
+
+        containerPanel = new JPanel();
+        containerPanel.setLayout(new BorderLayout(0, 0));
+        containerPanel.add(manualInputPanel, BorderLayout.CENTER);
+
+        add(containerPanel, BorderLayout.CENTER);
+
+        if (Constants.isGuiDebug()) {
+            manualInputPanel.setBorder(Constants.DEBUG_BORDER);
+        }
+        setVisible(true);
+    }
+
+    private JPanel initManualInputPanel() {
+        final JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1));
+        panel.add(new MissingLatitudePanel(s6cM.getPosition()));
+        panel.add(new MissingLongitudePanel(s6cM.getPosition()));
+        panel.add(new MissingHeightPanel(s6cM.getPosition()));
+        panel.add(new MissingEPSGCodePanel(s6cM.getPosition()));
+        return panel;
+    }
+
+    /**
+     * <p>isFinished.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isFinished() {
+        final java.awt.Component[] subPanels = manualInputPanel.getComponents();
+        for (final java.awt.Component component : subPanels) {
+            if (component instanceof MissingComponentPanel) {
+                final MissingComponentPanel mcp = (MissingComponentPanel) component;
+                if (!mcp.checkValues()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p>saveSettings.</p>
+     */
+    public void saveSettings() {
+        final java.awt.Component[] subPanels = manualInputPanel.getComponents();
+        for (final java.awt.Component component : subPanels) {
+            if (component instanceof MissingComponentPanel) {
+                final MissingComponentPanel mcp = (MissingComponentPanel) component;
+                mcp.assignValues();
+            }
+        }
+    }
+
+    /**
+     * <p>loadSettings.</p>
+     */
+    public void loadSettings() {
+        // load settings from model and set map and manual interface to model position
+        final Position p = s6cM.getPosition();
+        if (p.getEPSGCode() == null && p.getHeight() == null && p.getLatitude() == null && p.getLongitude() == null) {
+            // on init -> set to default
+            return;
+        }
+        if (p.getEPSGCode() != null && p.getEPSGCode().getValue() != Constants.DEFAULT_EPSG_CODE) {
+            final java.awt.Component[] subPanels = manualInputPanel.getComponents();
+            for (final java.awt.Component component : subPanels) {
+                if (component instanceof MissingLatitudePanel) {
+                    final MissingLatitudePanel mcp = (MissingLatitudePanel) component;
+                    mcp.setMissingComponent(p.getLatitude());
+                } else if (component instanceof MissingLongitudePanel) {
+                    final MissingLongitudePanel mcp = (MissingLongitudePanel) component;
+                    mcp.setMissingComponent(p.getLongitude());
+                } else if (component instanceof MissingHeightPanel) {
+                    final MissingHeightPanel mcp = (MissingHeightPanel) component;
+                    mcp.setMissingComponent(p.getHeight());
+                } else if (component instanceof MissingEPSGCodePanel) {
+                    final MissingEPSGCodePanel mcp = (MissingEPSGCodePanel) component;
+                    mcp.setMissingComponent(p.getEPSGCode());
+                }
+            }
+        }
+    }
 
 }

@@ -36,30 +36,36 @@ import org.n52.sos.importer.feeder.Configuration;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
+ * <p>WrappedCSVReader class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class WrappedCSVReader implements CsvParser {
 
-	private CSVReader csvReader;
+    private CSVReader csvReader;
 
-	@Override
-	public String[] readNext() throws IOException {
-		return csvReader.readNext();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String[] readNext() throws IOException {
+        return csvReader.readNext();
+    }
 
-	@Override
-	public void init(final BufferedReader bufferedReader,
-			final Configuration configuration) {
-		final int flwd = configuration.getFirstLineWithData();
-		final char separator = configuration.getCsvSeparator(),
-				quotechar = configuration.getCsvQuoteChar(),
-				escape = configuration.getCsvEscape();
-		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void init(final BufferedReader bufferedReader,
+            final Configuration configuration) {
+        final int flwd = configuration.getFirstLineWithData();
+        final char separator = configuration.getCsvSeparator();
+        final char quotechar = configuration.getCsvQuoteChar();
+        final char escape = configuration.getCsvEscape();
+        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+    }
 
-	@Override
-	public int getSkipLimit() {
-		return 1;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int getSkipLimit() {
+        return 1;
+    }
 
 }

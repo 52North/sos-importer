@@ -32,17 +32,25 @@ import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.view.MissingComponentPanel;
 
 /**
- * takes care of the associated date&time object
+ * Takes care of the associated {@link DateAndTime} object.
+ *
  * @author Raimund
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public abstract class MissingDateAndTimePanel extends MissingComponentPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected DateAndTime dateAndTime;
-	
-	public MissingDateAndTimePanel(DateAndTime dateAndTime) {
-		super();
-		this.dateAndTime = dateAndTime;
-	}	
+    protected DateAndTime dateAndTime;
+
+    /**
+     * <p>Constructor for MissingDateAndTimePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingDateAndTimePanel(DateAndTime dateAndTime) {
+        super();
+        this.dateAndTime = dateAndTime;
+    }
 }

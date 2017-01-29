@@ -35,42 +35,75 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
 
 /**
  * aggregates hour, minute and second
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class Time extends Component {
 
-	private Hour hour;
-	
-	private Minute minute;
-	
-	private Second second;
+    private Hour hour;
 
-	public void setHour(Hour hour) {
-		this.hour = hour;
-	}
+    private Minute minute;
 
-	public Hour getHour() {
-		return hour;
-	}
+    private Second second;
 
-	public void setMinute(Minute minute) {
-		this.minute = minute;
-	}
+    /**
+     * <p>Setter for the field <code>hour</code>.</p>
+     *
+     * @param hour a {@link org.n52.sos.importer.model.dateAndTime.Hour} object.
+     */
+    public void setHour(Hour hour) {
+        this.hour = hour;
+    }
 
-	public Minute getMinute() {
-		return minute;
-	}
+    /**
+     * <p>Getter for the field <code>hour</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Hour} object.
+     */
+    public Hour getHour() {
+        return hour;
+    }
 
-	public void setSecond(Second second) {
-		this.second = second;
-	}
+    /**
+     * <p>Setter for the field <code>minute</code>.</p>
+     *
+     * @param minute a {@link org.n52.sos.importer.model.dateAndTime.Minute} object.
+     */
+    public void setMinute(Minute minute) {
+        this.minute = minute;
+    }
 
-	public Second getSecond() {
-		return second;
-	}
-	
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingTimePanel((DateAndTime)c);
-	}
+    /**
+     * <p>Getter for the field <code>minute</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Minute} object.
+     */
+    public Minute getMinute() {
+        return minute;
+    }
+
+    /**
+     * <p>Setter for the field <code>second</code>.</p>
+     *
+     * @param second a {@link org.n52.sos.importer.model.dateAndTime.Second} object.
+     */
+    public void setSecond(Second second) {
+        this.second = second;
+    }
+
+    /**
+     * <p>Getter for the field <code>second</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.dateAndTime.Second} object.
+     */
+    public Second getSecond() {
+        return second;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingTimePanel((DateAndTime) c);
+    }
 }

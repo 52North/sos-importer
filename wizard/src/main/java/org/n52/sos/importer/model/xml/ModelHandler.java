@@ -32,15 +32,19 @@ import org.n52.sos.importer.model.StepModel;
 import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
+ * <p>ModelHandler interface.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
-public interface ModelHandler<T extends StepModel>{
-	/**
-	 * Handles the given StepModel.<br />
-	 * The given SosImportConfiguration is updated with the values from the 
-	 * given StepModel.
-	 * @param stepModel The StepModel to update the SosImportConfiguation
-	 * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
-	 */
-	public void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+public interface ModelHandler<T extends StepModel> {
+    /**
+     * Handles the given StepModel.<br>
+     * The given SosImportConfiguration is updated with the values from the
+     * given StepModel.
+     *
+     * @param stepModel The StepModel to update the SosImportConfiguation
+     * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
+     */
+    void handleModel(T stepModel, SosImportConfiguration sosImportConf);
 }

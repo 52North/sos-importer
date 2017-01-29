@@ -41,47 +41,59 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single minute
+ *
  * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingMinutePanel extends MissingDateAndTimePanel {
-	
-	private static final long serialVersionUID = 1L;
 
-	private JLabel minuteLabel;
-	
-	private SpinnerNumberModel minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
-	private JSpinner minuteSpinner = new JSpinner(minuteModel);
-	
-	public MissingMinutePanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.minuteLabel = new JLabel(Lang.l().minutes() + ": ");
-		this.add(minuteLabel);
-		this.add(minuteSpinner);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public void assignValues() {
-		dateAndTime.setMinute(new Minute(minuteModel.getNumber().intValue()));	
-	}
+    private JLabel minuteLabel;
 
-	@Override
-	public void unassignValues() {
-		dateAndTime.setMinute(null);	
-	}
-	
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
-	
-	@Override
-	public Component getMissingComponent() {
-		return new Minute(minuteModel.getNumber().intValue());
-	}
+    private SpinnerNumberModel minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
+    private JSpinner minuteSpinner = new JSpinner(minuteModel);
 
-	@Override
-	public void setMissingComponent(Component c) {
-		minuteModel.setValue(((Minute)c).getValue());
-	}
+    /**
+     * <p>Constructor for MissingMinutePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingMinutePanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.minuteLabel = new JLabel(Lang.l().minutes() + ": ");
+        this.add(minuteLabel);
+        this.add(minuteSpinner);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        dateAndTime.setMinute(new Minute(minuteModel.getNumber().intValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        dateAndTime.setMinute(null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        return new Minute(minuteModel.getNumber().intValue());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(Component c) {
+        minuteModel.setValue(((Minute) c).getValue());
+    }
 }

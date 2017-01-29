@@ -4,7 +4,7 @@
 
 	<property name="logFile" value="logs/sos-importer-feeder" />
 
-	<!-- 
+	<!--
 		the following assumptions are made by the Administrator:
 		* The name of a file appender is FILE
 		* The name of a console appender is STDOUT
@@ -19,7 +19,7 @@
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${logFile}.log</file>
-		
+
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${logFile}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
 			<!-- keep 30 days' worth of history -->

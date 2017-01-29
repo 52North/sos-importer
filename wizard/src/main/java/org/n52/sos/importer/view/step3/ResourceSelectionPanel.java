@@ -35,50 +35,62 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 
 /**
- * assigns or unassigns columns to Feature of Interests, Observed 
+ * assigns or unassigns columns to Feature of Interests, Observed
  * Properties, Units of Measurement and Sensors
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class ResourceSelectionPanel extends SelectionPanel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Resource resource;
+    private static final long serialVersionUID = 1L;
 
-	public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
-		super(containerPanel);
-		this.resource = resource;
-	}
+    private Resource resource;
 
-	@Override
-	protected void setSelection(String s) {	
-	}
+    /**
+     * <p>Constructor for ResourceSelectionPanel.</p>
+     *
+     * @param containerPanel a {@link javax.swing.JPanel} object.
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
+        super(containerPanel);
+        this.resource = resource;
+    }
 
-	@Override
-	protected String getSelection() {
-		return "0";
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected void setSelection(String s) {
+    }
 
-	@Override
-	public void setDefaultSelection() {		
-	}
-	
-	@Override
-	public void assign(TableElement tableElement) {
-		resource.setTableElement(tableElement);
-		ModelStore.getInstance().add(resource);
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected String getSelection() {
+        return "0";
+    }
 
-	@Override
-	public void unAssign(TableElement tableElement) {
-		Resource resourceToRemove = null;
-		for (Resource r: resource.getList())
-			if (tableElement.equals(r.getTableElement())) {
-				resourceToRemove = r;
-				break;
-			}
-				
-		ModelStore.getInstance().remove(resourceToRemove);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setDefaultSelection() {
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void assign(TableElement tableElement) {
+        resource.setTableElement(tableElement);
+        ModelStore.getInstance().add(resource);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void unAssign(TableElement tableElement) {
+        Resource resourceToRemove = null;
+        for (Resource r: resource.getList()) {
+            if (tableElement.equals(r.getTableElement())) {
+                resourceToRemove = r;
+                break;
+            }
+        }
+        ModelStore.getInstance().remove(resourceToRemove);
+    }
 }

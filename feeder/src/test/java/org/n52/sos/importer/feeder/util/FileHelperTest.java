@@ -28,26 +28,22 @@
  */
 package org.n52.sos.importer.feeder.util;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
-import org.n52.sos.importer.feeder.util.FileHelper;
 
 public class FileHelperTest {
-	
-	@Test
-	public void shouldShortenALongString() {
-		// given 
-		final String expectedMD5Hash = "c42073bd88ccb323a36b57092093b139";
-		final String longString = "This is a very long string that should be shortened to a shorter one";
-		
-		// when
-		final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
-		
-		// then
-		assertThat(shorterString.length(),is(32));
-		assertThat(shorterString,is(expectedMD5Hash));
-	}
+
+    @Test
+    public void shouldShortenALongString() {
+        // given
+        final String expectedMD5Hash = "c42073bd88ccb323a36b57092093b139";
+        final String longString = "This is a very long string that should be shortened to a shorter one";
+
+        // when
+        final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
+
+        // then
+        org.junit.Assert.assertThat(shorterString.length(), org.hamcrest.CoreMatchers.is(32));
+        org.junit.Assert.assertThat(shorterString, org.hamcrest.CoreMatchers.is(expectedMD5Hash));
+    }
 
 }

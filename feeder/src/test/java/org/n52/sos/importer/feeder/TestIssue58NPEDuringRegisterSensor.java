@@ -40,35 +40,38 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 
 /**
  * Test for Issue #58: Null Pointer Exception (NPE) when feeder tries to register a sensor
- * 
+ *
  * https://github.com/52North/sos-importer/issues/58
- * 
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  */
 public class TestIssue58NPEDuringRegisterSensor {
-	
 
-	@Test
-	public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
-		// given
-		final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
-		DataFile dataFile = new DataFile(config, config.getDataFile());
-		
-		// when
-		int mvColumnId = 4;
-		String[] values = { "TemperaturesensorAdrian", "TemperaturesensorAdrian", "20.10.2016 11:50", "48.14935 11.567826", "Temperature", "CEL", "24" };
-		FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
-		
-		// then
-		Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-		Assert.assertThat(foi.getUri(), Is.is("TemperaturesensorAdrian"));
-		Assert.assertThat(foi.getPosition().getLatitude(), Is.is(48.14935));
-		Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is("deg"));
-		Assert.assertThat(foi.getPosition().getLongitude(), Is.is(11.567826));
-		Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is("deg"));
-		// the next two values are coming from the configuration
-		Assert.assertThat(foi.getPosition().getAltitude(), Is.is(524.0));
-		Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
-	}
+
+    @Test
+    public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
+        // given
+        final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
+        DataFile dataFile = new DataFile(config, config.getDataFile());
+
+        // when
+        int mvColumnId = 4;
+        final String sensor = "TemperaturesensorAdrian";
+        String[] values = { sensor, sensor, "20.10.2016 11:50",
+                "48.14935 11.567826", "Temperature", "CEL", "24", };
+        FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
+
+        // then
+        final String deg = "deg";
+        Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
+        Assert.assertThat(foi.getUri(), Is.is(sensor));
+        Assert.assertThat(foi.getPosition().getLatitude(), Is.is(48.14935));
+        Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is(deg));
+        Assert.assertThat(foi.getPosition().getLongitude(), Is.is(11.567826));
+        Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is(deg));
+        // the next two values are coming from the configuration
+        Assert.assertThat(foi.getPosition().getAltitude(), Is.is(524.0));
+        Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
+    }
 }

@@ -28,10 +28,7 @@
  */
 package org.n52.sos.importer.view.step3;
 
-import java.awt.Color;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -43,101 +40,50 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * label which shows the success of parsing a marked column 
+ * label which shows the success of parsing a marked column
  * in the table and shows all values which could not be parsed
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class ParseTestLabel extends JLabel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final Parseable parser;
-	
-	private int firstLineWithData = 0;
-	
-	private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
-	
-	private final ParseTestLabel _this;
-	
-	private List<String> values;
-	
-	private final Runnable parserThread;
-	
-	public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
-		super();
-		if (logger.isTraceEnabled()) {
-			logger.trace("ParseTestLabel()[" + hashCode() + "]");
-		}
-		this.parser = parser;
-		this.firstLineWithData = firstLineWithData;
-		_this = this;
-		parserThread = new ParserThread();
-	}
-	
-	public void parseValues(final List<String> values) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("[" + hashCode() + "]." +
-					"parseValues()");
-		}
-		setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
-				"</u></html>");
-		this.values = values;
-		BackNextController.getInstance().setNextButtonEnabled(false);
-		// call invokeLater()
-		SwingUtilities.invokeLater(parserThread);
-	}	
-	
-	private class ParserThread implements Runnable{
-		@Override
-		public void run() {
-			if (logger.isTraceEnabled()) {
-				logger.trace("[" + hashCode() + "]." +
-						"run() <- parsing values ###########################################################");
-			}
-			int notParseableValues = 0;
-			int currentLine = 0;
-			final StringBuilder notParseable = new StringBuilder();
-			String text = "";
-			final Set<String> notParseableStrings = new HashSet<String>();
-			//
-			notParseable.append("<html>");
-			// do the test parsing
-			for (final String value: values) {
-				if(currentLine >= firstLineWithData) {
-					try {
-						parser.parse(value);
-					} catch (final Exception e) { // $codepro.audit.disable
-						if (notParseableStrings.add(value)) {
-							notParseable.append(value + "<br>");
-						}
-						notParseableValues++;
-					}
-				} else {
-					if (logger.isDebugEnabled()) {
-						logger.debug("skipping line to parse #" + currentLine);
-					}
-				}
-				currentLine++;
-			}
-			// handle the results of the test parsing
-			if (notParseableValues == 0) {
-				text = Lang.l().step3aParseTestAllOk();
-				_this.setForeground(Color.blue);
-			} else if (notParseableValues == 1) {
-				text = Lang.l().step3aParseTest1Failed();
-				_this.setForeground(Color.red);
-			} else {
-				text = Lang.l().step3aParseTestNFailed(notParseableValues);
-				_this.setForeground(Color.red);
-			}
-			_this.setText("<html>" + text+ "</html>");
-			notParseable.append("</html>");
-			_this.setToolTipText(notParseable.toString());
-			// enabled next button after parsing
-			// TODO maybe add check if no value could be parsed -> dialog and not enabling next
-			BackNextController.getInstance().setNextButtonEnabled(true);
-		}
-	}
-	
+    private static final String STRING = "].";
+    private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
+    private static final long serialVersionUID = 1L;
+
+    private final ParserThread parserThread;
+
+    /**
+     * <p>Constructor for ParseTestLabel.</p>
+     *
+     * @param parser a {@link org.n52.sos.importer.model.Parseable} object.
+     * @param firstLineWithData a int.
+     */
+    public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
+        super();
+        if (logger.isTraceEnabled()) {
+            logger.trace("ParseTestLabel()[" + hashCode() + "]");
+        }
+        parserThread = new ParserThread(this, parser, firstLineWithData);
+    }
+
+    /**
+     * <p>parseValues.</p>
+     *
+     * @param valuesToParse a {@link java.util.List} object.
+     */
+    public void parseValues(final List<String> valuesToParse) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("[" + hashCode() + STRING +
+                    "parseValues()");
+        }
+        setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
+                "</u></html>");
+        parserThread.setValues(valuesToParse);
+        BackNextController.getInstance().setNextButtonEnabled(false);
+        // call invokeLater()
+        SwingUtilities.invokeLater(parserThread);
+    }
+
 }

@@ -42,78 +42,120 @@ import org.n52.sos.importer.view.utils.ToolTips;
 /**
  * controls the main frame of the application,
  * changes step panels and exits the application
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
-public class MainController {
-	
-	private static MainController instance = null;
+public final class MainController {
 
-	private final MainFrame mainFrame = new MainFrame(this);
-	
-	private final Model xmlModel;
-	
-	private MainController() {
-		//
-		// Load the tooltips
-		ToolTips.loadSettings();
-		//
-		// load the configuration for the ComboBoxItems at startup 
-		// first call to getInstance() calls ComboBoxItems.load()
-		ComboBoxItems.getInstance();
-		//
-		// init xmlmodel TODO load from configuration
-		xmlModel = new Model();
-	}
-	
-	public static MainController getInstance() {
-		if (MainController.instance == null) {
-			MainController.instance = new MainController();
-		}
-		return MainController.instance;
-	}
-	
-	/**
-	 * Method is called each time a button ("Next","Back", or "Finish") is clicked
-	 * in the GUI.
-	 * @param stepController
-	 */
-	public void setStepController(final StepController stepController) {
-	    final DescriptionPanel descP = DescriptionPanel.getInstance();
-	    final BackNextModel bNM = BackNextController.getInstance().getModel();
-	    //
-	    descP.setText(stepController.getDescription());
-	    stepController.loadSettings();
-	    mainFrame.setStepPanel(stepController.getStepPanel());
-	    xmlModel.registerProvider(stepController.getModel());
-		bNM.setCurrentStepController(stepController);
-	}
-	
-	public void updateModel() {
-		xmlModel.updateModel();
-	}
-	
-	public boolean removeProvider(final StepModel sm) {
-		return xmlModel.removeProvider(sm);
-	}
-	
-	public boolean registerProvider(final StepModel sm) {
-		return xmlModel.registerProvider(sm);
-	}
-	
-	public void exit() {
-		mainFrame.showExitDialog();
-	}
-	
-	public void updateTitle(final String csvFilePath) {
-		mainFrame.updateTitle(csvFilePath);
-	}
+    private static MainController instance;
 
-	public boolean saveModel(final File file) throws IOException {
-		return xmlModel.save(file);
-	}
+    private final MainFrame mainFrame = new MainFrame(this);
 
-	public String getFilename() {
-		return xmlModel.getFileName();
-	}
+    private final Model xmlModel;
+
+    private MainController() {
+        //
+        // Load the tooltips
+        ToolTips.loadSettings();
+        //
+        // load the configuration for the ComboBoxItems at startup
+        // first call to getInstance() calls ComboBoxItems.load()
+        ComboBoxItems.getInstance();
+        //
+        // init xmlmodel TODO load from configuration
+        xmlModel = new Model();
+    }
+
+    /**
+     * <p>Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.controller.MainController} object.
+     */
+    public static MainController getInstance() {
+        if (MainController.instance == null) {
+            MainController.instance = new MainController();
+        }
+        return MainController.instance;
+    }
+
+    /**
+     * Method is called each time a button ("Next","Back", or "Finish") is clicked
+     * in the GUI.
+     *
+     * @param stepController a {@link org.n52.sos.importer.controller.StepController} object.
+     */
+    public void setStepController(final StepController stepController) {
+        final DescriptionPanel descP = DescriptionPanel.getInstance();
+        final BackNextModel bNM = BackNextController.getInstance().getModel();
+        //
+        descP.setText(stepController.getDescription());
+        stepController.loadSettings();
+        mainFrame.setStepPanel(stepController.getStepPanel());
+        xmlModel.registerProvider(stepController.getModel());
+        bNM.setCurrentStepController(stepController);
+    }
+
+    /**
+     * <p>updateModel.</p>
+     */
+    public void updateModel() {
+        xmlModel.updateModel();
+    }
+
+    /**
+     * <p>removeProvider.</p>
+     *
+     * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
+     * @return a boolean.
+     */
+    public boolean removeProvider(final StepModel sm) {
+        return xmlModel.removeProvider(sm);
+    }
+
+    /**
+     * <p>registerProvider.</p>
+     *
+     * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
+     * @return a boolean.
+     */
+    public boolean registerProvider(final StepModel sm) {
+        return xmlModel.registerProvider(sm);
+    }
+
+    /**
+     * <p>exit.</p>
+     */
+    public void exit() {
+        mainFrame.showExitDialog();
+    }
+
+    /**
+     * <p>updateTitle.</p>
+     *
+     * @param csvFilePath a {@link java.lang.String} object.
+     */
+    public void updateTitle(final String csvFilePath) {
+        mainFrame.updateTitle(csvFilePath);
+    }
+
+    /**
+     * <p>saveModel.</p>
+     *
+     * @param file a {@link java.io.File} object.
+     * @return a boolean.
+     * @throws java.io.IOException if any.
+     */
+    public boolean saveModel(final File file) throws IOException {
+        return xmlModel.save(file);
+    }
+
+    /**
+     * <p>getFilename.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFilename() {
+        return xmlModel.getFileName();
+    }
 }

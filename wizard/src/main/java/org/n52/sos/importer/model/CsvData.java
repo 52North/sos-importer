@@ -39,50 +39,72 @@ import java.util.List;
  *
  * @since 0.4.0
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class CsvData {
 
-	private List<String[]> lines = new LinkedList<>();
-	private int columns = 0;
+    private List<String[]> lines = new LinkedList<>();
+    private int columns;
 
-	public void setLines(final List<String[]> lines) {
-		this.lines = lines;
-		columns = 0;
-		if (lines != null) {
-			for (final String[] strings : lines) {
-				if (columns < strings.length) {
-					columns = strings.length;
-				}
-			}
-		}
-	}
+    /**
+     * <p>Setter for the field <code>lines</code>.</p>
+     *
+     * @param lines a {@link java.util.List} object.
+     */
+    public void setLines(final List<String[]> lines) {
+        this.lines = lines;
+        columns = 0;
+        if (lines != null) {
+            for (final String[] strings : lines) {
+                if (columns < strings.length) {
+                    columns = strings.length;
+                }
+            }
+        }
+    }
 
-	public int getRowCount() {
-		if (lines == null) {
-			return 0;
-		}
-		return lines.size();
-	}
+    /**
+     * <p>getRowCount.</p>
+     *
+     * @return a int.
+     */
+    public int getRowCount() {
+        if (lines == null) {
+            return 0;
+        }
+        return lines.size();
+    }
 
-	public int getColumnCount() {
-		return columns;
-	}
+    /**
+     * <p>getColumnCount.</p>
+     *
+     * @return a int.
+     */
+    public int getColumnCount() {
+        return columns;
+    }
 
-	public String[] getLine(final int i) {
-		final String[] extended = new String[columns];
-		if (lines == null) {
-			Arrays.fill(extended, "");
-			return extended;
-		}
-		String[] tmp = lines.get(i);
-		if (tmp.length < columns) {
-			Arrays.fill(extended, "");
-			for (int j = 0; j < tmp.length; j++) {
-				extended[j] = tmp[j];
-			}
-			tmp = extended;
-		}
-		return tmp;
-	}
+    /**
+     * <p>getLine.</p>
+     *
+     * @param i a int.
+     * @return an array of {@link java.lang.String} objects.
+     */
+    public String[] getLine(final int i) {
+        final String[] extended = new String[columns];
+        if (lines == null) {
+            Arrays.fill(extended, "");
+            return extended;
+        }
+        String[] tmp = lines.get(i);
+        if (tmp.length < columns) {
+            Arrays.fill(extended, "");
+            for (int j = 0; j < tmp.length; j++) {
+                extended[j] = tmp[j];
+            }
+            tmp = extended;
+        }
+        return tmp;
+    }
 
 }

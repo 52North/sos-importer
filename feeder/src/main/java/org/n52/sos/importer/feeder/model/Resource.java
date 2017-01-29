@@ -29,78 +29,101 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Abstract Resource class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public abstract class Resource {
-	
-	private String name;
-	
-	private String uri;
 
-	public Resource(String name, String uri) {
-		this.name = name;
-		this.uri = uri;
-	}
+    private String name;
 
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String uri;
 
-	public String getUri() {
-		return uri;
-	}
+    /**
+     * <p>Constructor for Resource.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public Resource(String name, String uri) {
+        this.name = name;
+        this.uri = uri;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("%s [name=%s, uri=%s]",
-				this.getClass().getSimpleName(),
-				name,
-				uri);
-	}
+    /**
+     * <p>Getter for the field <code>name</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((uri == null) ? 0 : uri.hashCode());
-		return result;
-	}
+    /**
+     * <p>Setter for the field <code>name</code>.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Resource)) {
-			return false;
-		}
-		Resource other = (Resource) obj;
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		if (uri == null) {
-			if (other.uri != null) {
-				return false;
-			}
-		} else if (!uri.equals(other.uri)) {
-			return false;
-		}
-		return true;
-	}
-	
-	
+    /**
+     * <p>Getter for the field <code>uri</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getUri() {
+        return uri;
+    }
 
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return String.format("%s [name=%s, uri=%s]",
+                this.getClass().getSimpleName(),
+                name,
+                uri);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Resource)) {
+            return false;
+        }
+        Resource other = (Resource) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (uri == null) {
+            if (other.uri != null) {
+                return false;
+            }
+        } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        return true;
+    }
 }

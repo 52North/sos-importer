@@ -29,42 +29,49 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>FeatureOfInterest class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public final class FeatureOfInterest extends Resource {
-	
-	private Position p;
 
-	/**
-	 * @param name
-	 * @param uri
-	 * @param p
-	 */
-	public FeatureOfInterest(String name,
-			String uri,
-			Position p) {
-		super(name, uri);
-		this.p = p;
-	}
+    private Position p;
 
-	/**
-	 * @return the p
-	 */
-	public Position getPosition() {
-		return p;
-	}
+    /**
+     * <p>Constructor for FeatureOfInterest.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     * @param p a {@link org.n52.sos.importer.feeder.model.Position} object.
+     */
+    public FeatureOfInterest(String name,
+            String uri,
+            Position p) {
+        super(name, uri);
+        this.p = p;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format(
-				"FeatureOfInterest [p=%s, name=%s, uri=%s]",
-				p,
-				getName(),
-				getUri());
-	}
-	
+    /**
+     * <p>getPosition.</p>
+     *
+     * @return the p
+     */
+    public Position getPosition() {
+        return p;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return String.format(
+                "FeatureOfInterest [p=%s, name=%s, uri=%s]",
+                p,
+                getName(),
+                getUri());
+    }
+
 }

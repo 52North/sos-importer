@@ -26,6 +26,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
+
+/*
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
+ */
 package org.n52.sos.importer.test;
 
 import org.n52.sos.importer.Constants;
@@ -35,19 +41,28 @@ import org.n52.sos.importer.controller.TableController;
 
 public class Step3TestManyManyColumns {
 
-	public static void main(final String[] args) {
-		final MainController f = MainController.getInstance();
-		Constants.DECIMAL_SEPARATOR = '.';
-		Constants.THOUSANDS_SEPARATOR = ',';
-		Constants.GUI_DEBUG = false;
-		final TableController tc = TableController.getInstance();
-		tc.setContent(TestData.EXAMPLE_TABLE_MANY_MANY_COLUMNS);
-		final int markedColumn = 0;
-		final int firstLineWithData = 1;
-		final boolean useHeader = false;
-		final Step3Controller s3C = new Step3Controller(markedColumn,
-				firstLineWithData,
-				useHeader);
-		f.setStepController(s3C);
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    //CHECKSTYLE:OFF
+    //CHECKSTYLE:OFF
+    public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        //CHECKSTYLE:ON
+        final MainController f = MainController.getInstance();
+        Constants.setDecimalSeparator('.');
+        Constants.setThousandsSeparator(',');
+        Constants.setGuiDebug(false);
+        final TableController tc = TableController.getInstance();
+        tc.setContent(TestData.EXAMPLE_TABLE_MANY_MANY_COLUMNS);
+        final int markedColumn = 0;
+        final int firstLineWithData = 1;
+        final boolean useHeader = false;
+        final Step3Controller s3C = new Step3Controller(markedColumn,
+                firstLineWithData,
+                useHeader);
+        f.setStepController(s3C);
+    }
 }

@@ -29,15 +29,22 @@
 package org.n52.sos.importer.feeder.exceptions;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>JavaApiBugJDL6203387Exception class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class JavaApiBugJDL6203387Exception extends IllegalArgumentException {
 
-	public JavaApiBugJDL6203387Exception(final String name) {
-		super(name);
-	}
+    private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 1L;
+    /**
+     * <p>Constructor for JavaApiBugJDL6203387Exception.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    public JavaApiBugJDL6203387Exception(final String name) {
+        super(name);
+    }
 
 }

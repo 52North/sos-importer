@@ -37,37 +37,36 @@ import org.n52.sos.importer.feeder.Configuration;
  * Interface to allow different CSVParser implementations
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public interface CsvParser {
 
-	/**
+    /**
      * Reads the next line and converts to a string array. Should return <code>null</code>
      * if no further data is available.
      *
      * @return a string array with each comma-separated element as a separate
      *         entry or <code>null</code> if no further data is available.
-     *
-     * @throws IOException
+     * @throws java.io.IOException
      *             if errors happen during the read
      */
     String[] readNext() throws IOException;
 
-	/**
-	 * MUST be called before first call of {@link #readNext()}!
-	 *
-	 * @param bufferedReader
-	 * @param configuration
-	 * @throws IOException
-	 */
-	void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
+    /**
+     * MUST be called before first call of {@link #readNext()}!
+     *
+     * @param bufferedReader a {@link java.io.BufferedReader} object.
+     * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
+     * @throws java.io.IOException if any.
+     */
+    void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
-	/**
-	 * Should return 0, if number of lines == number of observations,<br>
-	 * 				else the difference between line number and line index.
-	 *  
-	 * @return 0, if number of lines == number of observations,<br>
-	 * 				else the difference between line number and line index.
-	 */
-	int getSkipLimit();
+    /**
+     * Should return 0, if number of lines == number of observations,<br>
+     *              else the difference between line number and line index.
+     *
+     * @return a int.
+     */
+    int getSkipLimit();
 
 }

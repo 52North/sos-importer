@@ -36,34 +36,46 @@ import org.n52.sos.importer.Constants;
 
 /**
  * description label at the top of the main frame
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
-public class DescriptionPanel extends JPanel {
+public final class DescriptionPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static DescriptionPanel instance = null;
-	
-	private final JLabel descriptionLabel = new JLabel();
+    private static DescriptionPanel instance;
 
-	private DescriptionPanel() {
-		super();
-		setLayout(new FlowLayout(FlowLayout.CENTER));
-		descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
-		add(descriptionLabel);
-		if (Constants.GUI_DEBUG) {
-			setBorder(Constants.DEBUG_BORDER);
-		}
-	}
+    private final JLabel descriptionLabel = new JLabel();
 
-	public static DescriptionPanel getInstance() {
-		if (instance == null)
-			instance = new DescriptionPanel();
-		return instance;
-	}	
-	
-	public void setText(String stepDescription) {
-		descriptionLabel.setText(stepDescription);
-	}
+    private DescriptionPanel() {
+        super();
+        setLayout(new FlowLayout(FlowLayout.CENTER));
+        descriptionLabel.setFont(Constants.DEFAULT_STEP_TITLE_FONT);
+        add(descriptionLabel);
+        if (Constants.isGuiDebug()) {
+            setBorder(Constants.DEBUG_BORDER);
+        }
+    }
+
+    /**
+     * <p>Getter for the field <code>instance</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.view.DescriptionPanel} object.
+     */
+    public static DescriptionPanel getInstance() {
+        if (instance == null) {
+            instance = new DescriptionPanel();
+        }
+        return instance;
+    }
+
+    /**
+     * <p>setText.</p>
+     *
+     * @param stepDescription a {@link java.lang.String} object.
+     */
+    public void setText(String stepDescription) {
+        descriptionLabel.setText(stepDescription);
+    }
 }

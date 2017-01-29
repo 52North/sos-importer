@@ -35,110 +35,205 @@ import org.n52.sos.importer.feeder.model.ObservedProperty;
 
 /**
  * Holds all information for the RegisterSensor request
+ *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class RegisterSensor {
 
-	private final InsertObservation io;
-	
-	private final Map<ObservedProperty, String> measuredValueTypes;
+    private final InsertObservation io;
 
-	private final Collection<ObservedProperty> observedProperties;
+    private final Map<ObservedProperty, String> measuredValueTypes;
 
-	private final Map<ObservedProperty, String> unitOfMeasurements;
-	
-	public RegisterSensor(
-			final InsertObservation io, 
-			final Collection<ObservedProperty> observedProperties,
-			final Map<ObservedProperty, String> measuredValueTypes,
-			final Map<ObservedProperty, String> unitOfMeasurements) {
-		this.io = io;
-		this.observedProperties = observedProperties;
-		this.measuredValueTypes = measuredValueTypes;
-		this.unitOfMeasurements = unitOfMeasurements;
-	}
+    private final Collection<ObservedProperty> observedProperties;
 
-	public String getAltitudeUnit() {
-		return io.getFeatureOfInterest().getPosition().getAltitudeUnit();
-	}
+    private final Map<ObservedProperty, String> unitOfMeasurements;
 
-	public double getAltitudeValue() {
-		return io.getFeatureOfInterest().getPosition().getAltitude();
-	}
+    /**
+     * <p>Constructor for RegisterSensor.</p>
+     *
+     * @param io a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @param observedProperties a {@link java.util.Collection} object.
+     * @param measuredValueTypes a {@link java.util.Map} object.
+     * @param unitOfMeasurements a {@link java.util.Map} object.
+     */
+    public RegisterSensor(
+            final InsertObservation io,
+            final Collection<ObservedProperty> observedProperties,
+            final Map<ObservedProperty, String> measuredValueTypes,
+            final Map<ObservedProperty, String> unitOfMeasurements) {
+        this.io = io;
+        this.observedProperties = observedProperties;
+        this.measuredValueTypes = measuredValueTypes;
+        this.unitOfMeasurements = unitOfMeasurements;
+    }
 
-	public String getDefaultValue() {
-		if (io.getResultValue() instanceof Boolean) {
-			return "false";
-		}
-		if (io.getResultValue() instanceof Integer) {
-			return "0";
-		}
-		if (io.getResultValue() instanceof Double) {
-			return "0.0";
-		}
-		if (io.getResultValue() instanceof String) {
-			return " ";
-		}
-		return "notDefined";
-	}
+    /**
+     * <p>getAltitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getAltitudeUnit() {
+        return io.getFeatureOfInterest().getPosition().getAltitudeUnit();
+    }
 
-	public String getEpsgCode() {
-		return io.getEpsgCode();
-	}
+    /**
+     * <p>getAltitudeValue.</p>
+     *
+     * @return a double.
+     */
+    public double getAltitudeValue() {
+        return io.getFeatureOfInterest().getPosition().getAltitude();
+    }
 
-	public String getFeatureOfInterestName() {
-		return io.getFeatureOfInterestName();
-	}
+    /**
+     * <p>getDefaultValue.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDefaultValue() {
+        if (io.getResultValue() instanceof Boolean) {
+            return "false";
+        }
+        if (io.getResultValue() instanceof Integer) {
+            return "0";
+        }
+        if (io.getResultValue() instanceof Double) {
+            return "0.0";
+        }
+        if (io.getResultValue() instanceof String) {
+            return " ";
+        }
+        return "notDefined";
+    }
 
-	public String getFeatureOfInterestURI() {
-		return io.getFeatureOfInterestURI();
-	}
+    /**
+     * <p>getEpsgCode.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getEpsgCode() {
+        return io.getEpsgCode();
+    }
 
-	public String getLatitudeUnit() {
-		return io.getFeatureOfInterest().getPosition().getLatitudeUnit();
-	}
+    /**
+     * <p>getFeatureOfInterestName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFeatureOfInterestName() {
+        return io.getFeatureOfInterestName();
+    }
 
-	public double getLatitudeValue() {
-		return io.getLatitudeValue();
-	}
+    /**
+     * <p>getFeatureOfInterestURI.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFeatureOfInterestURI() {
+        return io.getFeatureOfInterestURI();
+    }
 
-	public String getLongitudeUnit() {
-		return io.getFeatureOfInterest().getPosition().getLongitudeUnit();
-	}
+    /**
+     * <p>getLatitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getLatitudeUnit() {
+        return io.getFeatureOfInterest().getPosition().getLatitudeUnit();
+    }
 
-	public double getLongitudeValue() {
-		return io.getLongitudeValue();
-	}
+    /**
+     * <p>getLatitudeValue.</p>
+     *
+     * @return a double.
+     */
+    public double getLatitudeValue() {
+        return io.getLatitudeValue();
+    }
 
-	public String getMeasuredValueType(final ObservedProperty observedProperty)
-	{
-		return measuredValueTypes.get(observedProperty);
-	}
+    /**
+     * <p>getLongitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getLongitudeUnit() {
+        return io.getFeatureOfInterest().getPosition().getLongitudeUnit();
+    }
 
-	public Collection<ObservedProperty> getObservedProperties()
-	{
-		return observedProperties;
-	}
+    /**
+     * <p>getLongitudeValue.</p>
+     *
+     * @return a double.
+     */
+    public double getLongitudeValue() {
+        return io.getLongitudeValue();
+    }
 
-	public String getOfferingName() {
-		return io.getOffering().getName();
-	}
+    /**
+     * <p>getMeasuredValueType.</p>
+     *
+     * @param observedProperty a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public String getMeasuredValueType(final ObservedProperty observedProperty) {
+        return measuredValueTypes.get(observedProperty);
+    }
 
-	public String getOfferingUri() {
-		return io.getOffering().getUri();
-	}
+    /**
+     * <p>Getter for the field <code>observedProperties</code>.</p>
+     *
+     * @return a {@link java.util.Collection} object.
+     */
+    public Collection<ObservedProperty> getObservedProperties() {
+        return observedProperties;
+    }
 
-	public String getSensorName() {
-		return io.getSensorName();
-	}
-	
-	public String getSensorURI() {
-		return io.getSensorURI();
-	}
+    /**
+     * <p>getOfferingName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getOfferingName() {
+        return io.getOffering().getName();
+    }
 
-	public String getUnitOfMeasurementCode(final ObservedProperty observedProperty) {
-		return unitOfMeasurements.get(observedProperty);
-	}
+    /**
+     * <p>getOfferingUri.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getOfferingUri() {
+        return io.getOffering().getUri();
+    }
+
+    /**
+     * <p>getSensorName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSensorName() {
+        return io.getSensorName();
+    }
+
+    /**
+     * <p>getSensorURI.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSensorURI() {
+        return io.getSensorURI();
+    }
+
+    /**
+     * <p>getUnitOfMeasurementCode.</p>
+     *
+     * @param observedProperty a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public String getUnitOfMeasurementCode(final ObservedProperty observedProperty) {
+        return unitOfMeasurements.get(observedProperty);
+    }
 
 }

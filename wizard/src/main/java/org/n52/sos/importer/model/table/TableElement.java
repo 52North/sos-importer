@@ -32,30 +32,39 @@ import java.util.HashSet;
 
 /**
  * can either be a column, row or cell in the table
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public abstract class TableElement {
 
-	/**
-	 * Colours this table element in the table
-	 */
-	public abstract void mark();
-	
-	/**
-	 * returns the corresponding value of another metadata type
-	 * for a measured value or feature of interest cell
-	 */
-	public abstract String getValueFor(Cell c);
-	
-	/**
-	 * returns the corresponding cell of another metadata type
-	 * for a measured value or feature of interest cell
-	 */
-	public abstract Cell getCellFor(Cell c);
-	
-	/**
-	 * retrieves all values in this column, row or cell
-	 */
-	public abstract HashSet<String> getValues();
+    /**
+     * Colours this table element in the table
+     */
+    public abstract void mark();
+
+    /**
+     * returns the corresponding value of another metadata type
+     * for a measured value or feature of interest cell
+     *
+     * @param c a {@link org.n52.sos.importer.model.table.Cell} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String getValueFor(Cell c);
+
+    /**
+     * returns the corresponding cell of another metadata type
+     * for a measured value or feature of interest cell
+     *
+     * @param c a {@link org.n52.sos.importer.model.table.Cell} object.
+     * @return a {@link org.n52.sos.importer.model.table.Cell} object.
+     */
+    public abstract Cell getCellFor(Cell c);
+
+    /**
+     * retrieves all values in this column, row or cell
+     *
+     * @return a {@link java.util.HashSet} object.
+     */
+    public abstract HashSet<String> getValues();
 }

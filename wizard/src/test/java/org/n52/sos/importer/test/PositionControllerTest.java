@@ -39,47 +39,58 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class to test the methods of the position controller
- * @author e.h.juerrens@52north.org
  *
+ * @author e.h.juerrens@52north.org
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class PositionControllerTest {
 
-	private static final Logger logger = 
-			LoggerFactory.getLogger(PositionControllerTest.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(PositionControllerTest.class);
 
-	public static void main(final String[] args) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Start Test");
-		}
-		final int firstLineWithData = 1;
-		final String g = "1", 
-				pa1 = "LAT",
-				pa2 = "LON";
-		//
-		// first element
-		final Column c1 = new Column(0, firstLineWithData);
-		final Position p1 = new Position();
-		p1.setLatitude(new Latitude(c1, pa1));
-		p1.setGroup(g);
-		//
-		// second element
-		final Column c2 = new Column(1, firstLineWithData);
-		final Position p2 = new Position();
-		p2.setLongitude(new Longitude(c2, pa2));
-		p2.setGroup(g);
-		//
-		// add elements to modelstore
-		final ModelStore ms = ModelStore.getInstance();
-		ms.add(p1);
-		ms.add(p2);
-		//
-		if (logger.isDebugEnabled()) {
-			logger.debug("Example data created");
-		}
-		//
-		// Position controller
-		final PositionController pc = new PositionController();
-		pc.mergePositions();
-	}
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    //CHECKSTYLE:OFF
+    //CHECKSTYLE:OFF
+    public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        //CHECKSTYLE:ON
+        if (logger.isDebugEnabled()) {
+            logger.debug("Start Test");
+        }
+        final int firstLineWithData = 1;
+        final String g = "1";
+        final String pa1 = "LAT";
+        final String pa2 = "LON";
+        //
+        // first element
+        final Column c1 = new Column(0, firstLineWithData);
+        final Position p1 = new Position();
+        p1.setLatitude(new Latitude(c1, pa1));
+        p1.setGroup(g);
+        //
+        // second element
+        final Column c2 = new Column(1, firstLineWithData);
+        final Position p2 = new Position();
+        p2.setLongitude(new Longitude(c2, pa2));
+        p2.setGroup(g);
+        //
+        // add elements to modelstore
+        final ModelStore ms = ModelStore.getInstance();
+        ms.add(p1);
+        ms.add(p2);
+        //
+        if (logger.isDebugEnabled()) {
+            logger.debug("Example data created");
+        }
+        //
+        // Position controller
+        final PositionController pc = new PositionController();
+        pc.mergePositions();
+    }
 
 }

@@ -28,9 +28,6 @@
  */
 package org.n52.sos.importer.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,45 +36,67 @@ import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.view.Step7Panel;
 
 /**
+ * <p>Step7ControllerTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 @Ignore("Requires display which is not available on remote build servers")
 public class Step7ControllerTest {
 
-	private Step7Controller controller;
+    private Step7Controller controller;
 
-	@Before
-	public void init() {
-		controller = new Step7Controller();
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        controller = new Step7Controller();
+    }
 
-	@Test
-	public void shouldSetHunkSizeInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setHunkSize(42)
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getHunkSize(), is(42));
-	}
+    /**
+     * <p>shouldSetHunkSizeInModel.</p>
+     */
+    @Test
+    public void shouldSetHunkSizeInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setHunkSize(42)
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getHunkSize(),
+                org.hamcrest.CoreMatchers.is(42));
+    }
 
-	@Test
-	public void shouldSetSendBufferInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setSendBuffer(42)
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getSendBuffer(), is(42));
-	}
+    /**
+     * <p>shouldSetSendBufferInModel.</p>
+     */
+    @Test
+    public void shouldSetSendBufferInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setSendBuffer(42)
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getSendBuffer(),
+                org.hamcrest.CoreMatchers.is(42));
+    }
 
-	@Test
-	public void shouldSetImportStrategyInModel() {
-		controller.loadSettings();
-		((Step7Panel) controller.getStepPanel())
-			.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		controller.saveSettings();
-		assertThat(((Step7Model) controller.getModel()).getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
-	}
+    /**
+     * <p>shouldSetImportStrategyInModel.</p>
+     */
+    @Test
+    public void shouldSetImportStrategyInModel() {
+        controller.loadSettings();
+        ((Step7Panel) controller.getStepPanel())
+            .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        controller.saveSettings();
+        org.junit.Assert.assertThat(
+                ((Step7Model) controller.getModel()).getImportStrategy(),
+                org.hamcrest.CoreMatchers.is(ImportStrategy.SweArrayObservationWithSplitExtension));
+    }
 
 }

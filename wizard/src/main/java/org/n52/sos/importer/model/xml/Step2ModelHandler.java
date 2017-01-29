@@ -43,50 +43,53 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
  * <li>CsvMeta.FirstLineWithData</li>
  * <li>CsvMeta.UseHeader</li>
  * </ul>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step2ModelHandler implements ModelHandler<Step2Model> {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step2ModelHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step2ModelHandler.class);
 
-	@Override
-	public void handleModel(final Step2Model stepModel,
-			final SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
-		CsvMetadata csvMetadata = sosImportConf.getCsvMetadata();
-		Parameter parameter = null;
-		//
-		if (csvMetadata == null) {
-			csvMetadata = sosImportConf.addNewCsvMetadata();
-			parameter = csvMetadata.addNewParameter();
-		} else {
-			parameter = csvMetadata.getParameter();
-		}
-		if (parameter == null) {
-			parameter = csvMetadata.addNewParameter();
-		}
-		csvMetadata.setFirstLineWithData(stepModel.getFirstLineWithData());
-		csvMetadata.setUseHeader(stepModel.isUseHeader());
-		csvMetadata.setDecimalSeparator(stepModel.getDecimalSeparator()+"");
-		parameter.setCommentIndicator(stepModel.getCommentIndicator());
-		parameter.setColumnSeparator(stepModel.getColumnSeparator());
-		parameter.setTextIndicator(stepModel.getTextQualifier());
-		if (stepModel.isSampleBased()) {
-			// add other sampling parameters
-			if (sosImportConf.getDataFile() == null) {
-				sosImportConf.addNewDataFile();
-			}
-			final DataFile dataFile = sosImportConf.getDataFile();
-			dataFile.setSampleStartRegEx(stepModel.getSampleBasedStartRegEx());
-			dataFile.setSampleDateOffset(stepModel.getSampleBasedDateOffset());
-			dataFile.setSampleDateExtractionRegEx(stepModel.getSampleBasedDateExtractionRegEx());
-			dataFile.setSampleDatePattern(stepModel.getSampleBasedDatePattern());
-			dataFile.setSampleDataOffset(stepModel.getSampleBasedDataOffset());
-			dataFile.setSampleSizeOffset(stepModel.getSampleBasedSampleSizeOffset());
-			dataFile.setSampleSizeRegEx(stepModel.getSampleBasedSampleSizeRegEx());
-		}
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void handleModel(final Step2Model stepModel,
+            final SosImportConfiguration sosImportConf) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("handleModel()");
+        }
+        CsvMetadata csvMetadata = sosImportConf.getCsvMetadata();
+        Parameter parameter = null;
+        //
+        if (csvMetadata == null) {
+            csvMetadata = sosImportConf.addNewCsvMetadata();
+            parameter = csvMetadata.addNewParameter();
+        } else {
+            parameter = csvMetadata.getParameter();
+        }
+        if (parameter == null) {
+            parameter = csvMetadata.addNewParameter();
+        }
+        csvMetadata.setFirstLineWithData(stepModel.getFirstLineWithData());
+        csvMetadata.setUseHeader(stepModel.isUseHeader());
+        csvMetadata.setDecimalSeparator(stepModel.getDecimalSeparator() + "");
+        parameter.setCommentIndicator(stepModel.getCommentIndicator());
+        parameter.setColumnSeparator(stepModel.getColumnSeparator());
+        parameter.setTextIndicator(stepModel.getTextQualifier());
+        if (stepModel.isSampleBased()) {
+            // add other sampling parameters
+            if (sosImportConf.getDataFile() == null) {
+                sosImportConf.addNewDataFile();
+            }
+            final DataFile dataFile = sosImportConf.getDataFile();
+            dataFile.setSampleStartRegEx(stepModel.getSampleBasedStartRegEx());
+            dataFile.setSampleDateOffset(stepModel.getSampleBasedDateOffset());
+            dataFile.setSampleDateExtractionRegEx(stepModel.getSampleBasedDateExtractionRegEx());
+            dataFile.setSampleDatePattern(stepModel.getSampleBasedDatePattern());
+            dataFile.setSampleDataOffset(stepModel.getSampleBasedDataOffset());
+            dataFile.setSampleSizeOffset(stepModel.getSampleBasedSampleSizeOffset());
+            dataFile.setSampleSizeRegEx(stepModel.getSampleBasedSampleSizeRegEx());
+        }
+    }
 
 }

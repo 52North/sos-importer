@@ -29,25 +29,28 @@
 package org.n52.sos.importer.model;
 
 /**
- * interface for objects which can convert Strings with the help 
+ * interface for objects which can convert Strings with the help
  * of a certain pattern into this object
- * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --> DateAndTime object)
- * @author Raimund, e.h.juerrens@52north.org
+ * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --&gt; DateAndTime object)
  *
+ * @version $Id: $Id
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public interface Parseable {
 
-	/**
-	 * converts a String with the help of a certain pattern 
-	 * into a user-defined object
-	 * @param s
-	 * @return
-	 */
-	public Object parse(String s);
-	
-	/**
-	 * set the pattern to be used by parse(String s);
-	 * @param parsePattern
-	 */
-	public void setPattern(String parsePattern); 
+    /**
+     * converts a String with the help of a certain pattern
+     * into a user-defined object
+     *
+     * @param s a {@link java.lang.String} object.
+     * @return a {@link java.lang.Object} object.
+     */
+    Object parse(String s);
+
+    /**
+     * set the pattern to be used by parse(String s);
+     *
+     * @param parsePattern a {@link java.lang.String} object.
+     */
+    void setPattern(String parsePattern);
 }

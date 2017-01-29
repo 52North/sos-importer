@@ -40,106 +40,106 @@ import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.So
 
 /**
  * Updates the according position column with the given metadata
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public class Step5cModelHandler implements ModelHandler<Step5cModel> {
-	
-	private static final Logger logger = LoggerFactory.getLogger(Step5cModelHandler.class);
 
-	@Override
-	public void handleModel(final Step5cModel stepModel,
-			final SosImportConfiguration sosImportConf) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("handleModel()");
-		}
-		Enum key = null;
-		String value = null;
-		org.n52.sos.importer.model.position.Position pos = null;
-		TableElement tabElem = null;
-		Column col = null;
-		int columnId;
-	
-		pos = stepModel.getPosition();
-		//
-		// get right element from configuration by column id
-		// 1. get columnId
-		tabElem = getTableElementFromPosition(pos);
-		columnId = Helper.getColumnIdFromTableElement(tabElem);
-		//
-		// 2. get the right element from configuration
-		col = Helper.getColumnById(columnId,sosImportConf);
-		// 3. check group
-		key = Key.GROUP;
-		value = pos.getGroup();
-		Helper.addOrUpdateColumnMetadata(key, value, col);
-		//
-		// 4.1 check latitude
-		if (pos.getLatitude() != null &&
-				pos.getLatitude().getTableElement() == null) {
-			final double val = pos.getLatitude().getValue();
-			if (val != Constants.NO_INPUT_INT) {
-				key = Key.POSITION_LATITUDE;
-				value = val + " " + pos.getLatitude().getParsedUnit();
-				Helper.addOrUpdateColumnMetadata(key,value,col);
-			}
-		}
-		// 4.2 check longitude
-		if (pos.getLongitude() != null &&
-				pos.getLongitude().getTableElement() == null) {
-			final double val = pos.getLongitude().getValue();
-			if (val != Constants.NO_INPUT_INT) {
-				key = Key.POSITION_LONGITUDE;
-				value = val + " " + pos.getLongitude().getParsedUnit();
-				Helper.addOrUpdateColumnMetadata(key,value,col);
-			}
-		}
-		// 4.3 check altitude
-		if (pos.getHeight() != null &&
-				pos.getHeight().getTableElement() == null) {
-			final double val = pos.getHeight().getValue();
-			if (val != Constants.NO_INPUT_INT) {
-				key = Key.POSITION_ALTITUDE;
-				value = val + " " + pos.getHeight().getParsedUnit();
-				Helper.addOrUpdateColumnMetadata(key,value,col);
-			}
-		}
-		// 4.4 check EPSG code
-		if (pos.getEPSGCode() != null &&
-				pos.getEPSGCode().getTableElement() == null) {
-			final int val = pos.getEPSGCode().getValue();
-			if (val != Constants.NO_INPUT_INT) {
-				key = Key.POSITION_EPSG_CODE;
-				value = val + "";
-				Helper.addOrUpdateColumnMetadata(key,value,col);
-			}
-		}
-	}
+    private static final Logger logger = LoggerFactory.getLogger(Step5cModelHandler.class);
 
-	private TableElement getTableElementFromPosition(
-			final org.n52.sos.importer.model.position.Position pos) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("getTableElementFromPosition()");
-		}
-		TableElement tabElem = null;
-		if (pos.getEPSGCode() != null && pos.getEPSGCode().getTableElement() != null) {
-			
-			tabElem = pos.getEPSGCode().getTableElement();
-			
-		} else if (pos.getLongitude() != null && pos.getLongitude().getTableElement() != null) {
-			
-			tabElem = pos.getLongitude().getTableElement();
-			
-		} else if (pos.getLatitude() != null && pos.getLatitude().getTableElement() != null) {
-			
-			tabElem = pos.getLatitude().getTableElement();
-			
-		} else if (pos.getHeight() != null && pos.getHeight().getTableElement() != null) {
-			
-			tabElem = pos.getHeight().getTableElement();
-			
-		}
-		return tabElem;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void handleModel(final Step5cModel stepModel,
+            final SosImportConfiguration sosImportConf) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("handleModel()");
+        }
+        Enum key = null;
+        String value = null;
+        org.n52.sos.importer.model.position.Position pos = null;
+        TableElement tabElem = null;
+        Column col = null;
+        int columnId;
 
+        pos = stepModel.getPosition();
+        //
+        // get right element from configuration by column id
+        // 1. get columnId
+        tabElem = getTableElementFromPosition(pos);
+        columnId = Helper.getColumnIdFromTableElement(tabElem);
+        //
+        // 2. get the right element from configuration
+        col = Helper.getColumnById(columnId, sosImportConf);
+        // 3. check group
+        key = Key.GROUP;
+        value = pos.getGroup();
+        Helper.addOrUpdateColumnMetadata(key, value, col);
+        //
+        // 4.1 check latitude
+        if (pos.getLatitude() != null &&
+                pos.getLatitude().getTableElement() == null) {
+            final double val = pos.getLatitude().getValue();
+            if (val != Constants.NO_INPUT_INT) {
+                key = Key.POSITION_LATITUDE;
+                value = val + " " + pos.getLatitude().getParsedUnit();
+                Helper.addOrUpdateColumnMetadata(key, value, col);
+            }
+        }
+        // 4.2 check longitude
+        if (pos.getLongitude() != null &&
+                pos.getLongitude().getTableElement() == null) {
+            final double val = pos.getLongitude().getValue();
+            if (val != Constants.NO_INPUT_INT) {
+                key = Key.POSITION_LONGITUDE;
+                value = val + " " + pos.getLongitude().getParsedUnit();
+                Helper.addOrUpdateColumnMetadata(key, value, col);
+            }
+        }
+        // 4.3 check altitude
+        if (pos.getHeight() != null &&
+                pos.getHeight().getTableElement() == null) {
+            final double val = pos.getHeight().getValue();
+            if (val != Constants.NO_INPUT_INT) {
+                key = Key.POSITION_ALTITUDE;
+                value = val + " " + pos.getHeight().getParsedUnit();
+                Helper.addOrUpdateColumnMetadata(key, value, col);
+            }
+        }
+        // 4.4 check EPSG code
+        if (pos.getEPSGCode() != null &&
+                pos.getEPSGCode().getTableElement() == null) {
+            final int val = pos.getEPSGCode().getValue();
+            if (val != Constants.NO_INPUT_INT) {
+                key = Key.POSITION_EPSG_CODE;
+                value = val + "";
+                Helper.addOrUpdateColumnMetadata(key, value, col);
+            }
+        }
+    }
+
+    private TableElement getTableElementFromPosition(
+            final org.n52.sos.importer.model.position.Position pos) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("getTableElementFromPosition()");
+        }
+        TableElement tabElem = null;
+        if (pos.getEPSGCode() != null && pos.getEPSGCode().getTableElement() != null) {
+
+            tabElem = pos.getEPSGCode().getTableElement();
+
+        } else if (pos.getLongitude() != null && pos.getLongitude().getTableElement() != null) {
+
+            tabElem = pos.getLongitude().getTableElement();
+
+        } else if (pos.getLatitude() != null && pos.getLatitude().getTableElement() != null) {
+
+            tabElem = pos.getLatitude().getTableElement();
+
+        } else if (pos.getHeight() != null && pos.getHeight().getTableElement() != null) {
+
+            tabElem = pos.getHeight().getTableElement();
+        }
+        return tabElem;
+    }
 }

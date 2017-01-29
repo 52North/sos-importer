@@ -1,5 +1,7 @@
 # 52°North SOS Importer
-[:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)&nbsp;&nbsp;&nbsp;**Master**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer_develop/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer_develop' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+[:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
+
+**Master**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer_develop/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer_develop' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
@@ -421,7 +423,7 @@ You can just download example files to see how the application works:
 
 ## How to Build
 
-   1. Have jdk, maven, and git installed already.
+   1. Have jdk (>=1.7), maven (>=3.1.1), and git installed already.
    1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
 
       ```

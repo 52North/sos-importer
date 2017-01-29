@@ -28,8 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import static java.lang.Integer.parseInt;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,192 +45,198 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Feeder class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
  */
 public final class Feeder {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
+    private static final String NEW_LINE_WITH_TABS = "\n\t\t";
 
-	private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
+    private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
 
-	public static void main(final String[] args) {
-		LOG.trace("main()");
-		logApplicationMetadata();
-		if (checkArgs(args)) {
-			// read configuration
-			final String configFile = args[1];
-			try {
-				final Configuration c = new Configuration(configFile);
-				// start application with valid configuration
-				// data file
-				if (args.length == 2) {
-					// Case: one time feeding with defined configuration
-					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
-				}
-				else if (args.length == 4) {
-					// Case: one time feeding with file override or period with file from configuration
-					if (isFileOverride(args[2])) {
-						// Case: file override
-						new Thread(new OneTimeFeeder(c,new File(args[3])),OneTimeFeeder.class.getCanonicalName()).start();
+    private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 
-					}
-					else if (isTimePeriodSet(args[2]))	{
-						// Case: repeated feeding
-						repeatedFeeding(c,parseInt(args[3]));
-					}
-				}
-				else if (args.length == 6) {
-					// Case: repeated feeding with file override
-					repeatedFeeding(c,new File(args[3]),parseInt(args[5]));
-				}
-			}
-			catch (final XmlException e)
-			{
-				final String errorMsg =
-						String.format("Configuration file '%s' could not be " +
-								"parsed. Exception thrown: %s",
-								configFile,
-								e.getMessage());
-				LOG.error(errorMsg);
-				LOG.debug("", e);
-			}
-			catch (final IOException e)
-			{
-				LOG.error("Exception thrown: {}", e.getMessage());
-				LOG.debug("", e);
-			}
-			catch (final IllegalArgumentException iae)
-			{
-				LOG.error("Given parameters could not be parsed! -p must be a number.");
-				LOG.debug("Exception Stack Trace:",iae);
-			}
-		}
-		else {
-			showUsage();
-		}
-	}
+    /**
+     * Method to start the application using various commandline parameters.
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    // Fix for uncommented main method error of checkstyle because I need this entry point
+    //CHECKSTYLE:OFF
+    public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        LOG.trace("main()");
+        logApplicationMetadata();
+        if (checkArgs(args)) {
+            // read configuration
+            final String configFile = args[1];
+            try {
+                final Configuration c = new Configuration(configFile);
+                // start application with valid configuration
+                // data file
+                if (args.length == 2) {
+                    // Case: one time feeding with defined configuration
+                    new Thread(new OneTimeFeeder(c), OneTimeFeeder.class.getSimpleName()).start();
+                } else if (args.length == 4) {
+                    // Case: one time feeding with file override or period with file from configuration
+                    if (isFileOverride(args[2])) {
+                        // Case: file override
+                        new Thread(new OneTimeFeeder(c,
+                                new File(args[3])),
+                                OneTimeFeeder.class.getCanonicalName()).start();
 
-	private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
-		final Timer t = new Timer("FeederTimer");
-		t.schedule(new RepeatedFeeder(c,f,periodInMinutes), 1, periodInMinutes*1000*60);
-	}
+                    } else if (isTimePeriodSet(args[2]))  {
+                        // Case: repeated feeding
+                        repeatedFeeding(c, Integer.parseInt(args[3]));
+                    }
+                } else if (args.length == 6) {
+                    // Case: repeated feeding with file override
+                    repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
+                }
+            } catch (final XmlException e) {
+                final String errorMsg =
+                        String.format("Configuration file '%s' could not be " +
+                                "parsed. Exception thrown: %s",
+                                configFile,
+                                e.getMessage());
+                LOG.error(errorMsg);
+                LOG.debug("", e);
+            } catch (final IOException e) {
+                LOG.error("Exception thrown: {}", e.getMessage());
+                LOG.debug("", e);
+            } catch (final IllegalArgumentException iae) {
+                LOG.error("Given parameters could not be parsed! -p must be a number.");
+                LOG.debug("Exception Stack Trace:", iae);
+            }
+        } else {
+            showUsage();
+        }
+    }
 
-	private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
-		repeatedFeeding(c,c.getDataFile(),periodInMinutes);
-	}
+    private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
+        final Timer t = new Timer("FeederTimer");
+        t.schedule(new RepeatedFeeder(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
+    }
 
-	/**
-	 * Prints the usage test to the Standard-Output.
-	 * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
-	 */
-	private static void showUsage() {
-		LOG.trace("showUsage()");
-		System.out.println(new StringBuffer("usage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
-				.append("options and arguments:\n")
-				.append("-c file	 : read the config file and start the import process\n")
-				.append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
-				.append("-p period   : OPTIONAL time period in minutes for repeated feeding")
-				.toString());
-	}
+    private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
+        repeatedFeeding(c, c.getDataFile(), periodInMinutes);
+    }
 
-	/**
-	 * This method validates the input parameters from the user. If something
-	 * wrong, it will be logged.
-	 * @param args the parameters given by the user
-	 * @return <b>true</b> if the parameters are valid and the programm has all
-	 * 				required information.<br />
-	 * 			<b>false</b> if parameters are missing or not usable in the
-	 * 				specified form.
-	 */
-	private static boolean checkArgs(final String[] args) {
-		LOG.trace("checkArgs({})",Arrays.toString(args));
-		if (args == null) {
-			LOG.error("no parameters defined. null received as args!");
-			return false;
-		} else if (args.length == 2) {
-			if (isConfigFileSet(args[0])) {
-				return true;
-			}
-		} else if (args.length == 4) {
-			if (isConfigFileSet(args[0]) && (
-					isFileOverride(args[2]) ||
-					isTimePeriodSet(args[2]) ) ) {
-				return true;
-			}
-		} else if (args.length == 6) {
-			if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
-					isFileOverride(args[2]) &&
-					isTimePeriodSet(args[4])) {
-				return true;
-			}
-		}
-		LOG.error("Given parameters do not match programm specification. ");
-		return false;
-	}
+    /**
+     * Prints the usage test to the Standard-Output.
+     * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
+     */
+    private static void showUsage() {
+        LOG.trace("showUsage()");
+        System.out.println(new StringBuffer("usage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
+                .append("options and arguments:\n")
+                .append("-c file     : read the config file and start the import process\n")
+                .append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
+                .append("-p period   : OPTIONAL time period in minutes for repeated feeding")
+                .toString());
+    }
 
-	private static boolean isConfigFileSet(final String parameter)
-	{
-		return ALLOWED_PARAMETERS[0].equals(parameter);
-	}
+    /**
+     * This method validates the input parameters from the user. If something
+     * wrong, it will be logged.
+     * @param args the parameters given by the user
+     * @return <b>true</b> if the parameters are valid and the programm has all
+     *              required information.<br>
+     *          <b>false</b> if parameters are missing or not usable in the
+     *              specified form.
+     */
+    private static boolean checkArgs(final String[] args) {
+        LOG.trace("checkArgs({})", Arrays.toString(args));
+        if (args == null) {
+            LOG.error("no parameters defined. null received as args!");
+            return false;
+        } else if (args.length == 2) {
+            if (isConfigFileSet(args[0])) {
+                return true;
+            }
+        } else if (args.length == 4) {
+            if (isConfigFileSet(args[0]) && (
+                    isFileOverride(args[2]) ||
+                    isTimePeriodSet(args[2]))) {
+                return true;
+            }
+        } else if (args.length == 6) {
+            if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
+                    isFileOverride(args[2]) &&
+                    isTimePeriodSet(args[4])) {
+                return true;
+            }
+        }
+        LOG.error("Given parameters do not match programm specification. ");
+        return false;
+    }
 
-	private static boolean isFileOverride(final String parameter)
-	{
-		return parameter.equals(ALLOWED_PARAMETERS[1]);
-	}
+    private static boolean isConfigFileSet(final String parameter) {
+        return ALLOWED_PARAMETERS[0].equals(parameter);
+    }
 
-	private static boolean isTimePeriodSet(final String parameter)
-	{
-		return parameter.equals(ALLOWED_PARAMETERS[2]);
-	}
+    private static boolean isFileOverride(final String parameter) {
+        return parameter.equals(ALLOWED_PARAMETERS[1]);
+    }
 
-	/**
-	 * Method print all available information from the jar's manifest file.
-	 */
-	private static void logApplicationMetadata() {
-		LOG.trace("logApplicationMetadata()");
-		final StringBuffer logMessage = new StringBuffer("Application started");
-		final InputStream manifestStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
-		try {
-			final Manifest manifest = new Manifest(manifestStream);
-			final Attributes attributes = manifest.getMainAttributes();
-			final Set<Object> keys = attributes.keySet();
-			for (final Object object : keys) {
-				if (object instanceof Name) {
-					final Name key = (Name) object;
-					logMessage.append("\n\t\t")
-						.append(key)
-						.append(": ")
-						.append(attributes.getValue(key));
-				}
-			}
-			// add heap information
-			logMessage.append("\n\t\t")
-				.append(heapSizeInformation())
-				.append("\n\t\t")
-				.append(operatingSystemInformation());
-		}
-		catch(final IOException ex) {
-			LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
-		}
-		LOG.info(logMessage.toString());
-	}
+    private static boolean isTimePeriodSet(final String parameter) {
+        return parameter.equals(ALLOWED_PARAMETERS[2]);
+    }
 
-	private static String operatingSystemInformation() {
-		return String.format("os.name: %s; os.arch: %s; os.version: %s",
-				System.getProperty("os.name"),
-				System.getProperty("os.arch"),
-				System.getProperty("os.version"));
-	}
+    /**
+     * Method print all available information from the jar's manifest file.
+     */
+    private static void logApplicationMetadata() {
+        LOG.trace("logApplicationMetadata()");
+        final StringBuffer logMessage = new StringBuffer("Application started");
+        final InputStream manifestStream =
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
+        try {
+            final Manifest manifest = new Manifest(manifestStream);
+            final Attributes attributes = manifest.getMainAttributes();
+            final Set<Object> keys = attributes.keySet();
+            for (final Object object : keys) {
+                if (object instanceof Name) {
+                    final Name key = (Name) object;
+                    logMessage.append(NEW_LINE_WITH_TABS)
+                        .append(key)
+                        .append(": ")
+                        .append(attributes.getValue(key));
+                }
+            }
+            // add heap information
+            logMessage.append(NEW_LINE_WITH_TABS)
+                .append(heapSizeInformation())
+                .append(NEW_LINE_WITH_TABS)
+                .append(operatingSystemInformation());
+        } catch (final IOException ex) {
+            LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
+        }
+        LOG.info(logMessage.toString());
+    }
 
-	protected static String heapSizeInformation() {
-		final long mb = 1024 * 1024;
-		final Runtime rt = Runtime.getRuntime();
-		return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
-				rt.maxMemory() / mb,
-				rt.totalMemory() / mb,
-				rt.freeMemory() / mb,
-				(rt.totalMemory() - rt.freeMemory()) / mb);
-	}
+    private static String operatingSystemInformation() {
+        return String.format("os.name: %s; os.arch: %s; os.version: %s",
+                System.getProperty("os.name"),
+                System.getProperty("os.arch"),
+                System.getProperty("os.version"));
+    }
+
+    /**
+     * <p>heapSizeInformation.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    protected static String heapSizeInformation() {
+        final long mb = 1024 * 1024;
+        final Runtime rt = Runtime.getRuntime();
+        return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
+                rt.maxMemory() / mb,
+                rt.totalMemory() / mb,
+                rt.freeMemory() / mb,
+                (rt.totalMemory() - rt.freeMemory()) / mb);
+    }
 
 }

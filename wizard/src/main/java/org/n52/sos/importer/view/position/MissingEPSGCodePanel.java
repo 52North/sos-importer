@@ -44,85 +44,97 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * consists of a combobox for the EPSG code and a combobox for the 
+ * consists of a combobox for the EPSG code and a combobox for the
  * name of the spatial reference system; both are linked with each other
- * @author Raimund
  *
+ * @author Raimund
+ * @version $Id: $Id
  */
 public class MissingEPSGCodePanel extends MissingComponentPanel {
-	
-	private static final long serialVersionUID = 1L;
-	
-	private static final Logger logger = LoggerFactory.getLogger(MissingEPSGCodePanel.class);
-	
-	private final Position position;
-	
-	private final EditableJComboBoxPanel EPSGCodeComboBox;
-	private final EditableJComboBoxPanel referenceSystemNameComboBox;
 
-	public MissingEPSGCodePanel(final Position position) {
-		super();
-		this.position = position;
-		
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-		referenceSystemNameComboBox = new EditableJComboBoxPanel(
-				EditableComboBoxItems.getInstance().getReferenceSystemNames(), 
-				Lang.l().referenceSystem(), 
-				ToolTips.get(ToolTips.REFERENCE_SYSTEMS));
-		EPSGCodeComboBox = new EditableJComboBoxPanel(
-				EditableComboBoxItems.getInstance().getEPSGCodes(), 
-				Lang.l().epsgCode(), 
-				ToolTips.get(ToolTips.EPSG));
-		this.add(referenceSystemNameComboBox);
-		this.add(EPSGCodeComboBox);
-		EPSGCodeComboBox.setPartnerComboBox(referenceSystemNameComboBox);
-		referenceSystemNameComboBox.setPartnerComboBox(EPSGCodeComboBox);
-	}
-	@Override
-	public void assignValues() {
-		final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
-		position.setEPSGCode(new EPSGCode(code));
-	}
-	
-	@Override
-	public void unassignValues() {
-		position.setEPSGCode(null);	
-	}
-	
-	@Override
-	public boolean checkValues() {
-		int code = 0;
-		try {
-			code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
-		} catch (final NumberFormatException e) {
-			JOptionPane.showMessageDialog(null,
-				    Lang.l().epsgCodeWarningDialogNaturalNumber(),
-				    Lang.l().warningDialogTitle(),
-				    JOptionPane.WARNING_MESSAGE);
-			logger.error("The EPSG code has be a natural number.", e);
-			return false;
-		}
-		
-		if (code < 0 || code > 32767) {
-			JOptionPane.showMessageDialog(null,
-				    Lang.l().epsgCodeWarningDialogOutOfRange(),
-				    Lang.l().warningDialogTitle(),
-				    JOptionPane.WARNING_MESSAGE);
-			logger.error("The EPSG-Code has to be in the range of 0 and 32767.");
-			return false;
-		}
-		
-		return true;
-	}
-	
-	@Override
-	public Component getMissingComponent() {
-		final int code = Integer.valueOf((String) EPSGCodeComboBox.getSelectedItem());
-		return new EPSGCode(code);
-	}
-	
-	@Override
-	public void setMissingComponent(final Component c) {
-		EPSGCodeComboBox.setSelectedItem(String.valueOf(((EPSGCode)c).getValue()));
-	}	
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = LoggerFactory.getLogger(MissingEPSGCodePanel.class);
+
+    private final Position position;
+
+    private final EditableJComboBoxPanel EPSGCodeComboBox;
+    private final EditableJComboBoxPanel referenceSystemNameComboBox;
+
+    /**
+     * <p>Constructor for MissingEPSGCodePanel.</p>
+     *
+     * @param position a {@link org.n52.sos.importer.model.position.Position} object.
+     */
+    public MissingEPSGCodePanel(final Position position) {
+        super();
+        this.position = position;
+
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        referenceSystemNameComboBox = new EditableJComboBoxPanel(
+                EditableComboBoxItems.getInstance().getReferenceSystemNames(),
+                Lang.l().referenceSystem(),
+                ToolTips.get(ToolTips.REFERENCE_SYSTEMS));
+        EPSGCodeComboBox = new EditableJComboBoxPanel(
+                EditableComboBoxItems.getInstance().getEPSGCodes(),
+                Lang.l().epsgCode(),
+                ToolTips.get(ToolTips.EPSG));
+        this.add(referenceSystemNameComboBox);
+        this.add(EPSGCodeComboBox);
+        EPSGCodeComboBox.setPartnerComboBox(referenceSystemNameComboBox);
+        referenceSystemNameComboBox.setPartnerComboBox(EPSGCodeComboBox);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void assignValues() {
+        final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
+        position.setEPSGCode(new EPSGCode(code));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void unassignValues() {
+        position.setEPSGCode(null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean checkValues() {
+        int code = 0;
+        try {
+            code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
+        } catch (final NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                    Lang.l().epsgCodeWarningDialogNaturalNumber(),
+                    Lang.l().warningDialogTitle(),
+                    JOptionPane.WARNING_MESSAGE);
+            logger.error("The EPSG code has be a natural number.", e);
+            return false;
+        }
+
+        if (code < 0 || code > 32767) {
+            JOptionPane.showMessageDialog(null,
+                    Lang.l().epsgCodeWarningDialogOutOfRange(),
+                    Lang.l().warningDialogTitle(),
+                    JOptionPane.WARNING_MESSAGE);
+            logger.error("The EPSG-Code has to be in the range of 0 and 32767.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Component getMissingComponent() {
+        final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
+        return new EPSGCode(code);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setMissingComponent(final Component c) {
+        EPSGCodeComboBox.setSelectedItem(String.valueOf(((EPSGCode) c).getValue()));
+    }
 }

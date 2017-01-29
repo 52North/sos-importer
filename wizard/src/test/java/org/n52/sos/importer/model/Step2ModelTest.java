@@ -28,108 +28,185 @@
  */
 package org.n52.sos.importer.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * <p>Step2ModelTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @version $Id: $Id
+ * @since 0.5.0
  */
 public class Step2ModelTest {
 
-	private Step2Model model;
+    private static final String TEST_REGEX = "test-regex";
 
-	@Before
-	public void init() {
-		model = new Step2Model("", 0);
-	}
+    private Step2Model model;
 
-	@Test
-	public void shouldReturnTrueIfIsSampleBasedIsSet() {
-		assertThat(model.setSampleBased(true).isSampleBased(), is(true));
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        model = new Step2Model("", 0);
+    }
 
-	@Test
-	public void shouldReturnFalseAsDefaultValueForSampleBased() {
-		assertThat(model.isSampleBased(), is(false));
-	}
+    /**
+     * <p>shouldReturnTrueIfIsSampleBasedIsSet.</p>
+     */
+    @Test
+    public void shouldReturnTrueIfIsSampleBasedIsSet() {
+        Assert.assertThat(model.setSampleBased(true).isSampleBased(), CoreMatchers.is(true));
+    }
 
-	@Test
-	public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
-		final String sampleBasedStartRegEx = "test-regex";
-		assertThat(model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(), is(sampleBasedStartRegEx));
-	}
+    /**
+     * <p>shouldReturnFalseAsDefaultValueForSampleBased.</p>
+     */
+    @Test
+    public void shouldReturnFalseAsDefaultValueForSampleBased() {
+        Assert.assertThat(model.isSampleBased(), CoreMatchers.is(false));
+    }
 
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
-		assertThat(model.getSampleBasedStartRegEx(), is(""));
-	}
+    /**
+     * <p>shouldReturnStringIfIsSampleBasedStartRegExIsSet.</p>
+     */
+    @Test
+    public void shouldReturnStringIfIsSampleBasedStartRegExIsSet() {
+        final String sampleBasedStartRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedStartRegEx(sampleBasedStartRegEx).getSampleBasedStartRegEx(),
+                CoreMatchers.is(sampleBasedStartRegEx));
+    }
 
-	@Test
-	public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
-		final int dateOffset = 25;
-		assertThat(model.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(), is(dateOffset));
-	}
+    /**
+     * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx.</p>
+     */
+    @Test
+    public void shouldReturnEmptyStringAsDefaultValueForSampleBasedStartRegEx() {
+        Assert.assertThat(model.getSampleBasedStartRegEx(), CoreMatchers.is(""));
+    }
 
-	@Test
-	public void shouldReturnZeroAsDefaultValueForSampleBasedDateOffset() {
-		assertThat(model.getSampleBasedDateOffset(), is(0));
-	}
+    /**
+     * <p>shouldReturnValueIfIsSampleBasedDateOffsetIsSet.</p>
+     */
+    @Test
+    public void shouldReturnValueIfIsSampleBasedDateOffsetIsSet() {
+        final int dateOffset = 25;
+        Assert.assertThat(
+                model.setSampleBasedDateOffset(dateOffset).getSampleBasedDateOffset(),
+                CoreMatchers.is(dateOffset));
+    }
 
-	@Test
-	public void shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet() {
-		final String sampleBasedDateExtractionRegEx = "test-regex";
-		assertThat(model.setSampleBasedDateExtractionRegEx(sampleBasedDateExtractionRegEx).getSampleBasedDateExtractionRegEx(), is(sampleBasedDateExtractionRegEx));
-	}
+    /**
+     * <p>shouldReturnZeroAsDefaultValueForSampleBasedDateOffset.</p>
+     */
+    @Test
+    public void shouldReturnZeroAsDefaultValueForSampleBasedDateOffset() {
+        Assert.assertThat(model.getSampleBasedDateOffset(), CoreMatchers.is(0));
+    }
 
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
-		assertThat(model.getSampleBasedDateExtractionRegEx(), is(""));
-	}
+    /**
+     * <p>shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet.</p>
+     */
+    @Test
+    public void shouldReturnStringIfIsSampleBasedDateExtractionRegExIsSet() {
+        final String sampleBasedDateExtractionRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedDateExtractionRegEx(
+                        sampleBasedDateExtractionRegEx).getSampleBasedDateExtractionRegEx(),
+                CoreMatchers.is(sampleBasedDateExtractionRegEx));
+    }
 
-	@Test
-	public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
-		final String datePattern = "test-regex";
-		assertThat(model.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(), is(datePattern));
-	}
+    /**
+     * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx.</p>
+     */
+    @Test
+    public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDateExtractionRegEx() {
+        Assert.assertThat(model.getSampleBasedDateExtractionRegEx(), CoreMatchers.is(""));
+    }
 
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
-		assertThat(model.getSampleBasedDatePattern(), is(""));
-	}
+    /**
+     * <p>shouldReturnStringIfIsSampleBasedDatePatternIsSet.</p>
+     */
+    @Test
+    public void shouldReturnStringIfIsSampleBasedDatePatternIsSet() {
+        final String datePattern = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedDatePattern(datePattern).getSampleBasedDatePattern(),
+                CoreMatchers.is(datePattern));
+    }
 
-	@Test
-	public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
-		final int dataOffset = 25;
-		assertThat(model.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(), is(dataOffset));
-	}
+    /**
+     * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern.</p>
+     */
+    @Test
+    public void shouldReturnEmptyStringAsDefaultValueForSampleBasedDatePattern() {
+        Assert.assertThat(
+                model.getSampleBasedDatePattern(),
+                CoreMatchers.is(""));
+    }
 
-	@Test
-	public void shouldReturnZeroAsDefaultValueForSampleBasedDataOffset() {
-		assertThat(model.getSampleBasedDataOffset(), is(0));
-	}
+    /**
+     * <p>shouldReturnValueIfIsSampleBasedDataOffsetIsSet.</p>
+     */
+    @Test
+    public void shouldReturnValueIfIsSampleBasedDataOffsetIsSet() {
+        final int dataOffset = 25;
+        Assert.assertThat(
+                model.setSampleBasedDataOffset(dataOffset).getSampleBasedDataOffset(),
+                CoreMatchers.is(dataOffset));
+    }
 
-	@Test
-	public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
-		final int sampleSizeOffset = 25;
-		assertThat(model.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(), is(sampleSizeOffset));
-	}
+    /**
+     * <p>shouldReturnZeroAsDefaultValueForSampleBasedDataOffset.</p>
+     */
+    @Test
+    public void shouldReturnZeroAsDefaultValueForSampleBasedDataOffset() {
+        Assert.assertThat(
+                model.getSampleBasedDataOffset(),
+                CoreMatchers.is(0));
+    }
 
-	@Test
-	public void shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset() {
-		assertThat(model.getSampleBasedSampleSizeOffset(), is(0));
-	}
+    /**
+     * <p>shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet.</p>
+     */
+    @Test
+    public void shouldReturnValueIfIsSampleBasedSampleSizeOffsetIsSet() {
+        final int sampleSizeOffset = 25;
+        Assert.assertThat(
+                model.setSampleBasedSampleSizeOffset(sampleSizeOffset).getSampleBasedSampleSizeOffset(),
+                CoreMatchers.is(sampleSizeOffset));
+    }
 
-	@Test
-	public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
-		final String sampleBasedSampleSizeRegEx = "test-regex";
-		assertThat(model.setSampleBasedSampleSizeRegEx(sampleBasedSampleSizeRegEx).getSampleBasedSampleSizeRegEx(), is(sampleBasedSampleSizeRegEx));
-	}
+    /**
+     * <p>shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset.</p>
+     */
+    @Test
+    public void shouldReturnZeroAsDefaultValueForSampleBasedSampleSizeOffset() {
+        Assert.assertThat(
+                model.getSampleBasedSampleSizeOffset(),
+                CoreMatchers.is(0));
+    }
 
-	@Test
-	public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
-		assertThat(model.getSampleBasedSampleSizeRegEx(), is(""));
-	}
+    /**
+     * <p>shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet.</p>
+     */
+    @Test
+    public void shouldReturnStringIfIsSampleBasedSampleSizeRegExIsSet() {
+        final String sampleBasedSampleSizeRegEx = TEST_REGEX;
+        Assert.assertThat(
+                model.setSampleBasedSampleSizeRegEx(sampleBasedSampleSizeRegEx).getSampleBasedSampleSizeRegEx(),
+                CoreMatchers.is(sampleBasedSampleSizeRegEx));
+    }
+
+    /**
+     * <p>shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx.</p>
+     */
+    @Test
+    public void shouldReturnEmptyStringAsDefaultValueForSampleBasedSampleSizeRegEx() {
+        Assert.assertThat(model.getSampleBasedSampleSizeRegEx(), CoreMatchers.is(""));
+    }
 }
