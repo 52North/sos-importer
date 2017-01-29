@@ -82,7 +82,8 @@ public class FileHelper {
         try {
             LOG.trace("shortenStringViaMD5Hash({})", longString);
             final MessageDigest md5 = MessageDigest.getInstance("MD5");
-            String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))).toLowerCase();
+            String shortString = DatatypeConverter.printHexBinary(
+                    md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))).toLowerCase();
             LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
             return shortString;
         } catch (final NoSuchAlgorithmException e) {
