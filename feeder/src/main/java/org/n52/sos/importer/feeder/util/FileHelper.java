@@ -29,11 +29,13 @@
 package org.n52.sos.importer.feeder.util;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.n52.sos.importer.feeder.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,14 +82,21 @@ public class FileHelper {
         try {
             LOG.trace("shortenStringViaMD5Hash({})", longString);
             final MessageDigest md5 = MessageDigest.getInstance("MD5");
-            String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes())).toLowerCase();
+            String shortString = DatatypeConverter.printHexBinary(md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))).toLowerCase();
             LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
             return shortString;
         } catch (final NoSuchAlgorithmException e) {
             LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.", longString);
-            LOG.debug("Exception thrown: {}", e.getMessage(), e);
-            return longString;
+            logDebug(e);
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Encoding '{}' not supported. String '{}' will not be shortened.", e, longString);
+            logDebug(e);
         }
+        return longString;
+    }
+
+    private static void logDebug(final Exception e) {
+        LOG.debug("Exception thrown: {}", e.getMessage(), e);
     }
 
     /**
