@@ -285,9 +285,9 @@
                 <version>${common.xml.version}</version>
             </dependency>
             <dependency>
-            	<groupId>commons-io</groupId>
-            	<artifactId>commons-io</artifactId>
-            	<version>2.4</version>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -452,6 +452,19 @@
             </snapshots>
         </repository>
     </repositories>
+    <!-- here the repositories where this project should deployed to -->
+    <distributionManagement>
+        <repository>
+            <id>n52-releases-dist</id>
+            <name>repository for 52North releases</name>
+            <url>dav:https://52north.org/maven/repo/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>n52-snapshots-dist</id>
+            <name>repository for 52North snapshots</name>
+            <url>dav:https://52north.org/maven/repo/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <profiles>
         <profile>
             <id>release</id>
