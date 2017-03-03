@@ -233,14 +233,13 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
    * [ ] Feed to multiple SOS instances
    * [ ] Support SOAP binding (might be an OX-F task)
    * [ ] Support KVP binding (might be an OX-F task)
-
+   * [ ] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
+   * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
+   * [ ] Switch wizard to Java FX.
 
 
 ### :white_large_square: 0.5
 
-   * [ ] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
-   * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
-   * [ ] Switch wizard to Java FX.
    * [x] *[Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)*
       * [#67](https://github.com/52North/sos-importer/issues/67): Fix/parsing unixtime  bug
       * [#66](https://github.com/52North/sos-importer/issues/66): Parsing Unix time fails
@@ -254,7 +253,7 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
       * [#58](https://github.com/52North/sos-importer/issues/58): Null Pointer Exception (NPE) when feeder tries to register a sensor
       * [#57](https://github.com/52North/sos-importer/issues/57): Feeder fails to read FoI position
       * [#36](https://github.com/52North/sos-importer/issues/36): Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
-      * Could not parse ISO8601 timestamps with timezone "Z"
+      * [#35](https://github.com/52North/sos-importer/issues/35): Could not parse ISO8601 timestamps with timezone "Z"
 
 
 ### :white_check_mark: 0.4
