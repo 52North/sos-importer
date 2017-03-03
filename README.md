@@ -237,23 +237,27 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
    * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
    * [ ] Switch wizard to Java FX.
 
+### :white_large_square: Open Issues
+
+Please take a look at the [github issues list](https://github.com/52North/sos-importer/issues).
+
 
 ### :white_large_square: 0.5
 
-   * [x] *[Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)*
-      * [#67](https://github.com/52North/sos-importer/issues/67): Fix/parsing unixtime  bug
-      * [#66](https://github.com/52North/sos-importer/issues/66): Parsing Unix time fails
-      * [#65](https://github.com/52North/sos-importer/issues/65): Fix/read lines not stored
-      * [#64](https://github.com/52North/sos-importer/issues/64): Fix/cannot build timezone error
-      * [#63](https://github.com/52North/sos-importer/issues/63): Cannot build importer when host in timezone MST (-07:00)
-      * [#62](https://github.com/52North/sos-importer/issues/62): Number of read lines not stored
-      * [#61](https://github.com/52North/sos-importer/issues/61): Fix/iae sample based import
-      * [#60](https://github.com/52North/sos-importer/issues/60): Fix/read foi position
-      * [#59](https://github.com/52North/sos-importer/issues/59): Fix/npe during register sensor
-      * [#58](https://github.com/52North/sos-importer/issues/58): Null Pointer Exception (NPE) when feeder tries to register a sensor
-      * [#57](https://github.com/52North/sos-importer/issues/57): Feeder fails to read FoI position
-      * [#36](https://github.com/52North/sos-importer/issues/36): Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
-      * [#35](https://github.com/52North/sos-importer/issues/35): Could not parse ISO8601 timestamps with timezone "Z"
+   * *[Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)*
+      * [x] [#67](https://github.com/52North/sos-importer/issues/67): Fix/parsing unixtime  bug
+      * [x] [#66](https://github.com/52North/sos-importer/issues/66): Parsing Unix time fails
+      * [x] [#65](https://github.com/52North/sos-importer/issues/65): Fix/read lines not stored
+      * [x] [#64](https://github.com/52North/sos-importer/issues/64): Fix/cannot build timezone error
+      * [x] [#63](https://github.com/52North/sos-importer/issues/63): Cannot build importer when host in timezone MST (-07:00)
+      * [x] [#62](https://github.com/52North/sos-importer/issues/62): Number of read lines not stored
+      * [x] [#61](https://github.com/52North/sos-importer/issues/61): Fix/iae sample based import
+      * [x] [#60](https://github.com/52North/sos-importer/issues/60): Fix/read foi position
+      * [x] [#59](https://github.com/52North/sos-importer/issues/59): Fix/npe during register sensor
+      * [x] [#58](https://github.com/52North/sos-importer/issues/58): Null Pointer Exception (NPE) when feeder tries to register a sensor
+      * [x] [#57](https://github.com/52North/sos-importer/issues/57): Feeder fails to read FoI position
+      * [x] [#36](https://github.com/52North/sos-importer/issues/36): Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
+      * [x] [#35](https://github.com/52North/sos-importer/issues/35): Could not parse ISO8601 timestamps with timezone "Z"
 
 
 ### :white_check_mark: 0.4
