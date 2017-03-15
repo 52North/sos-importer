@@ -334,20 +334,44 @@ public final class Configuration {
     }
 
     /**
-     * <p>getUser.</p>
+     * <p>getSosUser.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getUser() {
+     public String getSosUser() {
+        if (importConf.getSosMetadata().getCredentials() != null) {
+            return importConf.getSosMetadata().getCredentials().getUserName();
+        }
+        return null;
+    }
+
+    /**
+     * <p>getSosPassword.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getSosPassword() {
+        if (importConf.getSosMetadata().getCredentials() != null) {
+            return importConf.getSosMetadata().getCredentials().getPassword();
+        }
+        return null;
+    }
+
+    /**
+     * <p>getFtpUser.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getFtpUser() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getUserName();
     }
 
     /**
-     * <p>getPassword.</p>
+     * <p>getFtpPassword.</p>
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getPassword() {
+    public String getFtpPassword() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getPassword();
     }
 

@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
@@ -268,6 +270,16 @@ public final class Feeder {
                     sweArrayObservationTimeOutBuffer);
         }
         isUseLastTimestamp = config.isUseLastTimestamp();
+        if (config.getSosUser() != null && config.getSosPassword()!= null) {
+            try {
+                URI u = sosUrl.toURI();
+                sosWrapper.setBasicAuthHost(u.getScheme() + "://" + u.getHost() + ':' + u.getPort());
+                sosWrapper.setBasicAuthUser(config.getSosUser());
+                sosWrapper.setBasicAuthPassword(config.getSosPassword());
+            } catch (URISyntaxException ex) {
+                throw new OXFException(ex);
+            }
+        }
     }
 
     private Binding getBinding(final String binding) throws OXFException {
