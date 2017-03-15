@@ -425,7 +425,7 @@ Follow this list of steps or [this user guide](http://52north.org/files/sensorwe
    1. On the last step, you can view the log file, configuration file or start the import procedure. That's it, now you should be able to import data into a running SOS instance from CSV files, or similar.
 
 
-### Demo data
+## Demo data
 
 You can just download example files to see how the application works:
    * [example-data.csv](https://wiki.52north.org/pub/SensorWeb/SosImporter/example-data.csv): Example CSV file with 3 time series
