@@ -134,9 +134,9 @@ The `DataFile` contains information about the file containing the observations. 
 
 ### SosMetadata
 
-<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/03_SosMetadata.png" alt="03_SosMetadata.png" width='383' height='238' />
+<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/03_SosMetadata.png" alt="03_SosMetadata.png" width="383" height="238" />
 
-The `SosMetadata` section has one optional attribute `insertSweArrayObservationTimeoutBuffer`, three mandatory sections `URL`, `Offering` with attribute `generate`, and `Version`. The section `Binding` is optional. The `insertSweArrayObservationTimeoutBuffer` is required if the import strategy `SweArrayObservationWithSplitExtension` (more details later) is used. It defines an additional timeout that's used when sending the !InsertObservation requests to the SOS. The `URL` defines the service endpoint that receives the requests (e.g. !Insert!|RegisterSensor, !InsertObservation). The `Offering" should contain the offering identifier to use, or its attribute `generate` should be set to true. Than, the sensor identifier is used as offering identifier. The `Version` section defines the OGC specification version, that is understood by the SOS instance, e.g. 1.0.0, 2.0.0. The optional `Binding` section is required when selecting SOS version 2.0.0 and defines which binding should be used, e.g. SOAP, POX.
+The `SosMetadata` section has one optional attribute `insertSweArrayObservationTimeoutBuffer`, three mandatory sections `URL`, `Offering` with attribute `generate`, and `Version`. The section `Binding` is optional. The `insertSweArrayObservationTimeoutBuffer` is required if the import strategy `SweArrayObservationWithSplitExtension` (more details later) is used. It defines an additional timeout that's used when sending the !InsertObservation requests to the SOS. The `URL` defines the service endpoint that receives the requests (e.g. !Insert!|RegisterSensor, !InsertObservation). The `Offering` should contain the offering identifier to use, or its attribute `generate` should be set to true. Than, the sensor identifier is used as offering identifier. The `Version` section defines the OGC specification version, that is understood by the SOS instance, e.g. 1.0.0, 2.0.0. The optional `Binding` section is required when selecting SOS version 2.0.0 and defines which binding should be used, e.g. SOAP, POX.
 
 
 ### CsvMetadata
@@ -348,13 +348,13 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ## Contributors
 
-   * Active
-      * [Eike J&uuml;rrens](https://github.com/EHJ-52n)
-      * Your name here!
-   * Former
-      * Eric Fiedler
-      * Raimund Schn&#252;rer
-      * [Jan Schulte](https://github.com/janschulte)
+- Active
+  - [Eike J&uuml;rrens](https://github.com/EHJ-52n)
+  - Your name here!
+- Former
+  - Eric Fiedler
+  - Raimund Schn&#252;rer
+  - [Jan Schulte](https://github.com/janschulte)
 
 
 ## Get Involved
