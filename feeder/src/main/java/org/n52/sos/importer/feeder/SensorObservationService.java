@@ -679,6 +679,7 @@ public final class SensorObservationService {
         LOG.debug("Feature of Interest: {}", foi);
         // VALUE
         final Object value = dataFile.getValue(mVColumnId, values);
+        // TODO implement handling for value == null => skip observation and log it, or logging is done in getValue(..)
         LOG.debug("Value: {}", value.toString());
         // TODO implement using different templates in later version depending on the class of value
         // TIMESTAMP
