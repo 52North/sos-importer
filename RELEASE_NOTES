@@ -19,6 +19,7 @@ For a complete Release Notes overview visit
  * #62: Number of read lines not stored
  * #63: Cannot build importer when host in timezone MST (-07:00)
  * #66: Parsing Unix time fails
+ * #nn: Fix problem with count values containing double
 
 # Release Notes for SOS-Importer 0.4.0
 ## Features:

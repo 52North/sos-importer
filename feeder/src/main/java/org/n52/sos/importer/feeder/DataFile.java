@@ -440,7 +440,7 @@ public class DataFile {
                     return Boolean.parseBoolean(value);
                 } else if (m.getValue().equals("COUNT")) {
                     // COUNT
-                    return Integer.parseInt(value);
+                    return new Double(configuration.parseToDouble(value)).intValue();
                 } else if (m.getValue().equals("NUMERIC")) {
                     // NUMERIC
                     return configuration.parseToDouble(value);
