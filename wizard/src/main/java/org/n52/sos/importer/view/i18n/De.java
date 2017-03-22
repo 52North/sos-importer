@@ -993,6 +993,18 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
+    public String step7IgnoreColumnMismatchCheckBoxLabel() {
+        return "Sollen Zeilen mit falscher Spaltenanzahl ignoriert werden?";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step7IgnoreColumnMismatchBorderLabel() {
+        return "Weitere Einstellungen";
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String step7ImportStrategyBorderLabel() {
         return "Import-Strategie";
     }

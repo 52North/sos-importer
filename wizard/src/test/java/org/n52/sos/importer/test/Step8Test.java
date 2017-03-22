@@ -85,7 +85,7 @@ public class Step8Test {
             final File configFile = fc.getSelectedFile();
 
             final Step7Model s7M = new Step7Model("http://localhost:8080/ImportTestSOS/sos",
-                    configFile, true, null, "1.0.0", null);
+                    configFile, true, null, "1.0.0", null, false);
             final MainController f = MainController.getInstance();
 
             f.setStepController(new Step8Controller(s7M));

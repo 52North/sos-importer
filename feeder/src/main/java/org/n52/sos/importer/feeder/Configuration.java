@@ -1597,7 +1597,8 @@ public final class Configuration {
      * @return a boolean.
      */
     public boolean isCsvParserDefined() {
-        return importConf.getCsvMetadata().isSetCsvParserClass();
+        return importConf.getCsvMetadata().isSetCsvParserClass() &&
+                !importConf.getCsvMetadata().getCsvParserClass().getStringValue().isEmpty();
     }
 
     /**
@@ -1607,12 +1608,18 @@ public final class Configuration {
      */
     public String getCsvParser() {
         return isCsvParserDefined()
-                ? importConf.getCsvMetadata().getCsvParserClass()
+                ? importConf.getCsvMetadata().getCsvParserClass().getStringValue()
                 : WrappedCSVReader.class.getName();
     }
 
     public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
         return EPSG_EASTING_FIRST_MAP;
+    }
+
+    public boolean isIgnoreColumnMismatch() {
+        return importConf.getCsvMetadata().isSetCsvParserClass() &&
+                importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch() &&
+                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch();
     }
 
 }

@@ -81,6 +81,17 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
             sosMeta.setInsertSweArrayObservationTimeoutBuffer(stepModel.getSendBuffer());
             addHunkSize(stepModel.getHunkSize(), sosImportConf);
         }
+        addIgnoreColumnMismatch(stepModel.isIgnoreColumnMismatch(), sosImportConf);
+    }
+
+    private void addIgnoreColumnMismatch(boolean ignoreColumnMismatch, SosImportConfiguration sosImportConf) {
+        if (sosImportConf.getCsvMetadata() == null) {
+            sosImportConf.addNewCsvMetadata();
+        }
+        if (!sosImportConf.getCsvMetadata().isSetCsvParserClass()) {
+            sosImportConf.getCsvMetadata().addNewCsvParserClass();
+        }
+        sosImportConf.getCsvMetadata().getCsvParserClass().setIgnoreColumnCountMismatch(ignoreColumnMismatch);
     }
 
     private void addHunkSize(final int hunkSize,

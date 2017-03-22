@@ -107,6 +107,8 @@ public final class ToolTips {
     public static final String STEP6_AUTOMATIC_GENERATION_COLUMN_TOOLTIPS = "Step6AutogenerationColumn";
     /** Constant <code>OFFERING="Offering"</code> */
     public static final String OFFERING = "Offering";
+    /** Constant <code>IGNORE_COLUMN_MISMATCH="IGNORE_COLUMN_MISMATCH"</code> */
+    public static final String IGNORE_COLUMN_MISMATCH = "IGNORE_COLUMN_MISMATCH";
 
     private static final Logger logger = LoggerFactory.getLogger(ToolTips.class);
     private static final String BUNDLE_NAME = "org.n52.sos.importer.tooltips.tooltips";

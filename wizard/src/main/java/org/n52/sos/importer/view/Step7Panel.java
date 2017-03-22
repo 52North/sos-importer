@@ -129,6 +129,10 @@ public class Step7Panel extends JPanel {
 
     private final SpinnerNumberModel sweArraySendBuffer = new SpinnerNumberModel(25, 0, Integer.MAX_VALUE, 1);
 
+    private JCheckBox ignoreColumnMismatchCheckbox;
+
+    private JPanel ignoreColumnMismatchPanel;
+
     /**
      * <p>Constructor for Step7Panel.</p>
      */
@@ -151,6 +155,7 @@ public class Step7Panel extends JPanel {
         initConfigFilePanel();
         initSosVersionPanel();
         initSosBindingPanel();
+        initIgnoreColumnMismatchPanel();
 
         final GridBagConstraints gbc_sosURLPanel = new GridBagConstraints();
         gbc_sosURLPanel.fill = GridBagConstraints.BOTH;
@@ -160,8 +165,8 @@ public class Step7Panel extends JPanel {
         add(sosURLPanel, gbc_sosURLPanel);
 
         final GridBagConstraints gbc_configFilePanel = new GridBagConstraints();
-        gbc_configFilePanel.insets = new Insets(0, 0, 5, 0);
         gbc_configFilePanel.fill = GridBagConstraints.BOTH;
+        gbc_configFilePanel.insets = new Insets(0, 0, 5, 0);
         gbc_configFilePanel.gridx = 0;
         gbc_configFilePanel.gridy = 1;
         add(configFilePanel, gbc_configFilePanel);
@@ -180,6 +185,14 @@ public class Step7Panel extends JPanel {
         gbc_metaPanel.gridx = 0;
         gbc_metaPanel.gridy = 3;
         add(metaPanel, gbc_metaPanel);
+
+        final GridBagConstraints gbc_ignoreColumnMismatchPanel = new GridBagConstraints();
+        gbc_ignoreColumnMismatchPanel.fill = GridBagConstraints.BOTH;
+        gbc_ignoreColumnMismatchPanel.insets = new Insets(0, 0, 5, 0);
+        gbc_ignoreColumnMismatchPanel.gridx = 0;
+        gbc_ignoreColumnMismatchPanel.gridy = 5;
+        add(ignoreColumnMismatchPanel, gbc_ignoreColumnMismatchPanel);
+        metaPanel.setLayout(null);
 
         sosVersionPanel = new JPanel();
         sosVersionPanel.setBounds(10, 18, 101, 20);
@@ -331,6 +344,26 @@ public class Step7Panel extends JPanel {
         gbc_sweArrayObservationBufferSpinner.gridx = 3;
         gbc_sweArrayObservationBufferSpinner.gridy = 1;
         importStrategyPanel.add(sweArrayObservationBufferSpinner, gbc_sweArrayObservationBufferSpinner);
+    }
+
+    private void initIgnoreColumnMismatchPanel() {
+        final JLabel ignoreColumnMismatchLabel = new JLabel(Lang.l().step7IgnoreColumnMismatchCheckBoxLabel());
+
+        ignoreColumnMismatchCheckbox = new JCheckBox();
+        ignoreColumnMismatchCheckbox.setSelected(true);
+
+        ignoreColumnMismatchPanel = new JPanel();
+        ignoreColumnMismatchPanel.setBorder(new TitledBorder(null,
+                Lang.l().step7IgnoreColumnMismatchBorderLabel(),
+                TitledBorder.LEADING,
+                TitledBorder.TOP,
+                null,
+                null));
+        ignoreColumnMismatchPanel.setToolTipText(ToolTips.get(ToolTips.IGNORE_COLUMN_MISMATCH));
+        ignoreColumnMismatchPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+        ignoreColumnMismatchPanel.add(ignoreColumnMismatchLabel);
+        ignoreColumnMismatchPanel.add(ignoreColumnMismatchCheckbox);
     }
 
     private void setVisibleSweArrayObservationStrategyGuiElements(final boolean visible) {
@@ -683,6 +716,14 @@ public class Step7Panel extends JPanel {
                 break;
         }
         return this;
+    }
+
+    public void setIgnoreColumnMismatch(boolean ignoreColumnMismatch) {
+        ignoreColumnMismatchCheckbox.setSelected(ignoreColumnMismatch);
+    }
+
+    public boolean isIgnoreColumnMismatch() {
+        return ignoreColumnMismatchCheckbox.isSelected();
     }
 }
 

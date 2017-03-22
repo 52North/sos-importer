@@ -729,15 +729,22 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="CsvParserClass" type="xs:string">
-        <xs:annotation>
-            <xs:documentation>
-                The class that MUST be used for parsing the data file. The
-                interface org.n52.sos.importer.feeder.CsvParser MUST be
-                implemented. The class name MUST contain the fully qualified
-                package name and a zero-argument constructor MUST be provided.
-            </xs:documentation>
-        </xs:annotation>    
+    <xs:element name="CsvParserClass">
+      <xs:annotation>
+        <xs:documentation>
+                  The class that MUST be used for parsing the data file. The
+                  interface org.n52.sos.importer.feeder.CsvParser MUST be
+                  implemented. The class name MUST contain the fully qualified
+                  package name and a zero-argument constructor MUST be provided.
+              </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="ignoreColumnCountMismatch" type="xs:boolean" use="optional"/>
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
     </xs:element>
     <xs:element name="Credentials">
         <xs:annotation>
@@ -935,9 +942,9 @@
                     </xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>
-                	<xs:restriction base="xs:int">
-                		<xs:minInclusive value="1" />
-                	</xs:restriction>
+                  <xs:restriction base="xs:int">
+                    <xs:minInclusive value="1" />
+                  </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
         </xs:complexType>
@@ -1203,7 +1210,7 @@
                 observations should be imported to a running SOS instance using
                 the transactional interface. The configuration is used by the 
                 52n-sensorweb-importer to store the metadata and re-use it for
-				later import runs.
+                later import runs.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

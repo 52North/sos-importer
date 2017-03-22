@@ -56,7 +56,7 @@ public class Step7ModelHandlerTest {
     @Test
     public void shouldAddBindingIfSetInModel() {
         final String binding = "test-binding";
-        final Step7Model stepModel = new Step7Model(null, null, false, null, null, binding);
+        final Step7Model stepModel = new Step7Model(null, null, false, null, null, binding, false);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
@@ -69,11 +69,11 @@ public class Step7ModelHandlerTest {
      */
     @Test
     public void shouldNotAddBindingIfEmptyOrNull() {
-        final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "");
+        final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "", false);
         final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
 
-        final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null);
+        final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null, false);
         final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
 
@@ -87,7 +87,7 @@ public class Step7ModelHandlerTest {
     @Test
     public void shouldAddVersionIfSetInModel() {
         final String version = "test-version";
-        final Step7Model stepModel = new Step7Model(null, null, false, null, version, null);
+        final Step7Model stepModel = new Step7Model(null, null, false, null, version, null, false);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
@@ -99,11 +99,11 @@ public class Step7ModelHandlerTest {
      */
     @Test
     public void shouldNotAddVersionIfEmptyOrNull() {
-        final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "", null);
+        final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "", null, false);
         final SosImportConfiguration importConfEmpty = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelEmpty, importConfEmpty);
 
-        final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null);
+        final Step7Model stepModelNull = new Step7Model(null, null, false, null, null, null, false);
         final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
 
@@ -116,7 +116,7 @@ public class Step7ModelHandlerTest {
      */
     @Test
     public void shouldSetImportStrategy() {
-        final Step7Model stepModel = new Step7Model(null, null, false, null, "", null);
+        final Step7Model stepModel = new Step7Model(null, null, false, null, "", null, false);
         stepModel.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
@@ -132,7 +132,7 @@ public class Step7ModelHandlerTest {
     @Test
     public void shouldSetHunkSize() {
         final int hunkSize = 42;
-        final Step7Model stepModel = new Step7Model(null, null, false, null, "", null)
+        final Step7Model stepModel = new Step7Model(null, null, false, null, "", null, false)
                 .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension)
                 .setHunkSize(hunkSize);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
@@ -151,6 +151,30 @@ public class Step7ModelHandlerTest {
             }
         }
         throw new NoSuchElementException(String.format("Element with Key '%s' not found", key));
+    }
+
+    @Test
+    public void shouldSetIgnoreColumnMismatch() {
+        Step7Model stepModel = new Step7Model(null, null, false, null, "", null, false);
+        SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
+        new Step7ModelHandler().handleModel(stepModel, importConf);
+
+        Assert.assertThat(
+                importConf.getCsvMetadata().isSetCsvParserClass(),
+                Is.is(true));
+        Assert.assertThat(
+                importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch(),
+                Is.is(true));
+        Assert.assertThat(
+                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch(),
+                Is.is(false));
+
+        stepModel = new Step7Model(null, null, false, null, "", null, true);
+        importConf = SosImportConfiguration.Factory.newInstance();
+        new Step7ModelHandler().handleModel(stepModel, importConf);
+        Assert.assertThat(
+                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch(),
+                Is.is(true));
     }
 
 }

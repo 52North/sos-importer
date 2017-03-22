@@ -598,14 +598,18 @@ public final class SensorObservationService {
     private boolean isSizeValid(final DataFile dataFile,
             final String[] values) {
         if (values.length != dataFile.getExpectedColumnCount()) {
-            final String errorMsg = String.format(
-                    "Number of Expected columns '%s' does not match number of "
-                    + "found columns '%s' -> Cancel import! Please update your "
-                    + "configuration to match the number of columns.",
-                    dataFile.getExpectedColumnCount(),
-                    values.length);
-            LOG.error(errorMsg);
-            throw new InvalidColumnCountException(errorMsg);
+            if (configuration.isIgnoreColumnMismatch()) {
+                return false;
+            } else {
+                final String errorMsg = String.format(
+                        "Number of Expected columns '%s' does not match number of "
+                                + "found columns '%s' -> Cancel import! Please update your "
+                                + "configuration to match the number of columns.",
+                                dataFile.getExpectedColumnCount(),
+                                values.length);
+                LOG.error(errorMsg);
+                throw new InvalidColumnCountException(errorMsg);
+            }
         }
         return true;
     }

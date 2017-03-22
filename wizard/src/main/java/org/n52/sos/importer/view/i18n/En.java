@@ -996,6 +996,18 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
+    public String step7IgnoreColumnMismatchCheckBoxLabel() {
+        return "Should lines with wrong number of columns be ignored?";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step7IgnoreColumnMismatchBorderLabel() {
+        return "Additional Settings";
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String step7ImportStrategyBorderLabel() {
         return "Import Strategy";
     }

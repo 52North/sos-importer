@@ -1247,6 +1247,16 @@ public abstract class Lang {
     public abstract String step7DirectImport();
 
     /**
+     * @return Should lines with wrong number of columns be ignored?
+     */
+    public abstract String step7IgnoreColumnMismatchCheckBoxLabel();
+
+    /**
+     * @return Additional Settings
+     */
+    public abstract String step7IgnoreColumnMismatchBorderLabel();
+
+    /**
      * <p>step7ImportStrategyBorderLabel.</p>
      *
      * @return Import Strategy

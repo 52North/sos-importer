@@ -84,6 +84,8 @@ public class Step7Model implements StepModel {
 
     private int hunkSize = 5000;
 
+    private boolean ignoreColumnMismatch;
+
     /**
      * <p>Constructor for Step7Model.</p>
      *
@@ -93,26 +95,29 @@ public class Step7Model implements StepModel {
      * @param offering a {@link java.lang.String} object.
      * @param version a {@link java.lang.String} object.
      * @param binding a {@link java.lang.String} object.
+     * @param ignoreColumnMismatch a boolean
      */
     public Step7Model(final String sosURL,
             final File configFile,
             final boolean generateOfferingFromSensorName,
             final String offering,
             final String version,
-            final String binding) {
+            final String binding,
+            final boolean ignoreColumnMismatch) {
         this.sosURL = sosURL;
         this.configFile = configFile;
         this.generateOfferingFromSensorName = generateOfferingFromSensorName;
         this.offering = offering;
         this.binding = binding;
         this.version = version;
+        this.ignoreColumnMismatch = ignoreColumnMismatch;
     }
 
     /**
      * <p>Constructor for Step7Model.</p>
      */
     public Step7Model() {
-        this(null, null, true, null, null, null);
+        this(null, null, false, null, null, null, false);
     }
 
     /**
@@ -281,6 +286,15 @@ public class Step7Model implements StepModel {
      */
     public Step7Model setHunkSize(final int hunkSize) {
         this.hunkSize = hunkSize;
+        return this;
+    }
+
+    public boolean isIgnoreColumnMismatch() {
+        return ignoreColumnMismatch;
+    }
+
+    public Step7Model setIgnoreColumnMismatch(boolean ignoreColumnMismatch) {
+        this.ignoreColumnMismatch = ignoreColumnMismatch;
         return this;
     }
 

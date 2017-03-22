@@ -80,6 +80,7 @@ public class Step7Controller extends StepController {
             if (s7M.getVersion() != null && !s7M.getVersion().isEmpty()) {
                 s7P.setSosVersion(s7M.getVersion());
             }
+            s7P.setIgnoreColumnMismatch(s7M.isIgnoreColumnMismatch());
             switch (s7M.getImportStrategy()) {
                 case SweArrayObservationWithSplitExtension:
                     loadImportStrategyBasedSettings();
@@ -115,19 +116,22 @@ public class Step7Controller extends StepController {
         final String version = s7P.getSosVersion();
         final boolean generateOfferingFromSensorName = s7P.isGenerateOfferingFromSensorName();
         final File configFile = new File(s7P.getConfigFile());
+        final boolean ignoreColumnMismatch = s7P.isIgnoreColumnMismatch();
         if (s7M == null) {
             s7M = new Step7Model(sosURL,
                     configFile,
                     generateOfferingFromSensorName,
                     offering,
                     version,
-                    binding);
+                    binding,
+                    ignoreColumnMismatch);
         } else {
             s7M.setSosURL(sosURL);
             s7M.setSosVersion(version);
             s7M.setSosBinding(binding);
             s7M.setConfigFile(configFile);
             s7M.setGenerateOfferingFromSensorName(generateOfferingFromSensorName);
+            s7M.setIgnoreColumnMismatch(ignoreColumnMismatch);
             if (!generateOfferingFromSensorName) {
                 s7M.setOffering(offering);
             }
