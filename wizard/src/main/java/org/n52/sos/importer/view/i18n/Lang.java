@@ -793,68 +793,61 @@ public abstract class Lang {
     public abstract String step2TextQualifier();
 
     /**
-     * <p>step3aDescription.</p>
+     * <p>step3Description.</p>
      *
-     * @return Step 3a: Choose Metadata for the selected column
+     * @return Step 3: Choose Metadata for the selected column
      */
-    public abstract String step3aDescription();
+    public abstract String step3Description();
 
     /**
-     * <p>step3aMeasureValueColMissingDialogMessage.</p>
+     * <p>step3MeasureValueColMissingDialogMessage.</p>
      *
      * @return You have to specify at least one measured value column.
      */
-    public abstract String step3aMeasureValueColMissingDialogMessage();
+    public abstract String step3MeasureValueColMissingDialogMessage();
 
     /**
-     * <p>step3aMeasureValueColMissingDialogTitle.</p>
+     * <p>step3MeasureValueColMissingDialogTitle.</p>
      *
      * @return Measured value column missing
      */
-    public abstract String step3aMeasureValueColMissingDialogTitle();
+    public abstract String step3MeasureValueColMissingDialogTitle();
 
     /**
-     * <p>step3aParseTest1Failed.</p>
+     * <p>step3ParseTest1Failed.</p>
      *
      * @return 1 value not parseable.
      */
-    public abstract String step3aParseTest1Failed();
+    public abstract String step3ParseTest1Failed();
 
     /**
-     * <p>step3aParseTestAllOk.</p>
+     * <p>step3ParseTestAllOk.</p>
      *
      * @return All values parseable.
      */
-    public abstract String step3aParseTestAllOk();
+    public abstract String step3ParseTestAllOk();
 
     /**
-     * <p>step3aParseTestNFailed.</p>
+     * <p>step3ParseTestNFailed.</p>
      *
      * @param n a int.
      * @return <code>n</code> values not parseable.
      */
-    public abstract String step3aParseTestNFailed(int n);
+    public abstract String step3ParseTestNFailed(int n);
 
     /**
-     * <p>step3aSelectedColTypeUndefinedMsg.</p>
+     * <p>step3SelectedColTypeUndefinedMsg.</p>
      *
      * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
      */
-    public abstract String step3aSelectedColTypeUndefinedMsg();
+    public abstract String step3SelectedColTypeUndefinedMsg();
 
     /**
-     * <p>step3aSelectedColTypeUndefinedTitle.</p>
+     * <p>step3SelectedColTypeUndefinedTitle.</p>
      *
      * @return Column Type is "undefined"
      */
-    public abstract String step3aSelectedColTypeUndefinedTitle();
-
-    /**
-     * <p>step3bDescription.</p>
-     *
-     * @return Step 3b: Choose metadata for rows
-     */
-    public abstract String step3bDescription();
+    public abstract String step3SelectedColTypeUndefinedTitle();
 
     /**
      * <p>step3ColTypeDateTime.</p>

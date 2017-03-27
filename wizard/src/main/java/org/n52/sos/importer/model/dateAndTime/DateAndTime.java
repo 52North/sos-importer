@@ -297,4 +297,17 @@ public class DateAndTime extends Combination {
             return "Date&Time group " + getGroup();
         }
     }
+
+    /**
+     * @return true, if this is a unix time {@link DateAndTime}, else false.
+     */
+    public boolean isUnixTime() {
+        return year == null &&
+                month == null &&
+                day == null &&
+                hour == null &&
+                minute == null &&
+                second == null &&
+                timeZone == null;
+    }
 }

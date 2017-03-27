@@ -359,7 +359,7 @@ public class Model {
         doc.setSosImportConfiguration(sosImpConf);
         final Collection<XmlError> exs = XMLBeansParser.validate(doc);
         for (final XmlError xmlError : exs) {
-            logger.error("Xml error: ", xmlError);
+            logger.error("Xml error: {}", xmlError);
         }
         return (exs.size() == 0) ? true : false;
     }

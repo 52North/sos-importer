@@ -116,13 +116,25 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         for (final Integer key2 : keys) {
             /*
              * key = columnIndex List<String> contains: list.get(0) = type
-             * list.get(n) = endcoded meta data Type: Date & Time Measured Value
-             * Position * Feature of Interest * Observed Property * Unit of
-             * Measurement * Sensor * Do not export Encoded Metadata: Date &
-             * Time: Combination, Pattern <- parse pattern SEP Group UNIX TIME
-             * Measured Value: Numeric, .:, (: is separator between decimal
-             * Count, 0 and thousands separator) Boolean, 0 Text, 0 Position:
-             * Combination, Pattern <- parse pattern SEP Group
+             * list.get(n) = endcoded meta data Type:
+             * * Date & Time
+             * * Measured Value
+             * * Position
+             * * Feature of Interest
+             * * Observed Property
+             * * Unit of Measurement
+             * * Sensor
+             * * Do not export
+             * Encoded Metadata:
+             *  Date & Time:
+             *  * Combination, Pattern <- parse pattern SEP Group
+             *  * UNIX TIME
+             * Measured Value:
+             *  * Numeric, .:, (: is separator between decimal
+             *    Count, 0 and thousands separator)
+             *  * Boolean, 0
+             *  * Text, 0
+             * Position: Combination, Pattern <- parse pattern SEP Group
              */
             // value should have one or two elements
             final List<String> value = colAssignments.get(key2);
@@ -219,27 +231,33 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         //
         col.setType(Type.DATE_TIME);
         //
-        if (type.equalsIgnoreCase(Lang.l().step3DateAndTimeCombination())) {
-            String[] splittedMetadata = encodedMetadata
-                    .split(Constants.SEPARATOR_STRING);
-            String parsePattern = splittedMetadata[0];
-            String group = splittedMetadata[1];
-            //
+        String[] splittedMetadata = encodedMetadata
+                .split(Constants.SEPARATOR_STRING);
+        String parsePattern = splittedMetadata[0];
+        String group = splittedMetadata[1];
+        //
+        if (isValueSet(group)) {
             Helper.addOrUpdateColumnMetadata(Key.GROUP, group, col);
-            //
+        }
+        //
+        if (isValueSet(parsePattern)) {
             Helper.addOrUpdateColumnMetadata(Key.PARSE_PATTERN, parsePattern, col);
-            //
+        }
+        //
+        // TODO add type correct
+        if (type.equalsIgnoreCase(Constants.COMBINATION)) {
             Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.COMBINATION, col);
-            //
-            splittedMetadata = null;
-            parsePattern = null;
-            group = null;
         } else if (type.equalsIgnoreCase(Lang.l().step3DateAndTimeUnixTime())) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Unix time selected");
-            }
             Helper.addOrUpdateColumnMetadata(Key.TYPE, Constants.UNIX_TIME, col);
         }
+        //
+        splittedMetadata = null;
+        parsePattern = null;
+        group = null;
+    }
+
+    private boolean isValueSet(String valueString) {
+        return valueString != null && !valueString.isEmpty() && !valueString.equalsIgnoreCase("null");
     }
 
     /**
@@ -324,9 +342,6 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             col.setType(Type.OBSERVED_PROPERTY);
         } else if (type.equalsIgnoreCase(Lang.l().featureOfInterest())) {
             col.setType(Type.FOI);
-        } else if (type.equalsIgnoreCase(Lang.l().step3ColTypeDateTime())) {
-            setComplexColumnTypeDateAndTime(col,
-                    Lang.l().step3DateAndTimeUnixTime(), null);
         } else {
             logger.error("Type not known to schema : " + type);
         }

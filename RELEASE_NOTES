@@ -4,7 +4,11 @@ For a complete Release Notes overview visit
 
 # Release Notes for SOS-Importer 0.5.0
 ## Features:
- *
+ * Add support to ignore lines with invalid number of columns (=> log error but no import abort) in
+   * Wizard
+   * Bindings
+   * Feeder
+ * Add support for unix time with milliseconds
 
 
 ## Changes:
@@ -20,6 +24,11 @@ For a complete Release Notes overview visit
  * #63: Cannot build importer when host in timezone MST (-07:00)
  * #66: Parsing Unix time fails
  * #nn: Fix problem with count values containing double
+ * #nn: Fix handling of timestamp columns without any group assignment
+ * #nn: Fix handling of data files with multiple date & time columns
+ * #nn: Fix bug in unix time parsing
+ * #nn: Fix typo in xml schema: expresssion -> expression
+ 
 
 # Release Notes for SOS-Importer 0.4.0
 ## Features:

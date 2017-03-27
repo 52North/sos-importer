@@ -11,6 +11,7 @@
     <groupId>org.n52.sensorweb</groupId>
     <artifactId>52n-sos-importer</artifactId>
     <packaging>pom</packaging>
+    <!-- when updating this version, please update wizard::org.n52.sos.importer.Constants.VERSION, too -->
     <version>0.5.0-SNAPSHOT</version>
     <name>52North SOS-Importer</name>
     <description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>

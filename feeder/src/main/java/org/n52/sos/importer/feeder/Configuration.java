@@ -267,16 +267,16 @@ public final class Configuration {
 
     private void setLocaleFilePattern() {
         if (isRegularExpressionForLocalFileAvailable()) {
-            final String pattern = importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames();
+            final String pattern = importConf.getDataFile().getLocalFile().getRegularExpressionForAllowedFileNames();
             localeFilePattern  = Pattern.compile(pattern);
         }
     }
 
     private boolean isRegularExpressionForLocalFileAvailable() {
         return importConf.getDataFile().isSetLocalFile() &&
-                importConf.getDataFile().getLocalFile().isSetRegularExpresssionForAllowedFileNames() &&
-                importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames() != null &&
-                !importConf.getDataFile().getLocalFile().getRegularExpresssionForAllowedFileNames().isEmpty();
+                importConf.getDataFile().getLocalFile().isSetRegularExpressionForAllowedFileNames() &&
+                importConf.getDataFile().getLocalFile().getRegularExpressionForAllowedFileNames() != null &&
+                !importConf.getDataFile().getLocalFile().getRegularExpressionForAllowedFileNames().isEmpty();
     }
 
     /**

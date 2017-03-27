@@ -63,6 +63,7 @@ public class Step3Controller extends StepController {
 
     private Step3Panel step3Panel;
 
+
     /**
      * Step3Model of this Step3Controllers
      */
@@ -93,7 +94,7 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public String getDescription() {
-        return Lang.l().step3aDescription();
+        return Lang.l().step3Description();
     }
 
     /** {@inheritDoc} */
@@ -158,9 +159,9 @@ public class Step3Controller extends StepController {
         step3Model.addSelection(selection);
         selP = step3Panel.getLastChildPanel();
         selP.assign(new Column(number, firstLineWithData));
-        if (selection.size() == 2 && selection.get(1).equals("UNIX time")) {
+        if (shouldAddDateAndTime(selection)) {
             DateAndTime dtm = new DateAndTime();
-            dtm.setGroup("1");
+            dtm.setGroup(Integer.toString(step3Model.getMarkedColumn()+1));
             ModelStore.getInstance().add(dtm);
         }
         //
@@ -186,6 +187,13 @@ public class Step3Controller extends StepController {
             logger.debug(STEP3_PANEL + NULL_STRING);
         }
 
+    }
+
+
+    private boolean shouldAddDateAndTime(final List<String> selection) {
+        return selection.size() > 1 && (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
+                (selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
+                        selection.get(2).endsWith("null")));
     }
 
     /** {@inheritDoc} */
@@ -229,8 +237,8 @@ public class Step3Controller extends StepController {
                 ModelStore.getInstance().getMeasuredValues().size() == 0 &&
                 !currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
             JOptionPane.showMessageDialog(null,
-                    Lang.l().step3aMeasureValueColMissingDialogMessage(),
-                    Lang.l().step3aMeasureValueColMissingDialogTitle(),
+                    Lang.l().step3MeasureValueColMissingDialogMessage(),
+                    Lang.l().step3MeasureValueColMissingDialogTitle(),
                     JOptionPane.WARNING_MESSAGE);
             return false;
         }

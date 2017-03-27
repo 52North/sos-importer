@@ -92,6 +92,7 @@ public abstract class CombinationPanel extends SelectionPanel {
         exampleFormatLabel =  new ExampleFormatLabel(getCombination());
         patternComboBox.addActionListener(new FormatChanged());
         groupComboBox.setToolTipText(getGroupToolTip());
+        groupComboBox.setSelectedIndex(-1);
         //setDefaultSelection();
 
         final JPanel formatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

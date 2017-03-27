@@ -102,13 +102,13 @@ public class ParserThread implements Runnable {
         }
         // handle the results of the test parsing
         if (notParseableValues == 0) {
-            text = Lang.l().step3aParseTestAllOk();
+            text = Lang.l().step3ParseTestAllOk();
             parseTestLabel.setForeground(Color.blue);
         } else if (notParseableValues == 1) {
-            text = Lang.l().step3aParseTest1Failed();
+            text = Lang.l().step3ParseTest1Failed();
             parseTestLabel.setForeground(Color.red);
         } else {
-            text = Lang.l().step3aParseTestNFailed(notParseableValues);
+            text = Lang.l().step3ParseTestNFailed(notParseableValues);
             parseTestLabel.setForeground(Color.red);
         }
         parseTestLabel.setText(HTML_OPEN + text + HTML_CLOSE);

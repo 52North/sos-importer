@@ -44,6 +44,7 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.Cell;
+import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
@@ -298,6 +299,14 @@ public class DateAndTimeController {
         }
     }
 
+    public void markColumn() {
+        if (dateAndTime.isUnixTime()) {
+            new Column(Integer.parseInt(dateAndTime.getGroup()) - 1, 0).mark();
+        } else {
+            markComponents();
+        }
+    }
+
     /**
      * <p>forThis.</p>
      *
@@ -409,7 +418,9 @@ public class DateAndTimeController {
             final Iterator<DateAndTime> dATIter = list2.iterator();
             while (dATIter.hasNext()) {
                 final DateAndTime dt2 = dATIter.next();
-                if (dt1.getGroup().equals(dt2.getGroup())) {
+                if (!dt1.getGroup().equalsIgnoreCase("null") &&
+                        !dt2.getGroup().equalsIgnoreCase("null") &&
+                        dt1.getGroup().equals(dt2.getGroup())) {
                     merge(dt1, dt2);
                     dateAndTimes.remove(dt2);
                 }

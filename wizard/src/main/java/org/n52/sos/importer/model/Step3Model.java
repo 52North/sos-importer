@@ -63,6 +63,7 @@ package org.n52.sos.importer.model;
 import java.util.HashMap;
 import java.util.List;
 
+import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +105,16 @@ public class Step3Model implements StepModel {
     public boolean addSelection(final List<String> selection) {
         if (logger.isTraceEnabled()) {
             logger.trace("addSelection()");
+        }
+        // TODO add handling for date & time: handle unix time and empty groups by adding column index
+        if (selection.get(0).equals(Lang.l().step3ColTypeDateTime())) {
+            if (selection.size() == 3 && selection.get(2).endsWith("null")) {
+                String tmp = selection.get(2).replaceAll("null", Integer.toString(markedColumn+1));
+                selection.remove(2);
+                selection.add(2, tmp);
+            } else if (selection.size() == 2) {
+                selection.add("nullSEP" + (markedColumn+1));
+            }
         }
         columnAssignments.put(markedColumn, selection);
         final List<String> addedValue = columnAssignments.get(markedColumn);

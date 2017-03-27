@@ -136,8 +136,8 @@ public class Constants {
     public static final String TEXT = "TEXT";
     /** Constant <code>UNIX_TIME="UNIX_TIME"</code> */
     public static final String UNIX_TIME = "UNIX_TIME";
-    /** Constant <code>VERSION="0.4"</code> */
-    public static final String VERSION = "0.4";
+    /** Constant <code>VERSION="0.5.0-SNAPSHOT"</code> */
+    public static final String VERSION = "0.5.0-SNAPSHOT";
     /** Constant <code>WELCOME_RES_CONTENT_TYPE="text/html"</code> */
     public static final String WELCOME_RES_CONTENT_TYPE = "text/html";
     /** Constant <code>XML_CONFIG_DEFAULT_FILE_NAME_SUFFIX=".52n-sos-import-config.xml"</code> */

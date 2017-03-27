@@ -91,7 +91,7 @@ public class Step4aController extends StepController {
 
         final DateAndTimeController dateAndTimeController =
                 new DateAndTimeController(step4aModel.getDateAndTimeModel());
-        dateAndTimeController.markComponents();
+        dateAndTimeController.markColumn();
     }
 
     /** {@inheritDoc} */

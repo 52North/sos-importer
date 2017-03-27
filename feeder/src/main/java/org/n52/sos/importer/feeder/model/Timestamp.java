@@ -60,6 +60,7 @@ public class Timestamp {
     private byte hour = Byte.MIN_VALUE;
     private byte minute = Byte.MIN_VALUE;
     private byte seconds = Byte.MIN_VALUE;
+    private int millis = Integer.MIN_VALUE;
     private byte timezone = Byte.MIN_VALUE;
 
     /** {@inheritDoc} */
@@ -102,6 +103,9 @@ public class Timestamp {
         } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
             ts.append("00");
         }
+        if (millis != Integer.MIN_VALUE) {
+            ts.append("." + (millis < 10 ? "00" + millis : (millis < 100 ? "0" + millis :millis)));
+        }
         if (timezone != Byte.MIN_VALUE &&
                 (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
             ts.append(convertTimeZone(timezone));
@@ -143,6 +147,7 @@ public class Timestamp {
         hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
         minute = (byte) cal.get(Calendar.MINUTE);
         seconds = (byte) cal.get(Calendar.SECOND);
+        millis = cal.get(Calendar.MILLISECOND);
         timezone = (byte) (cal.getTimeZone().getOffset(dateToSet) / MILLIS_PER_HOUR);
         return this;
     }
@@ -198,6 +203,9 @@ public class Timestamp {
             }
             if (dateInfoPattern.indexOf("s") > -1) {
                 setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
+            }
+            if (dateInfoPattern.indexOf("S") > -1) {
+                setMillis(cal.get(GregorianCalendar.MILLISECOND));
             }
             if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
                 setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
@@ -257,6 +265,9 @@ public class Timestamp {
             if (other.getTimezone() > Byte.MIN_VALUE) {
                 setTimezone(other.getTimezone());
             }
+            if (other.getMillis() > Integer.MIN_VALUE) {
+                setMillis(other.getMillis());
+            }
         }
         return this;
     }
@@ -276,7 +287,7 @@ public class Timestamp {
     }
 
     private String getDatePattern() {
-        // "yyyy-MM-dd'T'HH:mm:ssX";
+        // "yyyy-MM-dd'T'HH:mm:ss.SSSX";
         final StringBuffer ts = new StringBuffer(31);
         if (year != Short.MIN_VALUE) {
             ts.append("yyyy");
@@ -313,13 +324,16 @@ public class Timestamp {
         } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
             ts.append(SS);
         }
+        if (millis != Integer.MIN_VALUE) {
+            ts.append(".SSS");
+        }
         if (timezone != Byte.MIN_VALUE &&
                 (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
             ts.append("X");
         }
         final String datePattern = ts.toString();
         if (datePattern.isEmpty()) {
-            return "yyyy-MM-dd'T'HH:mm:ssX";
+            return "yyyy-MM-dd'T'HH:mm:ss.SSSX";
         }
         return datePattern;
     }
@@ -488,6 +502,14 @@ public class Timestamp {
      */
     public byte getTimezone() {
         return timezone;
+    }
+
+    private void setMillis(int millis) {
+        this.millis = millis;
+    }
+
+    private int getMillis() {
+        return millis;
     }
 
 }

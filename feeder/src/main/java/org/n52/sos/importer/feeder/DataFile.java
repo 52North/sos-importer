@@ -470,7 +470,7 @@ public class DataFile {
         if (group == null) {
             group = configuration.getFirstDateTimeGroup();
         }
-        final Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
+        Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
         if (cols != null) {
             // Try to get timezone from configuration
             final Timestamp ts = new Timestamp();
@@ -547,7 +547,7 @@ public class DataFile {
         // DO: TZ := UTC; value from one single column (should be an integer)
         timeZone = TimeZone.getTimeZone("UTC");
         ts.setTimezone((byte) (timeZone.getRawOffset() / MILLIES_PER_HOUR));
-        ts.set(Long.parseLong(values[cols[0].getNumber()]) * 1000);
+        ts.set((long) (Double.parseDouble(values[cols[0].getNumber()]) * 1000));
     }
 
     private boolean isUnixTime(final Column[] cols) {

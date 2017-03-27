@@ -621,43 +621,43 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step3aDescription() {
-        return step() + " 3a: Choose Metadata for the selected column";
+    public String step3Description() {
+        return step() + " 3: Choose Metadata for the selected column";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aMeasureValueColMissingDialogMessage() {
+    public String step3MeasureValueColMissingDialogMessage() {
         return "You have to specify at least one " + measuredValue() + " column!";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aMeasureValueColMissingDialogTitle() {
+    public String step3MeasureValueColMissingDialogTitle() {
         return measuredValue() + " column missing";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTest1Failed() {
+    public String step3ParseTest1Failed() {
         return "1 value could not be interpreted.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTestAllOk() {
+    public String step3ParseTestAllOk() {
         return "All values could be interpreted.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTestNFailed(final int n) {
+    public String step3ParseTestNFailed(final int n) {
         return n + " values could not be interpreted.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aSelectedColTypeUndefinedMsg() {
+    public String step3SelectedColTypeUndefinedMsg() {
         return "The type for this column is \"" +
                 step3ColTypeUndefined() +
                 "\".\nPlease select one.\nChoose \"" +
@@ -667,16 +667,10 @@ public class En extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step3aSelectedColTypeUndefinedTitle() {
+    public String step3SelectedColTypeUndefinedTitle() {
         return "Column Type is \"" +
                 step3ColTypeUndefined() +
                 "\"";
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String step3bDescription() {
-        return step() + " 3b: Choose metadata for rows";
     }
 
     /** {@inheritDoc} */

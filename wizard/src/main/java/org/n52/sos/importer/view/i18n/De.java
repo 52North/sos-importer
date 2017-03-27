@@ -620,43 +620,43 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step3aDescription() {
-        return step() + " 3a: Wählen Sie die Metainformationen für die aktuelle Spalte";
+    public String step3Description() {
+        return step() + " 3: Wählen Sie die Metainformationen für die aktuelle Spalte";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aMeasureValueColMissingDialogMessage() {
+    public String step3MeasureValueColMissingDialogMessage() {
         return "Es muss mindestens 1 " + measuredValue() + "-Spalte definiert werden!";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aMeasureValueColMissingDialogTitle() {
+    public String step3MeasureValueColMissingDialogTitle() {
         return measuredValue() + "-Spalte fehlt!";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTest1Failed() {
+    public String step3ParseTest1Failed() {
         return "1 Wert nicht einlesbar.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTestAllOk() {
+    public String step3ParseTestAllOk() {
         return "Alle Werte einlesbar.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aParseTestNFailed(final int n) {
+    public String step3ParseTestNFailed(final int n) {
         return n + " Werte nicht einlesbar.";
     }
 
     /** {@inheritDoc} */
     @Override
-    public String step3aSelectedColTypeUndefinedMsg() {
+    public String step3SelectedColTypeUndefinedMsg() {
         return "Der Typ für die Spalte ist \"" +
                 step3ColTypeUndefined() +
                 "\".\n" +
@@ -670,16 +670,10 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
-    public String step3aSelectedColTypeUndefinedTitle() {
+    public String step3SelectedColTypeUndefinedTitle() {
         return "Spalten-Typ ist \"" +
                 step3ColTypeUndefined() +
                 "\"";
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String step3bDescription() {
-        return step() + " 3b: Wählen Sie die Metainformationen für die aktuelle Zeile";
     }
 
     /** {@inheritDoc} */
