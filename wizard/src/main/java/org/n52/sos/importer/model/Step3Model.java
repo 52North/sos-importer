@@ -69,6 +69,8 @@ import org.slf4j.LoggerFactory;
 
 public class Step3Model implements StepModel {
 
+    private static final String NULL = "null";
+
     private static final Logger logger = LoggerFactory.getLogger(Step3Model.class);
 
     private int markedColumn;
@@ -108,12 +110,12 @@ public class Step3Model implements StepModel {
         }
         // TODO add handling for date & time: handle unix time and empty groups by adding column index
         if (selection.get(0).equals(Lang.l().step3ColTypeDateTime())) {
-            if (selection.size() == 3 && selection.get(2).endsWith("null")) {
-                String tmp = selection.get(2).replaceAll("null", Integer.toString(markedColumn+1));
+            if (selection.size() == 3 && selection.get(2).endsWith(NULL)) {
+                String tmp = selection.get(2).replaceAll(NULL, Integer.toString(markedColumn + 1));
                 selection.remove(2);
                 selection.add(2, tmp);
             } else if (selection.size() == 2) {
-                selection.add("nullSEP" + (markedColumn+1));
+                selection.add(NULL + "SEP" + (markedColumn + 1));
             }
         }
         columnAssignments.put(markedColumn, selection);

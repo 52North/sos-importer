@@ -57,7 +57,7 @@ public class Step3Controller extends StepController {
 
     private static final String STEP3_MODEL = "Step3Model: ";
     private static final String STEP3_PANEL = "Step3Panel: ";
-    private static final String NULL_STRING = "null";
+    private static final String NULL = "null";
 
     private static final Logger logger = LoggerFactory.getLogger(Step3Controller.class);
 
@@ -113,7 +113,7 @@ public class Step3Controller extends StepController {
             logger.debug(STEP3_MODEL + step3Model);
             logger.debug(STEP3_PANEL + (step3Panel != null
                     ? "[" + step3Panel.hashCode() + "]"
-                    : NULL_STRING));
+                    : NULL));
         }
         final int number = step3Model.getMarkedColumn();
         if (logger.isDebugEnabled()) {
@@ -147,7 +147,7 @@ public class Step3Controller extends StepController {
             logger.debug(STEP3_MODEL + step3Model);
             logger.debug(STEP3_PANEL + (step3Panel != null
                     ? "[" + step3Panel.hashCode() + "]"
-                    : NULL_STRING));
+                    : NULL));
         }
         //
         final List<String> selection = new ArrayList<String>();
@@ -161,7 +161,7 @@ public class Step3Controller extends StepController {
         selP.assign(new Column(number, firstLineWithData));
         if (shouldAddDateAndTime(selection)) {
             DateAndTime dtm = new DateAndTime();
-            dtm.setGroup(Integer.toString(step3Model.getMarkedColumn()+1));
+            dtm.setGroup(Integer.toString(step3Model.getMarkedColumn() + 1));
             ModelStore.getInstance().add(dtm);
         }
         //
@@ -184,7 +184,7 @@ public class Step3Controller extends StepController {
         if (logger.isDebugEnabled()) {
             logger.debug("End:");
             logger.debug(STEP3_MODEL + step3Model);
-            logger.debug(STEP3_PANEL + NULL_STRING);
+            logger.debug(STEP3_PANEL + NULL);
         }
 
     }
@@ -193,7 +193,7 @@ public class Step3Controller extends StepController {
     private boolean shouldAddDateAndTime(final List<String> selection) {
         return selection.size() > 1 && (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
                 (selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
-                        selection.get(2).endsWith("null")));
+                        selection.get(2).endsWith(NULL)));
     }
 
     /** {@inheritDoc} */
