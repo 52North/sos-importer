@@ -48,10 +48,11 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
+    private static final String SINGLE_ZERO = "0";
+    private static final String DOUBLE_ZERO = SINGLE_ZERO + SINGLE_ZERO;
     private static final String PARAMETER_TIME_STAMP_IS_MANDATORY = "parameter timeStamp is mandatory.";
     private static final String SS = "ss";
     private static final String MM = "mm:";
-    private static final String ZERO_ZERO = ":00";
     private static final long MILLIS_PER_HOUR = 1000 * 60 * 60;
     private static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
     private short year = Short.MIN_VALUE;
@@ -75,36 +76,37 @@ public class Timestamp {
             }
         }
         if (month != Byte.MIN_VALUE) {
-            ts.append(month < 10 ? "0" + month : month);
+            ts.append(month < 10 ? SINGLE_ZERO + month : month);
             if (day != Byte.MIN_VALUE) {
                 ts.append("-");
             }
         }
         if (day != Byte.MIN_VALUE) {
-            ts.append(day < 10 ? "0" + day : day);
+            ts.append(day < 10 ? SINGLE_ZERO + day : day);
         }
         if ((year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE)
                 && (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
             ts.append("T");
         }
         if (hour != Byte.MIN_VALUE) {
-            ts.append(hour < 10 ? "0" + hour : hour);
+            ts.append(hour < 10 ? SINGLE_ZERO + hour : hour);
             if (minute != Byte.MIN_VALUE) {
                 ts.append(":");
             }
         }
         if (minute != Byte.MIN_VALUE) {
-            ts.append((minute < 10 ? "0" + minute : minute) + ":");
+            ts.append((minute < 10 ? SINGLE_ZERO + minute : minute) + ":");
         } else if (hour != Byte.MIN_VALUE) {
-            ts.append("00:");
+            ts.append(DOUBLE_ZERO);
+            ts.append(":");
         }
         if (seconds != Byte.MIN_VALUE) {
-            ts.append(seconds < 10 ? "0" + seconds : seconds);
+            ts.append(seconds < 10 ? SINGLE_ZERO + seconds : seconds);
         } else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
-            ts.append("00");
+            ts.append(DOUBLE_ZERO);
         }
         if (millis != Integer.MIN_VALUE) {
-            ts.append("." + (millis < 10 ? "00" + millis : (millis < 100 ? "0" + millis :millis)));
+            ts.append("." + (millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis)));
         }
         if (timezone != Byte.MIN_VALUE &&
                 (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
@@ -116,15 +118,15 @@ public class Timestamp {
     private String convertTimeZone(final int timeZone) {
         if (timeZone >= 0) {
             if (timeZone >= 10) {
-                return "+" + timeZone + ZERO_ZERO;
+                return "+" + timeZone + ":" + DOUBLE_ZERO;
             } else {
-                return "+0" + timeZone + ZERO_ZERO;
+                return "+0" + timeZone + ":" + DOUBLE_ZERO;
             }
         } else {
             if (timeZone <= -10) {
-                return timeZone + ZERO_ZERO;
+                return timeZone + ":" + DOUBLE_ZERO;
             } else {
-                return "-0" + Math.abs(timeZone) + ZERO_ZERO;
+                return "-0" + Math.abs(timeZone) + ":" + DOUBLE_ZERO;
             }
         }
     }

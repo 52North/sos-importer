@@ -61,6 +61,8 @@ public class DateAndTimeController {
 
     private static final Logger logger = LoggerFactory.getLogger(DateAndTimeController.class);
 
+    private static final String NULL = "null";
+
     private DateAndTime dateAndTime;
 
     private final List<MissingComponentPanel> missingComponentPanels;
@@ -418,8 +420,8 @@ public class DateAndTimeController {
             final Iterator<DateAndTime> dATIter = list2.iterator();
             while (dATIter.hasNext()) {
                 final DateAndTime dt2 = dATIter.next();
-                if (!dt1.getGroup().equalsIgnoreCase("null") &&
-                        !dt2.getGroup().equalsIgnoreCase("null") &&
+                if (!dt1.getGroup().equalsIgnoreCase(NULL) &&
+                        !dt2.getGroup().equalsIgnoreCase(NULL) &&
                         dt1.getGroup().equals(dt2.getGroup())) {
                     merge(dt1, dt2);
                     dateAndTimes.remove(dt2);

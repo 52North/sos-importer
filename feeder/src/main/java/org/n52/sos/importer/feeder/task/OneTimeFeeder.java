@@ -173,8 +173,7 @@ public class OneTimeFeeder implements Runnable {
     @Override
     public void run() {
         LOG.trace("run()");
-        LOG.info("Starting feeding data from file '{}' via configuration '{}' to SOS instance", dataFile.getFileName(),
-                config.getFileName());
+        LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
         // csv / ftp
         if (config.isRemoteFile()) {
             dataFile = getRemoteFile();
@@ -186,6 +185,7 @@ public class OneTimeFeeder implements Runnable {
             // no data -> nothing to do
             return;
         }
+        LOG.info("Datafile: '{}'.", dataFile.getFileName());
         if (dataFile.isAvailable()) {
             try {
                 // check SOS
