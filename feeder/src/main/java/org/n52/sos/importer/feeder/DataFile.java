@@ -119,23 +119,23 @@ public class DataFile {
     public boolean isAvailable() {
         LOG.trace("isAvailable()");
         if (!dataFile.exists()) {
-            LOG.error(String.format("Data dataFile '%s' specified in '%s' does not exist.",
+            LOG.error(String.format("File '%s' specified in '%s' does not exist.",
                     dataFile.getAbsolutePath(),
                     configuration.getConfigFile().getAbsolutePath()));
         } else if (!dataFile.isFile()) {
-            LOG.error(String.format("Data dataFile '%s' is not a dataFile!",
+            LOG.error(String.format("File '%s' is not a file!",
                     dataFile.getAbsolutePath()));
         } else if (!dataFile.canRead()) {
-            LOG.error(String.format("Data dataFile '%s' can not be accessed, please check dataFile permissions!",
+            LOG.error(String.format("File '%s' can not be accessed, please check file permissions!",
                     dataFile.getAbsolutePath()));
         } else if (checkWindowsJavaApiBugJDK6203387(dataFile)) {
             LOG.error(
-                    String.format("Data dataFile '%s' can not be accessed, "
+                    String.format("File '%s' can not be accessed, "
                             + "because another process blocked read access!",
                     dataFile.getAbsolutePath()));
             throw new JavaApiBugJDL6203387Exception(dataFile.getName());
         } else {
-            LOG.debug(String.format("Data dataFile '%s' is a dataFile and read permission is available.",
+            LOG.debug(String.format("File '%s' is a file and read permission is available.",
                         dataFile.getAbsolutePath()));
             return true;
         }
