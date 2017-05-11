@@ -44,9 +44,9 @@ public final class BackNextController {
 
     private static BackNextController instance;
 
-    private static final Logger logger = LoggerFactory.getLogger(BackNextController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackNextController.class);
 
-    private BackNextModel bNModel;
+    private final BackNextModel bNModel;
 
     private BackNextPanel backNextPanel;
 
@@ -112,8 +112,8 @@ public final class BackNextController {
      * <p>backButtonClicked.</p>
      */
     public void backButtonClicked() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("backButtonClicked()\n\n");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("backButtonClicked()\n\n");
         }
         final StepController currentSC = bNModel.getCurrentStepController();
         currentSC.back();
@@ -128,8 +128,8 @@ public final class BackNextController {
      * <p>nextButtonClicked.</p>
      */
     public void nextButtonClicked() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("nextButtonClicked()\n\n");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("nextButtonClicked()\n\n");
         }
         final StepController currentSC = bNModel.getCurrentStepController();
         // handle potential language switch
@@ -185,8 +185,8 @@ public final class BackNextController {
      * <p>finishButtonClicked.</p>
      */
     public void finishButtonClicked() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("finishButtonClicked()\n\n");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("finishButtonClicked()\n\n");
         }
         MainController.getInstance().exit();
     }

@@ -59,7 +59,7 @@ public class Step3Controller extends StepController {
     private static final String STEP3_PANEL = "Step3Panel: ";
     private static final String NULL = "null";
 
-    private static final Logger logger = LoggerFactory.getLogger(Step3Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step3Controller.class);
 
     private Step3Panel step3Panel;
 
@@ -106,18 +106,18 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void loadSettings() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("loadSettings()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("loadSettings()");
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug(STEP3_MODEL + step3Model);
-            logger.debug(STEP3_PANEL + (step3Panel != null
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(STEP3_MODEL + step3Model);
+            LOG.debug(STEP3_PANEL + (step3Panel != null
                     ? "[" + step3Panel.hashCode() + "]"
                     : NULL));
         }
         final int number = step3Model.getMarkedColumn();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Loading settings for column# " + number);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Loading settings for column# " + number);
         }
         final int fLWData = step3Model.getFirstLineWithData();
         final Column column = new Column(number, fLWData);
@@ -139,18 +139,18 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void saveSettings() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("saveSettings()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("saveSettings()");
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Start:");
-            logger.debug(STEP3_MODEL + step3Model);
-            logger.debug(STEP3_PANEL + (step3Panel != null
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Start:");
+            LOG.debug(STEP3_MODEL + step3Model);
+            LOG.debug(STEP3_PANEL + (step3Panel != null
                     ? "[" + step3Panel.hashCode() + "]"
                     : NULL));
         }
         //
-        final List<String> selection = new ArrayList<String>();
+        final List<String> selection = new ArrayList<>();
         SelectionPanel selP;
         final int number = step3Model.getMarkedColumn();
         final int firstLineWithData = step3Model.getFirstLineWithData();
@@ -181,10 +181,10 @@ public class Step3Controller extends StepController {
         tabCtrlr.turnSelectionOn();
         step3Panel = null;
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("End:");
-            logger.debug(STEP3_MODEL + step3Model);
-            logger.debug(STEP3_PANEL + NULL);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("End:");
+            LOG.debug(STEP3_MODEL + step3Model);
+            LOG.debug(STEP3_PANEL + NULL);
         }
 
     }
@@ -199,7 +199,7 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void back() {
-        final List<String> selection = new ArrayList<String>();
+        final List<String> selection = new ArrayList<>();
         step3Panel.store(selection);
         step3Model.addSelection(selection);
         final int number = step3Model.getMarkedColumn() - 1;
@@ -228,13 +228,13 @@ public class Step3Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
-        final List<String> currentSelection = new ArrayList<String>();
+        final List<String> currentSelection = new ArrayList<>();
         step3Panel.store(currentSelection);
         // check if the current column is the last in the file
         // if yes, check for at least one measured value column
         if ((step3Model.getMarkedColumn() + 1) ==
                 TableController.getInstance().getColumnCount() &&
-                ModelStore.getInstance().getMeasuredValues().size() == 0 &&
+                ModelStore.getInstance().getMeasuredValues().isEmpty() &&
                 !currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
             JOptionPane.showMessageDialog(null,
                     Lang.l().step3MeasureValueColMissingDialogMessage(),
@@ -263,10 +263,7 @@ public class Step3Controller extends StepController {
     @Override
     public boolean isStillValid() {
         //TODO: check whether the CSV file parsing settings have been changed
-        if (step3Model.getMarkedColumn() == 0) {
-            return false;
-        }
-        return true;
+        return step3Model.getMarkedColumn() != 0;
     }
 
     /** {@inheritDoc} */

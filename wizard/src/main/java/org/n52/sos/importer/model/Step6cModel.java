@@ -88,18 +88,13 @@ public class Step6cModel implements StepModel {
         position = this.featureOfInterest.getPosition() != null
                 ? this.featureOfInterest.getPosition()
                         : new Position();
-        missingPositionComponents = new ArrayList<Component>();
+        missingPositionComponents = new ArrayList<>();
     }
 
     /**
      * <p>Constructor for Step6cModel.</p>
      *
      * @param featureOfInterest a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-     * @param featureOfInterestName a {@link java.lang.String} object.
-     * @param featureOfInterestName a {@link java.lang.String} object.
-     * @param featureOfInterestName a {@link java.lang.String} object.
-     * @param featureOfInterestName a {@link java.lang.String} object.
-     * @param featureOfInterestName a {@link java.lang.String} object.
      * @param featureOfInterestName a {@link java.lang.String} object.
      */
     public Step6cModel(FeatureOfInterest featureOfInterest, String featureOfInterestName) {

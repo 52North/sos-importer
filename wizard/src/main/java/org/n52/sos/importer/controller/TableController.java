@@ -314,7 +314,7 @@ public final class TableController {
      * @return a {@link java.util.List} object.
      */
     public List<String> getMarkedValues() {
-        final ArrayList<String> values = new ArrayList<String>();
+        final ArrayList<String> values = new ArrayList<>();
 
         switch (tableSelectionMode) {
             case COLUMNS:
@@ -541,13 +541,9 @@ public final class TableController {
         final int colCount = table.getColumnCount();
         final TableColumnModel tcm = table.getColumnModel();
         // Check for null and empty strings
-        final boolean filter = typeToLeaveOut == null
-                ? false
-                        : typeToLeaveOut.equalsIgnoreCase("")
-                        ? false
-                                : true
-                ;
-        final ArrayList<String> headings = new ArrayList<String>(colCount);
+        final boolean filter = typeToLeaveOut == null?
+                false : !typeToLeaveOut.equalsIgnoreCase("");
+        final ArrayList<String> headings = new ArrayList<>(colCount);
         final String colon = ": ";
         if (!filter) {
             for (int i = 0; i < colCount; i++) {
@@ -592,9 +588,9 @@ public final class TableController {
         private final HashSet<Cell> cells;
 
         ColoredTableCellRenderer() {
-            columns = new HashSet<Column>();
-            rows = new HashSet<Row>();
-            cells = new HashSet<Cell>();
+            columns = new HashSet<>();
+            rows = new HashSet<>();
+            cells = new HashSet<>();
         }
 
         public void addColumn(final Column c) {

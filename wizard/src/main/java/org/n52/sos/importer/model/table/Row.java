@@ -72,6 +72,7 @@ public class Row extends TableElement {
     /**
      * <p>mark.</p>
      */
+    @Override
     public void mark() {
         TableController.getInstance().mark(this);
     }
@@ -127,9 +128,6 @@ public class Row extends TableElement {
             return false;
         }
         Row other = (Row) obj;
-        if (number != other.number) {
-            return false;
-        }
-        return true;
+        return number == other.number;
     }
 }

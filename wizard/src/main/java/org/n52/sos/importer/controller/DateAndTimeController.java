@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DateAndTimeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(DateAndTimeController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateAndTimeController.class);
 
     private static final String NULL = "null";
 
@@ -72,7 +72,7 @@ public class DateAndTimeController {
      */
     public DateAndTimeController() {
         dateAndTime = new DateAndTime();
-        missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        missingComponentPanels = new ArrayList<>();
     }
 
     /**
@@ -82,7 +82,7 @@ public class DateAndTimeController {
      */
     public DateAndTimeController(final DateAndTime dateAndTime) {
         this.dateAndTime = dateAndTime;
-        missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        missingComponentPanels = new ArrayList<>();
     }
 
     /**
@@ -175,7 +175,7 @@ public class DateAndTimeController {
      * @return a {@link java.util.List} object.
      */
     public List<Component> getMissingComponents() {
-        final List<Component> components = new ArrayList<Component>();
+        final List<Component> components = new ArrayList<>();
         for (final MissingComponentPanel mcp: missingComponentPanels) {
             components.add(mcp.getMissingComponent());
         }
@@ -227,31 +227,31 @@ public class DateAndTimeController {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void assignPattern(final String pattern, final TableElement tableElement) {
-        logger.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
+        LOG.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
 
-        if (pattern.indexOf("y") != -1) {
+        if (pattern.contains("y")) {
             dateAndTime.setYear(new Year(tableElement, pattern));
         }
-        if (pattern.indexOf("M") != -1 || pattern.indexOf("w") != -1 || pattern.indexOf("D") != -1) {
+        if (pattern.contains("M") || pattern.contains("w") || pattern.contains("D")) {
             dateAndTime.setMonth(new Month(tableElement, pattern));
         }
-        if (pattern.indexOf("d") != -1 || (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
+        if (pattern.contains("d") || (pattern.contains("W") && pattern.contains("d"))) {
             dateAndTime.setDay(new Day(tableElement, pattern));
         }
-        if (pattern.indexOf("H") != -1 ||
-                pattern.indexOf("k") != -1 ||
-                ((pattern.indexOf("K") != -1 ||
-                (pattern.indexOf("h") != -1) &&
-                pattern.indexOf("a") != -1))) {
+        if (pattern.contains("H") ||
+                pattern.contains("k") ||
+                ((pattern.contains("K") ||
+                (pattern.contains("h")) &&
+                pattern.contains("a")))) {
             dateAndTime.setHour(new Hour(tableElement, pattern));
         }
-        if (pattern.indexOf("m") != -1) {
+        if (pattern.contains("m")) {
             dateAndTime.setMinute(new Minute(tableElement, pattern));
         }
-        if (pattern.indexOf("s") != -1) {
+        if (pattern.contains("s")) {
             dateAndTime.setSecond(new Second(tableElement, pattern));
         }
-        if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1) {
+        if (pattern.contains("z") || pattern.contains("Z")) {
             dateAndTime.setTimeZone(new TimeZone(tableElement, pattern));
         }
     }
@@ -404,19 +404,19 @@ public class DateAndTimeController {
      * <p>mergeDateAndTimes.</p>
      */
     public void mergeDateAndTimes() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("mergeDateAndTimes()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("mergeDateAndTimes()");
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("Merge Date & Times");
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Merge Date & Times");
         }
         final List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
-        final ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<DateAndTime>(dateAndTimes.size());
+        final ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<>(dateAndTimes.size());
         while (!dateAndTimes.isEmpty()) {
             final DateAndTime dt1 = dateAndTimes.get(0);
             dateAndTimes.remove(dt1);
             // create tmp list from left over dts
-            final List<DateAndTime> list2 = new ArrayList<DateAndTime>(dateAndTimes);
+            final List<DateAndTime> list2 = new ArrayList<>(dateAndTimes);
             final Iterator<DateAndTime> dATIter = list2.iterator();
             while (dATIter.hasNext()) {
                 final DateAndTime dt2 = dATIter.next();

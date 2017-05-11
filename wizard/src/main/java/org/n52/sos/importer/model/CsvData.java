@@ -99,9 +99,7 @@ public class CsvData {
         String[] tmp = lines.get(i);
         if (tmp.length < columns) {
             Arrays.fill(extended, "");
-            for (int j = 0; j < tmp.length; j++) {
-                extended[j] = tmp[j];
-            }
+            System.arraycopy(tmp, 0, extended, 0, tmp.length);
             tmp = extended;
         }
         return tmp;

@@ -80,6 +80,5 @@ public class Text extends MeasuredValue implements Parseable {
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper
-        return;
     }
 }

@@ -76,7 +76,6 @@ public class Step8Panel extends JPanel {
     private JTextArea directImportOutputTextArea;
 
     private final Step8Controller controller;
-    private final Step8Panel this_;
 
     /**
      * <p>Constructor for Step8Panel.</p>
@@ -118,7 +117,6 @@ public class Step8Panel extends JPanel {
         gbc_directImportPanel.gridx = 0;
         gbc_directImportPanel.gridy = 2;
         add(directImportPanel, gbc_directImportPanel);
-        this_ = this;
     }
 
     private JPanel initDirectImportPanel() {
@@ -250,7 +248,7 @@ public class Step8Panel extends JPanel {
             }
         } else {
             JOptionPane.showMessageDialog(
-                    this_,
+                    this,
                     Lang.l().step8ErrorDesktopNotSupportedMesage(
                             f.getAbsolutePath()),
                     Lang.l().step8ErrorDesktopNotSupportedTitle(),

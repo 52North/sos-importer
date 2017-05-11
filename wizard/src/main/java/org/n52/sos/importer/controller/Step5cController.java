@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step5cController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step5cController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step5cController.class);
 
     private Step5cModel step5cModel;
 
@@ -151,7 +151,7 @@ public class Step5cController extends StepController {
         final Position p = positionController.getNextPositionWithMissingValues();
 
         if (p == null) {
-            logger.info("Skip Step 5c since there are not any Positions" +
+            LOG.info("Skip Step 5c since there are not any Positions" +
                     " with missing values");
             return false;
         }

@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6aController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step6aController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step6aController.class);
 
     private Step6aModel step6aModel;
 
@@ -162,7 +162,7 @@ public class Step6aController extends StepController {
             return true;
         }
 
-        logger.info("Skip Step 6a since there is at least one Date&Time");
+        LOG.info("Skip Step 6a since there is at least one Date&Time");
 
         return false;
     }

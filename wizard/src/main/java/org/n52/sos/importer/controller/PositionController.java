@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PositionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(PositionController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PositionController.class);
 
     private Position position;
 
@@ -72,7 +72,7 @@ public class PositionController {
      */
     public PositionController() {
         position = new Position();
-        missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        missingComponentPanels = new ArrayList<>();
     }
 
     /**
@@ -82,7 +82,7 @@ public class PositionController {
      */
     public PositionController(final Position position) {
         this.position = position;
-        missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        missingComponentPanels = new ArrayList<>();
     }
 
     /**
@@ -110,18 +110,18 @@ public class PositionController {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void assignPattern(final String pattern, final TableElement tableElement) {
-        logger.info("Assign pattern " + pattern + " to " + position + " in " + tableElement);
+        LOG.info("Assign pattern " + pattern + " to " + position + " in " + tableElement);
 
-        if (pattern.indexOf("LAT") != -1) {
+        if (pattern.contains("LAT")) {
             position.setLatitude(new Latitude(tableElement, pattern));
         }
-        if (pattern.indexOf("LON") != -1) {
+        if (pattern.contains("LON")) {
             position.setLongitude(new Longitude(tableElement, pattern));
         }
-        if (pattern.indexOf("ALT") != -1) {
+        if (pattern.contains("ALT")) {
             position.setHeight(new Height(tableElement, pattern));
         }
-        if (pattern.indexOf("EPSG") != -1) {
+        if (pattern.contains("EPSG")) {
             position.setEPSGCode(new EPSGCode(tableElement, pattern));
         }
     }
@@ -191,10 +191,10 @@ public class PositionController {
             epsgString = epsgString.concat(Integer.toString(epsgCode.getValue()));
         }
         try {
-            logger.debug(String.format("Trying to decode CRS from EPSG string : '%s'", epsgString));
+            LOG.debug(String.format("Trying to decode CRS from EPSG string : '%s'", epsgString));
             final CoordinateReferenceSystem crs = CRS.decode(epsgString);
             // 2 check for axis Z -> if present -> yes
-            logger.debug(String.format("CRS decoded to '%s' with %s dimensions.",
+            LOG.debug(String.format("CRS decoded to '%s' with %s dimensions.",
                     crs.getName(),
                     crs.getCoordinateSystem().getDimension()));
             if (crs.getCoordinateSystem().getDimension() == 3) {
@@ -202,7 +202,7 @@ public class PositionController {
             }
             // TODO what about user feedback?
         } catch (final FactoryException e) {
-            logger.error(String.format("Exception thrown: %s",
+            LOG.error(String.format("Exception thrown: %s",
                     e.getMessage()),
                     e);
         }
@@ -228,7 +228,7 @@ public class PositionController {
      * @return a {@link java.util.List} object.
      */
     public List<Component> getMissingComponents() {
-        final List<Component> components = new ArrayList<Component>();
+        final List<Component> components = new ArrayList<>();
         for (final MissingComponentPanel mcp: missingComponentPanels) {
             components.add(mcp.getMissingComponent());
         }
@@ -308,14 +308,14 @@ public class PositionController {
      * <p>mergePositions.</p>
      */
     public void mergePositions() {
-        logger.info("Merge Positions");
+        LOG.info("Merge Positions");
         final List<Position> positions = ModelStore.getInstance().getPositions();
-        final ArrayList<Position> mergedPositions = new ArrayList<Position>();
+        final ArrayList<Position> mergedPositions = new ArrayList<>();
         while (!positions.isEmpty()) {
             final Position p1 = positions.get(0);
             positions.remove(p1);
             // create tmp list from left over ps
-            final List<Position> list2 = new ArrayList<Position>(positions);
+            final List<Position> list2 = new ArrayList<>(positions);
             final Iterator<Position> pIter = list2.iterator();
             while (pIter.hasNext()) {
                 final Position p2 = pIter.next();

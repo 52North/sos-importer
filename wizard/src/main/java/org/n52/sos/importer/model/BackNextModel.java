@@ -44,7 +44,7 @@ public class BackNextModel {
 
     private static final String CLOSING_BRACES = "])";
 
-    private static final Logger logger = LoggerFactory.getLogger(BackNextModel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackNextModel.class);
 
     private final Stack<StepController> previousStepControllers;
 
@@ -56,8 +56,8 @@ public class BackNextModel {
      * <p>Constructor for BackNextModel.</p>
      */
     public BackNextModel() {
-        previousStepControllers = new Stack<StepController>();
-        followingStepControllers = new Stack<StepController>();
+        previousStepControllers = new Stack<>();
+        followingStepControllers = new Stack<>();
     }
 
     /**
@@ -66,10 +66,10 @@ public class BackNextModel {
      * @return a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public StepController getPreviousStepController() {
-        logger.trace("getPreviousStepController()");
+        LOG.trace("getPreviousStepController()");
         final StepController sc = previousStepControllers.pop();
-        if (logger.isTraceEnabled()) {
-            logger.trace("result: " +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("result: " +
                     (sc != null ? sc.getClass().getSimpleName() : null) +
                     "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }
@@ -82,8 +82,8 @@ public class BackNextModel {
      * @param sc a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public void addPreviousStepController(final StepController sc) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("addPreviousStepController(" +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("addPreviousStepController(" +
                     (sc != null ? sc.getClass().getSimpleName() : null) +
                     "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }
@@ -96,8 +96,8 @@ public class BackNextModel {
      * @param currentSC a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public void setCurrentStepController(final StepController currentSC) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("setCurrentStepController(" +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("setCurrentStepController(" +
                     currentSC.getClass().getSimpleName() +
                     "[" + currentSC.hashCode() + CLOSING_BRACES);
         }
@@ -110,8 +110,8 @@ public class BackNextModel {
      * @return a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public StepController getCurrentStepController() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getCurrentStepController()" +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("getCurrentStepController()" +
                     (currentStepController != null ? ": result:" +
                     currentStepController.getClass().getSimpleName() +
                     "[" + currentStepController.hashCode() + "]" : ""));
@@ -125,15 +125,15 @@ public class BackNextModel {
      * @return a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public StepController getFollowingStepController() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getFollowingStepController()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("getFollowingStepController()");
         }
         StepController sc = null;
         if (followingStepControllers.size() > 0) {
             sc = followingStepControllers.pop();
         }
-        if (logger.isTraceEnabled()) {
-            logger.trace("followingSC: " +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("followingSC: " +
                     (sc != null
                     ? sc.getClass().getSimpleName() + "[" + sc.hashCode() + "]"
                             : null));
@@ -147,8 +147,8 @@ public class BackNextModel {
      * @param sc a {@link org.n52.sos.importer.controller.StepController} object.
      */
     public void addFollowingStepController(final StepController sc) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("addFollowingStepController(" +
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("addFollowingStepController(" +
                     (sc != null ? sc.getClass().getSimpleName() : null) +
                     "[" + (sc != null ? sc.hashCode() : null) + CLOSING_BRACES);
         }

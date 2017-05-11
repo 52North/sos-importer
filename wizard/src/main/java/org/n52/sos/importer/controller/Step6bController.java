@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6bController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step6bController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step6bController.class);
 
     private Step6bModel step6bModel;
 
@@ -117,7 +117,7 @@ public class Step6bController extends StepController {
         missingResourcePanel.setMissingComponent(resource);
         missingResourcePanel.unassignValues();
 
-        final List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        final List<MissingComponentPanel> missingComponentPanels = new ArrayList<>();
         missingComponentPanels.add(missingResourcePanel);
 
         String question = step6bModel.getDescription();
@@ -195,7 +195,7 @@ public class Step6bController extends StepController {
     public boolean isNecessary() {
         step6bModel = getMissingResourceForMeasuredValue();
         if (step6bModel == null) {
-            logger.info("Skip Step 6b since all Measured Values are already" +
+            LOG.info("Skip Step 6b since all Measured Values are already" +
                     " assigned to Features Of Interest, Observed Properties," +
                     " Unit Of Measurements and Sensors");
             return false;
@@ -234,9 +234,9 @@ public class Step6bController extends StepController {
             }
         }
 
-        if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-                ModelStore.getInstance().getObservedPropertiesInTable().size() == 0 &&
-                ModelStore.getInstance().getSensorsInTable().size() == 0) {
+        if (ModelStore.getInstance().getFeatureOfInterestsInTable().isEmpty() &&
+                ModelStore.getInstance().getObservedPropertiesInTable().isEmpty() &&
+                ModelStore.getInstance().getSensorsInTable().isEmpty()) {
             for (final MeasuredValue mv: measuredValues) {
                 if (mv.getSensor() == null) {
                     return new Step6bModel(mv, new Sensor());

@@ -81,7 +81,7 @@ public class Step6aModel implements StepModel {
      */
     public Step6aModel(DateAndTime dateAndTime) {
         this.dateAndTime = dateAndTime;
-        missingDateAndTimeComponents = new ArrayList<Component>();
+        missingDateAndTimeComponents = new ArrayList<>();
     }
 
     /**

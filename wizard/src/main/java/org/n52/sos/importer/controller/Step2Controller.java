@@ -53,7 +53,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class Step2Controller extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step2Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step2Controller.class);
 
     private final Step2Model step2Model;
 
@@ -95,13 +95,13 @@ public class Step2Controller extends StepController {
             return false;
         }
 
-        if (step2Model.isSampleBased() &&
+        return !(step2Model.isSampleBased() &&
                 (step2Model.getSampleBasedStartRegEx() == null ||
                 step2Model.getSampleBasedStartRegEx().isEmpty() ||
                 step2Model.getSampleBasedDateOffset() < 1 ||
                 step2Model.getSampleBasedDateExtractionRegEx() == null ||
                 step2Model.getSampleBasedDateExtractionRegEx().isEmpty() ||
-                step2Model.getSampleBasedDateExtractionRegEx().indexOf("(") < 0 ||
+                !step2Model.getSampleBasedDateExtractionRegEx().contains("(") ||
                 step2Model.getSampleBasedDateExtractionRegEx().indexOf(")") < 1 ||
                 step2Model.getSampleBasedDatePattern() == null ||
                 step2Model.getSampleBasedDatePattern().isEmpty() ||
@@ -109,13 +109,9 @@ public class Step2Controller extends StepController {
                 step2Model.getSampleBasedSampleSizeOffset() < 1 ||
                 step2Model.getSampleBasedSampleSizeRegEx() == null ||
                 step2Model.getSampleBasedSampleSizeRegEx().isEmpty() ||
-                step2Model.getSampleBasedSampleSizeRegEx().indexOf("(") < 0 ||
+                !step2Model.getSampleBasedSampleSizeRegEx().contains("(") ||
                 step2Model.getSampleBasedSampleSizeRegEx().indexOf(")") < 1
-                )) {
-            return false;
-        }
-
-        return true;
+                ));
     }
 
     /** {@inheritDoc} */
@@ -133,8 +129,8 @@ public class Step2Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void loadSettings() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("loadSettings()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("loadSettings()");
         }
         step2Panel = new Step2Panel(step2Model.getCsvFileRowRount());
 
@@ -175,8 +171,8 @@ public class Step2Controller extends StepController {
     /** {@inheritDoc} */
     @Override
     public void saveSettings() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("saveSettings()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("saveSettings()");
         }
         final String columnSeparator = step2Panel.getColumnSeparator();
         step2Model.setColumnSeparator(columnSeparator);
@@ -189,7 +185,7 @@ public class Step2Controller extends StepController {
 
         final int firstLineWithData = step2Panel.getFirstLineWithData();
         if (firstLineWithData < 0 || firstLineWithData > (step2Model.getCsvFileRowRount() - 1)) {
-            logger.info("FirstLineWithData is to large. Set to 0");
+            LOG.info("FirstLineWithData is to large. Set to 0");
             step2Model.setFirstLineWithData(0);
         } else {
             step2Model.setFirstLineWithData(firstLineWithData);
@@ -241,10 +237,10 @@ public class Step2Controller extends StepController {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 line = replaceWhiteSpace(line, separator);
-                replacedText.append(line + "\n");
+                replacedText.append(line).append("\n");
             }
         } catch (final IOException e) {
-            logger.info("Error while parsing space-separated file", e);
+            LOG.info("Error while parsing space-separated file", e);
         }
         return replacedText.toString();
     }
@@ -262,9 +258,7 @@ public class Step2Controller extends StepController {
         for (int i = 0; i < text.length(); i++) {
             final char ch = text.charAt(i);
             if (Character.isWhitespace(ch)) {
-                if (lastCharacterWasAWhiteSpace) {
-                    continue;
-                } else {
+                if (!lastCharacterWasAWhiteSpace) {
                     replacedText.append(separator);
                     lastCharacterWasAWhiteSpace = true;
                 }
@@ -321,7 +315,7 @@ public class Step2Controller extends StepController {
         final boolean useHeader = step2Model.isUseHeader();
 
         final String comma = "', ";
-        logger.info("Parse CSV file: " +
+        LOG.info("Parse CSV file: " +
                 "column separator: '"    + separator         + comma +
                 "comment indicator: '"   + quoteChar         + comma +
                 "text qualifier: '"      + escape            + comma +
@@ -338,7 +332,7 @@ public class Step2Controller extends StepController {
         try (CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0))) {
             content.setLines(reader.readAll());
         } catch (final IOException e) {
-            logger.error("Error while parsing CSV file.", e);
+            LOG.error("Error while parsing CSV file.", e);
         }
         return content;
     }

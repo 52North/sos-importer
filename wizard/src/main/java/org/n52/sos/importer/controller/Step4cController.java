@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step4cController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step4cController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step4cController.class);
 
     private final int firstLineWithData;
 
@@ -95,12 +95,12 @@ public class Step4cController extends StepController {
         final int positions = ModelStore.getInstance().getPositions().size();
 
         if (positions == 0) {
-            logger.info("Skip Step 4c since there are not any Positions");
+            LOG.info("Skip Step 4c since there are not any Positions");
             return false;
         }
         if (positions == 1) {
             final Position position = ModelStore.getInstance().getPositions().get(0);
-            logger.info("Skip Step 4c since there is just one " + position);
+            LOG.info("Skip Step 4c since there is just one " + position);
 
             for (final FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests()) {
                 foi.setPosition(position);

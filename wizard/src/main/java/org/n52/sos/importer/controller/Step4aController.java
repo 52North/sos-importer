@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step4aController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step4aController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step4aController.class);
 
     private Step4aModel step4aModel;
 
@@ -144,12 +144,12 @@ public class Step4aController extends StepController {
         final int dateAndTimes = ModelStore.getInstance().getDateAndTimes().size();
 
         if (dateAndTimes == 0) {
-            logger.info("Skip Step 4a since there are not any Date&Times");
+            LOG.info("Skip Step 4a since there are not any Date&Times");
             return false;
         }
         if (dateAndTimes == 1) {
             final DateAndTime dateAndTime = ModelStore.getInstance().getDateAndTimes().get(0);
-            logger.info("Skip Step 4a since there is just " + dateAndTime);
+            LOG.info("Skip Step 4a since there is just " + dateAndTime);
 
             for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
                 mv.setDateAndTime(dateAndTime);

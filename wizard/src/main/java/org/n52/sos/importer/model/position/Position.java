@@ -78,7 +78,7 @@ public class Position extends Combination {
     private static final String TO = " to ";
     private static final String ADD = "Add ";
 
-    private static final Logger logger = LoggerFactory.getLogger(Position.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Position.class);
 
     private Latitude latitude;
 
@@ -131,9 +131,9 @@ public class Position extends Combination {
     public void setHeight(final Height height) {
         if (getGroup() != null) {
             if (height != null) {
-                logger.info(ADD + height + TO + this);
+                LOG.info(ADD + height + TO + this);
             } else {
-                logger.info(REMOVE + this.height + FROM + this);
+                LOG.info(REMOVE + this.height + FROM + this);
             }
         }
         this.height = height;
@@ -156,9 +156,9 @@ public class Position extends Combination {
     public void setEPSGCode(final EPSGCode newEpsgCode) {
         if (getGroup() != null) {
             if (newEpsgCode != null) {
-                logger.info(ADD + newEpsgCode + TO + this);
+                LOG.info(ADD + newEpsgCode + TO + this);
             } else {
-                logger.info(REMOVE + this.epsgCode + FROM + this);
+                LOG.info(REMOVE + this.epsgCode + FROM + this);
             }
         }
         this.epsgCode = newEpsgCode;
@@ -172,9 +172,9 @@ public class Position extends Combination {
     public void setLongitude(final Longitude longitude) {
         if (getGroup() != null) {
             if (longitude != null) {
-                logger.info(ADD + longitude + TO + this);
+                LOG.info(ADD + longitude + TO + this);
             } else {
-                logger.info(REMOVE + this.longitude + FROM + this);
+                LOG.info(REMOVE + this.longitude + FROM + this);
             }
         }
         this.longitude = longitude;
@@ -197,9 +197,9 @@ public class Position extends Combination {
     public void setLatitude(final Latitude latitude) {
         if (getGroup() != null) {
             if (latitude != null) {
-                logger.info(ADD + latitude + TO + this);
+                LOG.info(ADD + latitude + TO + this);
             } else {
-                logger.info(REMOVE + this.latitude + FROM + this);
+                LOG.info(REMOVE + this.latitude + FROM + this);
             }
         }
         this.latitude = latitude;

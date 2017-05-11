@@ -71,7 +71,7 @@ public class Step3Model implements StepModel {
 
     private static final String NULL = "null";
 
-    private static final Logger logger = LoggerFactory.getLogger(Step3Model.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step3Model.class);
 
     private int markedColumn;
     private final HashMap<Integer, List<String>> columnAssignments;
@@ -92,7 +92,7 @@ public class Step3Model implements StepModel {
         this.markedColumn = markedColumn;
         this.firstLineWithData = firstLineWithData;
         this.useHeader = useHeader;
-        columnAssignments = new HashMap<Integer, List<String>>();
+        columnAssignments = new HashMap<>();
     }
 
     /**
@@ -105,8 +105,8 @@ public class Step3Model implements StepModel {
      * @return a boolean.
      */
     public boolean addSelection(final List<String> selection) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("addSelection()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("addSelection()");
         }
         // TODO add handling for date & time: handle unix time and empty groups by adding column index
         if (selection.get(0).equals(Lang.l().step3ColTypeDateTime())) {
@@ -120,9 +120,9 @@ public class Step3Model implements StepModel {
         }
         columnAssignments.put(markedColumn, selection);
         final List<String> addedValue = columnAssignments.get(markedColumn);
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             final String aquot = "\"; ";
-            logger.debug("Next two values should be equal: " +
+            LOG.debug("Next two values should be equal: " +
                     "addedValue: \"" + addedValue + aquot +
                     "selection : \"" + selection + aquot +
                     "aV==sel? " + (addedValue == selection) +
@@ -138,12 +138,12 @@ public class Step3Model implements StepModel {
      * @return a <code>List&lt;String&gt;</code>
      */
     public List<String> getSelectionForColumn(final int colIndex) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getSelectionForColumn(colIndex:=" + colIndex + ")");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("getSelectionForColumn(colIndex:=" + colIndex + ")");
         }
         final List<String> value = columnAssignments.get(colIndex);
-        if (logger.isDebugEnabled()) {
-            logger.debug("found selection: " + value);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("found selection: " + value);
         }
         return value;
     }
@@ -154,8 +154,8 @@ public class Step3Model implements StepModel {
      * @return a <code>HashMap&lt;Integer,List&lt;String&gt;&gt;</code>
      */
     public HashMap<Integer, List<String>> getAllSelections() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getAllSelections()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("getAllSelections()");
         }
         return columnAssignments;
     }

@@ -80,7 +80,7 @@ public class Step5aModel implements StepModel {
      */
     public Step5aModel(DateAndTime dateAndTime) {
         this.dateAndTime = dateAndTime;
-        missingDateAndTimeComponents = new ArrayList<Component>();
+        missingDateAndTimeComponents = new ArrayList<>();
     }
 
     /**

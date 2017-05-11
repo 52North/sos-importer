@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step5aController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step5aController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step5aController.class);
 
     private Step5aModel step5aModel;
 
@@ -151,7 +151,7 @@ public class Step5aController extends StepController {
         final DateAndTime dtm = dateAndTimeController.getNextDateAndTimeWithMissingValues();
 
         if (dtm == null) {
-            logger.info("Skip Step 5a since there are not any Date&Times" +
+            LOG.info("Skip Step 5a since there are not any Date&Times" +
                     " with missing values");
             return false;
         }

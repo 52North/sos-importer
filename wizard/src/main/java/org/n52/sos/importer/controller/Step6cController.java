@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6cController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step6cController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step6cController.class);
 
     private Step6cModel step6cModel;
 
@@ -178,7 +178,7 @@ public class Step6cController extends StepController {
             return true;
         }
 
-        logger.info("Skip Step 6c since there is at least one position");
+        LOG.info("Skip Step 6c since there is at least one position");
         return false;
     }
 

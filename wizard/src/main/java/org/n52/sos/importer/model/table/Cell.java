@@ -59,8 +59,8 @@ public class Cell extends TableElement {
      * @param column a int.
      */
     public Cell(int row, int column) {
-        setRow(row);
-        setColumn(column);
+        this.row = row;
+        this.column = column;
     }
 
     /**
@@ -102,6 +102,7 @@ public class Cell extends TableElement {
     /**
      * <p>mark.</p>
      */
+    @Override
     public void mark() {
         TableController.getInstance().mark(this);
     }
@@ -121,7 +122,7 @@ public class Cell extends TableElement {
     /** {@inheritDoc} */
     @Override
     public HashSet<String> getValues() {
-        HashSet<String> values = new HashSet<String>();
+        HashSet<String> values = new HashSet<>();
         String value = TableController.getInstance().getValueAt(this);
         values.add(value);
         return values;
@@ -159,10 +160,7 @@ public class Cell extends TableElement {
         if (column != other.column) {
             return false;
         }
-        if (row != other.row) {
-            return false;
-        }
-        return true;
+        return row == other.row;
     }
 
 }

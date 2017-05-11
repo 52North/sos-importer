@@ -87,7 +87,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step8Controller extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step8Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step8Controller.class);
 
     private Step8Panel step8Panel;
 
@@ -125,21 +125,21 @@ public class Step8Controller extends StepController {
         */
         logFile = new File("logs/sos-importer-core.log");
         step8Panel.setLogFileURI(logFile.toURI());
-        logger.info("Log saved to file: " + logFile.getAbsolutePath());
+        LOG.info("Log saved to file: " + logFile.getAbsolutePath());
 
         // save model always
         try {
             if (MainController.getInstance().saveModel(step7Model.getConfigFile())) {
-                logger.info("Configuration saved to file: '{}'", step7Model.getConfigFile().getAbsolutePath());
+                LOG.info("Configuration saved to file: '{}'", step7Model.getConfigFile().getAbsolutePath());
             } else {
-                logger.error("File could not be saved. See log file!");
+                LOG.error("File could not be saved. See log file!");
                 JOptionPane.showMessageDialog(step8Panel,
                         Lang.l().step8SaveModelFailed(step7Model.getConfigFile()),
                         Lang.l().errorDialogTitle(),
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (final IOException e) {
-            logger.error(new StringBuffer("Exception thrown: ").append(e.getMessage()).toString(), e);
+            LOG.error(new StringBuffer("Exception thrown: ").append(e.getMessage()).toString(), e);
             JOptionPane.showMessageDialog(step8Panel,
                     Lang.l().step8SaveModelFailed(logFile, e.getLocalizedMessage()),
                     Lang.l().errorDialogTitle(),
@@ -209,13 +209,13 @@ public class Step8Controller extends StepController {
         pathToJavaExecutable.append(File.separator);
         pathToJavaExecutable.append("java");
         final File jvm = new File(pathToJavaExecutable.toString());
-        if (! jvm.exists() && System.getProperty("os.name").indexOf("Windows") != -1) {
+        if (! jvm.exists() && System.getProperty("os.name").contains("indows")) {
             pathToJavaExecutable.append(".exe");
         }
 
         String pathToFeederJar = System.getProperty("user.dir") + File.separator;
         pathToFeederJar = searchForFeederJarWithDefaultFileNameStart(pathToFeederJar);
-        final File feederJar = new File(pathToFeederJar.toString());
+        final File feederJar = new File(pathToFeederJar);
 
         if (!feederJar.exists()) {
             JOptionPane.showMessageDialog(step8Panel,
@@ -227,7 +227,7 @@ public class Step8Controller extends StepController {
 
             final ProcessBuilder builder = new ProcessBuilder(pathToJavaExecutable.toString(),
                     "-jar",
-                    pathToFeederJar.toString(),
+                    pathToFeederJar,
                     "-c",
                     step7Model.getConfigFile().getAbsolutePath());
             builder.redirectErrorStream(true);
@@ -239,17 +239,16 @@ public class Step8Controller extends StepController {
 
     private String searchForFeederJarWithDefaultFileNameStart(
             final String pathToDirectoryWithFeederJar) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("searchForFeederJarWithDefaultFileNameStart()");
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("searchForFeederJarWithDefaultFileNameStart()");
         }
         final File directoryWithFeederJar = new File(pathToDirectoryWithFeederJar);
-        if (directoryWithFeederJar != null &&
-                directoryWithFeederJar.exists() &&
+        if (directoryWithFeederJar.exists() &&
                 directoryWithFeederJar.isDirectory()) {
             final String[] files = directoryWithFeederJar.list(new FilenameFilter() {
                 @Override
                 public boolean accept(final File dir, final String name) {
-                    return name.indexOf(Constants.DEFAULT_FEEDER_JAR_NAME_START) != -1 && name.endsWith(".jar");
+                    return name.contains(Constants.DEFAULT_FEEDER_JAR_NAME_START) && name.endsWith(".jar");
                 }
             });
             if (files != null && files.length > 0) {
@@ -267,7 +266,7 @@ public class Step8Controller extends StepController {
                     chooser.setMultiSelectionEnabled(false);
                     final int returnVal = chooser.showOpenDialog(step8Panel);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        logger.debug(String.format("Choosen file: %s", chooser.getSelectedFile().getAbsolutePath()));
+                        LOG.debug(String.format("Choosen file: %s", chooser.getSelectedFile().getAbsolutePath()));
                         return chooser.getSelectedFile().getAbsolutePath();
                     }
                 }
@@ -311,16 +310,16 @@ public class Step8Controller extends StepController {
                     }
                 }
             } catch (final Exception e) {
-                logger.error("Exception thrown: {}", e.getMessage());
-                logger.debug("Exception", e);
+                LOG.error("Exception thrown: {}", e.getMessage());
+                LOG.debug("Exception", e);
             }
             return "Finished";
         }
 
         @Override
         protected void done() {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Import Task finished");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Import Task finished");
             }
         }
 

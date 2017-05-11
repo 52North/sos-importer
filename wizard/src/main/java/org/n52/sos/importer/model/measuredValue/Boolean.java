@@ -88,6 +88,5 @@ public class Boolean extends MeasuredValue {
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper
-        return;
     }
 }

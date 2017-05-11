@@ -125,7 +125,7 @@ public class UnitOfMeasurement extends Resource {
     /** {@inheritDoc} */
     @Override
     public List<Resource> getList() {
-        List<Resource> resources = new ArrayList<Resource>();
+        List<Resource> resources = new ArrayList<>();
         resources.addAll(ModelStore.getInstance().getUnitOfMeasurements());
         return resources;
     }

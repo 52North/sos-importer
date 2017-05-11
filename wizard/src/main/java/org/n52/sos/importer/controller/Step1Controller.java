@@ -62,7 +62,7 @@ public class Step1Controller extends StepController {
 
     private static final String ERROR = "Error";
 
-    private static final Logger logger = LoggerFactory.getLogger(Step1Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step1Controller.class);
 
     private Step1Panel step1Panel;
 
@@ -248,8 +248,9 @@ public class Step1Controller extends StepController {
             if (pHost != null && pPort != -1) {
                 if (pUser != null && pPassword != null) {
                     client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
+                } else {
+                    client = new FTPHTTPClient(pHost, pPort);
                 }
-                client = new FTPHTTPClient(pHost, pPort);
             } else {
                 client = new FTPClient();
             }
@@ -263,7 +264,7 @@ public class Step1Controller extends StepController {
                 // if back button was used: delete old file
                 if (new File(csvFilePath).exists()) {
                     if (!new File(csvFilePath).delete()) {
-                        logger.error("Could not delete file '{}'. Check permissions", csvFilePath);
+                        LOG.error("Could not delete file '{}'. Check permissions", csvFilePath);
                     }
                 }
 
@@ -284,10 +285,10 @@ public class Step1Controller extends StepController {
                         }
                         final boolean logout = client.logout();
                         if (logout) {
-                            logger.info("Step1Controller: cannot logout!");
+                            LOG.info("Step1Controller: cannot logout!");
                         }
                     } else {
-                        logger.info("Step1Controller: cannot login!");
+                        LOG.info("Step1Controller: cannot login!");
                     }
 
                     final File csv = new File(csvFilePath);
@@ -296,7 +297,7 @@ public class Step1Controller extends StepController {
                         readFile(new File(csvFilePath), step1Panel.getFileEncoding());
                     } else {
                         if (!csv.delete()) {
-                            logger.error("Could not delete CSV file '{}'", csvFilePath);
+                            LOG.error("Could not delete CSV file '{}'", csvFilePath);
                         }
                         throw new IOException();
                     }
@@ -312,8 +313,8 @@ public class Step1Controller extends StepController {
                         try {
                             fos.close();
                         } catch (IOException e) {
-                            logger.error("Exception thrown", e.getMessage());
-                            logger.debug("Stackstrace", e);
+                            LOG.error("Exception thrown", e.getMessage());
+                            LOG.debug("Stackstrace", e);
                         }
                     }
                 }
@@ -333,7 +334,7 @@ public class Step1Controller extends StepController {
      *              of the given file
      */
     private String readFile(final File f, final String encoding) {
-        logger.info("Read CSV file " + f.getAbsolutePath());
+        LOG.info("Read CSV file " + f.getAbsolutePath());
         final StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), encoding))) {
 
@@ -346,7 +347,7 @@ public class Step1Controller extends StepController {
             }
             br.close();
         } catch (final IOException ioe) {
-            logger.error(
+            LOG.error(
                     new StringBuffer("Problem while reading CSV file \"")
                     .append(f.getAbsolutePath())
                     .append("\"").toString(),

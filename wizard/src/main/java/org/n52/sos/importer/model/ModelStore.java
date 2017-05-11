@@ -56,12 +56,9 @@ import org.slf4j.LoggerFactory;
  */
 public final class ModelStore {
 
-    /**
-     *
-     */
     private static final String AQUOT = "\"";
 
-    private static final Logger logger = LoggerFactory.getLogger(ModelStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModelStore.class);
 
     private static ModelStore instance;
 
@@ -86,16 +83,16 @@ public final class ModelStore {
     private final HashSet<RegisterSensor> sensorsToRegister;
 
     private ModelStore() {
-        measuredValues = new ArrayList<MeasuredValue>();
-        dateAndTimes = new ArrayList<DateAndTime>();
-        featureOfInterests = new ArrayList<FeatureOfInterest>();
-        observedProperties = new ArrayList<ObservedProperty>();
-        unitOfMeasurements = new ArrayList<UnitOfMeasurement>();
-        sensors = new ArrayList<Sensor>();
-        positions = new ArrayList<Position>();
-        step6bSpecialModels = new HashSet<Step6bSpecialModel>();
-        observationsToInsert = new HashSet<InsertObservation>();
-        sensorsToRegister = new HashSet<RegisterSensor>();
+        measuredValues = new ArrayList<>();
+        dateAndTimes = new ArrayList<>();
+        featureOfInterests = new ArrayList<>();
+        observedProperties = new ArrayList<>();
+        unitOfMeasurements = new ArrayList<>();
+        sensors = new ArrayList<>();
+        positions = new ArrayList<>();
+        step6bSpecialModels = new HashSet<>();
+        observationsToInsert = new HashSet<>();
+        sensorsToRegister = new HashSet<>();
     }
 
     /**
@@ -196,7 +193,7 @@ public final class ModelStore {
      * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
      */
     public void add(final Step6bSpecialModel step6bSpecialModel) {
-        logger.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
+        LOG.info("Assign " + step6bSpecialModel.getSensor() + " to Feature of Interest \"" +
                 step6bSpecialModel.getFeatureOfInterest().getName() + "\" and Observed Property \"" +
                 step6bSpecialModel.getObservedProperty().getName() + AQUOT);
         step6bSpecialModels.add(step6bSpecialModel);
@@ -315,7 +312,7 @@ public final class ModelStore {
     public void remove(final Step6bSpecialModel step6bSpecialModel) {
         if (step6bSpecialModel.getSensor().getName() != null ||
                 step6bSpecialModel.getSensor().getURI() != null) {
-            logger.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
+            LOG.info("Unassign " + step6bSpecialModel.getSensor() + " from Feature of Interest \"" +
                     step6bSpecialModel.getFeatureOfInterest().getName() + " and Observed Property \"" +
                     step6bSpecialModel.getObservedProperty().getName() + AQUOT);
         }
@@ -360,7 +357,7 @@ public final class ModelStore {
         ((ArrayList<FeatureOfInterest>) featureOfInterests).trimToSize();
         final Object[] a = featureOfInterests.toArray();
         Arrays.sort(a);
-        featureOfInterests = new ArrayList<FeatureOfInterest>(a.length);
+        featureOfInterests = new ArrayList<>(a.length);
         for (final Object element : a) {
             featureOfInterests.add((FeatureOfInterest) element);
         }
@@ -462,7 +459,7 @@ public final class ModelStore {
      * @return a {@link java.util.List} object.
      */
     public List<FeatureOfInterest> getFeatureOfInterestsInTable() {
-        final ArrayList<FeatureOfInterest> foisInTable = new ArrayList<FeatureOfInterest>();
+        final ArrayList<FeatureOfInterest> foisInTable = new ArrayList<>();
         for (final FeatureOfInterest foi: featureOfInterests) {
             if (foi.getTableElement() != null) {
                 foisInTable.add(foi);
@@ -478,7 +475,7 @@ public final class ModelStore {
      * @return a {@link java.util.List} object.
      */
     public List<Sensor> getSensorsInTable() {
-        final ArrayList<Sensor> sensorsInTable = new ArrayList<Sensor>();
+        final ArrayList<Sensor> sensorsInTable = new ArrayList<>();
         for (final Sensor s: sensors) {
             if (s.getTableElement() != null) {
                 sensorsInTable.add(s);
@@ -494,7 +491,7 @@ public final class ModelStore {
      * @return a {@link java.util.List} object.
      */
     public List<ObservedProperty> getObservedPropertiesInTable() {
-        final ArrayList<ObservedProperty> opsInTable = new ArrayList<ObservedProperty>();
+        final ArrayList<ObservedProperty> opsInTable = new ArrayList<>();
         for (final ObservedProperty op: observedProperties) {
             if (op.getTableElement() != null) {
                 opsInTable.add(op);

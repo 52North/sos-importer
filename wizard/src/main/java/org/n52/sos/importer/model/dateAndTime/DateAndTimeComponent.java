@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class DateAndTimeComponent extends Component {
 
-    private static final Logger logger = LoggerFactory.getLogger(DateAndTimeComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateAndTimeComponent.class);
 
     private TableElement tableElement;
 
@@ -108,7 +108,7 @@ public abstract class DateAndTimeComponent extends Component {
      * @param value a int.
      */
     public void setValue(final int value) {
-        logger.info("Assign Value to " + this.getClass().getName());
+        LOG.info("Assign Value to " + this.getClass().getName());
         this.value = value;
     }
 
@@ -127,7 +127,7 @@ public abstract class DateAndTimeComponent extends Component {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void setTableElement(final TableElement tableElement) {
-        logger.info("Assign Column to " + this.getClass().getName());
+        LOG.info("Assign Column to " + this.getClass().getName());
         this.tableElement = tableElement;
     }
 
@@ -179,7 +179,7 @@ public abstract class DateAndTimeComponent extends Component {
         try {
             date = formatter.parse(s);
         } catch (final ParseException e) {
-            logger.error("Given String could not be parsed: " + s, e);
+            LOG.error("Given String could not be parsed: " + s, e);
             throw e;
         }
 

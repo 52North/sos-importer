@@ -75,6 +75,7 @@ public class Column extends TableElement {
     /**
      * <p>mark.</p>
      */
+    @Override
     public void mark() {
         TableController.getInstance().mark(this);
     }
@@ -94,7 +95,7 @@ public class Column extends TableElement {
     /** {@inheritDoc} */
     @Override
     public HashSet<String> getValues() {
-        HashSet<String> values = new HashSet<String>();
+        HashSet<String> values = new HashSet<>();
         for (int i = this.firstLineWithData; i < TableController.getInstance().getRowCount(); i++) {
             String value = TableController.getInstance().getValueAt(i, this.getNumber());
             if (value != null && !value.equalsIgnoreCase("")) {
@@ -132,10 +133,7 @@ public class Column extends TableElement {
             return false;
         }
         Column other = (Column) obj;
-        if (number != other.number) {
-            return false;
-        }
-        return true;
+        return number == other.number;
     }
 
     /**

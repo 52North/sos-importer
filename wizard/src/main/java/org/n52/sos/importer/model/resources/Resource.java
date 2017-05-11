@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Resource extends Component {
 
-    private static final Logger logger = LoggerFactory.getLogger(Resource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Resource.class);
 
     private TableElement tableElement;
     private String name;
@@ -150,7 +150,7 @@ public abstract class Resource extends Component {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void setTableElement(final TableElement tableElement) {
-        logger.info("In " + tableElement + " are " + this + "s");
+        LOG.info("In " + tableElement + " are " + this + "s");
         this.tableElement = tableElement;
     }
 

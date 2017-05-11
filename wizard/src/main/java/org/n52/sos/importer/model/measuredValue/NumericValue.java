@@ -113,6 +113,5 @@ public class NumericValue extends MeasuredValue implements Formatable {
     @Override
     public void setPattern(String formatPattern) {
         // do nothing, it's Java base type wrapper
-        return;
     }
 }

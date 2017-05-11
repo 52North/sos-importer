@@ -83,13 +83,13 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     private static final String TO = " to ";
     private static final String ASSIGN = "Assign ";
 
-    private static final Logger logger = LoggerFactory.getLogger(FeatureOfInterest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FeatureOfInterest.class);
 
     /** single position or position column/row */
     private Position position;
 
     /** corresponding positions for each feature of interest in this column/row */
-    private final HashMap<String, Position> positions = new HashMap<String, Position>();
+    private final HashMap<String, Position> positions = new HashMap<>();
 
     /** {@inheritDoc} */
     @Override
@@ -169,7 +169,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     /** {@inheritDoc} */
     @Override
     public List<Resource> getList() {
-        final List<Resource> resources = new ArrayList<Resource>();
+        final List<Resource> resources = new ArrayList<>();
         resources.addAll(ModelStore.getInstance().getFeatureOfInterests());
         return resources;
     }
@@ -204,7 +204,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
      * @param newPosition a {@link org.n52.sos.importer.model.position.Position} object.
      */
     public void assignPosition(final Position newPosition) {
-        logger.info(ASSIGN + newPosition + TO + this);
+        LOG.info(ASSIGN + newPosition + TO + this);
         setPosition(newPosition);
     }
 
@@ -213,7 +213,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
      */
     public void unassignPosition() {
         if (position != null) {
-            logger.info(UNASSIGN + position + FROM + this);
+            LOG.info(UNASSIGN + position + FROM + this);
             setPosition(null);
         }
     }
@@ -225,7 +225,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
      * @param newPosition a {@link org.n52.sos.importer.model.position.Position} object.
      */
     public void setPositionFor(final String featureOfInterestName, final Position newPosition) {
-        logger.info(ASSIGN + newPosition + TO + featureOfInterestName);
+        LOG.info(ASSIGN + newPosition + TO + featureOfInterestName);
         positions.put(featureOfInterestName, newPosition);
     }
 
@@ -237,7 +237,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     public void removePositionFor(final String featureOfInterestName) {
         final Position p = getPositionFor(featureOfInterestName);
         if (p != null) {
-            logger.info(UNASSIGN + p + FROM + featureOfInterestName);
+            LOG.info(UNASSIGN + p + FROM + featureOfInterestName);
         }
         positions.remove(featureOfInterestName);
     }

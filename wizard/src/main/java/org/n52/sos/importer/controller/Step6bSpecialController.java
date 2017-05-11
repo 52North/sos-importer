@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step6bSpecialController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step6bSpecialController.class);
 
     private Step6bSpecialModel step6bSpecialModel;
 
@@ -106,7 +106,7 @@ public class Step6bSpecialController extends StepController {
         ModelStore.getInstance().remove(step6bSpecialModel);
         missingResourcePanel.unassignValues();
 
-        final List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
+        final List<MissingComponentPanel> missingComponentPanels = new ArrayList<>();
         missingComponentPanels.add(missingResourcePanel);
 
         step6cPanel = new Step6Panel(description, foiName, opName, missingComponentPanels);
@@ -144,13 +144,13 @@ public class Step6bSpecialController extends StepController {
     @Override
     public boolean isNecessary() {
         if (ModelStore.getInstance().getSensorsInTable().size() > 0) {
-            logger.info("Skip 6b (Special) since there are sensors in the table.");
+            LOG.info("Skip 6b (Special) since there are sensors in the table.");
             return false;
         }
 
-        if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-                ModelStore.getInstance().getObservedPropertiesInTable().size() == 0) {
-            logger.info("Skip 6b (Special) since there are not any features of interest" +
+        if (ModelStore.getInstance().getFeatureOfInterestsInTable().isEmpty() &&
+                ModelStore.getInstance().getObservedPropertiesInTable().isEmpty()) {
+            LOG.info("Skip 6b (Special) since there are not any features of interest" +
                     "and observed properties in the table.");
             return false;
         }
@@ -174,43 +174,42 @@ public class Step6bSpecialController extends StepController {
         mvLoop:
             for (final MeasuredValue mv: ms.getMeasuredValues()) {
 
-                rowsLoop:
-                    for (int i = flwd; i < rows; i++) {
-                        //test if the measuredValue can be parsed
-                        final Cell cell = new Cell(i, ((Column) mv.getTableElement()).getNumber());
-                        final String value = tableController.getValueAt(cell);
-                        if (i >= firstLineWithData) {
-                            try {
-                                mv.parse(value);
-                            } catch (final Exception e) {
-                                if (logger.isTraceEnabled()) {
-                                    logger.trace("Value could not be parsed: " + value, e);
-                                }
-                                // it okay this way because parsing test happened during step 3
-                                continue rowsLoop;
+                for (int i = flwd; i < rows; i++) {
+                    //test if the measuredValue can be parsed
+                    final Cell cell = new Cell(i, ((Column) mv.getTableElement()).getNumber());
+                    final String value = tableController.getValueAt(cell);
+                    if (i >= firstLineWithData) {
+                        try {
+                            mv.parse(value);
+                        } catch (final Exception e) {
+                            if (LOG.isTraceEnabled()) {
+                                LOG.trace("Value could not be parsed: " + value, e);
                             }
+                            // it okay this way because parsing test happened during step 3
+                            continue;
+                        }
 
-                            final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
-                            final ObservedProperty op = mv.getObservedProperty().forThis(cell);
-                            final Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
-                            /*
-                             * check, if for the column of foi and obsProp a model is
-                             * available and if the sensor is generated in this model
-                             */
-                            for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
-                                if (s6bsM.getSensor().isGenerated() &&
-                                        // XXX maybe own equals
-                                        s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) &&
-                                        // XXX check if foi and obsprop
-                                        s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) {
-                                    continue mvLoop;
-                                }
-                            }
-                            if (!ms.getStep6bSpecialModels().contains(model)) {
-                                return model;
+                        final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
+                        final ObservedProperty op = mv.getObservedProperty().forThis(cell);
+                        final Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
+                        /*
+                         * check, if for the column of foi and obsProp a model is
+                         * available and if the sensor is generated in this model
+                         */
+                        for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
+                            if (s6bsM.getSensor().isGenerated() &&
+                                    // XXX maybe own equals
+                                    s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) &&
+                                    // XXX check if foi and obsprop
+                                    s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) {
+                                continue mvLoop;
                             }
                         }
+                        if (!ms.getStep6bSpecialModels().contains(model)) {
+                            return model;
+                        }
                     }
+                }
             }
         return null;
     }

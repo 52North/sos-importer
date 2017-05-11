@@ -77,8 +77,8 @@ public class Step6bModel implements StepModel {
      * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
      */
     public Step6bModel(MeasuredValue measuredValue, Resource resource) {
-        setMeasuredValue(measuredValue);
-        setResource(resource);
+        this.measuredValue = measuredValue;
+        this.resource = resource;
     }
 
     /**

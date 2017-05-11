@@ -75,7 +75,7 @@ public class DateAndTime extends Combination {
     private static final String TO = " to ";
     private static final String ADD = "Add ";
 
-    private static final Logger logger = LoggerFactory.getLogger(DateAndTime.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateAndTime.class);
 
     private Year year;
     private Month month;
@@ -102,9 +102,9 @@ public class DateAndTime extends Combination {
     public void setYear(final Year year) {
         if (getGroup() != null) {
             if (year != null) {
-                logger.info(ADD + year + TO + this);
+                LOG.info(ADD + year + TO + this);
             } else {
-                logger.info(REMOVE + this.year + FROM + this);
+                LOG.info(REMOVE + this.year + FROM + this);
             }
         }
         this.year = year;
@@ -127,9 +127,9 @@ public class DateAndTime extends Combination {
     public void setMonth(final Month month) {
         if (getGroup() != null) {
             if (month != null) {
-                logger.info(ADD + month + TO + this);
+                LOG.info(ADD + month + TO + this);
             } else {
-                logger.info(REMOVE + this.month + FROM + this);
+                LOG.info(REMOVE + this.month + FROM + this);
             }
         }
         this.month = month;
@@ -152,9 +152,9 @@ public class DateAndTime extends Combination {
     public void setDay(final Day day) {
         if (getGroup() != null) {
             if (day != null) {
-                logger.info(ADD + day + TO + this);
+                LOG.info(ADD + day + TO + this);
             } else {
-                logger.info(REMOVE + this.day + FROM + this);
+                LOG.info(REMOVE + this.day + FROM + this);
             }
         }
         this.day = day;
@@ -177,9 +177,9 @@ public class DateAndTime extends Combination {
     public void setHour(final Hour hour) {
         if (getGroup() != null) {
             if (hour != null) {
-                logger.info(ADD + hour + TO + this);
+                LOG.info(ADD + hour + TO + this);
             } else {
-                logger.info(REMOVE + this.hour + FROM + this);
+                LOG.info(REMOVE + this.hour + FROM + this);
             }
         }
         this.hour = hour;
@@ -202,9 +202,9 @@ public class DateAndTime extends Combination {
     public void setMinute(final Minute minute) {
         if (getGroup() != null) {
             if (minute != null) {
-                logger.info(ADD + minute + TO + this);
+                LOG.info(ADD + minute + TO + this);
             } else {
-                logger.info(REMOVE + this.minute + FROM + this);
+                LOG.info(REMOVE + this.minute + FROM + this);
             }
         }
         this.minute = minute;
@@ -227,9 +227,9 @@ public class DateAndTime extends Combination {
     public void setSecond(final Second second) {
         if (getGroup() != null) {
             if (second != null) {
-                logger.info(ADD + second + TO + this);
+                LOG.info(ADD + second + TO + this);
             } else {
-                logger.info(REMOVE + this.second + FROM + this);
+                LOG.info(REMOVE + this.second + FROM + this);
             }
         }
         this.second = second;
@@ -252,9 +252,9 @@ public class DateAndTime extends Combination {
     public void setTimeZone(final TimeZone timeZone) {
         if (getGroup() != null) {
             if (timeZone != null) {
-                logger.info(ADD + timeZone + TO + this);
+                LOG.info(ADD + timeZone + TO + this);
             } else {
-                logger.info(REMOVE + this.timeZone + FROM + this);
+                LOG.info(REMOVE + this.timeZone + FROM + this);
             }
         }
         this.timeZone = timeZone;

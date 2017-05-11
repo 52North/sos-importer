@@ -72,7 +72,7 @@ public abstract class PositionComponent extends Component {
     private static final String FT = "ft";
     private static final String N_A = "n/a";
 
-    private static final Logger logger = LoggerFactory.getLogger(PositionComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PositionComponent.class);
 
     private TableElement tableElement;
 
@@ -110,7 +110,7 @@ public abstract class PositionComponent extends Component {
      * @param value a double.
      */
     public void setValue(final double value) {
-        logger.info("Assign Value to " + this.getClass().getName());
+        LOG.info("Assign Value to " + this.getClass().getName());
         this.value = value;
     }
 
@@ -147,7 +147,7 @@ public abstract class PositionComponent extends Component {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void setTableElement(final TableElement tableElement) {
-        logger.info("Assign Column to " + this.getClass().getName());
+        LOG.info("Assign Column to " + this.getClass().getName());
         this.tableElement = tableElement;
     }
 
@@ -175,16 +175,23 @@ public abstract class PositionComponent extends Component {
      * @return a {@link java.lang.String} object.
      */
     public String getParsedUnit() {
-        if (unit == null || unit.equals("")) {
+        if (null == unit) {
             return N_A;
-        } else if (unit.equals("m") || unit.equals("meters")) {
-            return "m";
-        } else if (unit.equals(FT) || unit.equals("feet")) {
-            return FT;
-        } else if (unit.equals(DEGREE) || unit.equals("°")) {
-            return DEGREE;
+        } else switch (unit) {
+            case "":
+                return N_A;
+            case "m":
+            case "meters":
+                return "m";
+            case FT:
+            case "feet":
+                return FT;
+            case DEGREE:
+            case "°":
+                return DEGREE;
+            default:
+                return N_A;
         }
-        return N_A;
     }
 
     /** {@inheritDoc} */

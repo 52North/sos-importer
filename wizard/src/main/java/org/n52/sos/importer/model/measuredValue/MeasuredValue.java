@@ -79,7 +79,7 @@ public abstract class MeasuredValue implements Parseable {
     private static final String TO = " to ";
     private static final String ASSIGN = "Assign ";
 
-    private static final Logger logger = LoggerFactory.getLogger(MeasuredValue.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MeasuredValue.class);
 
     private TableElement tableElement;
 
@@ -100,9 +100,9 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setFeatureOfInterest(final FeatureOfInterest featureOfInterest) {
         if (featureOfInterest == null) {
-            logger.info("Unassign Feature Of Interest from " + this);
+            LOG.info("Unassign Feature Of Interest from " + this);
         } else {
-            logger.info(ASSIGN + featureOfInterest + TO + this);
+            LOG.info(ASSIGN + featureOfInterest + TO + this);
         }
         this.featureOfInterest = featureOfInterest;
     }
@@ -123,9 +123,9 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setObservedProperty(final ObservedProperty observedProperty) {
         if (observedProperty != null) {
-            logger.info(ASSIGN + observedProperty + TO + this);
+            LOG.info(ASSIGN + observedProperty + TO + this);
         } else {
-            logger.info("Unassign Observed Property from " + this);
+            LOG.info("Unassign Observed Property from " + this);
         }
         this.observedProperty = observedProperty;
     }
@@ -146,9 +146,9 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setUnitOfMeasurement(final UnitOfMeasurement unitOfMeasurement) {
         if (unitOfMeasurement != null) {
-            logger.info(ASSIGN + unitOfMeasurement + TO + this);
+            LOG.info(ASSIGN + unitOfMeasurement + TO + this);
         } else {
-            logger.info("Unassign Unit of Measurement from " + this);
+            LOG.info("Unassign Unit of Measurement from " + this);
         }
         this.unitOfMeasurement = unitOfMeasurement;
     }
@@ -169,9 +169,9 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setSensor(final Sensor sensor) {
         if (sensor != null) {
-            logger.info(ASSIGN + sensor + TO + this);
+            LOG.info(ASSIGN + sensor + TO + this);
         } else {
-            logger.info("Unassign Sensor from " + this);
+            LOG.info("Unassign Sensor from " + this);
         }
         this.sensor = sensor;
     }
@@ -191,7 +191,7 @@ public abstract class MeasuredValue implements Parseable {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void setTableElement(final TableElement tableElement) {
-        logger.info("In " + tableElement + " are " + this + "s");
+        LOG.info("In " + tableElement + " are " + this + "s");
         this.tableElement = tableElement;
     }
 
@@ -211,9 +211,9 @@ public abstract class MeasuredValue implements Parseable {
      */
     public void setDateAndTime(final DateAndTime dateAndTime) {
         if (dateAndTime != null) {
-            logger.info(ASSIGN + dateAndTime + TO + this);
+            LOG.info(ASSIGN + dateAndTime + TO + this);
         } else {
-            logger.info("Unassign " + this.dateAndTime + " from " + this);
+            LOG.info("Unassign " + this.dateAndTime + " from " + this);
         }
         this.dateAndTime = dateAndTime;
     }

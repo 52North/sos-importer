@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step4bController extends StepController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step4bController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Step4bController.class);
 
     private Step4bModel step4bModel;
 
@@ -106,8 +106,8 @@ public class Step4bController extends StepController {
          *  5 The resource type, that is linked to the measured value table element
          *  6 Table element of element to be selected
          */
-        if (logger.isDebugEnabled()) {
-            logger.debug("Text: " + text);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Text: " + text);
         }
         text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
         text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
@@ -199,7 +199,7 @@ public class Step4bController extends StepController {
             final String skipStep = "Skip Step 4b for ";
             if (number == 1) {
                 final Resource oneResource = resourceType.getList().get(0);
-                logger.info(skipStep + resourceType + "s" +
+                LOG.info(skipStep + resourceType + "s" +
                         " since there is just " + oneResource);
 
                 for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
@@ -211,7 +211,7 @@ public class Step4bController extends StepController {
                 resource = getNextUnassignedResource(resourceType);
             } else {
                 //number == 0
-                logger.info(skipStep + resourceType + "s" +
+                LOG.info(skipStep + resourceType + "s" +
                         " since there are not any " + resourceType + "s");
             }
             resourceType = resourceType.getNextResourceType();

@@ -78,8 +78,8 @@ public class Step5cModel implements StepModel {
      * @param position a {@link org.n52.sos.importer.model.position.Position} object.
      */
     public Step5cModel(Position position) {
-        this.setPosition(position);
-        setMissingPositionComponents(new ArrayList<Component>());
+        this.position = position;
+        this.missingPositionComponents = new ArrayList<>();
     }
 
     /**
