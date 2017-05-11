@@ -32,13 +32,16 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -73,6 +76,7 @@ public class Step8Panel extends JPanel {
     private JTextArea directImportOutputTextArea;
 
     private final Step8Controller controller;
+    private final Step8Panel this_;
 
     /**
      * <p>Constructor for Step8Panel.</p>
@@ -114,7 +118,7 @@ public class Step8Panel extends JPanel {
         gbc_directImportPanel.gridx = 0;
         gbc_directImportPanel.gridy = 2;
         add(directImportPanel, gbc_directImportPanel);
-
+        this_ = this;
     }
 
     private JPanel initDirectImportPanel() {
@@ -219,13 +223,9 @@ public class Step8Panel extends JPanel {
         configFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final Desktop desktop = Desktop.getDesktop();
-                try {
-                    desktop.browse(s7M.getConfigFile().toURI());
-                } catch (final IOException ioe) {
-                    logger.error("Unable to open configuration file: " + ioe.getMessage());
-                }
+                openFile(s7M.getConfigFile());
             }
+
         });
         configFileButton.setEnabled(true);
         configFileButton.setVisible(true);
@@ -238,6 +238,24 @@ public class Step8Panel extends JPanel {
         configurationFilePanel.add(configFileButton, gbc_configFileButton);
 
         return configurationFilePanel;
+    }
+
+    private void openFile(File f) throws HeadlessException {
+        final Desktop desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.OPEN)) {
+            try {
+                desktop.open(f);
+            } catch (final IOException ioe) {
+                logger.error("Unable to open file: " + ioe.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                    this_,
+                    Lang.l().step8ErrorDesktopNotSupportedMesage(
+                            f.getAbsolutePath()),
+                    Lang.l().step8ErrorDesktopNotSupportedTitle(),
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JPanel initLogFilePanel() {
@@ -299,12 +317,7 @@ public class Step8Panel extends JPanel {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                final Desktop desktop = Desktop.getDesktop();
-                try {
-                    desktop.browse(uri);
-                } catch (final IOException ioe) {
-                    logger.error("Unable to open log file: " + ioe.getMessage());
-                }
+                openFile(new File(uri));
             }
         });
     }

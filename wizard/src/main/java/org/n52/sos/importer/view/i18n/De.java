@@ -1173,6 +1173,17 @@ public class De extends Lang {
         return "Fehler: " + i;
     }
 
+    @Override
+    public String step8ErrorDesktopNotSupportedMesage(String pathToConfigFile) {
+        return String.format("Datei konnte nicht geöffnet werden. Bitte manuell öffnen:%n%n'%s'%n%n",
+                pathToConfigFile);
+    }
+
+    @Override
+    public String step8ErrorDesktopNotSupportedTitle() {
+        return "Öffnen der Datei fehlgeschlagen";
+    }
+
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {

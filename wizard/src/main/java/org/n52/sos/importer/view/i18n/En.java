@@ -1172,6 +1172,17 @@ public class En extends Lang {
         return "Errors: " + i;
     }
 
+    @Override
+    public String step8ErrorDesktopNotSupportedMesage(String pathToConfigFile) {
+        return String.format("Could not open file. Please open it manually:%n%n'%s'%n%n",
+                pathToConfigFile);
+    }
+
+    @Override
+    public String step8ErrorDesktopNotSupportedTitle() {
+        return "Opening File Failed ";
+    }
+
     /** {@inheritDoc} */
     @Override
     public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {

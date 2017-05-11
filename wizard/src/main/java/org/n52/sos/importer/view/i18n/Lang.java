@@ -1450,6 +1450,21 @@ public abstract class Lang {
     public abstract String step8ErrorLable(int i);
 
     /**
+     * <p>step8ErrorDesktopNotSupportedMesage</p>
+     *
+     * @param pathToFile this path will be shown to the user
+     * @return Could not open file. Please open it manually: PATH
+     */
+    public abstract String step8ErrorDesktopNotSupportedMesage(String pathToFile);
+
+    /**
+     * <p>step8ErrorDesktopNotSupportedTitle</p>
+     *
+     * @return Opening File Failed
+     */
+    public abstract String step8ErrorDesktopNotSupportedTitle();
+
+    /**
      * <p>step8FeederJarNotFound.</p>
      *
      * @return Could not find jar file!\nPlease place it there:\n\"expectedAbsolutePathToFeederJar\"
