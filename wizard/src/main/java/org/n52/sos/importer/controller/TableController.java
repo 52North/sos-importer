@@ -541,7 +541,7 @@ public final class TableController {
         final int colCount = table.getColumnCount();
         final TableColumnModel tcm = table.getColumnModel();
         // Check for null and empty strings
-        final boolean filter = typeToLeaveOut == null?
+        final boolean filter = typeToLeaveOut == null ?
                 false : !typeToLeaveOut.equalsIgnoreCase("");
         final ArrayList<String> headings = new ArrayList<>(colCount);
         final String colon = ": ";

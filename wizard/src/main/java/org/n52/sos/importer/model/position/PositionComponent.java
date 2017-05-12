@@ -177,20 +177,22 @@ public abstract class PositionComponent extends Component {
     public String getParsedUnit() {
         if (null == unit) {
             return N_A;
-        } else switch (unit) {
-            case "":
-                return N_A;
-            case "m":
-            case "meters":
-                return "m";
-            case FT:
-            case "feet":
-                return FT;
-            case DEGREE:
-            case "°":
-                return DEGREE;
-            default:
-                return N_A;
+        } else {
+            switch (unit) {
+                case "":
+                    return N_A;
+                case "m":
+                case "meters":
+                    return "m";
+                case FT:
+                case "feet":
+                    return FT;
+                case DEGREE:
+                case "°":
+                    return DEGREE;
+                default:
+                    return N_A;
+            }
         }
     }
 
