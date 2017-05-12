@@ -650,7 +650,7 @@ public final class SensorObservationService {
                     Arrays.toString(mVColumns));
             return null;
         }
-        final ArrayList<InsertObservation> result = new ArrayList<InsertObservation>(mVColumns.length);
+        final ArrayList<InsertObservation> result = new ArrayList<>(mVColumns.length);
         for (final int mVColumn : mVColumns) {
             LOG.debug("Parsing measured value column {}", mVColumn);
             try {
