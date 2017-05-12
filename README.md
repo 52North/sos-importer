@@ -1,7 +1,7 @@
 # 52°North SOS Importer
 [:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
 
-**Master**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href='https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer_develop/'><img src='https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer_develop' /></a>&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;[![Dependency Status](https://www.versioneye.com/user/projects/53735b2114c158f4f3000002/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/53735b2114c158f4f3000002)&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
