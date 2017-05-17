@@ -127,7 +127,7 @@ public class Step7Panel extends JPanel {
 
     private final SpinnerNumberModel hunkSizeModel = new SpinnerNumberModel(5000, 0, Integer.MAX_VALUE, 1);
 
-    private final SpinnerNumberModel sweArraySendBuffer = new SpinnerNumberModel(25, 0, Integer.MAX_VALUE, 1);
+    private final SpinnerNumberModel sweArraySendBuffer = new SpinnerNumberModel(25000, 0, Integer.MAX_VALUE, 1);
 
     private JCheckBox ignoreColumnMismatchCheckbox;
 
