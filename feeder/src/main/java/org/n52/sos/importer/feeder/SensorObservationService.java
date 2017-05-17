@@ -28,6 +28,8 @@
  */
 package org.n52.sos.importer.feeder;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -736,8 +738,7 @@ public final class SensorObservationService {
                             timeSeries.getSensorURI(),
                             sosUrl.toExternalForm(),
                             timeSeries));
-                    // TODO implement storing of failed import of a time series
-                    //failedInsertObservations.add(io);
+                    failedInsertObservations.addAll(timeSeries.getInsertObservations());
                     continue insertObservationForATimeSeries;
                 } else {
                     LOG.debug(String.format(SENSOR_REGISTERED_WITH_ID,
@@ -753,7 +754,6 @@ public final class SensorObservationService {
                         timeSeries.getSensorName(),
                         timeSeries.getSensorURI(),
                         timeSeries));
-                // TODO implement something useful here!
                 failedInsertObservations.addAll(timeSeries.getInsertObservations());
             } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
                 LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
@@ -853,7 +853,6 @@ public final class SensorObservationService {
 
     private String insertSweArrayObservation(
             final org.n52.oxf.sos.request.InsertObservationParameters sweArrayObservation) {
-        OperationResult opResult = null;
         try {
             try {
                 final int connectionTimeout = sosWrapper.getConnectionTimeout();
@@ -861,7 +860,7 @@ public final class SensorObservationService {
                 sosWrapper.setConnectionTimeOut(connectionTimeout + sweArrayObservationTimeOutBuffer);
                 sosWrapper.setReadTimeout(readTimeout + sweArrayObservationTimeOutBuffer);
                 setMimetype(sweArrayObservation);
-                opResult = sosWrapper.doInsertObservation(sweArrayObservation);
+                OperationResult opResult = sosWrapper.doInsertObservation(sweArrayObservation);
                 sosWrapper.setConnectionTimeOut(connectionTimeout);
                 sosWrapper.setReadTimeout(readTimeout);
                 if (sosVersion.equals(SOS_VERSION_100)) {
@@ -920,7 +919,7 @@ public final class SensorObservationService {
     private boolean isObservationAlreadyContained(final OWSException owsEx) {
         return owsEx.getExceptionCode().equals(Configuration.SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
                 owsEx.getExceptionTexts().length > 0 &&
-                (owsEx.getExceptionTexts()[0].indexOf(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT) > -1
+                (owsEx.getExceptionTexts()[0].contains(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT)
                         ||
                         isExceptionTextContained(owsEx,
                                 Configuration.SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED)
@@ -933,18 +932,15 @@ public final class SensorObservationService {
     }
 
     private boolean isExceptionTextContained(final OWSException owsEx, final String exceptionText) {
-        return owsEx.getExceptionTexts()[0].indexOf(exceptionText) > -1;
+        return owsEx.getExceptionTexts()[0].contains(exceptionText);
     }
 
     private String insertObservation(final InsertObservation io) throws IOException {
-        OperationResult opResult = null;
-        org.n52.oxf.sos.request.InsertObservationParameters parameters = null;
-
         try {
-            parameters = createParameterAssemblyFromIO(io);
+            org.n52.oxf.sos.request.InsertObservationParameters parameters = createParameterAssemblyFromIO(io);
             setMimetype(parameters);
             try {
-                opResult = sosWrapper.doInsertObservation(parameters);
+                OperationResult opResult = sosWrapper.doInsertObservation(parameters);
                 if (sosVersion.equals(SOS_VERSION_100)) {
                     try {
                         final InsertObservationResponse response =
@@ -953,9 +949,7 @@ public final class SensorObservationService {
                         LOG.debug(String.format(OBSERVATION_INSERTED_SUCCESSFULLY_WITH_ID,
                                 response.getAssignedObservationId()));
                         return response.getAssignedObservationId();
-                    } catch (final XmlException e) {
-                        log(e);
-                    } catch (final IOException e) {
+                    } catch (final XmlException | IOException e) {
                         log(e);
                     }
                 } else if (sosVersion.equals(SOS_200_VERSION)) {
@@ -998,32 +992,37 @@ public final class SensorObservationService {
 
     private org.n52.oxf.sos.request.InsertObservationParameters createParameterAssemblyFromIO(
             final InsertObservation io) throws OXFException {
-        ObservationParameters obsParameter = null;
+        ObservationParameters obsParameter;
 
-        if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-            // set text
-            obsParameter = new TextObservationParameters();
-            ((TextObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
-        } else if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
-            // set count
-            obsParameter = new CountObservationParameters();
-            ((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getResultValue());
-        } else if (io.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
-            // set boolean
-            obsParameter = new BooleanObservationParameters();
-            ((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getResultValue());
-        } else {
-            // set default value type
-            obsParameter = new MeasurementObservationParameters();
-            ((MeasurementObservationParameters) obsParameter).addUom(io.getUnitOfMeasurementCode());
-            ((MeasurementObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+        switch (io.getMeasuredValueType()) {
+            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
+                // set text
+                obsParameter = new TextObservationParameters();
+                ((TextObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+                break;
+            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
+                // set count
+                obsParameter = new CountObservationParameters();
+                ((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getResultValue());
+                break;
+            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
+                // set boolean
+                obsParameter = new BooleanObservationParameters();
+                ((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getResultValue());
+                break;
+            default:
+                // set default value type
+                obsParameter = new MeasurementObservationParameters();
+                ((MeasurementObservationParameters) obsParameter).addUom(io.getUnitOfMeasurementCode());
+                ((MeasurementObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+                break;
         }
         obsParameter.addObservedProperty(io.getObservedPropertyURI());
         obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
         obsParameter.addNewFoiName(io.getFeatureOfInterestName());
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
         // position
-        boolean eastingFirst = false;
+        boolean eastingFirst;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
             eastingFirst = Configuration.getEpsgEastingFirstMap().get("default");
         } else {
@@ -1094,8 +1093,8 @@ public final class SensorObservationService {
                         owsEx.getExceptionTexts() != null &&
                         owsEx.getExceptionTexts().length > 0) {
                     for (final String string : owsEx.getExceptionTexts()) {
-                        if (string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START) > -1 &&
-                                string.indexOf(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END) > -1) {
+                        if (string.contains(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START) &&
+                                string.contains(Configuration.SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END)) {
                             return rs.getSensorURI();
                         }
                     }
@@ -1105,8 +1104,8 @@ public final class SensorObservationService {
                         owsEx.getExceptionTexts() != null &&
                         owsEx.getExceptionTexts().length > 0) {
                     for (final String string : owsEx.getExceptionTexts()) {
-                        if (string.indexOf(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START) > -1 &&
-                                string.indexOf(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END) > -1) {
+                        if (string.contains(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START) &&
+                                string.contains(Configuration.SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END)) {
                             offerings.put(rs.getSensorURI(), rs.getOfferingUri());
                             return rs.getSensorURI();
                         }
@@ -1147,7 +1146,7 @@ public final class SensorObservationService {
         if (rs == null || rs.getObservedProperties() == null || rs.getObservedProperties().size() < 1) {
             return Collections.emptyList();
         }
-        final Set<String> tmp = new HashSet<String>(rs.getObservedProperties().size());
+        final Set<String> tmp = Sets.newHashSetWithExpectedSize(rs.getObservedProperties().size());
         for (final ObservedProperty obsProp : rs.getObservedProperties()) {
             final String measuredValueType = rs.getMeasuredValueType(obsProp);
             if (measuredValueType != null) {
@@ -1179,7 +1178,7 @@ public final class SensorObservationService {
         if (observedProperties == null || observedProperties.size() < 1) {
             return Collections.emptyList();
         }
-        final Collection<String> result = new ArrayList<String>(observedProperties.size());
+        final Collection<String> result = Lists.newArrayListWithCapacity(observedProperties.size());
         for (final ObservedProperty observedProperty : observedProperties) {
             result.add(observedProperty.getUri());
         }

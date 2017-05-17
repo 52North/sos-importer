@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder.model;
 
 
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
@@ -56,9 +57,9 @@ public class TimeSeriesRepositoryTest {
         InsertObservation[] ios = {io, io2 };
         tsr.addObservations(ios);
         RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
-        org.junit.Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
-        org.junit.Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
-        org.junit.Assert.assertThat(registerSensor.getObservedProperties(),
+        Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
+        Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
+        Assert.assertThat(registerSensor.getObservedProperties(),
                 Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
     }
 
