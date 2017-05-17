@@ -52,7 +52,7 @@ public class TimeSeriesRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(TimeSeriesRepository.class);
 
-    private final Map<TimeSeriesId,TimeSeries> repo;
+    private final Map<TimeSeriesId, TimeSeries> repo;
 
     /**
      * <p>Constructor for TimeSeriesRepository.</p>
