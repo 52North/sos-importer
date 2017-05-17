@@ -917,7 +917,7 @@ public class DataFile {
             return null;
         } else {
             Position p = configuration.getFoiPosition(values[i]);
-            if (p == null && configuration.getMeasureValueColumnIds().length == 1) {
+            if (p == null) {
                 p = configuration.getPosition(values);
             } else {
                 LOG.error(String.format("Could not find position for foi '%s'", values[i]));
