@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,7 +36,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
@@ -52,18 +52,14 @@ public class TimeSeriesRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(TimeSeriesRepository.class);
 
-    private final Vector<TimeSeries> repo;
+    private final Map<TimeSeriesId,TimeSeries> repo;
 
     /**
      * <p>Constructor for TimeSeriesRepository.</p>
      *
-     * @param numberOfTimeSeries a int.
      */
-    public TimeSeriesRepository(final int numberOfTimeSeries) {
-        repo = new Vector<TimeSeries>(numberOfTimeSeries);
-        for (int i = 0; i < numberOfTimeSeries; i++) {
-            repo.add(i, new TimeSeries());
-        }
+    public TimeSeriesRepository() {
+        repo = Maps.newHashMap();
     }
 
     /**
@@ -72,13 +68,16 @@ public class TimeSeriesRepository {
      * @param ios the {@link InsertObservation}s to add using the array index as timeseries id
      */
     public void addObservations(final InsertObservation[] ios) {
-        if (ios.length != repo.capacity()) {
-            throw new IllegalArgumentException("Number of InsertObservations is not matching number of timeseries!");
-        }
-        for (int i = 0; i < ios.length; i++) {
-            repo.get(i).addObservation(ios[i]);
+        for (InsertObservation io : ios) {
+            final TimeSeriesId timeSeriesId = new TimeSeriesId(io);
+            if (!repo.containsKey(timeSeriesId)) {
+                repo.put(timeSeriesId, new TimeSeries());
+            }
+            repo.get(timeSeriesId).addObservation(io);
         }
     }
+
+
 
     /**
      * <p>getTimeSeries.</p>
@@ -86,7 +85,7 @@ public class TimeSeriesRepository {
      * @return a {@link java.util.Collection} object.
      */
     public Collection<TimeSeries> getTimeSeries() {
-        return repo;
+        return repo.values();
     }
 
     /**
@@ -106,7 +105,7 @@ public class TimeSeriesRepository {
      */
     public RegisterSensor getRegisterSensor(final String sensorURI) {
         // get all time series of sensor
-        List<TimeSeries> timeseries = new ArrayList<>(repo.capacity());
+        List<TimeSeries> timeseries = new ArrayList<>(repo.values().size());
         for (TimeSeries series : getTimeSeries()) {
             if (series.getSensorURI().equals(sensorURI)) {
                 timeseries.add(series);
@@ -165,5 +164,4 @@ public class TimeSeriesRepository {
         }
         return true;
     }
-
 }

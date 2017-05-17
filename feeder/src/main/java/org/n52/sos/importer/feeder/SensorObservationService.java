@@ -350,7 +350,7 @@ public final class SensorObservationService {
             case SweArrayObservationWithSplitExtension:
                 LOG.debug("Using hunkSize '{}'", hunkSize);
                 long startReadingFile = System.currentTimeMillis();
-                TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
+                TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
                 int currentHunk = 0;
                 int sampleStartLine = lineCounter;
                 while ((values = cr.readNext()) != null) {
@@ -372,7 +372,7 @@ public final class SensorObservationService {
                         if (currentHunk == hunkSize) {
                             currentHunk = 0;
                             insertTimeSeries(timeSeriesRepository);
-                            timeSeriesRepository = new TimeSeriesRepository(mVCols.length);
+                            timeSeriesRepository = new TimeSeriesRepository();
                         } else {
                             currentHunk++;
                         }

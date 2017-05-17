@@ -40,7 +40,7 @@ public class TimeSeriesRepositoryTest {
 
     @Test
     public void shouldReturnRegisterSensorForCorrectSensor() {
-        TimeSeriesRepository tsr = new TimeSeriesRepository(2);
+        TimeSeriesRepository tsr = new TimeSeriesRepository();
         String sensorURI = "test-sensor-1-uri";
         ObservedProperty observedProperty1 = new ObservedProperty("test-obs-prop-1-name", "test-obs-prop-1-uri");
         ObservedProperty observedProperty2 = new ObservedProperty("test-obs-prop-2-name", "test-obs-prop-2-uri");
