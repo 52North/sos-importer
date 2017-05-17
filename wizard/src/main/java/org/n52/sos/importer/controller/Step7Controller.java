@@ -139,9 +139,9 @@ public class Step7Controller extends StepController {
         switch (s7P.getImportStrategy()) {
             case SweArrayObservationWithSplitExtension:
                 loadImportStrategyBasedSetting();
+                s7M.setImportStrategy(s7P.getImportStrategy());
                 break;
             default:
-                loadImportStrategyBasedSetting();
                 s7M.setImportStrategy(s7P.getImportStrategy());
                 break;
         }
