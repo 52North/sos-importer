@@ -982,38 +982,38 @@ public class DataFile {
         LOG.trace(String.format("getGregorianCalendarFields(%s)",
                     pattern));
         final ArrayList<Integer> fields = new ArrayList<Integer>();
-        if (pattern.indexOf("y") != -1) {
+        if (pattern.contains("y")) {
             fields.add(GregorianCalendar.YEAR);
         }
-        if (pattern.indexOf("M") != -1 ||
-                pattern.indexOf("w") != -1 ||
-                pattern.indexOf("D") != -1) {
+        if (pattern.contains("M") ||
+                pattern.contains("w") ||
+                pattern.contains("D")) {
             fields.add(GregorianCalendar.MONTH);
         }
-        if (pattern.indexOf("d") != -1 ||
-                (pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
+        if (pattern.contains("d") ||
+                (pattern.contains("W") && pattern.contains("d"))) {
             fields.add(GregorianCalendar.DAY_OF_MONTH);
         }
-        if (pattern.indexOf("H") != -1 ||
-                pattern.indexOf("k") != -1 ||
-                ((pattern.indexOf("K") != -1 ||
-                (pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
+        if (pattern.contains("H") ||
+                pattern.contains("k") ||
+                ((pattern.contains("K") ||
+                (pattern.contains("h")) && pattern.contains("a")))) {
             fields.add(GregorianCalendar.HOUR_OF_DAY);
         }
-        if (pattern.indexOf("m") != -1) {
+        if (pattern.contains("m")) {
             fields.add(GregorianCalendar.MINUTE);
         }
-        if (pattern.indexOf("s") != -1) {
+        if (pattern.contains("s")) {
             fields.add(GregorianCalendar.SECOND);
         }
-        if (pattern.indexOf("Z") != -1 || pattern.indexOf("z") != -1) {
+        if (pattern.contains("Z") || pattern.contains("z")) {
             fields.add(GregorianCalendar.ZONE_OFFSET);
         }
         fields.trimToSize();
         final int[] result = new int[fields.size()];
         int j = 0;
         for (final Integer i : fields) {
-            result[j++] = i.intValue();
+            result[j++] = i;
         }
         return result;
     }
