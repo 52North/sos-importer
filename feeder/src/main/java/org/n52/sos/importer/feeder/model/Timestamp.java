@@ -68,7 +68,7 @@ public class Timestamp {
     @Override
     public String toString() {
         // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
-        final StringBuffer ts = new StringBuffer(31);
+        final StringBuilder ts = new StringBuilder(31);
         if (year != Short.MIN_VALUE) {
             ts.append(year);
             if (month != Byte.MIN_VALUE) {
@@ -95,7 +95,7 @@ public class Timestamp {
             }
         }
         if (minute != Byte.MIN_VALUE) {
-            ts.append((minute < 10 ? SINGLE_ZERO + minute : minute) + ":");
+            ts.append(minute < 10 ? SINGLE_ZERO + minute : minute).append(":");
         } else if (hour != Byte.MIN_VALUE) {
             ts.append(DOUBLE_ZERO);
             ts.append(":");
@@ -106,7 +106,7 @@ public class Timestamp {
             ts.append(DOUBLE_ZERO);
         }
         if (millis != Integer.MIN_VALUE) {
-            ts.append("." + (millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis)));
+            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis));
         }
         if (timezone != Byte.MIN_VALUE &&
                 (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
@@ -188,28 +188,28 @@ public class Timestamp {
             final GregorianCalendar cal = new GregorianCalendar();
             cal.setTime(sdf.parse(dateInformation));
 
-            if (dateInfoPattern.indexOf("y") > -1) {
+            if (dateInfoPattern.contains("y")) {
                 setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
             }
-            if (dateInfoPattern.indexOf("M") > -1) {
+            if (dateInfoPattern.contains("M")) {
                 setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH) + 1)));
             }
-            if (dateInfoPattern.indexOf("d") > -1) {
+            if (dateInfoPattern.contains("d")) {
                 setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
             }
-            if (dateInfoPattern.indexOf("H") > -1) {
+            if (dateInfoPattern.contains("H")) {
                 setHour(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.HOUR_OF_DAY))));
             }
-            if (dateInfoPattern.indexOf("m") > -1) {
+            if (dateInfoPattern.contains("m")) {
                 setMinute(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MINUTE))));
             }
-            if (dateInfoPattern.indexOf("s") > -1) {
+            if (dateInfoPattern.contains("s")) {
                 setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
             }
-            if (dateInfoPattern.indexOf("S") > -1) {
+            if (dateInfoPattern.contains("S")) {
                 setMillis(cal.get(GregorianCalendar.MILLISECOND));
             }
-            if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
+            if (dateInfoPattern.contains("z") || dateInfoPattern.contains("Z")) {
                 setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
             }
         }

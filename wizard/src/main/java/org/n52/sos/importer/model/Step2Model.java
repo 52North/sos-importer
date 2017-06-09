@@ -106,9 +106,9 @@ public class Step2Model implements StepModel {
         this.csvFileContent = csvFileContent;
 
         final EditableComboBoxItems items = EditableComboBoxItems.getInstance();
-        columnSeparator = (String) items.getColumnSeparators().getElementAt(0);
-        commentIndicator = (String) items.getCommentIndicators().getElementAt(0);
-        textQualifier = (String) items.getTextQualifiers().getElementAt(0);
+        columnSeparator = items.getColumnSeparators().getElementAt(0);
+        commentIndicator = items.getCommentIndicators().getElementAt(0);
+        textQualifier = items.getTextQualifiers().getElementAt(0);
         firstLineWithData = 0;
         csvFileRowRount = csvFileRowCount;
     }

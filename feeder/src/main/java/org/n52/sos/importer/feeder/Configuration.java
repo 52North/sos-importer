@@ -214,20 +214,6 @@ public final class Configuration {
     private Pattern localeFilePattern;
 
     /**
-     * For testing only!
-     *
-     * @param importConf a {@link SosImportConfiguration} object.
-     */
-    protected Configuration(final SosImportConfiguration importConf) {
-        if (importConf == null) {
-            throw new IllegalArgumentException("SosImportConfiguration MUST NOT be null or INVALID");
-        }
-        this.importConf = importConf;
-        configFile = null;
-        setLocaleFilePattern();
-    }
-
-    /**
      * <p>Constructor for Configuration.</p>
      *
      * @param pathToFile a {@link java.lang.String} object.

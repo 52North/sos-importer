@@ -345,7 +345,6 @@ public class Step1Controller extends StepController {
                 sb.append(line).append("\n");
                 csvFileRowCount++;
             }
-            br.close();
         } catch (final IOException ioe) {
             LOG.error(
                     new StringBuffer("Problem while reading CSV file \"")
