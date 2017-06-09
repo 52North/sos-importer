@@ -969,9 +969,6 @@ public class DataFile {
         sdf.setTimeZone(timeZone);
 
         String parsebleTimestamp = timestampPart;
-        if (timestampPart.indexOf('Z') != -1) {
-            parsebleTimestamp = timestampPart.replaceAll("Z", "+0100");
-        }
 
         date = sdf.parse(parsebleTimestamp);
 
