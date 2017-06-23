@@ -96,6 +96,7 @@ public class DataFile {
     private final Configuration configuration;
 
     private final File dataFile;
+    private boolean timezoneInColumn;
 
     /**
      * <p>Constructor for DataFile.</p>
@@ -487,7 +488,7 @@ public class DataFile {
                         configuration.getDateInfoPattern());
             }
             if (configuration.isUseDateInfoFromFileModificationSet()) {
-                ts.enrich(dataFile.lastModified(), configuration.getLastModifiedDelta());
+                ts.adjustBy(dataFile.lastModified(), configuration.getLastModifiedDelta());
             }
             return ts;
         }
@@ -547,7 +548,7 @@ public class DataFile {
         // DO: TZ := UTC; value from one single column (should be an integer)
         timeZone = TimeZone.getTimeZone("UTC");
         ts.setTimezone((byte) (timeZone.getRawOffset() / MILLIES_PER_HOUR));
-        ts.set((long) (Double.parseDouble(values[cols[0].getNumber()]) * 1000));
+        ts.ofUnixTimeMillis((long) (Double.parseDouble(values[cols[0].getNumber()]) * 1000));
     }
 
     private boolean isUnixTime(final Column[] cols) {
@@ -589,6 +590,10 @@ public class DataFile {
                         LOG.debug("Exception thrown: ", nfe);
                         return TimeZone.getDefault();
                     }
+                }
+                if (meta.getKey().equals(Key.PARSE_PATTERN) && meta.getValue().contains("z")) {
+                    timezoneInColumn = true;
+                    return null;
                 }
             }
         }
@@ -966,13 +971,18 @@ public class DataFile {
                     field));
         Date date = null;
         final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        sdf.setTimeZone(timeZone);
+        if (timeZone != null) {
+            sdf.setTimeZone(timeZone);
+        }
 
         String parsebleTimestamp = timestampPart;
 
         date = sdf.parse(parsebleTimestamp);
 
-        final GregorianCalendar gc = new GregorianCalendar(timeZone);
+        GregorianCalendar gc = new GregorianCalendar();
+        if (timeZone != null) {
+            gc = new GregorianCalendar(timeZone);
+        }
         gc.setTime(date);
 
         return (short) gc.get(field);

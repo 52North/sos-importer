@@ -46,8 +46,10 @@ import net.opengis.swe.x101.VectorType;
 import net.opengis.swe.x101.VectorType.Coordinate;
 
 import org.apache.xmlbeans.XmlException;
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
@@ -80,7 +82,7 @@ public class DescriptionBuilderTest {
     private final String uomCode = "uom-code";
     private final UnitOfMeasurement uom = new UnitOfMeasurement(uomCode, uomUri);
     //"2013-09-25T15:25:33+02:00"
-    private final Timestamp timeStamp = new Timestamp().set(System.currentTimeMillis());
+    private final Timestamp timeStamp = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());
     private final int value = 52;
     private final String featureName = "feature-name";
     private final String featureUri = "feature-uri";
@@ -115,116 +117,116 @@ public class DescriptionBuilderTest {
 
     @Test public void
     shouldSetKeywords() {
-        org.junit.Assert.assertThat(system.getKeywordsArray().length, org.hamcrest.Matchers.is(1));
+        Assert.assertThat(system.getKeywordsArray().length, Matchers.is(1));
         final String[] keywordArray = system.getKeywordsArray(0).getKeywordList().getKeywordArray();
-        org.junit.Assert.assertThat(keywordArray.length, org.hamcrest.Matchers.is(3));
-        org.junit.Assert.assertThat(keywordArray, org.hamcrest.Matchers.hasItemInArray(featureName));
-        org.junit.Assert.assertThat(keywordArray, org.hamcrest.Matchers.hasItemInArray(sensorName));
-        org.junit.Assert.assertThat(keywordArray, org.hamcrest.Matchers.hasItemInArray(obsPropName));
+        Assert.assertThat(keywordArray.length, Matchers.is(3));
+        Assert.assertThat(keywordArray, Matchers.hasItemInArray(featureName));
+        Assert.assertThat(keywordArray, Matchers.hasItemInArray(sensorName));
+        Assert.assertThat(keywordArray, Matchers.hasItemInArray(obsPropName));
     }
 
     @Test public void
     shouldSetIdentification() {
-        org.junit.Assert.assertThat(system.getIdentificationArray().length, org.hamcrest.Matchers.is(1));
+        Assert.assertThat(system.getIdentificationArray().length, Matchers.is(1));
         final Identifier[] identifierArray = system.getIdentificationArray(0).getIdentifierList().getIdentifierArray();
-        org.junit.Assert.assertThat(identifierArray.length, org.hamcrest.Matchers.is(3));
+        Assert.assertThat(identifierArray.length, Matchers.is(3));
 
-        org.junit.Assert.assertThat(identifierArray[0].getName(), org.hamcrest.Matchers.is("uniqueID"));
-        org.junit.Assert.assertThat(identifierArray[0].getTerm().getDefinition(),
-                org.hamcrest.Matchers.is("urn:ogc:def:identifier:OGC:1.0:uniqueID"));
-        org.junit.Assert.assertThat(identifierArray[0].getTerm().getValue(), org.hamcrest.Matchers.is(sensorUri));
+        Assert.assertThat(identifierArray[0].getName(), Matchers.is("uniqueID"));
+        Assert.assertThat(identifierArray[0].getTerm().getDefinition(),
+                Matchers.is("urn:ogc:def:identifier:OGC:1.0:uniqueID"));
+        Assert.assertThat(identifierArray[0].getTerm().getValue(), Matchers.is(sensorUri));
 
-        org.junit.Assert.assertThat(identifierArray[1].getName(), org.hamcrest.Matchers.is("longName"));
-        org.junit.Assert.assertThat(identifierArray[1].getTerm().getDefinition(),
-                org.hamcrest.Matchers.is("urn:ogc:def:identifier:OGC:1.0:longName"));
-        org.junit.Assert.assertThat(identifierArray[1].getTerm().getValue(), org.hamcrest.Matchers.is(sensorName));
+        Assert.assertThat(identifierArray[1].getName(), Matchers.is("longName"));
+        Assert.assertThat(identifierArray[1].getTerm().getDefinition(),
+                Matchers.is("urn:ogc:def:identifier:OGC:1.0:longName"));
+        Assert.assertThat(identifierArray[1].getTerm().getValue(), Matchers.is(sensorName));
 
-        org.junit.Assert.assertThat(identifierArray[2].getName(), org.hamcrest.Matchers.is("shortName"));
-        org.junit.Assert.assertThat(identifierArray[2].getTerm().getDefinition(),
-                org.hamcrest.Matchers.is("urn:ogc:def:identifier:OGC:1.0:shortName"));
-        org.junit.Assert.assertThat(identifierArray[2].getTerm().getValue(), org.hamcrest.Matchers.is(sensorName));
+        Assert.assertThat(identifierArray[2].getName(), Matchers.is("shortName"));
+        Assert.assertThat(identifierArray[2].getTerm().getDefinition(),
+                Matchers.is("urn:ogc:def:identifier:OGC:1.0:shortName"));
+        Assert.assertThat(identifierArray[2].getTerm().getValue(), Matchers.is(sensorName));
     }
 
     @Test public void
     shouldSetSensorPosition() {
-        org.junit.Assert.assertThat(system.isSetPosition(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(system.getPosition().getName(), org.hamcrest.Matchers.is("sensorPosition"));
+        Assert.assertThat(system.isSetPosition(), Matchers.is(true));
+        Assert.assertThat(system.getPosition().getName(), Matchers.is("sensorPosition"));
         final VectorType vector = system.getPosition().getPosition().getLocation().getVector();
-        org.junit.Assert.assertThat(vector.getId(), org.hamcrest.Matchers.is("SYSTEM_LOCATION"));
-        org.junit.Assert.assertThat(vector.getCoordinateArray().length, org.hamcrest.Matchers.is(3));
+        Assert.assertThat(vector.getId(), Matchers.is("SYSTEM_LOCATION"));
+        Assert.assertThat(vector.getCoordinateArray().length, Matchers.is(3));
 
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getName(), org.hamcrest.Matchers.is(easting));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("x")));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getValue(),
-                org.hamcrest.Matchers.is(longitude));
+        Assert.assertThat(vector.getCoordinateArray(0).getName(), Matchers.is(easting));
+        Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("x")));
+        Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(vector.getCoordinateArray(0).getQuantity().getValue(),
+                Matchers.is(longitude));
 
-        org.junit.Assert.assertThat(vector.getCoordinateArray(1).getName(), org.hamcrest.Matchers.is(northing));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("y")));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getValue(),
-                org.hamcrest.Matchers.is(latitude));
+        Assert.assertThat(vector.getCoordinateArray(1).getName(), Matchers.is(northing));
+        Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("y")));
+        Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(vector.getCoordinateArray(1).getQuantity().getValue(),
+                Matchers.is(latitude));
 
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getName(), org.hamcrest.Matchers.is("altitude"));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("z")));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(meter)));
-        org.junit.Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getValue(),
-                org.hamcrest.Matchers.is(altitude));
+        Assert.assertThat(vector.getCoordinateArray(2).getName(), Matchers.is("altitude"));
+        Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("z")));
+        Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(meter)));
+        Assert.assertThat(vector.getCoordinateArray(2).getQuantity().getValue(),
+                Matchers.is(altitude));
     }
 
     @Test public void
     shouldSetInputs() {
-        org.junit.Assert.assertThat(system.isSetInputs(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(
-                system.getInputs().getInputList().getInputArray().length, org.hamcrest.Matchers.is(1));
-        org.junit.Assert.assertThat(system.getInputs().getInputList().getInputArray(0).getName(),
-                org.hamcrest.Matchers.is(obsPropName));
-        org.junit.Assert.assertThat(
+        Assert.assertThat(system.isSetInputs(), Matchers.is(true));
+        Assert.assertThat(
+                system.getInputs().getInputList().getInputArray().length, Matchers.is(1));
+        Assert.assertThat(system.getInputs().getInputList().getInputArray(0).getName(),
+                Matchers.is(obsPropName));
+        Assert.assertThat(
                 system.getInputs().getInputList().getInputArray(0).getObservableProperty().getDefinition(),
-                org.hamcrest.Matchers.is(obsPropUri));
+                Matchers.is(obsPropUri));
     }
 
     @Test public void
     shouldSetOutputs() {
-        org.junit.Assert.assertThat(system.isSetOutputs(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(
+        Assert.assertThat(system.isSetOutputs(), Matchers.is(true));
+        Assert.assertThat(
                 system.getOutputs().getOutputList().getOutputArray().length,
-                org.hamcrest.Matchers.is(1));
-        org.junit.Assert.assertThat(system.getOutputs().getOutputList().getOutputArray(0).getName(),
-                org.hamcrest.Matchers.is(obsPropName));
-        org.junit.Assert.assertThat(system.getOutputs().getOutputList().getOutputArray(0).getQuantity().getDefinition(),
-                org.hamcrest.Matchers.is(obsPropUri));
-        org.junit.Assert.assertThat(
+                Matchers.is(1));
+        Assert.assertThat(system.getOutputs().getOutputList().getOutputArray(0).getName(),
+                Matchers.is(obsPropName));
+        Assert.assertThat(system.getOutputs().getOutputList().getOutputArray(0).getQuantity().getDefinition(),
+                Matchers.is(obsPropUri));
+        Assert.assertThat(
                 system.getOutputs().getOutputList().getOutputArray(0).getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(uomCode));
+                Matchers.is(uomCode));
     }
 
     @Test public void
     shouldSetOfferings() {
         final Capabilities offering = getCapabilitiesByName("offerings");
         final AnyScalarPropertyType field = ((SimpleDataRecordType) offering.getAbstractDataRecord()).getFieldArray(0);
-        org.junit.Assert.assertThat(field.getName(), org.hamcrest.Matchers.is(offeringName));
-        org.junit.Assert.assertThat(field.isSetText(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(field.getText().getDefinition(),
-                org.hamcrest.Matchers.is("urn:ogc:def:identifier:OGC:1.0:offeringID"));
-        org.junit.Assert.assertThat(field.getText().getValue(), org.hamcrest.Matchers.is(offeringUri));
+        Assert.assertThat(field.getName(), Matchers.is(offeringName));
+        Assert.assertThat(field.isSetText(), Matchers.is(true));
+        Assert.assertThat(field.getText().getDefinition(),
+                Matchers.is("urn:ogc:def:identifier:OGC:1.0:offeringID"));
+        Assert.assertThat(field.getText().getValue(), Matchers.is(offeringUri));
     }
 
     @Test public void
     shouldSetFeatureOfInterest() {
         final Capabilities features = getCapabilitiesByName("featuresOfInterest");
         final DataComponentPropertyType field = ((DataRecordType) features.getAbstractDataRecord()).getFieldArray(0);
-        org.junit.Assert.assertThat(field.getName(), org.hamcrest.Matchers.is("featureOfInterestID"));
-        org.junit.Assert.assertThat(field.isSetText(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(field.getText().getDefinition(),
-                org.hamcrest.Matchers.is("http://www.opengis.net/def/featureOfInterest/identifier"));
-        org.junit.Assert.assertThat(field.getText().getValue(), org.hamcrest.Matchers.is(featureUri));
+        Assert.assertThat(field.getName(), Matchers.is("featureOfInterestID"));
+        Assert.assertThat(field.isSetText(), Matchers.is(true));
+        Assert.assertThat(field.getText().getDefinition(),
+                Matchers.is("http://www.opengis.net/def/featureOfInterest/identifier"));
+        Assert.assertThat(field.getText().getValue(), Matchers.is(featureUri));
     }
 
     @Test public void
@@ -234,66 +236,66 @@ public class DescriptionBuilderTest {
         final Capabilities observedBBOX = getCapabilitiesByName(observedBBox);
         final DataComponentPropertyType field =
                 ((DataRecordType) observedBBOX.getAbstractDataRecord()).getFieldArray(0);
-        org.junit.Assert.assertThat(field.getName(), org.hamcrest.Matchers.is(observedBBox));
+        Assert.assertThat(field.getName(), Matchers.is(observedBBox));
         final EnvelopeType envelope = EnvelopeType.Factory.parse(field.getAbstractDataRecord().newInputStream());
-        org.junit.Assert.assertThat(envelope.getDefinition(),
-                org.hamcrest.Matchers.is("urn:ogc:def:property:OGC:1.0:observedBBOX"));
+        Assert.assertThat(envelope.getDefinition(),
+                Matchers.is("urn:ogc:def:property:OGC:1.0:observedBBOX"));
 
-        org.junit.Assert.assertThat(envelope.isSetReferenceFrame(), org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(envelope.getReferenceFrame(),
-                org.hamcrest.Matchers.is(SensorDescriptionBuilder.EPSG_CODE_PREFIX + 4326));
+        Assert.assertThat(envelope.isSetReferenceFrame(), Matchers.is(true));
+        Assert.assertThat(envelope.getReferenceFrame(),
+                Matchers.is(SensorDescriptionBuilder.EPSG_CODE_PREFIX + 4326));
         final Coordinate[] lcCoords = envelope.getLowerCorner().getVector().getCoordinateArray();
 
-        org.junit.Assert.assertThat(lcCoords.length, org.hamcrest.Matchers.is(2));
+        Assert.assertThat(lcCoords.length, Matchers.is(2));
 
-        org.junit.Assert.assertThat(lcCoords[0].getName(), org.hamcrest.Matchers.is(easting));
-        org.junit.Assert.assertThat(lcCoords[0].getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("x")));
-        org.junit.Assert.assertThat(lcCoords[0].getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(lcCoords[0].getQuantity().getValue(), org.hamcrest.Matchers.is(longitude));
+        Assert.assertThat(lcCoords[0].getName(), Matchers.is(easting));
+        Assert.assertThat(lcCoords[0].getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("x")));
+        Assert.assertThat(lcCoords[0].getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(lcCoords[0].getQuantity().getValue(), Matchers.is(longitude));
 
-        org.junit.Assert.assertThat(lcCoords[1].getName(), org.hamcrest.Matchers.is(northing));
-        org.junit.Assert.assertThat(lcCoords[1].getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("y")));
-        org.junit.Assert.assertThat(lcCoords[1].getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(lcCoords[1].getQuantity().getValue(), org.hamcrest.Matchers.is(latitude));
+        Assert.assertThat(lcCoords[1].getName(), Matchers.is(northing));
+        Assert.assertThat(lcCoords[1].getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("y")));
+        Assert.assertThat(lcCoords[1].getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(lcCoords[1].getQuantity().getValue(), Matchers.is(latitude));
 
         final Coordinate[] ucCoords = envelope.getUpperCorner().getVector().getCoordinateArray();
 
-        org.junit.Assert.assertThat(ucCoords.length, org.hamcrest.Matchers.is(2));
+        Assert.assertThat(ucCoords.length, Matchers.is(2));
 
-        org.junit.Assert.assertThat(ucCoords[0].getName(), org.hamcrest.Matchers.is(easting));
-        org.junit.Assert.assertThat(ucCoords[0].getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("x")));
-        org.junit.Assert.assertThat(ucCoords[0].getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(ucCoords[0].getQuantity().getValue(), org.hamcrest.Matchers.is(longitude));
+        Assert.assertThat(ucCoords[0].getName(), Matchers.is(easting));
+        Assert.assertThat(ucCoords[0].getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("x")));
+        Assert.assertThat(ucCoords[0].getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(ucCoords[0].getQuantity().getValue(), Matchers.is(longitude));
 
-        org.junit.Assert.assertThat(ucCoords[1].getName(), org.hamcrest.Matchers.is(northing));
-        org.junit.Assert.assertThat(ucCoords[1].getQuantity().getAxisID(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase("y")));
-        org.junit.Assert.assertThat(ucCoords[1].getQuantity().getUom().getCode(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.equalToIgnoringCase(degree)));
-        org.junit.Assert.assertThat(ucCoords[1].getQuantity().getValue(), org.hamcrest.Matchers.is(latitude));
+        Assert.assertThat(ucCoords[1].getName(), Matchers.is(northing));
+        Assert.assertThat(ucCoords[1].getQuantity().getAxisID(),
+                Matchers.is(Matchers.equalToIgnoringCase("y")));
+        Assert.assertThat(ucCoords[1].getQuantity().getUom().getCode(),
+                Matchers.is(Matchers.equalToIgnoringCase(degree)));
+        Assert.assertThat(ucCoords[1].getQuantity().getValue(), Matchers.is(latitude));
     }
 
     @Test public void
     shouldSetValidTime()
             throws XmlException, IOException {
         final TimePeriodType validTime = system.getValidTime().getTimePeriod();
-        org.junit.Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.notNullValue()));
+        Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
+                Matchers.is(Matchers.notNullValue()));
         final long durationMillis =
                 new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
                         System.currentTimeMillis()).toDurationMillis();
-        org.junit.Assert.assertThat(durationMillis,
-                org.hamcrest.Matchers.is(org.hamcrest.Matchers.lessThanOrEqualTo(2000L)));
-        org.junit.Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
-                org.hamcrest.Matchers.is(true));
-        org.junit.Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
-                org.hamcrest.Matchers.is("unknown"));
+        Assert.assertThat(durationMillis,
+                Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
+        Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
+                Matchers.is(true));
+        Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
+                Matchers.is("unknown"));
         // test for valid time -> set by server
     }
 
@@ -305,7 +307,7 @@ public class DescriptionBuilderTest {
                 return capabilities;
             }
         }
-        org.junit.Assert.fail("sml:capabilities element with name '" + name + "' not found!");
+        Assert.fail("sml:capabilities element with name '" + name + "' not found!");
         return null;
     }
 }

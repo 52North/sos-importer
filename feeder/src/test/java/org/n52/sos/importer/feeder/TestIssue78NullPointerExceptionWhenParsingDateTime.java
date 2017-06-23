@@ -35,6 +35,7 @@ import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.Timestamp;
 
@@ -62,13 +63,13 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
-        Assert.assertThat(timeStamp.getYear(), Is.is((short) 2017));
-        Assert.assertThat(timeStamp.getMonth(), Is.is((byte) 4));
-        Assert.assertThat(timeStamp.getDay(), Is.is((byte) 13));
-        Assert.assertThat(timeStamp.getHour(), Is.is((byte) 8));
-        Assert.assertThat(timeStamp.getMinute(), Is.is((byte) 27));
-        Assert.assertThat(timeStamp.getSeconds(), Is.is((byte) 28));
-        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte) 0));
+        Assert.assertThat(timeStamp.getYear(), Is.is(2017));
+        Assert.assertThat(timeStamp.getMonth(), Is.is(4));
+        Assert.assertThat(timeStamp.getDay(), Is.is( 13));
+        Assert.assertThat(timeStamp.getHour(), Is.is( 8));
+        Assert.assertThat(timeStamp.getMinute(), Is.is(27));
+        Assert.assertThat(timeStamp.getSeconds(), Is.is(28));
+        Assert.assertThat(timeStamp.getTimezone(), Is.is(0));
     }
 
     @Test
@@ -85,13 +86,37 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
+        Assert.assertThat(timeStamp.getYear(), Is.is( 2017));
+        Assert.assertThat(timeStamp.getMonth(), Is.is(4));
+        Assert.assertThat(timeStamp.getDay(), Is.is(13));
+        Assert.assertThat(timeStamp.getHour(), Is.is(8));
+        Assert.assertThat(timeStamp.getMinute(), Is.is(27));
+        Assert.assertThat(timeStamp.getSeconds(), Is.is(28));
+        Assert.assertThat(timeStamp.getTimezone(), Is.is(0));
+    }
+
+    @Test
+    @Ignore
+    public void shouldParseTimestampWithConfigWithTimezoneText() throws XmlException, IOException, ParseException {
+        // given
+        Configuration configuration = new Configuration("src/test/resources/issue-078/data_config_with-zone-z.xml");
+        DataFile dataFile = new DataFile(configuration, null);
+        int mVColumnId = 2;
+        // Thu, 09 Jun 2016 10:29:40 GMT
+        String[] values = {"2017-04-13T08:27:28MESZ","20.80","39.20"};
+
+        // when
+        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+
+        // then
+        Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
         Assert.assertThat(timeStamp.getYear(), Is.is((short) 2017));
         Assert.assertThat(timeStamp.getMonth(), Is.is((byte) 4));
         Assert.assertThat(timeStamp.getDay(), Is.is((byte) 13));
         Assert.assertThat(timeStamp.getHour(), Is.is((byte) 8));
         Assert.assertThat(timeStamp.getMinute(), Is.is((byte) 27));
         Assert.assertThat(timeStamp.getSeconds(), Is.is((byte) 28));
-        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte) 0));
+        Assert.assertThat(timeStamp.getTimezone(), Is.is((byte) 2));
     }
 
 }

@@ -343,7 +343,7 @@ public class TimeSeries {
     private String getResultTime() {
         Timestamp resultTime = null;
         for (final InsertObservation io : timeseries) {
-            if (resultTime == null || resultTime.before(io.getTimeStamp())) {
+            if (resultTime == null || resultTime.isBefore(io.getTimeStamp())) {
                 resultTime = io.getTimeStamp();
             }
         }
@@ -357,10 +357,10 @@ public class TimeSeries {
         Timestamp start = null;
         Timestamp end = null;
         for (final InsertObservation io : timeseries) {
-            if (start == null || start.after(io.getTimeStamp())) {
+            if (start == null || start.isAfter(io.getTimeStamp())) {
                 start = io.getTimeStamp();
             }
-            if (end == null || end.before(io.getTimeStamp())) {
+            if (end == null || end.isBefore(io.getTimeStamp())) {
                 end = io.getTimeStamp();
             }
         }

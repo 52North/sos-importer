@@ -77,7 +77,6 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  */
 public final class Configuration {
 
-
     /**
      * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
      */
@@ -170,7 +169,7 @@ public final class Configuration {
     public static final String DEFAULT_CHARSET = "UTF-8";
 
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
-    private static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
+    private static final HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
 
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
@@ -187,7 +186,7 @@ public final class Configuration {
     private static final String KM = "km";
 
     static {
-        EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
+        EPSG_EASTING_FIRST_MAP = new HashMap<>();
         EPSG_EASTING_FIRST_MAP.put("default", false);
         EPSG_EASTING_FIRST_MAP.put("4326", false);
         EPSG_EASTING_FIRST_MAP.put("4979", false);
