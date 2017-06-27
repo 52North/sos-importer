@@ -28,7 +28,6 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.Instant;
@@ -41,20 +40,12 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
  * <p>Timestamp class.</p>
- *
- * TODO switch to Joda time or java 8 to get time zone problems fixed
- * Notes for implementation
- * - getter => use the java.time equivalents
- * - setter => use java.time.obj.with(...) -> returning objects
- * - differ between timezone offset and timezone id based timestamps
- *  ZonedDateTime OffsetDateTime
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
@@ -79,7 +70,6 @@ public class Timestamp {
 
     /** {@inheritDoc} */
     @Override
-    @Deprecated
     public String toString() {
     	return toISO8601String();
     }
@@ -358,7 +348,6 @@ public class Timestamp {
 
     /**
      * <p>after.</p>
-     * @deprecated
      * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @return a boolean.
      */
@@ -371,7 +360,6 @@ public class Timestamp {
 
     /**
      * <p>before.</p>
-     * @deprecated
      * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @return a boolean.
      */
@@ -384,7 +372,6 @@ public class Timestamp {
 
     /**
      * <p>applyDayDelta.</p>
-     * @deprecated
      * @param daysToAdd a int.
      * @return a {@link Timestamp} object.
      */
