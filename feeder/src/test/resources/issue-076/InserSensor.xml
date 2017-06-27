@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<swes:InsertSensor xmlns:swe1="http://www.opengis.net/swe/1.0" xmlns:ogc="http://www.opengis.net/ogc" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:icism="urn:us:gov:ic:ism:v2" xmlns:sml1="http://www.opengis.net/sensorML/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gmi="http://www.isotc211.org/2005/gmi" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sos="http://www.opengis.net/sos/2.0" xmlns:ns13="http://www.opengis.net/sos/1.0" xmlns:swe="http://www.opengis.net/swe/1.0.1" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:sampling="http://www.opengis.net/sampling/1.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:om="http://www.opengis.net/om/1.0" xmlns:ns20="http://www.opengis.net/gml" xmlns:swes="http://www.opengis.net/swes/2.0" xmlns:ns22="http://www.w3.org/2005/08/addressing" xmlns:ns23="http://www.opengis.net/om/2.0" xmlns:ns24="http://www.opengis.net/sampling/2.0" xmlns:samplingspatial="http://www.opengis.net/samplingSpatial/2.0" xmlns:ns26="http://www.opengis.net/swe/2.0" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:ns28="http://docs.oasis-open.org/wsn/t-1" xmlns:ns29="http://www.opengis.net/gml/" xmlns:sml="http://www.opengis.net/sensorML/1.0.1" version="2.0.0" service="SOS">
+  <swes:procedureDescriptionFormat>http://www.opengis.net/sensorML/1.0.1</swes:procedureDescriptionFormat>
+  <swes:procedureDescription>
+    <sml:SensorML version="1.0.1">
+      <sml:member>
+        <sml:System>
+          <sml:keywords>
+            <sml:KeywordList>
+              <sml:keyword>foi1</sml:keyword>
+              <sml:keyword>csv-sensor</sml:keyword>
+              <sml:keyword>Water</sml:keyword>
+              <sml:keyword>Krypton</sml:keyword>
+              <sml:keyword>Propan</sml:keyword>
+            </sml:KeywordList>
+          </sml:keywords>
+          <sml:identification>
+            <sml:IdentifierList>
+              <sml:identifier name="uniqueID">
+<sml:Term definition="urn:ogc:def:identifier:OGC:1.0:uniqueID">
+  <sml:value>urn:sensor:csv-sensor</sml:value>
+</sml:Term>
+              </sml:identifier>
+              <sml:identifier name="longName">
+<sml:Term definition="urn:ogc:def:identifier:OGC:1.0:longName">
+  <sml:value>csv-sensor</sml:value>
+</sml:Term>
+              </sml:identifier>
+              <sml:identifier name="shortName">
+<sml:Term definition="urn:ogc:def:identifier:OGC:1.0:shortName">
+  <sml:value>csv-sensor</sml:value>
+</sml:Term>
+              </sml:identifier>
+            </sml:IdentifierList>
+          </sml:identification>
+          <sml:classification>
+            <sml:ClassifierList>
+              <sml:classifier name="intendedApplication">
+<sml:Term definition="urn:ogc:def:classifier:OGC:1.0:application">
+  <sml:value>Water, Krypton, Propan</sml:value>
+</sml:Term>
+              </sml:classifier>
+            </sml:ClassifierList>
+          </sml:classification>
+          <sml:validTime>
+            <ns20:TimePeriod>
+              <ns20:beginPosition>2017-04-18T16:57:21+02:00</ns20:beginPosition>
+              <ns20:endPosition indeterminatePosition="unknown"></ns20:endPosition>
+            </ns20:TimePeriod>
+          </sml:validTime>
+          <sml:capabilities name="observedBBOX">
+            <swe:DataRecord>
+              <swe:field name="observedBBOX">
+<swe:Envelope referenceFrame="urn:ogc:def:crs:EPSG::4326" definition="urn:ogc:def:property:OGC:1.0:observedBBOX">
+  <swe:lowerCorner>
+    <swe:Vector>
+      <swe:coordinate name="easting">
+        <swe:Quantity axisID="x">
+          <swe:uom code="deg"/>
+          <swe:value>12.0</swe:value>
+        </swe:Quantity>
+      </swe:coordinate>
+      <swe:coordinate name="northing">
+        <swe:Quantity axisID="y">
+          <swe:uom code="deg"/>
+          <swe:value>20.0</swe:value>
+        </swe:Quantity>
+      </swe:coordinate>
+    </swe:Vector>
+  </swe:lowerCorner>
+  <swe:upperCorner>
+    <swe:Vector>
+      <swe:coordinate name="easting">
+        <swe:Quantity axisID="x">
+          <swe:uom code="deg"/>
+          <swe:value>12.0</swe:value>
+        </swe:Quantity>
+      </swe:coordinate>
+      <swe:coordinate name="northing">
+        <swe:Quantity axisID="y">
+          <swe:uom code="deg"/>
+          <swe:value>20.0</swe:value>
+        </swe:Quantity>
+      </swe:coordinate>
+    </swe:Vector>
+  </swe:upperCorner>
+</swe:Envelope>
+              </swe:field>
+            </swe:DataRecord>
+          </sml:capabilities>
+          <sml:capabilities name="featuresOfInterest">
+            <swe:DataRecord>
+              <swe:field name="featureOfInterestID">
+<swe:Text definition="http://www.opengis.net/def/featureOfInterest/identifier">
+  <swe:value>unr:foi:geomatys:foi1</swe:value>
+</swe:Text>
+              </swe:field>
+            </swe:DataRecord>
+          </sml:capabilities>
+          <sml:capabilities name="collectingStatus">
+            <swe:DataRecord>
+              <swe:field name="status">
+<swe:Boolean definition="urn:ogc:def:classifier:OGC:1.0:collectingStatus">
+  <swe:value>true</swe:value>
+</swe:Boolean>
+              </swe:field>
+            </swe:DataRecord>
+          </sml:capabilities>
+          <sml:capabilities name="offerings">
+            <swe:SimpleDataRecord>
+              <swe:field name="csv-sensor">
+<swe:Text definition="urn:ogc:def:identifier:OGC:1.0:offeringID">
+  <swe:value>urn:sensor:csv-sensor</swe:value>
+</swe:Text>
+              </swe:field>
+            </swe:SimpleDataRecord>
+          </sml:capabilities>
+          <sml:position name="sensorPosition">
+            <swe:Position referenceFrame="urn:ogc:def:crs:EPSG::4326">
+              <swe:location>
+<swe:Vector ns20:id="SYSTEM_LOCATION">
+  <swe:coordinate name="easting">
+    <swe:Quantity axisID="x">
+      <swe:uom code="deg"/>
+      <swe:value>12.0</swe:value>
+    </swe:Quantity>
+  </swe:coordinate>
+  <swe:coordinate name="northing">
+    <swe:Quantity axisID="y">
+      <swe:uom code="deg"/>
+      <swe:value>20.0</swe:value>
+    </swe:Quantity>
+  </swe:coordinate>
+  <swe:coordinate name="altitude">
+    <swe:Quantity axisID="z">
+      <swe:uom code="meters"/>
+      <swe:value>0.0</swe:value>
+    </swe:Quantity>
+  </swe:coordinate>
+</swe:Vector>
+              </swe:location>
+            </swe:Position>
+          </sml:position>
+          <sml:inputs>
+            <sml:InputList>
+              <sml:input name="Water">
+<swe:ObservableProperty definition="urn:phenomenon:Water"/>
+              </sml:input>
+              <sml:input name="Krypton">
+<swe:ObservableProperty definition="urn:phenomenon:Krypton"/>
+              </sml:input>
+              <sml:input name="Propan">
+<swe:ObservableProperty definition="urn:phenomenon:Propan"/>
+              </sml:input>
+            </sml:InputList>
+          </sml:inputs>
+          <sml:outputs>
+            <sml:OutputList>
+              <sml:output name="Water">
+<swe:Quantity definition="urn:phenomenon:Water">
+  <swe:uom code="kg"/>
+</swe:Quantity>
+              </sml:output>
+              <sml:output name="Krypton">
+<swe:Quantity definition="urn:phenomenon:Krypton">
+  <swe:uom code="kg"/>
+</swe:Quantity>
+              </sml:output>
+              <sml:output name="Propan">
+<swe:Quantity definition="urn:phenomenon:Propan">
+  <swe:uom code="kg"/>
+</swe:Quantity>
+              </sml:output>
+            </sml:OutputList>
+          </sml:outputs>
+        </sml:System>
+      </sml:member>
+    </sml:SensorML>
+  </swes:procedureDescription>
+  <swes:observableProperty>urn:phenomenon:Water</swes:observableProperty>
+  <swes:observableProperty>urn:phenomenon:Krypton</swes:observableProperty>
+  <swes:observableProperty>urn:phenomenon:Propan</swes:observableProperty>
+  <swes:metadata>
+    <sos:SosInsertionMetadata>
+      <sos:observationType>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement</sos:observationType>
+      <sos:featureOfInterestType>http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint</sos:featureOfInterestType>
+    </sos:SosInsertionMetadata>
+  </swes:metadata>
+</swes:InsertSensor>
