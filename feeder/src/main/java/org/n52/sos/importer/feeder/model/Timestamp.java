@@ -52,6 +52,7 @@ import java.util.regex.PatternSyntaxException;
  */
 public class Timestamp {
 
+    private static final String UTC = "UTC";
     private static final String SINGLE_ZERO = "0";
     private static final String DOUBLE_ZERO = SINGLE_ZERO + SINGLE_ZERO;
     private static final String PARAMETER_TIME_STAMP_IS_MANDATORY = "parameter timeStamp is mandatory.";
@@ -142,21 +143,56 @@ public class Timestamp {
      * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      */
     public Timestamp ofUnixTimeMillis(final long unixTimeMillis) {
-        OffsetDateTime timestamp = OffsetDateTime.ofInstant(Instant.ofEpochMilli(unixTimeMillis),ZoneId.of("UTC"));
+        OffsetDateTime timestamp = OffsetDateTime.ofInstant(Instant.ofEpochMilli(unixTimeMillis), ZoneId.of(UTC));
         year = timestamp.getYear();
         month = timestamp.getMonthValue();
         day = timestamp.getDayOfMonth();
         hour = timestamp.getHour();
         minute = timestamp.getMinute();
         seconds = timestamp.getSecond();
-        millis = timestamp.getNano()/1000;
-        timezone = timestamp.getOffset().getTotalSeconds()/3600;
+        millis = timestamp.getNano() / 1000;
+        timezone = timestamp.getOffset().getTotalSeconds() / 3600;
+        return this;
+    }
+
+    /**
+     * <p>enrich with values from another timestamp.</p>
+     *
+     * @param other a {@link Timestamp} object.
+     * @return a {@link Timestamp} object.
+     */
+    public Timestamp enrich(final Timestamp other) {
+        if (other != null) {
+            if (other.getYear() > Integer.MIN_VALUE) {
+                setYear(other.getYear());
+            }
+            if (other.getMonth() > Integer.MIN_VALUE) {
+                setMonth(other.getMonth());
+            }
+            if (other.getDay() > Integer.MIN_VALUE) {
+                setDay(other.getDay());
+            }
+            if (other.getHour() > Integer.MIN_VALUE) {
+                setHour(other.getHour());
+            }
+            if (other.getMinute() > Integer.MIN_VALUE) {
+                setMinute(other.getMinute());
+            }
+            if (other.getSeconds() > Integer.MIN_VALUE) {
+                setSeconds(other.getSeconds());
+            }
+            if (other.getTimezone() > Integer.MIN_VALUE) {
+                setTimezone(other.getTimezone());
+            }
+            if (other.getMillis() > Integer.MIN_VALUE) {
+                setMillis(other.getMillis());
+            }
+        }
         return this;
     }
 
     /**
      * <p>enrich.</p>
-     * @deprecated
      * @param timestampInformation the filename that might contain additional information
      *          for the {@link org.n52.sos.importer.feeder.model.Timestamp}
      * @param regExToExtractFileInfo a {@link java.lang.String} object.
@@ -218,7 +254,6 @@ public class Timestamp {
 
     /**
      * <p>enrich.</p>
-     * @deprecated
      * @param lastModified long
      * @param lastModifiedDeltaDays -1, if it should be ignored, else &gt; 0.
      * @return a {@link Timestamp} object.
@@ -230,46 +265,10 @@ public class Timestamp {
         if (lastModifiedDeltaDays > 0) {
             lastModifiedTmp = lastModified - (lastModifiedDeltaDays * MILLIS_PER_DAY);
         }
-        ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedTmp), ZoneId.of("UTC"));
+        ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedTmp), ZoneId.of(UTC));
         setYear(zdt.get(ChronoField.YEAR));
         setMonth(zdt.get(ChronoField.MONTH_OF_YEAR));
         setDay(zdt.get(ChronoField.DAY_OF_MONTH));
-        return this;
-    }
-
-    /**
-     * <p>enrich with values from another timestamp.</p>
-     *
-     * @param other a {@link Timestamp} object.
-     * @return a {@link Timestamp} object.
-     */
-    public Timestamp enrich(final Timestamp other) {
-        if (other != null) {
-            if (other.getYear() > Integer.MIN_VALUE) {
-                setYear(other.getYear());
-            }
-            if (other.getMonth() > Integer.MIN_VALUE) {
-                setMonth(other.getMonth());
-            }
-            if (other.getDay() > Integer.MIN_VALUE) {
-                setDay(other.getDay());
-            }
-            if (other.getHour() > Integer.MIN_VALUE) {
-                setHour(other.getHour());
-            }
-            if (other.getMinute() > Integer.MIN_VALUE) {
-                setMinute(other.getMinute());
-            }
-            if (other.getSeconds() > Integer.MIN_VALUE) {
-                setSeconds(other.getSeconds());
-            }
-            if (other.getTimezone() > Integer.MIN_VALUE) {
-                setTimezone(other.getTimezone());
-            }
-            if (other.getMillis() > Integer.MIN_VALUE) {
-                setMillis(other.getMillis());
-            }
-        }
         return this;
     }
 
@@ -281,16 +280,24 @@ public class Timestamp {
         String iso8601String = toISO8601String();
         try {
             return dtf.parse(iso8601String, ZonedDateTime::from).toInstant();
-        } catch (DateTimeException e) {}
+        } catch (DateTimeException e) {
+            //
+        }
         try {
             return dtf.parse(iso8601String, OffsetDateTime::from).toInstant();
-        } catch (DateTimeException e) {}
+        } catch (DateTimeException e) {
+            //
+        }
         try {
-            return dtf.parse(iso8601String, LocalDateTime::from).toInstant(ZoneOffset.of("UTC"));
-        } catch (DateTimeException e) {}
+            return dtf.parse(iso8601String, LocalDateTime::from).toInstant(ZoneOffset.of(UTC));
+        } catch (DateTimeException e) {
+            //
+        }
         try {
-            return Instant.ofEpochMilli(dtf.parse(iso8601String, LocalDate::from).toEpochDay()*MILLIS_PER_DAY);
-        } catch (DateTimeException e) {}
+            return Instant.ofEpochMilli(dtf.parse(iso8601String, LocalDate::from).toEpochDay() * MILLIS_PER_DAY);
+        } catch (DateTimeException e) {
+            //
+        }
         return Instant.ofEpochMilli(0);
     }
 
@@ -380,7 +387,10 @@ public class Timestamp {
         if (ta.isSupported(ChronoField.YEAR) &&
                 ta.isSupported(ChronoField.MONTH_OF_YEAR) &&
                 ta.isSupported(ChronoField.DAY_OF_MONTH)) {
-            LocalDate ld = LocalDate.of(ta.get(ChronoField.YEAR), ta.get(ChronoField.MONTH_OF_YEAR), ta.get(ChronoField.DAY_OF_MONTH));
+            LocalDate ld = LocalDate.of(
+                    ta.get(ChronoField.YEAR),
+                    ta.get(ChronoField.MONTH_OF_YEAR),
+                    ta.get(ChronoField.DAY_OF_MONTH));
             ld = ld.plusDays(daysToAdd);
             setYear(ld.getYear());
             setMonth(ld.getMonthValue());

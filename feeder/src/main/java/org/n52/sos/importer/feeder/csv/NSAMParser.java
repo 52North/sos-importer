@@ -208,7 +208,7 @@ public class NSAMParser implements CsvParser {
         final long newMillis = cal.getTimeInMillis() + Integer.parseInt(secondsElapsed) * 1000;
         cal.setTimeInMillis(newMillis);
         timestamp.setYear(cal.get(GregorianCalendar.YEAR));
-        timestamp.setMonth((cal.get(GregorianCalendar.MONTH) + 1));
+        timestamp.setMonth(cal.get(GregorianCalendar.MONTH) + 1);
         timestamp.setDay(cal.get(GregorianCalendar.DAY_OF_MONTH));
         timestamp.setHour(cal.get(GregorianCalendar.HOUR_OF_DAY));
         timestamp.setMinute(cal.get(GregorianCalendar.MINUTE));

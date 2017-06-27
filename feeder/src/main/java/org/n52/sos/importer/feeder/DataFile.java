@@ -591,7 +591,8 @@ public class DataFile {
                         return TimeZone.getDefault();
                     }
                 }
-                if (meta.getKey().equals(Key.PARSE_PATTERN) && (meta.getValue().contains("Z") || meta.getValue().contains("X"))) {
+                if (meta.getKey().equals(Key.PARSE_PATTERN) && (meta.getValue().contains("Z") ||
+                        meta.getValue().contains("X"))) {
                     return null;
                 }
             }
@@ -976,16 +977,16 @@ public class DataFile {
         TemporalAccessor ta = dtf.parse(timestampPart);
 
         if (ta.isSupported(field)) {
-        	return ta.get(field);
+            return ta.get(field);
         }
 
         throw new ParseException("Could not parse field '"
-        		+ field.toString()
-        		 + "' using pattern '"
-        		 + pattern
-        		 + "' for input '"
-        		 + timestampPart
-        		 + "'. (Ingore offset value).",-42);
+                + field.toString()
+                 + "' using pattern '"
+                 + pattern
+                 + "' for input '"
+                 + timestampPart
+                 + "'. (Ingore offset value).", -42);
     }
 
     private ChronoField[] getChronoFields(final String pattern) {
@@ -1029,7 +1030,7 @@ public class DataFile {
             for (final Metadata m : column.getMetadataArray()) {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
-					LOG.debug(String.format("Parsepattern found: %s",
+                    LOG.debug(String.format("Parsepattern found: %s",
                                 pattern));
                     return pattern;
                 }
@@ -1041,18 +1042,18 @@ public class DataFile {
         return null;
     }
 
-	private void checkPattern(String pattern) throws ParseException {
-		if (pattern.contains("z")) {
-			StringBuilder errorMsg = new StringBuilder();
-			errorMsg.append("Pattern 'z' not supported. Found in pattern '");
-			errorMsg.append(pattern);
-			errorMsg.append("'.");
-			LOG.error(errorMsg.toString());
-			throw new ParseException(
-					errorMsg.toString(),
-					pattern.indexOf('z'));
-		}
-	}
+    private void checkPattern(String pattern) throws ParseException {
+        if (pattern.contains("z")) {
+            StringBuilder errorMsg = new StringBuilder();
+            errorMsg.append("Pattern 'z' not supported. Found in pattern '");
+            errorMsg.append(pattern);
+            errorMsg.append("'.");
+            LOG.error(errorMsg.toString());
+            throw new ParseException(
+                    errorMsg.toString(),
+                    pattern.indexOf('z'));
+        }
+    }
 
     /** {@inheritDoc} */
     @Override

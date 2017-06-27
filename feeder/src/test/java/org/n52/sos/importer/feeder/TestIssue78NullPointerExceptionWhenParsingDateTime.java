@@ -30,16 +30,11 @@ package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.TimeZone;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

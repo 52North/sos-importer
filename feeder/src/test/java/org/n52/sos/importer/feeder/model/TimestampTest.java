@@ -31,7 +31,6 @@ package org.n52.sos.importer.feeder.model;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.TimeZone;
 
 import org.hamcrest.CoreMatchers;
