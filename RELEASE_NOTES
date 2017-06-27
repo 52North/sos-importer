@@ -28,6 +28,7 @@ For a complete Release Notes overview visit
  * #nn: Fix handling of data files with multiple date & time columns
  * #nn: Fix bug in unix time parsing
  * #nn: Fix typo in xml schema: expresssion -> expression
+ * #78: NullPointerException when parsing Date/Time
  
 
 # Release Notes for SOS-Importer 0.4.0

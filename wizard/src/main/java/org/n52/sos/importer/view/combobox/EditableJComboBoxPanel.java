@@ -61,9 +61,9 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  * @version $Id: $Id
  */
-public class EditableJComboBoxPanel extends JPanel {
+public final class EditableJComboBoxPanel extends JPanel {
 
-    private static final Logger logger = LoggerFactory.getLogger(EditableJComboBoxPanel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EditableJComboBoxPanel.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -79,7 +79,7 @@ public class EditableJComboBoxPanel extends JPanel {
 
     private final DefaultComboBoxModel<String> model;
 
-    private ActionListener selectionChanged;
+    private final ActionListener selectionChanged;
 
     private final JButton newItemButton;
 
@@ -104,7 +104,7 @@ public class EditableJComboBoxPanel extends JPanel {
         super();
         this.model = model;
         label = new JLabel(labelName + ":   ");
-        comboBox = new JComboBox<String>(model);
+        comboBox = new JComboBox<>(model);
         comboBox.setToolTipText(toolTip);
 
         if (model.getSize() == 0 || (model.getSize() == 1 && model.getElementAt(0).equals(""))) {
@@ -189,11 +189,11 @@ public class EditableJComboBoxPanel extends JPanel {
     protected JButton createIconButton(final String fileName, final String toolTip) {
         final JButton iconButton = new JButton();
         final URL imgURL = getClass().getResource(ICON_FILE_PATH + fileName);
-        ImageIcon icon = null;
+        ImageIcon icon;
         if (imgURL != null) {
             icon = new ImageIcon(imgURL);
         } else {
-            logger.error("Couldn't find file " + fileName + " for icon");
+            LOG.error("Couldn't find file " + fileName + " for icon");
             return null;
         }
 
@@ -342,11 +342,10 @@ public class EditableJComboBoxPanel extends JPanel {
             return " ";
         } else {
             int maxWhiteSpaces = 0;
-            int whiteSpaces = 0;
             for (int i = 0; i < model.getSize(); i++) {
-                final String item = (String) model.getElementAt(i);
+                final String item = model.getElementAt(i);
 
-                whiteSpaces = 0;
+                int whiteSpaces = 0;
                 for (final char ch: item.toCharArray()) {
                     if (Character.isWhitespace(ch)) {
                         whiteSpaces++;
@@ -358,7 +357,7 @@ public class EditableJComboBoxPanel extends JPanel {
                 }
             }
 
-            StringBuffer newBiggestWhiteSpace = new StringBuffer(" ");
+            StringBuilder newBiggestWhiteSpace = new StringBuilder(" ");
             for (int j = 0; j < maxWhiteSpaces; j++) {
                 newBiggestWhiteSpace.append(" ");
             }

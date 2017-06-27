@@ -157,7 +157,7 @@ public class DescriptionBuilder {
         builder.setClassifierIntendedApplication(intendedApplication.substring(0, intendedApplication.length() - 2));
 
         // add validTime starting from now
-        builder.setValidTime(new Timestamp().set(System.currentTimeMillis()).toString(), "unknown");
+        builder.setValidTime(new Timestamp().ofUnixTimeMillis(System.currentTimeMillis()).toString(), "unknown");
 
         return builder.buildSensorDescription();
     }

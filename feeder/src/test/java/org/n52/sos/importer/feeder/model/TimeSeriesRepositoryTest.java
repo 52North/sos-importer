@@ -48,7 +48,7 @@ public class TimeSeriesRepositoryTest {
         Sensor sensor = new Sensor("test-sensor-1-name", sensorURI);
         FeatureOfInterest foi = new FeatureOfInterest("foi-name", "foi-uri", null);
         Object value = 1;
-        Timestamp timeStamp = new Timestamp().set(System.currentTimeMillis());
+        Timestamp timeStamp = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());
         Offering off = new Offering("offering-name", "offering-uri");
         String mvType = "mv-type";
         InsertObservation io =

@@ -687,7 +687,7 @@ public final class SensorObservationService {
         // TIMESTAMP
         final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
         if (isSampleBasedDataFile) {
-            if (lastTimestamp != null && timeStamp.before(lastTimestamp)) {
+            if (lastTimestamp != null && timeStamp.isBefore(lastTimestamp)) {
                 sampleDate.applyDayDelta(1);
             }
             lastTimestamp = new Timestamp().enrich(timeStamp);
