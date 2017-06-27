@@ -173,6 +173,8 @@ public final class Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
+    private static final String OFFERING_SUFFIX = "-offering";
+
     private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
     private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
     private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
@@ -1146,7 +1148,7 @@ public final class Configuration {
         LOG.trace("getOffering()");
         if (importConf.getSosMetadata().getOffering().isSetGenerate() &&
                 importConf.getSosMetadata().getOffering().getGenerate()) {
-            return new Offering(s.getName(), s.getUri());
+            return new Offering(s.getName() + OFFERING_SUFFIX, s.getUri() + OFFERING_SUFFIX);
         } else {
             final String o = importConf.getSosMetadata().getOffering().getStringValue();
             return new Offering(o, o);

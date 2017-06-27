@@ -29,6 +29,7 @@ For a complete Release Notes overview visit
  * #nn: Fix bug in unix time parsing
  * #nn: Fix typo in xml schema: expresssion -> expression
  * #78: NullPointerException when parsing Date/Time
+ * #76: Server generated offering identifier
  
 
 # Release Notes for SOS-Importer 0.4.0
