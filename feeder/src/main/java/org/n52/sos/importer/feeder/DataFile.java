@@ -39,11 +39,12 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 
@@ -96,7 +97,6 @@ public class DataFile {
     private final Configuration configuration;
 
     private final File dataFile;
-    private boolean timezoneInColumn;
 
     /**
      * <p>Constructor for DataFile.</p>
@@ -502,37 +502,37 @@ public class DataFile {
         for (final Column column : cols) {
             // get pattern and fields
             final String pattern = getParsePattern(column);
-            final int[] fields = getGregorianCalendarFields(pattern);
-            for (final int field : fields) {
+            checkPattern(pattern);
+            final ChronoField[] fields = getChronoFields(pattern);
+            for (final ChronoField field : fields) {
                 // parse values
-                final short value =
+                final int value =
                         parseTimestampComponent(values[column.getNumber()],
                                 pattern,
                                 field,
                                 timeZone);
                 // add to timestamp object
                 switch (field) {
-                    case GregorianCalendar.YEAR:
+                    case YEAR:
                         ts.setYear(value);
                         break;
-                    case GregorianCalendar.MONTH:
-                        // java starts month counting at 0 -> +1 for each month
-                        ts.setMonth((byte) (value + 1));
+                    case MONTH_OF_YEAR:
+                        ts.setMonth(value);
                         break;
-                    case GregorianCalendar.DAY_OF_MONTH:
-                        ts.setDay((byte) value);
+                    case DAY_OF_MONTH:
+                        ts.setDay(value);
                         break;
-                    case GregorianCalendar.HOUR_OF_DAY:
-                        ts.setHour((byte) value);
+                    case HOUR_OF_DAY:
+                        ts.setHour(value);
                         break;
-                    case GregorianCalendar.MINUTE:
-                        ts.setMinute((byte) value);
+                    case MINUTE_OF_HOUR:
+                        ts.setMinute(value);
                         break;
-                    case GregorianCalendar.SECOND:
-                        ts.setSeconds((byte) value);
+                    case SECOND_OF_MINUTE:
+                        ts.setSeconds(value);
                         break;
-                    case GregorianCalendar.ZONE_OFFSET:
-                        ts.setTimezone((byte) value);
+                    case OFFSET_SECONDS:
+                        ts.setTimezone(value / 3600);
                         break;
                     default:
                         break;
@@ -591,8 +591,7 @@ public class DataFile {
                         return TimeZone.getDefault();
                     }
                 }
-                if (meta.getKey().equals(Key.PARSE_PATTERN) && meta.getValue().contains("z")) {
-                    timezoneInColumn = true;
+                if (meta.getKey().equals(Key.PARSE_PATTERN) && (meta.getValue().contains("Z") || meta.getValue().contains("X"))) {
                     return null;
                 }
             }
@@ -959,83 +958,80 @@ public class DataFile {
         return null;
     }
 
-    private short parseTimestampComponent(
+    private int parseTimestampComponent(
             final String timestampPart,
             final String pattern,
-            final int field,
+            final ChronoField field,
             final TimeZone timeZone)
                     throws ParseException {
-        LOG.trace(String.format("parseTimestampComponent(%s,%s,%d)",
+        LOG.trace(String.format("parseTimestampComponent(%s,%s,%s)",
                     timestampPart,
                     pattern,
                     field));
-        Date date = null;
-        final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
         if (timeZone != null) {
-            sdf.setTimeZone(timeZone);
+        	dtf.withZone(ZoneId.of(timeZone.getID()));
         }
 
-        String parsebleTimestamp = timestampPart;
+        TemporalAccessor ta = dtf.parse(timestampPart);
 
-        date = sdf.parse(parsebleTimestamp);
-
-        GregorianCalendar gc = new GregorianCalendar();
-        if (timeZone != null) {
-            gc = new GregorianCalendar(timeZone);
+        if (ta.isSupported(field)) {
+        	return ta.get(field);
         }
-        gc.setTime(date);
 
-        return (short) gc.get(field);
+        throw new ParseException("Could not parse field '"
+        		+ field.toString()
+        		 + "' using pattern '"
+        		 + pattern
+        		 + "' for input '"
+        		 + timestampPart
+        		 + "'. (Ingore offset value).",-42);
     }
 
-    private int[] getGregorianCalendarFields(final String pattern) {
-        LOG.trace(String.format("getGregorianCalendarFields(%s)",
+    private ChronoField[] getChronoFields(final String pattern) {
+        LOG.trace(String.format("getChronoFields(%s)",
                     pattern));
-        final ArrayList<Integer> fields = new ArrayList<Integer>();
+        final ArrayList<ChronoField> fields = new ArrayList<>();
         if (pattern.contains("y")) {
-            fields.add(GregorianCalendar.YEAR);
+            fields.add(ChronoField.YEAR);
         }
         if (pattern.contains("M") ||
                 pattern.contains("w") ||
                 pattern.contains("D")) {
-            fields.add(GregorianCalendar.MONTH);
+            fields.add(ChronoField.MONTH_OF_YEAR);
         }
         if (pattern.contains("d") ||
                 (pattern.contains("W") && pattern.contains("d"))) {
-            fields.add(GregorianCalendar.DAY_OF_MONTH);
+            fields.add(ChronoField.DAY_OF_MONTH);
         }
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
                 ((pattern.contains("K") ||
                 (pattern.contains("h")) && pattern.contains("a")))) {
-            fields.add(GregorianCalendar.HOUR_OF_DAY);
+            fields.add(ChronoField.HOUR_OF_DAY);
         }
         if (pattern.contains("m")) {
-            fields.add(GregorianCalendar.MINUTE);
+            fields.add(ChronoField.MINUTE_OF_HOUR);
         }
         if (pattern.contains("s")) {
-            fields.add(GregorianCalendar.SECOND);
+            fields.add(ChronoField.SECOND_OF_MINUTE);
         }
-        if (pattern.contains("Z") || pattern.contains("z")) {
-            fields.add(GregorianCalendar.ZONE_OFFSET);
+        if ((pattern.contains("Z") && !pattern.contains("'Z'")) || pattern.contains("XXX")) {
+            fields.add(ChronoField.OFFSET_SECONDS);
         }
         fields.trimToSize();
-        final int[] result = new int[fields.size()];
-        int j = 0;
-        for (final Integer i : fields) {
-            result[j++] = i;
-        }
-        return result;
+        return fields.toArray(new ChronoField[fields.size()]);
     }
 
-    private String getParsePattern(final Column column) {
+    private String getParsePattern(final Column column) throws ParseException {
         LOG.trace("getParsePattern()");
         if (column.getMetadataArray() != null && column.getMetadataArray().length > 1) {
             for (final Metadata m : column.getMetadataArray()) {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
-                    LOG.debug(String.format("Parsepattern found: %s",
-                                m.getValue()));
-                    return m.getValue();
+                    String pattern = m.getValue();
+					LOG.debug(String.format("Parsepattern found: %s",
+                                pattern));
+                    return pattern;
                 }
             }
         }
@@ -1044,6 +1040,19 @@ public class DataFile {
                     column.xmlText()));
         return null;
     }
+
+	private void checkPattern(String pattern) throws ParseException {
+		if (pattern.contains("z")) {
+			StringBuilder errorMsg = new StringBuilder();
+			errorMsg.append("Pattern 'z' not supported. Found in pattern '");
+			errorMsg.append(pattern);
+			errorMsg.append("'.");
+			LOG.error(errorMsg.toString());
+			throw new ParseException(
+					errorMsg.toString(),
+					pattern.indexOf('z'));
+		}
+	}
 
     /** {@inheritDoc} */
     @Override

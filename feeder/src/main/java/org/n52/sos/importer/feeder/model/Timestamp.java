@@ -71,7 +71,7 @@ public class Timestamp {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-    	return toISO8601String();
+        return toISO8601String();
     }
 
     public String toISO8601String() {
@@ -118,17 +118,17 @@ public class Timestamp {
         }
         if (timezone != Integer.MIN_VALUE &&
                 (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
-        	if (timezone >= 0) {
+            if (timezone >= 0) {
                 if (timezone >= 10) {
                     ts.append("+").append(timezone).append(":").append(DOUBLE_ZERO);
                 } else {
-                	ts.append("+0").append(timezone).append(":").append(DOUBLE_ZERO);
+                    ts.append("+0").append(timezone).append(":").append(DOUBLE_ZERO);
                 }
             } else {
                 if (timezone <= -10) {
-                	ts.append(timezone).append(":").append(DOUBLE_ZERO);
+                    ts.append(timezone).append(":").append(DOUBLE_ZERO);
                 } else {
-                	ts.append("-0").append(Math.abs(timezone)).append(":").append(DOUBLE_ZERO);
+                    ts.append("-0").append(Math.abs(timezone)).append(":").append(DOUBLE_ZERO);
                 }
             }
         }
@@ -142,7 +142,7 @@ public class Timestamp {
      * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      */
     public Timestamp ofUnixTimeMillis(final long unixTimeMillis) {
-    	OffsetDateTime timestamp = OffsetDateTime.ofInstant(Instant.ofEpochMilli(unixTimeMillis),ZoneId.of("UTC"));
+        OffsetDateTime timestamp = OffsetDateTime.ofInstant(Instant.ofEpochMilli(unixTimeMillis),ZoneId.of("UTC"));
         year = timestamp.getYear();
         month = timestamp.getMonthValue();
         day = timestamp.getDayOfMonth();
@@ -209,8 +209,8 @@ public class Timestamp {
             if (dateInfoPattern.contains("S")) {
                 setMillis(ta.get(ChronoField.MILLI_OF_SECOND));
             }
-            if (dateInfoPattern.contains("z") || dateInfoPattern.contains("Z")) {
-                setTimezone(ta.get(ChronoField.OFFSET_SECONDS)/3600);
+            if (dateInfoPattern.contains("Z")) {
+                setTimezone(ta.get(ChronoField.OFFSET_SECONDS) / 3600);
             }
         }
         return this;
@@ -277,21 +277,21 @@ public class Timestamp {
      * @return Instant of the current {@link Timestamp} object.
      */
     protected Instant toInstant() {
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern(getDatePattern());
-    	String iso8601String = toISO8601String();
-    	try {
-			return dtf.parse(iso8601String, ZonedDateTime::from).toInstant();
-    	} catch (DateTimeException e) {}
-    	try {
-    		return dtf.parse(iso8601String, OffsetDateTime::from).toInstant();
-		} catch (DateTimeException e) {}
-    	try {
-    		return dtf.parse(iso8601String, LocalDateTime::from).toInstant(ZoneOffset.of("UTC"));
-    	} catch (DateTimeException e) {}
-    	try {
-    		return Instant.ofEpochMilli(dtf.parse(iso8601String, LocalDate::from).toEpochDay()*MILLIS_PER_DAY);
-    	} catch (DateTimeException e) {}
-    	return Instant.ofEpochMilli(0);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(getDatePattern());
+        String iso8601String = toISO8601String();
+        try {
+            return dtf.parse(iso8601String, ZonedDateTime::from).toInstant();
+        } catch (DateTimeException e) {}
+        try {
+            return dtf.parse(iso8601String, OffsetDateTime::from).toInstant();
+        } catch (DateTimeException e) {}
+        try {
+            return dtf.parse(iso8601String, LocalDateTime::from).toInstant(ZoneOffset.of("UTC"));
+        } catch (DateTimeException e) {}
+        try {
+            return Instant.ofEpochMilli(dtf.parse(iso8601String, LocalDate::from).toEpochDay()*MILLIS_PER_DAY);
+        } catch (DateTimeException e) {}
+        return Instant.ofEpochMilli(0);
     }
 
     private String getDatePattern() {
@@ -378,14 +378,14 @@ public class Timestamp {
     public Timestamp applyDayDelta(final int daysToAdd) {
         TemporalAccessor ta = DateTimeFormatter.ofPattern(getDatePattern()).parse(toISO8601String());
         if (ta.isSupported(ChronoField.YEAR) &&
-        		ta.isSupported(ChronoField.MONTH_OF_YEAR) &&
-        		ta.isSupported(ChronoField.DAY_OF_MONTH)) {
-        	LocalDate ld = LocalDate.of(ta.get(ChronoField.YEAR), ta.get(ChronoField.MONTH_OF_YEAR), ta.get(ChronoField.DAY_OF_MONTH));
-        	ld = ld.plusDays(daysToAdd);
-        	setYear(ld.getYear());
-        	setMonth(ld.getMonthValue());
-        	setDay(ld.getDayOfMonth());
-    	}
+                ta.isSupported(ChronoField.MONTH_OF_YEAR) &&
+                ta.isSupported(ChronoField.DAY_OF_MONTH)) {
+            LocalDate ld = LocalDate.of(ta.get(ChronoField.YEAR), ta.get(ChronoField.MONTH_OF_YEAR), ta.get(ChronoField.DAY_OF_MONTH));
+            ld = ld.plusDays(daysToAdd);
+            setYear(ld.getYear());
+            setMonth(ld.getMonthValue());
+            setDay(ld.getDayOfMonth());
+        }
         return this;
     }
 
