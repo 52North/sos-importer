@@ -970,7 +970,7 @@ public class DataFile {
                     field));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
         if (timeZone != null) {
-        	dtf.withZone(ZoneId.of(timeZone.getID()));
+            dtf = dtf.withZone(ZoneId.of(timeZone.getID()));
         }
 
         TemporalAccessor ta = dtf.parse(timestampPart);
