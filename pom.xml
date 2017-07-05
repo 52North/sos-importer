@@ -41,9 +41,10 @@
         <geotools.version>9.5</geotools.version>
     </properties>
     <scm>
-        <connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</developerConnection>
-        <url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/?root=sensorweb</url>
+        <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/52North/sos-importer.git</developerConnection>
+        <url>https://github.com/52North/sos-importer</url>
+        <tag>HEAD</tag>
     </scm>
     <organization>
         <name>52°North</name>
