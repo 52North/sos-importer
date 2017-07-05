@@ -290,6 +290,11 @@
 						<xs:documentation>The sensor id.</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="OM_PARAMETER">
+					<xs:annotation>
+						<xs:documentation>An additional attribute of an observation.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -298,6 +303,7 @@
 			<xs:documentation>
                 The value of a key-value-pair. Potential values: 
                     TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; 
+                    TYPE->OM_PARAMETER: NUMERIC | COUNT | BOOLEAN | TEXT | CATEGORY
                     TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).
             </xs:documentation>
 		</xs:annotation>
@@ -444,6 +450,14 @@
 				<xs:element ref="Number"/>
 			</xs:choice>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="RelatedOmParameter">
+		<xs:annotation>
+			<xs:documentation>
+				A O'n'M 2.0 Parameter related to THIS entity. The content of this
+				element MUST match a column Number.
+			</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 	<xs:element name="RelatedSensor">
 		<xs:annotation>
@@ -681,6 +695,7 @@
                         </xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element ref="RelatedOmParameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
