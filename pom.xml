@@ -27,6 +27,19 @@
         <module>wizard</module>
         <module>feeder</module>
     </modules>
+    <properties>
+        <!-- manual setting -->
+        <currentYear>2016</currentYear>
+        <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+        <currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
+        <oxf.version>2.0.0</oxf.version>
+        <common.xml.version>1.1.5</common.xml.version>
+        <importer.xml.binding.version>0.4</importer.xml.binding.version>
+        <geotools.version>9.5</geotools.version>
+    </properties>
     <scm>
         <connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
         <developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</developerConnection>
@@ -93,18 +106,6 @@
             <organizationUrl>http://ifgi.uni-muenster.de/</organizationUrl>
         </contributor>
     </contributors>
-    <properties>
-        <currentYear>2016</currentYear> <!-- manual setting -->
-        <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
-        <currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <oxf.version>2.0.0-SNAPSHOT</oxf.version>
-        <common.xml.version>1.1.5</common.xml.version>
-        <importer.xml.binding.version>0.4</importer.xml.binding.version>
-        <geotools.version>9.5</geotools.version>
-    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -307,7 +308,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>2.10</version>
+                <version>2.12</version>
             </extension>
         </extensions>
         <pluginManagement>
