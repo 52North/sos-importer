@@ -46,6 +46,17 @@
         <url>https://github.com/52North/sos-importer</url>
         <tag>HEAD</tag>
     </scm>
+    <!-- here the repositories where this project should deployed to -->
+    <distributionManagement>
+        <repository>
+            <id>n52-releases-dist</id>
+            <url>dav:https://52north.org/maven/repo/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>n52-snapshots-dist</id>
+            <url>dav:https://52north.org/maven/repo/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <organization>
         <name>52°North</name>
         <url>http://52north.org/</url>
@@ -481,17 +492,6 @@
             </snapshots>
         </repository>
     </repositories>
-    <!-- here the repositories where this project should deployed to -->
-    <distributionManagement>
-        <repository>
-            <id>n52-releases-dist</id>
-            <url>dav:https://52north.org/maven/repo/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>n52-snapshots-dist</id>
-            <url>dav:https://52north.org/maven/repo/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
     <profiles>
         <profile>
             <id>release</id>
