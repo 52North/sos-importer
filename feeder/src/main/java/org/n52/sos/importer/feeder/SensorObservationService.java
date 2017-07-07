@@ -700,6 +700,7 @@ public final class SensorObservationService {
         // OBSERVED_PROPERTY
         final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId, values);
         LOG.debug("ObservedProperty: {}", observedProperty);
+        // OFFERING
         final Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
         return new InsertObservation(sensor,

@@ -54,11 +54,11 @@ import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.StepModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.DataFileDocument.DataFile;
-import org.x52North.sensorweb.sos.importer.x04.LocalFileDocument.LocalFile;
-import org.x52North.sensorweb.sos.importer.x04.RemoteFileDocument.RemoteFile;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.DataFileDocument.DataFile;
+import org.x52North.sensorweb.sos.importer.x05.LocalFileDocument.LocalFile;
+import org.x52North.sensorweb.sos.importer.x05.RemoteFileDocument.RemoteFile;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * In this class the XML model for an CSV file is stored for later re-use by

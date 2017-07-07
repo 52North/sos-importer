@@ -29,7 +29,7 @@
     Public License for more details.
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.4/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.4/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.5/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.5/" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!-- 
             
             BASE TYPES

@@ -39,10 +39,10 @@ import org.n52.sos.importer.model.position.Latitude;
 import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.table.Column;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument;
 
 /**
  * <p>Step5CModelHandlerTest class.</p>
@@ -71,7 +71,7 @@ public class Step5CModelHandlerTest {
         position.setGroup("A");
         final Step5cModel stepModel = new Step5cModel(position);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
-        org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column column =
+        org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column column =
                 importConf.addNewCsvMetadata().addNewColumnAssignments().addNewColumn();
         column.setNumber(positionColumnId);
         column.setType(TypeDocument.Type.POSITION);

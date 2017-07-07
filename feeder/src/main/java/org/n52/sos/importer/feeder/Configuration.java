@@ -52,20 +52,21 @@ import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x04.RelatedFOIDocument.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x04.SensorType;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum;
-import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
+import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
+import org.x52North.sensorweb.sos.importer.x05.RelatedOmParameterDocument;
+import org.x52North.sensorweb.sos.importer.x05.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x05.SensorType;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum;
+import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 
 /**
  * This class holds the configuration XML file and provides easy access to all
@@ -545,7 +546,7 @@ public final class Configuration {
      * <p>getColumnById.</p>
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
      */
     public Column getColumnById(final int mvColumnId) {
         LOG.trace(String.format("getColumnById(%d)", mvColumnId));
@@ -570,7 +571,7 @@ public final class Configuration {
      * <code>null</code> is returned.
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
      */
     public SensorType getRelatedSensor(final int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
@@ -669,7 +670,7 @@ public final class Configuration {
                         pos.getURI().getStringValue() != null &&
                         pos.getURI().getStringValue().equals(foiUri)) {
                     // if element is found -> fill position
-                    final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p = pos.getPosition();
+                    final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p = pos.getPosition();
                     if (p.isSetAlt() &&
                             p.isSetEPSGCode() &&
                             p.isSetLat() &&
@@ -685,11 +686,11 @@ public final class Configuration {
     /**
      * <p>getModelPositionXBPosition.</p>
      *
-     * @param p {@link org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position}
+     * @param p {@link org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position}
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
     public Position getModelPositionXBPosition(
-            final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p) {
+            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p) {
         LOG.trace("getPosition()");
         final String[] units = new String[3];
         final double[] values = new double[3];
@@ -715,7 +716,7 @@ public final class Configuration {
      * <p>getRelatedFoi.</p>
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType} object.
      */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
@@ -996,7 +997,7 @@ public final class Configuration {
      * Returns all columns of the corresponding <code>group</code>
      *
      * @param group a <code>{@link java.lang.String String}</code> as group identifier
-     * @param t a {@link org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum} object.
+     * @param t a {@link org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum} object.
      * @return a <code>Column[]</code> having all the group id
      *             <code>group</code> <b>or</b><br>
      *             an empty <code>Column[]</code>
@@ -1103,7 +1104,7 @@ public final class Configuration {
      * Returns the op with the given id or <code>null</code>
      *
      * @param idRef a {@link java.lang.String} object.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType} object.
      */
     public ObservedPropertyType getObsPropById(final String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
@@ -1192,7 +1193,7 @@ public final class Configuration {
     /**
      * <p>getSensorFromAdditionalMetadata.</p>
      *
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
      */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");

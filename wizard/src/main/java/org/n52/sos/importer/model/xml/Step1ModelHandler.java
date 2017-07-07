@@ -32,11 +32,11 @@ import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.view.Step1Panel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.CredentialsDocument.Credentials;
-import org.x52North.sensorweb.sos.importer.x04.DataFileDocument.DataFile;
-import org.x52North.sensorweb.sos.importer.x04.LocalFileDocument.LocalFile;
-import org.x52North.sensorweb.sos.importer.x04.RemoteFileDocument.RemoteFile;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.CredentialsDocument.Credentials;
+import org.x52North.sensorweb.sos.importer.x05.DataFileDocument.DataFile;
+import org.x52North.sensorweb.sos.importer.x05.LocalFileDocument.LocalFile;
+import org.x52North.sensorweb.sos.importer.x05.RemoteFileDocument.RemoteFile;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Get updates from Step1Model<br>

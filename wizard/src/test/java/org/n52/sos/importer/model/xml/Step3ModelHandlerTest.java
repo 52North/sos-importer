@@ -37,9 +37,9 @@ import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step3Model;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>

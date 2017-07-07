@@ -62,20 +62,20 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x04.GeneratedResourceType;
-import org.x52North.sensorweb.sos.importer.x04.GeneratedSpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.ManualResourceType;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x04.RelatedObservedPropertyDocument.RelatedObservedProperty;
-import org.x52North.sensorweb.sos.importer.x04.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
-import org.x52North.sensorweb.sos.importer.x04.SensorType;
-import org.x52North.sensorweb.sos.importer.x04.SpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
-import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x05.GeneratedResourceType;
+import org.x52North.sensorweb.sos.importer.x05.GeneratedSpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
+import org.x52North.sensorweb.sos.importer.x05.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x05.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
+import org.x52North.sensorweb.sos.importer.x05.SensorType;
+import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 
 /**
  * Class holds the datafile and provides easy to use interfaces to get certain
@@ -936,7 +936,7 @@ public class DataFile {
     }
 
     private Position getPosition(
-            final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p,
+            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p,
             final String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(%s,%s)",
                     p.xmlText(),
