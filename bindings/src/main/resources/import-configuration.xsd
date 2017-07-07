@@ -458,6 +458,11 @@
 				element MUST match a column Number.
 			</xs:documentation>
 		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0" />
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="RelatedSensor">
 		<xs:annotation>
