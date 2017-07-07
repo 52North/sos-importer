@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -37,8 +38,10 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -58,7 +61,6 @@ import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x05.RelatedOmParameterDocument;
 import org.x52North.sensorweb.sos.importer.x05.RelatedFOIDocument.RelatedFOI;
 import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
 import org.x52North.sensorweb.sos.importer.x05.SensorType;
@@ -545,23 +547,23 @@ public final class Configuration {
     /**
      * <p>getColumnById.</p>
      *
-     * @param mvColumnId a int.
+     * @param columnId a int.
      * @return a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
      */
-    public Column getColumnById(final int mvColumnId) {
-        LOG.trace(String.format("getColumnById(%d)", mvColumnId));
+    public Column getColumnById(final int columnId) {
+        LOG.trace(String.format("getColumnById(%d)", columnId));
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column column : cols) {
-            if (column.getNumber() == mvColumnId) {
+            if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Column found for id %d",
-                            mvColumnId));
+                            columnId));
                 }
                 return column;
             }
         }
         LOG.error(String.format("CsvMetadat.ColumnAssignments not set properly. Could not find Column for id %d.",
-                mvColumnId));
+                columnId));
         return null;
     }
 
@@ -1608,6 +1610,46 @@ public final class Configuration {
         return importConf.getCsvMetadata().isSetCsvParserClass() &&
                 importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch() &&
                 importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch();
+    }
+
+    public boolean isOmParameterAvailableFor(int mVColumnId) {
+        // Case A: relatedOmParameter set
+        if (importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray() > 0 &&
+                importConf.getCsvMetadata().getColumnAssignments().getColumnArray(mVColumnId)
+                        .getRelatedOmParameterArray().length > 0) {
+            return true;
+        } else {
+            // Case B: column with type omParameter
+            for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                if (column.getType().equals(Type.OM_PARAMETER)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Column> getColumnsForOmParameter(int mVColumnId) {
+        if (isOmParameterAvailableFor(mVColumnId)) {
+            List<Column> cols = new LinkedList<>();
+            // get by id
+            if (importConf.getCsvMetadata().getColumnAssignments().getColumnArray(mVColumnId)
+                    .getRelatedOmParameterArray().length > 0) {
+                for (BigInteger relatedOmParameter : importConf.getCsvMetadata().getColumnAssignments()
+                        .getColumnArray(mVColumnId).getRelatedOmParameterArray()) {
+                    cols.add(getColumnById(relatedOmParameter.intValue()));
+                }
+            } else {
+                // collect all
+                for (Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                    if (col.getType().equals(Type.OM_PARAMETER)) {
+                        cols.add(col);
+                    }
+                }
+            }
+            return cols;
+        }
+        return Collections.emptyList();
     }
 
 }

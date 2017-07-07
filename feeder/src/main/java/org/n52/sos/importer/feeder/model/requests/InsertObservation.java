@@ -28,6 +28,12 @@
  */
 package org.n52.sos.importer.feeder.model.requests;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.n52.oxf.om.x20.OmParameter;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -52,6 +58,7 @@ public class InsertObservation {
     private final UnitOfMeasurement unitOfMeasurement;
     private final Offering offering;
     private final String measuredValueType;
+    private List<OmParameter<?>> omParameters;
 
     /**
      * <p>Constructor for InsertObservation.</p>
@@ -63,6 +70,7 @@ public class InsertObservation {
      * @param uom a {@link org.n52.sos.importer.feeder.model.UnitOfMeasurement} object.
      * @param obsProp a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      * @param off a {@link org.n52.sos.importer.feeder.model.Offering} object.
+     * @param omParameters a optional list of {@link OmParameter}.
      * @param mvType a {@link java.lang.String} object.
      */
     public InsertObservation(final Sensor sensor,
@@ -72,6 +80,7 @@ public class InsertObservation {
             final UnitOfMeasurement uom,
             final ObservedProperty obsProp,
             final Offering off,
+            Optional<List<OmParameter<?>>> omParameters,
             final String mvType) {
         featureOfInterest = foi;
         this.sensor = sensor;
@@ -81,6 +90,11 @@ public class InsertObservation {
         resultValue = value;
         offering = off;
         measuredValueType = mvType;
+        if (omParameters.isPresent()) {
+            this.omParameters = omParameters.get();
+        } else {
+            this.omParameters = Collections.emptyList();
+        }
     }
 
     /**
@@ -266,7 +280,19 @@ public class InsertObservation {
         builder.append(offering);
         builder.append(", measuredValueType=");
         builder.append(measuredValueType);
+        builder.append(", omParameter=");
+        builder.append(Arrays.toString(getOmParameters()));
         builder.append("]");
         return builder.toString();
+    }
+
+    public boolean isSetOmParameters() {
+        return omParameters != null && !omParameters.isEmpty();
+    }
+
+    public OmParameter<?>[] getOmParameters() {
+        return isSetOmParameters() ? Collections.unmodifiableList(omParameters)
+                .toArray(new OmParameter<?>[omParameters.size()])
+                : new OmParameter<?>[0];
     }
 }
