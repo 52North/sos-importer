@@ -132,6 +132,23 @@
                         </xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="HUNK_SIZE">
+				    <xs:annotation>
+				        <xs:documentation>
+				           Use in combination with IMPORT_STRATEGY. Defines
+				           the number of observations to import per request.
+				        </xs:documentation>
+				    </xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="IMPORT_STRATEGY"/>
+				<xs:enumeration value="NAME">
+				    <xs:annotation>
+				        <xs:documentation>
+				            Specifies the name of the OM_PARAMETER column
+				            it is used within.
+				        </xs:documentation>
+				    </xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="TIME"/>
 				<xs:enumeration value="TIME_DAY"/>
 				<xs:enumeration value="TIME_HOUR"/>
@@ -147,8 +164,6 @@
 				<xs:enumeration value="POSITION_EPSG_CODE"/>
 				<xs:enumeration value="POSITION_LATITUDE"/>
 				<xs:enumeration value="POSITION_LONGITUDE"/>
-				<xs:enumeration value="IMPORT_STRATEGY"/>
-				<xs:enumeration value="HUNK_SIZE"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
