@@ -40,60 +40,67 @@ import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
 
 public class ConfigurationTest {
-
+    
     @Test
     public void isSetOmParameterShouldReturnFalseIfNotSet() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_not_set.xml");
-	Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(false));
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
+        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(false));
     }
-
+    
     @Test
     public void isSetOmParameterShoulodReturnTrueIfRelatedOmParameterIsSet() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_set_as_related.xml");
-	Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
+        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
     }
-
+    
     @Test
-    public void isSetOmParameterShoulodReturnTrueIfAtLeastOneOmParameterColumnIsDefined() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_set_in_column.xml");
-	Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
+    public void isSetOmParameterShoulodReturnTrueIfAtLeastOneOmParameterColumnIsDefined()
+            throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
+        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
     }
-
+    
     @Test
     public void getColumnsForOmParametersShouldReturnEmptyListIfNotSet() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_not_set.xml");
-	Assert.assertThat(configuration.getColumnsForOmParameter(4), CoreMatchers.notNullValue());
-	Assert.assertThat(configuration.getColumnsForOmParameter(4).isEmpty(), CoreMatchers.is(true));
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
+        Assert.assertThat(configuration.getColumnsForOmParameter(4), CoreMatchers.notNullValue());
+        Assert.assertThat(configuration.getColumnsForOmParameter(4).isEmpty(), CoreMatchers.is(true));
     }
-
+    
     @Test
     public void getColumnsForOmParameterShouldReturnCorrectValues() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_set_as_related.xml");
-
-	List<Column> omParameterColumns = configuration.getColumnsForOmParameter(4);
-	Assert.assertThat(omParameterColumns.isEmpty(), CoreMatchers.is(false));
-	Assert.assertThat(omParameterColumns.size(), CoreMatchers.is(1));
-	Column column = omParameterColumns.get(0);
-	Assert.assertThat(column.getType(), CoreMatchers.is(Type.OM_PARAMETER));
-	Assert.assertThat(column.getMetadataArray().length, CoreMatchers.is(1));
-	Assert.assertThat(column.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-	Assert.assertThat(column.getMetadataArray(0).getValue(), CoreMatchers.is("COUNT"));
-
-	Configuration configuration2 = new Configuration("src/test/resources/configuration/omparameter_set_in_column.xml");
-
-	List<Column> omParameterColumns2 = configuration2.getColumnsForOmParameter(4);
-	Assert.assertThat(omParameterColumns2.isEmpty(), CoreMatchers.is(false));
-	Assert.assertThat(omParameterColumns2.size(), CoreMatchers.is(2));
-	Column column2 = omParameterColumns2.get(0);
-	Assert.assertThat(column2.getType(), CoreMatchers.is(Type.OM_PARAMETER));
-	Assert.assertThat(column2.getMetadataArray().length, CoreMatchers.is(2));
-	Assert.assertThat(column2.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-	Assert.assertThat(column2.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
-
-	Column column3 = omParameterColumns2.get(1);
-	Assert.assertThat(column3.getMetadataArray().length, CoreMatchers.is(2));
-	Assert.assertThat(column3.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-	Assert.assertThat(column3.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
+        
+        List<Column> omParameterColumns = configuration.getColumnsForOmParameter(4);
+        Assert.assertThat(omParameterColumns.isEmpty(), CoreMatchers.is(false));
+        Assert.assertThat(omParameterColumns.size(), CoreMatchers.is(1));
+        Column column = omParameterColumns.get(0);
+        Assert.assertThat(column.getType(), CoreMatchers.is(Type.OM_PARAMETER));
+        Assert.assertThat(column.getMetadataArray().length, CoreMatchers.is(1));
+        Assert.assertThat(column.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
+        Assert.assertThat(column.getMetadataArray(0).getValue(), CoreMatchers.is("COUNT"));
+        
+        Configuration configuration2 = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
+        
+        List<Column> omParameterColumns2 = configuration2.getColumnsForOmParameter(4);
+        Assert.assertThat(omParameterColumns2.isEmpty(), CoreMatchers.is(false));
+        Assert.assertThat(omParameterColumns2.size(), CoreMatchers.is(2));
+        Column column2 = omParameterColumns2.get(0);
+        Assert.assertThat(column2.getType(), CoreMatchers.is(Type.OM_PARAMETER));
+        Assert.assertThat(column2.getMetadataArray().length, CoreMatchers.is(2));
+        Assert.assertThat(column2.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
+        Assert.assertThat(column2.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
+        
+        Column column3 = omParameterColumns2.get(1);
+        Assert.assertThat(column3.getMetadataArray().length, CoreMatchers.is(2));
+        Assert.assertThat(column3.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
+        Assert.assertThat(column3.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
     }
-
+    
 }

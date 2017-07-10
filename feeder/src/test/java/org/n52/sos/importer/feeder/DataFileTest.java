@@ -47,7 +47,8 @@ public class DataFileTest {
 
     @Test
     public void shouldReturnEmptyListIfNothingIsAvailable() throws XmlException, IOException {
-	Configuration configuration = new Configuration("src/test/resources/configuration/omparameter_not_set.xml");
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
 
 	Assert.assertThat(
 		new DataFile(configuration, null).getOmParameter(4, null),
@@ -64,7 +65,7 @@ public class DataFileTest {
     @Test
     public void shouldReturnBooleanParameter() throws XmlException, IOException {
 	Configuration configuration =
-		new Configuration("src/test/resources/configuration/omparameter_set_in_column.xml");
+                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
 	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(4,
 		new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "true", "false", "10"});
@@ -84,7 +85,7 @@ public class DataFileTest {
     @Test
     public void shouldReturnCountParameter() throws XmlException, IOException {
 	Configuration configuration =
-		new Configuration("src/test/resources/configuration/omparameter_set_in_column_all.xml");
+                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
 	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
@@ -117,7 +118,7 @@ public class DataFileTest {
     @Test
     public void shouldReturnTextParameter() throws XmlException, IOException {
 	Configuration configuration =
-		new Configuration("src/test/resources/configuration/omparameter_set_in_column_all.xml");
+                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
 	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
@@ -133,7 +134,7 @@ public class DataFileTest {
     @Test
     public void shouldReturnCategoryParameter() throws XmlException, IOException {
 	Configuration configuration =
-		new Configuration("src/test/resources/configuration/omparameter_set_in_column_all.xml");
+                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
 	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
