@@ -143,7 +143,7 @@ The `SosMetadata` section has one optional attribute `insertSweArrayObservationT
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/04_CsvMetadata.png" alt="04_CsvMetadata.png" width='482' height='278' />
 
-The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [Extend CsvParser](#Extend_CsvParser) section below for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections.
+The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [Extend CsvParser](#extend-csvparser) section below for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections.
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/05_Column.png" alt="05_Column.png" width='532' height='724' />
 
@@ -553,8 +553,8 @@ You can just download example files to see how the application works:
 
 ## How to Build
 
-   1. Have jdk (>=1.7), maven (>=3.1.1), and git installed already.
-   1. Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
+   1. Have jdk (>=1.8), maven (>=3.1.1), and git installed already.
+   1. _Optional_: Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
 
       ```
       ~$ git clone https://github.com/52North/OX-Framework.git
@@ -581,18 +581,7 @@ You can just download example files to see how the application works:
    1. Switch to required branch (`master` for latest stable version; `develop` for latest development version) via
 
       ```
-      ~/sos-importer$ git checkout devlop
-      ```
-
-      , for example.
-   1. Set-Up the geotools repository like this ([maven help regarding repositories](http://maven.apache.org/guides/mini/guide-multiple-repositories.html)):
-
-      ```
-      <repository>
-  	     <id>osgeo</id>
-  	     <name>Open Source Geospatial Foundation Repository</name>
-  	     <url>http://download.osgeo.org/webdav/geotools/</url>
-      </repository>
+      ~/sos-importer$ git checkout develop
       ```
 
    1. Build SOS importer modules:
@@ -602,8 +591,8 @@ You can just download example files to see how the application works:
       ```
 
    1. Find the jar files here:
-      * _wizard_: `~/52n-sos-importer/wizard/target/`
-      * _feeder_: `~/52n-sos-importer/feeder/target/`
+      * _wizard_: `~/sos-importer/wizard/target/`
+      * _feeder_: `~/sos-importer/feeder/target/`
 
 | *URLs* | *Content* |
 | --- | --- |
@@ -617,7 +606,7 @@ You can just download example files to see how the application works:
 
 ## Dependencies
 
-   * JAVA 1.7+
+   * JAVA 1.8+
    * List of Dependencies (generated following our [best practice](https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus) documentation): [THIRD-PARTY.txt](https://wiki.52north.org/pub/SensorWeb/SosImporter/THIRD-PARTY.txt)
 
 
@@ -633,7 +622,7 @@ To get your own parser implementation working, you need to implement the `CsvPar
 
 In addition, you need to add `<CsvParserClass>` in your configuration to `<CsvMetadata>`. The class that MUST be used for parsing the data file. The interface `org.n52.sos.importer.feeder.CsvParser` MUST be implemented. The class name MUST contain the fully qualified package name and a zero-argument constructor MUST be provided.
 
-The `CsvParser.init(..)` is called after the constructor and should result in a ready-to-use parser instance. `CsvParser.readNext()` returns the next "line" of values that should be processed as `String[]`. An `IOException` could be thrown if something unexpected happens during the read operation. The `CsvParser.getSkipLimit()` should return 0, if number of lines `` number of observations, or the difference between line number and line index.
+The `CsvParser.init(..)` is called after the constructor and should result in a ready-to-use parser instance. `CsvParser.readNext()` returns the next "line" of values that should be processed as `String[]`. An `IOException` could be thrown if something unexpected happens during the read operation. The `CsvParser.getSkipLimit()` should return 0, if number of lines == number of observations, or the difference between line number and line index.
 
 
 # Troubleshooting/Bugs
@@ -656,4 +645,4 @@ Ongoing development is done in branch [develop](../../tree/develop) and dedicate
 
 ## License
 
-The 52&deg;North Sos-Importer is published under the [GNU General Public License v2.0](http://www.spdx.org/licenses/GPL-2.0). The licenses of the dependencies are documented in [another section](#Dependencies).
+The 52&deg;North Sos-Importer is published under the [GNU General Public License v2.0](http://www.spdx.org/licenses/GPL-2.0). The licenses of the dependencies are documented in [another section](#dependencies).
