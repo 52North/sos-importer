@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SosImportConfiguration xsi:schemaLocation="https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
+<SosImportConfiguration xsi:schemaLocation="https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
     <DataFile referenceIsARegularExpression="false">
         <LocalFile>
             <Path>src/test/resources/issue-057/data_obs.csv</Path>
@@ -100,11 +100,27 @@
             </Column>
             <Column>
                 <Number>8</Number>
-                <Type>DO_NOT_EXPORT</Type>
+                <Type>OM_PARAMETER</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>BOOLEAN</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>NAME</Key>
+                    <Value>urn:ogc:number-of-reviews</Value>
+                </Metadata>
             </Column>
             <Column>
                 <Number>9</Number>
-                <Type>DO_NOT_EXPORT</Type>
+                <Type>OM_PARAMETER</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>BOOLEAN</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>NAME</Key>
+                    <Value>urn:ogc:observation-quality-reviewed</Value>
+                </Metadata>
             </Column>
             <Column>
                 <Number>10</Number>

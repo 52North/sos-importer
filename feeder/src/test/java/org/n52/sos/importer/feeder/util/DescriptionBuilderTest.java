@@ -31,6 +31,7 @@ package org.n52.sos.importer.feeder.util;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import net.opengis.gml.TimePeriodType;
 import net.opengis.sensorML.x101.CapabilitiesDocument.Capabilities;
@@ -102,7 +103,15 @@ public class DescriptionBuilderTest {
     private final Collection<ObservedProperty> observedProperties =
             java.util.Collections.singletonList(obsProp);
     private final InsertObservation io =
-            new InsertObservation(sensor, foi, value, timeStamp, uom, obsProp, off, mvType);
+            new InsertObservation(sensor,
+                foi,
+                value,
+                timeStamp,
+                uom,
+                obsProp,
+                off,
+                Optional.empty(),
+                mvType);
     private final RegisterSensor rs =
             new RegisterSensor(io, observedProperties, measuredValueTypes, unitOfMeasurements);
     private SystemType system;

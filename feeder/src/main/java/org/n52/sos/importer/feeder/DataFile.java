@@ -45,9 +45,17 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 
+import org.n52.oxf.om.x20.BooleanParameter;
+import org.n52.oxf.om.x20.CountParameter;
+import org.n52.oxf.om.x20.OmParameter;
+import org.n52.oxf.om.x20.QuantityParameter;
+import org.n52.oxf.om.x20.TextParameter;
 import org.n52.oxf.xml.NcNameResolver;
 import org.n52.sos.importer.feeder.csv.CsvParser;
 import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
@@ -62,20 +70,20 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x04.GeneratedResourceType;
-import org.x52North.sensorweb.sos.importer.x04.GeneratedSpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.ManualResourceType;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x04.RelatedObservedPropertyDocument.RelatedObservedProperty;
-import org.x52North.sensorweb.sos.importer.x04.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
-import org.x52North.sensorweb.sos.importer.x04.SensorType;
-import org.x52North.sensorweb.sos.importer.x04.SpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
-import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x05.GeneratedResourceType;
+import org.x52North.sensorweb.sos.importer.x05.GeneratedSpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
+import org.x52North.sensorweb.sos.importer.x05.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x05.RelatedUnitOfMeasurementDocument.RelatedUnitOfMeasurement;
+import org.x52North.sensorweb.sos.importer.x05.SensorType;
+import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 
 /**
  * Class holds the datafile and provides easy to use interfaces to get certain
@@ -85,6 +93,14 @@ import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
  * @version $Id: $Id
  */
 public class DataFile {
+
+    private static final String NUMERIC = "NUMERIC";
+
+    private static final String COUNT = "COUNT";
+
+    private static final String BOOLEAN = "BOOLEAN";
+
+    private static final String TEXT = "TEXT";
 
     private static final String NAME = "name: %s";
 
@@ -133,11 +149,11 @@ public class DataFile {
             LOG.error(
                     String.format("File '%s' can not be accessed, "
                             + "because another process blocked read access!",
-                    dataFile.getAbsolutePath()));
+                            dataFile.getAbsolutePath()));
             throw new JavaApiBugJDL6203387Exception(dataFile.getName());
         } else {
             LOG.debug(String.format("File '%s' is a file and read permission is available.",
-                        dataFile.getAbsolutePath()));
+                    dataFile.getAbsolutePath()));
             return true;
         }
         return false;
@@ -150,14 +166,12 @@ public class DataFile {
                 fr = new InputStreamReader(new FileInputStream(file), Configuration.DEFAULT_CHARSET);
             } catch (final FileNotFoundException fnfe) {
                 // TODO add more language specific versions of this error message
-                if (
-                        (
-                            fnfe.getMessage().indexOf("Der Prozess kann nicht auf die Datei zugreifen, "
-                                    + "da sie von einem anderen Prozess verwendet wird") >= 0
-                            ||
-                            fnfe.getMessage().indexOf("The process cannot access the dataFile "
-                                    + "because it is being used by another process") >= 0
-                        )
+                if ((fnfe.getMessage()
+                        .indexOf("Der Prozess kann nicht auf die Datei zugreifen, "
+                                + "da sie von einem anderen Prozess verwendet wird") >= 0
+                        || fnfe.getMessage()
+                                .indexOf("The process cannot access the dataFile "
+                                        + "because it is being used by another process") >= 0)
                         &&
                         fnfe.getMessage().indexOf(file.getName()) >= 0) {
                     return true;
@@ -288,15 +302,11 @@ public class DataFile {
                                 : null,
                                 // uri
                                 gRT.isSetURI()
-                        ? gRT.getURI().getStringValue()
+                                ? gRT.getURI().getStringValue()
                                 : null,
-                                // useUriAsPrefix
-                                gRT.isSetURI() &&
-                                gRT.getURI().isSetUseAsPrefix()
-                                ? gRT.getURI().getUseAsPrefix()
-                                        : false,
-                                        gRT.getNumberArray(),
-                                        values
+                        // useUriAsPrefix
+                        gRT.isSetURI() && gRT.getURI().isSetUseAsPrefix() ? gRT.getURI().getUseAsPrefix() : false,
+                        gRT.getNumberArray(), values
                         );
                 sensor = new Sensor(a[0], a[1]);
             } else if (sensorType.getResource() instanceof ManualResourceType) {
@@ -319,8 +329,7 @@ public class DataFile {
      */
     public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
         LOG.trace(String.format("getFoiForColumn(%d,%s)",
-                    mvColumnId,
-                    Arrays.toString(values)));
+                mvColumnId, Arrays.toString(values)));
         // check for foi column and return new foi
         FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
         if (foi == null) {
@@ -426,23 +435,23 @@ public class DataFile {
             if (m.getKey().equals(Key.TYPE)) {
                 // check various types of observation
                 // TEXT
-                if (m.getValue().equals("TEXT")) {
+                if (m.getValue().equals(TEXT)) {
                     return value;
                 }
                 // text is done -> clean string before parsing to other types
                 value = value.trim();
                 // BOOLEAN
-                if (m.getValue().equals("BOOLEAN")) {
+                if (m.getValue().equals(BOOLEAN)) {
                     if (value.equalsIgnoreCase("0")) {
                         value = "false";
                     } else if (value.equalsIgnoreCase("1")) {
                         value = "true";
                     }
                     return Boolean.parseBoolean(value);
-                } else if (m.getValue().equals("COUNT")) {
+                } else if (m.getValue().equals(COUNT)) {
                     // COUNT
                     return (int) configuration.parseToDouble(value);
-                } else if (m.getValue().equals("NUMERIC")) {
+                } else if (m.getValue().equals(NUMERIC)) {
                     // NUMERIC
                     return configuration.parseToDouble(value);
                 }
@@ -581,8 +590,8 @@ public class DataFile {
             for (final Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
                     try {
-                        for (final String zoneId :
-                                TimeZone.getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
+                        for (final String zoneId : TimeZone
+                                .getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
                             return TimeZone.getTimeZone(zoneId);
                         }
                     } catch (final NumberFormatException nfe) {
@@ -701,10 +710,7 @@ public class DataFile {
                                 uomGRT.isSetConcatString()
                                 ? uomGRT.getConcatString()
                                         : "",
-                                "",
-                                false,
-                                uomGRT.getNumberArray(),
-                                values);
+                                "", false, uomGRT.getNumberArray(), values);
                         return new UnitOfMeasurement(a[0], a[1]);
                     }
                 }
@@ -783,11 +789,8 @@ public class DataFile {
                                 ? opGRT.getConcatString()
                                         : "",
                                 opGRT.getURI().getStringValue(),
-                                opGRT.getURI().isSetUseAsPrefix()
-                                ? opGRT.getURI().getUseAsPrefix()
-                                        : false,
-                                opGRT.getNumberArray(),
-                                values);
+                                opGRT.getURI().isSetUseAsPrefix() ? opGRT.getURI().getUseAsPrefix() : false,
+                                opGRT.getNumberArray(), values);
                         return new ObservedProperty(a[0], a[1]);
                     }
                 }
@@ -915,7 +918,7 @@ public class DataFile {
 
     private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) throws ParseException {
         LOG.trace(String.format("getFoiColumn(%d,...)",
-                    mvColumnId));
+                mvColumnId));
         final int i = configuration.getColumnIdForFoi(mvColumnId);
         if (i < 0) {
             // foi is not in the data dataFile -> return null
@@ -936,11 +939,10 @@ public class DataFile {
     }
 
     private Position getPosition(
-            final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p,
+            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p,
             final String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(%s,%s)",
-                    p.xmlText(),
-                    Arrays.toString(values)));
+                p.xmlText(), Arrays.toString(values)));
         // Case A: Position is in configuration
         if (!p.isSetGroup() &&
                 //p.isSetAlt() &&
@@ -966,9 +968,7 @@ public class DataFile {
             final TimeZone timeZone)
                     throws ParseException {
         LOG.trace(String.format("parseTimestampComponent(%s,%s,%s)",
-                    timestampPart,
-                    pattern,
-                    field));
+                timestampPart, pattern, field));
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
         if (timeZone != null) {
             dtf = dtf.withZone(ZoneId.of(timeZone.getID()));
@@ -982,16 +982,12 @@ public class DataFile {
 
         throw new ParseException("Could not parse field '"
                 + field.toString()
-                 + "' using pattern '"
-                 + pattern
-                 + "' for input '"
-                 + timestampPart
-                 + "'. (Ingore offset value).", -42);
+                + "' using pattern '" + pattern + "' for input '" + timestampPart + "'. (Ingore offset value).", -42);
     }
 
     private ChronoField[] getChronoFields(final String pattern) {
         LOG.trace(String.format("getChronoFields(%s)",
-                    pattern));
+                pattern));
         final ArrayList<ChronoField> fields = new ArrayList<>();
         if (pattern.contains("y")) {
             fields.add(ChronoField.YEAR);
@@ -1008,7 +1004,7 @@ public class DataFile {
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
                 ((pattern.contains("K") ||
-                (pattern.contains("h")) && pattern.contains("a")))) {
+                        (pattern.contains("h")) && pattern.contains("a")))) {
             fields.add(ChronoField.HOUR_OF_DAY);
         }
         if (pattern.contains("m")) {
@@ -1031,14 +1027,13 @@ public class DataFile {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
                     LOG.debug(String.format("Parsepattern found: %s",
-                                pattern));
+                            pattern));
                     return pattern;
                 }
             }
         }
         LOG.debug(String.format("No Metadata element found with key %s in column %s",
-                    Key.PARSE_PATTERN.toString(),
-                    column.xmlText()));
+                Key.PARSE_PATTERN.toString(), column.xmlText()));
         return null;
     }
 
@@ -1105,5 +1100,69 @@ public class DataFile {
      */
     public char getSeparatorChar() {
         return configuration.getCsvSeparator();
+    }
+
+    public Optional<List<OmParameter<?>>> getOmParameter(int mVColumnId, String[] values) {
+        if (mVColumnId < 0 || values == null || values.length == 0) {
+            return Optional.empty();
+        }
+        // get om column id by relatedOM value or first column with omparameter as
+        // column type
+        if (configuration.isOmParameterAvailableFor(mVColumnId)) {
+            List<Column> omParameterColumns = configuration.getColumnsForOmParameter(mVColumnId);
+            List<OmParameter<?>> omParameters = new LinkedList<>();
+            // create omparameter from omparameter column
+            for (Column col : omParameterColumns) {
+                switch (getOmParameterType(col)) {
+                    case BOOLEAN:
+                        omParameters.add(new BooleanParameter(getOmParameterName(col),
+                                Boolean.parseBoolean(values[col.getNumber()])));
+                        break;
+                    case COUNT:
+                        omParameters.add(
+                                new CountParameter(getOmParameterName(col), Integer.parseInt(values[col.getNumber()])));
+                        break;
+                    case NUMERIC:
+                        omParameters.add(new QuantityParameter(getOmParameterName(col),
+                                getUnitOfMeasurement(col.getNumber(), values).getUri(),
+                                Double.parseDouble(values[col.getNumber()])));
+                        break;
+                    case "CATEGORY":
+                    case TEXT:
+                        omParameters.add(new TextParameter(getOmParameterName(col), values[col.getNumber()]));
+                        break;
+                    default:
+                        throw new IllegalArgumentException(
+                                "om:parameter type not supported: '" + getOmParameterType(col) + "'!");
+                }
+            }
+            return Optional.of(omParameters);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private String getOmParameterName(Column col) {
+        if (col != null && col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
+            for (Metadata meta : col.getMetadataArray()) {
+                if (meta.getKey().equals(Key.NAME) && meta.getValue() != null && !meta.getValue().isEmpty()) {
+                    return meta.getValue();
+                }
+            }
+        }
+        throw new IllegalArgumentException(
+                "Missing metadata element with key 'NAME' defining the name of the om:parameter!");
+    }
+
+    private String getOmParameterType(Column col) {
+        if (col != null && col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
+            for (Metadata meta : col.getMetadataArray()) {
+                if (meta.getKey().equals(Key.TYPE) && meta.getValue() != null && !meta.getValue().isEmpty()) {
+                    return meta.getValue();
+                }
+            }
+        }
+        throw new IllegalArgumentException(
+                "Missing metadata element with key 'TYPE' defining the type of the om:parameter!");
     }
 }

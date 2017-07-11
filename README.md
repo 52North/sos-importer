@@ -108,7 +108,7 @@ The configuration schema is used to store metadata about the data file and the i
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/01_SosImportConfiguration.png" alt="01_SosImportConfiguration.png" width='389' height='130' />
 
-Each `SosImportConfiguration` contains three mandatory sections. These are `DataFile`, `SosMetadta`, and `CsvMetadata`. The section `AdditionalMetadata` is optional.
+Each `SosImportConfiguration` contains three mandatory sections. These are `DataFile`, `SosMetadata`, and `CsvMetadata`. The section `AdditionalMetadata` is optional.
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/02_DataFile.png" alt="02_DataFile.png" width='663' height='715' />
 
@@ -161,6 +161,7 @@ The `Column` contains two mandatory sections `Number` and `Type`. The `Number` i
 | `OBSERVED_PROPERTY` | The observed property. |
 | `UOM` | The Unit of measure using UCUM codes. |
 | `SENSOR` | The sensor id. |
+| `OM_PARAMETER` | A `om:parameter` holding column. |
 
 Some of these types require several `Metadata` elements, consisting of a `Key` and a `Value`. Currently supported values of `Key`:
 
@@ -169,6 +170,13 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | *Key* | *Value* |
 | --- | --- |
 | `GROUP` | Indicates the membership of this column in a `POSITION` or `DATE_TIME` group. |
+| `NAME` | Specifies the name of the `OM_PARAMETER` column it is used within. |
+| `OTHER` | Not used. |
+| `PARSE_PATTERN` | Used to store the parse pattern of a `POSITION` or `DATE_TIME` column. |
+| `POSITION_ALTITUDE` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `POSITION_EPSG_CODE` | The EPSG code for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `POSITION_LATITUDE` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `POSITION_LONGITUDE` | The longitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `TIME` | Not used. |
 | `TIME_DAY` | The day value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_HOUR` | The hour value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
@@ -177,13 +185,7 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | `TIME_SECOND` | The second value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_YEAR` | The year value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_ZONE` | The time zone value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
-| `TYPE` | If `MEASURED_VALUE` column than these values are supported: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. If `DATE_TIME` column than these `COMBINATION`, `UNIX_TIME`. |
-| `OTHER` | Not used. |
-| `PARSE_PATTERN` | Used to store the parse pattern of a `POSITION` or `DATE_TIME` column. |
-| `POSITION_ALTITUDE` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
-| `POSITION_EPSG_CODE` | The EPSG code for the positions for all observations in the related `MEASURED_VALUE` column. |
-| `POSITION_LATITUDE` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
-| `POSITION_LONGITUDE` | The longitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `TYPE` | Supported values: <br />`MEASURED_VALUE` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. <br />`DATE_TIME` column: `COMBINATION`, `UNIX_TIME`. <br />`OM_PARAMETER` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`, `CATEGORY`. |
 
 The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links).
 
@@ -233,7 +235,7 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
    * [ ] Feed to multiple SOS instances
    * [ ] Support SOAP binding (might be an OX-F task)
    * [ ] Support KVP binding (might be an OX-F task)
-   * [ ] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
+   * [x] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
    * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
    * [ ] Switch wizard to Java FX.
 
@@ -244,7 +246,24 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ### :white_large_square: 0.5
 
+   * *Features*
+     * Add support to ignore lines with invalid number of columns (=> log error but no import abort) in
+       * Wizard
+       * Bindings
+       * Feeder
+     * Add support for unix time with milliseconds
+     * Add support for om:parameter
+   * *Changes:*
+      * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
+      * Updated to latest 52N parent &rarr; javadoc and dependency plugin cause a lot of minor adjustments
    * *[Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)*
+      * \#nn: Fix problem with count values containing double
+      * \#nn: Fix handling of timestamp columns without any group assignment
+      * \#nn: Fix handling of data files with multiple date & time columns
+      * \#nn: Fix bug in unix time parsing
+      * \#nn: Fix typo in xml schema: expresssion -> expression
+      * [x] [#78](https://github.com/52North/sos-importer/issues/78): NullPointerException when parsing Date/Time
+      * [x] [#76](https://github.com/52North/sos-importer/issues/76): Server generated offering identifier
       * [x] [#67](https://github.com/52North/sos-importer/issues/67): Fix/parsing unixtime  bug
       * [x] [#66](https://github.com/52North/sos-importer/issues/66): Parsing Unix time fails
       * [x] [#65](https://github.com/52North/sos-importer/issues/65): Fix/read lines not stored
@@ -295,15 +314,15 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
       * [#20](https://github.com/52North/sos-importer/issues/20): Current GUI is broken when using sample based files with minor inconsistencies
       * [#24](https://github.com/52North/sos-importer/issues/24): Fix/ignore line and column: Solved two NPEs while ignoring lines or columns
       * [#25](https://github.com/52North/sos-importer/issues/25): Fix/timezone-bug-parse-timestamps: Solved bug while parsing time stamps
-      * #NN: Fix bug with timestamps of sample files
-      * #NN: Fix bug with incrementing lastline causing data loss
-      * #NN: Fix bug with data files without headerline
-      * #NN: NSAMParser: Fix bug with timestamp extraction
-      * #NN: NSAMParser: Fix bug with skipLimit
-      * #NN: NSAMParser: Fix bug with empty lines, line ending, time series encoding
-      * #NN: fix/combinationpanel: On step 3 it was not possible to enter parse patterns for position and date & time
-      * #NN: fix problem with textfield for CSV file when switching to German      
-      * #NN: fix problem with multiple sensors in CSV file and register sensor
+      * \#NN: Fix bug with timestamps of sample files
+      * \#NN: Fix bug with incrementing lastline causing data loss
+      * \#NN: Fix bug with data files without headerline
+      * \#NN: NSAMParser: Fix bug with timestamp extraction
+      * \#NN: NSAMParser: Fix bug with skipLimit
+      * \#NN: NSAMParser: Fix bug with empty lines, line ending, time series encoding
+      * \#NN: fix/combinationpanel: On step 3 it was not possible to enter parse patterns for position and date & time
+      * \#NN: fix problem with textfield for CSV file when switching to German
+      * \#NN: fix problem with multiple sensors in CSV file and register sensor
       * [878](https://bugzilla.52north.org/show_bug.cgi?id=878)
       * "Too many columns issue"
       * [Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=milestone%3A0.4.0+is%3Aclosed)
@@ -338,7 +357,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ### :white_check_mark: 0.1
 
-   * *Release file:* <a target="_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
+   * *Release file:* <a target="\_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
    * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.1.0)
    * *Features*
       * [x] Swing GUI
@@ -364,13 +383,108 @@ You may first get in touch using the [sensor web mailinglist](mailto:swe@52north
 
 ## Project Funding
 
-   * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
-   * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
+   * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="\_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
+   * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="\_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
    * by University of Leicester during 2014.
 
 
 # Users
 ## How to Run
+
+### Configuration
+
+#### `om:parameter`
+
+The `om:parameter` can be used for encoding additional attributes of an observation, e.g. quality information.
+
+The supported ways of encoding the metadata about the om:parameter values are the following:
+
+* When having more than one measured value column, the om:parameter requires a linking element within the measured value column. This element is named `<RelatedOmParameter>` and contains the number of the column of the `om:parameter`. Here is an example linking the mesured value column #4 with its `om:parameter` column #8.
+
+  ```
+  <Column>
+    <Number>4</Number>
+    <Type>MEASURED_VALUE</Type>
+    [...]
+     <RelatedOmParameter>8</RelatedOmParameter>
+  ```
+
+* Each `OM_PARAMETER` column requires two `<Metadata>` elements:
+  * The first one with `<Key>` `TYPE` defines the type.
+  * The second one with `<Key>` `NAME` defines the name of the `om:parameter` used for encoding the `om:parameter` as `<NamedValue>`.
+* A unit of measurement is required when choosing the `TYPE` `NUMERIC`. It can be encoded in two ways. A `<RelatedUnitOfMeasurement>` element, which is:
+  * referencing another `<Column>` by its number, or
+  * referencing a `<Resource>` in the `<AdditionalMetadata>` section.
+
+Here are some additional examples for encoding `om:parameter` columns:
+
+```
+<Column>
+    <Number>1</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>COUNT</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>count-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>2</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>NUMERIC</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>numeric-parameter</Value>
+    </Metadata>
+    <RelatedUnitOfMeasurement>
+        <IdRef>uom1234</IdRef>
+    </RelatedUnitOfMeasurement>
+</Column>
+<Column>
+    <Number>3</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>BOOLEAN</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>boolean-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>4</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>TEXT</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>text-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>5</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>CATEGORY</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>category-parameter</Value>
+    </Metadata>
+</Column>
+```
+
+
 ### Module _feeder_
 
    1. Have *datafile* and *configuration file* ready.

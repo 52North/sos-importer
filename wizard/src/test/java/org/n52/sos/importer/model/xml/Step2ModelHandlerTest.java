@@ -32,7 +32,7 @@ package org.n52.sos.importer.model.xml;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step2Model;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * <p>Step2ModelHandlerTest class.</p>

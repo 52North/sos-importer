@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -37,8 +38,10 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -52,20 +55,20 @@ import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType;
-import org.x52North.sensorweb.sos.importer.x04.RelatedFOIDocument.RelatedFOI;
-import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x04.SensorType;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type;
-import org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum;
-import org.x52North.sensorweb.sos.importer.x04.UnitOfMeasurementType;
+import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
+import org.x52North.sensorweb.sos.importer.x05.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x05.SensorType;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum;
+import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 
 /**
  * This class holds the configuration XML file and provides easy access to all
@@ -544,23 +547,23 @@ public final class Configuration {
     /**
      * <p>getColumnById.</p>
      *
-     * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
+     * @param columnId a int.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
      */
-    public Column getColumnById(final int mvColumnId) {
-        LOG.trace(String.format("getColumnById(%d)", mvColumnId));
+    public Column getColumnById(final int columnId) {
+        LOG.trace(String.format("getColumnById(%d)", columnId));
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column column : cols) {
-            if (column.getNumber() == mvColumnId) {
+            if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Column found for id %d",
-                            mvColumnId));
+                            columnId));
                 }
                 return column;
             }
         }
         LOG.error(String.format("CsvMetadat.ColumnAssignments not set properly. Could not find Column for id %d.",
-                mvColumnId));
+                columnId));
         return null;
     }
 
@@ -570,7 +573,7 @@ public final class Configuration {
      * <code>null</code> is returned.
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
      */
     public SensorType getRelatedSensor(final int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
@@ -669,7 +672,7 @@ public final class Configuration {
                         pos.getURI().getStringValue() != null &&
                         pos.getURI().getStringValue().equals(foiUri)) {
                     // if element is found -> fill position
-                    final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p = pos.getPosition();
+                    final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p = pos.getPosition();
                     if (p.isSetAlt() &&
                             p.isSetEPSGCode() &&
                             p.isSetLat() &&
@@ -685,11 +688,11 @@ public final class Configuration {
     /**
      * <p>getModelPositionXBPosition.</p>
      *
-     * @param p {@link org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position}
+     * @param p {@link org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position}
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
     public Position getModelPositionXBPosition(
-            final org.x52North.sensorweb.sos.importer.x04.PositionDocument.Position p) {
+            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p) {
         LOG.trace("getPosition()");
         final String[] units = new String[3];
         final double[] values = new double[3];
@@ -715,7 +718,7 @@ public final class Configuration {
      * <p>getRelatedFoi.</p>
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.FeatureOfInterestType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType} object.
      */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
@@ -996,7 +999,7 @@ public final class Configuration {
      * Returns all columns of the corresponding <code>group</code>
      *
      * @param group a <code>{@link java.lang.String String}</code> as group identifier
-     * @param t a {@link org.x52North.sensorweb.sos.importer.x04.TypeDocument.Type.Enum} object.
+     * @param t a {@link org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum} object.
      * @return a <code>Column[]</code> having all the group id
      *             <code>group</code> <b>or</b><br>
      *             an empty <code>Column[]</code>
@@ -1103,7 +1106,7 @@ public final class Configuration {
      * Returns the op with the given id or <code>null</code>
      *
      * @param idRef a {@link java.lang.String} object.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.ObservedPropertyType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType} object.
      */
     public ObservedPropertyType getObsPropById(final String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
@@ -1192,7 +1195,7 @@ public final class Configuration {
     /**
      * <p>getSensorFromAdditionalMetadata.</p>
      *
-     * @return a {@link org.x52North.sensorweb.sos.importer.x04.SensorType} object.
+     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
      */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");
@@ -1607,6 +1610,46 @@ public final class Configuration {
         return importConf.getCsvMetadata().isSetCsvParserClass() &&
                 importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch() &&
                 importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch();
+    }
+
+    public boolean isOmParameterAvailableFor(int mVColumnId) {
+        // Case A: relatedOmParameter set
+        if (importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray() > 0 &&
+                importConf.getCsvMetadata().getColumnAssignments().getColumnArray(mVColumnId)
+                        .getRelatedOmParameterArray().length > 0) {
+            return true;
+        } else {
+            // Case B: column with type omParameter
+            for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                if (column.getType().equals(Type.OM_PARAMETER)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<Column> getColumnsForOmParameter(int mVColumnId) {
+        if (isOmParameterAvailableFor(mVColumnId)) {
+            List<Column> cols = new LinkedList<>();
+            // get by id
+            if (importConf.getCsvMetadata().getColumnAssignments().getColumnArray(mVColumnId)
+                    .getRelatedOmParameterArray().length > 0) {
+                for (BigInteger relatedOmParameter : importConf.getCsvMetadata().getColumnAssignments()
+                        .getColumnArray(mVColumnId).getRelatedOmParameterArray()) {
+                    cols.add(getColumnById(relatedOmParameter.intValue()));
+                }
+            } else {
+                // collect all
+                for (Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                    if (col.getType().equals(Type.OM_PARAMETER)) {
+                        cols.add(col);
+                    }
+                }
+            }
+            return cols;
+        }
+        return Collections.emptyList();
     }
 
 }

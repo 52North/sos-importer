@@ -28,6 +28,8 @@
  */
 package org.n52.sos.importer.feeder.model.requests;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.Position;
@@ -43,7 +45,7 @@ public class InsertObservationTest {
                 new FeatureOfInterest(null, null,
                         new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
         final InsertObservation insertObservation =
-                new InsertObservation(null, foi, null, null, null, null, null, null);
+                new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
         org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(true));
         org.junit.Assert.assertThat(insertObservation.getAltitudeValue(), org.hamcrest.CoreMatchers.is(alt));
     }
@@ -56,10 +58,18 @@ public class InsertObservationTest {
                                 new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},
                                 new String[] {DEG, DEG, null},
                                 4326));
-        InsertObservation insertObservation = new InsertObservation(null, foi, null, null, null, null, null, null);
+        InsertObservation insertObservation = new InsertObservation(null,
+            foi,
+            null,
+            null,
+            null,
+            null,
+            null,
+            Optional.empty(),
+            null);
         org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(false));
 
-        insertObservation = new InsertObservation(null, null, null, null, null, null, null, null);
+        insertObservation = new InsertObservation(null, null, null, null, null, null, null, Optional.empty(), null);
         org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(false));
     }
 

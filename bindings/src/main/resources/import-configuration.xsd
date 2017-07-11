@@ -29,7 +29,7 @@
     Public License for more details.
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.4/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.4/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://52north.org/sensorweb/sos/importer/0.5/" targetNamespace="http://52north.org/sensorweb/sos/importer/0.5/" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!-- 
             
             BASE TYPES
@@ -132,6 +132,23 @@
                         </xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="HUNK_SIZE">
+				    <xs:annotation>
+				        <xs:documentation>
+				           Use in combination with IMPORT_STRATEGY. Defines
+				           the number of observations to import per request.
+				        </xs:documentation>
+				    </xs:annotation>
+				</xs:enumeration>
+				<xs:enumeration value="IMPORT_STRATEGY"/>
+				<xs:enumeration value="NAME">
+				    <xs:annotation>
+				        <xs:documentation>
+				            Specifies the name of the OM_PARAMETER column
+				            it is used within.
+				        </xs:documentation>
+				    </xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="TIME"/>
 				<xs:enumeration value="TIME_DAY"/>
 				<xs:enumeration value="TIME_HOUR"/>
@@ -147,8 +164,6 @@
 				<xs:enumeration value="POSITION_EPSG_CODE"/>
 				<xs:enumeration value="POSITION_LATITUDE"/>
 				<xs:enumeration value="POSITION_LONGITUDE"/>
-				<xs:enumeration value="IMPORT_STRATEGY"/>
-				<xs:enumeration value="HUNK_SIZE"/>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -290,6 +305,11 @@
 						<xs:documentation>The sensor id.</xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="OM_PARAMETER">
+					<xs:annotation>
+						<xs:documentation>An additional attribute of an observation.</xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -298,6 +318,7 @@
 			<xs:documentation>
                 The value of a key-value-pair. Potential values: 
                     TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; 
+                    TYPE->OM_PARAMETER: NUMERIC | COUNT | BOOLEAN | TEXT | CATEGORY
                     TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).
             </xs:documentation>
 		</xs:annotation>
@@ -444,6 +465,19 @@
 				<xs:element ref="Number"/>
 			</xs:choice>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="RelatedOmParameter">
+		<xs:annotation>
+			<xs:documentation>
+				A O'n'M 2.0 Parameter related to THIS entity. The content of this
+				element MUST match a column Number.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0" />
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="RelatedSensor">
 		<xs:annotation>
@@ -681,6 +715,7 @@
                         </xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				<xs:element ref="RelatedOmParameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

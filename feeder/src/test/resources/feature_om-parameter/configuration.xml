@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SosImportConfiguration xsi:schemaLocation="https://raw.github.com/52North/sos-importer/master/52n-sos-importer-bindings/src/main/xsd/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
+<SosImportConfiguration xsi:schemaLocation="https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
     <DataFile referenceIsARegularExpression="false">
         <LocalFile>
-            <Path>src/test/resources/issue-057/data_obs.csv</Path>
+            <Path>src/test/resources/feature_om-parameter/data.csv</Path>
             <Encoding>UTF-8</Encoding>
         </LocalFile>
     </DataFile>
@@ -69,6 +69,8 @@
                     <Key>TYPE</Key>
                     <Value>NUMERIC</Value>
                 </Metadata>
+                <RelatedOmParameter>8</RelatedOmParameter>
+                <RelatedOmParameter>9</RelatedOmParameter>
             </Column>
             <Column>
                 <Number>5</Number>
@@ -87,7 +89,7 @@
                 </Metadata>
                 <Metadata>
                     <Key>PARSE_PATTERN</Key>
-                    <Value>M/dd/yyyy h.mm a</Value>
+                    <Value>dd.MM.yyyy HH:mm:ss</Value>
                 </Metadata>
                 <Metadata>
                     <Key>TYPE</Key>
@@ -95,20 +97,35 @@
                 </Metadata>
                 <Metadata>
                     <Key>TIME_ZONE</Key>
-                    <Value>1</Value>
+                    <Value>0</Value>
                 </Metadata>
             </Column>
             <Column>
                 <Number>8</Number>
-                <Type>DO_NOT_EXPORT</Type>
+                <Type>OM_PARAMETER</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>COUNT</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>NAME</Key>
+                    <Value>om-parameter-count</Value>
+                </Metadata>
             </Column>
             <Column>
                 <Number>9</Number>
-                <Type>DO_NOT_EXPORT</Type>
-            </Column>
-            <Column>
-                <Number>10</Number>
-                <Type>DO_NOT_EXPORT</Type>
+                <Type>OM_PARAMETER</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>NUMERIC</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>NAME</Key>
+                    <Value>om-parameter-numeric</Value>
+                </Metadata>
+                <RelatedUnitOfMeasurement>
+                    <IdRef>uom1234</IdRef>
+                </RelatedUnitOfMeasurement>
             </Column>
         </ColumnAssignments>
         <DecimalSeparator>.</DecimalSeparator>
@@ -125,5 +142,12 @@
             <Key>IMPORT_STRATEGY</Key>
             <Value>SingleObservation</Value>
         </Metadata>
+        <UnitOfMeasurement>
+            <ManualResource>
+                <ID>uom1234</ID>
+                <URI>test-uom-uri</URI>
+                <Name>test-uom-name</Name>
+            </ManualResource>
+        </UnitOfMeasurement>
     </AdditionalMetadata>
 </SosImportConfiguration>

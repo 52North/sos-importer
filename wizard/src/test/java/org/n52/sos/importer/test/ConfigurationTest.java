@@ -68,13 +68,13 @@ import java.io.IOException;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.OfferingDocument.Offering;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
-import org.x52North.sensorweb.sos.importer.x04.SosMetadataDocument.SosMetadata;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.OfferingDocument.Offering;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.SosMetadataDocument.SosMetadata;
 
 public class ConfigurationTest {
 

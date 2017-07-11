@@ -26,25 +26,28 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.model.xml;
+package org.n52.sos.importer.feeder;
 
-import org.n52.sos.importer.model.StepModel;
-import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 
-/**
- * <p>ModelHandler interface.</p>
- *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
- */
-public interface ModelHandler<T extends StepModel> {
-    /**
-     * Handles the given StepModel.<br>
-     * The given SosImportConfiguration is updated with the values from the
-     * given StepModel.
-     *
-     * @param stepModel The StepModel to update the SosImportConfiguation
-     * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
-     */
-    void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+import org.apache.xmlbeans.XmlException;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.n52.oxf.OXFException;
+import org.n52.oxf.ows.ExceptionReport;
+
+public class TestFeatureOmParameter {
+
+    @Test
+    @Ignore("requires running SOS service instance")
+    public void integrationTestForOmParameter() throws IllegalArgumentException, MalformedURLException, IOException,
+            OXFException, XmlException, ParseException, ExceptionReport {
+        Configuration configuration = new Configuration("src/test/resources/feature_om-parameter/configuration.xml");
+        DataFile dataFile = new DataFile(configuration, new File("src/test/resources/feature_om-parameter/data.csv"));
+        new SensorObservationService(configuration).importData(dataFile);
+    }
+
 }

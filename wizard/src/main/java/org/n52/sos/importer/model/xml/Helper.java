@@ -33,13 +33,13 @@ import org.n52.sos.importer.model.table.Row;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.x52North.sensorweb.sos.importer.x04.ColumnAssignmentsDocument.ColumnAssignments;
-import org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column;
-import org.x52North.sensorweb.sos.importer.x04.CsvMetadataDocument.CsvMetadata;
-import org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum;
-import org.x52North.sensorweb.sos.importer.x04.MetadataDocument.Metadata;
-import org.x52North.sensorweb.sos.importer.x04.RelatedSensorDocument.RelatedSensor;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.ColumnAssignmentsDocument.ColumnAssignments;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.CsvMetadataDocument.CsvMetadata;
+import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum;
+import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
+import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
  * Offering methods used by different ModelHandler classes.
@@ -56,9 +56,9 @@ public class Helper {
      *      if <b>yes</b>, update this one, <br>
      *      <b>else</b> add a new metadata element.
      *
-     * @param key a {@link org.x52North.sensorweb.sos.importer.x04.KeyDocument.Key.Enum} object.
+     * @param key a {@link org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum} object.
      * @param value a {@link java.lang.String} object.
-     * @param col a {@link org.x52North.sensorweb.sos.importer.x04.ColumnDocument.Column} object.
+     * @param col a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
      * @return a boolean.
      */
     protected static boolean addOrUpdateColumnMetadata(final Enum key,

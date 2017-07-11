@@ -28,8 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,6 +49,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,6 +57,7 @@ import java.util.regex.Pattern;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.adapter.OperationResult;
+import org.n52.oxf.om.x20.OmParameter;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.oxf.ows.OWSException;
 import org.n52.oxf.ows.OwsExceptionCode;
@@ -95,6 +95,9 @@ import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
@@ -406,6 +409,7 @@ public final class SensorObservationService {
                             isSizeValid(dataFile, values) &&
                             containsData(values) &&
                             !isHeaderLine(values)) {
+                        trimValues(values);
                         logLine(values);
                         final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
                         numOfObsTriedToInsert += ios.length;
@@ -430,6 +434,16 @@ public final class SensorObservationService {
                 newObservationsCount,
                 newFailedObservationsCount);
         return failedInsertObservations;
+    }
+
+    private void trimValues(String[] values) {
+        if (values != null && values.length > 0) {
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] != null && !values[i].isEmpty()) {
+                    values[i] = values[i].trim();
+                }
+            }
+        }
     }
 
     private void logLine(String[] values) {
@@ -700,8 +714,11 @@ public final class SensorObservationService {
         // OBSERVED_PROPERTY
         final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId, values);
         LOG.debug("ObservedProperty: {}", observedProperty);
+        // OFFERING
         final Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
+        // OM:PARAMETER
+        final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameter(mVColumnId, values);
         return new InsertObservation(sensor,
                 foi,
                 value,
@@ -709,6 +726,7 @@ public final class SensorObservationService {
                 uom,
                 observedProperty,
                 offer,
+                omParameter,
                 dataFile.getType(mVColumnId));
     }
 
@@ -1046,14 +1064,21 @@ public final class SensorObservationService {
             obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + io.getEpsgCode());
             obsParameter.addPhenomenonTime(io.getTimeStamp().toString());
             obsParameter.addResultTime(io.getTimeStamp().toString());
-            return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
+            if (io.isSetOmParameters()) {
+                return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
+                        obsParameter,
+                        Collections.singletonList(io.getOffering().getUri()),
+                        io.getOmParameters());
+            } else {
+                return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
                     obsParameter,
                     Collections.singletonList(io.getOffering().getUri()));
+            }
+        } else {
+            obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
+            obsParameter.addSamplingTime(io.getTimeStamp().toString());
+            return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
         }
-
-        obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + io.getEpsgCode());
-        obsParameter.addSamplingTime(io.getTimeStamp().toString());
-        return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
     }
 
     private String registerSensor(final RegisterSensor rs) throws OXFException, XmlException, IOException {
