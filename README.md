@@ -568,7 +568,7 @@ You can just download example files to see how the application works:
       ~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
       ~/OX-Framework$ git fetch eike
       ~/OX-Framework$ git checkout -b eike-develop eike/develop
-      ~/OX-Framework$ mvn clean instal
+      ~/OX-Framework$ mvn clean install
       ```
 
    1. Checkout latest version of SOS-Importer with:
