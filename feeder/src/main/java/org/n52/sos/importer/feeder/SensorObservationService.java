@@ -445,7 +445,7 @@ public final class SensorObservationService {
             }
         }
     }
-    
+
     private void logLine(String[] values) {
         LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1,
                 Arrays.toString(values)));

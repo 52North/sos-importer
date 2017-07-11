@@ -101,7 +101,7 @@ public class DataFileTest {
     @Test
     public void shouldReturnQuantityParameter() throws XmlException, IOException {
 	Configuration configuration =
-		new Configuration("src/test/resources/configuration/omparameter_set_in_column_all.xml");
+                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
 	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
