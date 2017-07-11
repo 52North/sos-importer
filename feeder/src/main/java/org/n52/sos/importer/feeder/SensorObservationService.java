@@ -409,6 +409,7 @@ public final class SensorObservationService {
                             isSizeValid(dataFile, values) &&
                             containsData(values) &&
                             !isHeaderLine(values)) {
+                        trimValues(values);
                         logLine(values);
                         final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
                         numOfObsTriedToInsert += ios.length;
@@ -435,6 +436,16 @@ public final class SensorObservationService {
         return failedInsertObservations;
     }
 
+    private void trimValues(String[] values) {
+        if (values != null && values.length > 0) {
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] != null && !values[i].isEmpty()) {
+                    values[i] = values[i].trim();
+                }
+            }
+        }
+    }
+    
     private void logLine(String[] values) {
         LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1,
                 Arrays.toString(values)));
