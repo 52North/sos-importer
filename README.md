@@ -185,7 +185,7 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | `TIME_SECOND` | The second value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_YEAR` | The year value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_ZONE` | The time zone value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
-| `TYPE` | If `MEASURED_VALUE` column than these values are supported: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. If `DATE_TIME` column than these `COMBINATION`, `UNIX_TIME`. |
+| `TYPE` | Supported values: <br />`MEASURED_VALUE` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. <br />`DATE_TIME` column: `COMBINATION`, `UNIX_TIME`. <br />`OM_PARAMETER` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`, `CATEGORY`. |
 
 The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links).
 
@@ -357,7 +357,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ### :white_check_mark: 0.1
 
-   * *Release file:* <a target="_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
+   * *Release file:* <a target="\_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
    * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.1.0)
    * *Features*
       * [x] Swing GUI
@@ -383,13 +383,108 @@ You may first get in touch using the [sensor web mailinglist](mailto:swe@52north
 
 ## Project Funding
 
-   * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
-   * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
+   * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="\_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
+   * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="\_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
    * by University of Leicester during 2014.
 
 
 # Users
 ## How to Run
+
+### Configuration
+
+#### `om:parameter`
+
+The `om:parameter` can be used for encoding additional attributes of an observation, e.g. quality information.
+
+The supported ways of encoding the metadata about the om:parameter values are the following:
+
+* When having more than one measured value column, the om:parameter requires a linking element within the measured value column. This element is named `<RelatedOmParameter>` and contains the number of the column of the `om:parameter`. Here is an example linking the mesured value column #4 with its `om:parameter` column #8.
+
+  ```
+  <Column>
+    <Number>4</Number>
+    <Type>MEASURED_VALUE</Type>
+    [...]
+     <RelatedOmParameter>8</RelatedOmParameter>
+  ```
+
+* Each `OM_PARAMETER` column requires two `<Metadata>` elements:
+  * The first one with `<Key>` `TYPE` defines the type.
+  * The second one with `<Key>` `NAME` defines the name of the `om:parameter` used for encoding the `om:parameter` as `<NamedValue>`.
+* A unit of measurement is required when choosing the `TYPE` `NUMERIC`. It can be encoded in two ways. A `<RelatedUnitOfMeasurement>` element, which is:
+  * referencing another `<Column>` by its number, or
+  * referencing a `<Resource>` in the `<AdditionalMetadata>` section.
+
+Here are some additional examples for encoding `om:parameter` columns:
+
+```
+<Column>
+    <Number>1</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>COUNT</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>count-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>2</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>NUMERIC</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>numeric-parameter</Value>
+    </Metadata>
+    <RelatedUnitOfMeasurement>
+        <IdRef>uom1234</IdRef>
+    </RelatedUnitOfMeasurement>
+</Column>
+<Column>
+    <Number>3</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>BOOLEAN</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>boolean-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>4</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>TEXT</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>text-parameter</Value>
+    </Metadata>
+</Column>
+<Column>
+    <Number>5</Number>
+    <Type>OM_PARAMETER</Type>
+    <Metadata>
+        <Key>TYPE</Key>
+        <Value>CATEGORY</Value>
+    </Metadata>
+    <Metadata>
+        <Key>NAME</Key>
+        <Value>category-parameter</Value>
+    </Metadata>
+</Column>
+```
+
+
 ### Module _feeder_
 
    1. Have *datafile* and *configuration file* ready.
