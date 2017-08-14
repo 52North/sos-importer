@@ -1234,7 +1234,9 @@ public class De extends Lang {
     @Override
     public String step8SaveModelFailed(final File f) {
         return DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI +
-                f.getAbsolutePath();
+                f.getAbsolutePath() +
+                "\"\ngespeichert werden. " +
+                "Für weitere Informationen bitte die Logdatei konsultieren.";
     }
 
     /** {@inheritDoc} */
