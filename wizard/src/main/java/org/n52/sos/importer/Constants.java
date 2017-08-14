@@ -150,8 +150,8 @@ public class Constants {
     public static final int URL_CONNECT_TIMEOUT_SECONDS = 5;
     /** Constant <code>URL_CONNECT_READ_TIMEOUT_SECONDS=5</code> */
     public static final int URL_CONNECT_READ_TIMEOUT_SECONDS = 5;
-    /** Constant <code>XML_BINDINGS_NAMESPACE="http://52north.org/sensorweb/sos/import/0.4/"</code> */
-    public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.4/";
+    /** Constant <code>XML_BINDINGS_NAMESPACE="http://52north.org/sensorweb/sos/import/0.5/"</code> */
+    public static final String XML_BINDINGS_NAMESPACE = "http://52north.org/sensorweb/sos/importer/0.5/";
     /** Constant <code>QNAME_GENERATED_RESOURCE</code> */
     public static final QName QNAME_GENERATED_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "GeneratedResource");
     /** Constant <code>QNAME_GENERATED_SPATIAL_RESOURCE</code> */
