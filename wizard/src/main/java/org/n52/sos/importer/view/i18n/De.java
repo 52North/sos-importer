@@ -41,6 +41,8 @@ import org.n52.sos.importer.Constants;
  */
 public class De extends Lang {
 
+    private static final String FUER_WEITERE_INFORMATIONEN_BITTE_DIE_LOGDATEI_KONSULTIEREN =
+            "Für weitere Informationen bitte die Logdatei konsultieren.";
     private static final String BEENDEN = "Beenden";
     private static final String DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI =
             "Die Konfiguration konnte nicht in der Datei\n\"";
@@ -1236,7 +1238,7 @@ public class De extends Lang {
         return DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI +
                 f.getAbsolutePath() +
                 "\"\ngespeichert werden. " +
-                "Für weitere Informationen bitte die Logdatei konsultieren.";
+                FUER_WEITERE_INFORMATIONEN_BITTE_DIE_LOGDATEI_KONSULTIEREN;
     }
 
     /** {@inheritDoc} */
@@ -1246,7 +1248,7 @@ public class De extends Lang {
                 f.getAbsolutePath() +
                 "\"\ngespeichert werden.\nEin Fehler ist aufgetreten:\n" +
                 exceptionText +
-                "Für weitere Informationen bitte die Logdatei konsultieren.";
+                FUER_WEITERE_INFORMATIONEN_BITTE_DIE_LOGDATEI_KONSULTIEREN;
     }
 
     /** {@inheritDoc} */
