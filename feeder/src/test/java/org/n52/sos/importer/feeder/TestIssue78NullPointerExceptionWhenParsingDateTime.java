@@ -76,7 +76,8 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
     @Test
     public void shouldParseTimestampWithConfigWithTimezoneZ() throws XmlException, IOException, ParseException {
         // given
-        Configuration configuration = new Configuration("src/test/resources/issue-078/data_config_with-zone-Z.xml");
+        Configuration configuration = new Configuration(
+                "src/test/resources/issue-078/data_config_with-zone-capital-z.xml");
         DataFile dataFile = new DataFile(configuration, null);
         int mVColumnId = 2;
         // Thu, 09 Jun 2016 10:29:40 GMT
