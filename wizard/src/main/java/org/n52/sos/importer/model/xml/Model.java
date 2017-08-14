@@ -358,10 +358,18 @@ public class Model {
         final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
         doc.setSosImportConfiguration(sosImpConf);
         final Collection<XmlError> exs = XMLBeansParser.validate(doc);
-        for (final XmlError xmlError : exs) {
-            logger.error("Xml error: {}", xmlError);
+        if (exs.isEmpty()) {
+            return true;
         }
-        return (exs.size() == 0) ? true : false;
+        logger.error("XML of configuration model is not valid. See the following output for details");
+        for (final XmlError xmlError : exs) {
+            logger.error("Xml error: Message: {}; Location: Line: {}, Column: {}; ErrorCode: {}",
+                    xmlError.getMessage(),
+                    xmlError.getLine(),
+                    xmlError.getColumn(),
+                    xmlError.getErrorCode());
+        }
+        return false;
     }
 
     /*
