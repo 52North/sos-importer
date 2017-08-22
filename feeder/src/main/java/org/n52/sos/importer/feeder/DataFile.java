@@ -60,6 +60,7 @@ import org.n52.oxf.xml.NcNameResolver;
 import org.n52.sos.importer.feeder.csv.CsvParser;
 import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
 import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
+import org.n52.sos.importer.feeder.exceptions.NoDataValueException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -417,6 +418,11 @@ public class DataFile {
         return result;
     }
 
+    public class NoDataValueObject{
+        public NoDataValueObject(){
+        }
+    }
+
     /**
      * <p>getValue.</p>
      *
@@ -431,6 +437,9 @@ public class DataFile {
                 Arrays.toString(values)));
         final Column column = configuration.getColumnById(mVColumn);
         String value = values[mVColumn];
+        if (configuration.isNoDataValueDefinedAndMatching(column, value)){
+                    return Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE;
+        }
         for (final Metadata m : column.getMetadataArray()) {
             if (m.getKey().equals(Key.TYPE)) {
                 // check various types of observation

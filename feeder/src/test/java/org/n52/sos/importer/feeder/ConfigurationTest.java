@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
@@ -101,6 +102,22 @@ public class ConfigurationTest {
         Assert.assertThat(column3.getMetadataArray().length, CoreMatchers.is(2));
         Assert.assertThat(column3.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
         Assert.assertThat(column3.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
+    }
+
+    @Test
+    public void isNoDataValueDefinedAndMatchingShouldReturnFalseIfNotSet() throws XmlException, IOException {
+    	Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
+    	Column column = configuration.getColumnById(4);
+    	Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "14.8"), Is.is(false));
+    }
+
+    @Test
+    public void isNoDataValueDefinedAndMatchingShouldReturnTrueIfSetAndMatching() throws XmlException, IOException {
+    	Configuration configuration = new Configuration(
+                "src/test/resources/features/no_data_value_set.xml");
+    	Column column = configuration.getColumnById(4);
+    	Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), Is.is(true));
     }
 
 }

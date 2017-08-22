@@ -122,6 +122,8 @@ public final class Configuration {
     public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
     /** Constant <code>SOS_OBSERVATION_ALREADY_CONTAINED="observation already contained in sos"</code> */
     public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
+    /** Constant <code>SOS_OBSERVATION_TYPE_NO_DATA_VALUE="NO_DATA_VALUE"</code> */
+    public static final String SOS_OBSERVATION_TYPE_NO_DATA_VALUE = "NO_DATA_VALUE";
     /** Constant <code>SOS_OBSERVATION_TYPE_TEXT="TEXT"</code> */
     public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
     /** Constant <code>SOS_OBSERVATION_TYPE_COUNT="COUNT"</code> */
@@ -1652,4 +1654,22 @@ public final class Configuration {
         return Collections.emptyList();
     }
 
+	public boolean isNoDataValueDefinedAndMatching(Column column, String value) {
+		if (value == null || value.isEmpty()) {
+			return false;
+		}
+		if (column == null || column.getMetadataArray() == null || column.sizeOfMetadataArray() == 0) {
+			return false;
+		}
+		for (Metadata md : column.getMetadataArray()) {
+			if (md.getKey().equals(Key.NO_DATA_VALUE)) {
+				if (value.equals(md.getValue())) {
+					LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
+					return true;
+				}
+				return false;
+			}
+		}
+		return false;
+	}
 }
