@@ -280,6 +280,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
       * [x] [#57](https://github.com/52North/sos-importer/issues/57): Feeder fails to read FoI position
       * [x] [#36](https://github.com/52North/sos-importer/issues/36): Strategy "SweArrayObservationWithSplitExtension" doesn't work with TextObservations
       * [x] [#35](https://github.com/52North/sos-importer/issues/35): Could not parse ISO8601 timestamps with timezone "Z"
+      * [x] [#86](https://github.com/52North/sos-importer/issues/86): Wizard module ClassCastException
 
 
 ### :white_check_mark: 0.4
