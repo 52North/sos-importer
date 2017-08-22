@@ -417,11 +417,6 @@ public class DataFile {
         return result;
     }
 
-    public class NoDataValueObject{
-        public NoDataValueObject(){
-        }
-    }
-
     /**
      * <p>getValue.</p>
      *
