@@ -56,9 +56,9 @@ public class Helper {
      *      if <b>yes</b>, update this one, <br>
      *      <b>else</b> add a new metadata element.
      *
-     * @param key a {@link org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum} object.
+     * @param key a {@link KeyDocument.Key.Enum} object.
      * @param value a {@link java.lang.String} object.
-     * @param col a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
+     * @param col a {@link ColumnDocument.Column} object.
      * @return a boolean.
      */
     protected static boolean addOrUpdateColumnMetadata(final Enum key,
