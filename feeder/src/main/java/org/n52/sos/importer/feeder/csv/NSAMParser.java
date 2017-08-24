@@ -232,7 +232,7 @@ public class NSAMParser implements CsvParser {
                         //CHECKSTYLE:OFF
                         // Fix for checkstyle ModifiedControlVariable
                         startDate = startDate.replaceAll(",", "");
-                      //CHECKSTYLE:ON
+                        //CHECKSTYLE:ON
                     }
                     // Case: Wrong date format like 12/31/2015 and not 12/31/15
                     if (startDate.length() == DATE_STRING_LENGTH + 2) {

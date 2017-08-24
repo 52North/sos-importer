@@ -1654,22 +1654,22 @@ public final class Configuration {
         return Collections.emptyList();
     }
 
-	public boolean isNoDataValueDefinedAndMatching(Column column, String value) {
-		if (value == null || value.isEmpty()) {
-			return false;
-		}
-		if (column == null || column.getMetadataArray() == null || column.sizeOfMetadataArray() == 0) {
-			return false;
-		}
-		for (Metadata md : column.getMetadataArray()) {
-			if (md.getKey().equals(Key.NO_DATA_VALUE)) {
-				if (value.equals(md.getValue())) {
-					LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
-					return true;
-				}
-				return false;
-			}
-		}
-		return false;
-	}
+    public boolean isNoDataValueDefinedAndMatching(Column column, String value) {
+        if (value == null || value.isEmpty()) {
+            return false;
+        }
+        if (column == null || column.getMetadataArray() == null || column.sizeOfMetadataArray() == 0) {
+            return false;
+        }
+        for (Metadata md : column.getMetadataArray()) {
+            if (md.getKey().equals(Key.NO_DATA_VALUE)) {
+                if (value.equals(md.getValue())) {
+                    LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
 }
