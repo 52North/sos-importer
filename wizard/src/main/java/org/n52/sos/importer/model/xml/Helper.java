@@ -56,9 +56,9 @@ public class Helper {
      *      if <b>yes</b>, update this one, <br>
      *      <b>else</b> add a new metadata element.
      *
-     * @param key a {@link KeyDocument.Key.Enum} object.
+     * @param key a Enum object.
      * @param value a {@link java.lang.String} object.
-     * @param col a {@link ColumnDocument.Column} object.
+     * @param col a Column object.
      * @return a boolean.
      */
     protected static boolean addOrUpdateColumnMetadata(final Enum key,
