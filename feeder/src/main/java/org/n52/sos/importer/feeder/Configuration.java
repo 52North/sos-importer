@@ -548,7 +548,7 @@ public final class Configuration {
      * <p>getColumnById.</p>
      *
      * @param columnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column} object.
+     * @return a {@link ColumnDocument.Column} object.
      */
     public Column getColumnById(final int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
@@ -573,7 +573,7 @@ public final class Configuration {
      * <code>null</code> is returned.
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
+     * @return a {@link SensorType} object.
      */
     public SensorType getRelatedSensor(final int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
@@ -688,7 +688,7 @@ public final class Configuration {
     /**
      * <p>getModelPositionXBPosition.</p>
      *
-     * @param p {@link org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position}
+     * @param p {@link PositionDocument.Position}
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
     public Position getModelPositionXBPosition(
@@ -718,7 +718,7 @@ public final class Configuration {
      * <p>getRelatedFoi.</p>
      *
      * @param mvColumnId a int.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType} object.
+     * @return a {@link FeatureOfInterestType} object.
      */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
@@ -999,7 +999,7 @@ public final class Configuration {
      * Returns all columns of the corresponding <code>group</code>
      *
      * @param group a <code>{@link java.lang.String String}</code> as group identifier
-     * @param t a {@link org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum} object.
+     * @param t a {@link TypeDocument.Type.Enum} object.
      * @return a <code>Column[]</code> having all the group id
      *             <code>group</code> <b>or</b><br>
      *             an empty <code>Column[]</code>
@@ -1106,7 +1106,7 @@ public final class Configuration {
      * Returns the op with the given id or <code>null</code>
      *
      * @param idRef a {@link java.lang.String} object.
-     * @return a {@link org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType} object.
+     * @return a {@link ObservedPropertyType} object.
      */
     public ObservedPropertyType getObsPropById(final String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
@@ -1195,7 +1195,7 @@ public final class Configuration {
     /**
      * <p>getSensorFromAdditionalMetadata.</p>
      *
-     * @return a {@link org.x52North.sensorweb.sos.importer.x05.SensorType} object.
+     * @return a {@link SensorType} object.
      */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");
