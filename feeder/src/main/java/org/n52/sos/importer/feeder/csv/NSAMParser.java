@@ -227,24 +227,21 @@ public class NSAMParser implements CsvParser {
             startDatesTmp.add(startDateLine.substring(START_TIME_BEGIN_INDEX, START_TIME_END_INDEX));
             for (String startDate : startDates) {
                 if (!startDate.isEmpty()) {
+                    String myDate = startDate;
                     // Case: Leftover ","
-                    if (startDate.indexOf(",") != -1) {
-                        //CHECKSTYLE:OFF
+                    if (myDate.indexOf(",") != -1) {
                         // Fix for checkstyle ModifiedControlVariable
-                        startDate = startDate.replaceAll(",", "");
-                        //CHECKSTYLE:ON
+                        myDate = startDate.replaceAll(",", "");
                     }
                     // Case: Wrong date format like 12/31/2015 and not 12/31/15
-                    if (startDate.length() == DATE_STRING_LENGTH + 2) {
-                        //CHECKSTYLE:OFF
+                    if (myDate.length() == DATE_STRING_LENGTH + 2) {
                         // Fix for checkstyle ModifiedControlVariable
-                        startDate = startDate.substring(0,
-                                //CHECKSTYLE:ON
-                                startDate.lastIndexOf("/") + 1).concat(
-                                        startDate.substring(startDate.lastIndexOf("/") + 3));
+                        myDate = myDate.substring(0,
+                                myDate.lastIndexOf("/") + 1).concat(
+                                        myDate.substring(myDate.lastIndexOf("/") + 3));
                     }
-                    if (startDate.length() == DATE_STRING_LENGTH) {
-                        startDatesTmp.add(startDate);
+                    if (myDate.length() == DATE_STRING_LENGTH) {
+                        startDatesTmp.add(myDate);
                     }
                 }
             }
