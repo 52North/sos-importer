@@ -518,7 +518,7 @@ usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
 
 ## Quickstart
 
-Follow this list of steps or [this user guide](http://52north.org/files/sensorweb/eo2h/52n-sensorweb-sos-importer-guide.pdf) using the [demo data](SosImporter#Demo_data) to get a first user experience.
+Follow this list of steps or [this user guide](http://52north.org/files/sensorweb/eo2h/52n-sensorweb-sos-importer-guide.pdf) using the [demo data](#demo-data) to get a first user experience.
 
    1. Download the example data to your computer.
    1. Start the application with `javar -jar 52n-sos-importer-wizard-bin.jar`.
