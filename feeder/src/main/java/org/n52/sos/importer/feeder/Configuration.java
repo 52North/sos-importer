@@ -550,7 +550,7 @@ public final class Configuration {
      * <p>getColumnById.</p>
      *
      * @param columnId a int.
-     * @return a {@link ColumnDocument.Column} object.
+     * @return a ColumnDocument.Column object.
      */
     public Column getColumnById(final int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
@@ -575,7 +575,7 @@ public final class Configuration {
      * <code>null</code> is returned.
      *
      * @param mvColumnId a int.
-     * @return a {@link SensorType} object.
+     * @return a SensorType object.
      */
     public SensorType getRelatedSensor(final int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
@@ -690,7 +690,7 @@ public final class Configuration {
     /**
      * <p>getModelPositionXBPosition.</p>
      *
-     * @param p {@link PositionDocument.Position}
+     * @param p PositionDocument.Position
      * @return {@link org.n52.sos.importer.feeder.model.Position}
      */
     public Position getModelPositionXBPosition(
@@ -720,7 +720,7 @@ public final class Configuration {
      * <p>getRelatedFoi.</p>
      *
      * @param mvColumnId a int.
-     * @return a {@link FeatureOfInterestType} object.
+     * @return a FeatureOfInterestType object.
      */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
@@ -1001,7 +1001,7 @@ public final class Configuration {
      * Returns all columns of the corresponding <code>group</code>
      *
      * @param group a <code>{@link java.lang.String String}</code> as group identifier
-     * @param t a {@link TypeDocument.Type.Enum} object.
+     * @param t a TypeDocument.Type.Enum object.
      * @return a <code>Column[]</code> having all the group id
      *             <code>group</code> <b>or</b><br>
      *             an empty <code>Column[]</code>
@@ -1040,7 +1040,7 @@ public final class Configuration {
      * Returns the group id of the first date time group found in
      * <code>CsvMetadata.ColumnAssignments.Column[]</code>
      *
-     * @return a <code>{@link java.lang.String String}</code>
+     * @return a {@link java.lang.String} object.
      */
     public String getFirstDateTimeGroup() {
         LOG.trace("getFirstDateTimeGroup()");
@@ -1108,7 +1108,7 @@ public final class Configuration {
      * Returns the op with the given id or <code>null</code>
      *
      * @param idRef a {@link java.lang.String} object.
-     * @return a {@link ObservedPropertyType} object.
+     * @return a ObservedPropertyType object.
      */
     public ObservedPropertyType getObsPropById(final String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
@@ -1197,7 +1197,7 @@ public final class Configuration {
     /**
      * <p>getSensorFromAdditionalMetadata.</p>
      *
-     * @return a {@link SensorType} object.
+     * @return a SensorType object.
      */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");
@@ -1469,10 +1469,10 @@ public final class Configuration {
     /**
      * <p>getImportStrategy.</p>
      *
-     * @return The {@link ImportStrategy} that could be configured in
+     * @return The ImportStrategy that could be configured in
      *         <code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=
      *         IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
-     *         <br>Default if nothing matching is found: {@link ImportStrategy#SingleObservation}.
+     *         <br>Default if nothing matching is found: ImportStrategy#SingleObservation.
      */
     public ImportStrategy getImportStrategy() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
@@ -1654,22 +1654,22 @@ public final class Configuration {
         return Collections.emptyList();
     }
 
-	public boolean isNoDataValueDefinedAndMatching(Column column, String value) {
-		if (value == null || value.isEmpty()) {
-			return false;
-		}
-		if (column == null || column.getMetadataArray() == null || column.sizeOfMetadataArray() == 0) {
-			return false;
-		}
-		for (Metadata md : column.getMetadataArray()) {
-			if (md.getKey().equals(Key.NO_DATA_VALUE)) {
-				if (value.equals(md.getValue())) {
-					LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
-					return true;
-				}
-				return false;
-			}
-		}
-		return false;
-	}
+    public boolean isNoDataValueDefinedAndMatching(Column column, String value) {
+        if (value == null || value.isEmpty()) {
+            return false;
+        }
+        if (column == null || column.getMetadataArray() == null || column.sizeOfMetadataArray() == 0) {
+            return false;
+        }
+        for (Metadata md : column.getMetadataArray()) {
+            if (md.getKey().equals(Key.NO_DATA_VALUE)) {
+                if (value.equals(md.getValue())) {
+                    LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
 }
