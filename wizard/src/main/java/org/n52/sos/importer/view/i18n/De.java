@@ -640,6 +640,18 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
+    public String step3OmParameterCategory() {
+        return "Kategorie";
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameLabel() {
+        return "Name";
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String step3ParseTest1Failed() {
         return "1 Wert nicht einlesbar.";
     }
@@ -694,6 +706,12 @@ public class De extends Lang {
     @Override
     public String step3ColTypeMeasuredValue() {
         return measuredValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3ColTypeOmParameter() {
+        return "om:Parameter";
     }
 
     /** {@inheritDoc} */

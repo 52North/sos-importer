@@ -70,6 +70,8 @@ public class Constants {
 
     /** Constant <code>BOOLEAN="BOOLEAN"</code> */
     public static final String BOOLEAN = "BOOLEAN";
+    /** Constant <code>CATEGORY="CATEGORY"</code> */
+    public static final String CATEGORY = "CATEGORY";
     /** Constant <code>COMBINATION="COMBINATION"</code> */
     public static final String COMBINATION = "COMBINATION";
     /** Constant <code>COUNT="COUNT"</code> */

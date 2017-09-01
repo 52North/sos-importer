@@ -813,6 +813,21 @@ public abstract class Lang {
      */
     public abstract String step3MeasureValueColMissingDialogTitle();
 
+
+    /**
+     * <p>step3OmParameterCategory.</p>
+     *
+     * @return Category
+     */
+    public abstract String step3OmParameterCategory();
+
+    /**
+     * <p>step3OmParameterNameLabel.</p>
+     * 
+     * @return Name
+     */
+    public abstract String step3OmParameterNameLabel();
+
     /**
      * <p>step3ParseTest1Failed.</p>
      *
@@ -876,6 +891,13 @@ public abstract class Lang {
      * @return Undefined
      */
     public abstract String step3ColTypeUndefined();
+
+    /**
+     * <p>step3ColTypeOmParameter.</p>
+     *
+     * @return om:Parameter
+     */
+    public abstract String step3ColTypeOmParameter();
 
     /**
      * <p>step3DateAndTimeCombination.</p>
@@ -1631,5 +1653,4 @@ public abstract class Lang {
      * @return Year
      */
     public abstract String year();
-
 }

@@ -72,6 +72,10 @@ public final class EditableComboBoxItems {
 
     private DefaultComboBoxModel<String> sosURLs;
 
+    private DefaultComboBoxModel<String> omParameterNames;
+
+    private DefaultComboBoxModel<String> omParameterNamesURIs;
+
     private EditableComboBoxItems() {
         setColumnSeparators(new DefaultComboBoxModel<>(
                 ComboBoxItems.getInstance().getColumnSeparators()));
@@ -408,5 +412,13 @@ public final class EditableComboBoxItems {
      */
     public DefaultComboBoxModel<String> getReferenceSystemNames() {
         return referenceSystemNames;
+    }
+
+    public DefaultComboBoxModel<String> getOmParameterNames() {
+        return omParameterNames;
+    }
+
+    public DefaultComboBoxModel<String> getOmParameterNamesURIs() {
+        return omParameterNamesURIs;
     }
 }

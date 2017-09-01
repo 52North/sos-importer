@@ -61,8 +61,8 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
         super(containerPanel);
         this.measuredValue = measuredValue;
         parseTestLabel = new ParseTestLabel(measuredValue, firstLineWithData);
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
-        this.add(parseTestLabel);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(parseTestLabel);
     }
 
     /** {@inheritDoc} */
@@ -72,6 +72,7 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
     /** {@inheritDoc} */
     @Override
     protected String getSelection() {
+        // TODO check the meaning of this "magic" number!
         return "0";
     }
 
