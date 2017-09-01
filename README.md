@@ -247,6 +247,9 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Add support for no data values for time series in
+       * Bindings
+       * Feeder
      * Add support to ignore lines with invalid number of columns (=> log error but no import abort) in
        * Wizard
        * Bindings

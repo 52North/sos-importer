@@ -136,6 +136,13 @@
                         </xs:documentation>
 					</xs:annotation>
 				</xs:enumeration>
+				<xs:enumeration value="NO_DATA_VALUE">
+					<xs:annotation>
+						<xs:documentation>
+                            Indicates a missing value of this column. <!--FIXME: more specify?-->
+                        </xs:documentation>
+					</xs:annotation>
+				</xs:enumeration>
 				<xs:enumeration value="HUNK_SIZE">
 				    <xs:annotation>
 				        <xs:documentation>

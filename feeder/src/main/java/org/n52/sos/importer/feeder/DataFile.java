@@ -431,6 +431,9 @@ public class DataFile {
                 Arrays.toString(values)));
         final Column column = configuration.getColumnById(mVColumn);
         String value = values[mVColumn];
+        if (configuration.isNoDataValueDefinedAndMatching(column, value)) {
+                    return Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE;
+        }
         for (final Metadata m : column.getMetadataArray()) {
             if (m.getKey().equals(Key.TYPE)) {
                 // check various types of observation
