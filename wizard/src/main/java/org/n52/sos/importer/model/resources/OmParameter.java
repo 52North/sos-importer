@@ -36,7 +36,6 @@ import javax.swing.DefaultComboBoxModel;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.table.Cell;
-import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class OmParameter extends Resource {
@@ -79,12 +78,12 @@ public class OmParameter extends Resource {
 
     @Override
     public DefaultComboBoxModel<String> getNames() {
-        return EditableComboBoxItems.getInstance().getOmParameterNames();
+        return new DefaultComboBoxModel<>();
     }
 
     @Override
     public DefaultComboBoxModel<String> getURIs() {
-        return EditableComboBoxItems.getInstance().getOmParameterNamesURIs();
+        return new DefaultComboBoxModel<>();
     }
 
     @Override
