@@ -96,48 +96,58 @@ public class Step3ModelHandlerTest {
     @Test
     public void shouldSetOmParameterColumnAssignment() {
         Step3Model model = new Step3Model(0, 0, false);
-        model.addSelection(Arrays.asList("om:Parameter", "Category", "0"));
+        model.addSelection(Arrays.asList("om:Parameter", "Category", "test-name"));
         model.setMarkedColumn(1);
-        model.addSelection(Arrays.asList("om:Parameter", "Numeric Value", "0"));
+        model.addSelection(Arrays.asList("om:Parameter", "Numeric Value", "test-name"));
         model.setMarkedColumn(2);
-        model.addSelection(Arrays.asList("om:Parameter", "Boolean", "0"));
+        model.addSelection(Arrays.asList("om:Parameter", "Boolean", "test-name"));
         model.setMarkedColumn(3);
-        model.addSelection(Arrays.asList("om:Parameter", "Text", "0"));
+        model.addSelection(Arrays.asList("om:Parameter", "Text", "test-name"));
         model.setMarkedColumn(4);
-        model.addSelection(Arrays.asList("om:Parameter", "Count", "0"));
+        model.addSelection(Arrays.asList("om:Parameter", "Count", "test-name"));
 
         SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
         new Step3ModelHandler().handleModel(model, sosImportConf);
 
         Column col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
         Assert.assertThat(col.getNumber(), Is.is(0));
-        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("CATEGORY"));
+        Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
+        Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
         col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(1);
         Assert.assertThat(col.getNumber(), Is.is(1));
-        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("NUMERIC"));
+        Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
+        Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
         col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(2);
         Assert.assertThat(col.getNumber(), Is.is(2));
-        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("BOOLEAN"));
+        Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
+        Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
         col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(3);
         Assert.assertThat(col.getNumber(), Is.is(3));
-        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("TEXT"));
+        Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
+        Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
         col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(4);
         Assert.assertThat(col.getNumber(), Is.is(4));
-        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("COUNT"));
+        Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
+        Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
     }
 
 }

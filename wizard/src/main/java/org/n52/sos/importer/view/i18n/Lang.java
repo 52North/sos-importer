@@ -823,10 +823,29 @@ public abstract class Lang {
 
     /**
      * <p>step3OmParameterNameLabel.</p>
-     * 
+     *
      * @return Name
+     * @see #name()
      */
     public abstract String step3OmParameterNameLabel();
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogMessage</p>
+     *
+     * @return The given om:Parameter->Name is invalid:
+     *         <br><br>
+     *         "<code>givenValue</code>"
+     *         <br><br>
+     *         Please provide a name with at least three characters.
+     */
+    public abstract String step3OmParameterNameInvalidDialogMessage(String givenValue);
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogTitle</p>
+     *
+     * @return om:Parameter->Name is invalid
+     */
+    public abstract String step3OmParameterNameInvalidDialogTitle();
 
     /**
      * <p>step3ParseTest1Failed.</p>

@@ -643,11 +643,25 @@ public class De extends Lang {
     public String step3OmParameterCategory() {
         return "Kategorie";
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameLabel() {
-        return "Name";
+        return name();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
+        return "Der übergebene om:Parameter->Name ist ungültig:\n\"" +
+                givenValue +
+                "\"\n\nBitte einen Namen mit mindestens 3 Zeichen eingeben.";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogTitle() {
+        return "om:Parameter->Name ist ungültig";
     }
 
     /** {@inheritDoc} */

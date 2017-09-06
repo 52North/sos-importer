@@ -646,7 +646,21 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameLabel() {
-        return "Name";
+        return name();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
+        return "The given om:Parameter->Name is invalid:\n\n\"" +
+                givenValue +
+                "\"\n\nPlease provide a name with at least three characters.";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogTitle() {
+        return "om:Parameter->Name is invalid";
     }
 
     /** {@inheritDoc} */

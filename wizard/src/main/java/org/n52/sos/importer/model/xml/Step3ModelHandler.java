@@ -304,6 +304,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             return;
         }
         Helper.addOrUpdateColumnMetadata(Key.TYPE, value, col);
+        Helper.addOrUpdateColumnMetadata(Key.NAME, encodedMetadata, col);
     }
 
     /**

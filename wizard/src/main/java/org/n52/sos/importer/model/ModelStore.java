@@ -147,7 +147,7 @@ public final class ModelStore {
             add((OmParameter) resource);
         }
     }
-    
+
     public void add(final OmParameter omParameter) {
         if (omParameter != null) {
             omParameters.add(omParameter);
@@ -272,12 +272,12 @@ public final class ModelStore {
             remove((OmParameter) resource);
         }
     }
-    
+
     public void remove(final OmParameter omParameter) {
         omParameters.remove(omParameter);
     }
-    
-    
+
+
 
     /**
      * <p>remove.</p>
