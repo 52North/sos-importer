@@ -46,6 +46,7 @@ import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.SensorObservationService;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
@@ -62,6 +63,7 @@ public class OneTimeFeeder implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
+    private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
     private static final String PROXY_PORT = "proxyPort";
     private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
 
@@ -117,7 +119,8 @@ public class OneTimeFeeder implements Runnable {
 
         // get first file
         final String directory = config.getConfigFile().getAbsolutePath();
-        file = FileHelper.createFileInImporterHomeWithUniqueFileName(directory + ".csv");
+        file = FileHelper.createFileInImporterHomeWithUniqueFileName(directory + ".csv"); // nicht importerHome Verzeichnis nutzen, 
+        // sondern temporäres Verzeichnis der JVM nutzen (Linux berücksichtigen: File.CreateTempFile())
 
         // if back button was used: delete old file
         if (file.exists()) {
@@ -206,12 +209,17 @@ public class OneTimeFeeder implements Runnable {
                     final String directory = dataFile.getFileName();
                     File counterFile = null;
                     String fileName = null;
+                    File timeStampFile = null;
+                    String timeStampFileName = null;
                     if (config.isRemoteFile()) {
-                        fileName = directory + COUNTER_FILE_POSTFIX;
+                        fileName = directory + COUNTER_FILE_POSTFIX; 
+                        timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX; 
                     } else {
                         fileName = getLocalFilename();
+                        timeStampFileName = getLocalTimeStampFilename();
                     }
                     counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
+                    timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName); // TODO: create temporary java File instead
                     LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
                     // read already inserted line count
                     if (counterFile.exists()) {
@@ -223,6 +231,18 @@ public class OneTimeFeeder implements Runnable {
                     } else {
                         LOG.debug("Counter file does not exist.");
                     }
+                    // read already inserted UsedLastTimeStamp
+                    if (timeStampFile.exists()) {
+                        LOG.debug("Read already inserted LastUsedTimeStamp from file");
+                        long storedTimeStamp = 0;
+                        try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
+                            storedTimeStamp = sc.nextLong(); // read TimeStamp as unixTimeMillis from file!
+                            final Timestamp timestamp = new Timestamp().ofUnixTimeMillis(storedTimeStamp);
+                            sos.setLastUsedTimeStamp(timestamp);
+                        }
+                    } else {
+                        LOG.debug("Timestamp file does not exist.");
+                    }
 
                     // SOS is available and transactional
                     final List<InsertObservation> failedInserts = sos.importData(dataFile);
@@ -230,6 +250,13 @@ public class OneTimeFeeder implements Runnable {
                     LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());
+                    
+                    // read and log lastUsedTimestamp
+                    Timestamp timestamp = sos.getLastUsedTimestamp();
+                    LOG.info("OneTimeFeeder: save read lastUsedTimestamp: {} to '{}",
+                            timestamp,
+                            timeStampFile.getCanonicalPath());
+                    
                     /*
                      * Hack for UoL EPC instrument files
                      * The EPC instrument produces data files with empty lines at the end.
@@ -247,6 +274,14 @@ public class OneTimeFeeder implements Runnable {
                                     Configuration.DEFAULT_CHARSET);
                             PrintWriter out = new PrintWriter(counterFileWriter);) {
                         out.println(lastLine);
+                    }
+                    // override lastUsedTimestamp file
+                    try (
+                            FileWriterWithEncoding timeStampFileWriter = new FileWriterWithEncoding(
+                                    timeStampFile.getAbsolutePath(),
+                                    Configuration.DEFAULT_CHARSET);
+                            PrintWriter out = new PrintWriter(timeStampFileWriter);) {
+                        out.println(timestamp);
                     }
 
                     saveFailedInsertObservations(failedInserts);
@@ -275,6 +310,20 @@ public class OneTimeFeeder implements Runnable {
                 "_" +
                 dataFile.getCanonicalPath() +
                 COUNTER_FILE_POSTFIX;
+    }
+    
+    /**
+     * <p>getLocalTimeStampFilename.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     * @throws java.io.IOException if any.
+     * @since 0.5.0
+     */
+    protected String getLocalTimeStampFilename() throws IOException {
+        return config.getConfigFile().getCanonicalPath() +
+                "_" +
+                dataFile.getCanonicalPath() +
+                TIMESTAMP_FILE_POSTFIX;
     }
 
     private boolean isLinuxOrSimilar() {

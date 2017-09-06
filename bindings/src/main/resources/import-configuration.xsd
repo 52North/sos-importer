@@ -767,8 +767,20 @@
 				<xs:element ref="Parameter"/>
 				<xs:element ref="UseHeader"/>
 				<xs:element ref="CsvParserClass" minOccurs="0"/>
+	            <xs:element ref="UseLastTimestamp" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseLastTimestamp" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>
+                If available and "UseLastTimestamp"
+                is set to TRUE, the saved time stamp will be used
+                to ignore data older than the specified time stamp.
+                The saved value is updated after processing an
+                entire datafile.
+			</xs:documentation>
+		</xs:annotation>
 	</xs:element>
 	<xs:element name="CsvParserClass">
 		<xs:annotation>
