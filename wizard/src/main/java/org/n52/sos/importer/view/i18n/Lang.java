@@ -832,7 +832,7 @@ public abstract class Lang {
     /**
      * <p>step3OmParameterNameInvalidDialogMessage</p>
      *
-     * @return The given om:Parameter->Name is invalid:
+     * @return The given om:Parameter-&gt;Name is invalid:
      *         <br><br>
      *         "<code>givenValue</code>"
      *         <br><br>
@@ -843,7 +843,7 @@ public abstract class Lang {
     /**
      * <p>step3OmParameterNameInvalidDialogTitle</p>
      *
-     * @return om:Parameter->Name is invalid
+     * @return om:Parameter-&gt;Name is invalid
      */
     public abstract String step3OmParameterNameInvalidDialogTitle();
 
