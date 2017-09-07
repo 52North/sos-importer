@@ -43,6 +43,7 @@ import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -305,6 +306,16 @@ public class TestData {
         final NumericValue nv = new NumericValue();
         nv.setTableElement(new Column(1, 1));
         return nv;
+    }
+
+    public static final OmParameter EXAMPLE_OM_PARAMETER = TestData.exampleOmParameter();
+
+    private static OmParameter exampleOmParameter() {
+        logger.trace("exampleOmParameter");
+        OmParameter op = new OmParameter("Numeric Value");
+        op.setName("op-name");
+        op.setTableElement(new Column(3, 1));
+        return op;
     }
     //CHECKSTYLE:ON
 }

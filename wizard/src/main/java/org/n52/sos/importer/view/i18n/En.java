@@ -42,18 +42,20 @@ import org.n52.sos.importer.Constants;
  */
 public class En extends Lang {
 
-    private static final Locale LOCALE = Locale.ENGLISH;
-    private static final String THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE =
-            "The configuration could not be saved to file\n\"";
-    private static final String OPEN = "Open";
-    private static final String VERSION = "Version";
     private static final String AQUOT_NL = "\"\n";
-    private static final String NL_AQUOT = "\n\"";
-    private static final String WHAT_IS_THE = "What is the ";
+    private static final String BINDING = "Binding";
     private static final String CAN_ONLY_BE_A_DECIMAL_NUMBER_SO_FAR = " can only be a decimal number so far.";
     private static final String ERROR = "Error";
+    private static final String NL_AQUOT = "\n\"";
+    private static final String OPEN = "Open";
+    private static final String PLEASE_CLICK_THE = "Please click the ";
     private static final String THE = "The ";
-    private static final String BINDING = "Binding";
+    private static final String THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE =
+            "The configuration could not be saved to file\n\"";
+    private static final String VERSION = "Version";
+    private static final String WHAT_IS_THE = "What is the ";
+
+    private static final Locale LOCALE = Locale.ENGLISH;
 
     /** {@inheritDoc} */
     @Override
@@ -817,7 +819,7 @@ public class En extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step4bModelDescription() {
-        return "Please click the " +
+        return PLEASE_CLICK_THE +
             Constants.STRING_REPLACER +
             " (not the title) containing " +
             "the measured values for the marked " +
@@ -831,6 +833,17 @@ public class En extends Lang {
             " " +
             Constants.STRING_REPLACER +
             ", click all of them with pressed CTRL key.";
+    }
+
+    @Override
+    public String step4dModelDescription(String orientation) {
+        return PLEASE_CLICK_THE +
+                orientation +
+                " (not the title) containing the measured values for the marked " +
+                step3ColTypeOmParameter() +
+                " " +
+                orientation +
+                " that is marked.";
     }
 
     /** {@inheritDoc} */

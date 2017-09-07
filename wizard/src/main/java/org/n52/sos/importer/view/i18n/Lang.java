@@ -1067,6 +1067,17 @@ public abstract class Lang {
     public abstract String step4bModelDescription();
 
     /**
+     * @param isColumn
+     *
+     * @return Please click the <code>orientation</code> (not the title)
+     * containing the measured values for the marked
+     * {@link #step3ColTypeOmParameter()} <code>column/row</code> that is
+     * marked.
+     *
+     */
+    public abstract String step4dModelDescription(String orientation);
+
+    /**
      * <p>step5aDescription.</p>
      *
      * @return Step 5a: Complete time data
@@ -1672,4 +1683,5 @@ public abstract class Lang {
      * @return Year
      */
     public abstract String year();
+
 }

@@ -66,6 +66,18 @@ public class OmParameter extends Resource {
         return mv.getOmParameters() != null && !mv.getOmParameters().isEmpty();
     }
 
+    /**
+     * @return <code>true</code>, if this instance is assigned to any measured value
+     */
+    public boolean isAssigned() {
+        for (MeasuredValue mv : ModelStore.getInstance().getMeasuredValues()) {
+            if (isAssignedTo(mv)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean isAssignedTo(MeasuredValue mv) {
         return mv.getOmParameters().contains(this);
