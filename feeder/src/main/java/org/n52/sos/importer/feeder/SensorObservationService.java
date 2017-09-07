@@ -371,7 +371,7 @@ public final class SensorObservationService {
                         final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
                         timeSeriesRepository.addObservations(ios);
                         numOfObsTriedToInsert += ios.length;
-                        LOG.debug(Feeder.heapSizeInformation());
+                        LOG.debug(Application.heapSizeInformation());
                         if (currentHunk == hunkSize) {
                             currentHunk = 0;
                             insertTimeSeries(timeSeriesRepository);
@@ -414,7 +414,7 @@ public final class SensorObservationService {
                         final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
                         numOfObsTriedToInsert += ios.length;
                         insertObservationsForOneLine(ios, values, dataFile);
-                        LOG.debug(Feeder.heapSizeInformation());
+                        LOG.debug(Application.heapSizeInformation());
                     } else {
                         logSkippedLine(values);
                     }

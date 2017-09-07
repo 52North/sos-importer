@@ -45,16 +45,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>Feeder class.</p>
+ * <p>Application class</p>
+ *
+ * It handles the parameters and executes the according tasks.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
-public final class Feeder {
+public final class Application {
 
     private static final String NEW_LINE_WITH_TABS = "\n\t\t";
 
-    private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
 

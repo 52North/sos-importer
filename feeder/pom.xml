@@ -239,7 +239,7 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.n52.sos.importer.feeder.Feeder</mainClass>
+                            <mainClass>org.n52.sos.importer.feeder.Application</mainClass>
                         </manifest>
                         <manifestEntries>
                             <build-time>${timestamp}</build-time>
