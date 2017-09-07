@@ -51,13 +51,13 @@ public class DataFileTest {
                 "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
 
 	Assert.assertThat(
-		new DataFile(configuration, null).getOmParameter(4, null),
+		new DataFile(configuration, null).getOmParameters(4, null),
 		CoreMatchers.is(Optional.empty()));
 	Assert.assertThat(
-		new DataFile(configuration, null).getOmParameter(4, new String[0]),
+		new DataFile(configuration, null).getOmParameters(4, new String[0]),
 		CoreMatchers.is(Optional.empty()));
 	Assert.assertThat(
-		new DataFile(configuration, null).getOmParameter(4,
+		new DataFile(configuration, null).getOmParameters(4,
 			new String[]{"0", "1", "2", "3", "4", "5", "7", "8", "9"}),
 		CoreMatchers.is(Optional.empty()));
     }
@@ -67,7 +67,7 @@ public class DataFileTest {
 	Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
-	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(4,
+	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(4,
 		new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "true", "false", "10"});
 
 	Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
@@ -87,7 +87,7 @@ public class DataFileTest {
 	Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
+	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
 	Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
@@ -103,7 +103,7 @@ public class DataFileTest {
 	Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
+	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
 	Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
@@ -120,7 +120,7 @@ public class DataFileTest {
 	Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
+	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
 	Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
@@ -136,7 +136,7 @@ public class DataFileTest {
 	Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameter(0,
+	Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
 		EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
 	Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));

@@ -1102,7 +1102,7 @@ public class DataFile {
         return configuration.getCsvSeparator();
     }
 
-    public Optional<List<OmParameter<?>>> getOmParameter(int mVColumnId, String[] values) {
+    public Optional<List<OmParameter<?>>> getOmParameters(int mVColumnId, String[] values) {
         if (mVColumnId < 0 || values == null || values.length == 0) {
             return Optional.empty();
         }
