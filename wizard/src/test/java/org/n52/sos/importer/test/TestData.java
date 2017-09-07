@@ -254,9 +254,7 @@ public class TestData {
     public static final FeatureOfInterest EXAMPLE_FOI = TestData.exampleFoi();
 
     private static FeatureOfInterest exampleFoi() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleFoi()");
-        }
+        logger.trace("exampleFoi()");
         final FeatureOfInterest foi = new FeatureOfInterest();
 
         foi.setName("FOI_TEST_1");
@@ -283,9 +281,7 @@ public class TestData {
     public static final ObservedProperty EXAMPLE_OBS_PROP = TestData.exampleObsProp();
 
     private static ObservedProperty exampleObsProp() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleObsProp()");
-        }
+        logger.trace("exampleObsProp()");
         final ObservedProperty obsProp = new ObservedProperty();
         obsProp.setName("OBS_PROP_TEST_1");
         obsProp.setGenerated(false);
@@ -304,11 +300,8 @@ public class TestData {
      */
     public static final MeasuredValue EXAMPLE_MEASURED_VALUE_NUMERIC = TestData.exampleMVnumeric();
 
-
     private static MeasuredValue exampleMVnumeric() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleMVnumeric()");
-        }
+        logger.trace("exampleMVnumeric()");
         final NumericValue nv = new NumericValue();
         nv.setTableElement(new Column(1, 1));
         return nv;

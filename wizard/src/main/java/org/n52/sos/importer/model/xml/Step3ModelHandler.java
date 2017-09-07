@@ -192,26 +192,6 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
     }
 
     /**
-     * @param number
-     *            the number of the column in the data file
-     * @param cols
-     *            all columns in the configuration
-     * @return the
-     *         <code>org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column</code>
-     *         with the given number
-     */
-    private Column getColumnForKey(final int number, final Column[] cols) {
-        logger.trace("\t\tgetColumnForKey()");
-        //
-        for (final Column col : cols) {
-            if (col.getNumber() == number) {
-                return col;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Date & Time:<br>
      * Combination, Pattern <- parse pattern SEP Group<br>
      * UNIX TIME

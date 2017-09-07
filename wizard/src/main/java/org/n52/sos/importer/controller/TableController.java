@@ -483,12 +483,9 @@ public final class TableController {
      */
     public String getOrientationString() {
         switch (orientation) {
-            case COLUMNS:
-                return Lang.l().column();
-
             case ROWS:
                 return Lang.l().row();
-
+            case COLUMNS:
             default:
                 return Lang.l().column();
         }

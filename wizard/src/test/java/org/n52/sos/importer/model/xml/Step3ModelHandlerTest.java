@@ -76,7 +76,11 @@ public class Step3ModelHandlerTest {
         SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
         new Step3ModelHandler().handleModel(model, sosImportConf);
 
-        final Metadata[] metadataArray = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray();
+        final Metadata[] metadataArray = sosImportConf
+                .getCsvMetadata()
+                .getColumnAssignments()
+                .getColumnArray(0)
+                .getMetadataArray();
         final int groupIndex = getGroupMetadataElementIndex(metadataArray);
         Assert.assertThat(groupIndex, Matchers.greaterThanOrEqualTo(0));
         Assert.assertThat(metadataArray[groupIndex].getValue(), Is.is(testGroup));

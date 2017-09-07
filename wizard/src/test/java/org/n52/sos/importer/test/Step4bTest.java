@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * <p>Step4bTest class.</p>
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class Step4bTest {
