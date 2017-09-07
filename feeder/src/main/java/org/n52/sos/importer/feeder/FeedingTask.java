@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.task;
+package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,27 +43,25 @@ import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
-import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.DataFile;
-import org.n52.sos.importer.feeder.SensorObservationService;
 import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>FeedingTask class.</p>
+ *
  * TODO if failed observations -&gt; store in file
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 // TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
-public class OneTimeFeeder implements Runnable {
+public class FeedingTask implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
     private static final String PROXY_PORT = "proxyPort";
-    private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
     private final Configuration config;
 
@@ -74,7 +72,7 @@ public class OneTimeFeeder implements Runnable {
      *
      * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
      */
-    public OneTimeFeeder(final Configuration config) {
+    public FeedingTask(final Configuration config) {
         this.config = config;
     }
 
@@ -84,7 +82,7 @@ public class OneTimeFeeder implements Runnable {
      * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
      * @param datafile a {@link java.io.File} object.
      */
-    public OneTimeFeeder(final Configuration config, final File datafile) {
+    public FeedingTask(final Configuration config, final File datafile) {
         this.config = config;
         dataFile = new DataFile(config, datafile);
     }
@@ -291,8 +289,7 @@ public class OneTimeFeeder implements Runnable {
      * Method should store failed insertObservations in a defined directory and
      * created configuration for this.
      */
-    private void saveFailedInsertObservations(
-            final List<InsertObservation> failedInserts) throws IOException {
+    private void saveFailedInsertObservations(final List<InsertObservation> failedInserts) throws IOException {
         // TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
         LOG.trace("saveFailedInsertObservations() <-- NOT YET IMPLEMENTED");
         //      // TODO save failed InsertObservations via ObjectOutputStream

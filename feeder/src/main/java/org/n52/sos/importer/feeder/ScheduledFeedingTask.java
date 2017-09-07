@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.task;
+package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -41,7 +41,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
 import org.n52.sos.importer.feeder.util.FileHelper;
@@ -49,19 +48,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>RepeatedFeeder class.</p>
+ * <p>ScheduledFeedingTask class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
-public class RepeatedFeeder extends TimerTask {
+public class ScheduledFeedingTask extends TimerTask {
 
     private static final String EXCEPTION_THROWN = "Exception thrown: {}";
     private static final String PROPERTIES_FILE_EXTENSION = ".properties";
     private static final String LAST_FEED_FILE = "lastFeedFile";
     private static File lastUsedDataFile;
 
-    private static final Logger LOG = LoggerFactory.getLogger(RepeatedFeeder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduledFeedingTask.class);
     private static final Lock ONE_FEEDER_LOCK = new ReentrantLock(true);
 
     private final Configuration configuration;
@@ -75,7 +73,7 @@ public class RepeatedFeeder extends TimerTask {
      * @param f a {@link java.io.File} object.
      * @param periodInMinutes a int.
      */
-    public RepeatedFeeder(final Configuration c, final File f, final int periodInMinutes) {
+    public ScheduledFeedingTask(final Configuration c, final File f, final int periodInMinutes) {
         configuration = c;
         file = f;
         this.periodInMinutes = periodInMinutes;
@@ -107,7 +105,7 @@ public class RepeatedFeeder extends TimerTask {
                 for (final File fileToFeed : filesToFeed) {
                     LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
-                        new OneTimeFeeder(configuration, fileToFeed).run();
+                        new FeedingTask(configuration, fileToFeed).run();
                         setLastUsedDataFile(fileToFeed);
                         saveLastFeedFile();
                         LOG.info("Finished feeding file {}.", fileToFeed.getName());
@@ -120,7 +118,7 @@ public class RepeatedFeeder extends TimerTask {
             } else {
                 datafile = file;
                 // OneTimeFeeder with file override used not as thread
-                new OneTimeFeeder(configuration, datafile).run();
+                new FeedingTask(configuration, datafile).run();
                 LOG.info("Finished feeding file {}. Next run in {} minute{}.",
                         datafile.getName(),
                         periodInMinutes,
@@ -219,7 +217,7 @@ public class RepeatedFeeder extends TimerTask {
     }
 
     private static synchronized void setLastUsedDataFile(File lastUsedDataFile) {
-        RepeatedFeeder.lastUsedDataFile = lastUsedDataFile;
+        ScheduledFeedingTask.lastUsedDataFile = lastUsedDataFile;
     }
 
 

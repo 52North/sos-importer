@@ -39,8 +39,6 @@ import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
 import org.apache.xmlbeans.XmlException;
-import org.n52.sos.importer.feeder.task.OneTimeFeeder;
-import org.n52.sos.importer.feeder.task.RepeatedFeeder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,14 +77,14 @@ public final class Application {
                 // data file
                 if (args.length == 2) {
                     // Case: one time feeding with defined configuration
-                    new Thread(new OneTimeFeeder(c), OneTimeFeeder.class.getSimpleName()).start();
+                    new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName()).start();
                 } else if (args.length == 4) {
                     // Case: one time feeding with file override or period with file from configuration
                     if (isFileOverride(args[2])) {
                         // Case: file override
-                        new Thread(new OneTimeFeeder(c,
+                        new Thread(new FeedingTask(c,
                                 new File(args[3])),
-                                OneTimeFeeder.class.getCanonicalName()).start();
+                                FeedingTask.class.getCanonicalName()).start();
 
                     } else if (isTimePeriodSet(args[2]))  {
                         // Case: repeated feeding
@@ -118,7 +116,7 @@ public final class Application {
 
     private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
         final Timer t = new Timer("FeederTimer");
-        t.schedule(new RepeatedFeeder(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
+        t.schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
     }
 
     private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
