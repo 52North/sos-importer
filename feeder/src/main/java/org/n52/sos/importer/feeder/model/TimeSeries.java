@@ -30,8 +30,12 @@ package org.n52.sos.importer.feeder.model;
 
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.xmlbeans.XmlString;
 import org.n52.oxf.sos.observation.ObservationParameters;
@@ -140,20 +144,32 @@ public class TimeSeries {
         return timeseries.getFirst();
     }
 
+    public String getUniqueObservedPropertyURI() {
+        if (timeseries.isEmpty()) {
+            return OBSERVED_PROPERTY_NOT_SET_CONST;
+        }
+        return timeseries.getFirst().getUniqueObservedPropertyURI();
+    }
+
     /**
      * <p>getObservedProperty.</p>
      *
      * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      */
-    public ObservedProperty getObservedProperty() {
+    public Set<ObservedProperty> getObservedProperties() {
         if (timeseries.isEmpty()) {
+            return new HashSet<>();
+        }
+        return timeseries.getFirst().getObservedProperties();
+
+        /*if (timeseries.isEmpty()) {
             return OBSERVED_PROPERTY_NOT_SET;
         }
         final ObservedProperty obsProp = timeseries.getFirst().getObservedProperty();
         if (obsProp == null) {
             return OBSERVED_PROPERTY_NOT_SET;
         }
-        return obsProp;
+        return obsProp;*/
     }
 
     /**
@@ -161,15 +177,19 @@ public class TimeSeries {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getUnitOfMeasurementCode() {
+    public Map<ObservedProperty, String> getUnitOfMeasurementCode() {
         if (timeseries.isEmpty()) {
+            return new HashMap<>();
+        }
+        return timeseries.getFirst().getObservedPropertiesUomCode();
+        /*if (timeseries.isEmpty()) {
             return UOM_CODE_NOT_SET;
         }
         final String uomCode = timeseries.getFirst().getUnitOfMeasurementCode();
         if (uomCode == null || uomCode.isEmpty()) {
             return UOM_CODE_NOT_SET;
         }
-        return uomCode;
+        return uomCode;*/
     }
 
     /**
@@ -177,7 +197,12 @@ public class TimeSeries {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getMeasuredValueType() {
+    public Map<ObservedProperty,String> getObservedPropertiesMeasuredValueType() {
+         if (timeseries.isEmpty()) {
+            return new HashMap<>();
+        }
+        return timeseries.getFirst().getObservedPropertiesMeasuredValueType();
+        /*
         if (timeseries.isEmpty()) {
             return MV_TYPE_NOT_SET;
         }
@@ -185,7 +210,7 @@ public class TimeSeries {
         if (mVType == null || mVType.isEmpty()) {
             return MV_TYPE_NOT_SET;
         }
-        return mVType;
+        return mVType;*/
     }
 
     /**
@@ -205,7 +230,7 @@ public class TimeSeries {
         // procedure
         obsParameter.addProcedure(getSensorURI());
         // obsProp
-        obsParameter.addObservedProperty(getObservedProperty().getUri());
+        obsParameter.addObservedProperty(getUniqueObservedPropertyURI());
         // feature
         addFeature(obsParameter);
         // result
@@ -243,31 +268,37 @@ public class TimeSeries {
             .getAbstractDataComponent()
             .substitute(XMLConstants.QN_SWE_2_0_TIME, TimeType.type);
         // obsProp
-        final Field xbObsProperty = xbDataRecord.addNewField();
-        xbObsProperty.setName(NcNameResolver.fixNcName(getObservedProperty().getName()));
-        if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
-            final TextType xbTextType = TextType.Factory.newInstance();
-            xbTextType.setDefinition(getObservedProperty().getUri());
-            xbObsProperty.addNewAbstractDataComponent().set(xbTextType);
-            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_TEXT, TextType.type);
-        } else if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
-            final CountType xbCountType = CountType.Factory.newInstance();
-            xbCountType.setDefinition(getObservedProperty().getUri());
-            xbObsProperty.addNewAbstractDataComponent().set(xbCountType);
-            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_COUNT, CountType.type);
-        } else if (getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
-            final BooleanType xbBooleanType = BooleanType.Factory.newInstance();
-            xbBooleanType.setDefinition(getObservedProperty().getUri());
-            xbObsProperty.addNewAbstractDataComponent().set(xbBooleanType);
-            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_BOOLEAN, BooleanType.type);
-            throw new RuntimeException("NO YET IMPLEMENTED");
-        } else {
-            final QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
-            xbQuantityWithUom.setDefinition(getObservedProperty().getUri());
-            xbQuantityWithUom.addNewUom().setCode(getUnitOfMeasurementCode());
-            xbObsProperty.addNewAbstractDataComponent().set(xbQuantityWithUom);
-            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_QUANTITY, QuantityType.type);
+        for (ObservedProperty observedProperty : getObservedProperties()) {
+            final String uom = getUnitOfMeasurementCode().get(observedProperty);
+            final String mValueType = getObservedPropertiesMeasuredValueType().get(observedProperty);
+
+            final Field xbObsProperty = xbDataRecord.addNewField();
+            xbObsProperty.setName(NcNameResolver.fixNcName(observedProperty.getName()));
+            if (mValueType.equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+                final TextType xbTextType = TextType.Factory.newInstance();
+                xbTextType.setDefinition(observedProperty.getUri());
+                xbObsProperty.addNewAbstractDataComponent().set(xbTextType);
+                xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_TEXT, TextType.type);
+            } else if (mValueType.equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+                final CountType xbCountType = CountType.Factory.newInstance();
+                xbCountType.setDefinition(observedProperty.getUri());
+                xbObsProperty.addNewAbstractDataComponent().set(xbCountType);
+                xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_COUNT, CountType.type);
+            } else if (mValueType.equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+                final BooleanType xbBooleanType = BooleanType.Factory.newInstance();
+                xbBooleanType.setDefinition(observedProperty.getUri());
+                xbObsProperty.addNewAbstractDataComponent().set(xbBooleanType);
+                xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_BOOLEAN, BooleanType.type);
+                throw new RuntimeException("NO YET IMPLEMENTED");
+            } else {
+                final QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
+                xbQuantityWithUom.setDefinition(observedProperty.getUri());
+                xbQuantityWithUom.addNewUom().setCode(uom);
+                xbObsProperty.addNewAbstractDataComponent().set(xbQuantityWithUom);
+                xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_QUANTITY, QuantityType.type);
+            }
         }
+
         // element type
         final ElementType xbElementType = xbDataArray.addNewElementType();
         xbElementType.setName("definition");
@@ -298,8 +329,10 @@ public class TimeSeries {
         int counter = 0;
         for (final InsertObservation io : timeseries) {
             sb.append(io.getTimeStamp().toString());
-            sb.append(TOKEN_SEPARATOR);
-            sb.append(io.getResultValue());
+            for (Object resultValue : io.getObservedPropertiesResultValue().values()) {
+                sb.append(TOKEN_SEPARATOR);
+                sb.append(resultValue);
+            }
             sb.append(BLOCK_SEPARATOR);
             if (counter > 0 && counter++ % 100 == 0) {
                 sb.append("\n");
@@ -375,7 +408,7 @@ public class TimeSeries {
     public String toString() {
         return String.format("TimeSeries [sensor=%s, observedProperty=%s, feature=%s]",
                 getSensorURI(),
-                getObservedProperty(),
+                getObservedProperties(),
                 timeseries.getFirst().getFeatureOfInterestURI());
     }
 

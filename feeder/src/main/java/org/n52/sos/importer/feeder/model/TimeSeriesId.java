@@ -43,7 +43,7 @@ public class TimeSeriesId {
     TimeSeriesId(InsertObservation io) {
         this.feature = io.getFeatureOfInterestURI();
         this.sensor = io.getSensorURI();
-        this.property = io.getObservedPropertyURI();
+        this.property = io.getUniqueObservedPropertyURI();
     }
 
     @Override

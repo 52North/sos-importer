@@ -89,17 +89,17 @@ public class RegisterSensor {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getDefaultValue() {
-        if (io.getResultValue() instanceof Boolean) {
+    public String getDefaultValue(ObservedProperty observedProperty) {
+        if (io.getObservedPropertiesResultValue().get(observedProperty) instanceof Boolean) {
             return "false";
         }
-        if (io.getResultValue() instanceof Integer) {
+        if (io.getObservedPropertiesResultValue().get(observedProperty) instanceof Integer) {
             return "0";
         }
-        if (io.getResultValue() instanceof Double) {
+        if (io.getObservedPropertiesResultValue().get(observedProperty) instanceof Double) {
             return "0.0";
         }
-        if (io.getResultValue() instanceof String) {
+        if (io.getObservedPropertiesResultValue().get(observedProperty) instanceof String) {
             return " ";
         }
         return "notDefined";

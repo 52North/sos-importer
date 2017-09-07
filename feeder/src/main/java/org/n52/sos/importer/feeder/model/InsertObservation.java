@@ -28,10 +28,17 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import org.n52.oxf.om.x20.OmParameter;
 
@@ -42,15 +49,15 @@ import org.n52.oxf.om.x20.OmParameter;
  */
 public class InsertObservation {
 
-    private final Object resultValue;
+    private final Set<ObservedProperty> observedProperties;
+    private final Map<ObservedProperty, Object> observedPropertiesResultValue;
     private final Timestamp timeStamp;
     private final Sensor sensor;
-    private final ObservedProperty observedProperty;
+    private final Map<ObservedProperty, UnitOfMeasurement> observedPropertiesWithUom;
     private final FeatureOfInterest featureOfInterest;
-    private final UnitOfMeasurement unitOfMeasurement;
     private final Offering offering;
-    private final String measuredValueType;
-    private List<OmParameter<?>> omParameters;
+    private final Map<ObservedProperty, String> observedPropertiesMeasuredValueType;
+    private final List<OmParameter<?>> omParameters;
 
     /**
      * <p>Constructor for InsertObservation.</p>
@@ -76,12 +83,40 @@ public class InsertObservation {
             final String mvType) {
         featureOfInterest = foi;
         this.sensor = sensor;
-        observedProperty = obsProp;
+        this.observedProperties = new HashSet<>();
+        this.observedProperties.add(obsProp);
+        observedPropertiesWithUom = new HashMap<>();
+        observedPropertiesWithUom.put(obsProp, uom);
         this.timeStamp = timeStamp;
-        unitOfMeasurement = uom;
-        resultValue = value;
+        observedPropertiesResultValue = new HashMap<>();
+        observedPropertiesResultValue.put(obsProp, value);
         offering = off;
-        measuredValueType = mvType;
+        observedPropertiesMeasuredValueType = new HashMap<>();
+        observedPropertiesMeasuredValueType.put(obsProp, mvType);
+        if (omParameters.isPresent()) {
+            this.omParameters = omParameters.get();
+        } else {
+            this.omParameters = Collections.emptyList();
+        }
+    }
+
+    public InsertObservation(final Sensor sensor,
+            final FeatureOfInterest foi,
+            final Map<ObservedProperty, Object> obsValue,
+            final Timestamp timeStamp,
+            final Map<ObservedProperty, UnitOfMeasurement> obsUom,
+            final Set<ObservedProperty> obsProps,
+            final Offering off,
+            Optional<List<OmParameter<?>>> omParameters,
+            final Map<ObservedProperty, String> obsMvType) {
+        this.featureOfInterest = foi;
+        this.sensor = sensor;
+        this.observedProperties = obsProps;
+        this.observedPropertiesWithUom = obsUom;
+        this.timeStamp = timeStamp;
+        this.observedPropertiesResultValue = obsValue;
+        this.offering = off;
+        this.observedPropertiesMeasuredValueType = obsMvType;
         if (omParameters.isPresent()) {
             this.omParameters = omParameters.get();
         } else {
@@ -130,8 +165,40 @@ public class InsertObservation {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getObservedPropertyURI() {
-        return observedProperty.getUri();
+    public String getUniqueObservedPropertyURI() {
+        if (observedProperties.size() == 1) {
+            return observedProperties.iterator().next().getUri();
+        } else if (observedProperties.size() > 1) {
+            StringBuilder sb = new StringBuilder("urn:phenomenon:composite:");
+            // return a composite generated composite name
+            for (ObservedProperty op : observedProperties) {
+                sb.append(op.getName()).append("-");
+            }
+            return sb.toString();
+        }
+        return null;
+    }
+
+    /**
+     * <p>getObservedPropertyURI.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public List<String> getObservedPropertyURI() {
+        List<String> results = new ArrayList<>();
+        for (ObservedProperty op : observedProperties) {
+            results.add(op.getUri());
+        }
+        return results;
+    }
+
+
+    public Map<ObservedProperty, String> getObservedPropertiesUomCode() {
+        Map<ObservedProperty, String> results = new LinkedHashMap<>();
+        for (Entry<ObservedProperty, UnitOfMeasurement> entry : observedPropertiesWithUom.entrySet()) {
+            results.put(entry.getKey(), entry.getValue().getCode());
+        }
+        return results;
     }
 
     /**
@@ -139,17 +206,18 @@ public class InsertObservation {
      *
      * @return a {@link java.lang.String} object.
      */
-    public String getUnitOfMeasurementCode() {
-        return unitOfMeasurement.getCode();
+    public String getUniqueUnitOfMeasurementCode() {
+        if (observedPropertiesWithUom.size() == 1) {
+            return observedPropertiesWithUom.values().iterator().next().getUri();
+        } else if (observedPropertiesWithUom.size() > 1) {
+            // shound not happen, return the first code
+            return observedPropertiesWithUom.values().iterator().next().getUri();
+        }
+        return null;
     }
 
-    /**
-     * <p>Getter for the field <code>resultValue</code>.</p>
-     *
-     * @return a {@link java.lang.Object} object.
-     */
-    public Object getResultValue() {
-        return resultValue;
+    public Map<ObservedProperty, Object> getObservedPropertiesResultValue() {
+        return observedPropertiesResultValue;
     }
 
     /**
@@ -212,8 +280,8 @@ public class InsertObservation {
      *
      * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      */
-    public ObservedProperty getObservedProperty() {
-        return observedProperty;
+    public Set<ObservedProperty> getObservedProperties() {
+        return observedPropertiesWithUom.keySet();
     }
 
     /**
@@ -229,10 +297,10 @@ public class InsertObservation {
      * <p>getUnitOfMeasurment.</p>
      *
      * @return a {@link org.n52.sos.importer.feeder.model.UnitOfMeasurement} object.
-     */
+
     protected UnitOfMeasurement getUnitOfMeasurment() {
         return unitOfMeasurement;
-    }
+    }*/
 
     /**
      * <p>Getter for the field <code>offering</code>.</p>
@@ -243,35 +311,38 @@ public class InsertObservation {
         return offering;
     }
 
-    /**
-     * <p>Getter for the field <code>measuredValueType</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getMeasuredValueType() {
-        return measuredValueType;
+    public Map<ObservedProperty, String> getObservedPropertiesMeasuredValueType() {
+        return observedPropertiesMeasuredValueType;
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("InsertObservation [resultValue=");
-        builder.append(resultValue);
-        builder.append(", timeStamp=");
+        builder.append("InsertObservation [resultValue=[");
+        for (Object resultValue : observedPropertiesResultValue.values())  {
+            builder.append(resultValue).append(',');
+        }
+        builder.append("], timeStamp=");
         builder.append(timeStamp);
         builder.append(", sensor=");
         builder.append(sensor);
-        builder.append(", observedProperty=");
-        builder.append(observedProperty);
-        builder.append(", featureOfInterest=");
+        builder.append(", observedProperty=[");
+        for (ObservedProperty observedProperty : observedPropertiesWithUom.keySet())  {
+            builder.append(observedProperty).append(',');
+        }
+        builder.append("], featureOfInterest=");
         builder.append(featureOfInterest);
-        builder.append(", unitOfMeasurement=");
-        builder.append(unitOfMeasurement);
-        builder.append(", offering=");
+        builder.append(", unitOfMeasurement=[");
+        for (UnitOfMeasurement unitOfMeasurement : observedPropertiesWithUom.values())  {
+            builder.append(unitOfMeasurement).append(',');
+        }
+        builder.append("], offering=");
         builder.append(offering);
-        builder.append(", measuredValueType=");
-        builder.append(measuredValueType);
-        builder.append(", omParameter=");
+        builder.append(", measuredValueType=[");
+        for (String measuredValueType : observedPropertiesMeasuredValueType.values())  {
+            builder.append(measuredValueType).append(',');
+        }
+        builder.append("], omParameter=");
         builder.append(Arrays.toString(getOmParameters()));
         builder.append("]");
         return builder.toString();

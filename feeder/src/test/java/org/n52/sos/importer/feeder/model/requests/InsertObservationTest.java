@@ -49,7 +49,7 @@ public class InsertObservationTest {
                 new FeatureOfInterest(null, null,
                         new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
         InsertObservation insertObservation =
-                new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+                new InsertObservation(null, foi, (Object)null, null, null, null, null, Optional.empty(), null);
         Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(true));
         Assert.assertThat(insertObservation.getAltitudeValue(), CoreMatchers.is(alt));
     }
@@ -64,7 +64,7 @@ public class InsertObservationTest {
                                 4326));
         InsertObservation insertObservation = new InsertObservation(null,
             foi,
-            null,
+            (Object)null,
             null,
             null,
             null,
@@ -73,7 +73,7 @@ public class InsertObservationTest {
             null);
         Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
 
-        insertObservation = new InsertObservation(null, null, null, null, null, null, null, Optional.empty(), null);
+        insertObservation = new InsertObservation(null, null, (Object)null, null, null, null, null, Optional.empty(), null);
         Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
     }
 
@@ -82,7 +82,7 @@ public class InsertObservationTest {
         FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
         foi.setParentFeature(DEG);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, (Object)null, null, null, null, null, Optional.empty(), null);
 
         Assert.assertThat(io.hasFeatureParentFeature(), Is.is(true));
         Assert.assertThat(io.getParentFeatureIdentifier(), Is.is(DEG));
@@ -94,7 +94,7 @@ public class InsertObservationTest {
         FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
         foi.setParentFeature(null);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, (Object)null, null, null, null, null, Optional.empty(), null);
 
         Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
 

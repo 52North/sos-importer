@@ -210,7 +210,10 @@ public final class Configuration {
          * SOS using the "SplitDataArrayIntoObservations" of the 52North
          * implementation.
          */
-        SweArrayObservationWithSplitExtension;
+        SweArrayObservationWithSplitExtension,
+        /**
+         */
+        SweArrayObservationMultiPhenomnon;
     }
 
     private SosImportConfiguration importConf;
@@ -1433,6 +1436,9 @@ public final class Configuration {
                     if (metadata.getValue().equalsIgnoreCase(
                             ImportStrategy.SweArrayObservationWithSplitExtension.name())) {
                         return ImportStrategy.SweArrayObservationWithSplitExtension;
+                    } else if (metadata.getValue().equalsIgnoreCase(
+                            ImportStrategy.SweArrayObservationMultiPhenomnon.name())) {
+                        return ImportStrategy.SweArrayObservationMultiPhenomnon;
                     } else {
                         return ImportStrategy.SingleObservation;
                     }

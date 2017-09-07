@@ -98,6 +98,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
@@ -374,6 +376,58 @@ public final class Feeder {
             skipLines(cr, lastLine);
         }
         switch (configuration.getImportStrategy()) {
+            case SweArrayObservationMultiPhenomnon:
+                // TODO
+                LOG.debug("Using hunkSize '{}'", hunkSize);
+                long startReadingFileMP = System.currentTimeMillis();
+                TimeSeriesRepository timeSeriesRepositoryMP = new TimeSeriesRepository();
+                int currentHunkMP = 0;
+                int sampleStartLineMP = lineCounter;
+                while ((values = cr.readNext()) != null) {
+                    // if it is a sample based file, I need to get the following information
+                    // * date information (depends on last timestamp because of
+                    if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
+                        sampleStartLineMP = processSampleStart(cr);
+                        continue;
+                    }
+                    if (!isLineIgnorable(values) &&
+                            containsData(values) &&
+                            isSizeValid(dataFile, values) &&
+                            !isHeaderLine(values)) {
+                        logLine(values);
+                        final InsertObservation[] ios = getInsertObservationsMultiPhenomenon(values, mVCols, dataFile);
+                        timeSeriesRepositoryMP.addObservations(ios);
+                        numOfObsTriedToInsert += ios.length;
+                        LOG.debug(Application.heapSizeInformation());
+                        if (currentHunkMP == hunkSize) {
+                            currentHunkMP = 0;
+                            insertTimeSeries(timeSeriesRepositoryMP);
+                            timeSeriesRepositoryMP = new TimeSeriesRepository();
+                        } else {
+                            currentHunkMP++;
+                        }
+                    } else {
+                        logSkippedLine(values);
+                    }
+                    incrementLineCounter();
+                    if (isSampleBasedDataFile) {
+                        LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; "
+                                + "sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
+                                isSampleBasedDataFile, isInSample, lineCounter,
+                                sampleStartLineMP, sampleSize, sampleDataOffset);
+
+                        if (isInSample && isSampleEndReached(sampleStartLineMP)) {
+                            isInSample = false;
+                            LOG.debug("Current sample left");
+                        }
+                    }
+                }
+                if (!timeSeriesRepositoryMP.isEmpty()) {
+                    insertTimeSeries(timeSeriesRepositoryMP);
+                }
+                lastLine = lineCounter;
+                logTiming(startReadingFileMP);
+                break;
             case SweArrayObservationWithSplitExtension:
                 LOG.debug("Using hunkSize '{}'", hunkSize);
                 long startReadingFile = System.currentTimeMillis();
@@ -687,6 +741,28 @@ public final class Feeder {
         return false;
     }
 
+    private InsertObservation[] getInsertObservationsMultiPhenomenon(final String[] values,
+            final int[] mVColumns,
+            final DataFile df) {
+        if (mVColumns == null || mVColumns.length == 0) {
+            LOG.error("Method called with bad arguments: values: {}, mVColumns: {}",
+                    Arrays.toString(values),
+                    Arrays.toString(mVColumns));
+            return null;
+        }
+        final ArrayList<InsertObservation> result = new ArrayList<>(mVColumns.length);
+        try {
+            final List<InsertObservation> io = getInsertObservationMultiPhenomnonFromValues(mVColumns, values, df);
+            result.addAll(io);
+        } catch (final ParseException pe) {
+            logExceptionThrownDuringParsing(pe);
+        } catch (final NumberFormatException nfe) {
+            logExceptionThrownDuringParsing(nfe);
+        }
+        result.trimToSize();
+        return result.toArray(new InsertObservation[result.size()]);
+    }
+
     private InsertObservation[] getInsertObservations(final String[] values,
             final int[] mVColumns,
             final DataFile df) {
@@ -713,6 +789,7 @@ public final class Feeder {
         result.trimToSize();
         return result.toArray(new InsertObservation[result.size()]);
     }
+
 
     private InsertObservation getInsertObservationForColumnIdFromValues(final int mVColumnId,
             final String[] values,
@@ -775,6 +852,143 @@ public final class Feeder {
                 offer,
                 omParameter,
                 dataFile.getType(mVColumnId));
+    }
+
+    private List<InsertObservation> getInsertObservationMultiPhenomnonFromValues(final int[] mVColumns,
+            final String[] values,
+            final DataFile dataFile) throws ParseException {
+
+        Map<Sensor, List<Integer>> sensorColumns = new HashMap<>();
+        // SENSOR
+        for (int mVColumn : mVColumns) {
+            final Sensor sensor = dataFile.getSensorForColumn(mVColumn, values);
+            LOG.debug("Sensor: {}", sensor);
+            if (sensorColumns.containsKey(sensor)) {
+                sensorColumns.get(sensor).add(mVColumn);
+            } else {
+                final List<Integer> columns = new ArrayList<>();
+                columns.add(mVColumn);
+                sensorColumns.put(sensor, columns);
+            }
+        }
+
+        List<InsertObservation> results = new ArrayList<>();
+        sensorLoop:for (Sensor sensor : sensorColumns.keySet()) {
+
+            List<Integer> columns =  sensorColumns.get(sensor);
+
+             // OFFERING
+            final Offering offer;
+            if (offerings.containsKey(sensor.getUri())) {
+                String offering = offerings.get(sensor.getUri());
+                offer = new Offering(offering, offering);
+            } else {
+                offer = dataFile.getOffering(sensor);
+            }
+            LOG.debug("Offering: {}", offer);
+
+            // FEATURE OF INTEREST incl. Position
+            // FOR NOW HANDLE ONLY ONE FOI!
+            FeatureOfInterest foi = null;
+            for (Integer mVColumnId : columns) {
+                if (foi == null) {
+                    foi = dataFile.getFoiForColumn(mVColumnId, values);
+                } else {
+                    FeatureOfInterest newFoi = dataFile.getFoiForColumn(mVColumnId, values);
+                    if (!foi.equals(newFoi)) {
+                        LOG.error("Multi phenomenon strategy does not handle multi foi in the same data line");
+                        continue sensorLoop;
+                    }
+                }
+            }
+            LOG.debug("Feature of Interest: {}", foi);
+
+
+            // TODO implement using different templates in later version depending on the class of value
+            // TIMESTAMP
+            // FOR NOW HANDLE ONLY ONE TIMESTAMP!
+            Timestamp timeStamp = null;
+            for (Integer mVColumnId : columns) {
+                if (timeStamp == null) {
+                    timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+                } else {
+                    Timestamp newtimeStamp = dataFile.getTimeStamp(mVColumnId, values);
+                    if (!timeStamp.toString().equals(newtimeStamp.toString())) {
+                        LOG.error("Multi phenomenon strategy does not handle multi timestamp in the same data line");
+                        continue sensorLoop;
+                    }
+                }
+            }
+            if (isSampleBasedDataFile) {
+                if (sampleLastTimestamp != null && timeStamp.isBefore(sampleLastTimestamp)) {
+                    sampleDate.applyDayDelta(1);
+                }
+                sampleLastTimestamp = new Timestamp().enrich(timeStamp);
+                timeStamp.enrich(sampleDate);
+            }
+            LOG.debug("Timestamp: {}", timeStamp);
+
+            final Set<ObservedProperty> obsProps = new LinkedHashSet<>();
+            final Map<ObservedProperty, UnitOfMeasurement> obsUom = new LinkedHashMap<>();
+            final Map<ObservedProperty, String> obsMvType = new LinkedHashMap<>();
+            final Map<ObservedProperty, Object> obsValue = new LinkedHashMap<>();
+
+            // not sure for this one
+            final List<OmParameter<?>> omParameters = new ArrayList<>();
+
+            for (Integer mVColumnId : columns) {
+
+                // OBSERVED_PROPERTY
+                final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId, values);
+                obsProps.add(observedProperty);
+                LOG.debug("ObservedProperty: {}", observedProperty);
+
+                // UOM CODE
+                final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId, values);
+                obsUom.put(observedProperty, uom);
+                LOG.debug("UomCode: '{}'", uom);
+
+               // VALUE
+                Object value = dataFile.getValue(mVColumnId, values);
+                if (value.equals(Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE)) {
+                    value = null;
+                }
+                obsValue.put(observedProperty, value);
+                // TODO implement handling for value == null => skip observation and log it, or logging is done in getValue(..)
+                LOG.debug("Value: {}", value);
+
+                // DATA TYPE
+                String dataType =  dataFile.getType(mVColumnId);
+                obsMvType.put(observedProperty, dataType);
+                LOG.debug("Data type: {}", dataType);
+
+                // OM:PARAMETER
+                final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(mVColumnId, values);
+                if (omParameter.isPresent()) {
+                    omParameters.addAll(omParameter.get());
+                }
+            }
+
+
+            final Optional<List<OmParameter<?>>> omParameter;
+            if (omParameters.isEmpty()) {
+                omParameter = Optional.empty();
+            } else {
+                omParameter = Optional.of(omParameters);
+            }
+
+            results.add(
+                    new InsertObservation(sensor,
+                    foi,
+                    obsValue,
+                    timeStamp,
+                    obsUom,
+                    obsProps,
+                    offer,
+                    omParameter,
+                    obsMvType));
+            }
+        return results;
     }
 
     private void logExceptionThrownDuringParsing(final Exception exception) {
@@ -875,12 +1089,10 @@ public final class Feeder {
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
             final InsertObservation[] ios) {
-        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<>(ios.length);
+        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<>();
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
-                unitsOfMeasurement.put(
-                        insertObservation.getObservedProperty(),
-                        insertObservation.getUnitOfMeasurementCode());
+                unitsOfMeasurement.putAll(insertObservation.getObservedPropertiesUomCode());
             }
         }
         LOG.debug(String.format("Found '%d' units of measurement for observed properties of sensor '%s': '%s'.",
@@ -892,9 +1104,7 @@ public final class Feeder {
         final Map<ObservedProperty, String> measuredValueTypes = new HashMap<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
-                measuredValueTypes.put(
-                        insertObservation.getObservedProperty(),
-                        insertObservation.getMeasuredValueType());
+                measuredValueTypes.putAll(insertObservation.getObservedPropertiesMeasuredValueType());
             }
         }
         LOG.debug(String.format("Found '%d' Measured value types for observed properties of sensor '%s': '%s'.",
@@ -906,7 +1116,7 @@ public final class Feeder {
         final Set<ObservedProperty> observedProperties = new HashSet<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
-                observedProperties.add(insertObservation.getObservedProperty());
+                observedProperties.addAll(insertObservation.getObservedProperties());
             }
         }
         LOG.debug(String.format("Found '%d' Observed Properties for Sensor '%s': '%s'",
@@ -1059,30 +1269,36 @@ public final class Feeder {
             final InsertObservation io) throws OXFException {
         ObservationParameters obsParameter;
 
-        switch (io.getMeasuredValueType()) {
+        // for this mode we must assume that we have a single phenomenon insertion
+        final ObservedProperty observedProperty = io.getObservedProperties().iterator().next();
+        final String mValueType = io.getObservedPropertiesMeasuredValueType().get(observedProperty);
+        final Object resultValue = io.getObservedPropertiesResultValue().get(observedProperty);
+
+        switch (mValueType) {
             case Configuration.SOS_OBSERVATION_TYPE_TEXT:
                 // set text
                 obsParameter = new TextObservationParameters();
-                ((TextObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+                ((TextObservationParameters) obsParameter).addObservationValue(resultValue.toString());
                 break;
             case Configuration.SOS_OBSERVATION_TYPE_COUNT:
                 // set count
                 obsParameter = new CountObservationParameters();
-                ((CountObservationParameters) obsParameter).addObservationValue((Integer) io.getResultValue());
+                ((CountObservationParameters) obsParameter).addObservationValue((Integer) resultValue);
                 break;
             case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
                 // set boolean
                 obsParameter = new BooleanObservationParameters();
-                ((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) io.getResultValue());
+                ((BooleanObservationParameters) obsParameter).addObservationValue((Boolean) resultValue);
                 break;
             default:
                 // set default value type
                 obsParameter = new MeasurementObservationParameters();
-                ((MeasurementObservationParameters) obsParameter).addUom(io.getUnitOfMeasurementCode());
-                ((MeasurementObservationParameters) obsParameter).addObservationValue(io.getResultValue().toString());
+                ((MeasurementObservationParameters) obsParameter).addUom(io.getUniqueUnitOfMeasurementCode());
+                ((MeasurementObservationParameters) obsParameter).addObservationValue(resultValue.toString());
                 break;
         }
-        obsParameter.addObservedProperty(io.getObservedPropertyURI());
+
+        obsParameter.addObservedProperty(io.getUniqueObservedPropertyURI());
         obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
         obsParameter.addNewFoiName(io.getFeatureOfInterestName());
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
@@ -1107,7 +1323,6 @@ public final class Feeder {
             pos = String.format(N_M_FORMAT, pos, io.getAltitudeValue());
         }
         obsParameter.addFoiPosition(pos);
-        obsParameter.addObservedProperty(io.getObservedPropertyURI());
         obsParameter.addProcedure(io.getSensorURI());
 
         if (sosVersion.equalsIgnoreCase(SOS_200_VERSION)) {
@@ -1288,7 +1503,7 @@ public final class Feeder {
                     ObservationTemplateBuilder.createObservationTemplateBuilderForTypeMeasurement(
                             registerSensor.getUnitOfMeasurementCode(firstObservedProperty));
         }
-        observationTemplate.setDefaultValue(registerSensor.getDefaultValue());
+        observationTemplate.setDefaultValue(registerSensor.getDefaultValue(firstObservedProperty));
 
         return new RegisterSensorParameters(
                 sensorDescBuilder.createSML(registerSensor),
