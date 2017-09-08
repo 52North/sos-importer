@@ -832,6 +832,8 @@ public abstract class Lang {
     /**
      * <p>step3OmParameterNameInvalidDialogMessage</p>
      *
+     * @param givenValue the user defined parameter name.
+     *
      * @return The given om:Parameter-&gt;Name is invalid:
      *         <br><br>
      *         "<code>givenValue</code>"
@@ -1067,7 +1069,7 @@ public abstract class Lang {
     public abstract String step4bModelDescription();
 
     /**
-     * @param isColumn
+     * @param orientation row or column
      *
      * @return Please click the <code>orientation</code> (not the title)
      * containing the measured values for the marked
