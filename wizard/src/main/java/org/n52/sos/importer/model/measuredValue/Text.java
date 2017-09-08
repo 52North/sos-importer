@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
 
@@ -64,19 +63,16 @@ import org.n52.sos.importer.model.Parseable;
 
 public class Text extends MeasuredValue implements Parseable {
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Text" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object parse(String s) {
         return s.trim();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper

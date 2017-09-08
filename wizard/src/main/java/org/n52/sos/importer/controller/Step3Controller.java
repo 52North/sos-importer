@@ -51,7 +51,6 @@ import org.slf4j.LoggerFactory;
  * for each column in the CSV file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step3Controller extends StepController {
 
@@ -91,19 +90,16 @@ public class Step3Controller extends StepController {
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step3Description();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step3Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         if (LOG.isTraceEnabled()) {
@@ -136,7 +132,6 @@ public class Step3Controller extends StepController {
         tabCtrlr.turnSelectionOff();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         if (LOG.isTraceEnabled()) {
@@ -196,7 +191,6 @@ public class Step3Controller extends StepController {
                         selection.get(2).endsWith(NULL)));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         final List<String> selection = new ArrayList<>();
@@ -213,19 +207,16 @@ public class Step3Controller extends StepController {
         step3Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step4aController(new Step4aModel(null, step3Model.getFirstLineWithData()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         final List<String> currentSelection = new ArrayList<>();
@@ -259,7 +250,6 @@ public class Step3Controller extends StepController {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         // check if we have reached the last column
@@ -273,14 +263,12 @@ public class Step3Controller extends StepController {
                 step3Model.getUseHeader());
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isStillValid() {
         //TODO: check whether the CSV file parsing settings have been changed
         return step3Model.getMarkedColumn() != 0;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step3Model;

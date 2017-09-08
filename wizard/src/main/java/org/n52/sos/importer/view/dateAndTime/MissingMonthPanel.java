@@ -43,7 +43,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for a single month
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingMonthPanel extends MissingDateAndTimePanel {
 
@@ -67,31 +66,26 @@ public class MissingMonthPanel extends MissingDateAndTimePanel {
         this.add(monthSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setMonth(new Month(monthModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setMonth(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Month(monthModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         monthModel.setValue(((Month) c).getValue());

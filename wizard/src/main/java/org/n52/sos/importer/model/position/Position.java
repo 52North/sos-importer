@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.position;
 
@@ -214,19 +213,16 @@ public class Position extends Combination {
         return latitude;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setGroup(final String group) {
         this.group = group;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getGroup() {
         return group;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String format(final Object o) {
         final Position p = (Position) o;
@@ -239,7 +235,6 @@ public class Position extends Combination {
         return positionString;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Position parse(final String s) {
         String pattern = getPattern();
@@ -281,7 +276,6 @@ public class Position extends Combination {
         return new Position(newLatitude, newLongitude, newHeight, newEpsgCode);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         if (getGroup() == null) {

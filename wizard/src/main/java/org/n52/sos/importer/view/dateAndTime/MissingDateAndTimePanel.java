@@ -36,7 +36,6 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public abstract class MissingDateAndTimePanel extends MissingComponentPanel {
 

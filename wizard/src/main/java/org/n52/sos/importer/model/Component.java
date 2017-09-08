@@ -35,7 +35,6 @@ import org.n52.sos.importer.view.MissingComponentPanel;
  * (e.g. DateAndTime)
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public abstract class Component {
 

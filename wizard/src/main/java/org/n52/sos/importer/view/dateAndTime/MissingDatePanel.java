@@ -48,7 +48,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for year, month and day
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingDatePanel extends MissingDateAndTimePanel {
 
@@ -81,7 +80,6 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
         this.add(dateSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         Calendar c = new GregorianCalendar();
@@ -91,7 +89,6 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
         dateAndTime.setYear(new Year(c.get(Calendar.YEAR)));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setDay(null);
@@ -99,13 +96,11 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
         dateAndTime.setYear(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         Calendar c = new GregorianCalendar();
@@ -117,7 +112,6 @@ public class MissingDatePanel extends MissingDateAndTimePanel {
         return date;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         org.n52.sos.importer.model.dateAndTime.Date date = (org.n52.sos.importer.model.dateAndTime.Date) c;

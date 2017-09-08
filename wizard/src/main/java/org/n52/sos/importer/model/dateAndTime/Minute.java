@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.dateAndTime;
 
@@ -88,19 +87,16 @@ public class Minute extends DateAndTimeComponent {
         super(value);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int getGregorianCalendarField() {
         return GregorianCalendar.MINUTE;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Minute" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingMinutePanel((DateAndTime) c);

@@ -29,7 +29,6 @@
 package org.n52.sos.importer.feeder.model;
 
 import java.util.Objects;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 
 /**
  *

@@ -83,7 +83,6 @@ import org.slf4j.LoggerFactory;
  * <p>ArrayListTransferHandler class.</p>
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  */
 public class ArrayListTransferHandler extends TransferHandler {
 
@@ -123,7 +122,6 @@ public class ArrayListTransferHandler extends TransferHandler {
         serialArrayListFlavor = new DataFlavor(ArrayList.class, "ArrayList");
     }
 
-    /** {@inheritDoc} */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public boolean importData(final JComponent c, final Transferable t) {
@@ -187,7 +185,6 @@ public class ArrayListTransferHandler extends TransferHandler {
         return true;
     }
 
-    /** {@inheritDoc} */
     @SuppressWarnings("rawtypes")
     @Override
     protected void exportDone(final JComponent c, final Transferable data, final int action) {
@@ -239,7 +236,6 @@ public class ArrayListTransferHandler extends TransferHandler {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean canImport(final JComponent c, final DataFlavor[] flavors) {
         if (hasLocalArrayListFlavor(flavors)) {
@@ -251,7 +247,6 @@ public class ArrayListTransferHandler extends TransferHandler {
         return false;
     }
 
-    /** {@inheritDoc} */
     @SuppressWarnings("rawtypes")
     @Override
     protected Transferable createTransferable(final JComponent c) {
@@ -272,7 +267,6 @@ public class ArrayListTransferHandler extends TransferHandler {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public int getSourceActions(final JComponent c) {
         return COPY_OR_MOVE;

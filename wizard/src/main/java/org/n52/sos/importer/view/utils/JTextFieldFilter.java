@@ -36,7 +36,6 @@ import javax.swing.text.PlainDocument;
  * <p>JTextFieldFilter class.</p>
  *
  * @author http://www.java-tips.org/java-se-tips/javax.swing/apply-special-filter-to-a-jtextfield.html
- * @version $Id: $Id
  */
 public class JTextFieldFilter extends PlainDocument {
 
@@ -93,7 +92,6 @@ public class JTextFieldFilter extends PlainDocument {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void insertString(int offset, final String  string, final AttributeSet attr) throws BadLocationException {
         if (string == null) {

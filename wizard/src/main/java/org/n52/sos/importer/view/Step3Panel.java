@@ -59,7 +59,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step3Panel extends JPanel {
 

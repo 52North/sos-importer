@@ -59,7 +59,6 @@ import org.n52.oxf.om.x20.TextParameter;
 import org.n52.oxf.xml.NcNameResolver;
 import org.n52.sos.importer.feeder.csv.CsvParser;
 import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
-import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -68,6 +67,7 @@ import org.n52.sos.importer.feeder.model.Resource;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
+import org.n52.sos.importer.feeder.util.JavaApiBugJDL6203387Exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
@@ -90,7 +90,6 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  * required resources.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class DataFile {
 
@@ -1053,7 +1052,6 @@ public class DataFile {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("DataFile [dataFile=%s, configuration=%s]", dataFile, configuration);

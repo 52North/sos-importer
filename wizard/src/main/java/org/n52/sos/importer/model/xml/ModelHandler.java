@@ -36,7 +36,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * <p>ModelHandler interface.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public interface ModelHandler<T extends StepModel> {
     /**

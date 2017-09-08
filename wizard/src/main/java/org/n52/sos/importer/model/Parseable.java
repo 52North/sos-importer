@@ -33,7 +33,6 @@ package org.n52.sos.importer.model;
  * of a certain pattern into this object
  * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --&gt; DateAndTime object)
  *
- * @version $Id: $Id
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public interface Parseable {

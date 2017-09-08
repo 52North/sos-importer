@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * column: 0:1, 0:n, n:0, 1:0, 1:1, n:n
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step6bSpecialController extends StepController {
 
@@ -92,7 +91,6 @@ public class Step6bSpecialController extends StepController {
         this.step6bSpecialModel = step6bSpecialModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         // FIXME does not work with generated
@@ -112,7 +110,6 @@ public class Step6bSpecialController extends StepController {
         step6cPanel = new Step6Panel(description, foiName, opName, missingComponentPanels);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         missingResourcePanel.assignValues();
@@ -122,25 +119,21 @@ public class Step6bSpecialController extends StepController {
         missingResourcePanel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step6bSpecialDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step6cPanel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step6cController();
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         if (ModelStore.getInstance().getSensorsInTable().size() > 0) {
@@ -214,13 +207,11 @@ public class Step6bSpecialController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return missingResourcePanel.checkValues();
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         final Step6bSpecialModel step6bSpecialModelTmp = getNextModel();
@@ -231,7 +222,6 @@ public class Step6bSpecialController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step6bSpecialModel;

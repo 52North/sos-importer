@@ -39,7 +39,6 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
  * UTC offset
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class TimeZone extends DateAndTimeComponent {
 
@@ -62,19 +61,16 @@ public class TimeZone extends DateAndTimeComponent {
         super(value);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int getGregorianCalendarField() {
         return GregorianCalendar.ZONE_OFFSET;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Timezone" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingTimeZonePanel((DateAndTime) c);

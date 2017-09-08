@@ -56,19 +56,16 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
 
 public class Boolean extends MeasuredValue {
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Boolean" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object parse(final String s) {
         String encodedString = s.trim();
@@ -84,7 +81,6 @@ public class Boolean extends MeasuredValue {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper

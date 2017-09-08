@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.resources;
 
@@ -73,31 +72,26 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class Sensor extends Resource {
 
-    /** {@inheritDoc} */
     @Override
     public void assign(MeasuredValue measuredValue) {
         measuredValue.setSensor(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssigned(MeasuredValue measuredValue) {
         return measuredValue.getSensor() != null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssignedTo(MeasuredValue measuredValue) {
         return measuredValue.getSensor() == this;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassign(MeasuredValue mv) {
         mv.setSensor(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Sensor forThis(Cell measuredValuePosition) {
         if (getTableElement() == null) {
@@ -110,19 +104,16 @@ public class Sensor extends Resource {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getNames() {
         return EditableComboBoxItems.getInstance().getSensorNames();
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getURIs() {
         return EditableComboBoxItems.getInstance().getSensorURIs();
     }
 
-    /** {@inheritDoc} */
     @Override
     public List<Resource> getList() {
         List<Resource> resources = new ArrayList<Resource>();
@@ -130,26 +121,22 @@ public class Sensor extends Resource {
         return resources;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Resource getNextResourceType() {
         return null;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Sensor" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getTypeName() {
         return Lang.l().sensor();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String XML_PREFIX() {
         return "sensor";

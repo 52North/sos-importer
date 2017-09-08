@@ -47,13 +47,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * Called in the case of not having any date information in the file
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step6aModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step6aModel stepModel,
             final SosImportConfiguration sosImportConf) {

@@ -59,7 +59,6 @@ import org.slf4j.LoggerFactory;
  *  - combine it with another combobox for synchronizing actions
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class EditableJComboBoxPanel extends JPanel {
 

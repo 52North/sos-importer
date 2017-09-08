@@ -45,7 +45,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * (used for steps 6bspecial and 6c)
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step6Panel extends JPanel {
 

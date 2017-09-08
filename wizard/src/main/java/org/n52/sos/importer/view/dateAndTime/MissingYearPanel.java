@@ -43,7 +43,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for single years
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingYearPanel extends MissingDateAndTimePanel {
 
@@ -68,31 +67,26 @@ public class MissingYearPanel extends MissingDateAndTimePanel {
         this.add(yearSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setYear(new Year(yearModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setYear(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Year(yearModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         yearModel.setValue(((Year) c).getValue());

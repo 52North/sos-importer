@@ -49,7 +49,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * selection panel in step 3 for position combinations
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class PositionCombinationPanel extends CombinationPanel {
 
@@ -67,19 +66,16 @@ public class PositionCombinationPanel extends CombinationPanel {
         super(containerPanel, firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String[] getGroupItems() {
         return ComboBoxItems.getInstance().getPositionGroups();
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getPatterns() {
         return EditableComboBoxItems.getInstance().getPositionPatterns();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object getTestValue() {
         Latitude latitude = new Latitude(52.4, "°");
@@ -90,7 +86,6 @@ public class PositionCombinationPanel extends CombinationPanel {
         return p;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Combination getCombination() {
         if (position == null) {
@@ -99,19 +94,16 @@ public class PositionCombinationPanel extends CombinationPanel {
         return position;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getPatternToolTip() {
         return ToolTips.get(ToolTips.POSITION_PATTERNS);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getGroupToolTip() {
         return ToolTips.get(ToolTips.POSITION_GROUPS);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assign(TableElement tableElement) {
         String[] part = getSelection().split(Constants.SEPARATOR_STRING);
@@ -125,7 +117,6 @@ public class PositionCombinationPanel extends CombinationPanel {
         ModelStore.getInstance().add(newPosition);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unAssign(TableElement tableElement) {
         Position positionToRemove = null;

@@ -67,7 +67,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  *
  * @author e.h.juerrens@52north.org
  * @since 0.2
- * @version $Id: $Id
  */
 public class Model {
 

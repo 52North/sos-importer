@@ -26,25 +26,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.exceptions;
+package org.n52.sos.importer.feeder.util;
 
 /**
- * <p>InvalidColumnCountException class.</p>
+ * <p>JavaApiBugJDL6203387Exception class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
-public class InvalidColumnCountException extends IllegalArgumentException {
+public class JavaApiBugJDL6203387Exception extends IllegalArgumentException {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * <p>Constructor for InvalidColumnCountException.</p>
+     * <p>Constructor for JavaApiBugJDL6203387Exception.</p>
      *
-     * @param errorMsg a {@link java.lang.String} object.
+     * @param name a {@link java.lang.String} object.
      */
-    public InvalidColumnCountException(final String errorMsg) {
-        super(errorMsg);
+    public JavaApiBugJDL6203387Exception(final String name) {
+        super(name);
     }
 
 }

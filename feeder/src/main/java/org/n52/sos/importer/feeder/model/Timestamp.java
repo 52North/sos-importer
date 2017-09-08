@@ -48,7 +48,6 @@ import java.util.regex.PatternSyntaxException;
  * <p>Timestamp class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Timestamp {
 
@@ -69,7 +68,6 @@ public class Timestamp {
     private int millis = Integer.MIN_VALUE;
     private int timezone = Integer.MIN_VALUE;
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return toISO8601String();

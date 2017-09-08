@@ -43,13 +43,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * Updates the metadata of the according time&amp;date column.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step5aModelHandler implements ModelHandler<Step5aModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step5aModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step5aModel stepModel,
             final SosImportConfiguration sosImportConf) {

@@ -32,7 +32,6 @@ package org.n52.sos.importer.feeder.model;
  * <p>Abstract Resource class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public abstract class Resource {
 
@@ -78,7 +77,6 @@ public abstract class Resource {
         return uri;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("%s [name=%s, uri=%s]",
@@ -87,7 +85,6 @@ public abstract class Resource {
                 uri);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -97,7 +94,6 @@ public abstract class Resource {
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

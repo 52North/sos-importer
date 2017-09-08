@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * controls the actions when the back or next button is pressed
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class BackNextController {
 

@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
  * loads and saves all combobox items in the properties file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class ComboBoxItems {
 

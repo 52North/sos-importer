@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
  * observed property, unit of measurement or sensor column
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step4bController extends StepController {
 
@@ -87,7 +86,6 @@ public class Step4bController extends StepController {
     /*
      * {@link org.n52.sos.importer.view.i18n.Lang#step4bModelDescription()}
      */
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         final Resource resource = step4bModel.getResource();
@@ -130,7 +128,6 @@ public class Step4bController extends StepController {
         resource.getTableElement().mark();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         final Resource resource = step4bModel.getResource();
@@ -152,7 +149,6 @@ public class Step4bController extends StepController {
         step4Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tableController.clearMarkedTableElements();
@@ -163,28 +159,24 @@ public class Step4bController extends StepController {
         step4Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step4bDescription();
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step4Panel;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step4cController(firstLineWithData);
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         Resource resourceType = new FeatureOfInterest();
@@ -220,7 +212,6 @@ public class Step4bController extends StepController {
         return resource != null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         Resource resourceType = step4bModel.getResource();
@@ -269,13 +260,11 @@ public class Step4bController extends StepController {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step4bModel;

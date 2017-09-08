@@ -39,12 +39,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Solves ambiguities in case there is more than one position group
- * (needs apparently to be implemented)
- * <br>
- * TODO Implement
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step4cController extends StepController {
 
@@ -61,35 +57,29 @@ public class Step4cController extends StepController {
         this.firstLineWithData = firstLineWithData;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step4dController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         final int positions = ModelStore.getInstance().getPositions().size();
@@ -108,23 +98,20 @@ public class Step4cController extends StepController {
             return false;
         }
         //TODO implement handling of more than one position group
-        throw new RuntimeException("NOT YET IMPLEMENTED");
+        throw new RuntimeException("Handling of multiple position groups is not yet implemented.");
         // return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return null;

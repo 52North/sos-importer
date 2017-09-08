@@ -221,7 +221,6 @@ public abstract class Resource extends Component {
      */
     public abstract Resource getNextResourceType();
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(final Combination c) {
         //not used since all resources have the same panel
@@ -247,7 +246,6 @@ public abstract class Resource extends Component {
         return XML_PREFIX() + hashCode();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         if (getTableElement() != null) {
@@ -262,7 +260,6 @@ public abstract class Resource extends Component {
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -277,7 +274,6 @@ public abstract class Resource extends Component {
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    /** {@inheritDoc} */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

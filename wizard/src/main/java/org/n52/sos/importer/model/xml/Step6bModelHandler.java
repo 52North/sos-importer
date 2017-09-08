@@ -64,13 +64,11 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  *  <li>Generated Resources</li></ul>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step6bModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step6bModel stepModel,
             final SosImportConfiguration sosImportConf) {

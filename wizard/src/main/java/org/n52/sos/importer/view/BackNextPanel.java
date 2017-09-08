@@ -44,7 +44,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * panel for back and next (and finish) button at the bottom of the main frame
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class BackNextPanel extends JPanel {
 

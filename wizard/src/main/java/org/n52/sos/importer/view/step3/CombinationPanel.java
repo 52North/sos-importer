@@ -58,7 +58,6 @@ import org.slf4j.LoggerFactory;
  * @author Raimund
  *
  * TODO document the methods
- * @version $Id: $Id
  */
 public abstract class CombinationPanel extends SelectionPanel {
     //source:   http://download.oracle.com/javase/tutorial/uiswing/
@@ -162,7 +161,6 @@ public abstract class CombinationPanel extends SelectionPanel {
      */
     public abstract String getGroupToolTip();
 
-    /** {@inheritDoc} */
     @Override
     public void setSelection(final String s) {
         if (logger.isTraceEnabled()) {
@@ -173,7 +171,6 @@ public abstract class CombinationPanel extends SelectionPanel {
         groupComboBox.setSelectedItem(part[1]);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setDefaultSelection() {
         if (logger.isTraceEnabled()) {
@@ -186,7 +183,6 @@ public abstract class CombinationPanel extends SelectionPanel {
         groupComboBox.setSelectedItem(group);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getSelection() {
         final String pattern = (String) patternComboBox.getSelectedItem();
@@ -194,7 +190,6 @@ public abstract class CombinationPanel extends SelectionPanel {
         return pattern + Constants.SEPARATOR_STRING + group;
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void patternChanged() {
         final String pattern = (String) patternComboBox.getSelectedItem();
@@ -212,7 +207,6 @@ public abstract class CombinationPanel extends SelectionPanel {
         exampleFormatLabel.reformat(tester);
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void reInit() {
         if (logger.isTraceEnabled()) {

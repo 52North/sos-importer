@@ -41,7 +41,6 @@ import org.n52.sos.importer.Constants;
  * consists of a short instruction label and the table
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step4Panel extends JPanel {
 

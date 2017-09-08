@@ -43,7 +43,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for a single minute
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingMinutePanel extends MissingDateAndTimePanel {
 
@@ -67,31 +66,26 @@ public class MissingMinutePanel extends MissingDateAndTimePanel {
         this.add(minuteSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setMinute(new Minute(minuteModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setMinute(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Minute(minuteModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         minuteModel.setValue(((Minute) c).getValue());

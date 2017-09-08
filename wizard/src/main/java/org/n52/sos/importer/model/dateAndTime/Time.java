@@ -37,7 +37,6 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimePanel;
  * aggregates hour, minute and second
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Time extends Component {
 
@@ -101,7 +100,6 @@ public class Time extends Component {
         return second;
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingTimePanel((DateAndTime) c);

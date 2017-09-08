@@ -33,8 +33,8 @@ import java.io.IOException;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.RegisterSensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
  * Creates a SensorML XML {@link String} representing the given {@link RegisterSensor} instance.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class DescriptionBuilder {
 
@@ -69,7 +68,7 @@ public class DescriptionBuilder {
     /**
      * <p>createSML.</p>
      *
-     * @param rs a {@link org.n52.sos.importer.feeder.model.requests.RegisterSensor} object.
+     * @param rs a {@link org.n52.sos.importer.feeder.model.RegisterSensor} object.
      * @return a {@link java.lang.String} object.
      * @throws org.apache.xmlbeans.XmlException if any.
      * @throws java.io.IOException if any.

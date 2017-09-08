@@ -53,7 +53,6 @@ import org.slf4j.LoggerFactory;
  * provides methods to add, retrieve and remove them
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class ModelStore {
 

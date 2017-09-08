@@ -43,13 +43,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosMetadataDocument.SosMetadata;
  * Saves the SOS URL and the offering settings.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step7ModelHandler implements ModelHandler<Step7Model> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Step7ModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step7Model stepModel,
             final SosImportConfiguration sosImportConf) {

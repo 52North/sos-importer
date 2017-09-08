@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * <p>Abstract Lang class.</p>
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  */
 public abstract class Lang {
 

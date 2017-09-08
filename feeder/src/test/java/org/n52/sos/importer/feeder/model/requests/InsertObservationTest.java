@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Position;
 
 public class InsertObservationTest {

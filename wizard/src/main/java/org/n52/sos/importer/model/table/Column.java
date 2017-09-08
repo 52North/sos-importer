@@ -36,7 +36,6 @@ import org.n52.sos.importer.controller.TableController;
  * represents a column in the table
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Column extends TableElement {
 
@@ -80,19 +79,16 @@ public class Column extends TableElement {
         TableController.getInstance().mark(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getValueFor(Cell c) {
         return TableController.getInstance().getValueAt(c.getRow(), this.getNumber());
     }
 
-    /** {@inheritDoc} */
     @Override
     public Cell getCellFor(Cell c) {
         return new Cell(c.getRow(), this.getNumber());
     }
 
-    /** {@inheritDoc} */
     @Override
     public HashSet<String> getValues() {
         HashSet<String> values = new HashSet<>();
@@ -105,13 +101,11 @@ public class Column extends TableElement {
         return values;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "column[#:" + number + "; fLWD:" + firstLineWithData + "]";
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -120,7 +114,6 @@ public class Column extends TableElement {
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

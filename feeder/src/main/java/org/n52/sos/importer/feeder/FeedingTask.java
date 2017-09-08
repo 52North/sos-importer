@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.task;
+package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -43,27 +42,24 @@ import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
-import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.DataFile;
-import org.n52.sos.importer.feeder.SensorObservationService;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>FeedingTask class.</p>
+ *
  * TODO if failed observations -&gt; store in file
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 // TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
-public class OneTimeFeeder implements Runnable {
+public class FeedingTask implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
     private static final String PROXY_PORT = "proxyPort";
-    private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
     private final Configuration config;
 
@@ -74,7 +70,7 @@ public class OneTimeFeeder implements Runnable {
      *
      * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
      */
-    public OneTimeFeeder(final Configuration config) {
+    public FeedingTask(final Configuration config) {
         this.config = config;
     }
 
@@ -84,7 +80,7 @@ public class OneTimeFeeder implements Runnable {
      * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
      * @param datafile a {@link java.io.File} object.
      */
-    public OneTimeFeeder(final Configuration config, final File datafile) {
+    public FeedingTask(final Configuration config, final File datafile) {
         this.config = config;
         dataFile = new DataFile(config, datafile);
     }
@@ -169,7 +165,6 @@ public class OneTimeFeeder implements Runnable {
         return new DataFile(config, file);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void run() {
         LOG.trace("run()");
@@ -189,16 +184,16 @@ public class OneTimeFeeder implements Runnable {
         if (dataFile.isAvailable()) {
             try {
                 // check SOS
-                SensorObservationService sos = null;
+                Feeder feeder = null;
                 final String sosURL = config.getSosUrl().toString();
                 try {
-                    sos = new SensorObservationService(config);
+                    feeder = new Feeder(config);
                 } catch (final ExceptionReport | OXFException e) {
                     LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
                 }
-                if (sos == null || !sos.isAvailable()) {
+                if (feeder == null || !feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
-                } else if (!sos.isTransactional()) {
+                } else if (!feeder.isSosTransactional()) {
                     LOG.error(String.format("SOS '%s' does not support required transactional operations: "
                             + "InsertSensor, InsertObservation. Please enable.",
                             sosURL));
@@ -218,15 +213,15 @@ public class OneTimeFeeder implements Runnable {
                         LOG.debug("Read already read lines from file");
                         try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
                             final int count = sc.nextInt();
-                            sos.setLastLine(count);
+                            feeder.setLastLine(count);
                         }
                     } else {
                         LOG.debug("Counter file does not exist.");
                     }
 
                     // SOS is available and transactional
-                    final List<InsertObservation> failedInserts = sos.importData(dataFile);
-                    int lastLine = sos.getLastLine();
+                    feeder.importData(dataFile);
+                    int lastLine = feeder.getLastLine();
                     LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());
@@ -249,7 +244,6 @@ public class OneTimeFeeder implements Runnable {
                         out.println(lastLine);
                     }
 
-                    saveFailedInsertObservations(failedInserts);
                     LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
                 }
             } catch (final MalformedURLException mue) {
@@ -285,22 +279,6 @@ public class OneTimeFeeder implements Runnable {
     private void log(final Exception e) {
         LOG.error("Exception thrown: {}", e.getMessage());
         LOG.debug(EXCEPTION_STACK_TRACE, e);
-    }
-
-    /*
-     * Method should store failed insertObservations in a defined directory and
-     * created configuration for this.
-     */
-    private void saveFailedInsertObservations(
-            final List<InsertObservation> failedInserts) throws IOException {
-        // TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
-        LOG.trace("saveFailedInsertObservations() <-- NOT YET IMPLEMENTED");
-        //      // TODO save failed InsertObservations via ObjectOutputStream
-        //      final String fileName = config.getConfigFile().getCanonicalPath() +
-        //      "_" +
-        //      dataFile.getCanonicalPath() +
-        //      "_failedObservations";
-        //      // TODO define name of outputfile
     }
 
 }

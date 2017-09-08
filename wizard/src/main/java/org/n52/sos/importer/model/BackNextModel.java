@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * stores past, future and present step controller
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class BackNextModel {
 

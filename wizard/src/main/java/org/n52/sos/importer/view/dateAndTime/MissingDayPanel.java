@@ -44,7 +44,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for a single day
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingDayPanel extends MissingComponentPanel {
 
@@ -70,31 +69,26 @@ public class MissingDayPanel extends MissingComponentPanel {
         this.add(daySpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setDay(new Day(dayModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setDay(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Day(dayModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         dayModel.setValue(((Day) c).getValue());

@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.dateAndTime;
 
@@ -260,7 +259,6 @@ public class DateAndTime extends Combination {
         this.timeZone = timeZone;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object parse(final String s) {
         Date dateTime = null;
@@ -275,7 +273,6 @@ public class DateAndTime extends Combination {
         return dateTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String format(final Object o) {
         final Date date = (Date) o;
@@ -286,7 +283,6 @@ public class DateAndTime extends Combination {
         return dateString;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         if (getGroup() == null) {

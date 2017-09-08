@@ -52,7 +52,6 @@ import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
  * <code>FOIPositions</code> element.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 /*
  * How to identify in the current foi is not from file but from manual input or generated
@@ -73,7 +72,6 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             "FeatureOfInterest element not defined correct: ";
     private static final Logger logger = LoggerFactory.getLogger(Step6cModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step6cModel stepModel,
             final SosImportConfiguration sosImportConf) {

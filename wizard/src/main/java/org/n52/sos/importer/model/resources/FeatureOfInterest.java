@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.resources;
 
@@ -91,31 +90,26 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     /** corresponding positions for each feature of interest in this column/row */
     private final HashMap<String, Position> positions = new HashMap<>();
 
-    /** {@inheritDoc} */
     @Override
     public void assign(final MeasuredValue measuredValue) {
         measuredValue.setFeatureOfInterest(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssigned(final MeasuredValue measuredValue) {
         return measuredValue.getFeatureOfInterest() != null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssignedTo(final MeasuredValue measuredValue) {
         return equals(measuredValue.getFeatureOfInterest());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassign(final MeasuredValue mv) {
         mv.setFeatureOfInterest(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public FeatureOfInterest forThis(final Cell measuredValuePosition) {
         /*
@@ -154,19 +148,16 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getNames() {
         return EditableComboBoxItems.getInstance().getFeatureOfInterestNames();
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getURIs() {
         return EditableComboBoxItems.getInstance().getFeatureOfInterestURIs();
     }
 
-    /** {@inheritDoc} */
     @Override
     public List<Resource> getList() {
         final List<Resource> resources = new ArrayList<>();
@@ -174,7 +165,6 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
         return resources;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Resource getNextResourceType() {
         return new ObservedProperty();
@@ -252,25 +242,21 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
         return positions.get(featureOfInterestName);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Feature Of Interest" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getTypeName() {
         return Lang.l().featureOfInterest();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String XML_PREFIX() {
         return "foi";
     }
 
-    /** {@inheritDoc} */
     @Override
     public int compareTo(final FeatureOfInterest o) {
         // try to compare by name
@@ -281,7 +267,6 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
         return getXMLId().compareTo(o.getXMLId());
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getName() {
         if (isGenerated()) {

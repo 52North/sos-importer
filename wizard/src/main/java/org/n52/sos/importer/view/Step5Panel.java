@@ -47,7 +47,6 @@ import org.n52.sos.importer.Constants;
  * (used for steps 5a, 5c, 6a, 6b)
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step5Panel extends JPanel {
 

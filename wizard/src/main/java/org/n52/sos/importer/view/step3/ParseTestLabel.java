@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * in the table and shows all values which could not be parsed
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class ParseTestLabel extends JLabel {
 

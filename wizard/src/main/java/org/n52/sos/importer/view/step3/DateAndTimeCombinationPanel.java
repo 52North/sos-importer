@@ -53,7 +53,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * selection panel in step 3 for {@link DateAndTime} combinations
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class DateAndTimeCombinationPanel extends CombinationPanel {
     //source:   http://download.oracle.com/javase/tutorial/uiswing/
@@ -74,7 +73,6 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
         super(containerPanel, firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public DateAndTime getCombination() {
         if (dateAndTime == null) {
@@ -83,37 +81,31 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
         return dateAndTime;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String[] getGroupItems() {
         return ComboBoxItems.getInstance().getDateAndTimeGroups();
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getPatterns() {
         return EditableComboBoxItems.getInstance().getDateAndTimePatterns();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object getTestValue() {
         return new Date();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getPatternToolTip() {
         return ToolTips.get(ToolTips.DATE_AND_TIME_PATTERNS);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getGroupToolTip() {
         return ToolTips.get(ToolTips.DATE_AND_TIME_GROUPS);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assign(TableElement tableElement) {
         String[] part = getSelection().split(Constants.SEPARATOR_STRING);
@@ -128,7 +120,6 @@ public class DateAndTimeCombinationPanel extends CombinationPanel {
         ModelStore.getInstance().add(dtm);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unAssign(TableElement tableElement) {
         DateAndTime dateAndTimeToRemove = null;

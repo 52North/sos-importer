@@ -44,7 +44,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * changes step panels and exits the application
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class MainController {
 

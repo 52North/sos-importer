@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.model.requests;
+package org.n52.sos.importer.feeder.model;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,19 +34,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.n52.oxf.om.x20.OmParameter;
-import org.n52.sos.importer.feeder.model.FeatureOfInterest;
-import org.n52.sos.importer.feeder.model.ObservedProperty;
-import org.n52.sos.importer.feeder.model.Offering;
-import org.n52.sos.importer.feeder.model.Position;
-import org.n52.sos.importer.feeder.model.Sensor;
-import org.n52.sos.importer.feeder.model.Timestamp;
-import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 
 /**
  * Holds all information for the InsertObservation request
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class InsertObservation {
 
@@ -260,7 +252,6 @@ public class InsertObservation {
         return measuredValueType;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();

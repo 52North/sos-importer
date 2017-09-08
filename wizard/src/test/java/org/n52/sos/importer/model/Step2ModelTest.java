@@ -37,7 +37,6 @@ import org.junit.Test;
  * <p>Step2ModelTest class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class Step2ModelTest {

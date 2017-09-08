@@ -38,7 +38,6 @@ import org.n52.sos.importer.Constants;
  * description label at the top of the main frame
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class DescriptionPanel extends JPanel {
 

@@ -40,7 +40,6 @@ import org.n52.sos.importer.model.table.TableElement;
  * assigns or unassigns columns to Booleans, Counts and Text
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MeasuredValueSelectionPanel extends SelectionPanel {
 
@@ -65,18 +64,15 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
         add(parseTestLabel);
     }
 
-    /** {@inheritDoc} */
     @Override
     protected void setSelection(String s) { }
 
-    /** {@inheritDoc} */
     @Override
     protected String getSelection() {
         // TODO check the meaning of this "magic" number!
         return "0";
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setDefaultSelection() { }
 
@@ -87,14 +83,12 @@ public class MeasuredValueSelectionPanel extends SelectionPanel {
         //parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assign(TableElement tableElement) {
         measuredValue.setTableElement(tableElement);
         ModelStore.getInstance().add(measuredValue);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unAssign(TableElement tableElement) {
         MeasuredValue measuredValueToRemove = null;

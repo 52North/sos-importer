@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
  * in case there are not any date&amp;times given in the CSV file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step6aController extends StepController {
 
@@ -86,7 +85,6 @@ public class Step6aController extends StepController {
         this.step6aModel = step6aModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         tableController.turnSelectionOff();
@@ -107,7 +105,6 @@ public class Step6aController extends StepController {
         step5Panel = new Step5Panel(description, mcp);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         dateAndTimeController.assignMissingComponentValues();
@@ -126,7 +123,6 @@ public class Step6aController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tableController.turnSelectionOn();
@@ -134,25 +130,21 @@ public class Step6aController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step6aDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step5Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step6bController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         final int n = ModelStore.getInstance().getDateAndTimes().size();
@@ -167,19 +159,16 @@ public class Step6aController extends StepController {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step6aModel;
