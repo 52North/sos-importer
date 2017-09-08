@@ -108,8 +108,7 @@ import net.opengis.swes.x20.InsertSensorResponseDocument;
  * Handles connection to SOS and provides an easy to use interface.<br>
  * Now this class supports only OGC SOS <b>1.0.0</b>
  *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk
- * J&uuml;rrens</a>
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
  */
 public final class SensorObservationService {
@@ -122,7 +121,7 @@ public final class SensorObservationService {
 
     private static final String EXCEPTION_CODE_STRING = "ExceptionCode: '%s' because of '%s'%n";
 
-    private static final String SOS_2_0_INSERT_OBSERVATION_RESPONSE
+    private static final String SOS_2_0_INSERT_OBSERVATION_RESPONSE 
             = "SOS 2.0 InsertObservation doesn't return the assigned id";
 
     private static final String INSERT_OBSERVATION_FAILED = "Insert observation failed for sensor '%s'[%s]. Store: %s";

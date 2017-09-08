@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -276,7 +275,6 @@ public class OneTimeFeeder implements Runnable {
                             tmp.setHour(hour);
                             tmp.setMinute(minute);
                             tmp.setSeconds(second);
-                            
                             sos.setLastUsedTimeStamp(tmp);
                         }
                     } else {
