@@ -191,6 +191,9 @@ public final class Configuration {
     private static final String MI = "mi";
     private static final String KM = "km";
 
+    private static final String FTP_REG_EX_NOT_SUPPORTED =
+            "Support for FTPUrls with regular expression is not yet implemented.";
+
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<>();
         EPSG_EASTING_FIRST_MAP.put("default", false);
@@ -333,10 +336,9 @@ public final class Configuration {
             for (int i = 1; i < splitString.length - 1; i++) {
                 result.append(splitString[i]);
             }
-        } /*else {
-            // regular expression
-            // TODO
-        }*/
+        } else {
+            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
+        }
         result.trimToSize();
         return result.toString();
     }
@@ -353,9 +355,7 @@ public final class Configuration {
         if (!isFtpUrlRegex()) {
             result = splitString[splitString.length - 1];
         } else {
-            // regular expression
-            // TODO
-            result = null;
+            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
         }
         return result;
     }

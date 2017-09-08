@@ -39,9 +39,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Solves ambiguities in case there is more than one position group
- * (needs apparently to be implemented)
- * <br>
- * TODO Implement
  *
  * @author Raimund
  */
@@ -101,7 +98,7 @@ public class Step4cController extends StepController {
             return false;
         }
         //TODO implement handling of more than one position group
-        throw new RuntimeException("NOT YET IMPLEMENTED");
+        throw new RuntimeException("Handling of multiple position groups is not yet implemented.");
         // return true;
     }
 
