@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.view.resources;
 
@@ -468,7 +467,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
         };
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         // manual or generate selected
@@ -588,7 +586,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         URI uri = null;
@@ -658,7 +655,6 @@ public class MissingResourcePanel extends MissingComponentPanel {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         /*
@@ -675,13 +671,11 @@ public class MissingResourcePanel extends MissingComponentPanel {
         resource.setUseNameAfterPrefixAsURI(false);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return resource;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
         final Resource r = (Resource) c;

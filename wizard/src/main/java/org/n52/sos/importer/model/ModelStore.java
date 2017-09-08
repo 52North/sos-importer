@@ -40,6 +40,7 @@ import org.n52.sos.importer.model.requests.InsertObservation;
 import org.n52.sos.importer.model.requests.RegisterSensor;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
@@ -52,7 +53,6 @@ import org.slf4j.LoggerFactory;
  * provides methods to add, retrieve and remove them
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class ModelStore {
 
@@ -74,6 +74,8 @@ public final class ModelStore {
 
     private final List<Sensor> sensors;
 
+    private final List<OmParameter> omParameters;
+
     private List<Position> positions;
 
     private final HashSet<Step6bSpecialModel> step6bSpecialModels;
@@ -88,6 +90,7 @@ public final class ModelStore {
         featureOfInterests = new ArrayList<>();
         observedProperties = new ArrayList<>();
         unitOfMeasurements = new ArrayList<>();
+        omParameters = new ArrayList<>();
         sensors = new ArrayList<>();
         positions = new ArrayList<>();
         step6bSpecialModels = new HashSet<>();
@@ -139,6 +142,14 @@ public final class ModelStore {
             add((UnitOfMeasurement) resource);
         } else if (resource instanceof Sensor) {
             add((Sensor) resource);
+        } else if (resource instanceof OmParameter) {
+            add((OmParameter) resource);
+        }
+    }
+
+    public void add(final OmParameter omParameter) {
+        if (omParameter != null) {
+            omParameters.add(omParameter);
         }
     }
 
@@ -256,8 +267,16 @@ public final class ModelStore {
             remove((UnitOfMeasurement) resource);
         } else if (resource instanceof Sensor) {
             remove((Sensor) resource);
+        } else if (resource instanceof OmParameter) {
+            remove((OmParameter) resource);
         }
     }
+
+    public void remove(final OmParameter omParameter) {
+        omParameters.remove(omParameter);
+    }
+
+
 
     /**
      * <p>remove.</p>
@@ -508,6 +527,11 @@ public final class ModelStore {
      */
     public HashSet<Step6bSpecialModel> getStep6bSpecialModels() {
         return step6bSpecialModels;
+    }
+
+    public List<OmParameter> getOmParameters() {
+        ((ArrayList<OmParameter>) omParameters).trimToSize();
+        return omParameters;
     }
 
 }

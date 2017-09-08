@@ -30,7 +30,7 @@ package org.n52.sos.importer.model.xml;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step3Model;
@@ -79,41 +79,31 @@ import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
  * 52n-sos-importer-bindings/src/main/xsd/
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step3ModelHandler implements ModelHandler<Step3Model> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step3ModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step3Model stepModel,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("handleModel()");
-        }
+        logger.trace("handleModel()");
         final HashMap<Integer, List<String>> colAssignments = stepModel.getAllSelections();
-        final Set<Integer> keySet = colAssignments.keySet();
-        final Integer[] keys = keySet.toArray(new Integer[keySet.size()]);
         CsvMetadata csvMeta = sosImportConf.getCsvMetadata();
         //
         if (csvMeta == null) {
             csvMeta = sosImportConf.addNewCsvMetadata();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new CsvMetadata element");
-            }
+            logger.debug("Added new CsvMetadata element");
         }
         //
         ColumnAssignments colAssignmentsXB = csvMeta.getColumnAssignments();
         if (colAssignmentsXB == null) {
             colAssignmentsXB = csvMeta.addNewColumnAssignments();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new ColumnAssignments element");
-            }
+            logger.debug("Added new ColumnAssignments element");
         }
         final Column[] cols = colAssignmentsXB.getColumnArray();
         //
-        for (final Integer key2 : keys) {
+        for (final Entry<Integer, List<String>> colAssignment : colAssignments.entrySet()) {
             /*
              * key = columnIndex List<String> contains: list.get(0) = type
              * list.get(n) = endcoded meta data Type:
@@ -137,8 +127,8 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
              * Position: Combination, Pattern <- parse pattern SEP Group
              */
             // value should have one or two elements
-            final List<String> value = colAssignments.get(key2);
-            final int key = key2.intValue();
+            final List<String> value = colAssignment.getValue();
+            final int key = colAssignment.getKey();
             Column col = getColumnForKey(key, cols);
             String type = null;
             String encodedMetadata = null;
@@ -184,37 +174,19 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
                 } else if (type.equalsIgnoreCase(Lang.l().position())) {
                     setComplexColumnTypePosition(col, value.get(1),
                             encodedMetadata);
+                    /*
+                     * OM:PARAMETER
+                     */
+                } else if (type.equalsIgnoreCase(Lang.l().step3ColTypeOmParameter())) {
+                    setComplexColumnTypeOmParameter(col, value.get(1),
+                            encodedMetadata);
                 }
             } else {
                 logger.error("Implementation error: value should have one to three elements: "
                         + value);
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("handling of Step3Model finished");
-        }
-    }
-
-    /**
-     * @param number
-     *            the number of the column in the data file
-     * @param cols
-     *            all columns in the configuration
-     * @return the
-     *         <code>org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column</code>
-     *         with the given number
-     */
-    private Column getColumnForKey(final int number, final Column[] cols) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tgetColumnForKey()");
-        }
-        //
-        for (final Column col : cols) {
-            if (col.getNumber() == number) {
-                return col;
-            }
-        }
-        return null;
+        logger.debug("handling of Step3Model finished");
     }
 
     /**
@@ -225,9 +197,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      */
     private void setComplexColumnTypeDateAndTime(final Column col, final String type,
             final String encodedMetadata) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tsetComplexTypeDateAndTime()");
-        }
+        logger.trace("\t\tsetComplexTypeDateAndTime()");
         //
         col.setType(Type.DATE_TIME);
         //
@@ -272,9 +242,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      */
     private void setComplexColumnTypeMeasuredValue(final Column col, final String type,
             final String encodedMetadata) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tsetComplexColumnTypeMeasuredValue()");
-        }
+        logger.trace("\t\tsetComplexColumnTypeMeasuredValue()");
         col.setType(Type.MEASURED_VALUE);
 
         String value = null;
@@ -291,6 +259,32 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         Helper.addOrUpdateColumnMetadata(Key.TYPE, value, col);
     }
 
+    private void setComplexColumnTypeOmParameter(Column col, String type, String encodedMetadata) {
+        if (col == null || type == null || type.isEmpty() || encodedMetadata == null || encodedMetadata.isEmpty()) {
+            logger.error("Bad input given for setComplexColumnTypeOmParameter: {}, {}, {}",
+                    col, type, encodedMetadata);
+            return;
+        }
+        col.setType(Type.OM_PARAMETER);
+        String value = null;
+        if (type.equalsIgnoreCase(Lang.l().step3MeasuredValNumericValue())) {
+            value = Constants.NUMERIC;
+        } else if (type.equalsIgnoreCase(Lang.l().step3MeasuredValBoolean())) {
+            value = Constants.BOOLEAN;
+        } else if (type.equalsIgnoreCase(Lang.l().step3MeasuredValCount())) {
+            value = Constants.COUNT;
+        } else if (type.equalsIgnoreCase(Lang.l().step3MeasuredValText())) {
+            value = Constants.TEXT;
+        } else if (type.equalsIgnoreCase(Lang.l().step3OmParameterCategory())) {
+            value = Constants.CATEGORY;
+        } else {
+            logger.error("Not Supported type for om:parameter found: '{}'", type);
+            return;
+        }
+        Helper.addOrUpdateColumnMetadata(Key.TYPE, value, col);
+        Helper.addOrUpdateColumnMetadata(Key.NAME, encodedMetadata, col);
+    }
+
     /**
      * Position: Combination, Pattern <- parse pattern SEP Group
      *
@@ -301,9 +295,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      */
     private void setComplexColumnTypePosition(final Column col, final String type,
             final String encodedMetadata) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tsetComplexColumnTypePosition()");
-        }
+        logger.trace("\t\tsetComplexColumnTypePosition()");
         //
         col.setType(Type.POSITION);
         Metadata meta = col.addNewMetadata();
@@ -329,9 +321,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
     }
 
     private void setSimpleColumnType(final Column col, final String type) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tsetSimpleColumnType()");
-        }
+        logger.trace("\t\tsetSimpleColumnType()");
         if (type.equalsIgnoreCase(Lang.l().step3ColTypeDoNotExport())) {
             col.setType(Type.DO_NOT_EXPORT);
         } else if (type.equalsIgnoreCase(Lang.l().sensor())) {

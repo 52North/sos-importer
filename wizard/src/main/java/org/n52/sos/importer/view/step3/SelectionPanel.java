@@ -39,7 +39,6 @@ import org.n52.sos.importer.model.table.TableElement;
  * used for different kinds of selections in step 3
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public abstract class SelectionPanel extends JPanel {
 

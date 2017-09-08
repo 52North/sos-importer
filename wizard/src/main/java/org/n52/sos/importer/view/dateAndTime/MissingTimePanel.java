@@ -48,7 +48,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for hour, minute and second
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingTimePanel extends MissingDateAndTimePanel {
 
@@ -81,7 +80,6 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
         this.add(timeSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         Calendar c = new GregorianCalendar();
@@ -91,7 +89,6 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
         dateAndTime.setSecond(new Second(c.get(Calendar.SECOND)));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setHour(null);
@@ -99,13 +96,11 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
         dateAndTime.setSecond(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         Calendar c = new GregorianCalendar();
@@ -117,7 +112,6 @@ public class MissingTimePanel extends MissingDateAndTimePanel {
         return time;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         Time time = (Time) c;

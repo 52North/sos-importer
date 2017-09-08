@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * connection), define the offering, and save the configuration.
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step7Controller extends StepController {
 
@@ -63,7 +62,6 @@ public class Step7Controller extends StepController {
         s7M = new Step7Model();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         s7P = new Step7Panel();
@@ -99,7 +97,6 @@ public class Step7Controller extends StepController {
         s7P.setSendBuffer(s7M.getSendBuffer());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         final BackNextController bnc = BackNextController.getInstance();
@@ -107,7 +104,6 @@ public class Step7Controller extends StepController {
         bnc.changeFinishToNext();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         final String sosURL = s7P.getSOSURL();
@@ -152,31 +148,26 @@ public class Step7Controller extends StepController {
         s7M.setSendBuffer(s7P.getSendBuffer());
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step7Description();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return s7P;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step8Controller(s7M);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         if (isOfferingNameNotGiven()) {
@@ -240,13 +231,11 @@ public class Step7Controller extends StepController {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return s7M;

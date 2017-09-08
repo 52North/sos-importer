@@ -38,13 +38,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * Solves ambiguities in case there is more than one date&amp;time column.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step4aModelHandler implements ModelHandler<Step4aModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step4aModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step4aModel s4aM,
             final SosImportConfiguration sosImportConf) {

@@ -46,13 +46,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * </ul>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step1ModelHandler implements ModelHandler<Step1Model> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step1ModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step1Model stepModel, final SosImportConfiguration sosImportConf) {
         if (logger.isTraceEnabled()) {

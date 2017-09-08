@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.position;
 
@@ -89,13 +88,11 @@ public class Height extends PositionComponent {
         super(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Height" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingHeightPanel((Position) c);
@@ -142,7 +139,6 @@ public class Height extends PositionComponent {
         return new Height(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Height forThis(Cell featureOfInterestPosition) {
         if (getTableElement() == null) {

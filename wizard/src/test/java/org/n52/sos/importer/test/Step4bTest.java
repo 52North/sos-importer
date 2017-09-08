@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * <p>Step4bTest class.</p>
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class Step4bTest {
@@ -59,9 +58,7 @@ public class Step4bTest {
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
-        if (logger.isTraceEnabled()) {
-            logger.trace("main()");
-        }
+        logger.trace("main()");
         final MainController f = MainController.getInstance();
         // Lang.setCurrentLocale(Locale.GERMAN);
         final int firstLineWithData = 1;

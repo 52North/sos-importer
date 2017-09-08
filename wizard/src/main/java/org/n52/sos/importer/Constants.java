@@ -47,7 +47,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * TODO move to shared module all constants that need to be shared!
- * @version $Id: $Id
  */
 public class Constants {
 
@@ -70,6 +69,8 @@ public class Constants {
 
     /** Constant <code>BOOLEAN="BOOLEAN"</code> */
     public static final String BOOLEAN = "BOOLEAN";
+    /** Constant <code>CATEGORY="CATEGORY"</code> */
+    public static final String CATEGORY = "CATEGORY";
     /** Constant <code>COMBINATION="COMBINATION"</code> */
     public static final String COMBINATION = "COMBINATION";
     /** Constant <code>COUNT="COUNT"</code> */

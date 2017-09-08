@@ -70,7 +70,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  * TODO before commit =&gt; add SOS versions to sosVersionComboBox
- * @version $Id: $Id
  */
 public class Step7Panel extends JPanel {
 

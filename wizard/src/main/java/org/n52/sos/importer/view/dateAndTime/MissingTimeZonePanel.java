@@ -44,7 +44,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * consists of a label and a JSpinner for the UTC offset
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
@@ -69,31 +68,26 @@ public class MissingTimeZonePanel extends MissingDateAndTimePanel {
         this.add(timeZoneSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setTimeZone(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new TimeZone(timeZoneModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         timeZoneModel.setValue(((TimeZone) c).getValue());

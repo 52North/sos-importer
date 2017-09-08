@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * lets the user add missing metadata for identified positions
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step5cController extends StepController {
 
@@ -83,7 +82,6 @@ public class Step5cController extends StepController {
         this.step5cModel = step5cModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         final Position position = step5cModel.getPosition();
@@ -101,7 +99,6 @@ public class Step5cController extends StepController {
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         positionController.assignMissingComponentValues();
@@ -116,7 +113,6 @@ public class Step5cController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tableController.clearMarkedTableElements();
@@ -126,25 +122,21 @@ public class Step5cController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return positionController.checkMissingComponentValues();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step5cDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step5Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         positionController = new PositionController();
@@ -160,7 +152,6 @@ public class Step5cController extends StepController {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         positionController = new PositionController();
@@ -173,13 +164,11 @@ public class Step5cController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step6aController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step5cModel;

@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
  * formats an exemplary String along the selected pattern
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class ExampleFormatLabel extends JLabel {
 

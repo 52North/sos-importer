@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * lets the user add missing metadata for identified date&amp;times
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step5aController extends StepController {
 
@@ -84,7 +83,6 @@ public class Step5aController extends StepController {
         this.step5aModel = step5aModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         final DateAndTime dateAndTime = step5aModel.getDateAndTime();
@@ -101,13 +99,11 @@ public class Step5aController extends StepController {
         dateAndTimeController.markComponents();
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         dateAndTimeController.assignMissingComponentValues();
@@ -122,7 +118,6 @@ public class Step5aController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tabController.clearMarkedTableElements();
@@ -132,19 +127,16 @@ public class Step5aController extends StepController {
         step5Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step5aDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step5Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         dateAndTimeController = new DateAndTimeController();
@@ -160,7 +152,6 @@ public class Step5aController extends StepController {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         dateAndTimeController = new DateAndTimeController();
@@ -173,13 +164,11 @@ public class Step5aController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step5cController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step5aModel;

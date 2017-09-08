@@ -32,7 +32,6 @@ package org.n52.sos.importer.feeder.model;
  * <p>FeatureOfInterest class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public final class FeatureOfInterest extends Resource {
 
@@ -64,7 +63,6 @@ public final class FeatureOfInterest extends Resource {
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format(

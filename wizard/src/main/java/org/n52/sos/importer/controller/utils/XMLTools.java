@@ -14,7 +14,6 @@ package org.n52.sos.importer.controller.utils;
  *
  * TODO replace by org.n52.oxf.xml.XMLTools when OXF is used by this implementation
  *
- * @version $Id: $Id
  */
 public class XMLTools {
 

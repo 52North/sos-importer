@@ -40,7 +40,6 @@ import org.n52.oxf.sos.request.InsertObservationParameters;
 import org.n52.oxf.xml.NcNameResolver;
 import org.n52.oxf.xml.XMLConstants;
 import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 
 import net.opengis.swe.x20.BooleanType;
 import net.opengis.swe.x20.CountType;
@@ -58,7 +57,6 @@ import net.opengis.swe.x20.TimeType;
  * Data holding class for all observations of a time series.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class TimeSeries {
 
@@ -91,7 +89,7 @@ public class TimeSeries {
     /**
      * <p>addObservation.</p>
      *
-     * @param insertObservation a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @param insertObservation a {@link org.n52.sos.importer.feeder.model.InsertObservation} object.
      * @return a boolean.
      */
     public boolean addObservation(final InsertObservation insertObservation) {
@@ -133,7 +131,7 @@ public class TimeSeries {
     /**
      * <p>getFirst.</p>
      *
-     * @return a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @return a {@link org.n52.sos.importer.feeder.model.InsertObservation} object.
      */
     public InsertObservation getFirst() {
         if (timeseries.isEmpty()) {
@@ -370,7 +368,6 @@ public class TimeSeries {
         return new StringBuffer(start.toString()).append("/").append(end.toString()).toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("TimeSeries [sensor=%s, observedProperty=%s, feature=%s]",

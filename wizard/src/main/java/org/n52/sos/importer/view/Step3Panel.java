@@ -40,11 +40,13 @@ import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.measuredValue.Text;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
+import org.n52.sos.importer.view.step3.OmParameterSelectionPanel;
 import org.n52.sos.importer.view.step3.PositionCombinationPanel;
 import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
@@ -57,7 +59,6 @@ import org.n52.sos.importer.view.utils.ToolTips;
  *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step3Panel extends JPanel {
 
@@ -180,19 +181,62 @@ public class Step3Panel extends JPanel {
             addRadioButton(Lang.l().step3ColTypeDateTime(),
                     ToolTips.get(ToolTips.DATE_AND_TIME),
                     new DateAndTimePanel(firstLineWithData));
-            addRadioButton(Lang.l().position(), ToolTips.get(ToolTips.POSITION), new PositionPanel(firstLineWithData));
+            addRadioButton(Lang.l().position(),
+                    ToolTips.get(ToolTips.POSITION),
+                    new PositionPanel(firstLineWithData));
             addRadioButton(Lang.l().featureOfInterest(),
                     ToolTips.get(ToolTips.FEATURE_OF_INTEREST),
                     new ResourceSelectionPanel(columnSubTypeJP, new FeatureOfInterest()));
             addRadioButton(Lang.l().observedProperty(),
                     ToolTips.get(ToolTips.OBSERVED_PROPERTY),
                     new ResourceSelectionPanel(columnSubTypeJP, new ObservedProperty()));
+            addRadioButton(Lang.l().step3ColTypeOmParameter(),
+                    ToolTips.get(ToolTips.OM_PARAMETER),
+                    new OmParameterPanel());
             addRadioButton(Lang.l().unitOfMeasurement(),
                     ToolTips.get(ToolTips.UNIT_OF_MEASUREMENT),
                     new ResourceSelectionPanel(columnSubTypeJP, new UnitOfMeasurement()));
             addRadioButton(Lang.l().sensor(),
                     ToolTips.get(ToolTips.SENSOR),
                     new ResourceSelectionPanel(columnSubTypeJP, new Sensor()));
+        }
+
+        private class OmParameterPanel extends RadioButtonPanel {
+
+            private static final long serialVersionUID = 1L;
+
+            /**
+             * JPanel for the definition of the om:parameter type
+             * TYPE->OM_PARAMETER: NUMERIC | COUNT | BOOLEAN | TEXT | CATEGORY
+             */
+            OmParameterPanel() {
+                super(columnSubTypeJP);
+                addRadioButton(Lang.l().step3MeasuredValNumericValue(),
+                        ToolTips.get(ToolTips.NUMERIC_VALUE),
+                        new OmParameterSelectionPanel(
+                                columnSubTypeMetadataJP,
+                                new OmParameter(Lang.l().step3ColTypeMeasuredValue())));
+                addRadioButton(Lang.l().step3MeasuredValCount(),
+                        ToolTips.get(ToolTips.COUNT),
+                        new OmParameterSelectionPanel(
+                                columnSubTypeMetadataJP,
+                                new OmParameter(Lang.l().step3MeasuredValCount())));
+                addRadioButton(Lang.l().step3MeasuredValBoolean(),
+                        ToolTips.get(ToolTips.BOOLEAN),
+                        new OmParameterSelectionPanel(
+                                columnSubTypeMetadataJP,
+                                new OmParameter(Lang.l().step3MeasuredValBoolean())));
+                addRadioButton(Lang.l().step3MeasuredValText(),
+                        ToolTips.get(ToolTips.TEXT),
+                        new OmParameterSelectionPanel(
+                                columnSubTypeMetadataJP,
+                                new OmParameter(Lang.l().step3MeasuredValText())));
+                addRadioButton(Lang.l().step3OmParameterCategory(),
+                        ToolTips.get(ToolTips.OM_PARAMETER_CATEGORY),
+                        new OmParameterSelectionPanel(
+                                columnSubTypeMetadataJP,
+                                new OmParameter(Lang.l().step3OmParameterCategory())));
+            }
         }
 
         private class MeasuredValuePanel extends RadioButtonPanel {

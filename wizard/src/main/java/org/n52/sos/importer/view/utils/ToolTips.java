@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
  * loads tooltips from the properties file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class ToolTips {
 
@@ -93,6 +92,10 @@ public final class ToolTips {
     public static final String DATE_AND_TIME_PATTERNS = "DateAndTimePatterns";
     /** Constant <code>DATE_AND_TIME_GROUPS="DateAndTimeGroups"</code> */
     public static final String DATE_AND_TIME_GROUPS = "DateAndTimeGroups";
+    /** Constant <code>OM_PARAMETER="omParameter"</code> */
+    public static final String OM_PARAMETER = "omParameter";
+    /** Constant <code>OM_PARAMETER_CATEGORY="omParameterCategory"</code> */
+    public static final String OM_PARAMETER_CATEGORY = "omParameterCategory";
     /** Constant <code>POSITION_PATTERNS="PositionPatterns"</code> */
     public static final String POSITION_PATTERNS = "PositionPatterns";
     /** Constant <code>POSITION_GROUPS="PositionGroups"</code> */

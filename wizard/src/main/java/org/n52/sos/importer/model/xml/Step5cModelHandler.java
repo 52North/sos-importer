@@ -42,13 +42,11 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * Updates the according position column with the given metadata
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step5cModelHandler implements ModelHandler<Step5cModel> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step5cModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step5cModel stepModel,
             final SosImportConfiguration sosImportConf) {

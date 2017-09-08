@@ -38,7 +38,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * <p>Step2ModelHandlerTest class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class Step2ModelHandlerTest {

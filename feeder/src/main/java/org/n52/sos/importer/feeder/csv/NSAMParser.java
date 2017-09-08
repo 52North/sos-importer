@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * <li>Each import run requires a NEW file</li></ul>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class NSAMParser implements CsvParser {
 
@@ -89,7 +88,6 @@ public class NSAMParser implements CsvParser {
     private final Stack<String[]> lines = new Stack<>();
 
 
-    /** {@inheritDoc} */
     @Override
     public String[] readNext() throws IOException {
         if (lines.empty()) {
@@ -98,7 +96,6 @@ public class NSAMParser implements CsvParser {
         return lines.pop();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void init(final BufferedReader br,
             final Configuration configuration) throws IOException {
@@ -277,7 +274,6 @@ public class NSAMParser implements CsvParser {
      *
      * Skip limit is 1 because the "lines" are artificial in this parser and num of lines == num of observations.
      */
-    /** {@inheritDoc} */
     @Override
     public int getSkipLimit() {
         return 1;

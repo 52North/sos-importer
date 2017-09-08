@@ -76,7 +76,6 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  * initialisation.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public final class Configuration {
 
@@ -191,6 +190,9 @@ public final class Configuration {
     private static final String FT = "ft";
     private static final String MI = "mi";
     private static final String KM = "km";
+
+    private static final String FTP_REG_EX_NOT_SUPPORTED =
+            "Support for FTPUrls with regular expression is not yet implemented.";
 
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<>();
@@ -334,10 +336,9 @@ public final class Configuration {
             for (int i = 1; i < splitString.length - 1; i++) {
                 result.append(splitString[i]);
             }
-        } /*else {
-            // regular expression
-            // TODO
-        }*/
+        } else {
+            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
+        }
         result.trimToSize();
         return result.toString();
     }
@@ -354,9 +355,7 @@ public final class Configuration {
         if (!isFtpUrlRegex()) {
             result = splitString[splitString.length - 1];
         } else {
-            // regular expression
-            // TODO
-            result = null;
+            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
         }
         return result;
     }
@@ -1169,7 +1168,6 @@ public final class Configuration {
         return configFile.getName();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("Configuration [file=%s]", configFile);

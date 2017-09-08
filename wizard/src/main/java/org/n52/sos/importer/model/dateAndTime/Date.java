@@ -37,7 +37,6 @@ import org.n52.sos.importer.view.dateAndTime.MissingDatePanel;
  * aggregates year, month and day
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Date extends Component {
 
@@ -101,7 +100,6 @@ public class Date extends Component {
         return day;
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingDatePanel((DateAndTime) c);

@@ -56,7 +56,6 @@ import org.slf4j.LoggerFactory;
  * in case they do not appear in the CSV file.
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step6bController extends StepController {
 
@@ -93,7 +92,6 @@ public class Step6bController extends StepController {
         this.step6bModel = step6bModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         final Resource resource = step6bModel.getResource();
@@ -129,7 +127,6 @@ public class Step6bController extends StepController {
         measuredValue.getTableElement().mark();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         missingResourcePanel.assignValues();
@@ -162,7 +159,6 @@ public class Step6bController extends StepController {
         missingResourcePanel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tableController.clearMarkedTableElements();
@@ -172,25 +168,21 @@ public class Step6bController extends StepController {
         missingResourcePanel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step6bSpecialController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step6bDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step5Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         step6bModel = getMissingResourceForMeasuredValue();
@@ -204,7 +196,6 @@ public class Step6bController extends StepController {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         final Step6bModel model = getMissingResourceForMeasuredValue();
@@ -248,13 +239,11 @@ public class Step6bController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return missingResourcePanel.checkValues();
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step6bModel;

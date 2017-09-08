@@ -32,7 +32,6 @@ package org.n52.sos.importer.model.requests;
  * collects all information for the InsertObservation request
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class InsertObservation {
 
@@ -180,7 +179,6 @@ public class InsertObservation {
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "InsertObservation [sensorName=" + sensorName + ", sensorURI="

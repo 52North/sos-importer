@@ -34,7 +34,6 @@ import javax.swing.DefaultComboBoxModel;
  * contains all models of comboboxes which can be edited by the user
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class EditableComboBoxItems {
 
@@ -409,4 +408,5 @@ public final class EditableComboBoxItems {
     public DefaultComboBoxModel<String> getReferenceSystemNames() {
         return referenceSystemNames;
     }
+
 }

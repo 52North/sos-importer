@@ -55,14 +55,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.n52.oxf.sos.adapter.wrapper.builder.SensorDescriptionBuilder;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
+import org.n52.sos.importer.feeder.model.RegisterSensor;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 
 public class DescriptionBuilderTest {
 

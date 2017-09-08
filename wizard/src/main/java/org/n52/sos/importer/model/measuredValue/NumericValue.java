@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
 
@@ -69,7 +68,6 @@ import org.n52.sos.importer.model.Formatable;
 
 public class NumericValue extends MeasuredValue implements Formatable {
 
-    /** {@inheritDoc} */
     @Override
     public Double parse(String s) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -88,7 +86,6 @@ public class NumericValue extends MeasuredValue implements Formatable {
         return n.doubleValue();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String format(Object o) {
         double number = (Double) o;
@@ -103,13 +100,11 @@ public class NumericValue extends MeasuredValue implements Formatable {
         return n;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Numeric Value" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setPattern(String formatPattern) {
         // do nothing, it's Java base type wrapper

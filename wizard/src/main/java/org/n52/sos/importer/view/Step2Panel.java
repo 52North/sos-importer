@@ -67,7 +67,6 @@ import org.slf4j.LoggerFactory;
  * offers settings for parsing the CSV file and
  * displays a preview of the CSV file
  *
- * @version $Id: $Id
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 /*

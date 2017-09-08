@@ -33,7 +33,6 @@ package org.n52.sos.importer.model;
  * certain pattern into a String
  * (e.g. Java-Date + pattern "yyyy-MM-dd" --&gt; "2011-08-04")
  *
- * @version $Id: $Id
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public interface Formatable {

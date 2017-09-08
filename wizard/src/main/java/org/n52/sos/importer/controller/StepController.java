@@ -39,7 +39,6 @@ import org.n52.sos.importer.model.StepModel;
  * <br>
  * A StepController is the controller for a step in the workflow.
  * It holds a model and a <code>StepPanel</code> for its step.
- * @version $Id: $Id
  */
 public abstract class StepController {
 

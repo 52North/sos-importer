@@ -52,7 +52,6 @@ import org.slf4j.LoggerFactory;
  * different step panels
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MainFrame extends JFrame {
 
@@ -175,7 +174,6 @@ public class MainFrame extends JFrame {
         setTitle(newTitle);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void repaint() {
         backNextPanel.repaint();

@@ -39,19 +39,16 @@ import au.com.bytecode.opencsv.CSVReader;
  * <p>WrappedCSVReader class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class WrappedCSVReader implements CsvParser {
 
     private CSVReader csvReader;
 
-    /** {@inheritDoc} */
     @Override
     public String[] readNext() throws IOException {
         return csvReader.readNext();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void init(final BufferedReader bufferedReader,
             final Configuration configuration) {
@@ -62,7 +59,6 @@ public class WrappedCSVReader implements CsvParser {
         csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int getSkipLimit() {
         return 1;

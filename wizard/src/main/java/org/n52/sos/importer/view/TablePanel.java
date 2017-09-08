@@ -45,7 +45,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * contains the table which is used by step panels 3, 4 and 5
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class TablePanel extends JPanel {
 

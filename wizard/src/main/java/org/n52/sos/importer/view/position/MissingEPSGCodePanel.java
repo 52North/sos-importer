@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
  * name of the spatial reference system; both are linked with each other
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingEPSGCodePanel extends MissingComponentPanel {
 
@@ -85,20 +84,17 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
         referenceSystemNameComboBox.setPartnerComboBox(EPSGCodeComboBox);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
         position.setEPSGCode(new EPSGCode(code));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         position.setEPSGCode(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         int code = 0;
@@ -125,14 +121,12 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         final int code = Integer.parseInt((String) EPSGCodeComboBox.getSelectedItem());
         return new EPSGCode(code);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
         EPSGCodeComboBox.setSelectedItem(String.valueOf(((EPSGCode) c).getValue()));

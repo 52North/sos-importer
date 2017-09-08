@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
  * used for all radio buttons in step 3
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public abstract class RadioButtonPanel extends SelectionPanel {
 
@@ -104,7 +103,6 @@ public abstract class RadioButtonPanel extends SelectionPanel {
         this.add(radioButton);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setSelection(final String s) {
         ButtonModel m = null;
@@ -119,7 +117,6 @@ public abstract class RadioButtonPanel extends SelectionPanel {
         group.setSelected(m, true);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setDefaultSelection() {
         final JRadioButton firstButton = (JRadioButton) group.getElements().nextElement();
@@ -127,7 +124,6 @@ public abstract class RadioButtonPanel extends SelectionPanel {
         setSelectedChildPanel(firstButton.getText());
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getSelection() {
         final Enumeration<AbstractButton> e = group.getElements();
@@ -140,11 +136,9 @@ public abstract class RadioButtonPanel extends SelectionPanel {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assign(final TableElement tableElement) {}
 
-    /** {@inheritDoc} */
     @Override
     public void unAssign(final TableElement tableElement) {}
 

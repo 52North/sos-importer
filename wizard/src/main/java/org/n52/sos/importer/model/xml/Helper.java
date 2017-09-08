@@ -45,7 +45,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * Offering methods used by different ModelHandler classes.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Helper {
 

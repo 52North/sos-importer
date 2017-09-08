@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * handles operations on DateAndTime objects
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class DateAndTimeController {
 

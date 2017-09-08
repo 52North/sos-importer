@@ -26,13 +26,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.exceptions;
+package org.n52.sos.importer.feeder.util;
 
 /**
  * <p>InvalidColumnCountException class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class InvalidColumnCountException extends IllegalArgumentException {
 

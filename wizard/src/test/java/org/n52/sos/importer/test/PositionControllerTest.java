@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
  * Class to test the methods of the position controller
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class PositionControllerTest {

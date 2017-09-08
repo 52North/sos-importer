@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Raimund
  * FIXME already defined positions are not identified
- * @version $Id: $Id
  */
 public class Step6cController extends StepController {
 
@@ -73,7 +72,6 @@ public class Step6cController extends StepController {
         this.step6cModel = step6cModel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         final FeatureOfInterest foi = step6cModel.getFeatureOfInterest();
@@ -95,7 +93,6 @@ public class Step6cController extends StepController {
         step6cPanel.loadSettings();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         step6cPanel.saveSettings();
@@ -112,19 +109,16 @@ public class Step6cController extends StepController {
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step6cDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step6cPanel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         final Step6cModel foiWithoutPosition = getNextFeatureOfInterestWithUnCompletePosition();
@@ -135,7 +129,6 @@ public class Step6cController extends StepController {
         return new Step6cController(foiWithoutPosition);
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step7Controller();
@@ -170,7 +163,6 @@ public class Step6cController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         step6cModel = getNextFeatureOfInterestWithUnCompletePosition();
@@ -182,13 +174,11 @@ public class Step6cController extends StepController {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return step6cPanel.isFinished();
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step6cModel;

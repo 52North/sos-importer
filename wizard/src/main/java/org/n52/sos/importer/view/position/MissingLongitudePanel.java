@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
  * consists of a text field for the longitude and a combobox for the units
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingLongitudePanel extends MissingComponentPanel {
 
@@ -85,7 +84,6 @@ public class MissingLongitudePanel extends MissingComponentPanel {
         this.add(longitudeUnitComboBox);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         final double value = Double.parseDouble(longitudeTextField.getText());
@@ -94,13 +92,11 @@ public class MissingLongitudePanel extends MissingComponentPanel {
         position.setLongitude(l);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         position.setLongitude(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         String longVal = null;
@@ -118,7 +114,6 @@ public class MissingLongitudePanel extends MissingComponentPanel {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         final double value = Double.parseDouble(longitudeTextField.getText());
@@ -126,7 +121,6 @@ public class MissingLongitudePanel extends MissingComponentPanel {
         return new Longitude(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
         final Longitude longitude = (Longitude) c;

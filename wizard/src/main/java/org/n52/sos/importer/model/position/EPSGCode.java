@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.position;
 
@@ -161,7 +160,6 @@ public class EPSGCode extends Component {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         final String epsgCode = "EPSG-Code ";
@@ -190,7 +188,6 @@ public class EPSGCode extends Component {
         return pattern;
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(final Combination c) {
         return new MissingEPSGCodePanel((Position) c);

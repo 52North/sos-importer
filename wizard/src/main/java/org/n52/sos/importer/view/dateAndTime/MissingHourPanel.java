@@ -43,7 +43,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for a single hour
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingHourPanel extends MissingDateAndTimePanel {
 
@@ -67,31 +66,26 @@ public class MissingHourPanel extends MissingDateAndTimePanel {
         this.add(hourSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setHour(new Hour(hourModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setHour(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Hour(hourModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         hourModel.setValue(((Hour) c).getValue());

@@ -34,7 +34,6 @@ import java.util.HashSet;
  * can either be a column, row or cell in the table
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public abstract class TableElement {
 

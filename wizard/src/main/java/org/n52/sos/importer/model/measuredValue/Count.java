@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
 
@@ -64,13 +63,11 @@ import org.n52.sos.importer.model.Parseable;
 
 public class Count extends MeasuredValue implements Parseable {
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Count" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public Object parse(String s) {
         int i = Integer.parseInt(s.trim());
@@ -81,7 +78,6 @@ public class Count extends MeasuredValue implements Parseable {
         return i;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setPattern(String parsePattern) {
         // do nothing, it's Java base type wrapper
