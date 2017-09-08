@@ -185,16 +185,16 @@ public class FeedingTask implements Runnable {
         if (dataFile.isAvailable()) {
             try {
                 // check SOS
-                SensorObservationService sos = null;
+                Feeder feeder = null;
                 final String sosURL = config.getSosUrl().toString();
                 try {
-                    sos = new SensorObservationService(config);
+                    feeder = new Feeder(config);
                 } catch (final ExceptionReport | OXFException e) {
                     LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
                 }
-                if (sos == null || !sos.isAvailable()) {
+                if (feeder == null || !feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
-                } else if (!sos.isTransactional()) {
+                } else if (!feeder.isSosTransactional()) {
                     LOG.error(String.format("SOS '%s' does not support required transactional operations: "
                             + "InsertSensor, InsertObservation. Please enable.",
                             sosURL));
@@ -214,15 +214,15 @@ public class FeedingTask implements Runnable {
                         LOG.debug("Read already read lines from file");
                         try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
                             final int count = sc.nextInt();
-                            sos.setLastLine(count);
+                            feeder.setLastLine(count);
                         }
                     } else {
                         LOG.debug("Counter file does not exist.");
                     }
 
                     // SOS is available and transactional
-                    sos.importData(dataFile);
-                    int lastLine = sos.getLastLine();
+                    feeder.importData(dataFile);
+                    int lastLine = feeder.getLastLine();
                     LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());

@@ -47,7 +47,7 @@ public class TestFeatureOmParameter {
             OXFException, XmlException, ParseException, ExceptionReport {
         Configuration configuration = new Configuration("src/test/resources/feature_om-parameter/configuration.xml");
         DataFile dataFile = new DataFile(configuration, new File("src/test/resources/feature_om-parameter/data.csv"));
-        new SensorObservationService(configuration).importData(dataFile);
+        new Feeder(configuration).importData(dataFile);
     }
 
 }

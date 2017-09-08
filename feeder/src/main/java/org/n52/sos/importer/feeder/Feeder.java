@@ -111,7 +111,7 @@ import net.opengis.swes.x20.InsertSensorResponseDocument;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  * @version $Id: $Id
  */
-public final class SensorObservationService {
+public final class Feeder {
 
     private static final String N_M_FORMAT = "%s %s";
 
@@ -138,7 +138,7 @@ public final class SensorObservationService {
 
     private static final String SOS_200_VERSION = "2.0.0";
 
-    private static final Logger LOG = LoggerFactory.getLogger(SensorObservationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
 
     private static final String SML_101_FORMAT_URI = "http://www.opengis.net/sensorML/1.0.1";
 
@@ -211,7 +211,7 @@ public final class SensorObservationService {
      * @throws org.n52.oxf.OXFException if any.
      * @throws java.net.MalformedURLException if any.
      */
-    public SensorObservationService(final Configuration config)
+    public Feeder(final Configuration config)
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
         this.configuration = config;
@@ -284,7 +284,7 @@ public final class SensorObservationService {
      *
      * @return a boolean.
      */
-    public boolean isAvailable() {
+    public boolean isSosAvailable() {
         return sosWrapper.getServiceDescriptor() != null;
     }
 
@@ -295,7 +295,7 @@ public final class SensorObservationService {
      *         operations are listed in the capabilities of this SOS, <br>
      *         else <code>false</code>.
      */
-    public boolean isTransactional() {
+    public boolean isSosTransactional() {
         if (!isServiceDescriptorAvailable()) {
             return false;
         }
