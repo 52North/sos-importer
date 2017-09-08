@@ -719,7 +719,7 @@ public final class Feeder {
         final Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
         // OM:PARAMETER
-        final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameter(mVColumnId, values);
+        final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(mVColumnId, values);
         return new InsertObservation(sensor,
                 foi,
                 value,
