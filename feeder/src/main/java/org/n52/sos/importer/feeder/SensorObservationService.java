@@ -420,7 +420,7 @@ public final class SensorObservationService {
                 if (!timeSeriesRepository.isEmpty()) {
                     insertTimeSeries(timeSeriesRepository);
                 }
-                if (isUseLastTimestamp && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (isUseLastTimestamp && newLastUsedTimestamp != null && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -728,6 +728,9 @@ public final class SensorObservationService {
         if (isUseLastTimestamp) {
             if (lastUsedTimestamp != null && timeStamp.isAfter(lastUsedTimestamp)) {
                 // update newLastUsedTimestamp, if timeStamp is After:
+                if (newLastUsedTimestamp == null) {
+                    newLastUsedTimestamp = timeStamp;
+                }
                 if (timeStamp.isAfter(newLastUsedTimestamp)) {
                     newLastUsedTimestamp = timeStamp;
                 }

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,6 +67,7 @@ public class OneTimeFeeder implements Runnable {
     private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
     private static final String PROXY_PORT = "proxyPort";
     private static final Logger LOG = LoggerFactory.getLogger(OneTimeFeeder.class);
+    private static final String TIMESTAMP_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
     private final Configuration config;
 
@@ -234,11 +236,48 @@ public class OneTimeFeeder implements Runnable {
                     // read already inserted UsedLastTimeStamp
                     if (timeStampFile.exists()) {
                         LOG.debug("Read already inserted LastUsedTimeStamp from file");
-                        long storedTimeStamp = 0;
+                        String storedTimeStamp = null;
                         try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
-                            storedTimeStamp = sc.nextLong(); // read TimeStamp as unixTimeMillis from file!
-                            final Timestamp timestamp = new Timestamp().ofUnixTimeMillis(storedTimeStamp);
-                            sos.setLastUsedTimeStamp(timestamp);
+                            storedTimeStamp = sc.next(); // read TimeStamp as ISO08601 string
+                            // get timestamp from SimpleString:
+                            int year = Integer.parseInt(storedTimeStamp
+                                    .substring(0,storedTimeStamp.indexOf('-'))
+                                    );
+                            String yearString = storedTimeStamp
+                                    .substring(storedTimeStamp.indexOf('-')+1);
+                            int month = Integer.parseInt(yearString
+                                    .substring(0,yearString.indexOf('-'))
+                                    );
+                            String monthString = yearString
+                                    .substring(yearString.indexOf('-')+1);
+                            int day = Integer.parseInt(monthString
+                                    .substring(0,monthString.indexOf('-'))
+                                    );
+                            String dayString = monthString
+                                    .substring(monthString.indexOf('-')+1);
+                            int hour = Integer.parseInt(dayString
+                                    .substring(0,dayString.indexOf('-'))
+                                    );
+                            String hourString = dayString
+                                    .substring(dayString.indexOf('-')+1);
+                            int minute = Integer.parseInt(hourString
+                                    .substring(0,hourString.indexOf('-'))
+                                    );
+                            String minuteString = hourString
+                                    .substring(hourString.indexOf('-')+1);
+                            int second = Integer.parseInt(minuteString
+                                    .substring(0,minuteString.indexOf('-'))
+                                    );
+                            
+                            Timestamp tmp = new Timestamp();
+                            tmp.setYear(year);
+                            tmp.setMonth(month);
+                            tmp.setDay(day);
+                            tmp.setHour(hour);
+                            tmp.setMinute(minute);
+                            tmp.setSeconds(second);
+                            
+                            sos.setLastUsedTimeStamp(tmp);
                         }
                     } else {
                         LOG.debug("Timestamp file does not exist.");
@@ -281,7 +320,15 @@ public class OneTimeFeeder implements Runnable {
                                     timeStampFile.getAbsolutePath(),
                                     Configuration.DEFAULT_CHARSET);
                             PrintWriter out = new PrintWriter(timeStampFileWriter);) {
-                        out.println(timestamp);
+                        // convert timestamp to SimpleString:
+                        int year = timestamp.getYear();
+                        int month = timestamp.getMonth();
+                        int day = timestamp.getDay();
+                        int hour = timestamp.getHour();
+                        int minute = timestamp.getMinute();
+                        int second = timestamp.getSeconds();
+                        String timeStampSimpleString = "" + year + "-" + month + "-" + day + "-" + hour + "-" + minute + "-" + second;
+                        out.println(timeStampSimpleString);
                     }
 
                     saveFailedInsertObservations(failedInserts);
