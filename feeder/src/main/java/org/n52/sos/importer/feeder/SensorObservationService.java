@@ -81,7 +81,6 @@ import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.oxf.sos.request.v200.InsertSensorParameters;
 import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.csv.CsvParser;
-import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -93,6 +92,7 @@ import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
+import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

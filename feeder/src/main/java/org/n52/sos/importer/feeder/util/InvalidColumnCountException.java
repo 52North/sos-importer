@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.exceptions;
+package org.n52.sos.importer.feeder.util;
 
 /**
  * <p>InvalidColumnCountException class.</p>

@@ -41,9 +41,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
-import org.n52.sos.importer.feeder.exceptions.JavaApiBugJDL6203387Exception;
 import org.n52.sos.importer.feeder.util.FileHelper;
+import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
+import org.n52.sos.importer.feeder.util.JavaApiBugJDL6203387Exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
