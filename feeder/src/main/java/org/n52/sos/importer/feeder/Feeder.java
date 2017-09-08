@@ -109,7 +109,6 @@ import net.opengis.swes.x20.InsertSensorResponseDocument;
  * Now this class supports only OGC SOS <b>1.0.0</b>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public final class Feeder {
 

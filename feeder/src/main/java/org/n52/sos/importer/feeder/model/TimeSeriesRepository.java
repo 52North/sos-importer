@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * A {@link TimeSeriesRepository} is a management type for some {@link TimeSeries}.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class TimeSeriesRepository {
 

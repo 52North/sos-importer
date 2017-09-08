@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
  * Creates a SensorML XML {@link String} representing the given {@link RegisterSensor} instance.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class DescriptionBuilder {
 

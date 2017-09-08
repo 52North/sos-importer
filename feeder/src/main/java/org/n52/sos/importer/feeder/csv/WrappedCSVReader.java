@@ -39,7 +39,6 @@ import au.com.bytecode.opencsv.CSVReader;
  * <p>WrappedCSVReader class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class WrappedCSVReader implements CsvParser {
 

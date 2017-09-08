@@ -57,7 +57,6 @@ import net.opengis.swe.x20.TimeType;
  * Data holding class for all observations of a time series.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class TimeSeries {
 

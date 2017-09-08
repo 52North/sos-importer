@@ -37,7 +37,6 @@ import org.n52.sos.importer.feeder.Configuration;
  * Interface to allow different CSVParser implementations
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public interface CsvParser {
 

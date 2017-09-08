@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
  * <li>Each import run requires a NEW file</li></ul>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class NSAMParser implements CsvParser {
 
