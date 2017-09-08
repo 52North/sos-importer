@@ -107,21 +107,8 @@ public class Step8Controller extends StepController {
         BackNextController.getInstance().changeNextToFinish();
         File logFile = null;
 
-        // FIXME get path to log file
-        /*
-        final Logger rL = Logger.getRootLogger();
-        final Enumeration<?> appender = rL.getAllAppenders();
-        while(appender.hasMoreElements()) {
-            final Object o = appender.nextElement();
-            if(o instanceof FileAppender) {
-                final FileAppender fA = (FileAppender) o;
-                logFile = new File(fA.getFile());
-                step8Panel.setLogFileURI(logFile.toURI());
-                logger.info("Log saved to file: " + logFile.getAbsolutePath());
-            }
-        }
-        */
-        logFile = new File("logs/sos-importer-core.log");
+        // Sync with logback.xml
+        logFile = new File("logs/sos-importer-wizard.log");
         step8Panel.setLogFileURI(logFile.toURI());
         LOG.info("Log saved to file: " + logFile.getAbsolutePath());
 
@@ -145,7 +132,6 @@ public class Step8Controller extends StepController {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {}
 
