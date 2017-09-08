@@ -67,7 +67,37 @@ public class Timestamp {
     private int seconds = Integer.MIN_VALUE;
     private int millis = Integer.MIN_VALUE;
     private int timezone = Integer.MIN_VALUE;
-
+    
+    public Timestamp() {
+        // do nothing
+    }
+    
+    /**
+     * Creates a Timestamp from a ISO8601String
+     * @param ISO8601String
+     */
+    public Timestamp(String ISO8601String) {
+        // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
+        year = Integer.parseInt(
+                ISO8601String.substring(0,3)
+                );
+        month = Integer.parseInt(
+                ISO8601String.substring(5,6)
+                );
+        day = Integer.parseInt(
+                ISO8601String.substring(8,9)
+                );
+        hour = Integer.parseInt(
+                ISO8601String.substring(11,12)
+                );
+        minute = Integer.parseInt(
+                ISO8601String.substring(14,15)
+                );
+        seconds = Integer.parseInt(
+                ISO8601String.substring(17,18)
+                );
+    }
+    
     @Override
     public String toString() {
         return toISO8601String();

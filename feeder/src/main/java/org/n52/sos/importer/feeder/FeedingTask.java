@@ -236,43 +236,7 @@ public class FeedingTask implements Runnable {
                             String storedTimeStamp = null;
                             try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
                                 storedTimeStamp = sc.next(); // read TimeStamp as ISO08601 string
-                                // get timestamp from SimpleString:
-                                int year = Integer.parseInt(storedTimeStamp
-                                        .substring(0,storedTimeStamp.indexOf('-'))
-                                        );
-                                String yearString = storedTimeStamp
-                                        .substring(storedTimeStamp.indexOf('-')+1);
-                                int month = Integer.parseInt(yearString
-                                        .substring(0,yearString.indexOf('-'))
-                                        );
-                                String monthString = yearString
-                                        .substring(yearString.indexOf('-')+1);
-                                int day = Integer.parseInt(monthString
-                                        .substring(0,monthString.indexOf('-'))
-                                        );
-                                String dayString = monthString
-                                        .substring(monthString.indexOf('-')+1);
-                                int hour = Integer.parseInt(dayString
-                                        .substring(0,dayString.indexOf('-'))
-                                        );
-                                String hourString = dayString
-                                        .substring(dayString.indexOf('-')+1);
-                                int minute = Integer.parseInt(hourString
-                                        .substring(0,hourString.indexOf('-'))
-                                        );
-                                String minuteString = hourString
-                                        .substring(hourString.indexOf('-')+1);
-                                int second = Integer.parseInt(minuteString
-                                        .substring(0,minuteString.indexOf('-'))
-                                        );
-                                
-                                Timestamp tmp = new Timestamp();
-                                tmp.setYear(year);
-                                tmp.setMonth(month);
-                                tmp.setDay(day);
-                                tmp.setHour(hour);
-                                tmp.setMinute(minute);
-                                tmp.setSeconds(second);
+                                Timestamp tmp = new Timestamp(storedTimeStamp);
                                 feeder.setLastUsedTimeStamp(tmp);
                             }
                         }

@@ -168,7 +168,7 @@ public final class Feeder {
 
     // stores the Timestamp of the last insertObservations
     // (required for handling sample based files)
-    private Timestamp lastTimestamp;
+    private Timestamp sampleLastTimestamp;
 
     // stores the Timestamp of the last insertObservations
     private Timestamp lastUsedTimestamp;
@@ -471,7 +471,7 @@ public final class Feeder {
             ParseException {
         int sampleStartLine;
         sampleStartLine = lineCounter;
-        lastTimestamp = null;
+        sampleLastTimestamp = null;
         getSampleMetaData(cr);
         isInSample = true;
         skipLines(cr, sampleDataOffset - (lineCounter - sampleStartLine));
