@@ -57,7 +57,7 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void isSetOmParameterShoulodReturnTrueIfAtLeastOneOmParameterColumnIsDefined()
+    public void isSetOmParameterShouldReturnTrueIfAtLeastOneOmParameterColumnIsDefined()
             throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");

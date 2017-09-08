@@ -1105,16 +1105,15 @@ public class DataFile {
         return configuration.getCsvSeparator();
     }
 
-    public Optional<List<OmParameter<?>>> getOmParameter(int mVColumnId, String[] values) {
+    public Optional<List<OmParameter<?>>> getOmParameters(int mVColumnId, String[] values) {
         if (mVColumnId < 0 || values == null || values.length == 0) {
             return Optional.empty();
         }
-        // get om column id by relatedOM value or first column with omparameter as
-        // column type
+        // get om column id by relatedOM value or all columns with om:parameter as column type
         if (configuration.isOmParameterAvailableFor(mVColumnId)) {
             List<Column> omParameterColumns = configuration.getColumnsForOmParameter(mVColumnId);
             List<OmParameter<?>> omParameters = new LinkedList<>();
-            // create omparameter from omparameter column
+            // create om:parameter from om:parameter column
             for (Column col : omParameterColumns) {
                 switch (getOmParameterType(col)) {
                     case BOOLEAN:

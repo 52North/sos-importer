@@ -29,12 +29,12 @@
 package org.n52.sos.importer.test;
 
 import org.n52.sos.importer.controller.MainController;
-import org.n52.sos.importer.controller.Step4bController;
+import org.n52.sos.importer.controller.Step4dController;
 import org.n52.sos.importer.controller.TableController;
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.Step4bModel;
+import org.n52.sos.importer.model.Step4dModel;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
-import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
@@ -46,9 +46,9 @@ import org.slf4j.LoggerFactory;
  * @author e.h.juerrens@52north.org
  * @since 0.5.0
  */
-public class Step4bTest {
+public class Step4dTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step4bTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step4dTest.class);
 
     /**
      * <p>main.</p>
@@ -63,7 +63,7 @@ public class Step4bTest {
         // Lang.setCurrentLocale(Locale.GERMAN);
         final int firstLineWithData = 1;
         int i = 0;
-        final FeatureOfInterest foi = TestData.EXAMPLE_FOI;
+        final OmParameter op = TestData.EXAMPLE_OM_PARAMETER;
         final TableController tc = TableController.getInstance();
         tc.setContent(TestData.EXAMPLE_TABLE);
         tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
@@ -85,8 +85,6 @@ public class Step4bTest {
         ms.add(nV1);
         ms.add(nV2);
 
-        f.setStepController(
-                new Step4bController(
-                        new Step4bModel(foi, firstLineWithData), firstLineWithData));
+        f.setStepController(new Step4dController(firstLineWithData, new Step4dModel(op)));
     }
 }

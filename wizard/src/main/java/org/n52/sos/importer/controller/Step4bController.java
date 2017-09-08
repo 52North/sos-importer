@@ -106,15 +106,14 @@ public class Step4bController extends StepController {
          *  5 The resource type, that is linked to the measured value table element
          *  6 Table element of element to be selected
          */
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Text: " + text);
-        }
+        LOG.debug("Text before: '{}'", text);
         text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
         text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
         text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
         text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
         text = text.replaceFirst(Constants.STRING_REPLACER, resource.getTypeName());
         text = text.replaceFirst(Constants.STRING_REPLACER, orientation);
+        LOG.debug("Text after : '{}'", text);
 
         step4Panel = new Step4Panel(text);
 

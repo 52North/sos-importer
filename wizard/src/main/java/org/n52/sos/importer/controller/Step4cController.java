@@ -86,7 +86,7 @@ public class Step4cController extends StepController {
     /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
-        return new Step5aController(firstLineWithData);
+        return new Step4dController(firstLineWithData);
     }
 
     /** {@inheritDoc} */

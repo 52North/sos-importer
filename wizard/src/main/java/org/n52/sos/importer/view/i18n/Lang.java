@@ -813,6 +813,42 @@ public abstract class Lang {
      */
     public abstract String step3MeasureValueColMissingDialogTitle();
 
+
+    /**
+     * <p>step3OmParameterCategory.</p>
+     *
+     * @return Category
+     */
+    public abstract String step3OmParameterCategory();
+
+    /**
+     * <p>step3OmParameterNameLabel.</p>
+     *
+     * @return Name
+     * @see #name()
+     */
+    public abstract String step3OmParameterNameLabel();
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogMessage</p>
+     *
+     * @param givenValue the user defined parameter name.
+     *
+     * @return The given om:Parameter-&gt;Name is invalid:
+     *         <br><br>
+     *         "<code>givenValue</code>"
+     *         <br><br>
+     *         Please provide a name with at least three characters.
+     */
+    public abstract String step3OmParameterNameInvalidDialogMessage(String givenValue);
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogTitle</p>
+     *
+     * @return om:Parameter-&gt;Name is invalid
+     */
+    public abstract String step3OmParameterNameInvalidDialogTitle();
+
     /**
      * <p>step3ParseTest1Failed.</p>
      *
@@ -876,6 +912,13 @@ public abstract class Lang {
      * @return Undefined
      */
     public abstract String step3ColTypeUndefined();
+
+    /**
+     * <p>step3ColTypeOmParameter.</p>
+     *
+     * @return om:Parameter
+     */
+    public abstract String step3ColTypeOmParameter();
 
     /**
      * <p>step3DateAndTimeCombination.</p>
@@ -1024,6 +1067,17 @@ public abstract class Lang {
      * all of them with pressed CTRL key.
      */
     public abstract String step4bModelDescription();
+
+    /**
+     * @param orientation row or column
+     *
+     * @return Please click the <code>orientation</code> (not the title)
+     * containing the measured values for the marked
+     * {@link #step3ColTypeOmParameter()} <code>column/row</code> that is
+     * marked.
+     *
+     */
+    public abstract String step4dModelDescription(String orientation);
 
     /**
      * <p>step5aDescription.</p>

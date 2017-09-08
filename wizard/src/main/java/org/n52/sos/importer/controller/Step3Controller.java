@@ -232,6 +232,20 @@ public class Step3Controller extends StepController {
         step3Panel.store(currentSelection);
         // check if the current column is the last in the file
         // if yes, check for at least one measured value column
+        if (!currentSelection.isEmpty() &&
+                currentSelection.get(0).equals(Lang.l().step3ColTypeOmParameter()) &&
+                currentSelection.size() == 3 &&
+                (currentSelection.get(2) == null ||
+                currentSelection.get(2).isEmpty() ||
+                currentSelection.get(2).trim().length() <= 3)
+            ) {
+            // TODO show info that name value is missing or too short
+            JOptionPane.showMessageDialog(null,
+                    Lang.l().step3OmParameterNameInvalidDialogMessage(currentSelection.get(2)),
+                    Lang.l().step3OmParameterNameInvalidDialogTitle(),
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         if ((step3Model.getMarkedColumn() + 1) ==
                 TableController.getInstance().getColumnCount() &&
                 ModelStore.getInstance().getMeasuredValues().isEmpty() &&

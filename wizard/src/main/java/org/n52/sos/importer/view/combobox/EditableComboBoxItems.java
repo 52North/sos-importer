@@ -409,4 +409,5 @@ public final class EditableComboBoxItems {
     public DefaultComboBoxModel<String> getReferenceSystemNames() {
         return referenceSystemNames;
     }
+
 }

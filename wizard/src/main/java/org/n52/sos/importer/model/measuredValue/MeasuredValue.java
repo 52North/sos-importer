@@ -60,7 +60,10 @@
  */
 package org.n52.sos.importer.model.measuredValue;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Parseable;
@@ -68,6 +71,7 @@ import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.TableElement;
@@ -92,6 +96,8 @@ public abstract class MeasuredValue implements Parseable {
     private FeatureOfInterest featureOfInterest;
 
     private Sensor sensor;
+
+    private List<OmParameter> omParameters;
 
     /**
      * <p>Setter for the field <code>featureOfInterest</code>.</p>
@@ -262,4 +268,33 @@ public abstract class MeasuredValue implements Parseable {
             return " " + getTableElement();
         }
     }
+
+    public boolean addOmParameter(OmParameter omParameter) {
+        if (omParameter == null) {
+            return false;
+        }
+        if (omParameters == null) {
+            omParameters = new ArrayList<OmParameter>();
+        }
+        return omParameters.add(omParameter);
+    }
+
+    public List<OmParameter> getOmParameters() {
+        if (omParameters == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(omParameters);
+    }
+
+    public boolean removeOmParameter(OmParameter omParameterToRemove) {
+        if (omParameters == null || omParameters.isEmpty() ||
+                omParameterToRemove == null) {
+            return false;
+        }
+        if (omParameters.contains(omParameterToRemove)) {
+            return omParameters.remove(omParameterToRemove);
+        }
+        return false;
+    }
+
 }

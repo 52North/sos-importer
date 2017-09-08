@@ -43,6 +43,7 @@ import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
+import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,9 +255,7 @@ public class TestData {
     public static final FeatureOfInterest EXAMPLE_FOI = TestData.exampleFoi();
 
     private static FeatureOfInterest exampleFoi() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleFoi()");
-        }
+        logger.trace("exampleFoi()");
         final FeatureOfInterest foi = new FeatureOfInterest();
 
         foi.setName("FOI_TEST_1");
@@ -283,9 +282,7 @@ public class TestData {
     public static final ObservedProperty EXAMPLE_OBS_PROP = TestData.exampleObsProp();
 
     private static ObservedProperty exampleObsProp() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleObsProp()");
-        }
+        logger.trace("exampleObsProp()");
         final ObservedProperty obsProp = new ObservedProperty();
         obsProp.setName("OBS_PROP_TEST_1");
         obsProp.setGenerated(false);
@@ -304,14 +301,21 @@ public class TestData {
      */
     public static final MeasuredValue EXAMPLE_MEASURED_VALUE_NUMERIC = TestData.exampleMVnumeric();
 
-
     private static MeasuredValue exampleMVnumeric() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("exampleMVnumeric()");
-        }
+        logger.trace("exampleMVnumeric()");
         final NumericValue nv = new NumericValue();
         nv.setTableElement(new Column(1, 1));
         return nv;
+    }
+
+    public static final OmParameter EXAMPLE_OM_PARAMETER = TestData.exampleOmParameter();
+
+    private static OmParameter exampleOmParameter() {
+        logger.trace("exampleOmParameter");
+        OmParameter op = new OmParameter("Numeric Value");
+        op.setName("op-name");
+        op.setTableElement(new Column(3, 1));
+        return op;
     }
     //CHECKSTYLE:ON
 }

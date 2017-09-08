@@ -256,6 +256,9 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
        * Feeder
      * Add support for unix time with milliseconds
      * Add support for om:parameter
+       * Bindings
+       * Wizard
+       * Feeder
    * *Changes:*
       * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
       * Updated to latest 52N parent &rarr; javadoc and dependency plugin cause a lot of minor adjustments

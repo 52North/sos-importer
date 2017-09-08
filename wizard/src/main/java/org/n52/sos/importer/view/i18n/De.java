@@ -41,23 +41,25 @@ import org.n52.sos.importer.Constants;
  */
 public class De extends Lang {
 
-    private static final String FUER_WEITERE_INFORMATIONEN_BITTE_DIE_LOGDATEI_KONSULTIEREN =
-            "Für weitere Informationen bitte die Logdatei konsultieren.";
+    private static final String AQUOT_NL = "\"\n";
     private static final String BEENDEN = "Beenden";
+    private static final String BINDING = "Binding";
+    private static final String BITTE_KLICKEN_SIE_IN_DIE = "Bitte klicken Sie in die ";
+    private static final String DER = "Der ";
+    private static final String DIE = "Die ";
     private static final String DIE_KONFIGURATION_KONNTE_NICHT_IN_DER_DATEI =
             "Die Konfiguration konnte nicht in der Datei\n\"";
-    private static final String REGISTRIERE = "Registriere ";
-    private static final String ÖFFNEN = "Öffnen";
-    private static final String VERSION = "Version";
-    private static final String AQUOT_NL = "\"\n";
-    private static final String NL_AQUOT = "\n\"";
-    private static final String PFAD = "Pfad";
-    private static final String DER = "Der ";
+    private static final String FEHLER = "Fehler";
+    private static final String FUER_WEITERE_INFORMATIONEN_BITTE_DIE_LOGDATEI_KONSULTIEREN =
+            "Für weitere Informationen bitte die Logdatei konsultieren.";
     private static final String KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN =
             " kann zur Zeit nur als Dezimalzahl angegeben werden.";
-    private static final String FEHLER = "Fehler";
-    private static final String DIE = "Die ";
-    private static final String BINDING = "Binding";
+    private static final String NL_AQUOT = "\n\"";
+    private static final String ÖFFNEN = "Öffnen";
+    private static final String PFAD = "Pfad";
+    private static final String REGISTRIERE = "Registriere ";
+    private static final String VERSION = "Version";
+
     private static final Locale LOCALE = Locale.GERMAN;
 
     /** {@inheritDoc} */
@@ -640,6 +642,32 @@ public class De extends Lang {
 
     /** {@inheritDoc} */
     @Override
+    public String step3OmParameterCategory() {
+        return "Kategorie";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameLabel() {
+        return name();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
+        return "Der übergebene om:Parameter->Name ist ungültig:\n\"" +
+                givenValue +
+                "\"\n\nBitte einen Namen mit mindestens 3 Zeichen eingeben.";
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3OmParameterNameInvalidDialogTitle() {
+        return "om:Parameter->Name ist ungültig";
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String step3ParseTest1Failed() {
         return "1 Wert nicht einlesbar.";
     }
@@ -694,6 +722,12 @@ public class De extends Lang {
     @Override
     public String step3ColTypeMeasuredValue() {
         return measuredValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String step3ColTypeOmParameter() {
+        return "om:Parameter";
     }
 
     /** {@inheritDoc} */
@@ -790,7 +824,7 @@ public class De extends Lang {
     /** {@inheritDoc} */
     @Override
     public String step4bModelDescription() {
-        return "Bitte klicken Sie in die " +
+        return BITTE_KLICKEN_SIE_IN_DIE +
                 Constants.STRING_REPLACER +
             " (nicht auf die Titel), die die Messwerte enthält, die zu der " +
             "hervorgehobenen " +
@@ -800,6 +834,17 @@ public class De extends Lang {
             " gehört. Wenn mehrere Messwert-" +
             Constants.STRING_REPLACER +
             "n dazugehören, wählen Sie sie mit gedrückter Strg-Taste aus.";
+    }
+
+    @Override
+    public String step4dModelDescription(String orientation) {
+        return BITTE_KLICKEN_SIE_IN_DIE +
+                orientation +
+                " (nicht auf die Titel), die die Messwerte enthält, die zu der hervorgehobenen" +
+                step3ColTypeOmParameter() +
+                " " +
+                orientation +
+                " gehört.";
     }
 
     /** {@inheritDoc} */

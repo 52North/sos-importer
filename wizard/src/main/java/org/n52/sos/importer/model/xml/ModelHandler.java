@@ -29,6 +29,7 @@
 package org.n52.sos.importer.model.xml;
 
 import org.n52.sos.importer.model.StepModel;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
@@ -47,4 +48,22 @@ public interface ModelHandler<T extends StepModel> {
      * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
      */
     void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+
+    /**
+     * @param number
+     *            the number of the column in the data file
+     * @param cols
+     *            all columns in the configuration
+     * @return the
+     *         <code>org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column</code>
+     *         with the given number
+     */
+    default Column getColumnForKey(final int number, final Column[] cols) {
+        for (final Column col : cols) {
+            if (col.getNumber() == number) {
+                return col;
+            }
+        }
+        return null;
+    }
 }

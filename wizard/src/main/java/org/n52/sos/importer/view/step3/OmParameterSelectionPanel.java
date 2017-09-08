@@ -30,80 +30,67 @@ package org.n52.sos.importer.view.step3;
 
 import java.awt.FlowLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.resources.OmParameter;
+import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.i18n.Lang;
 
-/**
- * assigns or unassigns columns to Booleans, Counts and Text
- *
- * @author Raimund
- * @version $Id: $Id
- */
-public class MeasuredValueSelectionPanel extends SelectionPanel {
+public class OmParameterSelectionPanel extends SelectionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private final ParseTestLabel parseTestLabel;
+    private JLabel parameterNameLabel;
+    private JTextField parameterNameTextField;
+    private OmParameter omParameter;
 
-    private MeasuredValue measuredValue;
-
-    /**
-     * <p>Constructor for MeasuredValueSelectionPanel.</p>
-     *
-     * @param containerPanel a {@link javax.swing.JPanel} object.
-     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
-     * @param firstLineWithData a int.
-     */
-    public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue, int firstLineWithData) {
+    public OmParameterSelectionPanel(JPanel containerPanel, OmParameter omParameter) {
         super(containerPanel);
-        this.measuredValue = measuredValue;
-        parseTestLabel = new ParseTestLabel(measuredValue, firstLineWithData);
+        this.omParameter = omParameter;
+        parameterNameLabel = new JLabel(Lang.l().step3OmParameterNameLabel() + ":");
+        parameterNameTextField = new JTextField(20);
         setLayout(new FlowLayout(FlowLayout.LEFT));
-        add(parseTestLabel);
+        add(parameterNameLabel);
+        add(parameterNameTextField);
     }
 
-    /** {@inheritDoc} */
     @Override
-    protected void setSelection(String s) { }
+    protected void setSelection(String parameterName) {
+        parameterNameTextField.setText(parameterName);
+    }
 
-    /** {@inheritDoc} */
     @Override
     protected String getSelection() {
-        // TODO check the meaning of this "magic" number!
-        return "0";
+        return parameterNameTextField.getText().trim();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void setDefaultSelection() { }
-
-    /**
-     * <p>reInit.</p>
-     */
-    protected void reInit() {
-        //parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
+    public void setDefaultSelection() {
+        parameterNameTextField.setText("");
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assign(TableElement tableElement) {
-        measuredValue.setTableElement(tableElement);
-        ModelStore.getInstance().add(measuredValue);
+        omParameter.setTableElement(tableElement);
+        ModelStore.getInstance().add(omParameter);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unAssign(TableElement tableElement) {
-        MeasuredValue measuredValueToRemove = null;
-        for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-            if (tableElement.equals(mv.getTableElement())) {
-                measuredValueToRemove = mv;
+        OmParameter parameterToRemove = null;
+        for (Resource op : omParameter.getList()) {
+            if (op instanceof OmParameter && op.getTableElement().equals(tableElement)) {
+                parameterToRemove = (OmParameter) op;
                 break;
             }
         }
-        ModelStore.getInstance().remove(measuredValueToRemove);
+        if (parameterToRemove != null) {
+            ModelStore.getInstance().remove(parameterToRemove);
+        }
     }
+
 }
