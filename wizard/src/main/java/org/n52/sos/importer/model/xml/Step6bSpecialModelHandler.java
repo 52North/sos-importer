@@ -57,14 +57,12 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * <li>an observed property</li></ol>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialModel> {
 
     private static final String AND_OBS_PROP = " and obsProp";
     private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step6bSpecialModel stepModel,
             final SosImportConfiguration sosImportConf) {

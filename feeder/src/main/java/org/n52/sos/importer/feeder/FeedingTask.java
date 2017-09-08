@@ -165,7 +165,6 @@ public class FeedingTask implements Runnable {
         return new DataFile(config, file);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void run() {
         LOG.trace("run()");

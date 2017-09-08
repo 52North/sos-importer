@@ -68,7 +68,6 @@ public class Timestamp {
     private int millis = Integer.MIN_VALUE;
     private int timezone = Integer.MIN_VALUE;
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return toISO8601String();

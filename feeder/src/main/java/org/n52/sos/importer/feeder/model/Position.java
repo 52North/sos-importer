@@ -140,7 +140,6 @@ public final class Position {
         return units[Position.LAT];
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("Position [values=%s, units=%s, epsgCode=%s]",

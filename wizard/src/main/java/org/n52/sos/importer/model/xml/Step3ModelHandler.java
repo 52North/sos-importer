@@ -79,13 +79,11 @@ import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
  * 52n-sos-importer-bindings/src/main/xsd/
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step3ModelHandler implements ModelHandler<Step3Model> {
 
     private static final Logger logger = LoggerFactory.getLogger(Step3ModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step3Model stepModel,
             final SosImportConfiguration sosImportConf) {

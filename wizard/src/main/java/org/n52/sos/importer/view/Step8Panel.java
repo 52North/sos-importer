@@ -60,7 +60,6 @@ import org.slf4j.LoggerFactory;
  * and inserting observations, provides a link to the log file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step8Panel extends JPanel {
 

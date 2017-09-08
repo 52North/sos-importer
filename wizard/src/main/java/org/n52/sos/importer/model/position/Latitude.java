@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.position;
 
@@ -89,13 +88,11 @@ public class Latitude extends PositionComponent {
         super(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Latitude" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public MissingComponentPanel getMissingComponentPanel(Combination c) {
         return new MissingLatitudePanel((Position) c);
@@ -140,7 +137,6 @@ public class Latitude extends PositionComponent {
         return new Latitude(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Latitude forThis(Cell featureOfInterestPosition) {
         if (getTableElement() == null) {

@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
  * consists of a text field for the height and a combobox for the units
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingHeightPanel extends MissingComponentPanel {
 
@@ -85,7 +84,6 @@ public class MissingHeightPanel extends MissingComponentPanel {
         this.add(heightUnitComboBox);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         final double value = Double.parseDouble(heightTextField.getText());
@@ -94,13 +92,11 @@ public class MissingHeightPanel extends MissingComponentPanel {
         position.setHeight(h);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         position.setHeight(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         try {
@@ -117,7 +113,6 @@ public class MissingHeightPanel extends MissingComponentPanel {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         final double value = Double.parseDouble(heightTextField.getText());
@@ -125,7 +120,6 @@ public class MissingHeightPanel extends MissingComponentPanel {
         return new Height(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
         final Height height = (Height) c;

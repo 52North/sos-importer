@@ -1052,7 +1052,6 @@ public class DataFile {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("DataFile [dataFile=%s, configuration=%s]", dataFile, configuration);

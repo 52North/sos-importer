@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
  * loads tooltips from the properties file
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class ToolTips {
 

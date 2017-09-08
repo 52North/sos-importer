@@ -83,7 +83,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Raimund
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  */
 public class Step8Controller extends StepController {
 
@@ -102,7 +101,6 @@ public class Step8Controller extends StepController {
         this.step7Model = step7Model;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         step8Panel = new Step8Panel(step7Model, this);
@@ -151,49 +149,41 @@ public class Step8Controller extends StepController {
     @Override
     public void saveSettings() {}
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step8Description();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step8Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         BackNextController.getInstance().changeFinishToNext();
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step7Model;

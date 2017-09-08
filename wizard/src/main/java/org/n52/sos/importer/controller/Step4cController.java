@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * TODO Implement
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step4cController extends StepController {
 
@@ -61,35 +60,29 @@ public class Step4cController extends StepController {
         this.firstLineWithData = firstLineWithData;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step5aController(firstLineWithData);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         final int positions = ModelStore.getInstance().getPositions().size();
@@ -112,19 +105,16 @@ public class Step4cController extends StepController {
         // return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return null;

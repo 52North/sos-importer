@@ -33,7 +33,6 @@ package org.n52.sos.importer.model;
  * of individual parts (e.g. latitude and longitude)
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public abstract class Combination implements Formatable, Parseable {
 
@@ -43,7 +42,6 @@ public abstract class Combination implements Formatable, Parseable {
     /** for merging */
     private String group;
 
-    /** {@inheritDoc} */
     @Override
     public void setPattern(String pattern) {
         this.pattern = pattern;

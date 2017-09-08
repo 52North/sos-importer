@@ -51,14 +51,12 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  *
  * TODO check functionality
- * @version $Id: $Id
  */
 public class Step4bModelHandler implements ModelHandler<Step4bModel> {
 
     private static final String ERROR_INSTRUCTIONS = "step 4; should not happen. Please check the log file!";
     private static final Logger logger = LoggerFactory.getLogger(Step4bModelHandler.class);
 
-    /** {@inheritDoc} */
     @Override
     public void handleModel(final Step4bModel s4M,
             final SosImportConfiguration sosImportConf) {

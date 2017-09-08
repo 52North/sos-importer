@@ -79,7 +79,6 @@ public class ScheduledFeedingTask extends TimerTask {
         this.periodInMinutes = periodInMinutes;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void run() {
         LOG.trace("run()");

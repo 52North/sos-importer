@@ -32,7 +32,6 @@ package org.n52.sos.importer.model.requests;
  * Collects all information for the RegisterSensor request
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class RegisterSensor {
 
@@ -229,7 +228,6 @@ public class RegisterSensor {
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "RegisterSensor [sensorName=" + sensorName + ", sensorURI="
@@ -249,7 +247,6 @@ public class RegisterSensor {
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -299,7 +296,6 @@ public class RegisterSensor {
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

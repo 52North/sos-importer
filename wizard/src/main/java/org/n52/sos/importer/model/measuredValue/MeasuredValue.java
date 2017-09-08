@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.measuredValue;
 
@@ -253,7 +252,6 @@ public abstract class MeasuredValue implements Parseable {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         if (getTableElement() == null) {

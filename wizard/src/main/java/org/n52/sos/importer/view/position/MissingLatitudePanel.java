@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
  * consists of a text field for the latitude and a combobox for the units
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingLatitudePanel extends MissingComponentPanel {
 
@@ -85,7 +84,6 @@ public class MissingLatitudePanel extends MissingComponentPanel {
         this.add(latitudeUnitComboBox);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         final double value = Double.parseDouble(latitudeTextField.getText());
@@ -94,13 +92,11 @@ public class MissingLatitudePanel extends MissingComponentPanel {
         position.setLatitude(l);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         position.setLatitude(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         String latVal = null;
@@ -118,7 +114,6 @@ public class MissingLatitudePanel extends MissingComponentPanel {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         final double value = Double.parseDouble(latitudeTextField.getText());
@@ -126,7 +121,6 @@ public class MissingLatitudePanel extends MissingComponentPanel {
         return new Latitude(value, unit);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(final Component c) {
         final Latitude latitude = (Latitude) c;

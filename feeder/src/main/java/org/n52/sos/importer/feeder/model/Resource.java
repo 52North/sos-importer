@@ -77,7 +77,6 @@ public abstract class Resource {
         return uri;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("%s [name=%s, uri=%s]",
@@ -86,7 +85,6 @@ public abstract class Resource {
                 uri);
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -96,7 +94,6 @@ public abstract class Resource {
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

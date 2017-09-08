@@ -1168,7 +1168,6 @@ public final class Configuration {
         return configFile.getName();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("Configuration [file=%s]", configFile);

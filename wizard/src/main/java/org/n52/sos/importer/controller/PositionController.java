@@ -57,7 +57,6 @@ import org.slf4j.LoggerFactory;
  * handles operations on Position objects
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class PositionController {
 

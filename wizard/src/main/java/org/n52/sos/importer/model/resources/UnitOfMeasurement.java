@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model.resources;
 
@@ -73,31 +72,26 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class UnitOfMeasurement extends Resource {
 
-    /** {@inheritDoc} */
     @Override
     public void assign(MeasuredValue measuredValue) {
         measuredValue.setUnitOfMeasurement(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssigned(MeasuredValue measuredValue) {
         return measuredValue.getUnitOfMeasurement() != null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isAssignedTo(MeasuredValue measuredValue) {
         return measuredValue.getUnitOfMeasurement() == this;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassign(MeasuredValue mv) {
         mv.setUnitOfMeasurement(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public UnitOfMeasurement forThis(Cell measuredValuePosition) {
         if (getTableElement() == null) {
@@ -110,19 +104,16 @@ public class UnitOfMeasurement extends Resource {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getNames() {
         return EditableComboBoxItems.getInstance().getUnitOfMeasurementCodes();
     }
 
-    /** {@inheritDoc} */
     @Override
     public DefaultComboBoxModel<String> getURIs() {
         return EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs();
     }
 
-    /** {@inheritDoc} */
     @Override
     public List<Resource> getList() {
         List<Resource> resources = new ArrayList<>();
@@ -130,25 +121,21 @@ public class UnitOfMeasurement extends Resource {
         return resources;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Resource getNextResourceType() {
         return new Sensor();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Unit Of Measurement" + super.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getTypeName() {
         return Lang.l().unitOfMeasurement();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String XML_PREFIX() {
         return "uom";

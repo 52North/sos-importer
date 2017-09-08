@@ -53,7 +53,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * provides all necessary functions for modifying the table
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public final class TableController {
 

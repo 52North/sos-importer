@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
  * Solves ambiguities in case there is more than one date&amp;time column.
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Step4aController extends StepController {
 
@@ -69,7 +68,6 @@ public class Step4aController extends StepController {
         tableController = TableController.getInstance();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         String text = step4aModel.getDescription();
@@ -94,7 +92,6 @@ public class Step4aController extends StepController {
         dateAndTimeController.markColumn();
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         final int[] selectedRowsOrColumns = tableController.getSelectedColumns();
@@ -115,7 +112,6 @@ public class Step4aController extends StepController {
         step4Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public void back() {
         tableController.clearMarkedTableElements();
@@ -126,19 +122,16 @@ public class Step4aController extends StepController {
         step4Panel = null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step4aDescription();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step4Panel;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         final int dateAndTimes = ModelStore.getInstance().getDateAndTimes().size();
@@ -163,7 +156,6 @@ public class Step4aController extends StepController {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         final DateAndTime dtm = getNextUnassignedDateAndTime();
@@ -176,7 +168,6 @@ public class Step4aController extends StepController {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         return new Step4bController(step4aModel.getFirstLineWithData());
@@ -214,13 +205,11 @@ public class Step4aController extends StepController {
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step4aModel;

@@ -252,7 +252,6 @@ public class InsertObservation {
         return measuredValueType;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();

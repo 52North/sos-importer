@@ -43,7 +43,6 @@ import org.n52.sos.importer.view.i18n.Lang;
  * consists of a label and a JSpinner for a single second
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class MissingSecondPanel extends MissingDateAndTimePanel {
 
@@ -67,31 +66,26 @@ public class MissingSecondPanel extends MissingDateAndTimePanel {
         this.add(secondSpinner);
     }
 
-    /** {@inheritDoc} */
     @Override
     public void assignValues() {
         dateAndTime.setSecond(new Second(secondModel.getNumber().intValue()));
     }
 
-    /** {@inheritDoc} */
     @Override
     public void unassignValues() {
         dateAndTime.setSecond(null);
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean checkValues() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public Component getMissingComponent() {
         return new Second(secondModel.getNumber().intValue());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void setMissingComponent(Component c) {
         secondModel.setValue(((Second) c).getValue());

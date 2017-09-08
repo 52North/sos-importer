@@ -44,7 +44,6 @@ import org.n52.sos.importer.view.position.MissingPositionPanel;
  * <p>Step6cPanel class.</p>
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 public class Step6cPanel extends JPanel {
 

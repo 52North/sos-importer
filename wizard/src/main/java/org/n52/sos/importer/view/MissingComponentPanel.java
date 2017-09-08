@@ -38,7 +38,6 @@ import org.n52.sos.importer.model.Component;
  * be chosen manually
  *
  * @author Raimund Schn&uuml;rer
- * @version $Id: $Id
  */
 public abstract class MissingComponentPanel extends JPanel {
 

@@ -48,7 +48,6 @@ import au.com.bytecode.opencsv.CSVReader;
 /**
  * offers settings for parsing the CSV file
  *
- * @version $Id: $Id
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Step2Controller extends StepController {
@@ -68,13 +67,11 @@ public class Step2Controller extends StepController {
         this.step2Model = step2Model;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         return Lang.l().step2Description();
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isFinished() {
         final String columnSeparator = step2Panel.getColumnSeparator();
@@ -114,7 +111,6 @@ public class Step2Controller extends StepController {
                 ));
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNextStepController() {
         final CsvData content = parseCSVFile();
@@ -126,7 +122,6 @@ public class Step2Controller extends StepController {
                 step2Model.isUseHeader());
     }
 
-    /** {@inheritDoc} */
     @Override
     public void loadSettings() {
         if (LOG.isTraceEnabled()) {
@@ -168,7 +163,6 @@ public class Step2Controller extends StepController {
         }
     }
 
-    /** {@inheritDoc} */
     @Override
     public void saveSettings() {
         if (LOG.isTraceEnabled()) {
@@ -270,7 +264,6 @@ public class Step2Controller extends StepController {
         return replacedText.toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public JPanel getStepPanel() {
         return step2Panel;
@@ -280,26 +273,22 @@ public class Step2Controller extends StepController {
      * @see org.n52.sos.importer.controller.StepController#isNecessary()
      * this step is always required
      */
-    /** {@inheritDoc} */
     @Override
     public boolean isNecessary() {
         return true;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepController getNext() {
         return null;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean isStillValid() {
         //TODO: check whether the CSV file has changed
         return false;
     }
 
-    /** {@inheritDoc} */
     @Override
     public StepModel getModel() {
         return step2Model;

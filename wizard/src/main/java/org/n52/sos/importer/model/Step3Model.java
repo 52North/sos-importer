@@ -56,7 +56,6 @@
  * Public License for more details.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @version $Id: $Id
  */
 package org.n52.sos.importer.model;
 
@@ -199,7 +198,6 @@ public class Step3Model implements StepModel {
         return useHeader;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         final String s = "Step3Model" +

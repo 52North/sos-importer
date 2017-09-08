@@ -63,7 +63,6 @@ public final class FeatureOfInterest extends Resource {
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format(

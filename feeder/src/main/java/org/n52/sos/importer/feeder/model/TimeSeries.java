@@ -368,7 +368,6 @@ public class TimeSeries {
         return new StringBuffer(start.toString()).append("/").append(end.toString()).toString();
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.format("TimeSeries [sensor=%s, observedProperty=%s, feature=%s]",

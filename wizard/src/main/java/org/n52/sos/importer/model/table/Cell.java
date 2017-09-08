@@ -36,7 +36,6 @@ import org.n52.sos.importer.controller.TableController;
  * represents a single cell in the table
  *
  * @author Raimund
- * @version $Id: $Id
  */
 public class Cell extends TableElement {
 
@@ -107,19 +106,16 @@ public class Cell extends TableElement {
         TableController.getInstance().mark(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getValueFor(Cell c) {
         return TableController.getInstance().getValueAt(this);
     }
 
-    /** {@inheritDoc} */
     @Override
     public Cell getCellFor(Cell c) {
         return this;
     }
 
-    /** {@inheritDoc} */
     @Override
     public HashSet<String> getValues() {
         HashSet<String> values = new HashSet<>();
@@ -128,13 +124,11 @@ public class Cell extends TableElement {
         return values;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "cell[" + row + "|" + column + "]";
     }
 
-    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -144,7 +138,6 @@ public class Cell extends TableElement {
         return result;
     }
 
-    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

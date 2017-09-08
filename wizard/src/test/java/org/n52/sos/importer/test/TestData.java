@@ -53,7 +53,6 @@ import org.slf4j.LoggerFactory;
  * This class holds shared test data for the other test classes.
  *
  * @author e.h.juerrens@52north.org
- * @version $Id: $Id
  * @since 0.5.0
  */
 public class TestData {
