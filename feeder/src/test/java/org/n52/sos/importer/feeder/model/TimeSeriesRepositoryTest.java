@@ -34,8 +34,6 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 
 
 public class TimeSeriesRepositoryTest {

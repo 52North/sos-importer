@@ -83,15 +83,15 @@ import org.n52.sos.importer.feeder.Configuration.ImportStrategy;
 import org.n52.sos.importer.feeder.csv.CsvParser;
 import org.n52.sos.importer.feeder.exceptions.InvalidColumnCountException;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.RegisterSensor;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -319,14 +319,13 @@ public final class SensorObservationService {
      * <p>importData.</p>
      *
      * @param dataFile a {@link org.n52.sos.importer.feeder.DataFile} object.
-     * @return a {@link java.util.List} object.
      * @throws java.io.IOException if any.
      * @throws org.n52.oxf.OXFException if any.
      * @throws org.apache.xmlbeans.XmlException if any.
      * @throws java.lang.IllegalArgumentException if any.
      * @throws java.text.ParseException if any.
      */
-    public List<InsertObservation> importData(final DataFile dataFile)
+    public void importData(final DataFile dataFile)
             throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
         LOG.trace("importData()");
         // 0 Get line
@@ -342,7 +341,7 @@ public final class SensorObservationService {
         final int[] mVCols = dataFile.getMeasuredValueColumnIds();
         if (mVCols == null || mVCols.length == 0) {
             LOG.error("No measured value columns found in configuration");
-            return null;
+            return;
         }
         if (configuration.getFirstLineWithData() == 0) {
             skipLines(cr, lastLine + 1);
@@ -433,7 +432,7 @@ public final class SensorObservationService {
         LOG.info("New observations in SOS: {}. Failed observations: {}.",
                 newObservationsCount,
                 newFailedObservationsCount);
-        return failedInsertObservations;
+        // TODO the failed insert observations should be handled here!
     }
 
     private void trimValues(String[] values) {

@@ -40,7 +40,6 @@ import org.n52.oxf.sos.request.InsertObservationParameters;
 import org.n52.oxf.xml.NcNameResolver;
 import org.n52.oxf.xml.XMLConstants;
 import org.n52.sos.importer.feeder.Configuration;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 
 import net.opengis.swe.x20.BooleanType;
 import net.opengis.swe.x20.CountType;
@@ -91,7 +90,7 @@ public class TimeSeries {
     /**
      * <p>addObservation.</p>
      *
-     * @param insertObservation a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @param insertObservation a {@link org.n52.sos.importer.feeder.model.InsertObservation} object.
      * @return a boolean.
      */
     public boolean addObservation(final InsertObservation insertObservation) {
@@ -133,7 +132,7 @@ public class TimeSeries {
     /**
      * <p>getFirst.</p>
      *
-     * @return a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @return a {@link org.n52.sos.importer.feeder.model.InsertObservation} object.
      */
     public InsertObservation getFirst() {
         if (timeseries.isEmpty()) {

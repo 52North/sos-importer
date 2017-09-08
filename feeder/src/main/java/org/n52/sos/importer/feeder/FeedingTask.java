@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -43,7 +42,6 @@ import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -223,7 +221,7 @@ public class FeedingTask implements Runnable {
                     }
 
                     // SOS is available and transactional
-                    final List<InsertObservation> failedInserts = sos.importData(dataFile);
+                    sos.importData(dataFile);
                     int lastLine = sos.getLastLine();
                     LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
                             lastLine,
@@ -247,7 +245,6 @@ public class FeedingTask implements Runnable {
                         out.println(lastLine);
                     }
 
-                    saveFailedInsertObservations(failedInserts);
                     LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
                 }
             } catch (final MalformedURLException mue) {
@@ -283,21 +280,6 @@ public class FeedingTask implements Runnable {
     private void log(final Exception e) {
         LOG.error("Exception thrown: {}", e.getMessage());
         LOG.debug(EXCEPTION_STACK_TRACE, e);
-    }
-
-    /*
-     * Method should store failed insertObservations in a defined directory and
-     * created configuration for this.
-     */
-    private void saveFailedInsertObservations(final List<InsertObservation> failedInserts) throws IOException {
-        // TODO Auto-generated method stub generated on 25.06.2012 around 11:39:44 by eike
-        LOG.trace("saveFailedInsertObservations() <-- NOT YET IMPLEMENTED");
-        //      // TODO save failed InsertObservations via ObjectOutputStream
-        //      final String fileName = config.getConfigFile().getCanonicalPath() +
-        //      "_" +
-        //      dataFile.getCanonicalPath() +
-        //      "_failedObservations";
-        //      // TODO define name of outputfile
     }
 
 }

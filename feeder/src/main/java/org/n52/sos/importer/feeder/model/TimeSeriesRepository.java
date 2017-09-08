@@ -37,8 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +90,7 @@ public class TimeSeriesRepository {
      * <p>getRegisterSensor.</p>
      *
      * @param sensorURI the URI of the Sensor
-     * @return A {@link org.n52.sos.importer.feeder.model.requests.RegisterSensor} using
+     * @return A {@link org.n52.sos.importer.feeder.model.RegisterSensor} using
      *          <ul>
      *              <li>ObservedProperty</li>
      *              <li>MeasureValueType</li>

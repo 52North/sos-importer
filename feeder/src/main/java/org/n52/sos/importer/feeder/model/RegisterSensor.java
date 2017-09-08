@@ -26,12 +26,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.model.requests;
+package org.n52.sos.importer.feeder.model;
 
 import java.util.Collection;
 import java.util.Map;
-
-import org.n52.sos.importer.feeder.model.ObservedProperty;
 
 /**
  * Holds all information for the RegisterSensor request
@@ -53,7 +51,7 @@ public class RegisterSensor {
     /**
      * <p>Constructor for RegisterSensor.</p>
      *
-     * @param io a {@link org.n52.sos.importer.feeder.model.requests.InsertObservation} object.
+     * @param io a {@link org.n52.sos.importer.feeder.model.InsertObservation} object.
      * @param observedProperties a {@link java.util.Collection} object.
      * @param measuredValueTypes a {@link java.util.Map} object.
      * @param unitOfMeasurements a {@link java.util.Map} object.
