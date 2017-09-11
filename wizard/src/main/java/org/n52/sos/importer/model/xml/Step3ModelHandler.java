@@ -85,8 +85,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
     private static final Logger logger = LoggerFactory.getLogger(Step3ModelHandler.class);
 
     @Override
-    public void handleModel(final Step3Model stepModel,
-            final SosImportConfiguration sosImportConf) {
+    public void handleModel(Step3Model stepModel, SosImportConfiguration sosImportConf) {
         logger.trace("handleModel()");
         final HashMap<Integer, List<String>> colAssignments = stepModel.getAllSelections();
         CsvMetadata csvMeta = sosImportConf.getCsvMetadata();
@@ -128,25 +127,22 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
              */
             // value should have one or two elements
             final List<String> value = colAssignment.getValue();
-            final int key = colAssignment.getKey();
-            Column col = getColumnForKey(key, cols);
-            String type = null;
+            Column col = getColumnForKey(colAssignment.getKey(), cols);
             String encodedMetadata = null;
             if (col == null) {
                 col = colAssignmentsXB.addNewColumn();
-                col.setNumber(key);
+                col.setNumber(colAssignment.getKey());
             }
             /*
              * SIMPLE TYPES (incl. UnixTime, Do-Not-Export require no metadata)
              */
             if (value.size() < 3) {
-                type = value.get(0);
-                setSimpleColumnType(col, type);
+                setSimpleColumnType(col, value.get(0));
                 /*
                  * COMPLEX TYPES
                  */
             } else if (value.size() == 3) {
-                type = value.get(0);
+                String type = value.get(0);
                 encodedMetadata = value.get(2);
                 // delete old metadata
                 Metadata[] metadata = col.getMetadataArray();
@@ -195,8 +191,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      * UNIX TIME
      *
      */
-    private void setComplexColumnTypeDateAndTime(final Column col, final String type,
-            final String encodedMetadata) {
+    private void setComplexColumnTypeDateAndTime(Column col, String type, String encodedMetadata) {
         logger.trace("\t\tsetComplexTypeDateAndTime()");
         //
         col.setType(Type.DATE_TIME);
@@ -240,8 +235,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      * @param type
      *            Numeric, Count, Boolean, or Text
      */
-    private void setComplexColumnTypeMeasuredValue(final Column col, final String type,
-            final String encodedMetadata) {
+    private void setComplexColumnTypeMeasuredValue(Column col, String type, String encodedMetadata) {
         logger.trace("\t\tsetComplexColumnTypeMeasuredValue()");
         col.setType(Type.MEASURED_VALUE);
 
@@ -293,8 +287,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
      * @param encodedMetadata
      *            e.g.: LAT LON ALT EPSG<code>SEP</code>A
      */
-    private void setComplexColumnTypePosition(final Column col, final String type,
-            final String encodedMetadata) {
+    private void setComplexColumnTypePosition(Column col, String type, String encodedMetadata) {
         logger.trace("\t\tsetComplexColumnTypePosition()");
         //
         col.setType(Type.POSITION);
@@ -320,7 +313,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         meta = null;
     }
 
-    private void setSimpleColumnType(final Column col, final String type) {
+    private void setSimpleColumnType(Column col, String type) {
         logger.trace("\t\tsetSimpleColumnType()");
         if (type.equalsIgnoreCase(Lang.l().step3ColTypeDoNotExport())) {
             col.setType(Type.DO_NOT_EXPORT);

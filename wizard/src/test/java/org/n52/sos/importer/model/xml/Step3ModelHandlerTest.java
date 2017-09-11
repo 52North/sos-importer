@@ -57,10 +57,10 @@ public class Step3ModelHandlerTest {
         selection.add("M/d/yyyy h.mm aSEPnull");
         model.addSelection(selection);
 
-        SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
-        new Step3ModelHandler().handleModel(model, sosImportConf);
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
 
-        final Metadata[] metadataArray = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0)
+        final Metadata[] metadataArray = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0)
                 .getMetadataArray();
         final int groupIndex = getGroupMetadataElementIndex(metadataArray);
         Assert.assertThat(groupIndex, Matchers.equalTo(0));
@@ -110,10 +110,10 @@ public class Step3ModelHandlerTest {
         model.setMarkedColumn(4);
         model.addSelection(Arrays.asList("om:Parameter", "Count", "test-name"));
 
-        SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
-        new Step3ModelHandler().handleModel(model, sosImportConf);
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
 
-        Column col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
         Assert.assertThat(col.getNumber(), Is.is(0));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
@@ -121,7 +121,7 @@ public class Step3ModelHandlerTest {
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(1);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(1);
         Assert.assertThat(col.getNumber(), Is.is(1));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
@@ -129,7 +129,7 @@ public class Step3ModelHandlerTest {
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(2);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(2);
         Assert.assertThat(col.getNumber(), Is.is(2));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
@@ -137,7 +137,7 @@ public class Step3ModelHandlerTest {
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(3);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(3);
         Assert.assertThat(col.getNumber(), Is.is(3));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
@@ -145,7 +145,7 @@ public class Step3ModelHandlerTest {
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(4);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(4);
         Assert.assertThat(col.getNumber(), Is.is(4));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
