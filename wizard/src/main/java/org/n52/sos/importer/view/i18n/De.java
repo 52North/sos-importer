@@ -550,13 +550,23 @@ public class De extends Lang {
         return "Kategorie";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameLabel() {
         return name();
     }
 
-    /** {@inheritDoc} */
+    @Override
+    public String step3HasParentFeatureCheckBox() {
+        return "<html>Wollen Sie ein gemeinsames <br />Ober-" +
+                featureOfInterest() +
+                " angeben?";
+    }
+
+    @Override
+    public String step3ParentFeatureIdentifierLabel() {
+        return "ID des Ober-" + featureOfInterest() + "s";
+    }
+
     @Override
     public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
         return "Der übergebene om:Parameter->Name ist ungültig:\n\"" +
@@ -564,13 +574,11 @@ public class De extends Lang {
                 "\"\n\nBitte einen Namen mit mindestens 3 Zeichen eingeben.";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameInvalidDialogTitle() {
         return "om:Parameter->Name ist ungültig";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3ParseTest1Failed() {
         return "1 Wert nicht einlesbar.";
@@ -626,7 +634,6 @@ public class De extends Lang {
         return "om:Parameter";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3ColTypeUndefined() {
         return "Unbekannt";

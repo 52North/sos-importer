@@ -549,27 +549,35 @@ public class En extends Lang {
         return "Category";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameLabel() {
         return name();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
+    public String step3OmParameterNameInvalidDialogMessage(final String givenValue) {
         return "The given om:Parameter->Name is invalid:\n\n\"" +
                 givenValue +
                 "\"\n\nPlease provide a name with at least three characters.";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameInvalidDialogTitle() {
         return "om:Parameter->Name is invalid";
     }
 
-    /** {@inheritDoc} */
+    @Override
+    public String step3HasParentFeatureCheckBox() {
+        return "<html>Do you want to configure a global<br /> parent feature for this <br />" +
+                featureOfInterest() +
+                "?</html>";
+    }
+
+    @Override
+    public String step3ParentFeatureIdentifierLabel() {
+        return "Parent " + featureOfInterest() + " identifier";
+    }
+
     @Override
     public String step3ParseTest1Failed() {
         return "1 value could not be interpreted.";
@@ -717,7 +725,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step4dModelDescription(String orientation) {
+    public String step4dModelDescription(final String orientation) {
         return PLEASE_CLICK_THE +
                 orientation +
                 " (not the title) containing the measured values for the marked " +
@@ -1041,7 +1049,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step8ErrorDesktopNotSupportedMesage(String pathToConfigFile) {
+    public String step8ErrorDesktopNotSupportedMesage(final String pathToConfigFile) {
         return String.format("Could not open file. Please open it manually:%n%n'%s'%n%n",
                 pathToConfigFile);
     }

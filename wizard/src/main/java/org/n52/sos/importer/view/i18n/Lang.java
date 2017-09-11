@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Lang {
 
-    private static HashMap<Locale, Lang> availableLocales = new HashMap<Locale, Lang>();
+    private static HashMap<Locale, Lang> availableLocales = new HashMap<>();
 
     // default language
     private static Locale currentLocale = Locale.ENGLISH;
@@ -797,6 +797,20 @@ public abstract class Lang {
      * @return Step 3: Choose Metadata for the selected column
      */
     public abstract String step3Description();
+
+    /**
+     * <p>step3HasParentFeatureCheckBox</p>
+     *
+     * @return Do you want to configure a global parent feature for this {@link #featureOfInterest()}?
+     */
+    public abstract String step3HasParentFeatureCheckBox();
+
+    /**
+     * <p>step3ParentFeatureIdentifierLabel</p>
+     *
+     * @return Parent {@link #featureOfInterest()} identifier
+     */
+    public abstract String step3ParentFeatureIdentifierLabel();
 
     /**
      * <p>step3MeasureValueColMissingDialogMessage.</p>
