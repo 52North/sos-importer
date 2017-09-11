@@ -501,7 +501,7 @@ Here are some additional examples for encoding `om:parameter` columns:
 ```
 usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
         options and arguments:
-        -c file	 : read the config file and start the import process
+        -c file     : read the config file and start the import process
         -d datafile : OPTIONAL override of the datafile defined in config file
         -p period   : OPTIONAL time period in minutes for repeated feeding
 ```
