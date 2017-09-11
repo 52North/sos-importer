@@ -154,8 +154,8 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-        	<groupId>commons-io</groupId>
-        	<artifactId>commons-io</artifactId>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -174,46 +174,46 @@
                 </configuration>
             </plugin>
             <plugin>
-				   <groupId>com.mycila</groupId>
-				   <artifactId>license-maven-plugin</artifactId>
-				   <inherited>false</inherited>
-				   <configuration>
-				      <header>src/main/resources/52n_license_header.txt</header>
-				      <aggregate>true</aggregate>
-				      <properties>
-				         <inceptionYear>${project.inceptionYear}</inceptionYear>
-				         <latestYearOfContribution>${currentYear}</latestYearOfContribution>
-						<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
-				      </properties>
-				      <includes>
-				         <include>src/**/*.java</include>
-				         <include>src/**/*.xml</include>
-				         <include>src/**/*.xsd</include>
-				         <include>src/**/*.properties</include>
-				      </includes>
-				      <excludes>
-				         <exclude>**/logback.xml</exclude>
-				         <exclude>**/logback-test.xml</exclude>
-				         <exclude>**/src/test/resources/**</exclude>
-				         <exclude>**/*.txt</exclude>
-				         <exclude>**/*.odt</exclude>
-				         <exclude>**/THIRD-PARTY.properties</exclude>
-				         <exclude>**/NOTICE.template</exclude>
-				         <exclude>**/*.md</exclude>
-				         <exclude>**/RELEASE_NOTES</exclude>
-				         <exclude>**/LICENSE.gpl-2.0</exclude>
-				      </excludes>
-				   </configuration>
-				   <executions>
-				      <execution>
-				         <id>check-license</id>
-				         <phase>initialize</phase>
-				         <goals>
-				            <goal>check</goal>
-				         </goals>
-				      </execution>
-				   </executions>
-				</plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <header>src/main/resources/52n_license_header.txt</header>
+                    <aggregate>true</aggregate>
+                    <properties>
+                        <inceptionYear>${project.inceptionYear}</inceptionYear>
+                        <latestYearOfContribution>${currentYear}</latestYearOfContribution>
+                        <!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
+                    </properties>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                        <include>src/**/*.xsd</include>
+                        <include>src/**/*.properties</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/logback.xml</exclude>
+                        <exclude>**/logback-test.xml</exclude>
+                        <exclude>**/src/test/resources/**</exclude>
+                        <exclude>**/*.txt</exclude>
+                        <exclude>**/*.odt</exclude>
+                        <exclude>**/THIRD-PARTY.properties</exclude>
+                        <exclude>**/NOTICE.template</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/RELEASE_NOTES</exclude>
+                        <exclude>**/LICENSE.gpl-2.0</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-license</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>maven-notice-plugin</artifactId>
