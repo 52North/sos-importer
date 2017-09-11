@@ -43,6 +43,7 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class FeatureOfInterestPanel extends ResourceSelectionPanel {
 
+    private static final long serialVersionUID = 1L;
     private final JCheckBox hasParentFeatureCheckbox;
     private final JTextField parentFeatureIdentifierTextField;
     private final JLabel parentFeatureIdentifierLabel;
@@ -86,11 +87,9 @@ public class FeatureOfInterestPanel extends ResourceSelectionPanel {
         add(identifierPanel);
     }
 
-    private static final long serialVersionUID = 1L;
-
     @Override
     protected void setSelection(final String s) {
-        if ((s == null) || s.isEmpty()) {
+        if (s == null || s.isEmpty()) {
             hasParentFeatureCheckbox.setSelected(false);
             parentFeatureIdentifierLabel.setVisible(false);
             parentFeatureIdentifierTextField.setText("");

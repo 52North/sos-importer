@@ -573,7 +573,7 @@ public class En extends Lang {
     public String step3HasParentFeatureCheckBox() {
         return "<html>Do you want to configure a global<br /> parent feature for this <br />" +
                 featureOfInterest() +
-                "?</html>";
+                "?" + "</html>";
     }
 
     @Override
