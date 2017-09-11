@@ -58,7 +58,7 @@ import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
  * <li>MEASURED_VALUE</li>
  * <li>DATE_TIME</li>
  * <li>POSITION</li>
- * <li>FOI</li>
+ * <li>FOI with optional parent feature identifier</li>
  * <li>OBSERVED_PROPERTY</li>
  * <li>UOM</li>
  * <li>SENSOR</li>
@@ -136,20 +136,21 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             /*
              * SIMPLE TYPES (incl. UnixTime, Do-Not-Export require no metadata)
              */
-            if (value.size() < 3) {
+            if (value.size() < 2) {
                 setSimpleColumnType(col, value.get(0));
                 /*
                  * COMPLEX TYPES
                  */
+            } else if (value.size() == 2) {
+                /*
+                 * FEATURE OF INTEREST with optional parent feature identifier
+                 */
+                removeMetadataArray(col);
+                setComplexTypeFeatureOfInterest(col, value.get(1));
             } else if (value.size() == 3) {
                 String type = value.get(0);
                 encodedMetadata = value.get(2);
-                // delete old metadata
-                Metadata[] metadata = col.getMetadataArray();
-                if (metadata != null && metadata.length > 0) {
-                    col.removeMetadata(0);
-                }
-                metadata = null;
+                removeMetadataArray(col);
                 //
                 /*
                  * DATE & TIME
@@ -183,6 +184,25 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
             }
         }
         logger.debug("handling of Step3Model finished");
+    }
+
+    private void setComplexTypeFeatureOfInterest(Column col, String parentFeatureIdentifier) {
+        logger.trace("\t\tsetComplexTypeFeatureOfInterest()");
+        col.setType(Type.FOI);
+        if (parentFeatureIdentifier != null && !parentFeatureIdentifier.isEmpty()) {
+            Helper.addOrUpdateColumnMetadata(Key.PARENT_FEATURE_IDENTIFIER, parentFeatureIdentifier, col);
+        }
+    }
+
+    private void removeMetadataArray(Column col) {
+        // delete old metadata
+        Metadata[] metadata = col.getMetadataArray();
+        if (metadata != null && metadata.length > 0) {
+            for (int i = 0; i < metadata.length; i++) {
+                col.removeMetadata(i);
+            }
+        }
+        metadata = null;
     }
 
     /**

@@ -37,6 +37,7 @@ import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
@@ -158,6 +159,38 @@ public class Step3ModelHandlerTest {
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("COUNT"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
+    }
+
+    @Test
+    public void shouldSetParentFeatureIdentifier() {
+        Step3Model model = new Step3Model(0, 0, false);
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "test-parent-feature"));
+
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
+
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+
+        Assert.assertThat(col.getNumber(), Is.is(0));
+        Assert.assertThat(col.getType(), Is.is(Type.FOI));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.PARENT_FEATURE_IDENTIFIER));
+        Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("test-parent-feature"));
+    }
+
+    @Test
+    public void shouldAddFeatureColumnWithoutParentFeatureIdentifier() {
+        Step3Model model = new Step3Model(0, 0, false);
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), ""));
+
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
+
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+
+        Assert.assertThat(col.getNumber(), Is.is(0));
+        Assert.assertThat(col.getType(), Is.is(Type.FOI));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(0));
     }
 
 }

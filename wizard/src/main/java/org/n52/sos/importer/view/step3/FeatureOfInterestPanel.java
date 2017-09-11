@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
-import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class FeatureOfInterestPanel extends ResourceSelectionPanel {
@@ -90,34 +89,31 @@ public class FeatureOfInterestPanel extends ResourceSelectionPanel {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void setSelection(String s) {
-        // TODO Auto-generated method stub
-
+    protected void setSelection(final String s) {
+        if ((s == null) || s.isEmpty()) {
+            hasParentFeatureCheckbox.setSelected(false);
+            parentFeatureIdentifierLabel.setVisible(false);
+            parentFeatureIdentifierTextField.setText("");
+            parentFeatureIdentifierTextField.setVisible(false);
+        } else {
+            hasParentFeatureCheckbox.setSelected(true);
+            parentFeatureIdentifierLabel.setVisible(true);
+            parentFeatureIdentifierTextField.setText(s);
+            parentFeatureIdentifierTextField.setVisible(true);
+        }
     }
 
     @Override
     protected String getSelection() {
-        // TODO Auto-generated method stub
-        // consider state of checkbox
-        return null;
+        if (hasParentFeatureCheckbox.isSelected()) {
+            return parentFeatureIdentifierTextField.getText().trim();
+        }
+        return super.getSelection();
     }
 
     @Override
     public void setDefaultSelection() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void assign(TableElement tableElement) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void unAssign(TableElement tableElement) {
-        // TODO Auto-generated method stub
-
+        setSelection("");
     }
 
 }

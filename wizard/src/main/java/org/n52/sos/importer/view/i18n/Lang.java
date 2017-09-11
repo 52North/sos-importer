@@ -845,6 +845,7 @@ public abstract class Lang {
     /**
      * <p>step3OmParameterNameInvalidDialogMessage</p>
      *
+     * @param parameterIdentifier the identifier of the invalid parameter
      * @param givenValue the user defined parameter name.
      *
      * @return The given om:Parameter-&gt;Name is invalid:
@@ -853,14 +854,16 @@ public abstract class Lang {
      *         <br><br>
      *         Please provide a name with at least three characters.
      */
-    public abstract String step3OmParameterNameInvalidDialogMessage(String givenValue);
+    public abstract String step3InvalidSelectionParameterDialogMessage(String parameterIdentifier, String givenValue);
 
     /**
      * <p>step3OmParameterNameInvalidDialogTitle</p>
      *
-     * @return om:Parameter-&gt;Name is invalid
+     * @param parameterIdentifier the identifier of the invalid parameter
+     *
+     * @return <code>parameterIdentifier</code> is invalid
      */
-    public abstract String step3OmParameterNameInvalidDialogTitle();
+    public abstract String step3InvalidSelectionParameterDialogTitle(String parameterIdentifier);
 
     /**
      * <p>step3ParseTest1Failed.</p>

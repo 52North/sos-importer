@@ -568,15 +568,18 @@ public class De extends Lang {
     }
 
     @Override
-    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
-        return "Der übergebene om:Parameter->Name ist ungültig:\n\"" +
+    public String step3InvalidSelectionParameterDialogMessage(final String givenValue,
+            final String parameterIdentifier) {
+        return "Der übergebene '" +
+                parameterIdentifier +
+                "' ist ungültig:\n\"" +
                 givenValue +
-                "\"\n\nBitte einen Namen mit mindestens 3 Zeichen eingeben.";
+                "\"\n\nBitte mindestens 3 Zeichen eingeben.";
     }
 
     @Override
-    public String step3OmParameterNameInvalidDialogTitle() {
-        return "om:Parameter->Name ist ungültig";
+    public String step3InvalidSelectionParameterDialogTitle(final String parameterIdentifier) {
+        return "'" + parameterIdentifier + "' ist ungültig";
     }
 
     @Override
@@ -725,7 +728,7 @@ public class De extends Lang {
     }
 
     @Override
-    public String step4dModelDescription(String orientation) {
+    public String step4dModelDescription(final String orientation) {
         return BITTE_KLICKEN_SIE_IN_DIE +
                 orientation +
                 " (nicht auf die Titel), die die Messwerte enthält, die zu der hervorgehobenen" +

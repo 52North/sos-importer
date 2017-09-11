@@ -213,22 +213,18 @@ public class Step3Controller extends StepController {
     public boolean isFinished() {
         final List<String> currentSelection = new ArrayList<>();
         panel.store(currentSelection);
-        // check if the current column is the last in the file
-        // if yes, check for at least one measured value column
-        if (!currentSelection.isEmpty() &&
-                currentSelection.get(0).equals(Lang.l().step3ColTypeOmParameter()) &&
-                currentSelection.size() == 3 &&
-                (currentSelection.get(2) == null ||
-                currentSelection.get(2).isEmpty() ||
-                currentSelection.get(2).trim().length() <= 3)
-            ) {
-            // TODO show info that name value is missing or too short
-            JOptionPane.showMessageDialog(null,
-                    Lang.l().step3OmParameterNameInvalidDialogMessage(currentSelection.get(2)),
-                    Lang.l().step3OmParameterNameInvalidDialogTitle(),
-                    JOptionPane.ERROR_MESSAGE);
+        // show info that name value is missing or too short
+        if (isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().step3ColTypeOmParameter(), 2)) {
+            showInvalidSelectionParameterInput(currentSelection.get(2), Lang.l().step3OmParameterNameLabel());
             return false;
         }
+        // check if feature column with checked parent feature has an identifier value
+        if (isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().featureOfInterest(), 1)) {
+            showInvalidSelectionParameterInput(currentSelection.get(1), Lang.l().step3ParentFeatureIdentifierLabel());
+            return false;
+        }
+        // check if the current column is the last in the file
+        // if yes, check for at least one measured value column
         if (((model.getMarkedColumn() + 1) ==
                 TableController.getInstance().getColumnCount()) &&
                 ModelStore.getInstance().getMeasuredValues().isEmpty() &&
@@ -240,6 +236,27 @@ public class Step3Controller extends StepController {
             return false;
         }
         return true;
+    }
+
+
+    private void showInvalidSelectionParameterInput(final String givenValue,
+            final String parameterIdentifier) {
+        JOptionPane.showMessageDialog(panel,
+                Lang.l().step3InvalidSelectionParameterDialogMessage(parameterIdentifier, givenValue),
+                Lang.l().step3InvalidSelectionParameterDialogTitle(parameterIdentifier),
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    private boolean isSelectionOfTypeAndSubParameterSet(final List<String> currentSelection,
+            final String typ,
+            final int subParamIndex) {
+        return !currentSelection.isEmpty() &&
+                currentSelection.get(0).equals(typ) &&
+                        (currentSelection.size() == (subParamIndex + 1)) && (
+                        (currentSelection.get(subParamIndex) == null) ||
+                        currentSelection.get(subParamIndex).isEmpty() ||
+                        (currentSelection.get(subParamIndex).trim().length() <= 3));
     }
 
     @Override

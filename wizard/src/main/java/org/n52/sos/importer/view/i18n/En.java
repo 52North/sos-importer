@@ -555,15 +555,18 @@ public class En extends Lang {
     }
 
     @Override
-    public String step3OmParameterNameInvalidDialogMessage(final String givenValue) {
-        return "The given om:Parameter->Name is invalid:\n\n\"" +
+    public String step3InvalidSelectionParameterDialogMessage(final String parameterIdentifier,
+            final String givenValue) {
+        return "The given '" +
+                parameterIdentifier +
+                "' is invalid:\n\n\"" +
                 givenValue +
-                "\"\n\nPlease provide a name with at least three characters.";
+                "\"\n\nPlease provide at least three characters.";
     }
 
     @Override
-    public String step3OmParameterNameInvalidDialogTitle() {
-        return "om:Parameter->Name is invalid";
+    public String step3InvalidSelectionParameterDialogTitle(final String parameterIdentifier) {
+        return "'" + parameterIdentifier + "' is invalid";
     }
 
     @Override
