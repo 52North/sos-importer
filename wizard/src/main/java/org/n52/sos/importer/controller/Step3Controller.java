@@ -186,7 +186,8 @@ public class Step3Controller extends StepController {
 
 
     private boolean shouldAddDateAndTime(final List<String> selection) {
-        return selection.size() > 1 && (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
+        return selection.size() > 1 && selection.get(1) != null && !selection.get(1).isEmpty() &&
+                (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
                 (selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
                         selection.get(2).endsWith(NULL)));
     }
