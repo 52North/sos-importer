@@ -28,13 +28,11 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 public class TimeSeriesRepositoryTest {
 
@@ -53,23 +51,23 @@ public class TimeSeriesRepositoryTest {
         String mvType = "mv-type";
         InsertObservation io =
                 new InsertObservation(sensor,
-                	foi,
-                	value,
-                	timeStamp,
-                	uom,
-                	observedProperty1,
-                	off,
-                	Optional.empty(),
-                	mvType);
+                    foi,
+                    value,
+                    timeStamp,
+                    uom,
+                    observedProperty1,
+                    off,
+                    Optional.empty(),
+                    mvType);
         InsertObservation io2 = new InsertObservation(sensor,
-        	foi,
-        	2,
-        	timeStamp,
-        	uom,
-        	observedProperty2,
-        	off,
-        	Optional.empty(),
-        	mvType);
+            foi,
+            2,
+            timeStamp,
+            uom,
+            observedProperty2,
+            off,
+            Optional.empty(),
+            mvType);
         InsertObservation[] ios = {io, io2 };
         tsr.addObservations(ios);
         RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
