@@ -265,7 +265,7 @@ public class Step3Controller extends StepController {
     }
 
     private void logAttributes() {
-        LOG.debug("{}: {}", model.getClass().getSimpleName(), model);
-        LOG.debug("{}: [{}]", panel.getClass().getSimpleName(), panel != null? panel.hashCode() : NULL);
+        LOG.debug("{}: {}", Step3Model.class.getSimpleName(), model);
+        LOG.debug("{}: [{}]", Step3Panel.class.getSimpleName(), panel != null? panel.hashCode() : NULL);
     }
 }
