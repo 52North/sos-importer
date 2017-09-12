@@ -34,6 +34,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step4aModel;
@@ -69,9 +70,7 @@ public class Step3Controller extends StepController {
      * @param firstLineWithData a int.
      * @param useHeader a boolean.
      */
-    public Step3Controller(final int currentColumn,
-            final int firstLineWithData,
-            final boolean useHeader) {
+    public Step3Controller(int currentColumn, int firstLineWithData, boolean useHeader) {
         model = new Step3Model(currentColumn,
                 firstLineWithData,
                 useHeader);
@@ -93,13 +92,13 @@ public class Step3Controller extends StepController {
         LOG.trace("loadSettings()");
         logAttributes();
 
-        final int number = model.getMarkedColumn();
+        int number = model.getMarkedColumn();
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loading settings for column# " + number);
         }
-        final int fLWData = model.getFirstLineWithData();
-        final Column column = new Column(number, fLWData);
-        final List<String> selection = model.getSelectionForColumn(number);
+        int fLWData = model.getFirstLineWithData();
+        Column column = new Column(number, fLWData);
+        List<String> selection = model.getSelectionForColumn(number);
         if (panel == null) {
             panel = new Step3Panel(model.getFirstLineWithData());
         }
@@ -119,17 +118,17 @@ public class Step3Controller extends StepController {
         LOG.trace("saveSettings()");
         logAttributes();
         //
-        final List<String> selection = new ArrayList<>();
+        List<String> selection = new ArrayList<>();
         SelectionPanel selP;
-        final int number = model.getMarkedColumn();
-        final int firstLineWithData = model.getFirstLineWithData();
+        int number = model.getMarkedColumn();
+        int firstLineWithData = model.getFirstLineWithData();
         //
         panel.store(selection);
         model.addSelection(selection);
         selP = panel.getLastChildPanel();
         selP.assign(new Column(number, firstLineWithData));
         if (shouldAddDateAndTime(selection)) {
-            final DateAndTime dtm = new DateAndTime();
+            DateAndTime dtm = new DateAndTime();
             dtm.setGroup(Integer.toString(model.getMarkedColumn() + 1));
             ModelStore.getInstance().add(dtm);
         }
@@ -137,16 +136,16 @@ public class Step3Controller extends StepController {
         // when having reached the last column, merge positions and date&time
         if (model.getMarkedColumn() + 1 ==
                 tabCtrlr.getColumnCount()) {
-            final DateAndTimeController dtc = new DateAndTimeController();
-            dtc.mergeDateAndTimes();
-            //
-            final PositionController pc = new PositionController();
-            pc.mergePositions();
+            new DateAndTimeController().mergeDateAndTimes();
+            new PositionController().mergePositions();
         }
         String heading = selection.get(0);
         if (heading.equalsIgnoreCase(Lang.l().step3ColTypeDateTime()) ||
                 heading.equalsIgnoreCase(Lang.l().position())) {
-            heading += String.format(" [%s]", selection.get(2).substring(selection.get(2).lastIndexOf("SEP") + 3));
+            heading += String.format(" [%s]",
+                    selection.get(2).substring(
+                            selection.get(2).lastIndexOf(
+                                    Constants.SEPARATOR_STRING) + Constants.SEPARATOR_STRING.length()));
         }
         tabCtrlr.setColumnHeading(number, heading);
         tabCtrlr.clearMarkedTableElements();
@@ -186,19 +185,19 @@ public class Step3Controller extends StepController {
 
     @Override
     public boolean isFinished() {
-        final List<String> currentSelection = new ArrayList<>();
-        panel.store(currentSelection);
+        final List<String> selection = new ArrayList<>();
+        panel.store(selection);
         // show info that name value is missing or too short
-        if (isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().step3ColTypeOmParameter(), 2)) {
-            showInvalidSelectionParameterInput(currentSelection.get(2), Lang.l().step3OmParameterNameLabel());
+        if (isSelectionOfTypeAndSubParameterNotSetCorrect(selection, Lang.l().step3ColTypeOmParameter(), 2)) {
+            showInvalidSelectionParameterInput(selection.get(2), Lang.l().step3OmParameterNameLabel());
             return false;
         }
         // check if feature column with checked parent feature has an identifier value
-        if (!currentSelection.isEmpty() &&
-                currentSelection.get(0).equals(Lang.l().featureOfInterest()) &&
-                currentSelection.get(1).equals("1") &&
-                isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().featureOfInterest(), 2)) {
-            showInvalidSelectionParameterInput(currentSelection.get(2), Lang.l().step3ParentFeatureIdentifierLabel());
+        if (!selection.isEmpty() &&
+                selection.get(0).equals(Lang.l().featureOfInterest()) &&
+                selection.get(1).equals("1") &&
+                isSelectionOfTypeAndSubParameterNotSetCorrect(selection, Lang.l().featureOfInterest(), 2)) {
+            showInvalidSelectionParameterInput(selection.get(2), Lang.l().step3ParentFeatureIdentifierLabel());
             return false;
         }
         // check if the current column is the last in the file
@@ -206,7 +205,7 @@ public class Step3Controller extends StepController {
         if (model.getMarkedColumn() + 1 ==
                 TableController.getInstance().getColumnCount() &&
                 ModelStore.getInstance().getMeasuredValues().isEmpty() &&
-                !currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
+                !selection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
             JOptionPane.showMessageDialog(null,
                     Lang.l().step3MeasureValueColMissingDialogMessage(),
                     Lang.l().step3MeasureValueColMissingDialogTitle(),
@@ -240,24 +239,23 @@ public class Step3Controller extends StepController {
         return model;
     }
 
-    private boolean shouldAddDateAndTime(final List<String> selection) {
+    private boolean shouldAddDateAndTime(List<String> selection) {
         return selection.size() > 1 && selection.get(1) != null && !selection.get(1).isEmpty() &&
                 (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
                 selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
                         selection.get(2).endsWith(NULL));
     }
 
-    private void showInvalidSelectionParameterInput(final String givenValue,
-            final String parameterIdentifier) {
+    private void showInvalidSelectionParameterInput(String givenValue, String parameterIdentifier) {
         JOptionPane.showMessageDialog(panel,
                 Lang.l().step3InvalidSelectionParameterDialogMessage(parameterIdentifier, givenValue),
                 Lang.l().step3InvalidSelectionParameterDialogTitle(parameterIdentifier),
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    private boolean isSelectionOfTypeAndSubParameterSet(final List<String> currentSelection,
-            final String typ,
-            final int subParamIndex) {
+    private boolean isSelectionOfTypeAndSubParameterNotSetCorrect(List<String> currentSelection,
+            String typ,
+            int subParamIndex) {
         return !currentSelection.isEmpty() &&
                 currentSelection.get(0).equals(typ) &&
                         currentSelection.size() == subParamIndex + 1 && (
