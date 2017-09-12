@@ -164,7 +164,7 @@ public class Step3ModelHandlerTest {
     @Test
     public void shouldSetParentFeatureIdentifier() {
         Step3Model model = new Step3Model(0, 0, false);
-        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "test-parent-feature"));
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "1", "test-parent-feature"));
 
         SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
         new Step3ModelHandler().handleModel(model, conf);
@@ -181,7 +181,7 @@ public class Step3ModelHandlerTest {
     @Test
     public void shouldAddFeatureColumnWithoutParentFeatureIdentifier() {
         Step3Model model = new Step3Model(0, 0, false);
-        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), ""));
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "0", ""));
 
         SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
         new Step3ModelHandler().handleModel(model, conf);

@@ -32,6 +32,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -113,6 +114,17 @@ public class FeatureOfInterestPanel extends ResourceSelectionPanel {
     @Override
     public void setDefaultSelection() {
         setSelection("");
+    }
+
+    @Override
+    public void store(List<String> selections) {
+        super.store(selections);
+        if (hasParentFeatureCheckbox.isSelected()) {
+            selections.set(1, "1");
+            selections.add(parentFeatureIdentifierTextField.getText().trim());
+        } else {
+            selections.add("");
+        }
     }
 
 }

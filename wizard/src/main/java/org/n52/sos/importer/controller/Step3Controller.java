@@ -190,8 +190,11 @@ public class Step3Controller extends StepController {
             return false;
         }
         // check if feature column with checked parent feature has an identifier value
-        if (isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().featureOfInterest(), 1)) {
-            showInvalidSelectionParameterInput(currentSelection.get(1), Lang.l().step3ParentFeatureIdentifierLabel());
+        if (!currentSelection.isEmpty() &&
+                currentSelection.get(0).equals(Lang.l().featureOfInterest()) &&
+                currentSelection.get(1).equals("1") &&
+                isSelectionOfTypeAndSubParameterSet(currentSelection, Lang.l().featureOfInterest(), 2)) {
+            showInvalidSelectionParameterInput(currentSelection.get(2), Lang.l().step3ParentFeatureIdentifierLabel());
             return false;
         }
         // check if the current column is the last in the file

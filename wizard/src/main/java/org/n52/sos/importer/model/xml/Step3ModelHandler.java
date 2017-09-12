@@ -141,12 +141,6 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
                 /*
                  * COMPLEX TYPES
                  */
-            } else if (value.size() == 2) {
-                /*
-                 * FEATURE OF INTEREST with optional parent feature identifier
-                 */
-                removeMetadataArray(col);
-                setComplexTypeFeatureOfInterest(col, value.get(1));
             } else if (value.size() == 3) {
                 String type = value.get(0);
                 encodedMetadata = value.get(2);
@@ -176,6 +170,11 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
                 } else if (type.equalsIgnoreCase(Lang.l().step3ColTypeOmParameter())) {
                     setComplexColumnTypeOmParameter(col, value.get(1),
                             encodedMetadata);
+                    /*
+                     * FEATURE OF INTEREST with optional parent feature identifier
+                     */
+                } else if (type.equalsIgnoreCase(Lang.l().featureOfInterest())) {
+                    setComplexTypeFeatureOfInterest(col, value);
                 }
             } else {
                 logger.error("Implementation error: value should have one to three elements: "
@@ -185,11 +184,11 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         logger.debug("handling of Step3Model finished");
     }
 
-    private void setComplexTypeFeatureOfInterest(Column col, String parentFeatureIdentifier) {
+    private void setComplexTypeFeatureOfInterest(Column col, List<String> value) {
         logger.trace("\t\tsetComplexTypeFeatureOfInterest()");
         col.setType(Type.FOI);
-        if (parentFeatureIdentifier != null && !parentFeatureIdentifier.isEmpty()) {
-            Helper.addOrUpdateColumnMetadata(Key.PARENT_FEATURE_IDENTIFIER, parentFeatureIdentifier, col);
+        if (value != null && !value.isEmpty() && value.size() == 3 && value.get(1).equalsIgnoreCase("1")) {
+            Helper.addOrUpdateColumnMetadata(Key.PARENT_FEATURE_IDENTIFIER, value.get(2), col);
         }
     }
 
