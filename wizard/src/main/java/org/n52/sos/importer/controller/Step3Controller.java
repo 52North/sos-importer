@@ -143,8 +143,12 @@ public class Step3Controller extends StepController {
             final PositionController pc = new PositionController();
             pc.mergePositions();
         }
-        // TODO if being date&time or position column: add group to table heading
-        tabCtrlr.setColumnHeading(number, selection.get(0));
+        String heading = selection.get(0);
+        if (heading.equalsIgnoreCase(Lang.l().step3ColTypeDateTime()) ||
+                heading.equalsIgnoreCase(Lang.l().position())) {
+            heading += String.format(" [%s]", selection.get(2).substring(selection.get(2).lastIndexOf("SEP") + 3));
+        }
+        tabCtrlr.setColumnHeading(number, heading);
         tabCtrlr.clearMarkedTableElements();
         tabCtrlr.setTableSelectionMode(TableController.CELLS);
         tabCtrlr.turnSelectionOn();
