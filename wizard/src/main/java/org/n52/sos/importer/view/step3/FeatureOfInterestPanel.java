@@ -121,7 +121,9 @@ public class FeatureOfInterestPanel extends ResourceSelectionPanel {
         super.store(selections);
         if (hasParentFeatureCheckbox.isSelected()) {
             selections.set(1, "1");
-            selections.add(parentFeatureIdentifierTextField.getText().trim());
+            String parentFeatureIdentifier = parentFeatureIdentifierTextField.getText().trim();
+            selections.add(parentFeatureIdentifier);
+            ((FeatureOfInterest)getResource()).setParentFeatureIdentifier(parentFeatureIdentifier);
         } else {
             selections.add("");
         }

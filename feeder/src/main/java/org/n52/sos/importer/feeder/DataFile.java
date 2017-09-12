@@ -121,7 +121,7 @@ public class DataFile {
      */
     public DataFile(final Configuration configuration, final File file) {
         this.configuration = configuration;
-        this.dataFile = file;
+        dataFile = file;
     }
 
     /**
@@ -431,7 +431,7 @@ public class DataFile {
         final Column column = configuration.getColumnById(mVColumn);
         String value = values[mVColumn];
         if (configuration.isNoDataValueDefinedAndMatching(column, value)) {
-                    return Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE;
+            return Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE;
         }
         for (final Metadata m : column.getMetadataArray()) {
             if (m.getKey().equals(Key.TYPE)) {
@@ -1000,13 +1000,13 @@ public class DataFile {
             fields.add(ChronoField.MONTH_OF_YEAR);
         }
         if (pattern.contains("d") ||
-                (pattern.contains("W") && pattern.contains("d"))) {
+                pattern.contains("W") && pattern.contains("d")) {
             fields.add(ChronoField.DAY_OF_MONTH);
         }
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
-                ((pattern.contains("K") ||
-                        (pattern.contains("h")) && pattern.contains("a")))) {
+                pattern.contains("K") ||
+                        pattern.contains("h") && pattern.contains("a")) {
             fields.add(ChronoField.HOUR_OF_DAY);
         }
         if (pattern.contains("m")) {
@@ -1015,7 +1015,7 @@ public class DataFile {
         if (pattern.contains("s")) {
             fields.add(ChronoField.SECOND_OF_MINUTE);
         }
-        if ((pattern.contains("Z") && !pattern.contains("'Z'")) || pattern.contains("XXX")) {
+        if (pattern.contains("Z") && !pattern.contains("'Z'") || pattern.contains("XXX")) {
             fields.add(ChronoField.OFFSET_SECONDS);
         }
         fields.trimToSize();

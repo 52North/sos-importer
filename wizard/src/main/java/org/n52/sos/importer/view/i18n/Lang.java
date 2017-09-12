@@ -30,6 +30,7 @@ package org.n52.sos.importer.view.i18n;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -1468,6 +1469,18 @@ public abstract class Lang {
      * @return Specification
      */
     public abstract String step7SosVersionLabel();
+
+    /**
+     * <p>step7RequiredParentFeatureAbsent.</p>
+     *
+     * @param absentParentFeatures a list of missing parent features in SOS
+     *
+     * @return <code>&lt;html&gt;</code>The following list of parent  <code>featureOfInterest()</code>s could not
+     *      be found in the given SOS instance:<code>&lt;ul&gt;</code><br/>
+     *          <code>&lt;li&gt;</code>absentParentFeatures<code>&lt;/li&gt;</code> <code>&lt;-- n times</code><br />
+     *      <ocde>&lt;/ul&gt;</code>Please ensure their existence before importing the data.<code>&lt;/html&gt;</code>
+     */
+    public abstract String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures);
 
     /**
      * <p>step8ConfigFileButton.</p>

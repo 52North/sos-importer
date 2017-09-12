@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Step3Controller extends StepController {
 
+    private static final String CS_4_THE_WIN = "{}: {}";
     private static final String NULL = "null";
     private static final Logger LOG = LoggerFactory.getLogger(Step3Controller.class);
 
@@ -154,7 +155,7 @@ public class Step3Controller extends StepController {
         panel = null;
 
         LOG.debug("End:");
-        LOG.debug("{}: {}", model.getClass().getSimpleName(), model);
+        LOG.debug(CS_4_THE_WIN, model.getClass().getSimpleName(), model);
     }
 
     @Override
@@ -265,7 +266,7 @@ public class Step3Controller extends StepController {
     }
 
     private void logAttributes() {
-        LOG.debug("{}: {}", Step3Model.class.getSimpleName(), model);
-        LOG.debug("{}: [{}]", Step3Panel.class.getSimpleName(), panel != null? panel.hashCode() : NULL);
+        LOG.debug(CS_4_THE_WIN, Step3Model.class.getSimpleName(), model);
+        LOG.debug("{}: [{}]", Step3Panel.class.getSimpleName(), panel != null ? panel.hashCode() : NULL);
     }
 }

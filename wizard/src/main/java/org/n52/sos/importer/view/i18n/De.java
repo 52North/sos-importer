@@ -29,6 +29,7 @@
 package org.n52.sos.importer.view.i18n;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import org.n52.sos.importer.Constants;
@@ -1011,6 +1012,21 @@ public class De extends Lang {
     @Override
     public String step7SosVersionLabel() {
         return VERSION;
+    }
+
+    @Override
+    public String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures) {
+        StringBuilder msg = new StringBuilder()
+                .append("<html>Die Liste der folgenden Ober-")
+                .append(featureOfInterest())
+                .append("e sind in der angegebenen SOS-Instanz nicht gefunden worden:<ul>");
+        for (String absentFeatureIdentifier : absentParentFeatures) {
+            msg.append("<li>")
+            .append(absentFeatureIdentifier)
+            .append("</li>");
+        }
+        msg.append("</ul>Bitte stellen Sie die Existenz dieser Sicher bevor die Daten hochgeladen werden.</html>");
+        return msg.toString();
     }
 
     @Override

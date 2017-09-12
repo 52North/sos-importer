@@ -30,6 +30,7 @@ package org.n52.sos.importer.view.i18n;
 
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import org.n52.sos.importer.Constants;
@@ -1010,6 +1011,21 @@ public class En extends Lang {
     @Override
     public String step7SosVersionLabel() {
         return VERSION;
+    }
+
+    @Override
+    public String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures) {
+        StringBuilder msg = new StringBuilder()
+                .append("<html>The following list of parent ")
+                .append(featureOfInterest())
+                .append("s could not be found in the given SOS instance:<ul>");
+        for (String absentFeatureIdentifier : absentParentFeatures) {
+            msg.append("<li>")
+            .append(absentFeatureIdentifier)
+            .append("</li>");
+        }
+        msg.append("</ul>Please ensure their existence before importing the data.</html>");
+        return msg.toString();
     }
 
     @Override
