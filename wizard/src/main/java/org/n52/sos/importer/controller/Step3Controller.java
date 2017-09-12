@@ -54,8 +54,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Step3Controller extends StepController {
 
-    private static final String STEP3_MODEL = "Step3Model: ";
-    private static final String STEP3_PANEL = "Step3Panel: ";
     private static final String NULL = "null";
     private static final Logger LOG = LoggerFactory.getLogger(Step3Controller.class);
 
@@ -80,7 +78,6 @@ public class Step3Controller extends StepController {
         panel = new Step3Panel(firstLineWithData);
     }
 
-
     @Override
     public String getDescription() {
         return Lang.l().step3Description();
@@ -93,15 +90,9 @@ public class Step3Controller extends StepController {
 
     @Override
     public void loadSettings() {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("loadSettings()");
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(STEP3_MODEL + model);
-            LOG.debug(STEP3_PANEL + (panel != null
-                    ? "[" + panel.hashCode() + "]"
-                    : NULL));
-        }
+        LOG.trace("loadSettings()");
+        logAttributes();
+
         final int number = model.getMarkedColumn();
         if (LOG.isDebugEnabled()) {
             LOG.debug("Loading settings for column# " + number);
@@ -125,16 +116,8 @@ public class Step3Controller extends StepController {
 
     @Override
     public void saveSettings() {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("saveSettings()");
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Start:");
-            LOG.debug(STEP3_MODEL + model);
-            LOG.debug(STEP3_PANEL + (panel != null
-                    ? "[" + panel.hashCode() + "]"
-                    : NULL));
-        }
+        LOG.trace("saveSettings()");
+        logAttributes();
         //
         final List<String> selection = new ArrayList<>();
         SelectionPanel selP;
@@ -152,7 +135,7 @@ public class Step3Controller extends StepController {
         }
         //
         // when having reached the last column, merge positions and date&time
-        if ((model.getMarkedColumn() + 1) ==
+        if (model.getMarkedColumn() + 1 ==
                 tabCtrlr.getColumnCount()) {
             final DateAndTimeController dtc = new DateAndTimeController();
             dtc.mergeDateAndTimes();
@@ -167,20 +150,8 @@ public class Step3Controller extends StepController {
         tabCtrlr.turnSelectionOn();
         panel = null;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("End:");
-            LOG.debug(STEP3_MODEL + model);
-            LOG.debug(STEP3_PANEL + NULL);
-        }
-
-    }
-
-
-    private boolean shouldAddDateAndTime(final List<String> selection) {
-        return (selection.size() > 1) && (selection.get(1) != null) && !selection.get(1).isEmpty() &&
-                (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
-                (selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
-                        selection.get(2).endsWith(NULL)));
+        LOG.debug("End:");
+        LOG.debug("{}: {}", model.getClass().getSimpleName(), model);
     }
 
     @Override
@@ -225,8 +196,8 @@ public class Step3Controller extends StepController {
         }
         // check if the current column is the last in the file
         // if yes, check for at least one measured value column
-        if (((model.getMarkedColumn() + 1) ==
-                TableController.getInstance().getColumnCount()) &&
+        if (model.getMarkedColumn() + 1 ==
+                TableController.getInstance().getColumnCount() &&
                 ModelStore.getInstance().getMeasuredValues().isEmpty() &&
                 !currentSelection.get(0).equalsIgnoreCase(Lang.l().measuredValue())) {
             JOptionPane.showMessageDialog(null,
@@ -236,27 +207,6 @@ public class Step3Controller extends StepController {
             return false;
         }
         return true;
-    }
-
-
-    private void showInvalidSelectionParameterInput(final String givenValue,
-            final String parameterIdentifier) {
-        JOptionPane.showMessageDialog(panel,
-                Lang.l().step3InvalidSelectionParameterDialogMessage(parameterIdentifier, givenValue),
-                Lang.l().step3InvalidSelectionParameterDialogTitle(parameterIdentifier),
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-
-    private boolean isSelectionOfTypeAndSubParameterSet(final List<String> currentSelection,
-            final String typ,
-            final int subParamIndex) {
-        return !currentSelection.isEmpty() &&
-                currentSelection.get(0).equals(typ) &&
-                        (currentSelection.size() == (subParamIndex + 1)) && (
-                        (currentSelection.get(subParamIndex) == null) ||
-                        currentSelection.get(subParamIndex).isEmpty() ||
-                        (currentSelection.get(subParamIndex).trim().length() <= 3));
     }
 
     @Override
@@ -281,5 +231,36 @@ public class Step3Controller extends StepController {
     @Override
     public StepModel getModel() {
         return model;
+    }
+
+    private boolean shouldAddDateAndTime(final List<String> selection) {
+        return selection.size() > 1 && selection.get(1) != null && !selection.get(1).isEmpty() &&
+                (selection.get(1).equals(Lang.l().step3DateAndTimeUnixTime()) ||
+                selection.get(1).equals(Lang.l().step3DateAndTimeCombination()) &&
+                        selection.get(2).endsWith(NULL));
+    }
+
+    private void showInvalidSelectionParameterInput(final String givenValue,
+            final String parameterIdentifier) {
+        JOptionPane.showMessageDialog(panel,
+                Lang.l().step3InvalidSelectionParameterDialogMessage(parameterIdentifier, givenValue),
+                Lang.l().step3InvalidSelectionParameterDialogTitle(parameterIdentifier),
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private boolean isSelectionOfTypeAndSubParameterSet(final List<String> currentSelection,
+            final String typ,
+            final int subParamIndex) {
+        return !currentSelection.isEmpty() &&
+                currentSelection.get(0).equals(typ) &&
+                        currentSelection.size() == subParamIndex + 1 && (
+                        currentSelection.get(subParamIndex) == null ||
+                        currentSelection.get(subParamIndex).isEmpty() ||
+                        currentSelection.get(subParamIndex).trim().length() <= 3);
+    }
+
+    private void logAttributes() {
+        LOG.debug("{}: {}", model.getClass().getSimpleName(), model);
+        LOG.debug("{}: [{}]", panel.getClass().getSimpleName(), panel != null? panel.hashCode() : NULL);
     }
 }

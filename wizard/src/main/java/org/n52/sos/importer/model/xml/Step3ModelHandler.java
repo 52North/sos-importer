@@ -161,8 +161,7 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
                     /*
                      * MEASURED VALUE
                      */
-                } else if (type.equalsIgnoreCase(Lang.l()
-                        .step3ColTypeMeasuredValue())) {
+                } else if (type.equalsIgnoreCase(Lang.l().step3ColTypeMeasuredValue())) {
                     setComplexColumnTypeMeasuredValue(col, value.get(1),
                             encodedMetadata);
                     /*
