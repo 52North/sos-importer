@@ -123,7 +123,7 @@ public class FeatureOfInterestPanel extends ResourceSelectionPanel {
             selections.set(1, "1");
             String parentFeatureIdentifier = parentFeatureIdentifierTextField.getText().trim();
             selections.add(parentFeatureIdentifier);
-            ((FeatureOfInterest)getResource()).setParentFeatureIdentifier(parentFeatureIdentifier);
+            ((FeatureOfInterest) getResource()).setParentFeatureIdentifier(parentFeatureIdentifier);
         } else {
             selections.add("");
         }
