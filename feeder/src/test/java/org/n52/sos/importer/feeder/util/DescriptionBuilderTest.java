@@ -124,20 +124,20 @@ public class DescriptionBuilderTest {
                 .getSensorML().getMemberArray(0).getProcess().newInputStream());
     }
 
-    @Test public void
-    shouldSetKeywords() {
+    @Test
+    public void shouldSetKeywords() {
         Assert.assertThat(system.getKeywordsArray().length, Matchers.is(1));
-        final String[] keywordArray = system.getKeywordsArray(0).getKeywordList().getKeywordArray();
+        String[] keywordArray = system.getKeywordsArray(0).getKeywordList().getKeywordArray();
         Assert.assertThat(keywordArray.length, Matchers.is(3));
         Assert.assertThat(keywordArray, Matchers.hasItemInArray(featureName));
         Assert.assertThat(keywordArray, Matchers.hasItemInArray(sensorName));
         Assert.assertThat(keywordArray, Matchers.hasItemInArray(obsPropName));
     }
 
-    @Test public void
-    shouldSetIdentification() {
+    @Test
+    public void shouldSetIdentification() {
         Assert.assertThat(system.getIdentificationArray().length, Matchers.is(1));
-        final Identifier[] identifierArray = system.getIdentificationArray(0).getIdentifierList().getIdentifierArray();
+        Identifier[] identifierArray = system.getIdentificationArray(0).getIdentifierList().getIdentifierArray();
         Assert.assertThat(identifierArray.length, Matchers.is(3));
 
         Assert.assertThat(identifierArray[0].getName(), Matchers.is("uniqueID"));
@@ -156,11 +156,11 @@ public class DescriptionBuilderTest {
         Assert.assertThat(identifierArray[2].getTerm().getValue(), Matchers.is(sensorName));
     }
 
-    @Test public void
-    shouldSetSensorPosition() {
+    @Test
+    public void shouldSetSensorPosition() {
         Assert.assertThat(system.isSetPosition(), Matchers.is(true));
         Assert.assertThat(system.getPosition().getName(), Matchers.is("sensorPosition"));
-        final VectorType vector = system.getPosition().getPosition().getLocation().getVector();
+        VectorType vector = system.getPosition().getPosition().getLocation().getVector();
         Assert.assertThat(vector.getId(), Matchers.is("SYSTEM_LOCATION"));
         Assert.assertThat(vector.getCoordinateArray().length, Matchers.is(3));
 
@@ -189,8 +189,8 @@ public class DescriptionBuilderTest {
                 Matchers.is(altitude));
     }
 
-    @Test public void
-    shouldSetInputs() {
+    @Test
+    public void shouldSetInputs() {
         Assert.assertThat(system.isSetInputs(), Matchers.is(true));
         Assert.assertThat(
                 system.getInputs().getInputList().getInputArray().length, Matchers.is(1));
@@ -201,8 +201,8 @@ public class DescriptionBuilderTest {
                 Matchers.is(obsPropUri));
     }
 
-    @Test public void
-    shouldSetOutputs() {
+    @Test
+    public void shouldSetOutputs() {
         Assert.assertThat(system.isSetOutputs(), Matchers.is(true));
         Assert.assertThat(
                 system.getOutputs().getOutputList().getOutputArray().length,
@@ -216,10 +216,10 @@ public class DescriptionBuilderTest {
                 Matchers.is(uomCode));
     }
 
-    @Test public void
-    shouldSetOfferings() {
-        final Capabilities offering = getCapabilitiesByName("offerings");
-        final AnyScalarPropertyType field = ((SimpleDataRecordType) offering.getAbstractDataRecord()).getFieldArray(0);
+    @Test
+    public void shouldSetOfferings() {
+        Capabilities offering = getCapabilitiesByName("offerings");
+        AnyScalarPropertyType field = ((SimpleDataRecordType) offering.getAbstractDataRecord()).getFieldArray(0);
         Assert.assertThat(field.getName(), Matchers.is(offeringName));
         Assert.assertThat(field.isSetText(), Matchers.is(true));
         Assert.assertThat(field.getText().getDefinition(),
@@ -227,10 +227,10 @@ public class DescriptionBuilderTest {
         Assert.assertThat(field.getText().getValue(), Matchers.is(offeringUri));
     }
 
-    @Test public void
-    shouldSetFeatureOfInterest() {
-        final Capabilities features = getCapabilitiesByName("featuresOfInterest");
-        final DataComponentPropertyType field = ((DataRecordType) features.getAbstractDataRecord()).getFieldArray(0);
+    @Test
+    public void shouldSetFeatureOfInterest() {
+        Capabilities features = getCapabilitiesByName("featuresOfInterest");
+         DataComponentPropertyType field = ((DataRecordType) features.getAbstractDataRecord()).getFieldArray(0);
         Assert.assertThat(field.getName(), Matchers.is("featureOfInterestID"));
         Assert.assertThat(field.isSetText(), Matchers.is(true));
         Assert.assertThat(field.getText().getDefinition(),
@@ -238,11 +238,10 @@ public class DescriptionBuilderTest {
         Assert.assertThat(field.getText().getValue(), Matchers.is(featureUri));
     }
 
-    @Test public void
-    shouldSetObservedBBOX()
-             throws XmlException, IOException {
-        final String observedBBox = "observedBBOX";
-        final Capabilities observedBBOX = getCapabilitiesByName(observedBBox);
+    @Test
+    public void shouldSetObservedBBOX() throws XmlException, IOException {
+        String observedBBox = "observedBBOX";
+        Capabilities observedBBOX = getCapabilitiesByName(observedBBox);
         final DataComponentPropertyType field =
                 ((DataRecordType) observedBBOX.getAbstractDataRecord()).getFieldArray(0);
         Assert.assertThat(field.getName(), Matchers.is(observedBBox));
@@ -290,22 +289,25 @@ public class DescriptionBuilderTest {
         Assert.assertThat(ucCoords[1].getQuantity().getValue(), Matchers.is(latitude));
     }
 
-    @Test public void
-    shouldSetValidTime()
+    @Test
+    public void shouldSetValidTime()
             throws XmlException, IOException {
-        final TimePeriodType validTime = system.getValidTime().getTimePeriod();
-        Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
-                Matchers.is(Matchers.notNullValue()));
-        final long durationMillis =
-                new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
-                        System.currentTimeMillis()).toDurationMillis();
-        Assert.assertThat(durationMillis,
-                Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
-        Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
-                Matchers.is(true));
-        Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
-                Matchers.is("unknown"));
-        // test for valid time -> set by server
+        synchronized (this) {
+            TimePeriodType validTime = system.getValidTime().getTimePeriod();
+
+            Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
+                    Matchers.is(Matchers.notNullValue()));
+            long durationMillis =
+                    new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
+                            System.currentTimeMillis()).toDurationMillis();
+            Assert.assertThat(durationMillis,
+                    Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
+            Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
+                    Matchers.is(true));
+            Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
+                    Matchers.is("unknown"));
+            // test for valid time -> set by server
+        }
     }
 
     // test for contact -> set by server

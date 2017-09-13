@@ -115,8 +115,7 @@ public class FeedingTask implements Runnable {
 
         // get first file
         final String directory = config.getConfigFile().getAbsolutePath();
-        file = FileHelper.createFileInImporterHomeWithUniqueFileName(directory + ".csv"); // nicht importerHome Verzeichnis nutzen, 
-        // sondern temporäres Verzeichnis der JVM nutzen (Linux berücksichtigen: File.CreateTempFile())
+        file = FileHelper.createFileInImporterHomeWithUniqueFileName(directory + ".csv");
 
         // if back button was used: delete old file
         if (file.exists()) {
@@ -205,7 +204,7 @@ public class FeedingTask implements Runnable {
                     File counterFile = null;
                     String fileName = null;
                     if (config.isRemoteFile()) {
-                        fileName = directory + COUNTER_FILE_POSTFIX; 
+                        fileName = directory + COUNTER_FILE_POSTFIX;
                     } else {
                         fileName = getLocalFilename();
                     }
@@ -228,7 +227,7 @@ public class FeedingTask implements Runnable {
                         if (config.isRemoteFile()) {
                             timeStampFileName = getLocalTimeStampFilename();
                         } else {
-                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX; 
+                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX;
                         }
                         if (timeStampFile.exists()) {
                             // read already inserted UsedLastTimeStamp
@@ -250,7 +249,7 @@ public class FeedingTask implements Runnable {
                     LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());
-                    
+
                     // read and log lastUsedTimestamp
                     if (config.isUseLastTimestamp()) {
                         Timestamp timestamp = feeder.getLastUsedTimestamp();
@@ -266,7 +265,7 @@ public class FeedingTask implements Runnable {
                             out.println(timestamp.toISO8601String());
                         }
                     }
-                    
+
                     /*
                      * Hack for UoL EPC instrument files
                      * The EPC instrument produces data files with empty lines at the end.
@@ -312,7 +311,7 @@ public class FeedingTask implements Runnable {
                 dataFile.getCanonicalPath() +
                 COUNTER_FILE_POSTFIX;
     }
-    
+
     /**
      * <p>getLocalTimeStampFilename.</p>
      *

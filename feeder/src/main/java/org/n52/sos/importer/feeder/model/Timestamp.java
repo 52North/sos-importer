@@ -67,11 +67,11 @@ public class Timestamp {
     private int seconds = Integer.MIN_VALUE;
     private int millis = Integer.MIN_VALUE;
     private int timezone = Integer.MIN_VALUE;
-    
+
     public Timestamp() {
         // do nothing
     }
-    
+
     /**
      * Creates a Timestamp from a ISO8601String
      * @param ISO8601String
@@ -97,7 +97,7 @@ public class Timestamp {
                 ISO8601String.substring(17,18)
                 );
     }
-    
+
     @Override
     public String toString() {
         return toISO8601String();

@@ -174,7 +174,7 @@ public final class Feeder {
     private Timestamp lastUsedTimestamp;
 
     private boolean isUseLastTimestamp;
-    
+
     private Timestamp newLastUsedTimestamp;
 
     // The date information of the current sample
