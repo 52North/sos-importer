@@ -1476,7 +1476,7 @@ public abstract class Lang {
      * @param absentParentFeatures a list of missing parent features in SOS
      *
      * @return <code>&lt;html&gt;</code>The following list of parent  <code>featureOfInterest()</code>s could not
-     *      be found in the given SOS instance:<code>&lt;ul&gt;</code><br/>
+     *      be found in the given SOS instance:<code>&lt;ul&gt;</code><br>
      *          <code>&lt;li&gt;</code>absentParentFeatures<code>&lt;/li&gt;</code> <code>&lt;-- n times</code><br>
      *      <ocde>&lt;/ul&gt;</code>Please ensure their existence before importing the data.<code>&lt;/html&gt;</code>
      */

@@ -235,7 +235,7 @@ public final class Configuration {
                 SosImportConfigurationDocument.Factory.parse(configFile);
         // Create an XmlOptions instance and set the error listener.
         final XmlOptions validateOptions = new XmlOptions();
-        final ArrayList<XmlError> errorList = new ArrayList<XmlError>();
+        final ArrayList<XmlError> errorList = new ArrayList<>();
         validateOptions.setErrorListener(errorList);
 
         // Validate the XML.
@@ -455,7 +455,7 @@ public final class Configuration {
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)) {
                 LOG.debug("Found measured value column: {}", column.getNumber());
@@ -481,7 +481,7 @@ public final class Configuration {
     public int[] getIgnoredColumnIds() {
         LOG.trace("getIgnoredColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)) {
                 LOG.debug("Found ignored column: {}", column.getNumber());
@@ -620,6 +620,7 @@ public final class Configuration {
      * <p>getColumnIdForFoi.</p>
      *
      * @param mvColumnId a int.
+     *
      * @return a int.
      */
     public int getColumnIdForFoi(final int mvColumnId) {
@@ -1011,7 +1012,7 @@ public final class Configuration {
             return null;
         }
         final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Column> tmpResultSet = new ArrayList<Column>(allCols.length);
+        final ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
         for (final Column col : allCols) {
             if (col.getType() != null &&
                     col.getType().equals(t)) {

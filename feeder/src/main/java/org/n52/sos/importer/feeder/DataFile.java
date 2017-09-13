@@ -321,14 +321,15 @@ public class DataFile {
     /**
      * <p>getFoiForColumn.</p>
      *
-     * @param mvColumnId a int.
+     * @param mvColumnId the column id of the measure value the foi is requested for.
      * @param values an array of {@link java.lang.String} objects.
+     *
      * @return a {@link org.n52.sos.importer.feeder.model.FeatureOfInterest} object.
+     *
      * @throws java.text.ParseException if any.
      */
     public FeatureOfInterest getFoiForColumn(int mvColumnId, String[] values) throws ParseException {
-        LOG.trace(String.format("getFoiForColumn(%d,%s)",
-                mvColumnId, Arrays.toString(values)));
+        LOG.trace(String.format("getFoiForColumn(%d,%s)", mvColumnId, Arrays.toString(values)));
         // check for foi column and return new foi
         FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
         if (foi == null) {
@@ -388,6 +389,26 @@ public class DataFile {
             }
         }
         return foi;
+    }
+
+    private FeatureOfInterest getFoiColumn(int mvColumnId, String[] values) throws ParseException {
+        LOG.trace(String.format("getFoiColumn(%d,...)",
+                mvColumnId));
+        int i = configuration.getColumnIdForFoi(mvColumnId);
+        if (i < 0) {
+            // foi is not in the data dataFile -> return null
+            return null;
+        } else {
+            Position p = configuration.getFoiPosition(values[i]);
+            if (p == null) {
+                p = configuration.getPosition(values);
+            } else {
+                LOG.error(String.format("Could not find position for foi '%s'", values[i]));
+            }
+            FeatureOfInterest s = new FeatureOfInterest(values[i], values[i], p);
+            LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
+            return s;
+        }
     }
 
     /**
@@ -910,26 +931,6 @@ public class DataFile {
         } else {
             Sensor s = new Sensor(values[i], values[i]);
             LOG.debug(String.format("Sensor found in datafile: %s", s));
-            return s;
-        }
-    }
-
-    private FeatureOfInterest getFoiColumn(int mvColumnId, String[] values) throws ParseException {
-        LOG.trace(String.format("getFoiColumn(%d,...)",
-                mvColumnId));
-        int i = configuration.getColumnIdForFoi(mvColumnId);
-        if (i < 0) {
-            // foi is not in the data dataFile -> return null
-            return null;
-        } else {
-            Position p = configuration.getFoiPosition(values[i]);
-            if (p == null) {
-                p = configuration.getPosition(values);
-            } else {
-                LOG.error(String.format("Could not find position for foi '%s'", values[i]));
-            }
-            FeatureOfInterest s = new FeatureOfInterest(values[i], values[i], p);
-            LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
             return s;
         }
     }

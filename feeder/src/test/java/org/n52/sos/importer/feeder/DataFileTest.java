@@ -45,6 +45,9 @@ import org.n52.oxf.om.x20.TextParameter;
 
 public class DataFileTest {
 
+    private static final String[] EXAMPLE_DATA_ALL_PARAMETER_TYPES =
+            new String[]{"0", "52", "42.0", "true", "test-text", "test-category"};
+
     @Test
     public void shouldReturnEmptyListIfNothingIsAvailable() throws XmlException, IOException {
         Configuration configuration = new Configuration(
@@ -147,8 +150,6 @@ public class DataFileTest {
         Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.is("test-category"));
     }
 
-    private static final String[] EXAMPLE_DATA_ALL_PARAMETER_TYPES =
-            new String[]{"0", "52", "42.0", "true", "test-text", "test-category"};
 
 
 }
