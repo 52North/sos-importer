@@ -1021,8 +1021,8 @@ public class En extends Lang {
                 .append("s could not be found in the given SOS instance:<ul>");
         for (String absentFeatureIdentifier : absentParentFeatures) {
             msg.append("<li>")
-            .append(absentFeatureIdentifier)
-            .append("</li>");
+                .append(absentFeatureIdentifier)
+                .append("</li>");
         }
         msg.append("</ul>Please ensure their existence before importing the data.</html>");
         return msg.toString();

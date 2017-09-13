@@ -1022,8 +1022,8 @@ public class De extends Lang {
                 .append("e sind in der angegebenen SOS-Instanz nicht gefunden worden:<ul>");
         for (String absentFeatureIdentifier : absentParentFeatures) {
             msg.append("<li>")
-            .append(absentFeatureIdentifier)
-            .append("</li>");
+                .append(absentFeatureIdentifier)
+                .append("</li>");
         }
         msg.append("</ul>Bitte stellen Sie die Existenz dieser Sicher bevor die Daten hochgeladen werden.</html>");
         return msg.toString();
