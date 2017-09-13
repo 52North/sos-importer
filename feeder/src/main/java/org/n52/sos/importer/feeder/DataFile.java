@@ -119,7 +119,7 @@ public class DataFile {
      * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
      * @param file a {@link java.io.File} object.
      */
-    public DataFile(final Configuration configuration, final File file) {
+    public DataFile(Configuration configuration, File file) {
         this.configuration = configuration;
         dataFile = file;
     }
@@ -414,7 +414,7 @@ public class DataFile {
     /**
      * @return result[0] := newName<br> result[1] := originaleName
      */
-    private String[] createCleanNCName(final Resource res) {
+    private String[] createCleanNCName(Resource res) {
         // implement check for NCName compliance and remove bad values
         String name = res.getName();
         String origName = name;
@@ -506,7 +506,7 @@ public class DataFile {
         Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
         if (cols != null) {
             // Try to get timezone from configuration
-            final Timestamp ts = new Timestamp();
+            Timestamp ts = new Timestamp();
             TimeZone timeZone = getTimeZone(cols);
             if (isUnixTime(cols)) {
                 handleUnixTime(values, cols, ts);
@@ -776,7 +776,7 @@ public class DataFile {
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      */
-    public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
+    public ObservedProperty getObservedProperty(int mVColumnId, String[] values) {
         LOG.trace("getObservedProperty()");
         Column mvColumn = configuration.getColumnById(mVColumnId);
 
@@ -822,7 +822,7 @@ public class DataFile {
         }
 
         // Case B: Information stored in another column
-        final int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
+        int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
         if (opColumnId > -1) {
             return new ObservedProperty(values[opColumnId], values[opColumnId]);
         }
@@ -1058,7 +1058,7 @@ public class DataFile {
      * @param mVColumnId a int.
      * @return a {@link java.lang.String} object.
      */
-    public String getType(final int mVColumnId) {
+    public String getType(int mVColumnId) {
         return configuration.getType(mVColumnId);
     }
 

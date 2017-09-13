@@ -28,46 +28,26 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-/**
- * <p>FeatureOfInterest class.</p>
- *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- */
 public final class FeatureOfInterest extends Resource {
 
-    private Position p;
+    private Position position;
 
-    /**
-     * <p>Constructor for FeatureOfInterest.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     * @param uri a {@link java.lang.String} object.
-     * @param p a {@link org.n52.sos.importer.feeder.model.Position} object.
-     */
     public FeatureOfInterest(String name,
             String uri,
             Position p) {
         super(name, uri);
-        this.p = p;
+        position = p;
     }
 
-    /**
-     * <p>getPosition.</p>
-     *
-     * @return the p
-     */
     public Position getPosition() {
-        return p;
+        return position;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return String.format(
                 "FeatureOfInterest [p=%s, name=%s, uri=%s]",
-                p,
+                position,
                 getName(),
                 getUri());
     }
