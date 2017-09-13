@@ -74,27 +74,27 @@ public class Timestamp {
 
     /**
      * Creates a Timestamp from a ISO8601String
-     * @param ISO8601String
+     * @param ISO8601String The Timestamp as String in ISO8601 pattern.
      */
     public Timestamp(String ISO8601String) {
         // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
         year = Integer.parseInt(
-                ISO8601String.substring(0,3)
+                ISO8601String.substring(0, 3)
                 );
         month = Integer.parseInt(
-                ISO8601String.substring(5,6)
+                ISO8601String.substring(5, 6)
                 );
         day = Integer.parseInt(
-                ISO8601String.substring(8,9)
+                ISO8601String.substring(8, 9)
                 );
         hour = Integer.parseInt(
-                ISO8601String.substring(11,12)
+                ISO8601String.substring(11, 12)
                 );
         minute = Integer.parseInt(
-                ISO8601String.substring(14,15)
+                ISO8601String.substring(14, 15)
                 );
         seconds = Integer.parseInt(
-                ISO8601String.substring(17,18)
+                ISO8601String.substring(17, 18)
                 );
     }
 

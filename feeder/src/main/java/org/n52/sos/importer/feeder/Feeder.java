@@ -408,7 +408,9 @@ public final class Feeder {
                 if (!timeSeriesRepository.isEmpty()) {
                     insertTimeSeries(timeSeriesRepository);
                 }
-                if (isUseLastTimestamp && newLastUsedTimestamp != null && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (isUseLastTimestamp
+                        && newLastUsedTimestamp != null
+                        && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;

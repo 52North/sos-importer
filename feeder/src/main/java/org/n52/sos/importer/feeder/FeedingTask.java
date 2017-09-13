@@ -223,18 +223,20 @@ public class FeedingTask implements Runnable {
                     File timeStampFile = null;
                     if (config.isUseLastTimestamp()) {
                         String timeStampFileName = null;
-                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
                         if (config.isRemoteFile()) {
                             timeStampFileName = getLocalTimeStampFilename();
                         } else {
                             timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX;
                         }
+                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
                         if (timeStampFile.exists()) {
                             // read already inserted UsedLastTimeStamp
-                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.", timeStampFile.getCanonicalPath());
+                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.",
+                                    timeStampFile.getCanonicalPath());
                             String storedTimeStamp = null;
-                            try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
-                                storedTimeStamp = sc.next(); // read TimeStamp as ISO08601 string
+                            try (Scanner sc = new Scanner(timeStampFile,
+                                    Configuration.DEFAULT_CHARSET)) {
+                                storedTimeStamp = sc.next();
                                 Timestamp tmp = new Timestamp(storedTimeStamp);
                                 feeder.setLastUsedTimeStamp(tmp);
                             }
@@ -251,7 +253,7 @@ public class FeedingTask implements Runnable {
                             counterFile.getCanonicalPath());
 
                     // read and log lastUsedTimestamp
-                    if (config.isUseLastTimestamp()) {
+                    if (config.isUseLastTimestamp() && timeStampFile != null) {
                         Timestamp timestamp = feeder.getLastUsedTimestamp();
                         LOG.info("OneTimeFeeder: save read lastUsedTimestamp: '{}' to '{}'",
                                 timestamp,
