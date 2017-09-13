@@ -30,11 +30,14 @@ package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.oxf.om.x20.BooleanParameter;
@@ -42,6 +45,8 @@ import org.n52.oxf.om.x20.CountParameter;
 import org.n52.oxf.om.x20.OmParameter;
 import org.n52.oxf.om.x20.QuantityParameter;
 import org.n52.oxf.om.x20.TextParameter;
+import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.Position;
 
 public class DataFileTest {
 
@@ -150,6 +155,43 @@ public class DataFileTest {
         Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.is("test-category"));
     }
 
+    @Test
+    public void shouldReturnFeatureOfInterestWithParentFeatureIdentifier()
+            throws XmlException, IOException, ParseException {
+        Configuration configuration =
+                new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
 
+        FeatureOfInterest featureOfInterest = new DataFile(configuration, null)
+                .getFoiForColumn(4,
+                        new String[]{"feature", "sensor", "52.0", "42.0", "123.45", "property", "12/24/2002 12.40 PM"});
+
+        Assert.assertThat(featureOfInterest.hasParentFeature(), Is.is(true));
+        Assert.assertThat(featureOfInterest.getParentFeature(), Is.is("test-parent-feature"));
+    }
+
+    @Test
+    public void shouldReturnFeatureOfInterest()
+            throws XmlException, IOException, ParseException {
+        Configuration configuration =
+                new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
+
+        FeatureOfInterest featureOfInterest = new DataFile(configuration, null)
+                .getFoiForColumn(4,
+                        new String[]{"feature", "sensor", "52.0", "42.0", "123.45", "property", "uom",
+                                "12/24/2002 12.40 PM"});
+
+        Assert.assertThat(featureOfInterest.getName(), Is.is("feature"));
+        Assert.assertThat(featureOfInterest.getUri(), Is.is("feature"));
+        Assert.assertThat(featureOfInterest.getPosition(), Is.is(Matchers.notNullValue()));
+        Position position = featureOfInterest.getPosition();
+        Assert.assertThat(position.getEpsgCode(), Is.is(4326));
+        // next value is from configuration file
+        Assert.assertThat(position.getAltitude(), Is.is(0.0));
+        Assert.assertThat(position.getAltitudeUnit(), Is.is("m"));
+        Assert.assertThat(position.getLatitude(), Is.is(52.0));
+        Assert.assertThat(position.getLatitudeUnit(), Is.is("deg"));
+        Assert.assertThat(position.getLongitude(), Is.is(42.0));
+        Assert.assertThat(position.getLongitudeUnit(), Is.is("deg"));
+    }
 
 }

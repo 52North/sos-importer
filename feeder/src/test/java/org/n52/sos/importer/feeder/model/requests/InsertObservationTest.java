@@ -77,4 +77,29 @@ public class InsertObservationTest {
         Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
     }
 
+    @Test
+    public void shouldReturnTrueIfParentFeatureIdentifierIsSet() {
+        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        foi.setParentFeature(DEG);
+
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(true));
+        Assert.assertThat(io.getParentFeatureIdentifier(), Is.is(DEG));
+    }
+
+
+    @Test
+    public void shouldReturnFalseIfParentFeatureIdentifierIsNullOrEmpty() {
+        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        foi.setParentFeature(null);
+
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
+
+        foi.setParentFeature("");
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
+    }
+
 }

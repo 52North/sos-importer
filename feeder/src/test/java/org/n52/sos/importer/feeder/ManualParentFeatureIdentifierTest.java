@@ -26,44 +26,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.model;
+package org.n52.sos.importer.feeder;
 
-public final class FeatureOfInterest extends Resource {
+import org.junit.Ignore;
+import org.junit.Test;
 
-    private Position position;
-    private String parentFeatureIdentifier;
+public class ManualParentFeatureIdentifierTest {
 
-    public FeatureOfInterest(String name,
-            String uri,
-            Position p) {
-        super(name, uri);
-        position = p;
-    }
 
-    public Position getPosition() {
-        return position;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "FeatureOfInterest [p=%s, name=%s, uri=%s, parent=%s]",
-                position,
-                getName(),
-                getUri(),
-                parentFeatureIdentifier);
-    }
-
-    public void setParentFeature(String parentFeatureIdentifier) {
-        this.parentFeatureIdentifier = parentFeatureIdentifier;
-    }
-
-    public boolean hasParentFeature() {
-        return parentFeatureIdentifier != null && !parentFeatureIdentifier.isEmpty();
-    }
-
-    public String getParentFeature() {
-        return parentFeatureIdentifier;
+    @Ignore("For manual testing only. Requires running sos instance")
+    @Test
+    public void test() {
+        Application.main(new String[] {"-c", "src/test/resources/features/parent-feature-identifier_set.xml"});
     }
 
 }

@@ -406,6 +406,9 @@ public class DataFile {
                 LOG.error(String.format("Could not find position for foi '%s'", values[i]));
             }
             FeatureOfInterest s = new FeatureOfInterest(values[i], values[i], p);
+            if (configuration.isParentFeatureSetForFeature(i)) {
+                s.setParentFeature(configuration.getParentFeature(i));
+            }
             LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
             return s;
         }

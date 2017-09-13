@@ -1671,4 +1671,40 @@ public final class Configuration {
         }
         return false;
     }
+
+    public boolean isParentFeatureSetForFeature(int featureColumnIndex) {
+        Column column = getColumnById(featureColumnIndex);
+        if (column == null) {
+            return false;
+        }
+        if (column.getType().equals(Type.FOI) &&
+                isColumnMetadataSet(column, Key.PARENT_FEATURE_IDENTIFIER)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isColumnMetadataSet(Column column,
+            org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum key) {
+        return getMetadataValue(column, key) != null &&
+                !getMetadataValue(column, key).isEmpty();
+    }
+
+    public String getParentFeature(int featureColumnIndex) {
+        Column column = getColumnById(featureColumnIndex);
+        if (column == null) {
+            return "";
+        }
+        return getMetadataValue(column, Key.PARENT_FEATURE_IDENTIFIER);
+    }
+
+    private String getMetadataValue(Column column,
+            org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum key) {
+        for (Metadata metadata : column.getMetadataArray()) {
+            if (metadata.getKey().equals(key)) {
+                return metadata.getValue();
+            }
+        }
+        return "";
+    }
 }
