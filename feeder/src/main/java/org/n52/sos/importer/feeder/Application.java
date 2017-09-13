@@ -77,7 +77,9 @@ public final class Application {
                 // data file
                 if (args.length == 2) {
                     // Case: one time feeding with defined configuration
-                    new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName()).start();
+                    Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
+                    thread.start();
+                    thread.join();
                 } else if (args.length == 4) {
                     // Case: one time feeding with file override or period with file from configuration
                     if (isFileOverride(args[2])) {
@@ -108,6 +110,9 @@ public final class Application {
             } catch (final IllegalArgumentException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
                 LOG.debug("Exception Stack Trace:", iae);
+            } catch (InterruptedException e) {
+                // we are doing nothing here, just log in the case of debug level logging
+                LOG.debug("Exception thrown: ", e);
             }
         } else {
             showUsage();
