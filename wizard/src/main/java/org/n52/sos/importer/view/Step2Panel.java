@@ -120,6 +120,8 @@ public class Step2Panel extends JPanel {
 
     private JTextField sampleSizeRegExTF;
     private JPanel sampleSizeRegExPanel;
+    private JLabel useLastTimestampLabel;
+    private JCheckBox useLastTimestampCheckBox;
 
     /**
      * <p>Constructor for Step2Panel.</p>
@@ -140,6 +142,7 @@ public class Step2Panel extends JPanel {
         addFirstLineWithData(csvSettingsPanel, gridY++);
         addDecimalSeparator(csvSettingsPanel, gridY++);
         addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
+        addUseLastTimeCheckBox(csvSettingsPanel, gridY++);
         addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
         JPanel csvDataPanel = new JPanel();
         addCsvDataPanel(csvDataPanel);
@@ -440,6 +443,22 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
     }
 
+    private void addUseLastTimeCheckBox(Container csvSettingsPanel, int gridY) {
+        useLastTimestampLabel = new JLabel(Lang.l().step2UseLastTimestamp());
+        useLastTimestampCheckBox = new JCheckBox();
+        useLastTimestampCheckBox.setSelected(false);
+        JPanel useLastTimestampPanel = new JPanel();
+        useLastTimestampPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        useLastTimestampPanel.add(useLastTimestampLabel);
+        useLastTimestampPanel.add(useLastTimestampCheckBox);
+        GridBagConstraints useLastTimestampPanelCOnstraints = new GridBagConstraints();
+        useLastTimestampPanelCOnstraints.fill = GridBagConstraints.BOTH;
+        useLastTimestampPanelCOnstraints.insets = new Insets(0, 0, 5, 0);
+        useLastTimestampPanelCOnstraints.gridx = 0;
+        useLastTimestampPanelCOnstraints.gridy = gridY;
+        csvSettingsPanel.add(useLastTimestampPanel, useLastTimestampPanelCOnstraints);
+    }
+
     private void addUseHeaderCheckbox(Container csvSettingsPanel, int gridY) {
         useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
         useHeaderJCB = new JCheckBox();
@@ -653,6 +672,14 @@ public class Step2Panel extends JPanel {
      */
     public void setUseHeader(boolean useHeader) {
         useHeaderJCB.setSelected(useHeader);
+    }
+
+    public boolean isUseLastTimestamp() {
+        return useLastTimestampCheckBox.isSelected();
+    }
+
+    public void setUseLastTimestamp(boolean useLastTimestamp) {
+        useLastTimestampCheckBox.setSelected(useLastTimestamp);
     }
 
     /**

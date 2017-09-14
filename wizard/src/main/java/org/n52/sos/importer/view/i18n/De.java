@@ -531,6 +531,11 @@ public class De extends Lang {
     }
 
     @Override
+    public String step2UseLastTimestamp() {
+        return "<html>Sollen Daten anhand ihres <br>Zeitstempels ignoriert werden?</html>";
+    }
+
+    @Override
     public String step3Description() {
         return step() + " 3: Wählen Sie die Metainformationen für die aktuelle Spalte";
     }
