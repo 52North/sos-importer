@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Lang {
 
-    private static HashMap<Locale, Lang> availableLocales = new HashMap<Locale, Lang>();
+    private static HashMap<Locale, Lang> availableLocales = new HashMap<>();
 
     // default language
     private static Locale currentLocale = Locale.ENGLISH;

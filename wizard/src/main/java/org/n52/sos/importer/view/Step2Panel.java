@@ -126,13 +126,13 @@ public class Step2Panel extends JPanel {
      *
      * @param csvFileRowCount a int.
      */
-    public Step2Panel(final int csvFileRowCount) {
+    public Step2Panel(int csvFileRowCount) {
         super();
         this.csvFileRowCount = csvFileRowCount;
 
-        final JPanel csvSettingsPanel = new JPanel();
+        JPanel csvSettingsPanel = new JPanel();
         setupStyle(csvSettingsPanel);
-        final EditableComboBoxItems items = EditableComboBoxItems.getInstance();
+        EditableComboBoxItems items = EditableComboBoxItems.getInstance();
         int gridY = 0;
         addColumnSeparator(csvSettingsPanel, items, gridY);
         addCommentIndicator(csvSettingsPanel, items, gridY++);
@@ -141,17 +141,17 @@ public class Step2Panel extends JPanel {
         addDecimalSeparator(csvSettingsPanel, gridY++);
         addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
         addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
-        final JPanel csvDataPanel = new JPanel();
+        JPanel csvDataPanel = new JPanel();
         addCsvDataPanel(csvDataPanel);
 
         add(csvSettingsPanel);
         add(csvDataPanel);
     }
 
-    private void addCsvDataPanel(final JPanel csvDataPanel) {
+    private void addCsvDataPanel(JPanel csvDataPanel) {
         csvFileTextArea = new JTextArea(20, 60);
         csvFileTextArea.setEditable(false);
-        final JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
+        JScrollPane scrollPane = new JScrollPane(csvFileTextArea);
         csvDataPanel.setBorder(new TitledBorder(null,
                 Lang.l().step2DataPreviewLabel(),
                 TitledBorder.LEADING,
@@ -163,8 +163,7 @@ public class Step2Panel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
     }
 
-    private void addElementsForSampleBasedFiles(final JPanel csvSettingsPanel,
-            int gridY) {
+    private void addElementsForSampleBasedFiles(JPanel csvSettingsPanel, int gridY) {
         int gridy = gridY;
         addIsSampleBased(csvSettingsPanel, gridy++);
         addStartRegEx(csvSettingsPanel, gridy++);
@@ -176,7 +175,7 @@ public class Step2Panel extends JPanel {
         addSampleSizeRegEx(csvSettingsPanel, gridy++);
     }
 
-    private void setSampleBasedElementsEnabled(final boolean state) {
+    private void setSampleBasedElementsEnabled(boolean state) {
         startRegExPanel.setVisible(state);
         dateOffsetPanel.setVisible(state);
         dateExtractionRegExPanel.setVisible(state);
@@ -187,8 +186,7 @@ public class Step2Panel extends JPanel {
         firstDataJS.setEnabled(!state);
     }
 
-    private void addSampleSizeRegEx(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addSampleSizeRegEx(JPanel csvSettingsPanel, int gridY) {
         sampleSizeRegExTF = new JTextField(28);
         sampleSizeRegExPanel = new JPanel();
         sampleSizeRegExPanel.setToolTipText(Lang.l().step2SampleBasedSampleSizeRegExTooltip());
@@ -199,16 +197,15 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(sampleSizeRegExPanel, simpleConstraints(gridY));
     }
 
-    private void addSampleSizeOffset(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addSampleSizeOffset(JPanel csvSettingsPanel, int gridY) {
         sampleSizeOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
         sampleSizeOffsetModel.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(final ChangeEvent e) {
-                final int number = sampleSizeOffsetModel.getNumber().intValue();
+            public void stateChanged(ChangeEvent e) {
+                int number = sampleSizeOffsetModel.getNumber().intValue();
                 if (number < 0) {
                     sampleSizeOffsetModel.setValue(0);
-                } else if (number > (csvFileRowCount - 1)) {
+                } else if (number > csvFileRowCount - 1) {
                     sampleSizeOffsetModel.setValue(csvFileRowCount - 1);
                 }
             }
@@ -223,16 +220,15 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(sampleSizeOffsetPanel, simpleConstraints(gridY));
     }
 
-    private void addDataOffset(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addDataOffset(JPanel csvSettingsPanel, int gridY) {
         dataOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
         dataOffsetModel.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(final ChangeEvent e) {
-                final int number = dataOffsetModel.getNumber().intValue();
+            public void stateChanged(ChangeEvent e) {
+                int number = dataOffsetModel.getNumber().intValue();
                 if (number < 0) {
                     dataOffsetModel.setValue(0);
-                } else if (number > (csvFileRowCount - 1)) {
+                } else if (number > csvFileRowCount - 1) {
                     dataOffsetModel.setValue(csvFileRowCount - 1);
                 }
             }
@@ -247,8 +243,7 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(dataOffsetPanel, simpleConstraints(gridY));
     }
 
-    private void addDatePattern(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addDatePattern(JPanel csvSettingsPanel, int gridY) {
         datePatternTF = new JTextField(28);
         datePatternPanel = new JPanel();
         datePatternPanel.setToolTipText(Lang.l().step2SampleBasedDatePatternTooltip());
@@ -259,8 +254,7 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(datePatternPanel, simpleConstraints(gridY));
     }
 
-    private void addDateExtractionRegEx(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addDateExtractionRegEx(JPanel csvSettingsPanel, int gridY) {
         dateExtractionRegExTF = new JTextField(28);
         dateExtractionRegExPanel = new JPanel();
         dateExtractionRegExPanel.setToolTipText(Lang.l().step2SampleBasedDateExtractionRegExTooltip());
@@ -271,17 +265,17 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(dateExtractionRegExPanel, simpleConstraints(gridY));
     }
 
-    private void addIsSampleBased(final JPanel csvSettingsPanel, final int gridY) {
+    private void addIsSampleBased(JPanel csvSettingsPanel, int gridY) {
         // isSampleBasedFile
         isSampleBasedCheckBox = new JCheckBox();
-        final JPanel isSampleBasedFilePanel = new JPanel();
+        JPanel isSampleBasedFilePanel = new JPanel();
         isSampleBasedFilePanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         isSampleBasedFilePanel.add(new JLabel(Lang.l().step2IsSampleBased() + "?"));
         isSampleBasedFilePanel.add(isSampleBasedCheckBox);
         isSampleBasedCheckBox.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 if (isSampleBasedCheckBox.isSelected()) {
                     // TODO activateSampleBasedGuiElements
                     setSampleBasedElementsEnabled(true);
@@ -298,8 +292,7 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(isSampleBasedFilePanel, simpleConstraints(gridY));
     }
 
-    private void addStartRegEx(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addStartRegEx(JPanel csvSettingsPanel, int gridY) {
         startRegExTF = new JTextField(28);
         startRegExPanel = new JPanel();
         startRegExPanel.setToolTipText(Lang.l().step2SampleBasedStartRegExTooltip());
@@ -310,16 +303,15 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(startRegExPanel, simpleConstraints(gridY));
     }
 
-    private void addDateOffset(final JPanel csvSettingsPanel,
-            final int gridY) {
+    private void addDateOffset(JPanel csvSettingsPanel, int gridY) {
         dateOffsetModel = new SpinnerNumberModel(1, 1, csvFileRowCount, 1);
         dateOffsetModel.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(final ChangeEvent e) {
-                final int number = dateOffsetModel.getNumber().intValue();
+            public void stateChanged(ChangeEvent e) {
+                int number = dateOffsetModel.getNumber().intValue();
                 if (number < 0) {
                     dateOffsetModel.setValue(0);
-                } else if (number > (csvFileRowCount - 1)) {
+                } else if (number > csvFileRowCount - 1) {
                     dateOffsetModel.setValue(csvFileRowCount - 1);
                 }
             }
@@ -334,8 +326,8 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(dateOffsetPanel, simpleConstraints(gridY));
     }
 
-    private GridBagConstraints simpleConstraints(final int gridY) {
-        final GridBagConstraints simpleConstraints = new GridBagConstraints();
+    private GridBagConstraints simpleConstraints(int gridY) {
+        GridBagConstraints simpleConstraints = new GridBagConstraints();
         simpleConstraints.fill = GridBagConstraints.HORIZONTAL;
         simpleConstraints.anchor = GridBagConstraints.NORTHWEST;
         simpleConstraints.gridx = 0;
@@ -343,28 +335,28 @@ public class Step2Panel extends JPanel {
         return simpleConstraints;
     }
 
-    private void addDecimalSeparator(final JPanel csvSettingsPanel, final int gridY) {
-        final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-        decimalSeparatorCombobox = new JComboBox<String>((String[]) Constants.DECIMAL_SEPARATORS.toArray());
+    private void addDecimalSeparator(JPanel csvSettingsPanel, int gridY) {
+        JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
+        decimalSeparatorCombobox = new JComboBox<>((String[]) Constants.DECIMAL_SEPARATORS.toArray());
         decimalSeparatorCombobox.setSelectedIndex(0);
-        final JPanel decimalSeparatorPanel = new JPanel();
+        JPanel decimalSeparatorPanel = new JPanel();
         decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         decimalSeparatorPanel.add(decimalSeparatorLabel);
         decimalSeparatorPanel.add(decimalSeparatorCombobox);
         csvSettingsPanel.add(decimalSeparatorPanel, simpleConstraints(gridY));
     }
 
-    private void addFirstLineWithData(final JPanel csvSettingsPanel, final int gridY) {
+    private void addFirstLineWithData(JPanel csvSettingsPanel, int gridY) {
         lineModel = new SpinnerNumberModel(0, 0, csvFileRowCount - 1, 1);
         firstDataJS = new JSpinner(lineModel);
         // Highlight the current selected line in the file preview
         firstDataJS.addChangeListener(new ChangeListener() {
             @Override
-            public void stateChanged(final ChangeEvent e) {
-                final int number = lineModel.getNumber().intValue();
+            public void stateChanged(ChangeEvent e) {
+                int number = lineModel.getNumber().intValue();
                 if (number < 0) {
                     lineModel.setValue(0);
-                } else if (number > (csvFileRowCount - 1)) {
+                } else if (number > csvFileRowCount - 1) {
                     lineModel.setValue(csvFileRowCount - 1);
                     setFirstLineWithData(number);
                     setCSVFileHighlight(number);
@@ -382,11 +374,11 @@ public class Step2Panel extends JPanel {
             }
         });
         firstDataJL = new JLabel(Lang.l().step2FirstLineWithData() + " :");
-        final JPanel firstLineWithDataJPanel = new JPanel();
+        JPanel firstLineWithDataJPanel = new JPanel();
         firstLineWithDataJPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         firstLineWithDataJPanel.add(firstDataJL);
         firstLineWithDataJPanel.add(firstDataJS);
-        final GridBagConstraints gbc_firstLineWithDataJPanel = new GridBagConstraints();
+        GridBagConstraints gbc_firstLineWithDataJPanel = new GridBagConstraints();
         gbc_firstLineWithDataJPanel.fill = GridBagConstraints.BOTH;
         gbc_firstLineWithDataJPanel.insets = new Insets(0, 0, 5, 0);
         gbc_firstLineWithDataJPanel.gridx = 0;
@@ -394,13 +386,12 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(firstLineWithDataJPanel, gbc_firstLineWithDataJPanel);
     }
 
-    private void addTextQualifier(final JPanel csvSettingsPanel,
-            final EditableComboBoxItems items, final int gridY) {
+    private void addTextQualifier(JPanel csvSettingsPanel, EditableComboBoxItems items, int gridY) {
         textQualifierCombobox = new EditableJComboBoxPanel(
                 items.getTextQualifiers(),
                 Lang.l().step2TextQualifier(),
                 ToolTips.get(ToolTips.TEXT_QUALIFIER));
-        final GridBagConstraints gbc_textQualifierCombobox = new GridBagConstraints();
+        GridBagConstraints gbc_textQualifierCombobox = new GridBagConstraints();
         gbc_textQualifierCombobox.fill = GridBagConstraints.BOTH;
         gbc_textQualifierCombobox.insets = new Insets(0, 0, 5, 0);
         gbc_textQualifierCombobox.gridx = 0;
@@ -408,13 +399,12 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(textQualifierCombobox, gbc_textQualifierCombobox);
     }
 
-    private void addCommentIndicator(final JPanel csvSettingsPanel,
-            final EditableComboBoxItems items, final int gridY) {
+    private void addCommentIndicator(JPanel csvSettingsPanel, EditableComboBoxItems items, int gridY) {
         commentIndicatorCombobox = new EditableJComboBoxPanel(
                 items.getCommentIndicators(),
                 Lang.l().step2CommentIndicator(),
                 ToolTips.get(ToolTips.COMMENT_INDICATOR));
-        final GridBagConstraints gbc_commentIndicatorCombobox = new GridBagConstraints();
+        GridBagConstraints gbc_commentIndicatorCombobox = new GridBagConstraints();
         gbc_commentIndicatorCombobox.fill = GridBagConstraints.BOTH;
         gbc_commentIndicatorCombobox.insets = new Insets(0, 0, 5, 0);
         gbc_commentIndicatorCombobox.gridx = 0;
@@ -422,14 +412,14 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(commentIndicatorCombobox, gbc_commentIndicatorCombobox);
     }
 
-    private void setupStyle(final JPanel csvSettingsPanel) {
+    private void setupStyle(JPanel csvSettingsPanel) {
         csvSettingsPanel.setBorder(new TitledBorder(null,
                 Lang.l().metadata(),
                 TitledBorder.LEADING,
                 TitledBorder.TOP,
                 null,
                 null));
-        final GridBagLayout gbl_csvSettingsPanel = new GridBagLayout();
+        GridBagLayout gbl_csvSettingsPanel = new GridBagLayout();
         gbl_csvSettingsPanel.columnWidths = new int[]{239, 0};
         gbl_csvSettingsPanel.rowHeights = new int[]{25, 25, 25, 25, 25, 0};
         gbl_csvSettingsPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
@@ -437,14 +427,12 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.setLayout(gbl_csvSettingsPanel);
     }
 
-    private void addColumnSeparator(final JPanel csvSettingsPanel,
-            final EditableComboBoxItems items,
-            final int gridY) {
+    private void addColumnSeparator(JPanel csvSettingsPanel, EditableComboBoxItems items, int gridY) {
         columnSeparatorCombobox = new EditableJComboBoxPanel(
                 items.getColumnSeparators(),
                 Lang.l().step2ColumnSeparator(),
                 ToolTips.get(ToolTips.COLUMN_SEPARATOR));
-        final GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
+        GridBagConstraints gbc_columnSeparatorCombobox = new GridBagConstraints();
         gbc_columnSeparatorCombobox.fill = GridBagConstraints.BOTH;
         gbc_columnSeparatorCombobox.insets = new Insets(0, 0, 5, 0);
         gbc_columnSeparatorCombobox.gridx = 0;
@@ -452,13 +440,13 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
     }
 
-    private void addUseHeaderCheckbox(final Container csvSettingsPanel, final int gridY) {
+    private void addUseHeaderCheckbox(Container csvSettingsPanel, int gridY) {
         useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
         useHeaderJCB = new JCheckBox();
         if (logger.isTraceEnabled()) {
             useHeaderJCB.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void actionPerformed(ActionEvent e) {
                     logger.trace("useHeader state changed. is selected?" +
                             useHeaderJCB.isSelected());
                 }
@@ -467,12 +455,12 @@ public class Step2Panel extends JPanel {
         useHeaderJCB.setSelected(false);
         // will be enabled if firstLineWithdata is set to > 0
         useHeaderJCB.setEnabled(false);
-        final JPanel useHeaderPanel = new JPanel();
+        JPanel useHeaderPanel = new JPanel();
         useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         useHeaderPanel.add(useHeaderJL);
         useHeaderPanel.add(useHeaderJCB);
         // TODO uncomment to enable useHeader
-        // final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
+        // GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
         // gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
         // gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
         // gbc_useHeaderPanel.gridx = 0;
@@ -494,7 +482,7 @@ public class Step2Panel extends JPanel {
      *
      * @param commentIndicator a {@link java.lang.String} object.
      */
-    public void setCommentIndicator(final String commentIndicator) {
+    public void setCommentIndicator(String commentIndicator) {
         commentIndicatorCombobox.setSelectedItem(commentIndicator);
     }
 
@@ -512,7 +500,7 @@ public class Step2Panel extends JPanel {
      *
      * @param decimalSeparator a {@link java.lang.String} object.
      */
-    public void setDecimalSeparator(final String decimalSeparator) {
+    public void setDecimalSeparator(String decimalSeparator) {
         decimalSeparatorCombobox.setSelectedItem(decimalSeparator);
     }
 
@@ -530,7 +518,7 @@ public class Step2Panel extends JPanel {
      *
      * @param columnSeparator a {@link java.lang.String} object.
      */
-    public void setColumnSeparator(final String columnSeparator) {
+    public void setColumnSeparator(String columnSeparator) {
         columnSeparatorCombobox.setSelectedItem(columnSeparator);
     }
 
@@ -541,9 +529,9 @@ public class Step2Panel extends JPanel {
      */
     public String getCSVFileContent() {
         // remove line numbers from each row before returning data
-        final String txt = csvFileTextArea.getText();
-        final StringTokenizer tok = new StringTokenizer(txt, NEW_LINE);
-        final StringBuffer buf = new StringBuffer(txt.length());
+        String txt = csvFileTextArea.getText();
+        StringTokenizer tok = new StringTokenizer(txt, NEW_LINE);
+        StringBuffer buf = new StringBuffer(txt.length());
         String tmp;
         while (tok.hasMoreTokens()) {
             tmp = tok.nextToken();
@@ -560,16 +548,16 @@ public class Step2Panel extends JPanel {
      *
      * @param content a {@link java.lang.String} object.
      */
-    public void setCSVFileContent(final String content) {
+    public void setCSVFileContent(String content) {
         // add line numbers to content
-        final String[] lines = content.split(NEW_LINE);
+        String[] lines = content.split(NEW_LINE);
         int count = 0;
         int levelOfCount = 1;
-        final int maxLevel = Integer.toString(csvFileRowCount).length();
+        int maxLevel = Integer.toString(csvFileRowCount).length();
         // 2:= whitespace + Constants.RAW_DATA_SEPARATOR
-        final int bufferSize = content.length() + (lines.length * (maxLevel + 2));
-        final StringBuffer sb = new StringBuffer(bufferSize);
-        for (final String line : lines) {
+        int bufferSize = content.length() + lines.length * (maxLevel + 2);
+        StringBuffer sb = new StringBuffer(bufferSize);
+        for (String line : lines) {
 
             for (int i = levelOfCount; i < maxLevel; i++) {
                 sb.append(" ");
@@ -594,21 +582,21 @@ public class Step2Panel extends JPanel {
      *
      * @param number a int.
      */
-    public void setCSVFileHighlight(final int number) {
+    public void setCSVFileHighlight(int number) {
         if (logger.isTraceEnabled()) {
             logger.trace("setCSVFileHighlight()");
         }
         try {
             csvFileTextArea.getHighlighter().removeAllHighlights();
             if (number >= 0) {
-                final int lineStart = csvFileTextArea.getLineStartOffset(number);
-                final int lineEnd = csvFileTextArea.getLineEndOffset(csvFileRowCount - 1);
-                final HighlightPainter painter = new DefaultHighlighter.
+                int lineStart = csvFileTextArea.getLineStartOffset(number);
+                int lineEnd = csvFileTextArea.getLineEndOffset(csvFileRowCount - 1);
+                HighlightPainter painter = new DefaultHighlighter.
                         DefaultHighlightPainter(
                                 Constants.DEFAULT_HIGHLIGHT_COLOR);
                 csvFileTextArea.getHighlighter().addHighlight(lineStart, lineEnd, painter);
             }
-        } catch (final BadLocationException e1) {
+        } catch (BadLocationException e1) {
             logger.error("Exception thrown: " + e1.getMessage(), e1);
         }
     }
@@ -627,7 +615,7 @@ public class Step2Panel extends JPanel {
      *
      * @param firstLineWithData a int.
      */
-    public void setFirstLineWithData(final int firstLineWithData) {
+    public void setFirstLineWithData(int firstLineWithData) {
         lineModel.setValue(firstLineWithData);
     }
 
@@ -645,7 +633,7 @@ public class Step2Panel extends JPanel {
      *
      * @param textQualifier a {@link java.lang.String} object.
      */
-    public void setTextQualifier(final String textQualifier) {
+    public void setTextQualifier(String textQualifier) {
         textQualifierCombobox.setSelectedItem(textQualifier);
     }
 
@@ -663,7 +651,7 @@ public class Step2Panel extends JPanel {
      *
      * @param useHeader a boolean.
      */
-    public void setUseHeader(final boolean useHeader) {
+    public void setUseHeader(boolean useHeader) {
         useHeaderJCB.setSelected(useHeader);
     }
 
@@ -673,7 +661,7 @@ public class Step2Panel extends JPanel {
      * @param isSampleBased a boolean.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBased(final boolean isSampleBased) {
+    public Step2Panel setSampleBased(boolean isSampleBased) {
         isSampleBasedCheckBox.setSelected(isSampleBased);
         setSampleBasedElementsEnabled(isSampleBased);
         return this;
@@ -703,7 +691,7 @@ public class Step2Panel extends JPanel {
      * @param sampleBasedStartRegEx a {@link java.lang.String} object.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
+    public Step2Panel setSampleBasedStartRegEx(String sampleBasedStartRegEx) {
         startRegExTF.setText(sampleBasedStartRegEx);
         return this;
     }
@@ -723,7 +711,7 @@ public class Step2Panel extends JPanel {
      * @param newDateOffset a int.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedDateOffset(final int newDateOffset) {
+    public Step2Panel setSampleBasedDateOffset(int newDateOffset) {
         dateOffsetModel.setValue(newDateOffset);
         return this;
     }
@@ -743,7 +731,7 @@ public class Step2Panel extends JPanel {
      * @param sampleBasedDateExtractionRegEx a {@link java.lang.String} object.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
+    public Step2Panel setSampleBasedDateExtractionRegEx(String sampleBasedDateExtractionRegEx) {
         dateExtractionRegExTF.setText(sampleBasedDateExtractionRegEx);
         return this;
     }
@@ -763,7 +751,7 @@ public class Step2Panel extends JPanel {
      * @param sampleBasedDatePattern a {@link java.lang.String} object.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedDatePattern(final String sampleBasedDatePattern) {
+    public Step2Panel setSampleBasedDatePattern(String sampleBasedDatePattern) {
         datePatternTF.setText(sampleBasedDatePattern);
         return this;
     }
@@ -783,7 +771,7 @@ public class Step2Panel extends JPanel {
      * @param newDataOffset a int.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedDataOffset(final int newDataOffset) {
+    public Step2Panel setSampleBasedDataOffset(int newDataOffset) {
         dataOffsetModel.setValue(newDataOffset);
         return this;
     }
@@ -803,7 +791,7 @@ public class Step2Panel extends JPanel {
      * @param newSampleSizeOffset a int.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedSampleSizeOffset(final int newSampleSizeOffset) {
+    public Step2Panel setSampleBasedSampleSizeOffset(int newSampleSizeOffset) {
         sampleSizeOffsetModel.setValue(newSampleSizeOffset);
         return this;
     }
@@ -823,7 +811,7 @@ public class Step2Panel extends JPanel {
      * @param sampleBasedSampleSizeRegEx a {@link java.lang.String} object.
      * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
      */
-    public Step2Panel setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
+    public Step2Panel setSampleBasedSampleSizeRegEx(String sampleBasedSampleSizeRegEx) {
         sampleSizeRegExTF.setText(sampleBasedSampleSizeRegEx);
         return this;
     }
