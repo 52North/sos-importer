@@ -170,6 +170,15 @@
                 <xs:enumeration value="TIME_ZONE"/>
                 <xs:enumeration value="TYPE"/>
                 <xs:enumeration value="OTHER"/>
+				<xs:enumeration value="PARENT_FEATURE_IDENTIFIER">
+                    <xs:annotation>
+                        <xs:documentation>
+                            If present, the related feature of interest column
+                            will get this identifier set as sampled feature for
+                            each observation.
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:enumeration>
                 <xs:enumeration value="PARSE_PATTERN"/>
                 <xs:enumeration value="POSITION_ALTITUDE"/>
                 <xs:enumeration value="POSITION_EPSG_CODE"/>

@@ -44,14 +44,13 @@ public class OmParameterSelectionPanel extends SelectionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel parameterNameLabel;
     private JTextField parameterNameTextField;
     private OmParameter omParameter;
 
     public OmParameterSelectionPanel(JPanel containerPanel, OmParameter omParameter) {
         super(containerPanel);
         this.omParameter = omParameter;
-        parameterNameLabel = new JLabel(Lang.l().step3OmParameterNameLabel() + ":");
+        JLabel parameterNameLabel = new JLabel(Lang.l().step3OmParameterNameLabel() + ":");
         parameterNameTextField = new JTextField(20);
         setLayout(new FlowLayout(FlowLayout.LEFT));
         add(parameterNameLabel);

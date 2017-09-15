@@ -46,7 +46,7 @@ public abstract class SelectionPanel extends JPanel {
 
     private final JPanel containerPanel;
 
-    private HashMap<String, SelectionPanel> childPanels = new HashMap<String, SelectionPanel>();
+    private HashMap<String, SelectionPanel> childPanels = new HashMap<>();
 
     private SelectionPanel selectedChildPanel;
 
@@ -132,7 +132,7 @@ public abstract class SelectionPanel extends JPanel {
      */
     public void store(List<String> selections) {
         // get our own selection and add them to the selections list
-        String s = this.getSelection();
+        String s = getSelection();
         selections.add(s);
         // ask my child panels if one is
         SelectionPanel childPanel = childPanels.get(s);
@@ -165,7 +165,7 @@ public abstract class SelectionPanel extends JPanel {
      * @param childPanel a {@link org.n52.sos.importer.view.step3.SelectionPanel} object.
      */
     public void setSelectedChildPanel(SelectionPanel childPanel) {
-        this.selectedChildPanel = childPanel;
+        selectedChildPanel = childPanel;
     }
 
     /**
@@ -174,7 +174,7 @@ public abstract class SelectionPanel extends JPanel {
      * @param childPanelName a {@link java.lang.String} object.
      */
     public void setSelectedChildPanel(String childPanelName) {
-        this.selectedChildPanel = childPanels.get(childPanelName);
+        selectedChildPanel = childPanels.get(childPanelName);
     }
 
     /**

@@ -293,18 +293,20 @@ public class DescriptionBuilderTest {
     @Test public void
     shouldSetValidTime()
             throws XmlException, IOException {
-        final TimePeriodType validTime = system.getValidTime().getTimePeriod();
-        Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
-                Matchers.is(Matchers.notNullValue()));
-        final long durationMillis =
-                new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
-                        System.currentTimeMillis()).toDurationMillis();
-        Assert.assertThat(durationMillis,
-                Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
-        Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
-                Matchers.is(true));
-        Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
-                Matchers.is("unknown"));
+        synchronized (this){
+            final TimePeriodType validTime = system.getValidTime().getTimePeriod();
+            Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
+                    Matchers.is(Matchers.notNullValue()));
+            final long durationMillis =
+                    new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
+                            System.currentTimeMillis()).toDurationMillis();
+            Assert.assertThat(durationMillis,
+                    Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
+            Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
+                    Matchers.is(true));
+            Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
+                    Matchers.is("unknown"));
+        }
         // test for valid time -> set by server
     }
 

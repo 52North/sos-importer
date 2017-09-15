@@ -254,9 +254,7 @@ public class Model {
      * changed.
      */
     public void updateModel() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("updateModel()");
-        }
+        logger.trace("updateModel()");
         /*
          * check each provider and update the internal model
          * using ModelHandler for each StepModel
@@ -264,71 +262,58 @@ public class Model {
 
         if (stepModells != null && stepModells.length > 0) {
             //
-            for (final StepModel sm : stepModells) {
+            for (final StepModel model : stepModells) {
                 //
-                if (sm instanceof Step1Model) {
+                if (model instanceof Step1Model) {
                     //
-                    final Step1Model s1M = (Step1Model) sm;
-                    new Step1ModelHandler().handleModel(s1M, sosImpConf);
+                    new Step1ModelHandler().handleModel((Step1Model) model, sosImpConf);
                     //
-                } else if (sm instanceof Step2Model) {
+                } else if (model instanceof Step2Model) {
                     //
-                    final Step2Model s2M = (Step2Model) sm;
-                    new Step2ModelHandler().handleModel(s2M, sosImpConf);
+                    new Step2ModelHandler().handleModel((Step2Model) model, sosImpConf);
                     //
-                } else if (sm instanceof Step3Model) {
+                } else if (model instanceof Step3Model) {
                     //
-                    final Step3Model s3M = (Step3Model) sm;
-                    new Step3ModelHandler().handleModel(s3M, sosImpConf);
+                    new Step3ModelHandler().handleModel((Step3Model) model, sosImpConf);
                     //
-                } else if (sm instanceof Step4aModel) {
+                } else if (model instanceof Step4aModel) {
                     //
-                    final Step4aModel s4aM = (Step4aModel) sm;
-                    new Step4aModelHandler().handleModel(s4aM, sosImpConf);
+                    new Step4aModelHandler().handleModel((Step4aModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step4bModel) {
+                } else if (model instanceof Step4bModel) {
                     //
-                    final Step4bModel s4bM = (Step4bModel) sm;
-                    new Step4bModelHandler().handleModel(s4bM, sosImpConf);
+                    new Step4bModelHandler().handleModel((Step4bModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step4dModel) {
+                } else if (model instanceof Step4dModel) {
                     //
-                    final Step4dModel s4dM = (Step4dModel) sm;
-                    new Step4dModelHandler().handleModel(s4dM, sosImpConf);
-                } else if (sm instanceof Step5aModel) {
+                    new Step4dModelHandler().handleModel((Step4dModel) model, sosImpConf);
+                } else if (model instanceof Step5aModel) {
                     //
-                    final Step5aModel s5aM = (Step5aModel) sm;
-                    new Step5aModelHandler().handleModel(s5aM, sosImpConf);
+                    new Step5aModelHandler().handleModel((Step5aModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step5cModel) {
+                } else if (model instanceof Step5cModel) {
                     //
-                    final Step5cModel s5cM = (Step5cModel) sm;
-                    new Step5cModelHandler().handleModel(s5cM, sosImpConf);
+                    new Step5cModelHandler().handleModel((Step5cModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step6aModel) {
+                } else if (model instanceof Step6aModel) {
                     //
-                    final Step6aModel s6aM = (Step6aModel) sm;
-                    new Step6aModelHandler().handleModel(s6aM, sosImpConf);
+                    new Step6aModelHandler().handleModel((Step6aModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step6bModel) {
+                } else if (model instanceof Step6bModel) {
                     //
-                    final Step6bModel s6bM = (Step6bModel) sm;
-                    new Step6bModelHandler().handleModel(s6bM, sosImpConf);
+                    new Step6bModelHandler().handleModel((Step6bModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step6bSpecialModel) {
+                } else if (model instanceof Step6bSpecialModel) {
                     //
-                    final Step6bSpecialModel s6bSM = (Step6bSpecialModel) sm;
-                    new Step6bSpecialModelHandler().handleModel(s6bSM, sosImpConf);
+                    new Step6bSpecialModelHandler().handleModel((Step6bSpecialModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step6cModel) {
+                } else if (model instanceof Step6cModel) {
                     //
-                    final Step6cModel s6cM = (Step6cModel) sm;
-                    new Step6cModelHandler().handleModel(s6cM, sosImpConf);
+                    new Step6cModelHandler().handleModel((Step6cModel) model, sosImpConf);
                     //
-                } else if (sm instanceof Step7Model) {
+                } else if (model instanceof Step7Model) {
                     //
-                    final Step7Model s7M = (Step7Model) sm;
-                    new Step7ModelHandler().handleModel(s7M, sosImpConf);
+                    new Step7ModelHandler().handleModel((Step7Model) model, sosImpConf);
                 }
             }
         }
@@ -386,7 +371,7 @@ public class Model {
         //
         ArrayList<StepModel> result;
         //
-        result = new ArrayList<StepModel>(stepModells.length + 1);
+        result = new ArrayList<>(stepModells.length + 1);
         for (final StepModel stepModel : stepModells) {
             if (stepModel != null) {
                 result.add(stepModel);
