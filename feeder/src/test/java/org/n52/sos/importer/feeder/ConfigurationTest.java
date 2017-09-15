@@ -119,5 +119,14 @@ public class ConfigurationTest {
     	Column column = configuration.getColumnById(4);
     	Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), Is.is(true));
     }
+    
+    @Test
+    public void shouldReturnURLFromRemoteFileURL() throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/configWithRemoteFile.xml");
+        // URL taken from config file
+        Assert.assertThat(configuration.getRemoteFileURL(), Is.is("http://www.example.com/my/fancy/directoryTree/data.csv"));
+        
+    }
 
 }

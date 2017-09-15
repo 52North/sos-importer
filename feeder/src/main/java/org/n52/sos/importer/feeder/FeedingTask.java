@@ -29,21 +29,22 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.Scanner;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
+import org.n52.sos.importer.feeder.util.HTTPClient;
+import org.n52.sos.importer.feeder.util.FTPClient;
+import org.n52.sos.importer.feeder.util.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,10 +61,11 @@ public class FeedingTask implements Runnable {
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
     private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
-    private static final String PROXY_PORT = "proxyPort";
     private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
     private final Configuration config;
+    
+    private WebClient webClient;
 
     private DataFile dataFile;
 
@@ -86,95 +88,40 @@ public class FeedingTask implements Runnable {
         this.config = config;
         dataFile = new DataFile(config, datafile);
     }
-
-    private DataFile getRemoteFile() {
-        File file = null;
-
-        // ftp client
-        FTPClient client;
-
-        // proxy
-        final String pHost = System.getProperty("proxyHost", "proxy");
-        int pPort = -1;
-        if (System.getProperty(PROXY_PORT) != null) {
-            pPort = Integer.parseInt(System.getProperty(PROXY_PORT));
-        }
-        final String pUser = System.getProperty("http.proxyUser");
-        final String pPassword = System.getProperty("http.proxyPassword");
-        if (pHost != null && pPort != -1) {
-            LOG.info("Using proxy for FTP connection!");
-            if (pUser != null && pPassword != null) {
-                client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
-            } else {
-                client = new FTPHTTPClient(pHost, pPort);
-            }
-        } else {
-            LOG.info("Using no proxy for FTP connection!");
-            client = new FTPClient();
-        }
-
-        // get first file
-        final String directory = config.getConfigFile().getAbsolutePath();
-        file = FileHelper.createFileInImporterHomeWithUniqueFileName(directory + ".csv"); // nicht importerHome Verzeichnis nutzen, 
-        // sondern temporäres Verzeichnis der JVM nutzen (Linux berücksichtigen: File.CreateTempFile())
-
-        // if back button was used: delete old file
-        if (file.exists()) {
-            if (!file.delete()) {
-                LOG.error("Could not delete file '{}'", file.getAbsolutePath());
-            }
-        }
-
-        FileOutputStream fos = null;
+    
+    private DataFile downloadRemoteFile() {
+        // get remoteUrl from configFile
+        URL fileUrl = null;
         try {
-            client.connect(config.getFtpHost());
-            final boolean login = client.login(config.getUser(), config.getPassword());
-            if (login) {
-                LOG.info("FTP: connected...");
-                // download file
-                final int result = client.cwd(config.getFtpSubdirectory());
-                LOG.info("FTP: go into directory...");
-                // successfully connected
-                if (result == 250) {
-                    fos = new FileOutputStream(file);
-                    LOG.info("FTP: download file...");
-                    client.retrieveFile(config.getFtpFile(), fos);
-                    fos.flush();
-                    fos.close();
-                } else {
-                    LOG.info("FTP: cannot go to subdirectory!");
-                }
-                final boolean logout = client.logout();
-                if (!logout) {
-                    LOG.info("FTP: cannot logout!");
-                }
-            } else {
-                LOG.info("FTP:  cannot login!");
-            }
-
-        } catch (final IOException e) {
-            LOG.error("The file you specified cannot be obtained.");
-            return null;
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    log(e);
-                }
-            }
+            fileUrl = new URL(config.getRemoteFileURL());
+        } catch (MalformedURLException e) {
+            LOG.error("Remote File URL is not valid '{}'", config.getRemoteFileURL());
+            e.printStackTrace();
         }
-
-        return new DataFile(config, file);
+        if (fileUrl != null) {
+            switch (fileUrl.getProtocol()) {
+            case "ftp":
+                webClient = new FTPClient(config);
+                break;
+            case "http":
+                webClient = new HTTPClient(config);
+                break;
+            default:
+                throw new IllegalArgumentException("Protocol not supported: " + fileUrl.getProtocol());
+            }
+            return webClient.download();
+        } else {
+            return null;
+        }
     }
-
+    
     @Override
     public void run() {
         LOG.trace("run()");
         LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
         // csv / ftp
         if (config.isRemoteFile()) {
-            dataFile = getRemoteFile();
+            dataFile = downloadRemoteFile();
         } else if (dataFile == null) {
             dataFile = new DataFile(config, config.getDataFile());
         }
@@ -322,7 +269,11 @@ public class FeedingTask implements Runnable {
                         out.println(lastLine);
                     }
 
+                    if (config.isRemoteFile()) {
+                        webClient.deleteDownloadedFile();
+                    }
                     LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
+                    
                 }
             } catch (final MalformedURLException mue) {
                 LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
