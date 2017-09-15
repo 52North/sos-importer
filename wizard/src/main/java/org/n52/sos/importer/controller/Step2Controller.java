@@ -32,12 +32,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import javax.swing.JPanel;
-
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.CsvData;
 import org.n52.sos.importer.model.Step2Model;
-import org.n52.sos.importer.model.StepModel;
 import org.n52.sos.importer.view.Step2Panel;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
@@ -54,17 +51,17 @@ public class Step2Controller extends StepController {
 
     private static final Logger LOG = LoggerFactory.getLogger(Step2Controller.class);
 
-    private final Step2Model step2Model;
+    private Step2Model model;
 
-    private Step2Panel step2Panel;
+    private Step2Panel panel;
 
     /**
      * <p>Constructor for Step2Controller.</p>
      *
      * @param step2Model a {@link org.n52.sos.importer.model.Step2Model} object.
      */
-    public Step2Controller(final Step2Model step2Model) {
-        this.step2Model = step2Model;
+    public Step2Controller(Step2Model step2Model) {
+        model = step2Model;
     }
 
     @Override
@@ -74,125 +71,121 @@ public class Step2Controller extends StepController {
 
     @Override
     public boolean isFinished() {
-        final String columnSeparator = step2Panel.getColumnSeparator();
+        String columnSeparator = panel.getColumnSeparator();
         if (columnSeparator == null || columnSeparator.equals("")) {
             return false;
         }
-        final String commentIndicator = step2Panel.getCommentIndicator();
+        String commentIndicator = panel.getCommentIndicator();
         if (commentIndicator == null || commentIndicator.equals("")) {
             return false;
         }
-        final String textQualifier = step2Panel.getTextQualifier();
+        String textQualifier = panel.getTextQualifier();
         if (textQualifier == null || textQualifier.equals("")) {
             return false;
         }
-        final int firstLineWithData = step2Panel.getFirstLineWithData();
+        int firstLineWithData = panel.getFirstLineWithData();
         if (firstLineWithData < 0 ||
-                firstLineWithData > (step2Model.getCsvFileRowRount() - 1)) {
+                firstLineWithData > model.getCsvFileRowRount() - 1) {
             return false;
         }
 
-        return !(step2Model.isSampleBased() &&
-                (step2Model.getSampleBasedStartRegEx() == null ||
-                step2Model.getSampleBasedStartRegEx().isEmpty() ||
-                step2Model.getSampleBasedDateOffset() < 1 ||
-                step2Model.getSampleBasedDateExtractionRegEx() == null ||
-                step2Model.getSampleBasedDateExtractionRegEx().isEmpty() ||
-                !step2Model.getSampleBasedDateExtractionRegEx().contains("(") ||
-                step2Model.getSampleBasedDateExtractionRegEx().indexOf(")") < 1 ||
-                step2Model.getSampleBasedDatePattern() == null ||
-                step2Model.getSampleBasedDatePattern().isEmpty() ||
-                step2Model.getSampleBasedDataOffset() < 1 ||
-                step2Model.getSampleBasedSampleSizeOffset() < 1 ||
-                step2Model.getSampleBasedSampleSizeRegEx() == null ||
-                step2Model.getSampleBasedSampleSizeRegEx().isEmpty() ||
-                !step2Model.getSampleBasedSampleSizeRegEx().contains("(") ||
-                step2Model.getSampleBasedSampleSizeRegEx().indexOf(")") < 1
+        return !(model.isSampleBased() &&
+                (model.getSampleBasedStartRegEx() == null ||
+                model.getSampleBasedStartRegEx().isEmpty() ||
+                model.getSampleBasedDateOffset() < 1 ||
+                model.getSampleBasedDateExtractionRegEx() == null ||
+                model.getSampleBasedDateExtractionRegEx().isEmpty() ||
+                !model.getSampleBasedDateExtractionRegEx().contains("(") ||
+                model.getSampleBasedDateExtractionRegEx().indexOf(")") < 1 ||
+                model.getSampleBasedDatePattern() == null ||
+                model.getSampleBasedDatePattern().isEmpty() ||
+                model.getSampleBasedDataOffset() < 1 ||
+                model.getSampleBasedSampleSizeOffset() < 1 ||
+                model.getSampleBasedSampleSizeRegEx() == null ||
+                model.getSampleBasedSampleSizeRegEx().isEmpty() ||
+                !model.getSampleBasedSampleSizeRegEx().contains("(") ||
+                model.getSampleBasedSampleSizeRegEx().indexOf(")") < 1
                 ));
     }
 
     @Override
     public StepController getNextStepController() {
-        final CsvData content = parseCSVFile();
+        CsvData content = parseCSVFile();
         TableController.getInstance().setContent(content);
         TableController.getInstance().setFirstLineWithData(
-                step2Model.getFirstLineWithData());
+                model.getFirstLineWithData());
         return new Step3Controller(0,
-                step2Model.getFirstLineWithData(),
-                step2Model.isUseHeader());
+                model.getFirstLineWithData(),
+                model.isUseHeader());
     }
 
     @Override
     public void loadSettings() {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("loadSettings()");
-        }
-        step2Panel = new Step2Panel(step2Model.getCsvFileRowRount());
+        LOG.trace("loadSettings()");
+        panel = new Step2Panel(model.getCsvFileRowRount());
 
-        final String columnSeparator = step2Model.getColumnSeparator();
-        step2Panel.setColumnSeparator(columnSeparator);
+        String columnSeparator = model.getColumnSeparator();
+        panel.setColumnSeparator(columnSeparator);
 
-        final String commentIndicator = step2Model.getCommentIndicator();
-        step2Panel.setCommentIndicator(commentIndicator);
+        String commentIndicator = model.getCommentIndicator();
+        panel.setCommentIndicator(commentIndicator);
 
-        final String textQualifier = step2Model.getTextQualifier();
-        step2Panel.setTextQualifier(textQualifier);
+        String textQualifier = model.getTextQualifier();
+        panel.setTextQualifier(textQualifier);
 
-        final int firstLineWithData = step2Model.getFirstLineWithData();
-        step2Panel.setFirstLineWithData(firstLineWithData);
+        int firstLineWithData = model.getFirstLineWithData();
+        panel.setFirstLineWithData(firstLineWithData);
 
-        final String csvFileContent = step2Model.getCSVFileContent();
-        step2Panel.setCSVFileContent(csvFileContent);
+        String csvFileContent = model.getCSVFileContent();
+        panel.setCSVFileContent(csvFileContent);
 
-        final boolean useHeader = step2Model.isUseHeader();
-        step2Panel.setUseHeader(useHeader);
-        step2Panel.setCSVFileHighlight(firstLineWithData);
+        boolean useHeader = model.isUseHeader();
+        panel.setUseHeader(useHeader);
+        panel.setCSVFileHighlight(firstLineWithData);
 
-        final char decimalSeparator = step2Model.getDecimalSeparator();
-        step2Panel.setDecimalSeparator(decimalSeparator + "");
+        char decimalSeparator = model.getDecimalSeparator();
+        panel.setDecimalSeparator(decimalSeparator + "");
 
-        if (step2Model.isSampleBased()) {
-            step2Panel.setSampleBased(true);
-            step2Panel.setSampleBasedStartRegEx(step2Model.getSampleBasedStartRegEx());
-            step2Panel.setSampleBasedDateOffset(step2Model.getSampleBasedDateOffset());
-            step2Panel.setSampleBasedDateExtractionRegEx(step2Model.getSampleBasedDateExtractionRegEx());
-            step2Panel.setSampleBasedDatePattern(step2Model.getSampleBasedDatePattern());
-            step2Panel.setSampleBasedDataOffset(step2Model.getSampleBasedDataOffset());
-            step2Panel.setSampleBasedSampleSizeOffset(step2Model.getSampleBasedSampleSizeOffset());
-            step2Panel.setSampleBasedSampleSizeRegEx(step2Model.getSampleBasedSampleSizeRegEx());
+        if (model.isSampleBased()) {
+            panel.setSampleBased(true);
+            panel.setSampleBasedStartRegEx(model.getSampleBasedStartRegEx());
+            panel.setSampleBasedDateOffset(model.getSampleBasedDateOffset());
+            panel.setSampleBasedDateExtractionRegEx(model.getSampleBasedDateExtractionRegEx());
+            panel.setSampleBasedDatePattern(model.getSampleBasedDatePattern());
+            panel.setSampleBasedDataOffset(model.getSampleBasedDataOffset());
+            panel.setSampleBasedSampleSizeOffset(model.getSampleBasedSampleSizeOffset());
+            panel.setSampleBasedSampleSizeRegEx(model.getSampleBasedSampleSizeRegEx());
         }
     }
 
     @Override
     public void saveSettings() {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("saveSettings()");
-        }
-        final String columnSeparator = step2Panel.getColumnSeparator();
-        step2Model.setColumnSeparator(columnSeparator);
+        LOG.trace("saveSettings()");
+        String columnSeparator = panel.getColumnSeparator();
+        model.setColumnSeparator(columnSeparator);
 
-        final String commentIndicator = step2Panel.getCommentIndicator();
-        step2Model.setCommentIndicator(commentIndicator);
+        String commentIndicator = panel.getCommentIndicator();
+        model.setCommentIndicator(commentIndicator);
 
-        final String textQualifier = step2Panel.getTextQualifier();
-        step2Model.setTextQualifier(textQualifier);
+        String textQualifier = panel.getTextQualifier();
+        model.setTextQualifier(textQualifier);
 
-        final int firstLineWithData = step2Panel.getFirstLineWithData();
-        if (firstLineWithData < 0 || firstLineWithData > (step2Model.getCsvFileRowRount() - 1)) {
+        int firstLineWithData = panel.getFirstLineWithData();
+        if (firstLineWithData < 0 || firstLineWithData > model.getCsvFileRowRount() - 1) {
             LOG.info("FirstLineWithData is to large. Set to 0");
-            step2Model.setFirstLineWithData(0);
+            model.setFirstLineWithData(0);
         } else {
-            step2Model.setFirstLineWithData(firstLineWithData);
+            model.setFirstLineWithData(firstLineWithData);
         }
 
-        final boolean useHeader = step2Panel.getUseHeader();
-        step2Model.setUseHeader(useHeader);
+        boolean useHeader = panel.getUseHeader();
+        model.setUseHeader(useHeader);
 
-        final String csvFileContent = step2Panel.getCSVFileContent();
-        step2Model.setCSVFileContent(csvFileContent);
+        String csvFileContent = panel.getCSVFileContent();
+        model.setCSVFileContent(csvFileContent);
 
-        final String decimalSeparator = step2Panel.getDecimalSeparator();
-        step2Model.setDecimalSeparator(decimalSeparator.charAt(0));
+        String decimalSeparator = panel.getDecimalSeparator();
+        model.setDecimalSeparator(decimalSeparator.charAt(0));
         // Update global decimal separator
         Constants.setDecimalSeparator(decimalSeparator.charAt(0));
         if (Constants.getDecimalSeparator() == '.') {
@@ -201,18 +194,18 @@ public class Step2Controller extends StepController {
             Constants.setThousandsSeparator('.');
         }
 
-        if (step2Panel.isSampleBased()) {
-            step2Model.setSampleBased(true);
-            step2Model.setSampleBasedStartRegEx(step2Panel.getSampleBasedStartRegEx());
-            step2Model.setSampleBasedDateOffset(step2Panel.getSampleBasedDateOffset());
-            step2Model.setSampleBasedDateExtractionRegEx(step2Panel.getSampleBasedDateExtractionRegEx());
-            step2Model.setSampleBasedDatePattern(step2Panel.getSampleBasedDatePattern());
-            step2Model.setSampleBasedDataOffset(step2Panel.getSampleBasedDataOffset());
-            step2Model.setSampleBasedSampleSizeOffset(step2Panel.getSampleBasedSampleSizeOffset());
-            step2Model.setSampleBasedSampleSizeRegEx(step2Panel.getSampleBasedSampleSizeRegEx());
+        if (panel.isSampleBased()) {
+            model.setSampleBased(true);
+            model.setSampleBasedStartRegEx(panel.getSampleBasedStartRegEx());
+            model.setSampleBasedDateOffset(panel.getSampleBasedDateOffset());
+            model.setSampleBasedDateExtractionRegEx(panel.getSampleBasedDateExtractionRegEx());
+            model.setSampleBasedDatePattern(panel.getSampleBasedDatePattern());
+            model.setSampleBasedDataOffset(panel.getSampleBasedDataOffset());
+            model.setSampleBasedSampleSizeOffset(panel.getSampleBasedSampleSizeOffset());
+            model.setSampleBasedSampleSizeRegEx(panel.getSampleBasedSampleSizeRegEx());
         }
 
-        step2Panel = null;
+        panel = null;
     }
 
     /**
@@ -222,10 +215,10 @@ public class Step2Controller extends StepController {
      * @param separator a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public String convertSpaceSeparatedText(final String text, final String separator) {
-        final StringBuilder replacedText = new StringBuilder();
-        final StringReader sr = new StringReader(text);
-        final BufferedReader br = new BufferedReader(sr);
+    public String convertSpaceSeparatedText(String text, String separator) {
+        StringBuilder replacedText = new StringBuilder();
+        StringReader sr = new StringReader(text);
+        BufferedReader br = new BufferedReader(sr);
         String line = null;
         try {
             while ((line = br.readLine()) != null) {
@@ -233,7 +226,7 @@ public class Step2Controller extends StepController {
                 line = replaceWhiteSpace(line, separator);
                 replacedText.append(line).append("\n");
             }
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOG.info("Error while parsing space-separated file", e);
         }
         return replacedText.toString();
@@ -246,11 +239,11 @@ public class Step2Controller extends StepController {
      * @param separator a {@link java.lang.String} object.
      * @return a {@link java.lang.String} object.
      */
-    public String replaceWhiteSpace(final String text, final String separator) {
-        final StringBuilder replacedText = new StringBuilder();
+    public String replaceWhiteSpace(String text, String separator) {
+        StringBuilder replacedText = new StringBuilder();
         boolean lastCharacterWasAWhiteSpace = false;
         for (int i = 0; i < text.length(); i++) {
-            final char ch = text.charAt(i);
+            char ch = text.charAt(i);
             if (Character.isWhitespace(ch)) {
                 if (!lastCharacterWasAWhiteSpace) {
                     replacedText.append(separator);
@@ -265,14 +258,10 @@ public class Step2Controller extends StepController {
     }
 
     @Override
-    public JPanel getStepPanel() {
-        return step2Panel;
+    public Step2Panel getStepPanel() {
+        return panel;
     }
 
-    /* (non-Javadoc)
-     * @see org.n52.sos.importer.controller.StepController#isNecessary()
-     * this step is always required
-     */
     @Override
     public boolean isNecessary() {
         return true;
@@ -290,20 +279,20 @@ public class Step2Controller extends StepController {
     }
 
     @Override
-    public StepModel getModel() {
-        return step2Model;
+    public Step2Model getModel() {
+        return model;
     }
 
     private CsvData parseCSVFile() {
-        final CsvData content = new CsvData();
-        String csvFileContent = step2Model.getCSVFileContent();
-        String separator = step2Model.getColumnSeparator();
-        final String quoteChar = step2Model.getCommentIndicator();
-        final String escape = step2Model.getTextQualifier();
-        final int firstLineWithData = step2Model.getFirstLineWithData();
-        final boolean useHeader = step2Model.isUseHeader();
+        CsvData content = new CsvData();
+        String csvFileContent = model.getCSVFileContent();
+        String separator = model.getColumnSeparator();
+        String quoteChar = model.getCommentIndicator();
+        String escape = model.getTextQualifier();
+        int firstLineWithData = model.getFirstLineWithData();
+        boolean useHeader = model.isUseHeader();
 
-        final String comma = "', ";
+        String comma = "', ";
         LOG.info("Parse CSV file: " +
                 "column separator: '"    + separator         + comma +
                 "comment indicator: '"   + quoteChar         + comma +
@@ -317,10 +306,10 @@ public class Step2Controller extends StepController {
             separator = ";";
             csvFileContent = convertSpaceSeparatedText(csvFileContent, separator);
         }
-        final StringReader sr = new StringReader(csvFileContent);
+        StringReader sr = new StringReader(csvFileContent);
         try (CSVReader reader = new CSVReader(sr, separator.charAt(0), quoteChar.charAt(0), escape.charAt(0))) {
             content.setLines(reader.readAll());
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOG.error("Error while parsing CSV file.", e);
         }
         return content;
