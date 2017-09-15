@@ -320,7 +320,20 @@ public final class Feeder {
         }
         return false;
     }
-
+    
+    /**
+     * Checks for <b>isUseLastTimestamp</b> and <b>newLastUsedTimestamp</b>
+     * operations.
+     * @return <code>true</code> if isUseLastTimestamp is true and
+     *         newLastUsedTimestamp is after lastUsedTimestamp
+     *         else <code>false</code>.
+     */
+    private boolean isLastUsedTimestampSafe() {
+        return isUseLastTimestamp
+                && newLastUsedTimestamp != null
+                && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
+    }
+    
     /**
      * <p>importData.</p>
      *
@@ -349,10 +362,9 @@ public final class Feeder {
             LOG.error("No measured value columns found in configuration");
             return;
         }
-        // Get stored lastUsedTimestamp, if it is set:
         if (isUseLastTimestamp) {
             lastLine = dataFile.getFirstLineWithData();
-            // TODO Problem gelöst, dass immer auf die erste Zeile mit Daten zurückgesetzt werden muss?
+            // TODO pointing back on first line with data secured?
         }
         if (configuration.getFirstLineWithData() == 0) {
             skipLines(cr, lastLine + 1);
@@ -408,9 +420,7 @@ public final class Feeder {
                 if (!timeSeriesRepository.isEmpty()) {
                     insertTimeSeries(timeSeriesRepository);
                 }
-                if (isUseLastTimestamp
-                        && newLastUsedTimestamp != null
-                        && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (isLastUsedTimestampSafe()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -435,7 +445,7 @@ public final class Feeder {
                     }
                     incrementLineCounter();
                 }
-                if (isUseLastTimestamp && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (isLastUsedTimestampSafe()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -726,6 +736,9 @@ public final class Feeder {
                 // store lastUsedTimestamp in configuration/station?
             } else {
                 // abort Insertion
+                LOG.debug("skipping InsertObservation of timestamp '{}', "
+                        + "because it is not after LastUsedTimestamp '{}'", 
+                         timeStamp, lastUsedTimestamp);
                 return null;
             }
         }
@@ -1344,22 +1357,10 @@ public final class Feeder {
         this.lastLine = lastLine;
     }
 
-    /**
-     * <p>
-     * Getter for the field <code>lastUsedTimestamp</code>.</p>
-     *
-     * @return a Timestamp.
-     */
     public Timestamp getLastUsedTimestamp() {
         return lastUsedTimestamp;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>lastUsedTimeStamp</code>.</p>
-     *
-     * @param timeStamp a Timestamp.
-     */
     public void setLastUsedTimeStamp(final Timestamp timeStamp) {
         LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", this.lastUsedTimestamp, timeStamp);
         this.lastUsedTimestamp = timeStamp;

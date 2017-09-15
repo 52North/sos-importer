@@ -233,10 +233,9 @@ public class FeedingTask implements Runnable {
                             // read already inserted UsedLastTimeStamp
                             LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.",
                                     timeStampFile.getCanonicalPath());
-                            String storedTimeStamp = null;
                             try (Scanner sc = new Scanner(timeStampFile,
                                     Configuration.DEFAULT_CHARSET)) {
-                                storedTimeStamp = sc.next();
+                                String storedTimeStamp = sc.next();
                                 Timestamp tmp = new Timestamp(storedTimeStamp);
                                 feeder.setLastUsedTimeStamp(tmp);
                             }
