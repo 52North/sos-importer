@@ -71,6 +71,12 @@ import org.slf4j.LoggerFactory;
  */
 /*
  * To enable useHeader, search for USE_HEADER
+ * TODO finish implementation of useLastTimestamp:
+ *   - loadSettings
+ *   - saveSettings
+ *   - in model
+ *   - in xmlmodel
+ *   - in tests
  */
 public class Step2Panel extends JPanel {
 
