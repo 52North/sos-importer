@@ -49,11 +49,11 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>FeedingTask class.</p>
  *
- * TODO if failed observations -&gt; store in file
- *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-// TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
+/*
+ * TODO if failed observations -&gt; store in file
+ */
 public class FeedingTask implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
