@@ -30,6 +30,9 @@ package org.n52.sos.importer.feeder.model.requests;
 
 import java.util.Optional;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
@@ -39,21 +42,21 @@ public class InsertObservationTest {
 
     private static final String DEG = "deg";
 
-    @Test public void
-    shouldReturnTrueIfAltitudeIsAvailable() {
-        final double alt = 2.0;
-        final FeatureOfInterest foi =
+    @Test
+    public void houldReturnTrueIfAltitudeIsAvailable() {
+        double alt = 2.0;
+        FeatureOfInterest foi =
                 new FeatureOfInterest(null, null,
                         new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
-        final InsertObservation insertObservation =
+        InsertObservation insertObservation =
                 new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
-        org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(true));
-        org.junit.Assert.assertThat(insertObservation.getAltitudeValue(), org.hamcrest.CoreMatchers.is(alt));
+        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(true));
+        Assert.assertThat(insertObservation.getAltitudeValue(), CoreMatchers.is(alt));
     }
 
-    @Test public void
-    shouldReturnFalseIfAltitudeIsNotAvailable() {
-        final FeatureOfInterest foi =
+    @Test
+    public void shouldReturnFalseIfAltitudeIsNotAvailable() {
+        FeatureOfInterest foi =
                 new FeatureOfInterest(null, null,
                         new Position(
                                 new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},
@@ -68,10 +71,35 @@ public class InsertObservationTest {
             null,
             Optional.empty(),
             null);
-        org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(false));
+        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
 
         insertObservation = new InsertObservation(null, null, null, null, null, null, null, Optional.empty(), null);
-        org.junit.Assert.assertThat(insertObservation.isSetAltitudeValue(), org.hamcrest.CoreMatchers.is(false));
+        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
+    }
+
+    @Test
+    public void shouldReturnTrueIfParentFeatureIdentifierIsSet() {
+        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        foi.setParentFeature(DEG);
+
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(true));
+        Assert.assertThat(io.getParentFeatureIdentifier(), Is.is(DEG));
+    }
+
+
+    @Test
+    public void shouldReturnFalseIfParentFeatureIdentifierIsNullOrEmpty() {
+        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        foi.setParentFeature(null);
+
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
+
+        foi.setParentFeature("");
+        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
     }
 
 }

@@ -130,6 +130,7 @@ public class Step7Test {
         uom.setName("degC");
         final FeatureOfInterest foi = new FeatureOfInterest();
         foi.setName("Weatherstation Muenster");
+        foi.setParentFeatureIdentifier("test-parent-feature");
         final Sensor sn = new Sensor();
         sn.setName("Thermometer 1");
 

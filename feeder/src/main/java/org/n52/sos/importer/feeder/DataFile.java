@@ -119,9 +119,9 @@ public class DataFile {
      * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
      * @param file a {@link java.io.File} object.
      */
-    public DataFile(final Configuration configuration, final File file) {
+    public DataFile(Configuration configuration, File file) {
         this.configuration = configuration;
-        this.dataFile = file;
+        dataFile = file;
     }
 
     /**
@@ -158,12 +158,12 @@ public class DataFile {
         return false;
     }
 
-    private boolean checkWindowsJavaApiBugJDK6203387(final File file) {
+    private boolean checkWindowsJavaApiBugJDK6203387(File file) {
         if (isWindows()) {
             Reader fr = null;
             try {
                 fr = new InputStreamReader(new FileInputStream(file), Configuration.DEFAULT_CHARSET);
-            } catch (final FileNotFoundException fnfe) {
+            } catch (FileNotFoundException fnfe) {
                 // TODO add more language specific versions of this error message
                 if ((fnfe.getMessage()
                         .indexOf("Der Prozess kann nicht auf die Datei zugreifen, "
@@ -209,33 +209,33 @@ public class DataFile {
      */
     public CsvParser getCSVReader() throws IOException {
         LOG.trace("getCSVReader()");
-        final Reader fr = new InputStreamReader(new FileInputStream(dataFile), Configuration.DEFAULT_CHARSET);
-        final BufferedReader br = new BufferedReader(fr);
+        Reader fr = new InputStreamReader(new FileInputStream(dataFile), Configuration.DEFAULT_CHARSET);
+        BufferedReader br = new BufferedReader(fr);
         CsvParser cr = null;
         if (configuration.isCsvParserDefined()) {
-            final String csvParser = configuration.getCsvParser();
+            String csvParser = configuration.getCsvParser();
             try {
-                final Class<?> clazz = Class.forName(csvParser);
-                final Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
-                final Object instance = constructor.newInstance();
+                Class<?> clazz = Class.forName(csvParser);
+                Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
+                Object instance = constructor.newInstance();
                 if (CsvParser.class.isAssignableFrom(instance.getClass())) {
                     cr = (CsvParser) instance;
                 }
-            } catch (final ClassNotFoundException |
+            } catch (ClassNotFoundException |
                     NoSuchMethodException |
                     SecurityException |
                     InstantiationException |
                     IllegalAccessException |
                     IllegalArgumentException |
                     InvocationTargetException e) {
-                final String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. "
+                String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. "
                         + "Cancel import",
                         csvParser);
                 LOG.error(errorMsg);
                 LOG.debug("Exception thrown: {}", e.getMessage(), e);
                 try {
                     br.close();
-                } catch (final IOException e1) {
+                } catch (IOException e1) {
                     LOG.error("Could not close BufferedReader: {}", e1.getMessage(), e1);
                 }
                 throw new IllegalArgumentException(errorMsg, e);
@@ -275,7 +275,7 @@ public class DataFile {
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link Sensor} object.
      */
-    public Sensor getSensorForColumn(final int mvColumnId, final String[] values) {
+    public Sensor getSensorForColumn(int mvColumnId, String[] values) {
         LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
         // check for sensor column and return new sensor
         Sensor sensor = getSensorFromColumn(mvColumnId, values);
@@ -293,8 +293,8 @@ public class DataFile {
         if (sensorType != null && sensorType.getResource() != null) {
             // generated sensor
             if (sensorType.getResource() instanceof GeneratedResourceType) {
-                final GeneratedResourceType gRT = (GeneratedResourceType) sensorType.getResource();
-                final String[] a = getUriAndNameFromGeneratedResourceType(
+                GeneratedResourceType gRT = (GeneratedResourceType) sensorType.getResource();
+                String[] a = getUriAndNameFromGeneratedResourceType(
                         // concatstring
                         gRT.isSetConcatString()
                         ? gRT.getConcatString()
@@ -310,7 +310,7 @@ public class DataFile {
                 sensor = new Sensor(a[0], a[1]);
             } else if (sensorType.getResource() instanceof ManualResourceType) {
                 // manual sensor
-                final ManualResourceType mRT = (ManualResourceType) sensorType.getResource();
+                ManualResourceType mRT = (ManualResourceType) sensorType.getResource();
                 sensor = new Sensor(mRT.getName(),
                         mRT.getURI().getStringValue());
             }
@@ -321,14 +321,15 @@ public class DataFile {
     /**
      * <p>getFoiForColumn.</p>
      *
-     * @param mvColumnId a int.
+     * @param mvColumnId the column id of the measure value the foi is requested for.
      * @param values an array of {@link java.lang.String} objects.
+     *
      * @return a {@link org.n52.sos.importer.feeder.model.FeatureOfInterest} object.
+     *
      * @throws java.text.ParseException if any.
      */
-    public FeatureOfInterest getFoiForColumn(final int mvColumnId, final String[] values) throws ParseException {
-        LOG.trace(String.format("getFoiForColumn(%d,%s)",
-                mvColumnId, Arrays.toString(values)));
+    public FeatureOfInterest getFoiForColumn(int mvColumnId, String[] values) throws ParseException {
+        LOG.trace(String.format("getFoiForColumn(%d,%s)", mvColumnId, Arrays.toString(values)));
         // check for foi column and return new foi
         FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
         if (foi == null) {
@@ -344,13 +345,13 @@ public class DataFile {
             }
         }
         // else build foi from manual or generated resource
-        final FeatureOfInterestType foiT = configuration.getRelatedFoi(mvColumnId);
+        FeatureOfInterestType foiT = configuration.getRelatedFoi(mvColumnId);
         if (foiT != null && foiT.getResource() != null) {
             // generated foi
             if (foiT.getResource() instanceof GeneratedSpatialResourceType) {
-                final GeneratedSpatialResourceType gSRT =
+                GeneratedSpatialResourceType gSRT =
                         (GeneratedSpatialResourceType) foiT.getResource();
-                final String[] a = getUriAndNameFromGeneratedResourceType(
+                String[] a = getUriAndNameFromGeneratedResourceType(
                         // concatstring
                         gSRT.isSetConcatString()
                         ? gSRT.getConcatString()
@@ -367,19 +368,19 @@ public class DataFile {
                                                 gSRT.getNumberArray(),
                                                 values
                         );
-                final Position p = getPosition(gSRT.getPosition(), values);
+                Position p = getPosition(gSRT.getPosition(), values);
                 foi = new FeatureOfInterest(a[0], a[1], p);
             } else if (foiT.getResource() instanceof SpatialResourceType) {
                 // manual foi
-                final SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
-                final Position p = getPosition(mSRT.getPosition(), values);
+                SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
+                Position p = getPosition(mSRT.getPosition(), values);
                 foi = new FeatureOfInterest(mSRT.getName(),
                         mSRT.getURI().getStringValue(),
                         p);
             }
         }
         if (!NcNameResolver.isNCName(foi.getName())) {
-            final String[] a = createCleanNCName(foi);
+            String[] a = createCleanNCName(foi);
             foi.setName(a[0]);
             if (!a[0].equals(a[1])) {
                 LOG.debug(String.format("Feature Of Interest name changed to match NCName production: '%s' to '%s'",
@@ -390,29 +391,52 @@ public class DataFile {
         return foi;
     }
 
+    private FeatureOfInterest getFoiColumn(int mvColumnId, String[] values) throws ParseException {
+        LOG.trace(String.format("getFoiColumn(%d,...)",
+                mvColumnId));
+        int i = configuration.getColumnIdForFoi(mvColumnId);
+        if (i < 0) {
+            // foi is not in the data dataFile -> return null
+            return null;
+        } else {
+            Position p = configuration.getFoiPosition(values[i]);
+            if (p == null) {
+                p = configuration.getPosition(values);
+            } else {
+                LOG.error(String.format("Could not find position for foi '%s'", values[i]));
+            }
+            FeatureOfInterest s = new FeatureOfInterest(values[i], values[i], p);
+            if (configuration.isParentFeatureSetForFeature(i)) {
+                s.setParentFeature(configuration.getParentFeature(i));
+            }
+            LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
+            return s;
+        }
+    }
+
     /**
      * @return result[0] := newName<br> result[1] := originaleName
      */
-    private String[] createCleanNCName(final Resource res) {
+    private String[] createCleanNCName(Resource res) {
         // implement check for NCName compliance and remove bad values
         String name = res.getName();
-        final String origName = name;
+        String origName = name;
         // clean rest of string using Constants.UNICODE_REPLACER
-        final char[] foiNameChars = name.toCharArray();
+        char[] foiNameChars = name.toCharArray();
         for (int i = 0; i < foiNameChars.length; i++) {
-            final char c = foiNameChars[i];
+            char c = foiNameChars[i];
             if (!NcNameResolver.isNCNameChar(c)) {
                 foiNameChars[i] = Configuration.UNICODE_REPLACER;
             }
         }
         name = String.valueOf(foiNameChars);
         // check if name is only containing "_"
-        final Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
+        Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
         if (matcher.matches()) {
             // if yes -> change to "className" + res.getUri().hashCode()
             name = res.getClass().getSimpleName().toLowerCase() + res.getUri().hashCode();
         }
-        final String[] result = { name, origName };
+        String[] result = { name, origName };
         return result;
     }
 
@@ -424,16 +448,16 @@ public class DataFile {
      * @return a {@link java.lang.Object} object.
      * @throws java.text.ParseException if any.
      */
-    public Object getValue(final int mVColumn, final String[] values) throws ParseException {
+    public Object getValue(int mVColumn, String[] values) throws ParseException {
         LOG.trace(String.format("getValue(%s,%s)",
                 mVColumn,
                 Arrays.toString(values)));
-        final Column column = configuration.getColumnById(mVColumn);
+        Column column = configuration.getColumnById(mVColumn);
         String value = values[mVColumn];
         if (configuration.isNoDataValueDefinedAndMatching(column, value)) {
             return Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE;
         }
-        for (final Metadata m : column.getMetadataArray()) {
+        for (Metadata m : column.getMetadataArray()) {
             if (m.getKey().equals(Key.TYPE)) {
                 // check various types of observation
                 // TEXT
@@ -470,10 +494,10 @@ public class DataFile {
      * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @throws java.text.ParseException if any.
      */
-    public Timestamp getTimeStamp(final int mVColumn, final String[] values) throws ParseException {
+    public Timestamp getTimeStamp(int mVColumn, String[] values) throws ParseException {
         LOG.trace("getTimeStamp()");
         // if RelatedDateTimeGroup is set for mvColumn -> get group id
-        final Column col = configuration.getColumnById(mVColumn);
+        Column col = configuration.getColumnById(mVColumn);
         String group = null;
         if (col.isSetRelatedDateTimeGroup()) {
             group = col.getRelatedDateTimeGroup();
@@ -485,7 +509,7 @@ public class DataFile {
         Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
         if (cols != null) {
             // Try to get timezone from configuration
-            final Timestamp ts = new Timestamp();
+            Timestamp ts = new Timestamp();
             TimeZone timeZone = getTimeZone(cols);
             if (isUnixTime(cols)) {
                 handleUnixTime(values, cols, ts);
@@ -506,18 +530,18 @@ public class DataFile {
         return null;
     }
 
-    private void handleDateTimeCombination(final String[] values, final Column[] cols, final Timestamp ts,
-            TimeZone timeZone) throws ParseException {
+    private void handleDateTimeCombination(String[] values, Column[] cols, Timestamp ts, TimeZone timeZone)
+            throws ParseException {
         // TODO implement case if time zone is contained in a column
         // get value from each column
-        for (final Column column : cols) {
+        for (Column column : cols) {
             // get pattern and fields
-            final String pattern = getParsePattern(column);
+            String pattern = getParsePattern(column);
             checkPattern(pattern);
-            final ChronoField[] fields = getChronoFields(pattern);
-            for (final ChronoField field : fields) {
+            ChronoField[] fields = getChronoFields(pattern);
+            for (ChronoField field : fields) {
                 // parse values
-                final int value =
+                int value =
                         parseTimestampComponent(values[column.getNumber()],
                                 pattern,
                                 field,
@@ -553,7 +577,7 @@ public class DataFile {
         }
     }
 
-    private void handleUnixTime(final String[] values, final Column[] cols, final Timestamp ts) {
+    private void handleUnixTime(String[] values, Column[] cols, Timestamp ts) {
         TimeZone timeZone;
         // handle unix time:
         // DO: TZ := UTC; value from one single column (should be an integer)
@@ -562,7 +586,7 @@ public class DataFile {
         ts.ofUnixTimeMillis((long) (Double.parseDouble(values[cols[0].getNumber()]) * 1000));
     }
 
-    private boolean isUnixTime(final Column[] cols) {
+    private boolean isUnixTime(Column[] cols) {
         // PRE: 1 column and TYPE DATE_TIME and metadata:type:UNIX_TIME
         return cols.length == 1 &&
                 containsUnixTimeType(cols[0].getMetadataArray());
@@ -580,23 +604,23 @@ public class DataFile {
         return false;
     }
 
-    private TimeZone getTimeZone(final Column[] cols) {
+    private TimeZone getTimeZone(Column[] cols) {
         if (cols == null || cols.length < 1) {
             return TimeZone.getDefault();
         }
-        for (final Column column : cols) {
+        for (Column column : cols) {
             if (column.getMetadataArray() == null ||
                     column.getMetadataArray().length < 1) {
                 continue;
             }
-            for (final Metadata meta : column.getMetadataArray()) {
+            for (Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
                     try {
-                        for (final String zoneId : TimeZone
+                        for (String zoneId : TimeZone
                                 .getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
                             return TimeZone.getTimeZone(zoneId);
                         }
-                    } catch (final NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         LOG.error("Could not parse interger from timezone metadata value. Using default timezone");
                         LOG.debug("Exception thrown: ", nfe);
                         return TimeZone.getDefault();
@@ -621,10 +645,9 @@ public class DataFile {
      * <li>TIME_YEAR</li>
      * <li>TIME_ZONE</li></ul>
      */
-    private void enrichTimestampWithColumnMetadata(final Timestamp ts,
-            final Column col) {
+    private void enrichTimestampWithColumnMetadata(Timestamp ts, Column col) {
         if (col.getMetadataArray() != null) {
-            for (final Metadata m : col.getMetadataArray()) {
+            for (Metadata m : col.getMetadataArray()) {
                 if (m.getKey().equals(Key.TIME_ZONE)) {
                     ts.setTimezone(Byte.parseByte(m.getValue()));
                     continue;
@@ -682,33 +705,30 @@ public class DataFile {
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link UnitOfMeasurement} object.
      */
-    public UnitOfMeasurement getUnitOfMeasurement(final int mVColumnId, final String[] values) {
+    public UnitOfMeasurement getUnitOfMeasurement(int mVColumnId, String[] values) {
         LOG.trace("getUnitOfMeasurement()");
-        final Column mvColumn = configuration.getColumnById(mVColumnId);
+        Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
         if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
                 mvColumn.getRelatedUnitOfMeasurementArray().length > 0) {
-            final RelatedUnitOfMeasurement relUom =
-                    mvColumn.getRelatedUnitOfMeasurementArray(0);
+            RelatedUnitOfMeasurement relUom = mvColumn.getRelatedUnitOfMeasurementArray(0);
 
             // Case A.1.*: idRef
             if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
-                final UnitOfMeasurementType uom = configuration.getUomById(relUom.getIdRef());
+                UnitOfMeasurementType uom = configuration.getUomById(relUom.getIdRef());
                 if (uom != null) {
 
                     // Case A.1.1
                     if (uom.getResource() instanceof ManualResourceType) {
-                        final ManualResourceType uomMRT =
-                                (ManualResourceType) uom.getResource();
+                        ManualResourceType uomMRT = (ManualResourceType) uom.getResource();
                         return new UnitOfMeasurement(uomMRT.getName(), uomMRT.getURI().getStringValue());
                     }
 
                     // Case A.1.2
                     if (uom.getResource() instanceof GeneratedResourceType) {
-                        final GeneratedResourceType uomGRT =
-                                (GeneratedResourceType) uom.getResource();
-                        final String[] a = getUriAndNameFromGeneratedResourceType(
+                        GeneratedResourceType uomGRT = (GeneratedResourceType) uom.getResource();
+                        String[] a = getUriAndNameFromGeneratedResourceType(
                                 uomGRT.isSetConcatString()
                                 ? uomGRT.getConcatString()
                                         : "",
@@ -725,7 +745,7 @@ public class DataFile {
         }
 
         // Case B: Information stored in another column
-        final int uomColumnId = configuration.getColumnIdForUom(mVColumnId);
+        int uomColumnId = configuration.getColumnIdForUom(mVColumnId);
         if (uomColumnId > -1) {
             return new UnitOfMeasurement(values[uomColumnId], values[uomColumnId]);
         }
@@ -759,24 +779,24 @@ public class DataFile {
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      */
-    public ObservedProperty getObservedProperty(final int mVColumnId, final String[] values) {
+    public ObservedProperty getObservedProperty(int mVColumnId, String[] values) {
         LOG.trace("getObservedProperty()");
-        final Column mvColumn = configuration.getColumnById(mVColumnId);
+        Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
         if (mvColumn.getRelatedObservedPropertyArray() != null &&
                 mvColumn.getRelatedObservedPropertyArray().length > 0) {
-            final RelatedObservedProperty relOp =
+            RelatedObservedProperty relOp =
                     mvColumn.getRelatedObservedPropertyArray(0);
 
             // Case A.1.*: idRef
             if (relOp.isSetIdRef() && !relOp.isSetNumber()) {
-                final ObservedPropertyType op = configuration.getObsPropById(relOp.getIdRef());
+                ObservedPropertyType op = configuration.getObsPropById(relOp.getIdRef());
                 if (op != null) {
 
                     // Case A.1.1
                     if (op.getResource() instanceof ManualResourceType) {
-                        final ManualResourceType opMRT =
+                        ManualResourceType opMRT =
                                 (ManualResourceType) op.getResource();
                         return new ObservedProperty(opMRT.getName(), opMRT.getURI().getStringValue());
 
@@ -784,9 +804,9 @@ public class DataFile {
 
                     // Case A.1.2
                     if (op.getResource() instanceof GeneratedResourceType) {
-                        final GeneratedResourceType opGRT =
+                        GeneratedResourceType opGRT =
                                 (GeneratedResourceType) op.getResource();
-                        final String[] a = getUriAndNameFromGeneratedResourceType(
+                        String[] a = getUriAndNameFromGeneratedResourceType(
                                 opGRT.isSetConcatString()
                                 ? opGRT.getConcatString()
                                         : "",
@@ -805,7 +825,7 @@ public class DataFile {
         }
 
         // Case B: Information stored in another column
-        final int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
+        int opColumnId = configuration.getColumnIdForOpsProp(mVColumnId);
         if (opColumnId > -1) {
             return new ObservedProperty(values[opColumnId], values[opColumnId]);
         }
@@ -820,10 +840,10 @@ public class DataFile {
      * @param s a {@link Sensor} object.
      * @return a {@link Offering} object.
      */
-    public Offering getOffering(final Sensor s) {
-        final Offering off = configuration.getOffering(s);
+    public Offering getOffering(Sensor s) {
+        Offering off = configuration.getOffering(s);
         if (!NcNameResolver.isNCName(off.getName())) {
-            final String[] a = createCleanNCName(off);
+            String[] a = createCleanNCName(off);
             off.setName(a[0]);
             if (!a[0].equals(a[1])) {
                 LOG.debug(String.format("Offering name changed to match NCName production: '%s' to '%s'",
@@ -867,11 +887,11 @@ public class DataFile {
      * @return <code>String[] result = {name,uri};</code>
      */
     private String[] getUriAndNameFromGeneratedResourceType(
-            final String concatString,
-            final String uri,
-            final boolean useUriAsPrefixAfterNameAsUri,
-            final int[] columnIds,
-            final String[] values) {
+            String concatString,
+            String uri,
+            boolean useUriAsPrefixAfterNameAsUri,
+            int[] columnIds,
+            String[] values) {
         LOG.trace(String.format("getValuesFromResourceType(%s,%s,%b,%s,%s)",
                 concatString,
                 uri,
@@ -899,50 +919,28 @@ public class DataFile {
             myUri = uri + name;
         }
         LOG.debug(String.format("uri: %s", uri));
-        final String[] result = {name, myUri};
+        String[] result = {name, myUri};
         return result;
     }
 
-    private Sensor getSensorFromColumn(final int mvColumnId, final String[] values) {
+    private Sensor getSensorFromColumn(int mvColumnId, String[] values) {
         LOG.trace(String.format("getSensorColumn(%d,%s)",
                 mvColumnId,
                 Arrays.toString(values)));
-        final int i = configuration.getColumnIdForSensor(mvColumnId);
+        int i = configuration.getColumnIdForSensor(mvColumnId);
         if (i < 0) {
             // sensor is not in the data dataFile -> return null
             return null;
         } else {
-            final Sensor s = new Sensor(values[i], values[i]);
+            Sensor s = new Sensor(values[i], values[i]);
             LOG.debug(String.format("Sensor found in datafile: %s", s));
             return s;
         }
     }
 
-    private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) throws ParseException {
-        LOG.trace(String.format("getFoiColumn(%d,...)",
-                mvColumnId));
-        final int i = configuration.getColumnIdForFoi(mvColumnId);
-        if (i < 0) {
-            // foi is not in the data dataFile -> return null
-            return null;
-        } else {
-            Position p = configuration.getFoiPosition(values[i]);
-            if (p == null) {
-                p = configuration.getPosition(values);
-            } else {
-                LOG.error(String.format("Could not find position for foi '%s'", values[i]));
-            }
-            final FeatureOfInterest s = new FeatureOfInterest(values[i],
-                    values[i],
-                    p);
-            LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
-            return s;
-        }
-    }
-
     private Position getPosition(
-            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p,
-            final String[] values) throws ParseException {
+            org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p,
+            String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(%s,%s)",
                 p.xmlText(), Arrays.toString(values)));
         // Case A: Position is in configuration
@@ -964,10 +962,10 @@ public class DataFile {
     }
 
     private int parseTimestampComponent(
-            final String timestampPart,
-            final String pattern,
-            final ChronoField field,
-            final TimeZone timeZone)
+            String timestampPart,
+            String pattern,
+            ChronoField field,
+            TimeZone timeZone)
                     throws ParseException {
         LOG.trace(String.format("parseTimestampComponent(%s,%s,%s)",
                 timestampPart, pattern, field));
@@ -987,10 +985,10 @@ public class DataFile {
                 + "' using pattern '" + pattern + "' for input '" + timestampPart + "'. (Ingore offset value).", -42);
     }
 
-    private ChronoField[] getChronoFields(final String pattern) {
+    private ChronoField[] getChronoFields(String pattern) {
         LOG.trace(String.format("getChronoFields(%s)",
                 pattern));
-        final ArrayList<ChronoField> fields = new ArrayList<>();
+        ArrayList<ChronoField> fields = new ArrayList<>();
         if (pattern.contains("y")) {
             fields.add(ChronoField.YEAR);
         }
@@ -1000,13 +998,13 @@ public class DataFile {
             fields.add(ChronoField.MONTH_OF_YEAR);
         }
         if (pattern.contains("d") ||
-                (pattern.contains("W") && pattern.contains("d"))) {
+                pattern.contains("W") && pattern.contains("d")) {
             fields.add(ChronoField.DAY_OF_MONTH);
         }
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
-                ((pattern.contains("K") ||
-                        (pattern.contains("h")) && pattern.contains("a")))) {
+                pattern.contains("K") ||
+                        pattern.contains("h") && pattern.contains("a")) {
             fields.add(ChronoField.HOUR_OF_DAY);
         }
         if (pattern.contains("m")) {
@@ -1015,17 +1013,17 @@ public class DataFile {
         if (pattern.contains("s")) {
             fields.add(ChronoField.SECOND_OF_MINUTE);
         }
-        if ((pattern.contains("Z") && !pattern.contains("'Z'")) || pattern.contains("XXX")) {
+        if (pattern.contains("Z") && !pattern.contains("'Z'") || pattern.contains("XXX")) {
             fields.add(ChronoField.OFFSET_SECONDS);
         }
         fields.trimToSize();
         return fields.toArray(new ChronoField[fields.size()]);
     }
 
-    private String getParsePattern(final Column column) throws ParseException {
+    private String getParsePattern(Column column) throws ParseException {
         LOG.trace("getParsePattern()");
         if (column.getMetadataArray() != null && column.getMetadataArray().length > 1) {
-            for (final Metadata m : column.getMetadataArray()) {
+            for (Metadata m : column.getMetadataArray()) {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
                     LOG.debug(String.format("Parsepattern found: %s",
@@ -1063,7 +1061,7 @@ public class DataFile {
      * @param mVColumnId a int.
      * @return a {@link java.lang.String} object.
      */
-    public String getType(final int mVColumnId) {
+    public String getType(int mVColumnId) {
         return configuration.getType(mVColumnId);
     }
 

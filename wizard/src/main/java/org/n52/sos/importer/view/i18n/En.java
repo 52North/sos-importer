@@ -30,6 +30,7 @@ package org.n52.sos.importer.view.i18n;
 
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import org.n52.sos.importer.Constants;
@@ -171,9 +172,6 @@ public class En extends Lang {
         return "Format";
     }
 
-    /* (non-Javadoc)
-     * @see org.n52.sos.importer.view.i18n.Lang#generated()
-     */
     @Override
     public String generated() {
         return "generated";
@@ -549,27 +547,38 @@ public class En extends Lang {
         return "Category";
     }
 
-    /** {@inheritDoc} */
     @Override
     public String step3OmParameterNameLabel() {
         return name();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public String step3OmParameterNameInvalidDialogMessage(String givenValue) {
-        return "The given om:Parameter->Name is invalid:\n\n\"" +
+    public String step3InvalidSelectionParameterDialogMessage(String parameterIdentifier,
+            final String givenValue) {
+        return "The given '" +
+                parameterIdentifier +
+                "' is invalid:\n\n\"" +
                 givenValue +
-                "\"\n\nPlease provide a name with at least three characters.";
+                "\"\n\nPlease provide at least three characters.";
     }
 
-    /** {@inheritDoc} */
     @Override
-    public String step3OmParameterNameInvalidDialogTitle() {
-        return "om:Parameter->Name is invalid";
+    public String step3InvalidSelectionParameterDialogTitle(String parameterIdentifier) {
+        return "'" + parameterIdentifier + "' is invalid";
     }
 
-    /** {@inheritDoc} */
+    @Override
+    public String step3HasParentFeatureCheckBox() {
+        return "<html>Do you want to configure a global<br /> parent feature for this <br />" +
+                featureOfInterest() +
+                "?" + "</html>";
+    }
+
+    @Override
+    public String step3ParentFeatureIdentifierLabel() {
+        return "Parent " + featureOfInterest() + " identifier";
+    }
+
     @Override
     public String step3ParseTest1Failed() {
         return "1 value could not be interpreted.";
@@ -581,7 +590,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step3ParseTestNFailed(final int n) {
+    public String step3ParseTestNFailed(int n) {
         return n + " values could not be interpreted.";
     }
 
@@ -843,7 +852,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step7ConfigDirNotDirOrWriteable(final String folder) {
+    public String step7ConfigDirNotDirOrWriteable(String folder) {
         return "The selected config file folder \n\"" +
                 folder +
                 "\"\nis not accessible for the application.";
@@ -940,7 +949,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step7OfferingNameNotValid(final String offeringName) {
+    public String step7OfferingNameNotValid(String offeringName) {
         return String.format("The given offering '%s' is not valid. It should match XML-NCName specification.",
                 offeringName);
     }
@@ -961,14 +970,14 @@ public class En extends Lang {
     }
 
     @Override
-    public String step7SOSConncetionStart(final String strURL) {
+    public String step7SOSConncetionStart(String strURL) {
         return "To start connection testing to URL" +
                 NL_AQUOT + strURL + AQUOT_NL +
                 "select YES. For changing values select NO.";
     }
 
     @Override
-    public String step7SOSconnectionFailed(final String strURL,
+    public String step7SOSconnectionFailed(String strURL,
             final int responseCode) {
         return "Could not connect to " + sos() + ": "
                 + strURL +
@@ -977,10 +986,10 @@ public class En extends Lang {
     }
 
     @Override
-    public String step7SOSConnectionFailedException(final String strURL,
-            final String message,
-            final int readTimeoutSeconds,
-            final int connectTimeoutSeconds) {
+    public String step7SOSConnectionFailedException(String strURL,
+            String message,
+            int readTimeoutSeconds,
+            int connectTimeoutSeconds) {
         return "Connection to " + sos() +
                 NL_AQUOT + strURL + AQUOT_NL +
                 "failed after " + connectTimeoutSeconds + " seconds connect and " +
@@ -1002,6 +1011,21 @@ public class En extends Lang {
     @Override
     public String step7SosVersionLabel() {
         return VERSION;
+    }
+
+    @Override
+    public String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures) {
+        StringBuilder msg = new StringBuilder()
+                .append("<html>The following list of parent ")
+                .append(featureOfInterest())
+                .append("s could not be found in the given SOS instance:<ul>");
+        for (String absentFeatureIdentifier : absentParentFeatures) {
+            msg.append("<li>")
+                .append(absentFeatureIdentifier)
+                .append("</li>");
+        }
+        msg.append("</ul>Please ensure their existence before importing the data.</html>");
+        return msg.toString();
     }
 
     @Override
@@ -1036,7 +1060,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step8ErrorLable(final int i) {
+    public String step8ErrorLable(int i) {
         return "Errors: " + i;
     }
 
@@ -1052,19 +1076,19 @@ public class En extends Lang {
     }
 
     @Override
-    public String step8FeederJarNotFound(final String expectedAbsolutePathToFeederJar) {
+    public String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar) {
         return String.format("Could not find jar file!%nPlease place it there:%n'%s'",
                 expectedAbsolutePathToFeederJar);
     }
 
     @Override
-    public String step8FeederJarNotFoundSelectByUser(final String pathToDirectoryWithFeederJar) {
+    public String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar) {
         return String.format("Could not find jar file here:%n'%s'%nPlease select YES for selecting the file manually.",
                 pathToDirectoryWithFeederJar);
     }
 
     @Override
-    public String step8InsertObservationLabel(final int i) {
+    public String step8InsertObservationLabel(int i) {
         return "Insert " + i + " Observations...";
     }
 
@@ -1084,19 +1108,19 @@ public class En extends Lang {
     }
 
     @Override
-    public String step8RegisterSensorLabel(final int i) {
+    public String step8RegisterSensorLabel(int i) {
         return "Register " + i + " " + sensor() + "(s)...";
     }
 
     @Override
-    public String step8SaveModelFailed(final File f) {
+    public String step8SaveModelFailed(File f) {
         return THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE +
                 f.getAbsolutePath() +
                 "\".";
     }
 
     @Override
-    public String step8SaveModelFailed(final File f, final String exceptionText) {
+    public String step8SaveModelFailed(File f, String exceptionText) {
         return THE_CONFIGURATION_COULD_NOT_BE_SAVED_TO_FILE +
                 f.getAbsolutePath() +
                 "\".\nAn Exception occurred:\n" +
@@ -1110,7 +1134,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String step8SuccessLabel(final int i) {
+    public String step8SuccessLabel(int i) {
         return "Successful: " + i;
     }
 
@@ -1140,7 +1164,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String uriSyntaxNotValidDialogMessage(final String uri) {
+    public String uriSyntaxNotValidDialogMessage(String uri) {
         return "The entered URI \"" + uri + "\" is syntactically not correct.";
     }
 

@@ -35,7 +35,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <oxf.version>2.0.0</oxf.version>
+        <oxf.version>2.1.0</oxf.version>
         <common.xml.version>1.1.5</common.xml.version>
         <importer.xml.binding.version>0.4</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
@@ -325,6 +325,24 @@
         </extensions>
         <pluginManagement>
             <plugins>
+                <!-- Start new release: mvn jgitflow:release-start -DautoVersionSubmodules=true -->
+                <!-- Finish new release: mvn jgitflow:release-finish -->
+                <plugin>
+                    <groupId>external.atlassian.jgitflow</groupId>
+                    <artifactId>jgitflow-maven-plugin</artifactId>
+                    <version>1.0-m5.1</version>
+                    <configuration>
+                        <flowInitContext>
+                            <masterBranchName>master</masterBranchName>
+                            <developBranchName>develop</developBranchName>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/</releaseBranchPrefix>
+                            <hotfixBranchPrefix>fix/</hotfixBranchPrefix>
+                            <versionTagPrefix>v</versionTagPrefix>
+                        </flowInitContext>
+                        <useReleaseProfile>false</useReleaseProfile>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>

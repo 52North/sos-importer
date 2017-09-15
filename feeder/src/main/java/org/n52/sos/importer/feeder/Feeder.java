@@ -220,7 +220,7 @@ public final class Feeder {
     public Feeder(final Configuration config)
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
-        this.configuration = config;
+        configuration = config;
         sosUrl = config.getSosUrl();
         sosVersion = config.getSosVersion();
         sosBinding = getBinding(config.getSosBinding());
@@ -246,10 +246,10 @@ public final class Feeder {
         } else {
             sensorDescBuilder = new DescriptionBuilder();
         }
-        failedInsertObservations = new LinkedList<InsertObservation>();
-        registeredSensors = new LinkedList<String>();
+        failedInsertObservations = new LinkedList<>();
+        registeredSensors = new LinkedList<>();
         if (sosVersion.equals(SOS_200_VERSION)) {
-            offerings = new HashMap<String, String>();
+            offerings = new HashMap<>();
         }
         if (config.getHunkSize() > 0) {
             hunkSize = config.getHunkSize();
@@ -877,7 +877,7 @@ public final class Feeder {
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
             final InsertObservation[] ios) {
-        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(ios.length);
+        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 unitsOfMeasurement.put(
@@ -891,7 +891,7 @@ public final class Feeder {
     }
 
     private Map<ObservedProperty, String> getMeasuredValueTypes(final String sensorURI, final InsertObservation[] ios) {
-        final Map<ObservedProperty, String> measuredValueTypes = new HashMap<ObservedProperty, String>(ios.length);
+        final Map<ObservedProperty, String> measuredValueTypes = new HashMap<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 measuredValueTypes.put(
@@ -905,7 +905,7 @@ public final class Feeder {
     }
 
     private Collection<ObservedProperty> getObservedProperties(final String sensorURI, final InsertObservation[] ios) {
-        final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(ios.length);
+        final Set<ObservedProperty> observedProperties = new HashSet<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 observedProperties.add(insertObservation.getObservedProperty());
@@ -1088,6 +1088,9 @@ public final class Feeder {
         obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
         obsParameter.addNewFoiName(io.getFeatureOfInterestName());
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
+        if (io.hasFeatureParentFeature()) {
+            obsParameter.addFoiSampleFeature(io.getParentFeatureIdentifier());
+        }
         // position
         boolean eastingFirst;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
