@@ -90,6 +90,8 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     /** corresponding positions for each feature of interest in this column/row */
     private final HashMap<String, Position> positions = new HashMap<>();
 
+    private String parentFeatureIdentifier;
+
     @Override
     public void assign(final MeasuredValue measuredValue) {
         measuredValue.setFeatureOfInterest(this);
@@ -274,5 +276,20 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
         } else {
             return super.getName();
         }
+    }
+
+    public FeatureOfInterest setParentFeatureIdentifier(String parentFeatureIdentifier) {
+        this.parentFeatureIdentifier = parentFeatureIdentifier;
+        return this;
+    }
+
+    public String getParentFeatureIdentifier() {
+        return parentFeatureIdentifier;
+    }
+
+    public boolean hasParentFeature() {
+        return parentFeatureIdentifier != null &&
+                !parentFeatureIdentifier.isEmpty() &&
+                parentFeatureIdentifier.length() > 3;
     }
 }

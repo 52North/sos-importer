@@ -286,4 +286,12 @@ public class InsertObservation {
                 .toArray(new OmParameter<?>[omParameters.size()])
                 : new OmParameter<?>[0];
     }
+
+    public boolean hasFeatureParentFeature() {
+        return featureOfInterest.hasParentFeature();
+    }
+
+    public String getParentFeatureIdentifier() {
+        return featureOfInterest.getParentFeature();
+    }
 }

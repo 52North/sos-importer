@@ -66,6 +66,10 @@ public class ResourceSelectionPanel extends SelectionPanel {
         return "0";
     }
 
+    protected Resource getResource() {
+        return resource;
+    }
+
     @Override
     public void setDefaultSelection() {
     }

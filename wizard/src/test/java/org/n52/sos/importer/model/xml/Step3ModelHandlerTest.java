@@ -37,10 +37,12 @@ import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step3Model;
+import org.n52.sos.importer.view.i18n.Lang;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
@@ -57,10 +59,10 @@ public class Step3ModelHandlerTest {
         selection.add("M/d/yyyy h.mm aSEPnull");
         model.addSelection(selection);
 
-        SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
-        new Step3ModelHandler().handleModel(model, sosImportConf);
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
 
-        final Metadata[] metadataArray = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0)
+        final Metadata[] metadataArray = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0)
                 .getMetadataArray();
         final int groupIndex = getGroupMetadataElementIndex(metadataArray);
         Assert.assertThat(groupIndex, Matchers.equalTo(0));
@@ -110,48 +112,85 @@ public class Step3ModelHandlerTest {
         model.setMarkedColumn(4);
         model.addSelection(Arrays.asList("om:Parameter", "Count", "test-name"));
 
-        SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
-        new Step3ModelHandler().handleModel(model, sosImportConf);
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
 
-        Column col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
         Assert.assertThat(col.getNumber(), Is.is(0));
+        Assert.assertThat(col.getType(), Is.is(Type.OM_PARAMETER));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("CATEGORY"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(1);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(1);
         Assert.assertThat(col.getNumber(), Is.is(1));
+        Assert.assertThat(col.getType(), Is.is(Type.OM_PARAMETER));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("NUMERIC"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(2);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(2);
         Assert.assertThat(col.getNumber(), Is.is(2));
+        Assert.assertThat(col.getType(), Is.is(Type.OM_PARAMETER));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("BOOLEAN"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(3);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(3);
         Assert.assertThat(col.getNumber(), Is.is(3));
+        Assert.assertThat(col.getType(), Is.is(Type.OM_PARAMETER));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("TEXT"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
 
-        col = sosImportConf.getCsvMetadata().getColumnAssignments().getColumnArray(4);
+        col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(4);
         Assert.assertThat(col.getNumber(), Is.is(4));
+        Assert.assertThat(col.getType(), Is.is(Type.OM_PARAMETER));
         Assert.assertThat(col.sizeOfMetadataArray(), Is.is(2));
         Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.TYPE));
         Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("COUNT"));
         Assert.assertThat(col.getMetadataArray(1).getKey(), Is.is(Key.NAME));
         Assert.assertThat(col.getMetadataArray(1).getValue(), Is.is("test-name"));
+    }
+
+    @Test
+    public void shouldSetParentFeatureIdentifier() {
+        Step3Model model = new Step3Model(0, 0, false);
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "1", "test-parent-feature"));
+
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
+
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+
+        Assert.assertThat(col.getNumber(), Is.is(0));
+        Assert.assertThat(col.getType(), Is.is(Type.FOI));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(1));
+        Assert.assertThat(col.getMetadataArray(0).getKey(), Is.is(Key.PARENT_FEATURE_IDENTIFIER));
+        Assert.assertThat(col.getMetadataArray(0).getValue(), Is.is("test-parent-feature"));
+    }
+
+    @Test
+    public void shouldAddFeatureColumnWithoutParentFeatureIdentifier() {
+        Step3Model model = new Step3Model(0, 0, false);
+        model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "0", ""));
+
+        SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
+        new Step3ModelHandler().handleModel(model, conf);
+
+        Column col = conf.getCsvMetadata().getColumnAssignments().getColumnArray(0);
+
+        Assert.assertThat(col.getNumber(), Is.is(0));
+        Assert.assertThat(col.getType(), Is.is(Type.FOI));
+        Assert.assertThat(col.sizeOfMetadataArray(), Is.is(0));
     }
 
 }

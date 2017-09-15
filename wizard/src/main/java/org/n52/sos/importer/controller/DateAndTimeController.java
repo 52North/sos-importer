@@ -52,7 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * handles operations on DateAndTime objects
+ * Handles operations on DateAndTime objects
  *
  * @author Raimund
  */
@@ -146,9 +146,9 @@ public class DateAndTimeController {
          *  Only add if at least one time element is already set
          */
         if (dateAndTime.getTimeZone() == null && (
-                (dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null) ||
-                (dateAndTime.getMinute() != null && dateAndTime.getMinute().getTableElement() != null) ||
-                (dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null))) {
+                dateAndTime.getHour() != null && dateAndTime.getHour().getTableElement() != null ||
+                dateAndTime.getMinute() != null && dateAndTime.getMinute().getTableElement() != null ||
+                dateAndTime.getSeconds() != null && dateAndTime.getSeconds().getTableElement() != null)) {
             missingComponentPanels.add(new MissingTimeZonePanel(dateAndTime));
         }
         //
@@ -226,7 +226,7 @@ public class DateAndTimeController {
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public void assignPattern(final String pattern, final TableElement tableElement) {
-        LOG.info("Assign pattern " + pattern + " to " + dateAndTime + " in " + tableElement);
+        LOG.info("Assign pattern '{}' to {} in {}", pattern, dateAndTime, tableElement);
 
         if (pattern.contains("y")) {
             dateAndTime.setYear(new Year(tableElement, pattern));
@@ -234,14 +234,14 @@ public class DateAndTimeController {
         if (pattern.contains("M") || pattern.contains("w") || pattern.contains("D")) {
             dateAndTime.setMonth(new Month(tableElement, pattern));
         }
-        if (pattern.contains("d") || (pattern.contains("W") && pattern.contains("d"))) {
+        if (pattern.contains("d") || pattern.contains("W") && pattern.contains("d")) {
             dateAndTime.setDay(new Day(tableElement, pattern));
         }
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
-                ((pattern.contains("K") ||
-                (pattern.contains("h")) &&
-                pattern.contains("a")))) {
+                pattern.contains("K") ||
+                pattern.contains("h") &&
+                pattern.contains("a")) {
             dateAndTime.setHour(new Hour(tableElement, pattern));
         }
         if (pattern.contains("m")) {
@@ -403,12 +403,7 @@ public class DateAndTimeController {
      * <p>mergeDateAndTimes.</p>
      */
     public void mergeDateAndTimes() {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("mergeDateAndTimes()");
-        }
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Merge Date & Times");
-        }
+        LOG.info("Merge Date & Times");
         final List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();
         final ArrayList<DateAndTime> mergedDateAndTimes = new ArrayList<>(dateAndTimes.size());
         while (!dateAndTimes.isEmpty()) {

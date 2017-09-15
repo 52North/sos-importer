@@ -124,12 +124,12 @@ public class Step6aModelHandler implements ModelHandler<Step6aModel> {
 
     /**
      * Check for each date element is the given <code>DateAndTime</code> object
-     * and create final string for the time stamp using this rule:<br/>
+     * and create final string for the time stamp using this rule:<br>
      * IF
      * <ul><li><b>null</b> -> add default value to String</li>
      * <li><b>else</b> -> add value to String</li></ul>
-     * Used format: <code>"yyyy-MM-dd'T'HH:mm:ssZ"</code><br/>
-     * The colon bug is fixed, so the time zone looks like "<code>+02:00</code>" for example.<br/>
+     * Used format: <code>"yyyy-MM-dd'T'HH:mm:ssZ"</code><br>
+     * The colon bug is fixed, so the time zone looks like "<code>+02:00</code>" for example.<br>
      * Default value is: "<code>1970-01-01T00:00:00:+00:00</code>"
      * @return a String or null, if dAT is null.
      */

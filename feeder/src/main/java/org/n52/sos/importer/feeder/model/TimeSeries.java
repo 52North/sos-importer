@@ -318,6 +318,9 @@ public class TimeSeries {
         obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
         obsParameter.addNewFoiName(io.getFeatureOfInterestName());
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
+        if (io.hasFeatureParentFeature()) {
+            obsParameter.addFoiSampleFeature(io.getParentFeatureIdentifier());
+        }
         // position
         boolean eastingFirst = false;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
