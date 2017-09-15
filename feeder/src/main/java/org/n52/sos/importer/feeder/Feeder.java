@@ -328,7 +328,7 @@ public final class Feeder {
      *         newLastUsedTimestamp is after lastUsedTimestamp
      *         else <code>false</code>.
      */
-    private boolean isLastUsedTimestampSafe() {
+    private boolean shouldUpdateLastUsedTimestamp() {
         return isUseLastTimestamp
                 && newLastUsedTimestamp != null
                 && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
@@ -420,7 +420,7 @@ public final class Feeder {
                 if (!timeSeriesRepository.isEmpty()) {
                     insertTimeSeries(timeSeriesRepository);
                 }
-                if (isLastUsedTimestampSafe()) {
+                if (shouldUpdateLastUsedTimestamp()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -445,7 +445,7 @@ public final class Feeder {
                     }
                     incrementLineCounter();
                 }
-                if (isLastUsedTimestampSafe()) {
+                if (shouldUpdateLastUsedTimestamp()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -736,8 +736,7 @@ public final class Feeder {
                 // store lastUsedTimestamp in configuration/station?
             } else {
                 // abort Insertion
-                LOG.debug("skipping InsertObservation of timestamp '{}', "
-                        + "because it is not after LastUsedTimestamp '{}'", 
+                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'", 
                          timeStamp, lastUsedTimestamp);
                 return null;
             }
