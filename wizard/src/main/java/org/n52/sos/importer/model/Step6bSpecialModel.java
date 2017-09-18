@@ -59,6 +59,7 @@
  */
 package org.n52.sos.importer.model;
 
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
@@ -72,9 +73,12 @@ public class Step6bSpecialModel implements StepModel {
 
     private Sensor sensor;
 
-    public Step6bSpecialModel(FeatureOfInterest foi, ObservedProperty obsProp) {
+    private MeasuredValue mv;
+
+    public Step6bSpecialModel(MeasuredValue mv, FeatureOfInterest foi, ObservedProperty obsProp) {
         this.foi = foi;
         this.obsProp = obsProp;
+        this.mv = mv;
         sensor = new Sensor();
     }
 
@@ -96,6 +100,10 @@ public class Step6bSpecialModel implements StepModel {
 
     public ObservedProperty getObservedProperty() {
         return obsProp;
+    }
+
+    public MeasuredValue getMeasuredValue() {
+        return mv;
     }
 
     @Override

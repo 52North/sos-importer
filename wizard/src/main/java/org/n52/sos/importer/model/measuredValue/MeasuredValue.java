@@ -272,7 +272,7 @@ public abstract class MeasuredValue implements Parseable {
             return false;
         }
         if (omParameters == null) {
-            omParameters = new ArrayList<OmParameter>();
+            omParameters = new ArrayList<>();
         }
         return omParameters.add(omParameter);
     }
@@ -293,6 +293,84 @@ public abstract class MeasuredValue implements Parseable {
             return omParameters.remove(omParameterToRemove);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (dateAndTime == null ? 0 : dateAndTime.hashCode());
+        result = prime * result + (featureOfInterest == null ? 0 : featureOfInterest.hashCode());
+        result = prime * result + (observedProperty == null ? 0 : observedProperty.hashCode());
+        result = prime * result + (omParameters == null ? 0 : omParameters.hashCode());
+        result = prime * result + (sensor == null ? 0 : sensor.hashCode());
+        result = prime * result + (tableElement == null ? 0 : tableElement.hashCode());
+        result = prime * result + (unitOfMeasurement == null ? 0 : unitOfMeasurement.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MeasuredValue other = (MeasuredValue) obj;
+        if (dateAndTime == null) {
+            if (other.dateAndTime != null) {
+                return false;
+            }
+        } else if (!dateAndTime.equals(other.dateAndTime)) {
+            return false;
+        }
+        if (featureOfInterest == null) {
+            if (other.featureOfInterest != null) {
+                return false;
+            }
+        } else if (!featureOfInterest.equals(other.featureOfInterest)) {
+            return false;
+        }
+        if (observedProperty == null) {
+            if (other.observedProperty != null) {
+                return false;
+            }
+        } else if (!observedProperty.equals(other.observedProperty)) {
+            return false;
+        }
+        if (omParameters == null) {
+            if (other.omParameters != null) {
+                return false;
+            }
+        } else if (!omParameters.equals(other.omParameters)) {
+            return false;
+        }
+        if (sensor == null) {
+            if (other.sensor != null) {
+                return false;
+            }
+        } else if (!sensor.equals(other.sensor)) {
+            return false;
+        }
+        if (tableElement == null) {
+            if (other.tableElement != null) {
+                return false;
+            }
+        } else if (!tableElement.equals(other.tableElement)) {
+            return false;
+        }
+        if (unitOfMeasurement == null) {
+            if (other.unitOfMeasurement != null) {
+                return false;
+            }
+        } else if (!unitOfMeasurement.equals(other.unitOfMeasurement)) {
+            return false;
+        }
+        return true;
     }
 
 }

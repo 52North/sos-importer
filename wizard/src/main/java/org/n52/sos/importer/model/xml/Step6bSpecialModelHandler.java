@@ -66,9 +66,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
     @Override
     public void handleModel(final Step6bSpecialModel stepModel,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("handleModel()");
-        }
+        logger.trace("handleModel()");
         /*
          * add sensor to model
          */
@@ -81,9 +79,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
         final ModelStore ms = ModelStore.getInstance();
         if (addiMeta == null) {
             addiMeta = sosImportConf.addNewAdditionalMetadata();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new AdditionalMetadata element");
-            }
+            logger.debug("Added new AdditionalMetadata element");
         } else {
             sensorsXB = addiMeta.getSensorArray();
 
@@ -91,9 +87,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                 for (final SensorType aSensor : sensorsXB) {
                 if (aSensor.getResource().getID().equalsIgnoreCase(sensor.getXMLId())) {
                     sensorXB = aSensor;
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Found Sensor element");
-                    }
+                    logger.debug("Found Sensor element");
                     break findSensor;
                 }
             }
@@ -110,9 +104,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
         // sensor found or add new one?
         if (sensorXB == null) {
             sensorXB = addiMeta.addNewSensor();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new Sensor element");
-            }
+            logger.debug("Added new Sensor element");
             if (sensor.isGenerated()) {
                 /*
                  * GENERATED
@@ -154,9 +146,7 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                         logger.debug("Added new number element: " + num.xmlText(new XmlOptions().setSaveOuter()));
                     }
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Added new generated sensor");
-                }
+                logger.debug("Added new generated sensor");
             } else {
                 /*
                  * MANUAL
@@ -173,22 +163,19 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                 sensorRT.setID(sensor.getXMLId());
                 sensorRT.setName(sensor.getName());
                 sensorRT.addNewURI().setStringValue(sensor.getURI().toString());
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Added new manual sensor");
-                }
+                logger.debug("Added new manual sensor");
             }
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Sensor is already contained in AdditionalMetadata element");
-            }
+            logger.debug("Sensor is already contained in AdditionalMetadata element");
         }
         /*
          * identify related measured value columns and update relation
          */
         final ArrayList<MeasuredValue> mVs = (ArrayList<MeasuredValue>) ms.getMeasuredValues();
-        final ArrayList<MeasuredValue> relatedMVs = new ArrayList<MeasuredValue>(mVs.size());
+        final ArrayList<MeasuredValue> relatedMVs = new ArrayList<>(mVs.size());
         for (final MeasuredValue measuredValue : mVs) {
-            if (foi.isAssignedTo(measuredValue) && obsProp.isAssigned(measuredValue)) {
+            if (foi.isAssignedTo(measuredValue) && obsProp.isAssigned(measuredValue) ||
+                    stepModel.getMeasuredValue().equals(measuredValue)) {
                 relatedMVs.add(measuredValue);
                 if (logger.isDebugEnabled()) {
                     logger.debug("Found related MeasureValue" +
@@ -229,8 +216,6 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
                         "related to MeasuredValue column #" + mvColId);
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("handling of Step6bSpecialModel finished.");
-        }
+        logger.debug("handling of Step6bSpecialModel finished.");
     }
 }

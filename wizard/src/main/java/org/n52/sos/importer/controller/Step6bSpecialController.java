@@ -149,7 +149,7 @@ public class Step6bSpecialController extends StepController {
 
                         final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
                         final ObservedProperty op = mv.getObservedProperty().forThis(cell);
-                        final Step6bSpecialModel tmpModel = new Step6bSpecialModel(foi, op);
+                        final Step6bSpecialModel tmpModel = new Step6bSpecialModel(mv, foi, op);
                         /*
                          * check, if for the column of foi and obsProp a model is
                          * available and if the sensor is generated in this model

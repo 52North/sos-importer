@@ -313,7 +313,6 @@ public final class Feeder {
             headerLine = readHeaderLine(dataFile);
         }
         final int failedObservationsBefore = failedInsertObservations.size();
-        int numOfObsTriedToInsert = 0;
         // 1 Get all measured value columns =: mvCols
         final int[] mVCols = dataFile.getMeasuredValueColumnIds();
         if (mVCols == null || mVCols.length == 0) {
@@ -325,14 +324,13 @@ public final class Feeder {
         } else {
             skipLines(cr, lastLine);
         }
+        int numOfObsTriedToInsert = 0;
         switch (configuration.getImportStrategy()) {
             case SweArrayObservationWithSplitExtension:
-                numOfObsTriedToInsert = importUsingSweArrayObservationStrategy(dataFile, cr, headerLine,
-                        numOfObsTriedToInsert, mVCols);
+                numOfObsTriedToInsert = importUsingSweArrayObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
             case SingleObservation:
-                numOfObsTriedToInsert = importUsingSingleObservationStrategy(dataFile, cr, headerLine,
-                        numOfObsTriedToInsert, mVCols);
+                numOfObsTriedToInsert = importUsingSingleObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
             default:
                 LOG.error("Not supported strategy given '{}'.",
@@ -347,8 +345,8 @@ public final class Feeder {
         // TODO the failed insert observations should be handled here!
     }
 
-    private int importUsingSweArrayObservationStrategy(DataFile dataFile, final CsvParser cr, String[] headerLine,
-            int numOfObsTriedToInsert, final int[] mVCols)
+    private int importUsingSweArrayObservationStrategy(DataFile dataFile, CsvParser cr, String[] headerLine,
+            int[] mVCols)
             throws IOException, ParseException, OXFException, XmlException {
         String[] values;
         LOG.debug("Using hunkSize '{}'", hunkSize);
@@ -356,6 +354,7 @@ public final class Feeder {
         TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
         int currentHunk = 0;
         int sampleStartLine = lineCounter;
+        int numOfObsTriedToInsert = 0;
         while ((values = cr.readNext()) != null) {
             // if it is a sample based file, I need to get the following information
             // * date information (depends on last timestamp because of
@@ -385,7 +384,7 @@ public final class Feeder {
             }
             lineCounter++;
             if (lineCounter % 10000 == 0) {
-                LOG.info("Processed line {}.", lineCounter);
+                LOG.info("Handled line {}.", lineCounter);
             }
             if (isSampleBasedDataFile) {
                 LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; "
@@ -408,9 +407,10 @@ public final class Feeder {
     }
 
     private int importUsingSingleObservationStrategy(DataFile dataFile, final CsvParser cr, String[] headerLine,
-            int numOfObsTriedToInsert, final int[] mVCols) throws IOException, OXFException, XmlException {
+            final int[] mVCols) throws IOException, OXFException, XmlException {
         String[] values;
         long singleObservationStartReadingFile = System.currentTimeMillis();
+        int numOfObsTriedToInsert = 0;
         // for each line
         while ((values = cr.readNext()) != null) {
             if (!configuration.isLineIgnorable(values) &&
@@ -418,13 +418,13 @@ public final class Feeder {
                     configuration.isParsedColumnCountCorrect(values.length) &&
                     !isHeaderLine(headerLine, values)) {
                 LineHelper.trimValues(values);
-                LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1, Arrays.toString(values)));
+                LOG.debug(String.format("Processing CSV line #%d: %s", lineCounter + 1, Arrays.toString(values)));
                 final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
                 numOfObsTriedToInsert += ios.length;
                 insertObservationsForOneLine(ios, values, dataFile);
                 LOG.debug(Application.heapSizeInformation());
             } else {
-                LOG.debug("\t\tSkip CSV line #{}; Raw data: '{}'", lineCounter + 1, Arrays.toString(values));
+                LOG.debug("\t\tIgnore CSV line #{}; Raw data: '{}'", lineCounter + 1, Arrays.toString(values));
             }
             lineCounter++;
             if (lineCounter % 10000 == 0) {

@@ -73,14 +73,16 @@ import org.n52.sos.importer.model.Step3Model;
 import org.n52.sos.importer.model.Step6bSpecialModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.resources.FeatureOfInterest;
+import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Step6bSpecialTest {
+public class Step6bSpecialTestFoiInColumnAndManualObservedProperty {
 
-    private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(Step6bSpecialTestFoiInColumnAndManualObservedProperty.class);
 
     //CHECKSTYLE:OFF
     public static void main(final String[] args) throws URISyntaxException {
@@ -91,22 +93,30 @@ public class Step6bSpecialTest {
          * Set-Up Step specific data
          */
         final int firstLineWithData = 1;
+        FeatureOfInterest foi = TestData.EXAMPLE_FOI;
+        foi.setTableElement(new Column(1,firstLineWithData));
+        ObservedProperty property = TestData.EXAMPLE_OBS_PROP;
+        property.setTableElement(null);
         Column markedColumn = new Column(4, firstLineWithData);
         TableController tc = TableController.getInstance();
-        tc.setContent(TestData.EXAMPLE_TABLE_NO_FOI);
+        tc.setContent(TestData.EXAMPLE_TABLE_WITH_FOI);
+        tc.setFirstLineWithData(firstLineWithData);
         int i = 0;
         tc.setColumnHeading(i, Lang.l().step3ColTypeDateTime());
-        tc.setColumnHeading(++i, Lang.l().sensor());
-        tc.setColumnHeading(++i, Lang.l().observedProperty());
-        tc.setColumnHeading(++i, Lang.l().unitOfMeasurement());
+        tc.setColumnHeading(++i, Lang.l().featureOfInterest());
+        tc.setColumnHeading(++i, Lang.l().position());
+        tc.setColumnHeading(++i, Lang.l().position());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
+        tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
         tc.setColumnHeading(++i, Lang.l().step3ColTypeMeasuredValue());
         tc.mark(markedColumn);
         MeasuredValue mv = new NumericValue();
-        mv.setFeatureOfInterest(TestData.EXAMPLE_FOI);
-        mv.setObservedProperty(TestData.EXAMPLE_OBS_PROP);
+        mv.setFeatureOfInterest(foi);
+        mv.setObservedProperty(property);
         mv.setTableElement(markedColumn);
         ModelStore.getInstance().add(mv);
-        Step6bSpecialModel s6bSM = new Step6bSpecialModel(mv, TestData.EXAMPLE_FOI, TestData.EXAMPLE_OBS_PROP);
+        Step6bSpecialModel s6bSM = new Step6bSpecialModel(mv, foi, property);
         /*
          * Set-Up Column metadata
          */

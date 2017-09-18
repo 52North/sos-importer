@@ -228,6 +228,13 @@ public class TestData {
                 {"2012-04-23 11:53:53", "Thermometer", "Temperature", "degC", "12.4"},
                 {"2012-04-23 11:54:13", "Thermometer", "Temperature", "degC", "12.5"},
                 });
+
+    public static final CsvData EXAMPLE_TABLE_WITH_FOI = convert(new String[][] {
+        {"timestamp",     "node_id", "lat",       "lon",      "battery", "rssi_node_gw", "rssi_gw_node", "moisture"},
+        {"1504216866.97", "2",       "51.141977", "7.369473", "4.1",     "-109",         "-108",         "805"},
+        {"1504216932.76", "7",       "51.141942", "7.369396", "4",       "-121",         "-122",         "790"},
+        {"1504217046.6",  "6",       "51.141954", "7.369358", "4",       "-142",         "-142",         "794"}
+    });
     /**
      * Example data set without feature of interest
      */
