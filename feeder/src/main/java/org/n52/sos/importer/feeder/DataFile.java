@@ -874,15 +874,6 @@ public class DataFile {
     }
 
     /**
-     * <p>getConfigurationFileName.</p>
-     *
-     * @return a {@link String} object.
-     */
-    public String getConfigurationFileName() {
-        return configuration.getFileName();
-    }
-
-    /**
      * <code>String[] result = {name,uri};</code>
      * @return <code>String[] result = {name,uri};</code>
      */

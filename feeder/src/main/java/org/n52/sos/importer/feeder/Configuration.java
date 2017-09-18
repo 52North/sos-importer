@@ -53,6 +53,7 @@ import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
@@ -221,6 +222,8 @@ public final class Configuration {
 
     private Pattern localeFilePattern;
 
+    private Pattern[] ignorePatterns;
+
     /**
      * <p>Constructor for Configuration.</p>
      *
@@ -257,6 +260,8 @@ public final class Configuration {
             importConf = sosImportDoc.getSosImportConfiguration();
             setLocaleFilePattern();
         }
+
+        ignorePatterns = getIgnoreLineRegExPatterns();
     }
 
     private void setLocaleFilePattern() {
@@ -1518,6 +1523,50 @@ public final class Configuration {
         return -1;
     }
 
+    public boolean isParsedColumnCountCorrect(int count) {
+        if (count != getExpectedColumnCount()) {
+            if (isIgnoreColumnMismatch()) {
+                return false;
+            } else {
+                final String errorMsg = String.format(
+                        "Number of Expected columns '%s' does not match number of "
+                                + "found columns '%s' -> Cancel import! Please update your "
+                                + "configuration to match the number of columns.",
+                                getExpectedColumnCount(),
+                                count);
+                LOG.error(errorMsg);
+                throw new InvalidColumnCountException(errorMsg);
+            }
+        }
+        return true;
+    }
+
+    public boolean containsData(final String[] values) {
+        if (values != null && values.length > 0) {
+            for (int i = 0; i < values.length; i++) {
+                final String value = values[i];
+                if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
+                    LOG.debug("Value of column '{}' is null or empty but shouldn't.", i);
+                    return false;
+                }
+            }
+            return true;
+        }
+        LOG.debug("Line is empty");
+        return false;
+    }
+
+    private boolean isColumnIgnored(final int i) {
+        int[] ignoredColumns = getIgnoredColumnIds();
+        if (ignoredColumns != null && ignoredColumns.length > 0) {
+            for (final int ignoredColumn : ignoredColumns) {
+                if (i == ignoredColumn) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * <p>isIgnoreLineRegExSet.</p>
@@ -1529,7 +1578,20 @@ public final class Configuration {
                 importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
     }
 
-    public Pattern[] getIgnoreLineRegExPatterns() {
+    public boolean isLineIgnorable(String[] values) {
+        if (ignorePatterns != null && ignorePatterns.length > 0) {
+            String line = restoreLine(values);
+            for (Pattern pattern : ignorePatterns) {
+                if (pattern.matcher(line).matches()) {
+                    LOG.info("Line '{}' matches ingore patter '{}'", line, pattern.toString());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Pattern[] getIgnoreLineRegExPatterns() {
         if (!isIgnoreLineRegExSet()) {
             return new Pattern[0];
         }
@@ -1701,5 +1763,19 @@ public final class Configuration {
             }
         }
         return "";
+    }
+
+    public String restoreLine(String[] values) {
+        if (values == null || values.length == 0) {
+            return "";
+        }
+        final StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < values.length; i++) {
+            sb.append(values[i]);
+            if (i != values.length - 1) {
+                sb.append(getCsvSeparator());
+            }
+        }
+        return sb.toString();
     }
 }

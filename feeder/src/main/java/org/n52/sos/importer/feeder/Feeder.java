@@ -92,7 +92,7 @@ import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
-import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
+import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,8 +155,6 @@ public final class Feeder {
     private Map<String, String> offerings;
     private final DescriptionBuilder sensorDescBuilder;
 
-    private String[] headerLine;
-
     private boolean isSampleBasedDataFile;
 
     // Identified on localhost on development system
@@ -191,16 +189,10 @@ public final class Feeder {
 
     private int lineCounter;
 
-    private final int[] ignoredColumns;
-
-    private Pattern[] ignorePatterns;
-
     // adding 25s
     private int sweArrayObservationTimeOutBuffer = 25000;
 
     private int sampleSizeDivisor;
-
-    private String skipReason = "";
 
     /**
      * <p>Constructor for SensorObservationService.</p>
@@ -218,7 +210,6 @@ public final class Feeder {
         sosVersion = config.getSosVersion();
         sosBinding = getBinding(config.getSosBinding());
         isSampleBasedDataFile = config.isSamplingFile();
-        ignoredColumns = config.getIgnoredColumnIds();
         if (isSampleBasedDataFile) {
             sampleIdPattern = Pattern.compile(config.getSampleStartRegEx());
             sampleSizePattern = Pattern.compile(config.getSampleSizeRegEx());
@@ -246,9 +237,6 @@ public final class Feeder {
         }
         if (config.getHunkSize() > 0) {
             hunkSize = config.getHunkSize();
-        }
-        if (config.isIgnoreLineRegExSet()) {
-            ignorePatterns = config.getIgnoreLineRegExPatterns();
         }
         if (config.isInsertSweArrayObservationTimeoutBufferSet()) {
             sweArrayObservationTimeOutBuffer = config.getInsertSweArrayObservationTimeoutBuffer();
@@ -319,9 +307,9 @@ public final class Feeder {
         LOG.trace("importData()");
         // 0 Get line
         final CsvParser cr = dataFile.getCSVReader();
-        String[] values;
+        String[] headerLine = new String[0];
         lineCounter = dataFile.getFirstLineWithData();
-        if (dataFile.getHeaderLine() > -1 && headerLine == null) {
+        if (dataFile.getHeaderLine() > -1) {
             headerLine = readHeaderLine(dataFile);
         }
         final int failedObservationsBefore = failedInsertObservations.size();
@@ -339,77 +327,12 @@ public final class Feeder {
         }
         switch (configuration.getImportStrategy()) {
             case SweArrayObservationWithSplitExtension:
-                LOG.debug("Using hunkSize '{}'", hunkSize);
-                long startReadingFile = System.currentTimeMillis();
-                TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
-                int currentHunk = 0;
-                int sampleStartLine = lineCounter;
-                while ((values = cr.readNext()) != null) {
-                    // if it is a sample based file, I need to get the following information
-                    // * date information (depends on last timestamp because of
-                    if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
-                        sampleStartLine = processSampleStart(cr);
-                        continue;
-                    }
-                    if (!isLineIgnorable(values) &&
-                            containsData(values) &&
-                            isSizeValid(dataFile, values) &&
-                            !isHeaderLine(values)) {
-                        logLine(values);
-                        final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
-                        timeSeriesRepository.addObservations(ios);
-                        numOfObsTriedToInsert += ios.length;
-                        LOG.debug(Application.heapSizeInformation());
-                        if (currentHunk == hunkSize) {
-                            currentHunk = 0;
-                            insertTimeSeries(timeSeriesRepository);
-                            timeSeriesRepository = new TimeSeriesRepository();
-                        } else {
-                            currentHunk++;
-                        }
-                    } else {
-                        logSkippedLine(values);
-                    }
-                    incrementLineCounter();
-                    if (isSampleBasedDataFile) {
-                        LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; "
-                                + "sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
-                                isSampleBasedDataFile, isInSample, lineCounter,
-                                sampleStartLine, sampleSize, sampleDataOffset);
-
-                        if (isInSample && isSampleEndReached(sampleStartLine)) {
-                            isInSample = false;
-                            LOG.debug("Current sample left");
-                        }
-                    }
-                }
-                if (!timeSeriesRepository.isEmpty()) {
-                    insertTimeSeries(timeSeriesRepository);
-                }
-                lastLine = lineCounter;
-                logTiming(startReadingFile);
+                numOfObsTriedToInsert = importUsingSweArrayObservationStrategy(dataFile, cr, headerLine,
+                        numOfObsTriedToInsert, mVCols);
                 break;
             case SingleObservation:
-                startReadingFile = System.currentTimeMillis();
-                // for each line
-                while ((values = cr.readNext()) != null) {
-                    if (!isLineIgnorable(values) &&
-                            isSizeValid(dataFile, values) &&
-                            containsData(values) &&
-                            !isHeaderLine(values)) {
-                        trimValues(values);
-                        logLine(values);
-                        final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
-                        numOfObsTriedToInsert += ios.length;
-                        insertObservationsForOneLine(ios, values, dataFile);
-                        LOG.debug(Application.heapSizeInformation());
-                    } else {
-                        logSkippedLine(values);
-                    }
-                    incrementLineCounter();
-                }
-                lastLine = lineCounter;
-                logTiming(startReadingFile);
+                numOfObsTriedToInsert = importUsingSingleObservationStrategy(dataFile, cr, headerLine,
+                        numOfObsTriedToInsert, mVCols);
                 break;
             default:
                 LOG.error("Not supported strategy given '{}'.",
@@ -424,19 +347,93 @@ public final class Feeder {
         // TODO the failed insert observations should be handled here!
     }
 
-    private void trimValues(String[] values) {
-        if (values != null && values.length > 0) {
-            for (int i = 0; i < values.length; i++) {
-                if (values[i] != null && !values[i].isEmpty()) {
-                    values[i] = values[i].trim();
+    private int importUsingSweArrayObservationStrategy(DataFile dataFile, final CsvParser cr, String[] headerLine,
+            int numOfObsTriedToInsert, final int[] mVCols)
+            throws IOException, ParseException, OXFException, XmlException {
+        String[] values;
+        LOG.debug("Using hunkSize '{}'", hunkSize);
+        long startReadingFile = System.currentTimeMillis();
+        TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
+        int currentHunk = 0;
+        int sampleStartLine = lineCounter;
+        while ((values = cr.readNext()) != null) {
+            // if it is a sample based file, I need to get the following information
+            // * date information (depends on last timestamp because of
+            if (isSampleBasedDataFile && !isInSample && isSampleStart(values)) {
+                sampleStartLine = processSampleStart(cr);
+                continue;
+            }
+            if (!configuration.isLineIgnorable(values) &&
+                    configuration.containsData(values) &&
+                    configuration.isParsedColumnCountCorrect(values.length) &&
+                    !isHeaderLine(headerLine, values)) {
+                LineHelper.trimValues(values);
+                LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1, Arrays.toString(values)));
+                final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
+                timeSeriesRepository.addObservations(ios);
+                numOfObsTriedToInsert += ios.length;
+                LOG.debug(Application.heapSizeInformation());
+                if (currentHunk == hunkSize) {
+                    currentHunk = 0;
+                    insertTimeSeries(timeSeriesRepository);
+                    timeSeriesRepository = new TimeSeriesRepository();
+                } else {
+                    currentHunk++;
+                }
+            } else {
+                LOG.debug("\t\tSkip CSV line #{}; Raw data: '{}'", lineCounter + 1, Arrays.toString(values));
+            }
+            lineCounter++;
+            if (lineCounter % 10000 == 0) {
+                LOG.info("Processed line {}.", lineCounter);
+            }
+            if (isSampleBasedDataFile) {
+                LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; "
+                        + "sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
+                        isSampleBasedDataFile, isInSample, lineCounter,
+                        sampleStartLine, sampleSize, sampleDataOffset);
+
+                if (isInSample && isSampleEndReached(sampleStartLine)) {
+                    isInSample = false;
+                    LOG.debug("Current sample left");
                 }
             }
         }
+        if (!timeSeriesRepository.isEmpty()) {
+            insertTimeSeries(timeSeriesRepository);
+        }
+        lastLine = lineCounter;
+        logTiming(startReadingFile);
+        return numOfObsTriedToInsert;
     }
 
-    private void logLine(String[] values) {
-        LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1,
-                Arrays.toString(values)));
+    private int importUsingSingleObservationStrategy(DataFile dataFile, final CsvParser cr, String[] headerLine,
+            int numOfObsTriedToInsert, final int[] mVCols) throws IOException, OXFException, XmlException {
+        String[] values;
+        long singleObservationStartReadingFile = System.currentTimeMillis();
+        // for each line
+        while ((values = cr.readNext()) != null) {
+            if (!configuration.isLineIgnorable(values) &&
+                    configuration.containsData(values) &&
+                    configuration.isParsedColumnCountCorrect(values.length) &&
+                    !isHeaderLine(headerLine, values)) {
+                LineHelper.trimValues(values);
+                LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1, Arrays.toString(values)));
+                final InsertObservation[] ios = getInsertObservations(values, mVCols, dataFile);
+                numOfObsTriedToInsert += ios.length;
+                insertObservationsForOneLine(ios, values, dataFile);
+                LOG.debug(Application.heapSizeInformation());
+            } else {
+                LOG.debug("\t\tSkip CSV line #{}; Raw data: '{}'", lineCounter + 1, Arrays.toString(values));
+            }
+            lineCounter++;
+            if (lineCounter % 10000 == 0) {
+                LOG.info("Processed line {}.", lineCounter);
+            }
+        }
+        lastLine = lineCounter;
+        logTiming(singleObservationStartReadingFile);
+        return numOfObsTriedToInsert;
     }
 
     private int processSampleStart(final CsvParser cr) throws IOException,
@@ -454,34 +451,6 @@ public final class Feeder {
         LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
                 new Date(startReadingFile).toString(),
                 new Date(System.currentTimeMillis()).toString());
-    }
-
-    private void incrementLineCounter() {
-        lineCounter++;
-        if (lineCounter % 10000 == 0) {
-            LOG.info("Processed line {}.", lineCounter);
-        }
-    }
-
-    private void logSkippedLine(String[] values) {
-        LOG.debug(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
-                lineCounter + 1,
-                !skipReason.isEmpty() ? String.format("Reason: %s", skipReason) : "",
-                Arrays.toString(values)));
-        skipReason = "";
-    }
-
-    private boolean isLineIgnorable(final String[] values) {
-        if (ignorePatterns != null && ignorePatterns.length > 0) {
-            final String line = restoreLine(values);
-            for (final Pattern pattern : ignorePatterns) {
-                if (pattern.matcher(line).matches()) {
-                    skipReason = "Matched ignore pattern.";
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void getSampleMetaData(final CsvParser cr) throws IOException, ParseException {
@@ -523,18 +492,8 @@ public final class Feeder {
                 sampleSizePattern.pattern()), 42);
     }
 
-    private String restoreLine(final String[] values) {
-        if (values == null || values.length == 0) {
-            return "";
-        }
-        final StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < values.length; i++) {
-            sb.append(values[i]);
-            if (i != values.length - 1) {
-                sb.append(configuration.getCsvSeparator());
-            }
-        }
-        return sb.toString();
+    private String restoreLine(String[] values) {
+        return configuration.restoreLine(values);
     }
 
     private Timestamp parseSampleDate(final String[] values) throws ParseException {
@@ -583,66 +542,22 @@ public final class Feeder {
                                 dataFile.getEncoding()))) {
             int counter = 1;
             for (String line; (line = br.readLine()) != null;) {
-                if (counter++ == dataFile.getHeaderLine()) {
-                    return line.split(Character.toString(dataFile.getSeparatorChar()));
+                if (counter == dataFile.getHeaderLine()) {
+                    return line.split(Character.toString(configuration.getCsvSeparator()));
+                } else {
+                    counter++;
                 }
             }
         }
         return null;
     }
 
-    private boolean isHeaderLine(final String[] values) {
-        boolean isHeaderLine = Arrays.equals(headerLine, values);
-        if (!isHeaderLine) {
-            skipReason = "Headerline found.";
+    private boolean isHeaderLine(String[] storedHeaderline, String[] lineToCheck) {
+        boolean isHeaderLine = Arrays.equals(storedHeaderline, lineToCheck);
+        if (isHeaderLine) {
+            LOG.debug("Headerline found: '{}'", Arrays.toString(lineToCheck));
         }
         return isHeaderLine;
-    }
-
-    private boolean isSizeValid(final DataFile dataFile,
-            final String[] values) {
-        if (values.length != dataFile.getExpectedColumnCount()) {
-            if (configuration.isIgnoreColumnMismatch()) {
-                return false;
-            } else {
-                final String errorMsg = String.format(
-                        "Number of Expected columns '%s' does not match number of "
-                                + "found columns '%s' -> Cancel import! Please update your "
-                                + "configuration to match the number of columns.",
-                                dataFile.getExpectedColumnCount(),
-                                values.length);
-                LOG.error(errorMsg);
-                throw new InvalidColumnCountException(errorMsg);
-            }
-        }
-        return true;
-    }
-
-    private boolean containsData(final String[] values) {
-        skipReason = "Line is empty.";
-        if (values != null && values.length > 0) {
-            for (int i = 0; i < values.length; i++) {
-                final String value = values[i];
-                if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
-                    skipReason = String.format("Value of column '%s' is null or empty but shouldn't." , i);
-                    return false;
-                }
-            }
-            skipReason = "";
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isColumnIgnored(final int i) {
-        if (ignoredColumns != null && ignoredColumns.length > 0) {
-            for (final int ignoredColumn : ignoredColumns) {
-                if (i == ignoredColumn) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private InsertObservation[] getInsertObservations(final String[] values,
