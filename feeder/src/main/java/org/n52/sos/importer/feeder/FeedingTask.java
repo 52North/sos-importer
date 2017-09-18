@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 /*
  * TODO if failed observations -&gt; store in file
  */
-public class FeedingTask implements Runnable {
+public class FeedingTask {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
@@ -165,11 +165,10 @@ public class FeedingTask implements Runnable {
         return new DataFile(config, file);
     }
 
-    @Override
-    public void run() {
-        LOG.trace("run()");
+    public void startFeeding() {
+        LOG.trace("startFeeding()");
         LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
-        // csv / ftp
+        // local or remote
         if (config.isRemoteFile()) {
             dataFile = getRemoteFile();
         } else if (dataFile == null) {
@@ -181,80 +180,83 @@ public class FeedingTask implements Runnable {
             return;
         }
         LOG.info("Datafile: '{}'.", dataFile.getFileName());
-        if (dataFile.isAvailable()) {
-            try {
-                // check SOS
-                Feeder feeder = null;
-                final String sosURL = config.getSosUrl().toString();
-                try {
-                    feeder = new Feeder(config);
-                } catch (final ExceptionReport | OXFException e) {
-                    LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
-                }
-                if (feeder == null || !feeder.isSosAvailable()) {
-                    LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
-                } else if (!feeder.isSosTransactional()) {
-                    LOG.error(String.format("SOS '%s' does not support required transactional operations: "
-                            + "InsertSensor, InsertObservation. Please enable.",
-                            sosURL));
-                } else {
-                    final String directory = dataFile.getFileName();
-                    File counterFile = null;
-                    String fileName = null;
-                    if (config.isRemoteFile()) {
-                        fileName = directory + COUNTER_FILE_POSTFIX;
-                    } else {
-                        fileName = getLocalFilename();
-                    }
-                    counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
-                    LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
-                    // read already inserted line count
-                    if (counterFile.exists()) {
-                        LOG.debug("Read already read lines from file");
-                        try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                            final int count = sc.nextInt();
-                            feeder.setLastLine(count);
-                        }
-                    } else {
-                        LOG.debug("Counter file does not exist.");
-                    }
-
-                    // SOS is available and transactional
-                    feeder.importData(dataFile);
-                    int lastLine = feeder.getLastLine();
-                    LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
-                            lastLine,
-                            counterFile.getCanonicalPath());
-                    /*
-                     * Hack for UoL EPC instrument files
-                     * The EPC instrument produces data files with empty lines at the end.
-                     * When a new sample is appended, this empty line is removed, hence
-                     * the line counter needs to be decremented.
-                     */
-                    if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
-                        lastLine = lastLine - 1;
-                        LOG.info("Decrement lastLine counter: {}", lastLine);
-                    }
-                    // override counter file
-                    try (
-                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
-                                    counterFile.getAbsoluteFile(),
-                                    Configuration.DEFAULT_CHARSET);
-                            PrintWriter out = new PrintWriter(counterFileWriter);) {
-                        out.println(lastLine);
-                    }
-
-                    LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
-                }
-            } catch (final MalformedURLException mue) {
-                LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
-                        config.getFileName(),
-                        mue.getMessage());
-                LOG.debug(EXCEPTION_STACK_TRACE, mue);
-            } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
-                log(e);
-            }
+        if (!dataFile.isAvailable()) {
+            LOG.error("Datafile is not available. Cancel feeding!");
+            return;
         }
+        try {
+            // check SOS
+            Feeder feeder = null;
+            final String sosURL = config.getSosUrl().toString();
+            try {
+                feeder = new Feeder(config);
+            } catch (final ExceptionReport | OXFException e) {
+                LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
+            }
+            if (feeder == null || !feeder.isSosAvailable()) {
+                LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
+            } else if (!feeder.isSosTransactional()) {
+                LOG.error(String.format("SOS '%s' does not support required transactional operations: "
+                        + "InsertSensor, InsertObservation. Please enable.",
+                        sosURL));
+            } else {
+                File counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(generateCounterFileName());
+                LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
+                // read already inserted line count
+                if (counterFile.exists()) {
+                    LOG.debug("Read already read lines from file");
+                    try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
+                        final int count = sc.nextInt();
+                        feeder.setLastLine(count);
+                    }
+                } else {
+                    LOG.debug("Counter file does not exist.");
+                }
+
+                // SOS is available and transactional
+                feeder.importData(dataFile);
+                int lastLine = feeder.getLastLine();
+                LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
+                        lastLine,
+                        counterFile.getCanonicalPath());
+                /*
+                 * Hack for UoL EPC instrument files
+                 * The EPC instrument produces data files with empty lines at the end.
+                 * When a new sample is appended, this empty line is removed, hence
+                 * the line counter needs to be decremented.
+                 */
+                if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
+                    lastLine = lastLine - 1;
+                    LOG.info("Decrement lastLine counter: {}", lastLine);
+                }
+                // override counter file
+                try (
+                        FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
+                                counterFile.getAbsoluteFile(),
+                                Configuration.DEFAULT_CHARSET);
+                        PrintWriter out = new PrintWriter(counterFileWriter);) {
+                    out.println(lastLine);
+                }
+
+                LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
+            }
+        } catch (final MalformedURLException mue) {
+            LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
+                    config.getFileName(),
+                    mue.getMessage());
+            LOG.debug(EXCEPTION_STACK_TRACE, mue);
+        } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
+            log(e);
+        }
+    }
+
+    private String generateCounterFileName() throws IOException {
+        final String directory = dataFile.getFileName();
+        String fileName = directory + COUNTER_FILE_POSTFIX;
+        if (!config.isRemoteFile()) {
+            fileName = getLocalFilename();
+        }
+        return fileName;
     }
 
     protected String getLocalFilename() throws IOException {

@@ -72,29 +72,24 @@ public final class Application {
             // read configuration
             String configFile = args[1];
             try {
-                final Configuration c = new Configuration(configFile);
+                Configuration configuration = new Configuration(configFile);
                 // start application with valid configuration
                 // data file
                 if (args.length == 2) {
                     // Case: one time feeding with defined configuration
-                    Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
-                    thread.start();
-                    thread.join();
+                    new FeedingTask(configuration).startFeeding();
                 } else if (args.length == 4) {
                     // Case: one time feeding with file override or period with file from configuration
                     if (isFileOverride(args[2])) {
                         // Case: file override
-                        new Thread(new FeedingTask(c,
-                                new File(args[3])),
-                                FeedingTask.class.getCanonicalName()).start();
-
+                        new FeedingTask(configuration, new File(args[3])).startFeeding();
                     } else if (isTimePeriodSet(args[2]))  {
                         // Case: repeated feeding
-                        repeatedFeeding(c, Integer.parseInt(args[3]));
+                        repeatedFeeding(configuration, Integer.parseInt(args[3]));
                     }
                 } else if (args.length == 6) {
                     // Case: repeated feeding with file override
-                    repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
+                    repeatedFeeding(configuration, new File(args[3]), Integer.parseInt(args[5]));
                 }
             } catch (final XmlException e) {
                 final String errorMsg =
@@ -110,21 +105,18 @@ public final class Application {
             } catch (IllegalArgumentException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
                 LOG.debug("Exception Stack Trace:", iae);
-            } catch (InterruptedException e) {
-                // we are doing nothing here, just log in the case of debug level logging
-                LOG.debug("Exception thrown: ", e);
             }
         } else {
             showUsage();
         }
     }
 
-    private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
+    private static void repeatedFeeding(Configuration c, File f, int periodInMinutes) {
         final Timer t = new Timer("FeederTimer");
         t.schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
     }
 
-    private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
+    private static void repeatedFeeding(Configuration c, int periodInMinutes) {
         repeatedFeeding(c, c.getDataFile(), periodInMinutes);
     }
 
