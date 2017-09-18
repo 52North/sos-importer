@@ -81,13 +81,6 @@ public class ConfigurationTest {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
     private static final File TEST_CONFIG = new File("src/test/xml/configuration-test.xml");
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     * @throws java.io.IOException if any.
-     * @throws org.apache.xmlbeans.XmlException if any.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) throws XmlException, IOException {
         //CHECKSTYLE_ON

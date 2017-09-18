@@ -187,11 +187,12 @@ public class FeedingTask {
         try {
             // check SOS
             Feeder feeder = null;
-            final String sosURL = config.getSosUrl().toString();
+            String sosURL = config.getSosUrl().toString();
             try {
                 feeder = new Feeder(config);
-            } catch (final ExceptionReport | OXFException e) {
-                LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
+            } catch (ExceptionReport | OXFException e) {
+                LOG.error("SOS " + sosURL + " is not available. Please check the configuration!");
+                LOG.debug("Exception thrown:", e);
             }
             if (feeder == null || !feeder.isSosAvailable()) {
                 LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
@@ -206,8 +207,7 @@ public class FeedingTask {
                 if (counterFile.exists()) {
                     LOG.debug("Read already read lines from file");
                     try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                        final int count = sc.nextInt();
-                        feeder.setLastLine(count);
+                        feeder.setLastLine(sc.nextInt());
                     }
                 } else {
                     LOG.debug("Counter file does not exist.");

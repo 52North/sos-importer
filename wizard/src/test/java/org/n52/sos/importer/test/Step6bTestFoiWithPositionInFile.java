@@ -81,11 +81,6 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bTestFoiWithPositionInFile {
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
@@ -117,7 +112,7 @@ public class Step6bTestFoiWithPositionInFile {
          * Set-Up Column metadata
          */
         Step3Model s3M = new Step3Model(4, firstLineWithData, false);
-        List<String> selection = new ArrayList<String>(3);
+        List<String> selection = new ArrayList<>(3);
         selection.add(Lang.l().step3ColTypeMeasuredValue());
         selection.add(Lang.l().step3MeasuredValNumericValue());
         selection.add(".SEP,");
@@ -132,7 +127,7 @@ public class Step6bTestFoiWithPositionInFile {
         String pattern = "LON";
         int colId = 5;
         s3M = new Step3Model(colId, firstLineWithData, false);
-        selection = new ArrayList<String>(3);
+        selection = new ArrayList<>(3);
         selection.add(Lang.l().position());
         selection.add(Lang.l().step3PositionCombination());
         // set parse pattern and group separated by
@@ -152,7 +147,7 @@ public class Step6bTestFoiWithPositionInFile {
         s3M = new Step3Model(colId, firstLineWithData, false);
         pattern = "LAT";
         tabE = new Column(colId, firstLineWithData);
-        selection = new ArrayList<String>(3);
+        selection = new ArrayList<>(3);
         selection.add(Lang.l().position());
         selection.add(Lang.l().step3PositionCombination());
         // set parse pattern and group separated by

@@ -39,28 +39,14 @@ import org.n52.sos.importer.model.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Class to test the methods of the date and time controller
- *
- * @author e.h.juerrens@52north.org
- * @since 0.5.0
- */
 public class DateAndTimeControllerTest {
-
 
     private static final Logger logger =
             LoggerFactory.getLogger(DateAndTimeControllerTest.class);
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
-    //CHECKSTYLE:OFF
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
-        // CHECKSTYLE_ON
         if (logger.isDebugEnabled()) {
             logger.debug("Start Test");
         }

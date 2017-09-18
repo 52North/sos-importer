@@ -43,37 +43,18 @@ import org.n52.sos.importer.view.Step6cPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * <p>Step6cWMSPanelTest class.</p>
- *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @since 0.5.0
- */
 public class Step6cWMSPanelTest extends JFrame {
 
-    /**
-     *
-     */
     private static final String TEST_FOI_NAME = "testFOIname";
 
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
 
-    /**
-     * <p>Constructor for Step6cWMSPanelTest.</p>
-     *
-     * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
-     */
     public Step6cWMSPanelTest(final Step6cModel s6cM) {
         getContentPane().add(new Step6cPanel("test description", TEST_FOI_NAME, s6cM));
     }
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON

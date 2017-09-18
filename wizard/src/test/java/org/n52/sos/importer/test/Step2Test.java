@@ -67,15 +67,8 @@ import org.n52.sos.importer.model.Step2Model;
 
 public class Step2Test {
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
-    //CHECKSTYLE:OFF
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
-        //CHECKSTYLE:ON
         //CHECKSTYLE:ON
         final MainController f = MainController.getInstance();
         final TableController tc = TableController.getInstance();

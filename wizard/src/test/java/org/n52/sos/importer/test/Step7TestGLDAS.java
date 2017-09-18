@@ -85,12 +85,7 @@ import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 
 public class Step7TestGLDAS {
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     * @throws java.net.URISyntaxException if any.
-     */
+
     //CHECKSTYLE:OFF
     public static void main(final String[] args) throws URISyntaxException {
         //CHECKSTLYE:ON
