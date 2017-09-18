@@ -42,6 +42,7 @@ import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,7 @@ public class FeedingTask implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
     private static final String COUNTER_FILE_POSTFIX = "_counter";
+    private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
     private static final String PROXY_PORT = "proxyPort";
     private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
@@ -218,13 +220,53 @@ public class FeedingTask implements Runnable {
                     } else {
                         LOG.debug("Counter file does not exist.");
                     }
+                    File timeStampFile = null;
+                    if (config.isUseLastTimestamp()) {
+                        String timeStampFileName = null;
+                        if (config.isRemoteFile()) {
+                            timeStampFileName = getLocalTimeStampFilename();
+                        } else {
+                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX;
+                        }
+                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
+                        if (timeStampFile.exists()) {
+                            // read already inserted UsedLastTimeStamp
+                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.",
+                                    timeStampFile.getCanonicalPath());
+                            try (Scanner sc = new Scanner(timeStampFile,
+                                    Configuration.DEFAULT_CHARSET)) {
+                                String storedTimeStamp = sc.next();
+                                Timestamp tmp = new Timestamp(storedTimeStamp);
+                                feeder.setLastUsedTimeStamp(tmp);
+                            }
+                        }
+                    } else {
+                        LOG.debug("Timestamp file does not exist.");
+                    }
 
                     // SOS is available and transactional
                     feeder.importData(dataFile);
                     int lastLine = feeder.getLastLine();
-                    LOG.info("OneTimeFeeder: save read lines count: {} to '{}'",
+                    LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());
+
+                    // read and log lastUsedTimestamp
+                    if (config.isUseLastTimestamp() && timeStampFile != null) {
+                        Timestamp timestamp = feeder.getLastUsedTimestamp();
+                        LOG.info("OneTimeFeeder: save read lastUsedTimestamp: '{}' to '{}'",
+                                timestamp,
+                                timeStampFile.getCanonicalPath());
+                        // override lastUsedTimestamp file
+                        try (
+                                FileWriterWithEncoding timeStampFileWriter = new FileWriterWithEncoding(
+                                        timeStampFile.getAbsolutePath(),
+                                        Configuration.DEFAULT_CHARSET);
+                                PrintWriter out = new PrintWriter(timeStampFileWriter);) {
+                            out.println(timestamp.toISO8601String());
+                        }
+                    }
+
                     /*
                      * Hack for UoL EPC instrument files
                      * The EPC instrument produces data files with empty lines at the end.
@@ -269,6 +311,20 @@ public class FeedingTask implements Runnable {
                 "_" +
                 dataFile.getCanonicalPath() +
                 COUNTER_FILE_POSTFIX;
+    }
+
+    /**
+     * <p>getLocalTimeStampFilename.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     * @throws java.io.IOException if any.
+     * @since 0.5.0
+     */
+    protected String getLocalTimeStampFilename() throws IOException {
+        return config.getConfigFile().getCanonicalPath() +
+                "_" +
+                dataFile.getCanonicalPath() +
+                TIMESTAMP_FILE_POSTFIX;
     }
 
     private boolean isLinuxOrSimilar() {

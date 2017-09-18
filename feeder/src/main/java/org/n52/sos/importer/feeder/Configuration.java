@@ -1302,6 +1302,10 @@ public final class Configuration {
                 importConf.getDataFile().getUseDateFromLastModifiedDate();
     }
 
+    public boolean isUseLastTimestamp() {
+        return importConf.getCsvMetadata().isSetUseLastTimestamp();
+    }
+
     /**
      * <p>isSamplingFile.</p>
      *
