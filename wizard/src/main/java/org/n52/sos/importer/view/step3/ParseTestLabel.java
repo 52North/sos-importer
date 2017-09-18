@@ -47,38 +47,20 @@ import org.slf4j.LoggerFactory;
  */
 public class ParseTestLabel extends JLabel {
 
-    private static final String STRING = "].";
     private static final Logger logger = LoggerFactory.getLogger(ParseTestLabel.class);
     private static final long serialVersionUID = 1L;
 
     private final ParserThread parserThread;
 
-    /**
-     * <p>Constructor for ParseTestLabel.</p>
-     *
-     * @param parser a {@link org.n52.sos.importer.model.Parseable} object.
-     * @param firstLineWithData a int.
-     */
-    public ParseTestLabel(final Parseable parser, final int firstLineWithData) {
+    public ParseTestLabel(Parseable parser, int firstLineWithData) {
         super();
-        if (logger.isTraceEnabled()) {
-            logger.trace("ParseTestLabel()[" + hashCode() + "]");
-        }
+        logger.trace("ParseTestLabel()[{}]", hashCode());
         parserThread = new ParserThread(this, parser, firstLineWithData);
     }
 
-    /**
-     * <p>parseValues.</p>
-     *
-     * @param valuesToParse a {@link java.util.List} object.
-     */
-    public void parseValues(final List<String> valuesToParse) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("[" + hashCode() + STRING +
-                    "parseValues()");
-        }
-        setText("<html><u>" + Lang.l().waitForParseResultsLabel() +
-                "</u></html>");
+    public void parseValues(List<String> valuesToParse) {
+        logger.trace("[{}].parseValues()]", hashCode());
+        setText("<html><u>" + Lang.l().waitForParseResultsLabel() + "</u></html>");
         parserThread.setValues(valuesToParse);
         BackNextController.getInstance().setNextButtonEnabled(false);
         // call invokeLater()

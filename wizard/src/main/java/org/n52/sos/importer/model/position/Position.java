@@ -157,10 +157,10 @@ public class Position extends Combination {
             if (newEpsgCode != null) {
                 LOG.info(ADD + newEpsgCode + TO + this);
             } else {
-                LOG.info(REMOVE + this.epsgCode + FROM + this);
+                LOG.info(REMOVE + epsgCode + FROM + this);
             }
         }
-        this.epsgCode = newEpsgCode;
+        epsgCode = newEpsgCode;
     }
 
     /**
@@ -237,6 +237,7 @@ public class Position extends Combination {
 
     @Override
     public Position parse(final String s) {
+        LOG.trace("parse('{}')", s);
         String pattern = getPattern();
 
         pattern = pattern.replaceAll(LAT, "{0}");
@@ -285,4 +286,67 @@ public class Position extends Combination {
             return "Position group " + getGroup();
         }
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (epsgCode == null ? 0 : epsgCode.hashCode());
+        result = prime * result + (group == null ? 0 : group.hashCode());
+        result = prime * result + (height == null ? 0 : height.hashCode());
+        result = prime * result + (latitude == null ? 0 : latitude.hashCode());
+        result = prime * result + (longitude == null ? 0 : longitude.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Position other = (Position) obj;
+        if (epsgCode == null) {
+            if (other.epsgCode != null) {
+                return false;
+            }
+        } else if (!epsgCode.equals(other.epsgCode)) {
+            return false;
+        }
+        if (group == null) {
+            if (other.group != null) {
+                return false;
+            }
+        } else if (!group.equals(other.group)) {
+            return false;
+        }
+        if (height == null) {
+            if (other.height != null) {
+                return false;
+            }
+        } else if (!height.equals(other.height)) {
+            return false;
+        }
+        if (latitude == null) {
+            if (other.latitude != null) {
+                return false;
+            }
+        } else if (!latitude.equals(other.latitude)) {
+            return false;
+        }
+        if (longitude == null) {
+            if (other.longitude != null) {
+                return false;
+            }
+        } else if (!longitude.equals(other.longitude)) {
+            return false;
+        }
+        return true;
+    }
+
 }

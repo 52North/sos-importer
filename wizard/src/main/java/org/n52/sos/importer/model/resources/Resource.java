@@ -90,7 +90,7 @@ public abstract class Resource extends Component {
      * @param newUri a {@link java.net.URI} object.
      */
     public void setURI(final URI newUri) {
-        this.uri = newUri;
+        uri = newUri;
     }
 
     /**
@@ -235,13 +235,6 @@ public abstract class Resource extends Component {
      */
     public abstract Resource forThis(Cell measuredValuePosition);
 
-    /**
-     * <p>getXMLId.</p>
-     *
-     * @return XML prefix combined with hash code
-     * @see #XML_PREFIX()
-     * @see #hashCode()
-     */
     public String getXMLId() {
         return XML_PREFIX() + hashCode();
     }
@@ -257,23 +250,17 @@ public abstract class Resource extends Component {
         return "";
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
         result = prime * result
-                + ((tableElement == null) ? 0 : tableElement.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+                + (tableElement == null ? 0 : tableElement.hashCode());
+        result = prime * result + (uri == null ? 0 : uri.hashCode());
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
