@@ -156,10 +156,8 @@ public class Step6bSpecialController extends StepController {
                          */
                         for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
                             if (s6bsM.getSensor().isGenerated() &&
-                                    // XXX maybe own equals
-                                    s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) &&
-                                    // XXX check if foi and obsprop
-                                    s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) {
+                                    s6bsM.getFeatureOfInterest().equals(foi) &&
+                                    s6bsM.getObservedProperty().equals(op)) {
                                 continue mvLoop;
                             }
                         }
