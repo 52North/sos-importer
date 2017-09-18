@@ -1066,15 +1066,6 @@ public class DataFile {
     }
 
     /**
-     * <p>getExpectedColumnCount.</p>
-     *
-     * @return a int.
-     */
-    public int getExpectedColumnCount() {
-        return configuration.getExpectedColumnCount();
-    }
-
-    /**
      * <p>getHeaderLine.</p>
      *
      * @return a int.
@@ -1090,15 +1081,6 @@ public class DataFile {
      */
     public String getEncoding() {
         return configuration.getDataFileEncoding();
-    }
-
-    /**
-     * <p>getSeparatorChar.</p>
-     *
-     * @return a char.
-     */
-    public char getSeparatorChar() {
-        return configuration.getCsvSeparator();
     }
 
     public Optional<List<OmParameter<?>>> getOmParameters(int mVColumnId, String[] values) {

@@ -1529,11 +1529,6 @@ public final class Configuration {
                 importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
     }
 
-    /**
-     * <p>getIgnoreLineRegExPatterns.</p>
-     *
-     * @return an array of {@link java.util.regex.Pattern} objects.
-     */
     public Pattern[] getIgnoreLineRegExPatterns() {
         if (!isIgnoreLineRegExSet()) {
             return new Pattern[0];

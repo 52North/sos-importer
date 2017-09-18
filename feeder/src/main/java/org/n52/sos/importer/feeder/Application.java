@@ -70,7 +70,7 @@ public final class Application {
         logApplicationMetadata();
         if (checkArgs(args)) {
             // read configuration
-            final String configFile = args[1];
+            String configFile = args[1];
             try {
                 final Configuration c = new Configuration(configFile);
                 // start application with valid configuration
@@ -104,10 +104,10 @@ public final class Application {
                                 e.getMessage());
                 LOG.error(errorMsg);
                 LOG.debug("", e);
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 LOG.error("Exception thrown: {}", e.getMessage());
                 LOG.debug("", e);
-            } catch (final IllegalArgumentException iae) {
+            } catch (IllegalArgumentException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
                 LOG.debug("Exception Stack Trace:", iae);
             } catch (InterruptedException e) {
@@ -128,7 +128,7 @@ public final class Application {
         repeatedFeeding(c, c.getDataFile(), periodInMinutes);
     }
 
-    /**
+    /*
      * Prints the usage test to the Standard-Output.
      * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
      */
@@ -145,13 +145,15 @@ public final class Application {
     /**
      * This method validates the input parameters from the user. If something
      * wrong, it will be logged.
+     *
      * @param args the parameters given by the user
+     *
      * @return <b>true</b> if the parameters are valid and the programm has all
      *              required information.<br>
      *          <b>false</b> if parameters are missing or not usable in the
      *              specified form.
      */
-    private static boolean checkArgs(final String[] args) {
+    private static boolean checkArgs(String[] args) {
         LOG.trace("checkArgs({})", Arrays.toString(args));
         if (args == null) {
             LOG.error("no parameters defined. null received as args!");
@@ -177,15 +179,15 @@ public final class Application {
         return false;
     }
 
-    private static boolean isConfigFileSet(final String parameter) {
+    private static boolean isConfigFileSet(String parameter) {
         return ALLOWED_PARAMETERS[0].equals(parameter);
     }
 
-    private static boolean isFileOverride(final String parameter) {
+    private static boolean isFileOverride(String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[1]);
     }
 
-    private static boolean isTimePeriodSet(final String parameter) {
+    private static boolean isTimePeriodSet(String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[2]);
     }
 
@@ -194,16 +196,16 @@ public final class Application {
      */
     private static void logApplicationMetadata() {
         LOG.trace("logApplicationMetadata()");
-        final StringBuffer logMessage = new StringBuffer("Application started");
-        final InputStream manifestStream =
+        StringBuffer logMessage = new StringBuffer("Application started");
+        InputStream manifestStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
         try {
-            final Manifest manifest = new Manifest(manifestStream);
-            final Attributes attributes = manifest.getMainAttributes();
-            final Set<Object> keys = attributes.keySet();
-            for (final Object object : keys) {
+            Manifest manifest = new Manifest(manifestStream);
+            Attributes attributes = manifest.getMainAttributes();
+            Set<Object> keys = attributes.keySet();
+            for (Object object : keys) {
                 if (object instanceof Name) {
-                    final Name key = (Name) object;
+                    Name key = (Name) object;
                     logMessage.append(NEW_LINE_WITH_TABS)
                         .append(key)
                         .append(": ")
@@ -215,7 +217,7 @@ public final class Application {
                 .append(heapSizeInformation())
                 .append(NEW_LINE_WITH_TABS)
                 .append(operatingSystemInformation());
-        } catch (final IOException ex) {
+        } catch (IOException ex) {
             LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
         }
         LOG.info(logMessage.toString());
@@ -228,14 +230,9 @@ public final class Application {
                 System.getProperty("os.version"));
     }
 
-    /**
-     * <p>heapSizeInformation.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     protected static String heapSizeInformation() {
-        final long mb = 1024 * 1024;
-        final Runtime rt = Runtime.getRuntime();
+        long mb = 1024 * 1024;
+        Runtime rt = Runtime.getRuntime();
         return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
                 rt.maxMemory() / mb,
                 rt.totalMemory() / mb,

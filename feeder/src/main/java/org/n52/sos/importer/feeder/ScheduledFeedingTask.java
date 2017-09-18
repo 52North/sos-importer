@@ -66,16 +66,9 @@ public class ScheduledFeedingTask extends TimerTask {
     private final File file;
     private final int periodInMinutes;
 
-    /**
-     * <p>Constructor for RepeatedFeeder.</p>
-     *
-     * @param c a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param f a {@link java.io.File} object.
-     * @param periodInMinutes a int.
-     */
-    public ScheduledFeedingTask(final Configuration c, final File f, final int periodInMinutes) {
-        configuration = c;
-        file = f;
+    public ScheduledFeedingTask(Configuration configuration, File file, int periodInMinutes) {
+        this.configuration = configuration;
+        this.file = file;
         this.periodInMinutes = periodInMinutes;
     }
 
@@ -95,7 +88,7 @@ public class ScheduledFeedingTask extends TimerTask {
              */
             // if file is a directory, get latest from file list
             if (file.isDirectory()) {
-                final ArrayList<File> filesToFeed = new ArrayList<File>();
+                final ArrayList<File> filesToFeed = new ArrayList<>();
                 getLastFeedFile();
                 if (getLastUsedDataFile() != null) {
                     filesToFeed.add(getLastUsedDataFile());

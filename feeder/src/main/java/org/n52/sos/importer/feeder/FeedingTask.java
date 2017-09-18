@@ -257,13 +257,6 @@ public class FeedingTask implements Runnable {
         }
     }
 
-    /**
-     * <p>getLocalFilename.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
-     * @since 0.5.0
-     */
     protected String getLocalFilename() throws IOException {
         return config.getConfigFile().getCanonicalPath() +
                 "_" +

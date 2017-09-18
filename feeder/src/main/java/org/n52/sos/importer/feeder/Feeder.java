@@ -314,17 +314,7 @@ public final class Feeder {
         return false;
     }
 
-    /**
-     * <p>importData.</p>
-     *
-     * @param dataFile a {@link org.n52.sos.importer.feeder.DataFile} object.
-     * @throws java.io.IOException if any.
-     * @throws org.n52.oxf.OXFException if any.
-     * @throws org.apache.xmlbeans.XmlException if any.
-     * @throws java.lang.IllegalArgumentException if any.
-     * @throws java.text.ParseException if any.
-     */
-    public void importData(final DataFile dataFile)
+    public void importData(DataFile dataFile)
             throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
         LOG.trace("importData()");
         // 0 Get line
