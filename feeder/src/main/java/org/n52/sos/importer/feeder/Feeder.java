@@ -166,7 +166,14 @@ public final class Feeder {
 
     // stores the Timestamp of the last insertObservations
     // (required for handling sample based files)
-    private Timestamp lastTimestamp;
+    private Timestamp sampleLastTimestamp;
+
+    // stores the Timestamp of the last insertObservations
+    private Timestamp lastUsedTimestamp;
+
+    private boolean isUseLastTimestamp;
+
+    private Timestamp newLastUsedTimestamp;
 
     // The date information of the current sample
     private Timestamp sampleDate;
@@ -302,6 +309,29 @@ public final class Feeder {
         return false;
     }
 
+    /**
+     * Checks for <b>isUseLastTimestamp</b> and <b>newLastUsedTimestamp</b>
+     * operations.
+     * @return <code>true</code> if isUseLastTimestamp is true and
+     *         newLastUsedTimestamp is after lastUsedTimestamp
+     *         else <code>false</code>.
+     */
+    private boolean shouldUpdateLastUsedTimestamp() {
+        return isUseLastTimestamp
+                && newLastUsedTimestamp != null
+                && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
+    }
+
+    /**
+     * <p>importData.</p>
+     *
+     * @param dataFile a {@link org.n52.sos.importer.feeder.DataFile} object.
+     * @throws java.io.IOException if any.
+     * @throws org.n52.oxf.OXFException if any.
+     * @throws org.apache.xmlbeans.XmlException if any.
+     * @throws java.lang.IllegalArgumentException if any.
+     * @throws java.text.ParseException if any.
+     */
     public void importData(DataFile dataFile)
             throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
         LOG.trace("importData()");
@@ -318,6 +348,10 @@ public final class Feeder {
         if (mVCols == null || mVCols.length == 0) {
             LOG.error("No measured value columns found in configuration");
             return;
+        }
+        if (isUseLastTimestamp) {
+            lastLine = dataFile.getFirstLineWithData();
+            // TODO pointing back on first line with data secured?
         }
         if (configuration.getFirstLineWithData() == 0) {
             skipLines(cr, lastLine + 1);
@@ -342,8 +376,8 @@ public final class Feeder {
             case SingleObservation:
                 numOfObsTriedToInsert = importUsingSingleObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
-//            case ResultHandling:
-//                numOfObsTriedToInsert = new ResultHandlingImporter(parser);
+            // case ResultHandling:
+            // numOfObsTriedToInsert = new ResultHandlingImporter(parser);
             default:
                 LOG.error("Not supported strategy given '{}'.",
                         configuration.getImportStrategy());
@@ -410,6 +444,9 @@ public final class Feeder {
                 }
             }
         }
+        if (shouldUpdateLastUsedTimestamp()) {
+            lastUsedTimestamp = newLastUsedTimestamp;
+        }
         if (!timeSeriesRepository.isEmpty()) {
             insertTimeSeries(timeSeriesRepository);
         }
@@ -443,6 +480,9 @@ public final class Feeder {
                 LOG.info("Processed line {}.", lineCounter);
             }
         }
+        if (shouldUpdateLastUsedTimestamp()) {
+            lastUsedTimestamp = newLastUsedTimestamp;
+        }
         lastLine = lineCounter;
         logTiming(singleObservationStartReadingFile);
         return numOfObsTriedToInsert;
@@ -452,7 +492,7 @@ public final class Feeder {
             ParseException {
         int sampleStartLine;
         sampleStartLine = lineCounter;
-        lastTimestamp = null;
+        sampleLastTimestamp = null;
         getSampleMetaData(cr);
         isInSample = true;
         skipLines(cr, sampleDataOffset - (lineCounter - sampleStartLine));
@@ -602,6 +642,34 @@ public final class Feeder {
     private InsertObservation getInsertObservationForColumnIdFromValues(final int mVColumnId,
             final String[] values,
             final DataFile dataFile) throws ParseException {
+        // TIMESTAMP
+        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        if (isSampleBasedDataFile) {
+            if (sampleLastTimestamp != null && timeStamp.isBefore(sampleLastTimestamp)) {
+                sampleDate.applyDayDelta(1);
+            }
+            sampleLastTimestamp = new Timestamp().enrich(timeStamp);
+            timeStamp.enrich(sampleDate);
+        }
+        if (isUseLastTimestamp) {
+            if (lastUsedTimestamp != null && timeStamp.isAfter(lastUsedTimestamp)) {
+                // update newLastUsedTimestamp, if timeStamp is After:
+                if (newLastUsedTimestamp == null) {
+                    newLastUsedTimestamp = timeStamp;
+                }
+                if (timeStamp.isAfter(newLastUsedTimestamp)) {
+                    newLastUsedTimestamp = timeStamp;
+                }
+                // store lastUsedTimestamp in configuration/station?
+            } else {
+                // abort Insertion
+                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'",
+                         timeStamp, lastUsedTimestamp);
+                return null;
+            }
+        }
+        // TODO implement using different templates in later version depending on the class of value
+        LOG.debug("Timestamp: {}", timeStamp);
         // SENSOR
         final Sensor sensor = dataFile.getSensorForColumn(mVColumnId, values);
         LOG.debug("Sensor: {}", sensor);
@@ -615,17 +683,6 @@ public final class Feeder {
         }
         // TODO implement handling for value == null => skip observation and log it, or logging is done in getValue(..)
         LOG.debug("Value: {}", value.toString());
-        // TODO implement using different templates in later version depending on the class of value
-        // TIMESTAMP
-        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
-        if (isSampleBasedDataFile) {
-            if (lastTimestamp != null && timeStamp.isBefore(lastTimestamp)) {
-                sampleDate.applyDayDelta(1);
-            }
-            lastTimestamp = new Timestamp().enrich(timeStamp);
-            timeStamp.enrich(sampleDate);
-        }
-        LOG.debug("Timestamp: {}", timeStamp);
         // UOM CODE
         final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(mVColumnId, values);
         LOG.debug("UomCode: '{}'", uom);
@@ -1229,4 +1286,12 @@ public final class Feeder {
         this.lastLine = lastLine;
     }
 
+    public Timestamp getLastUsedTimestamp() {
+        return lastUsedTimestamp;
+    }
+
+    public void setLastUsedTimeStamp(final Timestamp timeStamp) {
+        LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", lastUsedTimestamp, timeStamp);
+        lastUsedTimestamp = timeStamp;
+    }
 }
