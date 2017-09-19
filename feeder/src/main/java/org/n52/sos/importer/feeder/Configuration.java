@@ -312,7 +312,7 @@ public final class Configuration {
     public String getRemoteFileURL() {
         return importConf.getDataFile().getRemoteFile().getURL();
     }
-    
+
     public boolean isRemoteFileURLRegex() {
         LOG.trace("isRemoteFileURLRegex()");
         return importConf.getDataFile().getReferenceIsARegularExpression();
@@ -1627,7 +1627,7 @@ public final class Configuration {
     public boolean areRemoteFileCredentialsSet() {
         return isRemoteFile() && importConf.getDataFile().getRemoteFile().isSetCredentials();
     }
-    
+
     public boolean isParentFeatureSetForFeature(int featureColumnIndex) {
         Column column = getColumnById(featureColumnIndex);
         if (column == null) {

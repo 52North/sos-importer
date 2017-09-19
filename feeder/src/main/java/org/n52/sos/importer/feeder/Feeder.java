@@ -320,7 +320,7 @@ public final class Feeder {
         }
         return false;
     }
-    
+
     /**
      * Checks for <b>isUseLastTimestamp</b> and <b>newLastUsedTimestamp</b>
      * operations.
@@ -333,7 +333,7 @@ public final class Feeder {
                 && newLastUsedTimestamp != null
                 && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
     }
-    
+
     /**
      * <p>importData.</p>
      *
@@ -736,7 +736,7 @@ public final class Feeder {
                 // store lastUsedTimestamp in configuration/station?
             } else {
                 // abort Insertion
-                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'", 
+                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'",
                          timeStamp, lastUsedTimestamp);
                 return null;
             }

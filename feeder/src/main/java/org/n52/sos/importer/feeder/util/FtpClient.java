@@ -1,6 +1,33 @@
+/**
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * If the program is linked with libraries which are licensed under one of
+ * the following licenses, the combination of the program with the linked
+ * library is not considered a "derivative work" of the program:
+ *
+ *     - Apache License, version 2.0
+ *     - Apache Software License, version 1.0
+ *     - GNU Lesser General Public License, version 3
+ *     - Mozilla Public License, versions 1.0, 1.1 and 2.0
+ *     - Common Development and Distribution License (CDDL), version 1.0
+ *
+ * Therefore the distribution of the program linked with libraries licensed
+ * under the aforementioned licenses, is permitted by the copyright holders
+ * if the distribution is compliant with both the GNU General Public
+ * License version 2 and the aforementioned licenses.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ */
 package org.n52.sos.importer.feeder.util;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -12,9 +39,6 @@ import org.n52.sos.importer.feeder.DataFile;
 
 public class FtpClient extends WebClient {
 
-    private static final String PROXY_PORT = "proxyPort";
-    private File file = null;
-
     public FtpClient(Configuration config) {
         super(config);
     }
@@ -23,33 +47,27 @@ public class FtpClient extends WebClient {
     public DataFile download() {
         // ftp client
         FTPClient client;
-        
+
         // proxy
         final String pHost = System.getProperty("proxyHost", "proxy");
         int pPort = -1;
         if (System.getProperty(PROXY_PORT) != null) {
             pPort = Integer.parseInt(System.getProperty(PROXY_PORT));
         }
-        final String pUser = System.getProperty("http.proxyUser");
-        final String pPassword = System.getProperty("http.proxyPassword");
         if (pHost != null && pPort != -1) {
             LOG.info("Using proxy for FTP connection!");
-            if (pUser != null && pPassword != null) {
-                client = new FTPHTTPClient(pHost, pPort, pUser, pPassword);
-            } else {
-                client = new FTPHTTPClient(pHost, pPort);
-            }
+            client = new FTPHTTPClient(pHost, pPort);
         } else {
             LOG.info("Using no proxy for FTP connection!");
             client = new FTPClient();
         }
 
         createTempFile();
-        
+
         if (file == null) {
             return null;
         }
-        
+
         try (FileOutputStream fos = new FileOutputStream(file);) {
             client.connect(config.getRemoteFileURL());
             if (config.areRemoteFileCredentialsSet()) {
@@ -65,7 +83,7 @@ public class FtpClient extends WebClient {
         } catch (final IOException e) {
             LOG.error("The file you specified cannot be obtained.");
             return null;
-        } 
+        }
         return new DataFile(config, file);
     }
 }

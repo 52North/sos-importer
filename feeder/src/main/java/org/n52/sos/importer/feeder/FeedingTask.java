@@ -64,7 +64,7 @@ public class FeedingTask implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
     private final Configuration config;
-    
+
     private WebClient webClient;
 
     private DataFile dataFile;
@@ -88,7 +88,7 @@ public class FeedingTask implements Runnable {
         this.config = config;
         dataFile = new DataFile(config, datafile);
     }
-    
+
     private DataFile downloadRemoteFile() {
         // get remoteUrl from configFile
         URL fileUrl = null;
@@ -100,21 +100,21 @@ public class FeedingTask implements Runnable {
         }
         if (fileUrl != null) {
             switch (fileUrl.getProtocol()) {
-            case "ftp":
-                webClient = new FtpClient(config);
-                break;
-            case "http":
-                webClient = new HTTPClient(config);
-                break;
-            default:
-                throw new IllegalArgumentException("Protocol not supported: " + fileUrl.getProtocol());
+                case"ftp":
+                    webClient = new FtpClient(config);
+                    break;
+                case "http":
+                    webClient = new HTTPClient(config);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Protocol not supported: " + fileUrl.getProtocol());
             }
             return webClient.download();
         } else {
             return null;
         }
     }
-    
+
     @Override
     public void run() {
         LOG.trace("run()");
@@ -238,7 +238,7 @@ public class FeedingTask implements Runnable {
                         webClient.deleteDownloadedFile();
                     }
                     LOG.info("Feeding data from file {} to SOS instance finished.", dataFile.getFileName());
-                    
+
                 }
             } catch (final MalformedURLException mue) {
                 LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
