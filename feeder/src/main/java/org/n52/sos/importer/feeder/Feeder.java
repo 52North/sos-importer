@@ -370,6 +370,15 @@ public final class Feeder {
             // Add observationBus !? or importer and collector know each other or feeder provides interface to
             // publish observations from collector to importer but it's asychron, hence parsing and importing happens
             // in different threads
+            // Collector implementations
+            // - default collector
+            // - sample based collector
+            // - colum collector
+            // Importer implementations
+            // - swearray importer
+            // - single observation importer
+            // - result handling importer
+            //   ^-> profil importer
             case SweArrayObservationWithSplitExtension:
                 numOfObsTriedToInsert = importUsingSweArrayObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
