@@ -247,6 +247,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Add support for HTTP remote files incl. fix for FTP client
      * Add support for parent feature relations
        * Bindings
        * Wizard

@@ -191,9 +191,6 @@ public final class Configuration {
     private static final String MI = "mi";
     private static final String KM = "km";
 
-    private static final String FTP_REG_EX_NOT_SUPPORTED =
-            "Support for FTPUrls with regular expression is not yet implemented.";
-
     static {
         EPSG_EASTING_FIRST_MAP = new HashMap<>();
         EPSG_EASTING_FIRST_MAP.put("default", false);
@@ -312,61 +309,12 @@ public final class Configuration {
         return importConf.getDataFile().getRemoteFile() != null;
     }
 
-    /**
-     * Returns the host name of the ftp server.
-     *
-     * @return ftp host
-     */
-    public String getFtpHost() {
-        final String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
-        return splitString[0];
+    public String getRemoteFileURL() {
+        return importConf.getDataFile().getRemoteFile().getURL();
     }
 
-    /**
-     * Returns a string, that indicates the path of subdirectories, where the
-     * ftp file is located.
-     *
-     * @return subdirectory structure
-     */
-    public String getFtpSubdirectory() {
-        final String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
-        StringBuffer result = new StringBuffer();
-        // certain file
-        if (!isFtpUrlRegex()) {
-            for (int i = 1; i < splitString.length - 1; i++) {
-                result.append(splitString[i]);
-            }
-        } else {
-            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
-        }
-        result.trimToSize();
-        return result.toString();
-    }
-
-    /**
-     * Returns the name of the ftp file.
-     *
-     * @return ftp file name
-     */
-    public String getFtpFile() {
-        final String[] splitString = importConf.getDataFile().getRemoteFile().getURL().split("/");
-        String result;
-        // certain file
-        if (!isFtpUrlRegex()) {
-            result = splitString[splitString.length - 1];
-        } else {
-            throw new RuntimeException(FTP_REG_EX_NOT_SUPPORTED);
-        }
-        return result;
-    }
-
-    /**
-     * <p>isFtpUrlRegex.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean isFtpUrlRegex() {
-        LOG.trace("isSosUrlRegex()");
+    public boolean isRemoteFileURLRegex() {
+        LOG.trace("isRemoteFileURLRegex()");
         return importConf.getDataFile().getReferenceIsARegularExpression();
     }
 
@@ -1674,6 +1622,10 @@ public final class Configuration {
             }
         }
         return false;
+    }
+
+    public boolean areRemoteFileCredentialsSet() {
+        return isRemoteFile() && importConf.getDataFile().getRemoteFile().isSetCredentials();
     }
 
     public boolean isParentFeatureSetForFeature(int featureColumnIndex) {
