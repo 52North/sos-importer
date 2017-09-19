@@ -45,6 +45,10 @@ public class FtpClient extends WebClient {
 
     @Override
     public DataFile download() {
+        if (config.isRemoteFileURLRegex()) {
+            LOG.error("Regex in remote file URLs are not supported.");
+            return null;
+        }
         // ftp client
         FTPClient client;
 

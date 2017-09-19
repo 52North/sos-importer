@@ -50,6 +50,10 @@ public class HTTPClient extends WebClient {
 
     @Override
     public DataFile download() {
+        if (config.isRemoteFileURLRegex()) {
+            LOG.error("Regex in remote file URLs are not supported.");
+            return null;
+        }
         // HttpClient
         CloseableHttpClient client;
 
