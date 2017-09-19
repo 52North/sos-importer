@@ -326,12 +326,24 @@ public final class Feeder {
         }
         int numOfObsTriedToInsert = 0;
         switch (configuration.getImportStrategy()) {
+            // TODO divide into parser and importer
+            // TODO start parser/observation collector with subtypes for columns instead rows and sample based types
+            // TODO feeder is the controller and sends all received insertobservation objects to the importer
+            // TODO importer "collects" all observations and depending on the number of available importer threads
+            //      the observation is imported directly or put on hold in a list of observations to be inserted
+            // TODO division between importer and collector is important to easily add new collectors and
+            //      importer/strategies
+            // Add observationBus !? or importer and collector know each other or feeder provides interface to
+            // publish observations from collector to importer but it's asychron, hence parsing and importing happens
+            // in different threads
             case SweArrayObservationWithSplitExtension:
                 numOfObsTriedToInsert = importUsingSweArrayObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
             case SingleObservation:
                 numOfObsTriedToInsert = importUsingSingleObservationStrategy(dataFile, cr, headerLine, mVCols);
                 break;
+//            case ResultHandling:
+//                numOfObsTriedToInsert = new ResultHandlingImporter(parser);
             default:
                 LOG.error("Not supported strategy given '{}'.",
                         configuration.getImportStrategy());
