@@ -38,13 +38,13 @@ import org.n52.sos.importer.model.measuredValue.Boolean;
 import org.n52.sos.importer.model.measuredValue.Count;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.measuredValue.Text;
-import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.OmParameter;
 import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.view.i18n.Lang;
 import org.n52.sos.importer.view.step3.DateAndTimeCombinationPanel;
+import org.n52.sos.importer.view.step3.FeatureOfInterestPanel;
 import org.n52.sos.importer.view.step3.MeasuredValueSelectionPanel;
 import org.n52.sos.importer.view.step3.OmParameterSelectionPanel;
 import org.n52.sos.importer.view.step3.PositionCombinationPanel;
@@ -68,10 +68,10 @@ public class Step3Panel extends JPanel {
      * This panel holds the first column with radio buttons for each column
      * type, or Do-not-export
      */
-    private JPanel columnTypeJP;
-    private JPanel columnSubTypeJP;
-    private JPanel columnSubTypeMetadataJP;
-    private TablePanel tablePanel;
+    private final JPanel columnTypeJP;
+    private final JPanel columnSubTypeJP;
+    private final JPanel columnSubTypeMetadataJP;
+    private final TablePanel tablePanel;
     private final SelectionPanel columnTypeRadioButtonPanel;
 
     /**
@@ -79,7 +79,7 @@ public class Step3Panel extends JPanel {
      *
      * @param firstLineWithData a int.
      */
-    public Step3Panel(int firstLineWithData) {
+    public Step3Panel(final int firstLineWithData) {
         super();
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         /*
@@ -96,7 +96,7 @@ public class Step3Panel extends JPanel {
         columnTypeRadioButtonPanel = new ColumnTypePanel(firstLineWithData);
         columnTypeRadioButtonPanel.getContainerPanel().add(columnTypeRadioButtonPanel);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBorder(new TitledBorder(null,
                 Lang.l().column().substring(0, 1).toUpperCase()
                 + Lang.l().column().substring(1) + " "
@@ -143,7 +143,7 @@ public class Step3Panel extends JPanel {
      *
      * @param selection list of all selected items, e.g. column type and the corresponding meta data
      */
-    public void store(List<String> selection) {
+    public void store(final List<String> selection) {
         columnTypeRadioButtonPanel.store(selection);
     }
 
@@ -152,7 +152,7 @@ public class Step3Panel extends JPanel {
      *
      * @param selection a {@link java.util.List} object.
      */
-    public void restore(List<String> selection) {
+    public void restore(final List<String> selection) {
         columnTypeRadioButtonPanel.restore(selection);
     }
 
@@ -172,7 +172,7 @@ public class Step3Panel extends JPanel {
          * column type
          * @param firstLineWithData required for the test parsing results
          */
-        ColumnTypePanel(int firstLineWithData) {
+        ColumnTypePanel(final int firstLineWithData) {
             super(columnTypeJP);
             addRadioButton(Lang.l().step3ColTypeDoNotExport());
             addRadioButton(Lang.l().step3ColTypeMeasuredValue(),
@@ -186,7 +186,7 @@ public class Step3Panel extends JPanel {
                     new PositionPanel(firstLineWithData));
             addRadioButton(Lang.l().featureOfInterest(),
                     ToolTips.get(ToolTips.FEATURE_OF_INTEREST),
-                    new ResourceSelectionPanel(columnSubTypeJP, new FeatureOfInterest()));
+                    new FeatureOfInterestPanel(columnSubTypeJP));
             addRadioButton(Lang.l().observedProperty(),
                     ToolTips.get(ToolTips.OBSERVED_PROPERTY),
                     new ResourceSelectionPanel(columnSubTypeJP, new ObservedProperty()));
@@ -247,7 +247,7 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the measure value type
              * @param firstLineWithData required for the test parsing results
              */
-            MeasuredValuePanel(int firstLineWithData) {
+            MeasuredValuePanel(final int firstLineWithData) {
                 super(columnSubTypeJP);
                 addRadioButton(Lang.l().step3MeasuredValNumericValue(),
                         ToolTips.get(ToolTips.NUMERIC_VALUE),
@@ -274,7 +274,7 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the date time type
              * @param firstLineWithData required for the test parsing results
              */
-            DateAndTimePanel(int firstLineWithData) {
+            DateAndTimePanel(final int firstLineWithData) {
                 super(columnSubTypeJP);
                 addRadioButton(
                         Lang.l().step3DateAndTimeCombination(),
@@ -295,7 +295,7 @@ public class Step3Panel extends JPanel {
              * JPanel for the definition of the position type
              * @param firstLineWithData required for the test parsing results
              */
-            PositionPanel(int firstLineWithData) {
+            PositionPanel(final int firstLineWithData) {
                 super(columnSubTypeJP);
                 addRadioButton(
                         Lang.l().step3PositionCombination(),

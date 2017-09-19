@@ -108,7 +108,7 @@
         <Metadata>
             <Key>IMPORT_STRATEGY</Key>
             <Value>SweArrayObservationWithSplitExtension</Value>
-	    <!--Value>SingleObservation</Value-->
+            <!--Value>SingleObservation</Value-->
         </Metadata>
         <Metadata>
             <Key>HUNK_SIZE</Key>

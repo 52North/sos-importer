@@ -174,7 +174,7 @@ public final class Feeder {
     private Timestamp lastUsedTimestamp;
 
     private boolean isUseLastTimestamp;
-    
+
     private Timestamp newLastUsedTimestamp;
 
     // The date information of the current sample
@@ -220,7 +220,7 @@ public final class Feeder {
     public Feeder(final Configuration config)
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("SensorObservationService(%s)", config.toString()));
-        this.configuration = config;
+        configuration = config;
         sosUrl = config.getSosUrl();
         sosVersion = config.getSosVersion();
         sosBinding = getBinding(config.getSosBinding());
@@ -246,10 +246,10 @@ public final class Feeder {
         } else {
             sensorDescBuilder = new DescriptionBuilder();
         }
-        failedInsertObservations = new LinkedList<InsertObservation>();
-        registeredSensors = new LinkedList<String>();
+        failedInsertObservations = new LinkedList<>();
+        registeredSensors = new LinkedList<>();
         if (sosVersion.equals(SOS_200_VERSION)) {
-            offerings = new HashMap<String, String>();
+            offerings = new HashMap<>();
         }
         if (config.getHunkSize() > 0) {
             hunkSize = config.getHunkSize();
@@ -320,7 +320,20 @@ public final class Feeder {
         }
         return false;
     }
-
+    
+    /**
+     * Checks for <b>isUseLastTimestamp</b> and <b>newLastUsedTimestamp</b>
+     * operations.
+     * @return <code>true</code> if isUseLastTimestamp is true and
+     *         newLastUsedTimestamp is after lastUsedTimestamp
+     *         else <code>false</code>.
+     */
+    private boolean shouldUpdateLastUsedTimestamp() {
+        return isUseLastTimestamp
+                && newLastUsedTimestamp != null
+                && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
+    }
+    
     /**
      * <p>importData.</p>
      *
@@ -349,10 +362,9 @@ public final class Feeder {
             LOG.error("No measured value columns found in configuration");
             return;
         }
-        // Get stored lastUsedTimestamp, if it is set:
         if (isUseLastTimestamp) {
             lastLine = dataFile.getFirstLineWithData();
-            // TODO Problem gelöst, dass immer auf die erste Zeile mit Daten zurückgesetzt werden muss?
+            // TODO pointing back on first line with data secured?
         }
         if (configuration.getFirstLineWithData() == 0) {
             skipLines(cr, lastLine + 1);
@@ -408,7 +420,7 @@ public final class Feeder {
                 if (!timeSeriesRepository.isEmpty()) {
                     insertTimeSeries(timeSeriesRepository);
                 }
-                if (isUseLastTimestamp && newLastUsedTimestamp != null && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (shouldUpdateLastUsedTimestamp()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -433,7 +445,7 @@ public final class Feeder {
                     }
                     incrementLineCounter();
                 }
-                if (isUseLastTimestamp && newLastUsedTimestamp.isAfter(lastUsedTimestamp)) {
+                if (shouldUpdateLastUsedTimestamp()) {
                     lastUsedTimestamp = newLastUsedTimestamp;
                 }
                 lastLine = lineCounter;
@@ -724,6 +736,8 @@ public final class Feeder {
                 // store lastUsedTimestamp in configuration/station?
             } else {
                 // abort Insertion
+                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'", 
+                         timeStamp, lastUsedTimestamp);
                 return null;
             }
         }
@@ -862,7 +876,7 @@ public final class Feeder {
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
             final InsertObservation[] ios) {
-        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(ios.length);
+        final Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 unitsOfMeasurement.put(
@@ -876,7 +890,7 @@ public final class Feeder {
     }
 
     private Map<ObservedProperty, String> getMeasuredValueTypes(final String sensorURI, final InsertObservation[] ios) {
-        final Map<ObservedProperty, String> measuredValueTypes = new HashMap<ObservedProperty, String>(ios.length);
+        final Map<ObservedProperty, String> measuredValueTypes = new HashMap<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 measuredValueTypes.put(
@@ -890,7 +904,7 @@ public final class Feeder {
     }
 
     private Collection<ObservedProperty> getObservedProperties(final String sensorURI, final InsertObservation[] ios) {
-        final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(ios.length);
+        final Set<ObservedProperty> observedProperties = new HashSet<>(ios.length);
         for (final InsertObservation insertObservation : ios) {
             if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
                 observedProperties.add(insertObservation.getObservedProperty());
@@ -1073,6 +1087,9 @@ public final class Feeder {
         obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
         obsParameter.addNewFoiName(io.getFeatureOfInterestName());
         obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
+        if (io.hasFeatureParentFeature()) {
+            obsParameter.addFoiSampleFeature(io.getParentFeatureIdentifier());
+        }
         // position
         boolean eastingFirst;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
@@ -1342,22 +1359,10 @@ public final class Feeder {
         this.lastLine = lastLine;
     }
 
-    /**
-     * <p>
-     * Getter for the field <code>lastUsedTimestamp</code>.</p>
-     *
-     * @return a Timestamp.
-     */
     public Timestamp getLastUsedTimestamp() {
         return lastUsedTimestamp;
     }
 
-    /**
-     * <p>
-     * Setter for the field <code>lastUsedTimeStamp</code>.</p>
-     *
-     * @param timeStamp a Timestamp.
-     */
     public void setLastUsedTimeStamp(final Timestamp timeStamp) {
         LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", this.lastUsedTimestamp, timeStamp);
         this.lastUsedTimestamp = timeStamp;

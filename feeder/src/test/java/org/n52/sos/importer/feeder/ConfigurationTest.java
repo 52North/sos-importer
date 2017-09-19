@@ -106,18 +106,18 @@ public class ConfigurationTest {
 
     @Test
     public void isNoDataValueDefinedAndMatchingShouldReturnFalseIfNotSet() throws XmlException, IOException {
-    	Configuration configuration = new Configuration(
+        Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
-    	Column column = configuration.getColumnById(4);
-    	Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "14.8"), Is.is(false));
+        Column column = configuration.getColumnById(4);
+        Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "14.8"), Is.is(false));
     }
 
     @Test
     public void isNoDataValueDefinedAndMatchingShouldReturnTrueIfSetAndMatching() throws XmlException, IOException {
-    	Configuration configuration = new Configuration(
+        Configuration configuration = new Configuration(
                 "src/test/resources/features/no_data_value_set.xml");
-    	Column column = configuration.getColumnById(4);
-    	Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), Is.is(true));
+        Column column = configuration.getColumnById(4);
+        Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), Is.is(true));
     }
     
     @Test

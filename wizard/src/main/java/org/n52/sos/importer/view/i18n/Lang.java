@@ -30,6 +30,7 @@ package org.n52.sos.importer.view.i18n;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Lang {
 
-    private static HashMap<Locale, Lang> availableLocales = new HashMap<Locale, Lang>();
+    private static HashMap<Locale, Lang> availableLocales = new HashMap<>();
 
     // default language
     private static Locale currentLocale = Locale.ENGLISH;
@@ -799,6 +800,20 @@ public abstract class Lang {
     public abstract String step3Description();
 
     /**
+     * <p>step3HasParentFeatureCheckBox</p>
+     *
+     * @return Do you want to configure a global parent feature for this {@link #featureOfInterest()}?
+     */
+    public abstract String step3HasParentFeatureCheckBox();
+
+    /**
+     * <p>step3ParentFeatureIdentifierLabel</p>
+     *
+     * @return Parent {@link #featureOfInterest()} identifier
+     */
+    public abstract String step3ParentFeatureIdentifierLabel();
+
+    /**
      * <p>step3MeasureValueColMissingDialogMessage.</p>
      *
      * @return You have to specify at least one measured value column.
@@ -831,6 +846,7 @@ public abstract class Lang {
     /**
      * <p>step3OmParameterNameInvalidDialogMessage</p>
      *
+     * @param parameterIdentifier the identifier of the invalid parameter
      * @param givenValue the user defined parameter name.
      *
      * @return The given om:Parameter-&gt;Name is invalid:
@@ -839,14 +855,16 @@ public abstract class Lang {
      *         <br><br>
      *         Please provide a name with at least three characters.
      */
-    public abstract String step3OmParameterNameInvalidDialogMessage(String givenValue);
+    public abstract String step3InvalidSelectionParameterDialogMessage(String parameterIdentifier, String givenValue);
 
     /**
      * <p>step3OmParameterNameInvalidDialogTitle</p>
      *
-     * @return om:Parameter-&gt;Name is invalid
+     * @param parameterIdentifier the identifier of the invalid parameter
+     *
+     * @return <code>parameterIdentifier</code> is invalid
      */
-    public abstract String step3OmParameterNameInvalidDialogTitle();
+    public abstract String step3InvalidSelectionParameterDialogTitle(String parameterIdentifier);
 
     /**
      * <p>step3ParseTest1Failed.</p>
@@ -1451,6 +1469,18 @@ public abstract class Lang {
      * @return Specification
      */
     public abstract String step7SosVersionLabel();
+
+    /**
+     * <p>step7RequiredParentFeatureAbsent.</p>
+     *
+     * @param absentParentFeatures a list of missing parent features in SOS
+     *
+     * @return <code>&lt;html&gt;</code>The following list of parent  <code>featureOfInterest()</code>s could not
+     *      be found in the given SOS instance:<code>&lt;ul&gt;</code><br>
+     *          <code>&lt;li&gt;</code>absentParentFeatures<code>&lt;/li&gt;</code> <code>&lt;-- n times</code><br>
+     *      <code>&lt;/ul&gt;</code>Please ensure their existence before importing the data.<code>&lt;/html&gt;</code>
+     */
+    public abstract String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures);
 
     /**
      * <p>step8ConfigFileButton.</p>

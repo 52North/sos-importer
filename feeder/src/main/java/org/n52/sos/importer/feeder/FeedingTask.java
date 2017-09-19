@@ -51,11 +51,11 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>FeedingTask class.</p>
  *
- * TODO if failed observations -&gt; store in file
- *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-// TODO refactor to abstract class: move getRemoteFile to FTPOneTimeFeeder
+/*
+ * TODO if failed observations -&gt; store in file
+ */
 public class FeedingTask implements Runnable {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
@@ -152,7 +152,7 @@ public class FeedingTask implements Runnable {
                     File counterFile = null;
                     String fileName = null;
                     if (config.isRemoteFile()) {
-                        fileName = directory + COUNTER_FILE_POSTFIX; 
+                        fileName = directory + COUNTER_FILE_POSTFIX;
                     } else {
                         fileName = getLocalFilename();
                     }
@@ -171,55 +171,20 @@ public class FeedingTask implements Runnable {
                     File timeStampFile = null;
                     if (config.isUseLastTimestamp()) {
                         String timeStampFileName = null;
-                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
                         if (config.isRemoteFile()) {
                             timeStampFileName = getLocalTimeStampFilename();
                         } else {
-                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX; 
+                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX;
                         }
+                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
                         if (timeStampFile.exists()) {
                             // read already inserted UsedLastTimeStamp
-                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.", timeStampFile.getCanonicalPath());
-                            String storedTimeStamp = null;
-                            try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
-                                storedTimeStamp = sc.next(); // read TimeStamp as ISO08601 string
-                                // get timestamp from SimpleString:
-                                int year = Integer.parseInt(storedTimeStamp
-                                        .substring(0,storedTimeStamp.indexOf('-'))
-                                        );
-                                String yearString = storedTimeStamp
-                                        .substring(storedTimeStamp.indexOf('-')+1);
-                                int month = Integer.parseInt(yearString
-                                        .substring(0,yearString.indexOf('-'))
-                                        );
-                                String monthString = yearString
-                                        .substring(yearString.indexOf('-')+1);
-                                int day = Integer.parseInt(monthString
-                                        .substring(0,monthString.indexOf('-'))
-                                        );
-                                String dayString = monthString
-                                        .substring(monthString.indexOf('-')+1);
-                                int hour = Integer.parseInt(dayString
-                                        .substring(0,dayString.indexOf('-'))
-                                        );
-                                String hourString = dayString
-                                        .substring(dayString.indexOf('-')+1);
-                                int minute = Integer.parseInt(hourString
-                                        .substring(0,hourString.indexOf('-'))
-                                        );
-                                String minuteString = hourString
-                                        .substring(hourString.indexOf('-')+1);
-                                int second = Integer.parseInt(minuteString
-                                        .substring(0,minuteString.indexOf('-'))
-                                        );
-                                
-                                Timestamp tmp = new Timestamp();
-                                tmp.setYear(year);
-                                tmp.setMonth(month);
-                                tmp.setDay(day);
-                                tmp.setHour(hour);
-                                tmp.setMinute(minute);
-                                tmp.setSeconds(second);
+                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.",
+                                    timeStampFile.getCanonicalPath());
+                            try (Scanner sc = new Scanner(timeStampFile,
+                                    Configuration.DEFAULT_CHARSET)) {
+                                String storedTimeStamp = sc.next();
+                                Timestamp tmp = new Timestamp(storedTimeStamp);
                                 feeder.setLastUsedTimeStamp(tmp);
                             }
                         }
@@ -233,9 +198,9 @@ public class FeedingTask implements Runnable {
                     LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
                             lastLine,
                             counterFile.getCanonicalPath());
-                    
+
                     // read and log lastUsedTimestamp
-                    if (config.isUseLastTimestamp()) {
+                    if (config.isUseLastTimestamp() && timeStampFile != null) {
                         Timestamp timestamp = feeder.getLastUsedTimestamp();
                         LOG.info("OneTimeFeeder: save read lastUsedTimestamp: '{}' to '{}'",
                                 timestamp,
@@ -249,7 +214,7 @@ public class FeedingTask implements Runnable {
                             out.println(timestamp.toISO8601String());
                         }
                     }
-                    
+
                     /*
                      * Hack for UoL EPC instrument files
                      * The EPC instrument produces data files with empty lines at the end.
@@ -299,7 +264,7 @@ public class FeedingTask implements Runnable {
                 dataFile.getCanonicalPath() +
                 COUNTER_FILE_POSTFIX;
     }
-    
+
     /**
      * <p>getLocalTimeStampFilename.</p>
      *
