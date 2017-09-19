@@ -3,25 +3,26 @@ package org.n52.sos.importer.feeder.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 
-public class FTPClient extends WebClient {
+public class FtpClient extends WebClient {
 
     private static final String PROXY_PORT = "proxyPort";
-    private DataFile dataFile = null;
     private File file = null;
 
-    public FTPClient(Configuration config) {
+    public FtpClient(Configuration config) {
         super(config);
     }
 
     @Override
     public DataFile download() {
         // ftp client
-        org.apache.commons.net.ftp.FTPClient client;
+        FTPClient client;
         
         // proxy
         final String pHost = System.getProperty("proxyHost", "proxy");
@@ -40,62 +41,31 @@ public class FTPClient extends WebClient {
             }
         } else {
             LOG.info("Using no proxy for FTP connection!");
-            client = new org.apache.commons.net.ftp.FTPClient();
+            client = new FTPClient();
         }
 
-        // get first file
-        final String fileName = config.getFileName();
-        try {
-            file = File.createTempFile(fileName, ".csv");
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        createTempFile();
+        
+        if (file == null) {
+            return null;
         }
         
-        // if back button was used: delete old file
-        if (file != null && file.exists()) {
-            if (!file.delete()) {
-                LOG.error("Could not delete file '{}'", file.getAbsolutePath());
-            }
-        }
-
-        FileOutputStream fos = null;
-        
-        try {
+        try (FileOutputStream fos = new FileOutputStream(file);) {
             client.connect(config.getRemoteFileURL());
-            client.login(config.getUser(), config.getPassword());
+            if (config.areRemoteFileCredentialsSet()) {
+                client.login(config.getUser(), config.getPassword());
+            }
             client.enterLocalPassiveMode();
-            fos = new FileOutputStream(file);
-            client.retrieveFile(fileName, fos);
-            final boolean logout = client.logout();
-            if (!logout) {
+            URL remoteFileURL = new URL(config.getRemoteFileURL());
+            client.retrieveFile(remoteFileURL.getFile(), fos);
+            if (config.areRemoteFileCredentialsSet() && !client.logout()) {
                 LOG.info("FTP: cannot logout!");
             }
             fos.flush();
         } catch (final IOException e) {
             LOG.error("The file you specified cannot be obtained.");
             return null;
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    LOG.error(""+e);
-                }
-            }
-        }
-        dataFile = new DataFile(config, file);
-        return dataFile;
+        } 
+        return new DataFile(config, file);
     }
-
-    @Override
-    public boolean deleteDownloadedFile()
-    {
-        if (file != null) {
-            file.delete();
-            return true;
-        }
-        return false;
-    }
-
 }

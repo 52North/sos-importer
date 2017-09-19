@@ -1,6 +1,5 @@
 package org.n52.sos.importer.feeder.util;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -9,14 +8,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 
 public class HTTPClient extends WebClient {
-
-    private DataFile dataFile = null;
-    private File file = null;
     
     public HTTPClient(Configuration config) {
         super(config);
@@ -24,50 +20,30 @@ public class HTTPClient extends WebClient {
 
     @Override
     public DataFile download() {
+        // TODO: Add support of proxyconfigurations
+        
         // HttpClient
-        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpClient client = HttpClients.createMinimal();
         
-        // get first file
-        final String fileName = config.getFileName();
-        try {
-            file = File.createTempFile(fileName, ".csv");
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        createTempFile();
+        
+        if (file == null) {
+            return null;
         }
         
-        // if back button was used: delete old file
-        if (file != null && file.exists()) {
-            if (!file.delete()) {
-                LOG.error("Could not delete file '{}'", file.getAbsolutePath());
-            }
-        }
-        
-        try {
-            CloseableHttpResponse response;
-            response = client.execute(
-                    new HttpGet(config.getRemoteFileURL()));
+        try (FileOutputStream fos = new FileOutputStream(file);) {
+            CloseableHttpResponse response = client.execute(new HttpGet(config.getRemoteFileURL()));
             HttpEntity entity = response.getEntity();
             if (entity != null) {
-                FileOutputStream fos = new FileOutputStream(file);
                 entity.writeTo(fos);
             }
         } catch (ClientProtocolException e) {
             LOG.error("A HTTP Protocol error occured '{}'", e);
-            e.printStackTrace();
+            return null;
         } catch (IOException e) {
             LOG.error("A IO error occured '{}'", e);
-            e.printStackTrace();
+            return null;
         }
-        dataFile = new DataFile(config, file);
-        return dataFile;
+        return new DataFile(config, file);
     }
-
-    @Override
-    public boolean deleteDownloadedFile()
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }

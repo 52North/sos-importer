@@ -43,7 +43,7 @@ import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.n52.sos.importer.feeder.util.HTTPClient;
-import org.n52.sos.importer.feeder.util.FTPClient;
+import org.n52.sos.importer.feeder.util.FtpClient;
 import org.n52.sos.importer.feeder.util.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +101,7 @@ public class FeedingTask implements Runnable {
         if (fileUrl != null) {
             switch (fileUrl.getProtocol()) {
             case "ftp":
-                webClient = new FTPClient(config);
+                webClient = new FtpClient(config);
                 break;
             case "http":
                 webClient = new HTTPClient(config);

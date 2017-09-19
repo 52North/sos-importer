@@ -1622,4 +1622,8 @@ public final class Configuration {
         }
         return false;
     }
+
+    public boolean areRemoteFileCredentialsSet() {
+        return isRemoteFile() && importConf.getDataFile().getRemoteFile().isSetCredentials();
+    }
 }
