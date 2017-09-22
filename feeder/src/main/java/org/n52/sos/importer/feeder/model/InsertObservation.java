@@ -38,6 +38,8 @@ import org.n52.oxf.om.x20.OmParameter;
 /**
  * Holds all information for the InsertObservation request
  *
+ * TODO change to om:observation from arctic see
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class InsertObservation {

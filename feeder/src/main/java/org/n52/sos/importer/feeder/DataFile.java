@@ -28,7 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,8 +35,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -57,8 +54,6 @@ import org.n52.oxf.om.x20.OmParameter;
 import org.n52.oxf.om.x20.QuantityParameter;
 import org.n52.oxf.om.x20.TextParameter;
 import org.n52.oxf.xml.NcNameResolver;
-import org.n52.sos.importer.feeder.csv.CsvParser;
-import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -198,54 +193,6 @@ public class DataFile {
     private boolean isWindows() {
         return System.getProperty(OS_NAME).indexOf("Windows") >= 0 ||
                 System.getProperty(OS_NAME).indexOf("windows") >= 0;
-    }
-
-    /**
-     * Returns a CSVReader instance for the current DataFile using the configuration
-     * including the defined values for: first line with data, separator, escape, and text qualifier.
-     *
-     * @return a <code>CSVReader</code> instance
-     * @throws java.io.IOException if any.
-     */
-    public CsvParser getCSVReader() throws IOException {
-        LOG.trace("getCSVReader()");
-        Reader fr = new InputStreamReader(new FileInputStream(dataFile), Configuration.DEFAULT_CHARSET);
-        BufferedReader br = new BufferedReader(fr);
-        CsvParser cr = null;
-        if (configuration.isCsvParserDefined()) {
-            String csvParser = configuration.getCsvParser();
-            try {
-                Class<?> clazz = Class.forName(csvParser);
-                Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
-                Object instance = constructor.newInstance();
-                if (CsvParser.class.isAssignableFrom(instance.getClass())) {
-                    cr = (CsvParser) instance;
-                }
-            } catch (ClassNotFoundException |
-                    NoSuchMethodException |
-                    SecurityException |
-                    InstantiationException |
-                    IllegalAccessException |
-                    IllegalArgumentException |
-                    InvocationTargetException e) {
-                String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. "
-                        + "Cancel import",
-                        csvParser);
-                LOG.error(errorMsg);
-                LOG.debug("Exception thrown: {}", e.getMessage(), e);
-                try {
-                    br.close();
-                } catch (IOException e1) {
-                    LOG.error("Could not close BufferedReader: {}", e1.getMessage(), e1);
-                }
-                throw new IllegalArgumentException(errorMsg, e);
-            }
-        }
-        if (cr == null) {
-            cr = new WrappedCSVReader();
-        }
-        cr.init(br, configuration);
-        return cr;
     }
 
     /**
@@ -1111,6 +1058,10 @@ public class DataFile {
         } else {
             return Optional.empty();
         }
+    }
+
+    public boolean areMeasureValuesAvailable() {
+        return getMeasuredValueColumnIds() != null && getMeasuredValueColumnIds().length == 0;
     }
 
     private String getOmParameterName(Column col) {

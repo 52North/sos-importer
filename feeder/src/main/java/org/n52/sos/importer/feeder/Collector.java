@@ -26,42 +26,34 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.csv;
+package org.n52.sos.importer.feeder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
-import org.n52.sos.importer.feeder.Configuration;
-
-import au.com.bytecode.opencsv.CSVReader;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 
 /**
- * <p>WrappedCSVReader class.</p>
+ * Interface for observation Collectors.<br>
  *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * Should collect {@link InsertObservation}s from the given {@link DataFile}
+ * data source. The results of this process are provided via the
+ * {@link FeedingContext#addObservationForImporting(InsertObservation...)} method.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J6uuml;rrens, Eike Hinderk</a>
+ * @since 0.5.0
+ * @see Importer
+ * @see FeedingContext
+ * @see InsertObservation
  */
-public class WrappedCSVReader implements CsvParser {
+public interface Collector {
 
-    private CSVReader csvReader;
+    void setConfiguration(Configuration configuration);
 
-    @Override
-    public String[] readNext() throws IOException {
-        return csvReader.readNext();
-    }
+    void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException;
 
-    @Override
-    public void init(final BufferedReader bufferedReader,
-            final Configuration configuration) {
-        final int flwd = configuration.getFirstLineWithData();
-        final char separator = configuration.getCsvSeparator();
-        final char quotechar = configuration.getCsvQuoteChar();
-        final char escape = configuration.getCsvEscape();
-        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
-    }
+    void setFeedingContext(FeedingContext context);
 
-    @Override
-    public int getSkipLimit() {
-        return 1;
-    }
+    void stopCollecting();
 
 }

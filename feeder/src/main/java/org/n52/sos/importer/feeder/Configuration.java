@@ -49,7 +49,7 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
+import org.n52.sos.importer.feeder.csv.WrappedCSVParser;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -1609,7 +1609,7 @@ public final class Configuration {
     public String getCsvParser() {
         return isCsvParserDefined()
                 ? importConf.getCsvMetadata().getCsvParserClass().getStringValue()
-                : WrappedCSVReader.class.getName();
+                : WrappedCSVParser.class.getName();
     }
 
     public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
@@ -1733,5 +1733,28 @@ public final class Configuration {
             }
         }
         return sb.toString();
+    }
+
+    public String getImporterClassName() {
+        // TODO change to collection of all classes implementing an interface and search for matching one
+        switch (getImportStrategy()) {
+            case SingleObservation:
+                return "SingleObservationImporter.class.getName()";
+            case SweArrayObservationWithSplitExtension:
+                return "SweArrayObservaionWithSplitExtensionImporter.class.getName()";
+            default:
+                LOG.error("Not supported strategy given '{}'.", getImportStrategy());
+                return "";
+        }
+    }
+
+    public String getCollectorClassName() {
+        // TODO implement analogue to getImporterClassName()
+        if (isCsvParserDefined()) {
+            return getCsvParser();
+        } else {
+            LOG.error("Collector implementation not defined!");
+            return "";
+        }
     }
 }

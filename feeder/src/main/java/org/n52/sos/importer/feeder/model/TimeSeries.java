@@ -397,4 +397,17 @@ public class TimeSeries {
         return Collections.unmodifiableList(timeseries);
     }
 
+    public Timestamp getYoungestTimestamp() {
+        if (isEmpty()) {
+            return new Timestamp().ofUnixTimeMillis(Long.MIN_VALUE);
+        }
+        Timestamp youngestTimestamp = getFirst().getTimeStamp();
+        for (InsertObservation insertObservation : timeseries) {
+            if (insertObservation.getTimeStamp().isAfter(youngestTimestamp)) {
+                youngestTimestamp = insertObservation.getTimeStamp();
+            }
+        }
+        return youngestTimestamp;
+    }
+
 }

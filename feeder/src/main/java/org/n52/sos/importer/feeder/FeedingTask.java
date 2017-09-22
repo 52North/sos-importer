@@ -158,7 +158,7 @@ public class FeedingTask {
                 if (counterFile.exists()) {
                     LOG.debug("Read already read lines from file");
                     try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                        feeder.setLastLine(sc.nextInt());
+                        feeder.setLastReadLine(sc.nextInt());
                     }
                 } else {
                     LOG.debug("Counter file does not exist.");
@@ -174,7 +174,7 @@ public class FeedingTask {
                         try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
                             String storedTimeStamp = sc.next();
                             Timestamp tmp = new Timestamp(storedTimeStamp);
-                            feeder.setLastUsedTimeStamp(tmp);
+                            feeder.setLastUsedTimestamp(tmp);
                         }
                     } else {
                         LOG.debug("Timestamp file does not exist.");
@@ -183,7 +183,7 @@ public class FeedingTask {
 
                 // SOS is available and transactional
                 feeder.importData(dataFile);
-                int lastLine = feeder.getLastLine();
+                int lastLine = feeder.getLastReadLine();
                 LOG.info("FeedingTask: save read lines count: '{}' to '{}'",
                         lastLine,
                         counterFile.getCanonicalPath());
