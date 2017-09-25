@@ -222,6 +222,12 @@ public class TimestampTest {
         Assert.assertThat(timestamp.getHour(), Is.is(Integer.MIN_VALUE));
         Assert.assertThat(timestamp.getTimezone(), Is.is(Integer.MIN_VALUE));
     }
+
+    @Test
+    public void shouldCreateTimestampFromISO8601StringWithZoneZ() throws ParseException {
+        timestamp = new Timestamp("1234-12-30T12:34:56");
+
+        Assert.assertThat(timestamp.toISO8601String(), Is.is("1234-12-30T12:34:56"));
     }
 
 }

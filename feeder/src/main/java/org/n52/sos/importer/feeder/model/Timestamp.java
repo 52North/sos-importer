@@ -78,24 +78,12 @@ public class Timestamp {
      */
     public Timestamp(String ISO8601String) {
         // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
-        year = Integer.parseInt(
-                ISO8601String.substring(0, 3)
-                );
-        month = Integer.parseInt(
-                ISO8601String.substring(5, 6)
-                );
-        day = Integer.parseInt(
-                ISO8601String.substring(8, 9)
-                );
-        hour = Integer.parseInt(
-                ISO8601String.substring(11, 12)
-                );
-        minute = Integer.parseInt(
-                ISO8601String.substring(14, 15)
-                );
-        seconds = Integer.parseInt(
-                ISO8601String.substring(17, 18)
-                );
+        year = Integer.parseInt(ISO8601String.substring(0, 4));
+        month = Integer.parseInt(ISO8601String.substring(5, 7));
+        day = Integer.parseInt(ISO8601String.substring(8, 10));
+        hour = Integer.parseInt(ISO8601String.substring(11, 13));
+        minute = Integer.parseInt(ISO8601String.substring(14, 16));
+        seconds = Integer.parseInt(ISO8601String.substring(17, 19));
     }
 
     @Override
@@ -143,7 +131,7 @@ public class Timestamp {
             ts.append(DOUBLE_ZERO);
         }
         if (millis != Integer.MIN_VALUE) {
-            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis));
+            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : millis < 100 ? SINGLE_ZERO + millis : millis);
         }
         if (timezone != Integer.MIN_VALUE &&
                 (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
@@ -161,6 +149,7 @@ public class Timestamp {
                 }
             }
         }
+
         return ts.toString();
     }
 
@@ -291,7 +280,7 @@ public class Timestamp {
             final int lastModifiedDeltaDays) {
         long lastModifiedTmp = lastModified;
         if (lastModifiedDeltaDays > 0) {
-            lastModifiedTmp = lastModified - (lastModifiedDeltaDays * MILLIS_PER_DAY);
+            lastModifiedTmp = lastModified - lastModifiedDeltaDays * MILLIS_PER_DAY;
         }
         ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedTmp), ZoneId.of(UTC));
         setYear(zdt.get(ChronoField.YEAR));
