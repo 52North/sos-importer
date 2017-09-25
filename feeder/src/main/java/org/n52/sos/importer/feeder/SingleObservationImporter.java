@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
@@ -48,53 +51,78 @@ public class SingleObservationImporter extends ImporterSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleObservationImporter.class);
 
+    // TODO Replace with thread pool naming the threaads
+    private ExecutorService importerThreads = Executors.newFixedThreadPool(5);
+
     @Override
     public void addObservationForImporting(InsertObservation... insertObservations)
             throws OXFException, XmlException, IOException {
         if (insertObservations == null) {
             return;
         }
-        Timestamp newLastUsedTimestamp = null;
-        insertObservations:
-            for (InsertObservation io : insertObservations) {
-                if (io != null) {
-                    if (!sosClient.isSensorRegistered(io.getSensorURI()) &&
-                            !failedSensorInsertions.contains(io.getSensorURI())) {
-                        RegisterSensor rs = new RegisterSensor(io,
-                                getObservedProperties(io.getSensorURI(), insertObservations),
-                                getMeasuredValueTypes(io.getSensorURI(), insertObservations),
-                                getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
-                        String assignedSensorId = sosClient.registerSensor(rs);
-                        if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
-                            LOG.error(String.format(
-                                    "Sensor '%s'[%s] could not be registered at SOS."
-                                            + "Skipping insert observation for this and store it.",
-                                            io.getSensorName(),
-                                            io.getSensorURI()));
-                            failedObservations.add(io);
-                            failedSensorInsertions.add(io.getSensorURI());
-                            continue insertObservations;
+
+        importerThreads.execute(new Runnable() {
+
+            @Override
+            public void run() {
+                Timestamp newLastUsedTimestamp = null;
+                insertObservations:
+                    for (InsertObservation io : insertObservations) {
+                        if (io != null) {
+                            if (!sosClient.isSensorRegistered(io.getSensorURI()) &&
+                                    !failedSensorInsertions.contains(io.getSensorURI())) {
+                                RegisterSensor rs = new RegisterSensor(io,
+                                        getObservedProperties(io.getSensorURI(), insertObservations),
+                                        getMeasuredValueTypes(io.getSensorURI(), insertObservations),
+                                        getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
+                                String assignedSensorId = null;
+                                try {
+                                    assignedSensorId = sosClient.registerSensor(rs);
+                                } catch (OXFException | XmlException | IOException e) {
+                                    log(e);
+                                }
+                                if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
+                                    LOG.error(String.format(
+                                            "Sensor '%s'[%s] could not be registered at SOS."
+                                                    + "Skipping insert observation for this and store it.",
+                                                    io.getSensorName(),
+                                                    io.getSensorURI()));
+                                    failedObservations.add(io);
+                                    failedSensorInsertions.add(io.getSensorURI());
+                                    continue insertObservations;
+                                }
+                            }
+                            String observationId = null;
+                            try {
+                                // sensor is registered -> insert the data
+                                observationId = sosClient.insertObservation(io);
+                            } catch (IOException e) {
+                                log(e);
+                            }
+                            if (observationId == null || observationId.equalsIgnoreCase("")) {
+                                LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
+                                        io.getSensorName(),
+                                        io.getSensorURI(),
+                                        io));
+                                failedObservations.add(io);
+                            } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
+                                LOG.debug(String.format("Observation was already contained in SOS: %s",
+                                        io));
+                            } else if (configuration.isUseLastTimestamp()) {
+                                newLastUsedTimestamp = io.getTimeStamp();
+                            }
                         }
                     }
-                    // sensor is registered -> insert the data
-                    String observationId = sosClient.insertObservation(io);
-                    if (observationId == null || observationId.equalsIgnoreCase("")) {
-                        LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
-                                io.getSensorName(),
-                                io.getSensorURI(),
-                                io));
-                        failedObservations.add(io);
-                    } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
-                        LOG.debug(String.format("Observation was already contained in SOS: %s",
-                                io));
-                    } else {
-                        newLastUsedTimestamp = io.getTimeStamp();
-                    }
+                if (context.shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
+                    context.setLastUsedTimestamp(newLastUsedTimestamp);
                 }
             }
-        if (context.shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
-            context.setLastUsedTimestamp(newLastUsedTimestamp);
-        }
+
+            private void log(Exception e) {
+                LOG.error("Exception Thrown.", e.getLocalizedMessage());
+                LOG.debug("Exception:", e);
+            }
+        });
     }
 
     private Collection<ObservedProperty> getObservedProperties(String sensorURI, InsertObservation[] ios) {
@@ -135,6 +163,18 @@ public class SingleObservationImporter extends ImporterSkeleton {
         LOG.debug(String.format("Found '%d' units of measurement for observed properties of sensor '%s': '%s'.",
                 unitsOfMeasurement.size(), sensorURI, unitsOfMeasurement));
         return unitsOfMeasurement;
+    }
+
+    @Override
+    public void stopImporting() {
+        try {
+            importerThreads.shutdown();
+            while (!importerThreads.awaitTermination(60, TimeUnit.SECONDS)) {
+                LOG.info("Awaiting completion of threads.");
+            }
+        } catch (InterruptedException e) {
+            LOG.debug("We are interurupted!");
+        }
     }
 
 }
