@@ -179,7 +179,7 @@ public final class Feeder implements FeedingContext {
                     }
                 }
             }
-        }).start();
+        }, "collector-" + collector.getClass().getSimpleName()).start();
         importer.startImporting();
         try {
             latch.await();
@@ -197,9 +197,7 @@ public final class Feeder implements FeedingContext {
         if (importer.hasFailedObservations()) {
             handleFailedObservations(importer.getFailedObservations());
         }
-        LOG.debug("Timing:\nStart File: {}\nFinished importing: {}",
-                startImportingData,
-                LocalDateTime.now());
+        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
     private void log(Exception exception) {

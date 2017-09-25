@@ -38,11 +38,11 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkeleton implements Importer {
+public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SweArrayObservationWithSplitExtensionImporter.class);
 
-    private TimeSeriesRepository timeSeriesRepository;
+    private TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
 
     private int currentHunk;
 
@@ -52,7 +52,6 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
     private int hunkSize = 5000;
 
     public SweArrayObservationWithSplitExtensionImporter() {
-        timeSeriesRepository = new TimeSeriesRepository();
         currentHunk = 0;
         hunkSize = configuration.getHunkSize();
         LOG.debug("Using hunkSize '{}'", hunkSize);

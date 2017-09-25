@@ -236,8 +236,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton implement
         return sampleIdPattern.matcher(configuration.restoreLine(line)).matches();
     }
 
-    private int processSampleStart() throws IOException,
-    ParseException {
+    private int processSampleStart() throws IOException, ParseException {
         int sampleStartLine;
         sampleStartLine = lineCounter;
         sampleLastTimestamp = null;

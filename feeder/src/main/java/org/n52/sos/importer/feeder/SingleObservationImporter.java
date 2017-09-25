@@ -44,7 +44,7 @@ import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SingleObservationImporter extends ImporterSkeleton implements Importer {
+public class SingleObservationImporter extends ImporterSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleObservationImporter.class);
 

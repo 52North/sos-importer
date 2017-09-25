@@ -114,8 +114,9 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
     @Override
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException {
+        LOG.trace("getInsertObservationForMeasuredValue(..)");
         // TIMESTAMP
-        final Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
+        Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
         if (configuration.isUseLastTimestamp()) {
             if (context.getLastUsedTimestamp() != null && timeStamp.isAfter(context.getLastUsedTimestamp())) {
                 // update newLastUsedTimestamp, if timeStamp is new or After:
@@ -135,29 +136,29 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
         // TODO implement using different templates in later version depending on the class of value
         LOG.debug("Timestamp: {}", timeStamp);
         // SENSOR
-        final Sensor sensor = dataFile.getSensorForColumn(measureValueColumn, line);
+        Sensor sensor = dataFile.getSensorForColumn(measureValueColumn, line);
         LOG.debug("Sensor: {}", sensor);
         // FEATURE OF INTEREST incl. Position
-        final FeatureOfInterest foi = dataFile.getFoiForColumn(measureValueColumn, line);
+        FeatureOfInterest foi = dataFile.getFoiForColumn(measureValueColumn, line);
         LOG.debug("Feature of Interest: {}", foi);
         // VALUE
-        final Object value = dataFile.getValue(measureValueColumn, line);
+        Object value = dataFile.getValue(measureValueColumn, line);
         if (value.equals(Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE)) {
             return null;
         }
         // TODO implement handling for value == null => skip observation and log it, or logging is done in getValue(..)
         LOG.debug("Value: {}", value.toString());
         // UOM CODE
-        final UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(measureValueColumn, line);
+        UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(measureValueColumn, line);
         LOG.debug("UomCode: '{}'", uom);
         // OBSERVED_PROPERTY
-        final ObservedProperty observedProperty = dataFile.getObservedProperty(measureValueColumn, line);
+        ObservedProperty observedProperty = dataFile.getObservedProperty(measureValueColumn, line);
         LOG.debug("ObservedProperty: {}", observedProperty);
         // OFFERING
-        final Offering offer = dataFile.getOffering(sensor);
+        Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
         // OM:PARAMETER
-        final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
+        Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
         return new InsertObservation(sensor,
                 foi,
                 value,

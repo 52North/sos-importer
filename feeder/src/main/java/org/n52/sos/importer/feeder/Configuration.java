@@ -407,9 +407,9 @@ public final class Configuration {
      */
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<>();
-        for (final Column column : cols) {
+        Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)) {
                 LOG.debug("Found measured value column: {}", column.getNumber());
                 ids.add(column.getNumber());
@@ -417,7 +417,7 @@ public final class Configuration {
         }
         ids.trimToSize();
         if (ids.size() > 0) {
-            final int[] result = new int[ids.size()];
+            int[] result = new int[ids.size()];
             for (int i = 0; i < result.length; i++) {
                 result[i] = ids.get(i);
             }
@@ -1753,8 +1753,8 @@ public final class Configuration {
         if (isCsvParserDefined()) {
             return getCsvParser();
         } else {
-            LOG.error("Collector implementation not defined!");
-            return "";
+            LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
+            return DefaultCsvCollector.class.getName();
         }
     }
 }
