@@ -1749,12 +1749,8 @@ public final class Configuration {
     }
 
     public String getCollectorClassName() {
-        // TODO implement analogue to getImporterClassName()
-        if (isCsvParserDefined()) {
-            return getCsvParser();
-        } else {
-            LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
-            return DefaultCsvCollector.class.getName();
-        }
+        // TODO implement analog to getImporterClassName()
+        LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
+        return DefaultCsvCollector.class.getName();
     }
 }
