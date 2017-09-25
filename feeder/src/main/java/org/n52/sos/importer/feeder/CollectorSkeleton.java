@@ -180,10 +180,10 @@ public abstract class CollectorSkeleton implements Collector {
 
     protected InsertObservation[] getInsertObservationsForOneLine(String[] line) {
         final ArrayList<InsertObservation> result = new ArrayList<>(line.length);
-        for (final int mVColumn : dataFile.getMeasuredValueColumnIds()) {
-            LOG.debug("Parsing measured value column {}", mVColumn);
+        for (int measureValueColumn : dataFile.getMeasuredValueColumnIds()) {
+            LOG.debug("Parsing measured value column {}", measureValueColumn);
             try {
-                final InsertObservation io = getInsertObservationForMeasuredValue(mVColumn, line);
+                final InsertObservation io = getInsertObservationForMeasuredValue(measureValueColumn, line);
                 if (io != null) {
                     result.add(io);
                 }
@@ -195,7 +195,7 @@ public abstract class CollectorSkeleton implements Collector {
         return result.toArray(new InsertObservation[result.size()]);
     }
 
-    protected abstract InsertObservation getInsertObservationForMeasuredValue(int mVColumn, String[] line)
+    protected abstract InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException;
 
 }
