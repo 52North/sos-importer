@@ -9,10 +9,13 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.n52.sos.importer.feeder.csv.CsvParser;
 import org.n52.sos.importer.feeder.csv.WrappedCSVParser;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,5 +149,25 @@ public abstract class CollectorSkeleton implements Collector {
         }
         return null;
     }
+
+    protected InsertObservation[] getInsertObservationsForOneLine(String[] line) {
+        final ArrayList<InsertObservation> result = new ArrayList<>(line.length);
+        for (final int mVColumn : dataFile.getMeasuredValueColumnIds()) {
+            LOG.debug("Parsing measured value column {}", mVColumn);
+            try {
+                final InsertObservation io = getInsertObservationForMeasuredValue(mVColumn, line);
+                if (io != null) {
+                    result.add(io);
+                }
+            } catch (ParseException | NumberFormatException e) {
+                logExceptionThrownDuringParsing(e);
+            }
+        }
+        result.trimToSize();
+        return result.toArray(new InsertObservation[result.size()]);
+    }
+
+    protected abstract InsertObservation getInsertObservationForMeasuredValue(int mVColumn, String[] line)
+            throws ParseException;
 
 }

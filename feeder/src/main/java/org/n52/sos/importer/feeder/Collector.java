@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.concurrent.CountDownLatch;
 
 import org.n52.sos.importer.feeder.model.InsertObservation;
@@ -50,7 +51,7 @@ public interface Collector {
 
     void setConfiguration(Configuration configuration);
 
-    void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException;
+    void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException, ParseException;
 
     void setFeedingContext(FeedingContext context);
 

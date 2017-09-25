@@ -1,31 +1,3 @@
-/**
- * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
- * Software GmbH
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 as published
- * by the Free Software Foundation.
- *
- * If the program is linked with libraries which are licensed under one of
- * the following licenses, the combination of the program with the linked
- * library is not considered a "derivative work" of the program:
- *
- *     - Apache License, version 2.0
- *     - Apache Software License, version 1.0
- *     - GNU Lesser General Public License, version 3
- *     - Mozilla Public License, versions 1.0, 1.1 and 2.0
- *     - Common Development and Distribution License (CDDL), version 1.0
- *
- * Therefore the distribution of the program linked with libraries licensed
- * under the aforementioned licenses, is permitted by the copyright holders
- * if the distribution is compliant with both the GNU General Public
- * License version 2 and the aforementioned licenses.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
- */
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
@@ -34,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.n52.oxf.om.x20.OmParameter;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
@@ -47,13 +21,48 @@ import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultCsvCollector extends CollectorSkeleton implements Collector {
+public class SampleBasedObservationCollector extends CollectorSkeleton implements Collector {
 
-    static final Logger LOG = LoggerFactory.getLogger(DefaultCsvCollector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SampleBasedObservationCollector.class);
+
+    // stores the Timestamp of the last insertObservations
+    // (required for handling sample based files)
+    private Timestamp sampleLastTimestamp;
+
+    // The date information of the current sample
+    private Timestamp sampleDate;
+
+    private Pattern sampleIdPattern;
+
+    private Pattern sampleSizePattern;
+
+    private boolean isInSample;
+
+    private int sampleSize;
+
+    private int sampleSizeOffset;
+
+    private int sampleDateOffset;
+
+    private int sampleOffsetDifference;
+
+    private int sampleDataOffset;
+
+    private int sampleSizeDivisor;
+
+    public SampleBasedObservationCollector() {
+        super();
+        sampleIdPattern = Pattern.compile(configuration.getSampleStartRegEx());
+        sampleSizePattern = Pattern.compile(configuration.getSampleSizeRegEx());
+        sampleSizeOffset = configuration.getSampleSizeOffset();
+        sampleDateOffset = configuration.getSampleDateOffset();
+        sampleSizeDivisor = configuration.getSampleSizeDivisor();
+        sampleOffsetDifference = Math.abs(sampleDateOffset - sampleSizeOffset);
+        sampleDataOffset = configuration.getSampleDataOffset();
+    }
 
     @Override
-    public void collectObservations(DataFile dataFile, CountDownLatch latch)
-            throws IOException {
+    public void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException, ParseException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
             return;
@@ -85,7 +94,15 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
                 skipLines(lastLine);
             }
             String[] line;
+            int sampleStartLine = 0;
             while ((line = parser.readNext()) != null && !stopped) {
+                // if it is a sample based file, I need to get the following information
+                // * date information (depends on last timestamp because of
+                if (!isInSample && isSampleStart(line)) {
+                    sampleStartLine = processSampleStart();
+                    continue;
+                }
+
                 if (!configuration.isLineIgnorable(line) &&
                         configuration.containsData(line) &&
                         configuration.isParsedColumnCountCorrect(line.length) &&
@@ -105,6 +122,15 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
                     LOG.info("Handled line {}.", lineCounter);
                 }
             }
+            LOG.debug("SampleFile: isInSample: {}; lineCounter: {}; "
+                    + "sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
+                    isInSample, lineCounter,
+                    sampleStartLine, sampleSize, sampleDataOffset);
+
+            if (isInSample && isSampleEndReached(sampleStartLine)) {
+                isInSample = false;
+                LOG.debug("Current sample left");
+            }
             context.setLastReadLine(lineCounter);
         } finally {
             latch.countDown();
@@ -116,6 +142,11 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
             throws ParseException {
         // TIMESTAMP
         final Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
+        if (sampleLastTimestamp != null && timeStamp.isBefore(sampleLastTimestamp)) {
+            sampleDate.applyDayDelta(1);
+        }
+        sampleLastTimestamp = new Timestamp().enrich(timeStamp);
+        timeStamp.enrich(sampleDate);
         if (configuration.isUseLastTimestamp()) {
             if (context.getLastUsedTimestamp() != null && timeStamp.isAfter(context.getLastUsedTimestamp())) {
                 // update newLastUsedTimestamp, if timeStamp is new or After:
@@ -167,6 +198,73 @@ public class DefaultCsvCollector extends CollectorSkeleton implements Collector 
                 offer,
                 omParameter,
                 dataFile.getType(measureValueColumn));
+    }
+
+    public boolean isSampleEndReached(int sampleStartLine) {
+        return sampleStartLine + sampleSize + sampleDataOffset == lineCounter;
+    }
+
+    private boolean isSampleStart(String[] line) {
+        return sampleIdPattern.matcher(configuration.restoreLine(line)).matches();
+    }
+
+    private int processSampleStart() throws IOException,
+    ParseException {
+        int sampleStartLine;
+        sampleStartLine = lineCounter;
+        sampleLastTimestamp = null;
+        getSampleMetaData();
+        isInSample = true;
+        skipLines(sampleDataOffset - (lineCounter - sampleStartLine));
+        return sampleStartLine;
+    }
+
+    private void getSampleMetaData() throws IOException, ParseException {
+        LOG.trace("getSampleMetadata(...)");
+        LOG.trace("dataOffset: {}; sizeOffset: {}; OffsetDifference: {}",
+                sampleDataOffset, sampleSizeOffset, sampleOffsetDifference);
+        if (sampleDateOffset < sampleSizeOffset) {
+            skipLines(sampleDateOffset);
+            sampleDate = parseSampleDate(parser.readNext());
+            lineCounter++;
+            skipLines(sampleOffsetDifference);
+            sampleSize = parseSampleSize(parser.readNext());
+            lineCounter++;
+        } else {
+            skipLines(sampleSizeOffset);
+            sampleSize = parseSampleSize(parser.readNext());
+            lineCounter++;
+            skipLines(sampleOffsetDifference);
+            sampleDate = parseSampleDate(parser.readNext());
+            lineCounter++;
+        }
+        LOG.info("Parsed Metadata: Date: '{}'; Size: {}",
+                sampleDate, sampleSize);
+    }
+
+    private int parseSampleSize(String[] line) throws ParseException {
+        String lineToParse = configuration.restoreLine(line);
+        Matcher matcher = sampleSizePattern.matcher(lineToParse);
+        if (matcher.matches() && matcher.groupCount() == 1) {
+            String sampleSizeTmp = matcher.group(1);
+            return Integer.parseInt(sampleSizeTmp) / sampleSizeDivisor;
+            // TODO handle NumberformatException
+        }
+        throw new ParseException(
+                String.format(
+                        "Could not extract sampleSize from '%s' using "
+                                + "regular expression '%s' (Offset is always 42).",
+                                lineToParse,
+                                sampleSizePattern.pattern()), 42);
+    }
+
+    private Timestamp parseSampleDate(String[] line) throws ParseException {
+        String dateInfoPattern = configuration.getSampleDatePattern();
+        String regExToExtractDateInfo = configuration.getSampleDateExtractionRegEx();
+        String timestampInformation = configuration.restoreLine(line);
+        LOG.trace("parseSampleDate: dateInfoPattern: '{}'; extractRegEx: '{}'; line: '{}'",
+                dateInfoPattern, regExToExtractDateInfo, timestampInformation);
+        return new Timestamp().enrich(timestampInformation, regExToExtractDateInfo, dateInfoPattern);
     }
 
 }
