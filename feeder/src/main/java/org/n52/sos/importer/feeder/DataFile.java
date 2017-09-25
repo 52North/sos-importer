@@ -1061,7 +1061,8 @@ public class DataFile {
     }
 
     public boolean areMeasureValuesAvailable() {
-        return getMeasuredValueColumnIds() != null && getMeasuredValueColumnIds().length == 0;
+        int[] measuredValueColumnIds = getMeasuredValueColumnIds();
+        return measuredValueColumnIds != null && measuredValueColumnIds.length > 0;
     }
 
     private String getOmParameterName(Column col) {
