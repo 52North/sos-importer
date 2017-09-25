@@ -247,6 +247,11 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Add support for profile observations
+     * Refactoring:
+       * Introduced Importer and Collector interface to split code in Feeder and support multithreading
+         for parsing and feeding observation in the SOS
+       * <CsvMetadata><ObservationCollectorClass> for specifying the implementation of the Collector interface
      * Add support for HTTP remote files incl. fix for FTP client
      * Add support for parent feature relations
        * Bindings

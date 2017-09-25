@@ -1756,4 +1756,15 @@ public final class Configuration {
             return DefaultCsvCollector.class.getName();
         }
     }
+
+    public String getParentFeatureFromAdditionalMetadata() {
+        if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().sizeOfMetadataArray() > 0) {
+            for (Metadata metadata : importConf.getAdditionalMetadata().getMetadataArray()) {
+                if (metadata.getKey().equals(Key.PARENT_FEATURE_IDENTIFIER)) {
+                    return metadata.getValue();
+                }
+            }
+        }
+        return null;
+    }
 }
