@@ -49,7 +49,7 @@ import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleBasedObservationCollector extends CollectorSkeleton implements Collector {
+public class SampleBasedObservationCollector extends CollectorSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SampleBasedObservationCollector.class);
 

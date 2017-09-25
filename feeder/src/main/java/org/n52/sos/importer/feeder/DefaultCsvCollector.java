@@ -47,7 +47,7 @@ import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultCsvCollector extends CollectorSkeleton implements Collector {
+public class DefaultCsvCollector extends CollectorSkeleton {
 
     static final Logger LOG = LoggerFactory.getLogger(DefaultCsvCollector.class);
 
