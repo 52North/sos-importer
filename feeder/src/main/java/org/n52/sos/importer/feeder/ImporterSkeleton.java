@@ -72,6 +72,9 @@ public abstract class ImporterSkeleton implements Importer {
         if (configuration == null) {
             throw new IllegalArgumentException("Field 'configuration' MUST not be null!");
         }
+        if (context == null) {
+            throw new IllegalArgumentException("Field 'context' MUST not be null!");
+        }
     }
 
     @Override

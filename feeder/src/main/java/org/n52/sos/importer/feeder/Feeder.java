@@ -87,6 +87,7 @@ public final class Feeder implements FeedingContext {
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
         importer.setConfiguration(configuration);
         importer.setSosClient(sosClient);
+        importer.setFeedingContext(this);
         collector = (Collector) initObjectByClassName(configuration.getCollectorClassName());
         collector.setConfiguration(configuration);
         collector.setFeedingContext(this);
