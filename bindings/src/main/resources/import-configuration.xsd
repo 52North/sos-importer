@@ -784,6 +784,7 @@
 				<xs:element ref="Parameter"/>
 				<xs:element ref="UseHeader"/>
 				<xs:element ref="CsvParserClass" minOccurs="0"/>
+				<xs:element ref="ObservationCollectorClass" minOccurs="0" maxOccurs="1" />
 	            <xs:element ref="UseLastTimestamp" minOccurs="0" maxOccurs="1" />
 			</xs:sequence>
 		</xs:complexType>
@@ -815,6 +816,17 @@
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
+    </xs:element>
+    <xs:element name="ObservationCollectorClass" type="xs:string"
+            default="org.n52.sos.importer.feeder.DefaultCsvCollector">
+        <xs:annotation>
+            <xs:documentation>
+                The class that MUST be used for processing the data file. The
+                interface org.n52.sos.importer.feeder.Collector MUST be
+                implemented. The class name MUST contain the fully qualified
+                package name and a zero-argument constructor MUST be provided.
+            </xs:documentation>
+        </xs:annotation>
     </xs:element>
     <xs:element name="Credentials">
         <xs:annotation>

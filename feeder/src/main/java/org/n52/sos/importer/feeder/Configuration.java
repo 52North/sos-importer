@@ -1749,8 +1749,11 @@ public final class Configuration {
     }
 
     public String getCollectorClassName() {
-        // TODO implement analog to getImporterClassName()
-        LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
-        return DefaultCsvCollector.class.getName();
+        if (importConf.getCsvMetadata().isSetObservationCollectorClass()) {
+            return importConf.getCsvMetadata().getObservationCollectorClass();
+        } else {
+            LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
+            return DefaultCsvCollector.class.getName();
+        }
     }
 }
