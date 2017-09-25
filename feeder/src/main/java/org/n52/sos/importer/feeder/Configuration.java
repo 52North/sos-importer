@@ -1739,9 +1739,9 @@ public final class Configuration {
         // TODO change to collection of all classes implementing an interface and search for matching one
         switch (getImportStrategy()) {
             case SingleObservation:
-                return "SingleObservationImporter.class.getName()";
+                return SingleObservationImporter.class.getName();
             case SweArrayObservationWithSplitExtension:
-                return "SweArrayObservaionWithSplitExtensionImporter.class.getName()";
+                return SweArrayObservationWithSplitExtensionImporter.class.getName();
             default:
                 LOG.error("Not supported strategy given '{}'.", getImportStrategy());
                 return "";
