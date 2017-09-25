@@ -54,7 +54,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
     public SweArrayObservationWithSplitExtensionImporter() {
         timeSeriesRepository = new TimeSeriesRepository();
         currentHunk = 0;
-        hunkSize = configuration().getHunkSize();
+        hunkSize = configuration.getHunkSize();
         LOG.debug("Using hunkSize '{}'", hunkSize);
     }
 
@@ -68,7 +68,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                 + "Change "
                 + "<SosImportConfiguration><SosMetadata><insertSweArrayObservationTimeoutBuffer>"
                 + " if required.",
-                configuration().getInsertSweArrayObservationTimeoutBuffer());
+                configuration.getInsertSweArrayObservationTimeoutBuffer());
     }
 
     @Override
@@ -93,9 +93,9 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
         insertObservationForATimeSeries:
         for (final TimeSeries timeSeries : timeSeriesRepository.getTimeSeries()) {
             // check if sensor is registered
-            if (!sosClient().isSensorRegistered(timeSeries.getSensorURI()) &&
-                    !failedSensorInsertions().contains(timeSeries.getSensorURI())) {
-                final String assignedSensorId = sosClient().registerSensor(
+            if (!sosClient.isSensorRegistered(timeSeries.getSensorURI()) &&
+                    !failedSensorInsertions.contains(timeSeries.getSensorURI())) {
+                final String assignedSensorId = sosClient.registerSensor(
                         timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI()));
                 if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
                     LOG.error(String.format(
@@ -104,20 +104,20 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                             timeSeries.getSensorName(),
                             timeSeries.getSensorURI(),
                             timeSeries));
-                    failedObservations().addAll(timeSeries.getInsertObservations());
-                    failedSensorInsertions().add(timeSeries.getSensorURI());
+                    failedObservations.addAll(timeSeries.getInsertObservations());
+                    failedSensorInsertions.add(timeSeries.getSensorURI());
                     continue insertObservationForATimeSeries;
                 }
             }
             // insert observation
-            final String observationId = sosClient().insertSweArrayObservation(
-                    timeSeries.getSweArrayObservation(sosClient().getVersion()));
+            final String observationId = sosClient.insertSweArrayObservation(
+                    timeSeries.getSweArrayObservation(sosClient.getVersion()));
             if (observationId == null || observationId.equalsIgnoreCase("")) {
                 LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
                         timeSeries.getSensorName(),
                         timeSeries.getSensorURI(),
                         timeSeries));
-                failedObservations().addAll(timeSeries.getInsertObservations());
+                failedObservations.addAll(timeSeries.getInsertObservations());
             } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
                 LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
                         timeSeries));
@@ -125,8 +125,8 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                 newLastUsedTimestamp = timeSeries.getYoungestTimestamp();
             }
         }
-        if (context().shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
-            context().setLastUsedTimestamp(newLastUsedTimestamp);
+        if (context.shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
+            context.setLastUsedTimestamp(newLastUsedTimestamp);
         }
     }
 

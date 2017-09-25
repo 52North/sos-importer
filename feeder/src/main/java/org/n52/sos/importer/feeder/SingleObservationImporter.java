@@ -58,32 +58,32 @@ public class SingleObservationImporter extends ImporterSkeleton implements Impor
         insertObservations:
             for (InsertObservation io : insertObservations) {
                 if (io != null) {
-                    if (!sosClient().isSensorRegistered(io.getSensorURI()) &&
-                            !failedSensorInsertions().contains(io.getSensorURI())) {
+                    if (!sosClient.isSensorRegistered(io.getSensorURI()) &&
+                            !failedSensorInsertions.contains(io.getSensorURI())) {
                         RegisterSensor rs = new RegisterSensor(io,
                                 getObservedProperties(io.getSensorURI(), insertObservations),
                                 getMeasuredValueTypes(io.getSensorURI(), insertObservations),
                                 getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
-                        String assignedSensorId = sosClient().registerSensor(rs);
+                        String assignedSensorId = sosClient.registerSensor(rs);
                         if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
                             LOG.error(String.format(
                                     "Sensor '%s'[%s] could not be registered at SOS."
                                             + "Skipping insert observation for this and store it.",
                                             io.getSensorName(),
                                             io.getSensorURI()));
-                            failedObservations().add(io);
-                            failedSensorInsertions().add(io.getSensorURI());
+                            failedObservations.add(io);
+                            failedSensorInsertions.add(io.getSensorURI());
                             continue insertObservations;
                         }
                     }
                     // sensor is registered -> insert the data
-                    String observationId = sosClient().insertObservation(io);
+                    String observationId = sosClient.insertObservation(io);
                     if (observationId == null || observationId.equalsIgnoreCase("")) {
                         LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
                                 io.getSensorName(),
                                 io.getSensorURI(),
                                 io));
-                        failedObservations().add(io);
+                        failedObservations.add(io);
                     } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
                         LOG.debug(String.format("Observation was already contained in SOS: %s",
                                 io));
@@ -92,8 +92,8 @@ public class SingleObservationImporter extends ImporterSkeleton implements Impor
                     }
                 }
             }
-        if (context().shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
-            context().setLastUsedTimestamp(newLastUsedTimestamp);
+        if (context.shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
+            context.setLastUsedTimestamp(newLastUsedTimestamp);
         }
     }
 

@@ -36,15 +36,15 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 
 public abstract class ImporterSkeleton implements Importer {
 
-    private Configuration configuration;
+    protected Configuration configuration;
 
-    private SosClient sosClient;
+    protected SosClient sosClient;
 
-    private List<InsertObservation> failedObservations = new LinkedList<>();
+    protected List<InsertObservation> failedObservations = new LinkedList<>();
 
-    private List<String> failedSensorInsertions = new LinkedList<>();
+    protected List<String> failedSensorInsertions = new LinkedList<>();
 
-    private FeedingContext context;
+    protected FeedingContext context;
 
     public ImporterSkeleton() {
     }
@@ -54,26 +54,14 @@ public abstract class ImporterSkeleton implements Importer {
         this.configuration = configuration;
     }
 
-    protected Configuration configuration() {
-        return configuration;
-    }
-
     @Override
     public void setFeedingContext(FeedingContext context) {
         this.context = context;
     }
 
-    protected FeedingContext context() {
-        return context;
-    }
-
     @Override
     public void setSosClient(SosClient sosClient) {
         this.sosClient = sosClient;
-    }
-
-    protected SosClient sosClient() {
-        return sosClient;
     }
 
     @Override
@@ -94,14 +82,6 @@ public abstract class ImporterSkeleton implements Importer {
     @Override
     public List<InsertObservation> getFailedObservations() {
         return hasFailedObservations() ? Collections.unmodifiableList(failedObservations) : Collections.emptyList();
-    }
-
-    protected List<InsertObservation> failedObservations() {
-        return failedObservations;
-    }
-
-    protected List<String> failedSensorInsertions() {
-        return failedSensorInsertions;
     }
 
 }
