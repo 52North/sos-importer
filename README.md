@@ -503,13 +503,15 @@ Here are some additional examples for encoding `om:parameter` columns:
    1. Open command line tool.
    1. Change to directory with `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar`.
    1. Run `java -jar 52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` to see the latest supported and required parameters like this:<br />
-```
-usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
+`usage: java -jar Feeder.jar [-c file [-d datafile] [-p period]]| -m directory period threads`
+
         options and arguments:
         -c file     : read the config file and start the import process
         -d datafile : OPTIONAL override of the datafile defined in config file
         -p period   : OPTIONAL time period in minutes for repeated feeding
-```
+        OR
+        -m directory period threads : directory path containing configuration XML files that are every period of minutes submitted as FeedingTasks into a ThreadPool of size threads
+        
 
 
    * *Notes*

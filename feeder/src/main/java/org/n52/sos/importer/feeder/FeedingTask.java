@@ -104,6 +104,7 @@ public class FeedingTask implements Runnable {
                     webClient = new FtpClient(config);
                     break;
                 case "http":
+                case "https":
                     webClient = new HTTPClient(config);
                     break;
                 default:
