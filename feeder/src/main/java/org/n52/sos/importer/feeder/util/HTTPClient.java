@@ -78,9 +78,16 @@ public class HTTPClient extends WebClient {
 
         try (FileOutputStream fos = new FileOutputStream(file);) {
             CloseableHttpResponse response = client.execute(new HttpGet(config.getRemoteFileURL()));
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                entity.writeTo(fos);
+            if (response.getStatusLine().getStatusCode() < 400) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    entity.writeTo(fos);
+                }
+            } else {
+                LOG.error("Could not download file '{}'. Response status: '{}'",
+                        config.getRemoteFileURL(),
+                        response.getStatusLine());
+                return null;
             }
         } catch (ClientProtocolException e) {
             LOG.error("A HTTP Protocol error occured '{}'", e);
