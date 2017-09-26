@@ -58,7 +58,7 @@ public class HTTPClient extends WebClient {
         CloseableHttpClient client;
 
         // proxy
-        final String pHost = System.getProperty("proxyHost", "proxy");
+        final String pHost = System.getProperty("proxyHost");
         int pPort = -1;
         if (System.getProperty(PROXY_PORT) != null) {
             pPort = Integer.parseInt(System.getProperty(PROXY_PORT));

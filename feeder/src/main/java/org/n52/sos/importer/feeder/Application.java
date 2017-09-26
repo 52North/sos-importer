@@ -100,7 +100,9 @@ public final class Application {
                     } else {
                         if (args.length == 4 && shouldRunMultiFeederTask(args[0], args[1])) {
                             // Case: repeated feeding of files in pool of threads
-                            MultiFeederTask mft = new MultiFeederTask(args[1], Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                            MultiFeederTask mft = new MultiFeederTask(args[1],
+                                    Integer.parseInt(args[2]),
+                                    Integer.parseInt(args[3]));
                             mft.startFeeding();
                         }
                     }
@@ -138,8 +140,7 @@ public final class Application {
     }
 
     private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
-        final Timer t = new Timer("FeederTimer");
-        t.schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
+        new Timer("FeederTimer").schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
     }
 
     private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {

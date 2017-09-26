@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 public class MultiFeederTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(MultiFeederTask.class);
-    
+
     private static final Lock ONE_PERIODIC_FEEDING_LOCK = new ReentrantLock(true);
 
     private File directory;
@@ -58,6 +58,18 @@ public class MultiFeederTask {
     private int period;
 
     private ExecutorService threads;
+
+    public MultiFeederTask(String directoryPath, int periodInMins, int threadCount) {
+        directory = new File(directoryPath);
+        period = periodInMins;
+        // TODO: name Threads
+        threads = Executors.newFixedThreadPool(threadCount);
+    }
+
+    public void startFeeding() {
+        int periodInMillis = period * 60 * 1000;
+        new Timer("multi-feeder-task").scheduleAtFixedRate(new PeriodicMultiFeederTask(), 0, periodInMillis);
+    }
 
     private class PeriodicMultiFeederTask extends TimerTask {
 
@@ -71,18 +83,15 @@ public class MultiFeederTask {
                     public boolean accept(File pathname) {
                         return pathname.isFile() &&
                                 pathname.canRead() &&
-                                pathname.getName().toLowerCase().endsWith(".xml");
+                                pathname.getName().toLowerCase().endsWith("-config.xml");
                     }
 
                 });
                 if (files != null && files.length > 0) {
                     for (final File fileEntry : files) {
-                        // create FeedingTask
                         try {
                             Configuration config = new Configuration(fileEntry.getAbsolutePath());
-                            FeedingTask currentFeedingTask = new FeedingTask(config);
-                            // submit FeedingTask into threadsPool
-                            threads.submit(currentFeedingTask);
+                            threads.submit(new FeedingTask(config));
                         } catch (XmlException | IOException e) {
                             LOG.error("Only valid XML format is supported.");
                             continue;
@@ -95,21 +104,6 @@ public class MultiFeederTask {
                 ONE_PERIODIC_FEEDING_LOCK.unlock();
             }
         }
-
-    }
-
-    public MultiFeederTask(String directoryPath, int periodInMins, int threads) {
-        directory = new File(directoryPath);
-        period = periodInMins;
-        // TODO: name Threads
-        this.threads = Executors.newFixedThreadPool(threads);
-    }
-
-    public void startFeeding() {
-        PeriodicMultiFeederTask pmft = new PeriodicMultiFeederTask();
-        Timer timer = new Timer();
-        final int periodInMillis = period*60*1000;
-        timer.scheduleAtFixedRate(pmft, 0, periodInMillis);
     }
 
 }
