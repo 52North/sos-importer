@@ -267,6 +267,7 @@ public final class Feeder {
                     + " if required.",
                     sweArrayObservationTimeOutBuffer);
         }
+        isUseLastTimestamp = config.isUseLastTimestamp();
     }
 
     private Binding getBinding(final String binding) throws OXFException {
@@ -330,8 +331,9 @@ public final class Feeder {
      */
     private boolean shouldUpdateLastUsedTimestamp() {
         return isUseLastTimestamp
-                && newLastUsedTimestamp != null
-                && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
+                && (lastUsedTimestamp == null && newLastUsedTimestamp != null
+                ||
+                newLastUsedTimestamp != null  && newLastUsedTimestamp.isAfter(lastUsedTimestamp));
     }
 
     /**
@@ -725,12 +727,9 @@ public final class Feeder {
             timeStamp.enrich(sampleDate);
         }
         if (isUseLastTimestamp) {
-            if (lastUsedTimestamp != null && timeStamp.isAfter(lastUsedTimestamp)) {
+            if (lastUsedTimestamp == null || timeStamp.isAfter(lastUsedTimestamp)) {
                 // update newLastUsedTimestamp, if timeStamp is After:
-                if (newLastUsedTimestamp == null) {
-                    newLastUsedTimestamp = timeStamp;
-                }
-                if (timeStamp.isAfter(newLastUsedTimestamp)) {
+                if (newLastUsedTimestamp == null || timeStamp.isAfter(newLastUsedTimestamp)) {
                     newLastUsedTimestamp = timeStamp;
                 }
                 // store lastUsedTimestamp in configuration/station?
@@ -1364,7 +1363,7 @@ public final class Feeder {
     }
 
     public void setLastUsedTimeStamp(final Timestamp timeStamp) {
-        LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", this.lastUsedTimestamp, timeStamp);
-        this.lastUsedTimestamp = timeStamp;
+        LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", lastUsedTimestamp, timeStamp);
+        lastUsedTimestamp = timeStamp;
     }
 }
