@@ -6,9 +6,9 @@
             <!--<Encoding>UTF-8</Encoding>-->
        </RemoteFile>
    </DataFile>
-    <SosMetadata insertSweArrayObservationTimeoutBuffer="25">
+    <SosMetadata insertSweArrayObservationTimeoutBuffer="25000">
         <!--<URL>http://sensorweb.demo.52north.org/52nSOSv3.2.0/sos</URL>-->
-        <URL>http://nauru-lan.lan.int.52north.org:8080/52n-sos-webapp/service</URL>
+        <URL>http://localhost:8080/52n-sos-webapp/service</URL>
         <Offering generate="true"/>
         <Version>2.0.0</Version>
         <Binding>POX</Binding>
@@ -44,7 +44,7 @@
                </Metadata>
                 <Metadata>
                     <Key>PARSE_PATTERN</Key>
-                    <Value>hh:mm</Value>
+                    <Value>HH:mm</Value>
                </Metadata>
                 <Metadata>
                     <Key>TYPE</Key>
@@ -1366,84 +1366,84 @@
         <UnitOfMeasurement> <!-- bis zu x41 (wiederverwendung beachten) -->
             <ManualResource>
                 <ID>uom-672743775</ID>
-                <URI>http://iamnotused.com</URI> <!-- von unitsofmeasure.org -->
+                <URI>http://iamnotused.com</URI><!-- von unitsofmeasure.org -->
                 <Name>%</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743776</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>Cel</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743777</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>cm</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743778</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>W/m^2</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743779</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>mm</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743780</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>m</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743781</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>km</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743782</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>deg</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743783</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>CODE_TABLE</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743784</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>hPa</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743785</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>min</Name>
            </ManualResource>
        </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-672743786</ID>
-                <URI>http://iamnotused.com</URI> 
+                <URI>http://iamnotused.com</URI>
                 <Name>h</Name>
            </ManualResource>
        </UnitOfMeasurement>

@@ -2,7 +2,7 @@
 <SosImportConfiguration xsi:schemaLocation="https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
     <DataFile referenceIsARegularExpression="false">
         <RemoteFile>
-            <URL>https://opendata.dwd.de/weather/weather_reports/poi/13168-BEOB.csv</URL>
+            <URL>https://opendata.dwd.de/weather/weather_reports/poi/08540-BEOB.csv</URL>
             <!--<Encoding>UTF-8</Encoding>-->
        </RemoteFile>
    </DataFile>
@@ -1059,8 +1059,8 @@
         <Sensor>
             <ManualResource>
                 <ID>sensor-315497425</ID>
-                <URI>http://www.52north.org/dwd/procedure/13168</URI>
-                <Name>NOVI SAD</Name>
+                <URI>http://www.52north.org/dwd/procedure/08540</URI>
+                <Name>MONTE REAL</Name>
            </ManualResource>
        </Sensor>
         <ObservedProperty><!-- x41 -->
@@ -1353,13 +1353,13 @@
         <FeatureOfInterest>
             <SpatialResource>
                 <ID>foi542806731</ID>
-                <URI>http://www.52north.org/dwd/featureOfInterest/13168</URI>
-                <Name>NOVI SAD</Name>
+                <URI>http://www.52north.org/dwd/featureOfInterest/08540</URI>
+                <Name>MONTE REAL</Name>
                 <Position>
-                    <Alt unit="meters">86</Alt>
+                    <Alt unit="meters">52</Alt>
                     <EPSGCode>4326</EPSGCode>
-                    <Lat unit="deg">45.33</Lat>
-                    <Long unit="deg">19.85</Long>
+                    <Lat unit="deg">39.83</Lat>
+                    <Long unit="deg">-8.88</Long>
                </Position>
            </SpatialResource>
        </FeatureOfInterest>
