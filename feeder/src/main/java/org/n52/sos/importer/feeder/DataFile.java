@@ -1004,7 +1004,7 @@ public class DataFile {
         if (pattern.contains("H") ||
                 pattern.contains("k") ||
                 pattern.contains("K") ||
-                        pattern.contains("h") && pattern.contains("a")) {
+                pattern.contains("h") && pattern.contains("a")) {
             fields.add(ChronoField.HOUR_OF_DAY);
         }
         if (pattern.contains("m")) {
@@ -1047,6 +1047,24 @@ public class DataFile {
             throw new ParseException(
                     errorMsg.toString(),
                     pattern.indexOf('z'));
+        } else if (pattern.contains("h")  && !pattern.contains("a")) {
+            StringBuilder errorMsg = new StringBuilder();
+            errorMsg.append("Pattern 'h' without 'a' not supported. Found in pattern '");
+            errorMsg.append(pattern);
+            errorMsg.append("'.");
+            LOG.error(errorMsg.toString());
+            throw new ParseException(
+                    errorMsg.toString(),
+                    pattern.indexOf('h'));
+        } else if (pattern.contains("a")  && !pattern.contains("h")) {
+            StringBuilder errorMsg = new StringBuilder();
+            errorMsg.append("Pattern 'a' without 'h' not supported. Found in pattern '");
+            errorMsg.append(pattern);
+            errorMsg.append("'.");
+            LOG.error(errorMsg.toString());
+            throw new ParseException(
+                    errorMsg.toString(),
+                    pattern.indexOf('a'));
         }
     }
 
