@@ -142,6 +142,7 @@ public class MainFrame extends JFrame {
         stepContainerPanel.add(stepPanel);
         // prevent irrational frame resizing
         // pack();
+        // FIXME use current width and heigth and not always the default
         setBounds(this.getBounds().x, this.getBounds().y, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
         setVisible(true);
     }
