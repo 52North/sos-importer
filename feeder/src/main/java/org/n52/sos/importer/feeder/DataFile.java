@@ -1181,4 +1181,8 @@ public class DataFile {
         throw new IllegalArgumentException(
                 "Missing metadata element with key 'TYPE' defining the type of the om:parameter!");
     }
+
+    public String getAbsolutePath() {
+        return dataFile.getAbsolutePath();
+    }
 }

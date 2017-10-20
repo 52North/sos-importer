@@ -131,7 +131,7 @@ public class FeedingTask implements Runnable {
             // no data -> nothing to do
             return;
         }
-        LOG.info("Datafile: '{}'.", dataFile.getFileName());
+        LOG.info("Datafile: '{}'.", dataFile.getAbsolutePath());
         if (dataFile.isAvailable()) {
             try {
                 // check SOS
