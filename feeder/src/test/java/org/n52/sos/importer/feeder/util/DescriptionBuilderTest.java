@@ -48,8 +48,6 @@ import net.opengis.swe.x101.VectorType.Coordinate;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -297,11 +295,6 @@ public class DescriptionBuilderTest {
 
             Assert.assertThat(validTime.getBeginPosition().getObjectValue(),
                     Matchers.is(Matchers.notNullValue()));
-            long durationMillis =
-                    new Interval(new DateTime(validTime.getBeginPosition().getStringValue()).getMillis(),
-                            System.currentTimeMillis()).toDurationMillis();
-            Assert.assertThat(durationMillis,
-                    Matchers.is(Matchers.lessThanOrEqualTo(2000L)));
             Assert.assertThat(validTime.getEndPosition().isSetIndeterminatePosition(),
                     Matchers.is(true));
             Assert.assertThat(validTime.getEndPosition().getIndeterminatePosition().toString(),
