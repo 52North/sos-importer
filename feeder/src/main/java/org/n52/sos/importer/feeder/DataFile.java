@@ -1038,29 +1038,30 @@ public class DataFile {
     }
 
     private void checkPattern(String pattern) throws ParseException {
+        String end = "'.";
         if (pattern.contains("z")) {
             StringBuilder errorMsg = new StringBuilder();
-            errorMsg.append("Pattern 'z' not supported. Found in pattern '");
-            errorMsg.append(pattern);
-            errorMsg.append("'.");
+            errorMsg.append("Pattern 'z' not supported. Found in pattern '")
+                .append(pattern)
+                .append(end);
             LOG.error(errorMsg.toString());
             throw new ParseException(
                     errorMsg.toString(),
                     pattern.indexOf('z'));
         } else if (pattern.contains("h")  && !pattern.contains("a")) {
             StringBuilder errorMsg = new StringBuilder();
-            errorMsg.append("Pattern 'h' without 'a' not supported. Found in pattern '");
-            errorMsg.append(pattern);
-            errorMsg.append("'.");
+            errorMsg.append("Pattern 'h' without 'a' not supported. Found in pattern '")
+                .append(pattern)
+                .append(end);
             LOG.error(errorMsg.toString());
             throw new ParseException(
                     errorMsg.toString(),
                     pattern.indexOf('h'));
         } else if (pattern.contains("a")  && !pattern.contains("h")) {
             StringBuilder errorMsg = new StringBuilder();
-            errorMsg.append("Pattern 'a' without 'h' not supported. Found in pattern '");
-            errorMsg.append(pattern);
-            errorMsg.append("'.");
+            errorMsg.append("Pattern 'a' without 'h' not supported. Found in pattern '")
+                .append(pattern)
+                .append(end);
             LOG.error(errorMsg.toString());
             throw new ParseException(
                     errorMsg.toString(),

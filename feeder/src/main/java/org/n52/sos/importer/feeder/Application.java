@@ -69,61 +69,61 @@ public final class Application {
         LOG.trace("main()");
         logApplicationMetadata();
         if (checkArgs(args)) {
-                // read configuration
-                final String configFile = args[1];
-                try {
-                    if (isConfigFileSet(args[0])) {
-                        final Configuration c = new Configuration(configFile);
-                        // start application with valid configuration
-                        // data file
-                        if (args.length == 2) {
-                            // Case: one time feeding with defined configuration
-                            Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
-                            thread.start();
-                            thread.join();
-                        } else if (args.length == 4) {
-                            // Case: one time feeding with file override or period with file from configuration
-                            if (isFileOverride(args[2])) {
-                                // Case: file override
-                                new Thread(new FeedingTask(c,
-                                        new File(args[3])),
-                                        FeedingTask.class.getCanonicalName()).start();
+            // read configuration
+            final String configFile = args[1];
+            try {
+                if (isConfigFileSet(args[0])) {
+                    final Configuration c = new Configuration(configFile);
+                    // start application with valid configuration
+                    // data file
+                    if (args.length == 2) {
+                        // Case: one time feeding with defined configuration
+                        Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
+                        thread.start();
+                        thread.join();
+                    } else if (args.length == 4) {
+                        // Case: one time feeding with file override or period with file from configuration
+                        if (isFileOverride(args[2])) {
+                            // Case: file override
+                            new Thread(new FeedingTask(c,
+                                    new File(args[3])),
+                                    FeedingTask.class.getCanonicalName()).start();
 
-                            } else if (isTimePeriodSet(args[2]))  {
-                                // Case: repeated feeding
-                                repeatedFeeding(c, Integer.parseInt(args[3]));
-                            }
-                        } else if (args.length == 6) {
-                            // Case: repeated feeding with file override
-                            repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
+                        } else if (isTimePeriodSet(args[2]))  {
+                            // Case: repeated feeding
+                            repeatedFeeding(c, Integer.parseInt(args[3]));
                         }
-                    } else {
-                        if (args.length == 4 && shouldRunMultiFeederTask(args[0], args[1])) {
-                            // Case: repeated feeding of files in pool of threads
-                            MultiFeederTask mft = new MultiFeederTask(args[1],
-                                    Integer.parseInt(args[2]),
-                                    Integer.parseInt(args[3]));
-                            mft.startFeeding();
-                        }
+                    } else if (args.length == 6) {
+                        // Case: repeated feeding with file override
+                        repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
                     }
-                } catch (final XmlException e) {
-                    final String errorMsg =
-                            String.format("Configuration file '%s' could not be " +
-                                    "parsed. Exception thrown: %s",
-                                    configFile,
-                                    e.getMessage());
-                    LOG.error(errorMsg);
-                    LOG.debug("", e);
-                } catch (final IOException e) {
-                    LOG.error("Exception thrown: {}", e.getMessage());
-                    LOG.debug("", e);
-                } catch (final IllegalArgumentException iae) {
-                    LOG.error("Given parameters could not be parsed! -p must be a number.");
-                    LOG.debug("Exception Stack Trace:", iae);
-                } catch (InterruptedException e) {
-                    // we are doing nothing here, just log in the case of debug level logging
-                    LOG.debug("Exception thrown: ", e);
+                } else {
+                    if (args.length == 4 && shouldRunMultiFeederTask(args[0], args[1])) {
+                        // Case: repeated feeding of files in pool of threads
+                        MultiFeederTask mft = new MultiFeederTask(args[1],
+                                Integer.parseInt(args[2]),
+                                Integer.parseInt(args[3]));
+                        mft.startFeeding();
+                    }
                 }
+            } catch (final XmlException e) {
+                final String errorMsg =
+                        String.format("Configuration file '%s' could not be " +
+                                "parsed. Exception thrown: %s",
+                                configFile,
+                                e.getMessage());
+                LOG.error(errorMsg);
+                LOG.debug("", e);
+            } catch (final IOException e) {
+                LOG.error("Exception thrown: {}", e.getMessage());
+                LOG.debug("", e);
+            } catch (final IllegalArgumentException iae) {
+                LOG.error("Given parameters could not be parsed! -p must be a number.");
+                LOG.debug("Exception Stack Trace:", iae);
+            } catch (InterruptedException e) {
+                // we are doing nothing here, just log in the case of debug level logging
+                LOG.debug("Exception thrown: ", e);
+            }
         } else {
             showUsage();
         }
@@ -140,7 +140,8 @@ public final class Application {
     }
 
     private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
-        new Timer("FeederTimer").schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
+        new Timer("FeederTimer").
+                schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
     }
 
     private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
@@ -153,12 +154,14 @@ public final class Application {
      */
     private static void showUsage() {
         LOG.trace("showUsage()");
-        System.out.println(new StringBuffer("usage: java -jar Feeder.jar [-c file [-d datafile] [-p period]]|-m directory period threads\n")
+        System.out.println(new StringBuffer("usage: java -jar Feeder.jar [-c file [-d datafile] [-p period]]|")
+                .append("-m directory period threads\n")
                 .append("options and arguments:\n")
                 .append("-c file     : read the config file and start the import process\n")
                 .append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
                 .append("-p period   : OPTIONAL time period in minutes for repeated feeding")
-                .append("-m directory period threads : directory path containing configuration XML files that are every period of minutes submitted as FeedingTasks into a ThreadPool of size threads")
+                .append("-m directory period threads : directory path containing configuration XML files that")
+                .append("are every period of minutes submitted as FeedingTasks into a ThreadPool of size threads")
                 .toString());
     }
 
