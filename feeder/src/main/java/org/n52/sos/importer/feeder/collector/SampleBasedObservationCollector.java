@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.collector;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -38,6 +38,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.n52.oxf.om.x20.OmParameter;
+import org.n52.sos.importer.feeder.Application;
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;

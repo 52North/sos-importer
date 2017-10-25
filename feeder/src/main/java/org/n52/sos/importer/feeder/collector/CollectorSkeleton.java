@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.collector;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -41,8 +41,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.n52.sos.importer.feeder.csv.CsvParser;
-import org.n52.sos.importer.feeder.csv.WrappedCSVParser;
+import org.n52.sos.importer.feeder.Collector;
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.DataFile;
+import org.n52.sos.importer.feeder.FeedingContext;
+import org.n52.sos.importer.feeder.collector.csv.CsvParser;
+import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;

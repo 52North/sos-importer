@@ -162,7 +162,7 @@
 		</Parameter>
 		<UseHeader>false</UseHeader>
 		<CsvParserClass ignoreColumnCountMismatch="true" />
-		<ObservationCollectorClass>org.n52.sos.importer.feeder.SingleProfileCollector</ObservationCollectorClass>
+		<ObservationCollectorClass>org.n52.sos.importer.feeder.collector.SingleProfileCollector</ObservationCollectorClass>
 	</CsvMetadata>
 	<AdditionalMetadata>
 		<Metadata>

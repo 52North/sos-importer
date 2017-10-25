@@ -26,42 +26,46 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.csv;
+package org.n52.sos.importer.feeder.collector.csv;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 import org.n52.sos.importer.feeder.Configuration;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 /**
- * <p>WrappedCSVReader class.</p>
+ * Interface to allow different CSVParser implementations
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public class WrappedCSVParser implements CsvParser {
+public interface CsvParser {
 
-    private CSVReader csvReader;
+    /**
+     * Reads the next line and converts to a string array. Should return <code>null</code>
+     * if no further data is available.
+     *
+     * @return a string array with each comma-separated element as a separate
+     *         entry or <code>null</code> if no further data is available.
+     * @throws java.io.IOException
+     *             if errors happen during the read
+     */
+    String[] readNext() throws IOException;
 
-    @Override
-    public String[] readNext() throws IOException {
-        return csvReader.readNext();
-    }
+    /**
+     * MUST be called before first call of {@link #readNext()}!
+     *
+     * @param bufferedReader a {@link java.io.BufferedReader} object.
+     * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
+     * @throws java.io.IOException if any.
+     */
+    void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
-    @Override
-    public void init(final BufferedReader bufferedReader,
-            final Configuration configuration) {
-        final int flwd = configuration.getFirstLineWithData();
-        final char separator = configuration.getCsvSeparator();
-        final char quotechar = configuration.getCsvQuoteChar();
-        final char escape = configuration.getCsvEscape();
-        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
-    }
-
-    @Override
-    public int getSkipLimit() {
-        return 1;
-    }
+    /**
+     * Should return 0, if number of lines == number of observations,<br>
+     *              else the difference between line number and line index.
+     *
+     * @return a int.
+     */
+    int getSkipLimit();
 
 }

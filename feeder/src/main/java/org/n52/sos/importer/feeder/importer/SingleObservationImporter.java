@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.importer;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
+import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.RegisterSensor;

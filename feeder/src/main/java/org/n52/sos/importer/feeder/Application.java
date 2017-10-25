@@ -255,7 +255,7 @@ public final class Application {
                 System.getProperty("os.version"));
     }
 
-    protected static String heapSizeInformation() {
+    public static String heapSizeInformation() {
         long mb = 1024 * 1024;
         Runtime rt = Runtime.getRuntime();
         return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",

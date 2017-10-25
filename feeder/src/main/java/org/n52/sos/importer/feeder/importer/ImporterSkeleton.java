@@ -26,12 +26,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.importer;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.FeedingContext;
+import org.n52.sos.importer.feeder.Importer;
+import org.n52.sos.importer.feeder.SosClient;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 
 public abstract class ImporterSkeleton implements Importer {

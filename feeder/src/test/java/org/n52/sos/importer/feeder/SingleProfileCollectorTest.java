@@ -39,6 +39,7 @@ import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.n52.sos.importer.feeder.collector.SingleProfileCollector;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 
