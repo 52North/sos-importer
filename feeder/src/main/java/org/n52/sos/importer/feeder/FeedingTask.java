@@ -243,33 +243,18 @@ public class FeedingTask {
     }
 
     private String generateFileNameWithPostfix(String postfix) throws IOException {
-        final String directory = dataFile.getFileName();
-        String fileName = directory + postfix;
+        String fileName = dataFile.getFileName() + postfix;
         if (!config.isRemoteFile()) {
-            fileName = getLocalFilename();
+            fileName = getLocalFilename(postfix);
         }
         return fileName;
     }
 
-    protected String getLocalFilename() throws IOException {
+    private String getLocalFilename(String postfix) throws IOException {
         return config.getConfigFile().getCanonicalPath() +
                 "_" +
                 dataFile.getCanonicalPath() +
-                COUNTER_FILE_POSTFIX;
-    }
-
-    /**
-     * <p>getLocalTimeStampFilename.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
-     * @since 0.5.0
-     */
-    protected String getLocalTimeStampFilename() throws IOException {
-        return config.getConfigFile().getCanonicalPath() +
-                "_" +
-                dataFile.getCanonicalPath() +
-                TIMESTAMP_FILE_POSTFIX;
+                postfix;
     }
 
     private boolean isLinuxOrSimilar() {
