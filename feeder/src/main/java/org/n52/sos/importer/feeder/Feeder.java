@@ -165,7 +165,8 @@ public final class Feeder implements FeedingContext {
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
         exceptions = new ArrayList<>();
-        startCollector(dataFile, latch);
+        Thread collectorThread = initCollectorThread(dataFile, latch);
+        collectorThread.start();
         importer.startImporting();
         try {
             latch.await();
@@ -186,8 +187,8 @@ public final class Feeder implements FeedingContext {
         LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
-    private void startCollector(DataFile dataFile, CountDownLatch latch) {
-        new Thread(new Runnable() {
+    private Thread initCollectorThread(DataFile dataFile, CountDownLatch latch) {
+        return new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -202,7 +203,7 @@ public final class Feeder implements FeedingContext {
                     }
                 }
             }
-        }, "collector-" + collector.getClass().getSimpleName()).start();
+        }, "collector-" + collector.getClass().getSimpleName());
     }
 
     private void log(Exception exception) {
