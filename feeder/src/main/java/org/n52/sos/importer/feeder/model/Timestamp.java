@@ -478,4 +478,58 @@ public class Timestamp {
         return millis;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + day;
+        result = prime * result + hour;
+        result = prime * result + millis;
+        result = prime * result + minute;
+        result = prime * result + month;
+        result = prime * result + seconds;
+        result = prime * result + timezone;
+        result = prime * result + year;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Timestamp other = (Timestamp) obj;
+        if (day != other.day) {
+            return false;
+        }
+        if (hour != other.hour) {
+            return false;
+        }
+        if (millis != other.millis) {
+            return false;
+        }
+        if (minute != other.minute) {
+            return false;
+        }
+        if (month != other.month) {
+            return false;
+        }
+        if (seconds != other.seconds) {
+            return false;
+        }
+        if (timezone != other.timezone) {
+            return false;
+        }
+        if (year != other.year) {
+            return false;
+        }
+        return true;
+    }
+
 }
