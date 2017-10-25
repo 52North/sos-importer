@@ -198,4 +198,19 @@ public abstract class CollectorSkeleton implements Collector {
     protected abstract InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException;
 
+    protected boolean verifyTimeStamp(Timestamp timeStamp) {
+        if (context.getLastUsedTimestamp() == null || timeStamp.isAfter(context.getLastUsedTimestamp())) {
+            // update newLastUsedTimestamp, if timeStamp is new or After:
+            if (newLastUsedTimestamp == null || timeStamp.isAfter(newLastUsedTimestamp)) {
+                newLastUsedTimestamp = timeStamp;
+            } else {
+                // abort Insertion
+                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'",
+                        timeStamp, context.getLastUsedTimestamp());
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -117,21 +117,8 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         LOG.trace("getInsertObservationForMeasuredValue(..)");
         // TIMESTAMP
         Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
-        if (configuration.isUseLastTimestamp()) {
-            if (context.getLastUsedTimestamp() != null && timeStamp.isAfter(context.getLastUsedTimestamp())) {
-                // update newLastUsedTimestamp, if timeStamp is new or After:
-                if (newLastUsedTimestamp == null) {
-                    newLastUsedTimestamp = timeStamp;
-                }
-                if (timeStamp.isAfter(newLastUsedTimestamp)) {
-                    newLastUsedTimestamp = timeStamp;
-                }
-            } else {
-                // abort Insertion
-                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'",
-                         timeStamp, context.getLastUsedTimestamp());
-                return null;
-            }
+        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timeStamp)) {
+            return null;
         }
         // TODO implement using different templates in later version depending on the class of value
         LOG.debug("Timestamp: {}", timeStamp);
