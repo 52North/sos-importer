@@ -159,9 +159,11 @@ public final class Application {
                 .append("options and arguments:\n")
                 .append("-c file     : read the config file and start the import process\n")
                 .append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
-                .append("-p period   : OPTIONAL time period in minutes for repeated feeding")
-                .append("-m directory period threads : directory path containing configuration XML files that")
-                .append("are every period of minutes submitted as FeedingTasks into a ThreadPool of size threads")
+                .append("-p period   : OPTIONAL time period in minutes for repeated feeding\n")
+                .append("-m directory period threads:\n")
+                .append("            'directory' path containing configuration XML files that\n")
+                .append("            are every 'period' of minutes submitted as FeedingTasks\n")
+                .append("            into a ThreadPool of size 'threads'.")
                 .toString());
     }
 
