@@ -54,7 +54,7 @@ public abstract class WebClient {
     protected void createTempFile() {
         final String fileName = config.getFileName();
         try {
-            file = File.createTempFile(fileName, ".csv");
+            file = File.createTempFile(fileName + "_", ".csv");
         } catch (IOException e1) {
             LOG.error("could not create TempFile '{}.csv'", fileName);
         }

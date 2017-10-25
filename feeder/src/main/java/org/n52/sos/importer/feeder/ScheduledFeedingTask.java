@@ -116,9 +116,7 @@ public class ScheduledFeedingTask extends TimerTask {
                         periodInMinutes,
                         periodInMinutes > 1 ? "s" : "");
             }
-        } catch (final InvalidColumnCountException iae) {
-            // Exception is already logged -> nothing to do
-        } catch (final JavaApiBugJDL6203387Exception e) {
+        } catch (final InvalidColumnCountException | JavaApiBugJDL6203387Exception e) {
             // Exception is already logged -> nothing to do
         } catch (final Exception e) {
             LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());

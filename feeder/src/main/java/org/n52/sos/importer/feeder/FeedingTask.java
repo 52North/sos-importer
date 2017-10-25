@@ -104,6 +104,7 @@ public class FeedingTask {
                     webClient = new FtpClient(config);
                     break;
                 case "http":
+                case "https":
                     webClient = new HTTPClient(config);
                     break;
                 default:
@@ -129,7 +130,7 @@ public class FeedingTask {
             // no data -> nothing to do
             return;
         }
-        LOG.info("Datafile: '{}'.", dataFile.getFileName());
+        LOG.info("Datafile: '{}'.", dataFile.getAbsolutePath());
         if (!dataFile.isAvailable()) {
             LOG.error("Datafile is not available. Cancel feeding!");
             return;
@@ -151,19 +152,8 @@ public class FeedingTask {
                         + "InsertSensor, InsertObservation. Please enable.",
                         sosURL));
             } else {
-                File counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
-                        generateFileNameWithPostfix(COUNTER_FILE_POSTFIX));
-                LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
-                // read already inserted line count
-                if (counterFile.exists()) {
-                    LOG.debug("Read already read lines from file");
-                    try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                        feeder.setLastReadLine(sc.nextInt());
-                    }
-                } else {
-                    LOG.debug("Counter file does not exist.");
-                }
                 File timeStampFile = null;
+                File counterFile = null;
                 if (config.isUseLastTimestamp()) {
                     timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
                             generateFileNameWithPostfix(TIMESTAMP_FILE_POSTFIX));
@@ -179,14 +169,23 @@ public class FeedingTask {
                     } else {
                         LOG.debug("Timestamp file does not exist.");
                     }
+                } else {
+                    counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
+                            generateFileNameWithPostfix(COUNTER_FILE_POSTFIX));
+                    LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
+                    // read already inserted line count
+                    if (counterFile.exists()) {
+                        LOG.debug("Read already read lines from file");
+                        try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
+                            feeder.setLastReadLine(sc.nextInt());
+                        }
+                    } else {
+                        LOG.debug("Counter file does not exist.");
+                    }
                 }
 
                 // SOS is available and transactional
                 feeder.importData(dataFile);
-                int lastLine = feeder.getLastReadLine();
-                LOG.info("FeedingTask: save read lines count: '{}' to '{}'",
-                        lastLine,
-                        counterFile.getCanonicalPath());
 
                 // read and log lastUsedTimestamp
                 if (config.isUseLastTimestamp() && timeStampFile != null) {
@@ -202,25 +201,29 @@ public class FeedingTask {
                             PrintWriter out = new PrintWriter(timeStampFileWriter);) {
                         out.println(timestamp.toISO8601String());
                     }
-                }
-
-                /*
-                 * Hack for UoL EPC instrument files
-                 * The EPC instrument produces data files with empty lines at the end.
-                 * When a new sample is appended, this empty line is removed, hence
-                 * the line counter needs to be decremented.
-                 */
-                if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
-                    lastLine = lastLine - 1;
-                    LOG.info("Decrement lastLine counter: {}", lastLine);
-                }
-                // override counter file
-                try (
-                        FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
-                                counterFile.getAbsoluteFile(),
-                                Configuration.DEFAULT_CHARSET);
-                        PrintWriter out = new PrintWriter(counterFileWriter);) {
-                    out.println(lastLine);
+                } else {
+                    int lastLine = feeder.getLastReadLine();
+                    LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
+                            lastLine,
+                            counterFile.getCanonicalPath());
+                    /*
+                     * Hack for UoL EPC instrument files
+                     * The EPC instrument produces data files with empty lines at the end.
+                     * When a new sample is appended, this empty line is removed, hence
+                     * the line counter needs to be decremented.
+                     */
+                    if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
+                        lastLine = lastLine - 1;
+                        LOG.info("Decrement lastLine counter: {}", lastLine);
+                    }
+                    // override counter file
+                    try (
+                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
+                                    counterFile.getAbsoluteFile(),
+                                    Configuration.DEFAULT_CHARSET);
+                            PrintWriter out = new PrintWriter(counterFileWriter);) {
+                        out.println(lastLine);
+                    }
                 }
 
                 if (config.isRemoteFile()) {
@@ -231,10 +234,10 @@ public class FeedingTask {
             }
         } catch (final MalformedURLException mue) {
             LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
-                    config.getFileName(),
-                    mue.getMessage());
-            LOG.debug(EXCEPTION_STACK_TRACE, mue);
-        } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
+                     config.getFileName(),
+                     mue.getMessage());
+             LOG.debug(EXCEPTION_STACK_TRACE, mue);
+         } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
             log(e);
         }
     }
