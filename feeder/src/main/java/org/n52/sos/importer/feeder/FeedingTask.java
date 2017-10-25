@@ -104,6 +104,7 @@ public class FeedingTask implements Runnable {
                     webClient = new FtpClient(config);
                     break;
                 case "http":
+                case "https":
                     webClient = new HTTPClient(config);
                     break;
                 default:
@@ -130,7 +131,7 @@ public class FeedingTask implements Runnable {
             // no data -> nothing to do
             return;
         }
-        LOG.info("Datafile: '{}'.", dataFile.getFileName());
+        LOG.info("Datafile: '{}'.", dataFile.getAbsolutePath());
         if (dataFile.isAvailable()) {
             try {
                 // check SOS
@@ -149,26 +150,8 @@ public class FeedingTask implements Runnable {
                             sosURL));
                 } else {
                     final String directory = dataFile.getFileName();
-                    File counterFile = null;
-                    String fileName = null;
-                    if (config.isRemoteFile()) {
-                        fileName = directory + COUNTER_FILE_POSTFIX;
-                    } else {
-                        fileName = getLocalFilename();
-                    }
-                    counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
-                    LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
-                    // read already inserted line count
-                    if (counterFile.exists()) {
-                        LOG.debug("Read already read lines from file");
-                        try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                            final int count = sc.nextInt();
-                            feeder.setLastLine(count);
-                        }
-                    } else {
-                        LOG.debug("Counter file does not exist.");
-                    }
                     File timeStampFile = null;
+                    File counterFile = null;
                     if (config.isUseLastTimestamp()) {
                         String timeStampFileName = null;
                         if (config.isRemoteFile()) {
@@ -187,17 +170,32 @@ public class FeedingTask implements Runnable {
                                 Timestamp tmp = new Timestamp(storedTimeStamp);
                                 feeder.setLastUsedTimeStamp(tmp);
                             }
+                        } else {
+                            LOG.debug("Timestamp file does not exist.");
                         }
                     } else {
-                        LOG.debug("Timestamp file does not exist.");
+                        String fileName = null;
+                        if (config.isRemoteFile()) {
+                            fileName = directory + COUNTER_FILE_POSTFIX;
+                        } else {
+                            fileName = getLocalFilename();
+                        }
+                        counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
+                        LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
+                        // read already inserted line count
+                        if (counterFile.exists()) {
+                            LOG.debug("Read already read lines from file");
+                            try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
+                                final int count = sc.nextInt();
+                                feeder.setLastLine(count);
+                            }
+                        } else {
+                            LOG.debug("Counter file does not exist.");
+                        }
                     }
 
                     // SOS is available and transactional
                     feeder.importData(dataFile);
-                    int lastLine = feeder.getLastLine();
-                    LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
-                            lastLine,
-                            counterFile.getCanonicalPath());
 
                     // read and log lastUsedTimestamp
                     if (config.isUseLastTimestamp() && timeStampFile != null) {
@@ -213,25 +211,29 @@ public class FeedingTask implements Runnable {
                                 PrintWriter out = new PrintWriter(timeStampFileWriter);) {
                             out.println(timestamp.toISO8601String());
                         }
-                    }
-
-                    /*
-                     * Hack for UoL EPC instrument files
-                     * The EPC instrument produces data files with empty lines at the end.
-                     * When a new sample is appended, this empty line is removed, hence
-                     * the line counter needs to be decremented.
-                     */
-                    if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
-                        lastLine = lastLine - 1;
-                        LOG.info("Decrement lastLine counter: {}", lastLine);
-                    }
-                    // override counter file
-                    try (
-                            FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
-                                    counterFile.getAbsoluteFile(),
-                                    Configuration.DEFAULT_CHARSET);
-                            PrintWriter out = new PrintWriter(counterFileWriter);) {
-                        out.println(lastLine);
+                    } else {
+                        int lastLine = feeder.getLastLine();
+                        LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
+                                lastLine,
+                                counterFile.getCanonicalPath());
+                        /*
+                         * Hack for UoL EPC instrument files
+                         * The EPC instrument produces data files with empty lines at the end.
+                         * When a new sample is appended, this empty line is removed, hence
+                         * the line counter needs to be decremented.
+                         */
+                        if (config.getFileName().contains("EPC_import-config.xml") && isLinuxOrSimilar()) {
+                            lastLine = lastLine - 1;
+                            LOG.info("Decrement lastLine counter: {}", lastLine);
+                        }
+                        // override counter file
+                        try (
+                                FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
+                                        counterFile.getAbsoluteFile(),
+                                        Configuration.DEFAULT_CHARSET);
+                                PrintWriter out = new PrintWriter(counterFileWriter);) {
+                            out.println(lastLine);
+                        }
                     }
 
                     if (config.isRemoteFile()) {

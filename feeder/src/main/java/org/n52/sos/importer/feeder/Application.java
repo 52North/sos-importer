@@ -55,7 +55,7 @@ public final class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p"};
+    private static final String[] ALLOWED_PARAMETERS = { "-c", "-d", "-p", "-m" };
 
     /**
      * Method to start the application using various commandline parameters.
@@ -72,29 +72,39 @@ public final class Application {
             // read configuration
             final String configFile = args[1];
             try {
-                final Configuration c = new Configuration(configFile);
-                // start application with valid configuration
-                // data file
-                if (args.length == 2) {
-                    // Case: one time feeding with defined configuration
-                    Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
-                    thread.start();
-                    thread.join();
-                } else if (args.length == 4) {
-                    // Case: one time feeding with file override or period with file from configuration
-                    if (isFileOverride(args[2])) {
-                        // Case: file override
-                        new Thread(new FeedingTask(c,
-                                new File(args[3])),
-                                FeedingTask.class.getCanonicalName()).start();
+                if (isConfigFileSet(args[0])) {
+                    final Configuration c = new Configuration(configFile);
+                    // start application with valid configuration
+                    // data file
+                    if (args.length == 2) {
+                        // Case: one time feeding with defined configuration
+                        Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
+                        thread.start();
+                        thread.join();
+                    } else if (args.length == 4) {
+                        // Case: one time feeding with file override or period with file from configuration
+                        if (isFileOverride(args[2])) {
+                            // Case: file override
+                            new Thread(new FeedingTask(c,
+                                    new File(args[3])),
+                                    FeedingTask.class.getCanonicalName()).start();
 
-                    } else if (isTimePeriodSet(args[2]))  {
-                        // Case: repeated feeding
-                        repeatedFeeding(c, Integer.parseInt(args[3]));
+                        } else if (isTimePeriodSet(args[2]))  {
+                            // Case: repeated feeding
+                            repeatedFeeding(c, Integer.parseInt(args[3]));
+                        }
+                    } else if (args.length == 6) {
+                        // Case: repeated feeding with file override
+                        repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
                     }
-                } else if (args.length == 6) {
-                    // Case: repeated feeding with file override
-                    repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
+                } else {
+                    if (args.length == 4 && shouldRunMultiFeederTask(args[0], args[1])) {
+                        // Case: repeated feeding of files in pool of threads
+                        MultiFeederTask mft = new MultiFeederTask(args[1],
+                                Integer.parseInt(args[2]),
+                                Integer.parseInt(args[3]));
+                        mft.startFeeding();
+                    }
                 }
             } catch (final XmlException e) {
                 final String errorMsg =
@@ -119,9 +129,19 @@ public final class Application {
         }
     }
 
+    private static boolean shouldRunMultiFeederTask(String parameter1, String parameter2) {
+        return isMultiFeederTask(parameter1) &&
+                isValidDirectory(parameter2);
+    }
+
+    private static boolean isValidDirectory(String parameter2) {
+        File f = new File(parameter2);
+        return f.exists() && f.isDirectory() && f.canRead();
+    }
+
     private static void repeatedFeeding(final Configuration c, final File f, final int periodInMinutes) {
-        final Timer t = new Timer("FeederTimer");
-        t.schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
+        new Timer("FeederTimer").
+                schedule(new ScheduledFeedingTask(c, f, periodInMinutes), 1, periodInMinutes * 1000 * 60L);
     }
 
     private static void repeatedFeeding(final Configuration c, final int periodInMinutes) {
@@ -134,11 +154,16 @@ public final class Application {
      */
     private static void showUsage() {
         LOG.trace("showUsage()");
-        System.out.println(new StringBuffer("usage: java -jar Feeder.jar -c file [-d datafile] [-p period]\n")
+        System.out.println(new StringBuffer("usage: java -jar Feeder.jar [-c file [-d datafile] [-p period]]|")
+                .append("-m directory period threads\n")
                 .append("options and arguments:\n")
                 .append("-c file     : read the config file and start the import process\n")
                 .append("-d datafile : OPTIONAL override of the datafile defined in config file\n")
-                .append("-p period   : OPTIONAL time period in minutes for repeated feeding")
+                .append("-p period   : OPTIONAL time period in minutes for repeated feeding\n")
+                .append("-m directory period threads:\n")
+                .append("            'directory' path containing configuration XML files that\n")
+                .append("            are every 'period' of minutes submitted as FeedingTasks\n")
+                .append("            into a ThreadPool of size 'threads'.")
                 .toString());
     }
 
@@ -151,6 +176,7 @@ public final class Application {
      *          <b>false</b> if parameters are missing or not usable in the
      *              specified form.
      */
+    //
     private static boolean checkArgs(final String[] args) {
         LOG.trace("checkArgs({})", Arrays.toString(args));
         if (args == null) {
@@ -165,6 +191,10 @@ public final class Application {
                     isFileOverride(args[2]) ||
                     isTimePeriodSet(args[2]))) {
                 return true;
+            } else {
+               if (isMultiFeederTask(args[0])) {
+                   return true;
+               }
             }
         } else if (args.length == 6) {
             if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
@@ -175,6 +205,10 @@ public final class Application {
         }
         LOG.error("Given parameters do not match programm specification. ");
         return false;
+    }
+
+    private static boolean isMultiFeederTask(String parameter) {
+        return parameter.equals(ALLOWED_PARAMETERS[3]);
     }
 
     private static boolean isConfigFileSet(final String parameter) {
