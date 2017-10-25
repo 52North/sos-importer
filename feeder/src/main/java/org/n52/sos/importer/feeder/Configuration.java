@@ -1748,9 +1748,12 @@ public final class Configuration {
         }
     }
 
+    // FIXME improve loading here
     public String getCollectorClassName() {
         if (importConf.getCsvMetadata().isSetObservationCollectorClass()) {
             return importConf.getCsvMetadata().getObservationCollectorClass();
+        } else if (isSamplingFile()) {
+            return SampleBasedObservationCollector.class.getName();
         } else {
             LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
             return DefaultCsvCollector.class.getName();
