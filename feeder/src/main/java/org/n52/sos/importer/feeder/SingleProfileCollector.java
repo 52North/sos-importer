@@ -110,20 +110,20 @@ public class SingleProfileCollector extends CollectorSkeleton {
         // long, lat, alt
         double[] values = new double[3];
         while ((line = parser.readNext()) != null) {
-            if (line[0].equalsIgnoreCase("% Device")) {
+            if (line[0].equalsIgnoreCase(" Device")) {
                 LOG.debug("Creating sensor from '{}'", Arrays.toString(line));
                 sensor = new Sensor(line[1], line[1]);
-            } else if (line[0].equalsIgnoreCase("% Cast time (UTC)")) {
+            } else if (line[0].equalsIgnoreCase(" Cast time (UTC)")) {
                 LOG.debug("Creating timestamp from '{}'", Arrays.toString(line));
                 timestamp = new Timestamp(line[1].replaceAll(" ", "T").concat("Z"));
                 timestamp.setTimezone(0);
-            } else if (line[0].equalsIgnoreCase("% Start latitude")) {
+            } else if (line[0].equalsIgnoreCase(" Start latitude")) {
                 values[1] = Double.parseDouble(line[1]);
-            } else if (line[0].equalsIgnoreCase("% Start longitude")) {
+            } else if (line[0].equalsIgnoreCase(" Start longitude")) {
                 values[0] = Double.parseDouble(line[1]);
-            } else if (line[0].equalsIgnoreCase("% Start altitude")) {
+            } else if (line[0].equalsIgnoreCase(" Start altitude")) {
                 values[2] = Double.parseDouble(line[1]);
-            } else if (line[0].equalsIgnoreCase("% ")) {
+            } else if (line[0].equalsIgnoreCase(" ")) {
                 break;
             }
         }
@@ -147,21 +147,8 @@ public class SingleProfileCollector extends CollectorSkeleton {
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException {
         // TIMESTAMP
-        if (configuration.isUseLastTimestamp()) {
-            if (context.getLastUsedTimestamp() != null && timestamp.isAfter(context.getLastUsedTimestamp())) {
-                // update newLastUsedTimestamp, if timeStamp is new or After:
-                if (newLastUsedTimestamp == null) {
-                    newLastUsedTimestamp = timestamp;
-                }
-                if (timestamp.isAfter(newLastUsedTimestamp)) {
-                    newLastUsedTimestamp = timestamp;
-                }
-            } else {
-                // abort Insertion
-                LOG.debug("skip InsertObservation with timestamp '{}' because not after LastUsedTimestamp '{}'",
-                         timestamp, context.getLastUsedTimestamp());
-                return null;
-            }
+        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timestamp)) {
+            return null;
         }
         LOG.debug("Timestamp: {}", timestamp);
         LOG.debug("Sensor: {}", sensor);
