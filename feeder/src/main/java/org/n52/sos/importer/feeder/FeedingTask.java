@@ -236,8 +236,8 @@ public class FeedingTask {
             LOG.error("SOS URL syntax not correct in configuration file '{}'. Exception thrown: {}",
                      config.getFileName(),
                      mue.getMessage());
-             LOG.debug(EXCEPTION_STACK_TRACE, mue);
-         } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
+            LOG.debug(EXCEPTION_STACK_TRACE, mue);
+        } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
             log(e);
         }
     }

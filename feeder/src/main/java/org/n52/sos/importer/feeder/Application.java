@@ -185,9 +185,9 @@ public final class Application {
                     isTimePeriodSet(args[2]))) {
                 return true;
             } else {
-               if (isMultiFeederTask(args[0])) {
-                   return true;
-               }
+                if (isMultiFeederTask(args[0])) {
+                    return true;
+                }
             }
         } else if (args.length == 6) {
             if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
