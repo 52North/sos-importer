@@ -211,8 +211,11 @@ public final class Feeder implements FeedingContext {
     }
 
     private void handleExceptions() {
-        // TODO Auto-generated method stub
-        // FIXME implement
+        // FIXME implement better handling than logging
+        // first level of handling: logging
+        for (Exception exception : exceptions) {
+            log(exception);
+        }
     }
 
     private void handleFailedObservations(List<InsertObservation> failedObservations) {
