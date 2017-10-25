@@ -225,9 +225,16 @@ public class TimestampTest {
 
     @Test
     public void shouldCreateTimestampFromISO8601StringWithZoneZ() throws ParseException {
-        timestamp = new Timestamp("1234-12-30T12:34:56");
+        timestamp = new Timestamp("1234-12-30T12:34:56Z");
 
-        Assert.assertThat(timestamp.toISO8601String(), Is.is("1234-12-30T12:34:56"));
+        Assert.assertThat(timestamp.toISO8601String(), Is.is("1234-12-30T12:34:56+00:00"));
+    }
+
+    @Test
+    public void shouldCreateTimestampFromISO8601StringWithZone() throws ParseException {
+        timestamp = new Timestamp("1234-12-30T12:34:56+07:00");
+
+        Assert.assertThat(timestamp.toISO8601String(), Is.is("1234-12-30T12:34:56+07:00"));
     }
 
 }

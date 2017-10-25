@@ -84,6 +84,11 @@ public class Timestamp {
         hour = Integer.parseInt(ISO8601String.substring(11, 13));
         minute = Integer.parseInt(ISO8601String.substring(14, 16));
         seconds = Integer.parseInt(ISO8601String.substring(17, 19));
+        if (ISO8601String.indexOf("+") == 19 || ISO8601String.indexOf("-") == 19) {
+            timezone = Integer.parseInt(ISO8601String.substring(20, 22));
+        } else if (ISO8601String.contains("Z")) {
+            timezone = 0;
+        }
     }
 
     @Override
