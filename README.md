@@ -247,6 +247,8 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * MultiFeederTask
+       This feature provides means for harvesting many observation data source at once. The required inputs are an folder with configurations, the number of importing threads, and the period in minutes when all import configurations are processed again. This includes the option for changing the content of the configuration directory between each run.
      * Add support for HTTP remote files incl. fix for FTP client
      * Add support for parent feature relations
        * Bindings
