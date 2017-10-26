@@ -110,8 +110,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                         }
                     }
                     // insert observation
-                    final String observationId = sosClient.insertSweArrayObservation(
-                            timeSeries.getSweArrayObservation(sosClient.getVersion()));
+                    final String observationId = sosClient.insertSweArrayObservation(timeSeries);
                     if (observationId == null || observationId.equalsIgnoreCase("")) {
                         LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
                                 timeSeries.getSensorName(),

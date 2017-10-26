@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -43,6 +44,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlString;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.adapter.OperationResult;
 import org.n52.oxf.ows.ExceptionReport;
@@ -62,12 +64,17 @@ import org.n52.oxf.sos.observation.BooleanObservationParameters;
 import org.n52.oxf.sos.observation.CountObservationParameters;
 import org.n52.oxf.sos.observation.MeasurementObservationParameters;
 import org.n52.oxf.sos.observation.ObservationParameters;
+import org.n52.oxf.sos.observation.SweArrayObservationParameters;
 import org.n52.oxf.sos.observation.TextObservationParameters;
+import org.n52.oxf.sos.request.InsertObservationParameters;
 import org.n52.oxf.sos.request.v100.RegisterSensorParameters;
 import org.n52.oxf.sos.request.v200.InsertSensorParameters;
+import org.n52.oxf.xml.NcNameResolver;
+import org.n52.oxf.xml.XMLConstants;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.RegisterSensor;
+import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +85,17 @@ import com.google.common.collect.Sets;
 import net.opengis.sos.x10.InsertObservationResponseDocument;
 import net.opengis.sos.x10.RegisterSensorResponseDocument;
 import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
+import net.opengis.swe.x20.BooleanType;
+import net.opengis.swe.x20.CountType;
+import net.opengis.swe.x20.DataArrayDocument;
+import net.opengis.swe.x20.DataArrayType;
+import net.opengis.swe.x20.DataRecordType;
+import net.opengis.swe.x20.QuantityType;
+import net.opengis.swe.x20.TextEncodingType;
+import net.opengis.swe.x20.TextType;
+import net.opengis.swe.x20.TimeType;
+import net.opengis.swe.x20.DataArrayType.ElementType;
+import net.opengis.swe.x20.DataRecordType.Field;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 public class SosClient {
@@ -109,6 +127,12 @@ public class SosClient {
     private static final String PROBLEM_WITH_OXF_EXCEPTION_THROWN = "Problem with OXF. Exception thrown: %s";
 
     private static final String N_M_FORMAT = "%s %s";
+
+    private static final String DEFAULT = "default";
+
+    private static final String TOKEN_SEPARATOR = ";";
+
+    private static final String BLOCK_SEPARATOR = "@";
 
     private SOSWrapper sosWrapper;
 
@@ -341,13 +365,13 @@ public class SosClient {
                 observationTemplate.generateObservationTemplate());
     }
 
-    private boolean isObservationTypeMatching(final RegisterSensor registerSensor,
+    private boolean isObservationTypeMatching(RegisterSensor registerSensor,
             final ObservedProperty firstObservedProperty,
             final String observationType) {
         return registerSensor.getMeasuredValueType(firstObservedProperty).equals(observationType);
     }
 
-    private void setMimetype(final MimetypeAwareRequestParameters parameters) {
+    private void setMimetype(MimetypeAwareRequestParameters parameters) {
         String mimeType = "text/xml";
         if (sosBinding != null) {
             parameters.addParameterValue(ISOSRequestBuilder.BINDING, sosBinding.name());
@@ -360,7 +384,7 @@ public class SosClient {
         parameters.setType(mimeType);
     }
 
-    private InsertSensorParameters createInsertSensorParametersFromRS(final RegisterSensor rs)
+    private InsertSensorParameters createInsertSensorParametersFromRS(RegisterSensor rs)
             throws XmlException, IOException {
         return new InsertSensorParameters(sensorDescBuilder.createSML(rs),
                 SML_101_FORMAT_URI,
@@ -385,7 +409,7 @@ public class SosClient {
         }
     }
 
-    private Collection<String> getObservedPropertyURIs(final Collection<ObservedProperty> observedProperties) {
+    private Collection<String> getObservedPropertyURIs(Collection<ObservedProperty> observedProperties) {
         if (observedProperties == null || observedProperties.isEmpty()) {
             return Collections.emptyList();
         }
@@ -410,7 +434,7 @@ public class SosClient {
         return tmp;
     }
 
-    private String getURIForObservationType(final String measuredValueType) {
+    private String getURIForObservationType(String measuredValueType) {
         if (measuredValueType.equals("NUMERIC")) {
             return "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement";
         }
@@ -484,7 +508,7 @@ public class SosClient {
     }
 
     private org.n52.oxf.sos.request.InsertObservationParameters createParameterAssemblyFromIO(
-            final InsertObservation io) throws OXFException {
+            InsertObservation io) throws OXFException {
         ObservationParameters obsParameter;
 
         switch (io.getMeasuredValueType()) {
@@ -520,7 +544,7 @@ public class SosClient {
         // position
         boolean eastingFirst;
         if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
-            eastingFirst = Configuration.getEpsgEastingFirstMap().get("default");
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get(DEFAULT);
         } else {
             eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
         }
@@ -559,7 +583,7 @@ public class SosClient {
         }
     }
 
-    private boolean isObservationAlreadyContained(final OWSException owsEx) {
+    private boolean isObservationAlreadyContained(OWSException owsEx) {
         return owsEx.getExceptionCode().equals(Configuration.SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE) &&
                 owsEx.getExceptionTexts().length > 0 &&
                 (owsEx.getExceptionTexts()[0].contains(Configuration.SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT)
@@ -574,11 +598,19 @@ public class SosClient {
                                 Configuration.SOS_UNIQUE_CONSTRAINT_VIOLATION));
     }
 
-    private boolean isExceptionTextContained(final OWSException owsEx, final String exceptionText) {
+    private boolean isExceptionTextContained(OWSException owsEx, String exceptionText) {
         return owsEx.getExceptionTexts()[0].contains(exceptionText);
     }
 
-    public String insertSweArrayObservation(
+    public String insertSweArrayObservation(TimeSeries timeSeries) throws IOException {
+        if (timeSeries == null || timeSeries.isEmpty()) {
+            return null;
+        } else {
+            return insertSweArrayObservation(getSweArrayObservation(timeSeries));
+        }
+    }
+
+    private String insertSweArrayObservation(
             final org.n52.oxf.sos.request.InsertObservationParameters sweArrayObservation) {
         try {
             try {
@@ -636,6 +668,153 @@ public class SosClient {
             LOG.error(String.format(PROBLEM_WITH_OXF_EXCEPTION_THROWN, e.getMessage()), e);
         }
         return null;
+    }
+
+    private InsertObservationParameters getSweArrayObservation(TimeSeries timeSeries) {
+        final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
+        // add extension
+        obsParameter.addExtension(
+                "<swe:Boolean xmlns:swe=\"http://www.opengis.net/swe/2.0\" "
+                + "definition=\"SplitDataArrayIntoObservations\"><swe:value>true</swe:value></swe:Boolean>");
+
+        // OM_Observation
+        // procedure
+        obsParameter.addProcedure(timeSeries.getSensorURI());
+        // obsProp
+        obsParameter.addObservedProperty(timeSeries.getObservedProperty().getUri());
+        // feature
+        addFeature(obsParameter, timeSeries);
+        // result
+        addResult(obsParameter, timeSeries);
+        if (sosVersion.equalsIgnoreCase(SOS_VERSION_200)) {
+            obsParameter.addSrsPosition(Configuration.SOS_200_EPSG_CODE_PREFIX + timeSeries.getFirst().getEpsgCode());
+            // phentime
+            obsParameter.addPhenomenonTime(timeSeries.getPhenomenonTime());
+            // temporal bbox for result time
+            obsParameter.addResultTime(timeSeries.getResultTime());
+            return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
+                    obsParameter,
+                    Collections.singletonList(timeSeries.getFirst().getOffering().getUri()));
+        }
+
+        obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + timeSeries.getFirst().getEpsgCode());
+        obsParameter.addSamplingTime(timeSeries.getPhenomenonTime());
+        return new org.n52.oxf.sos.request.v100.InsertObservationParameters(obsParameter);
+    }
+
+    private void addFeature(ObservationParameters obsParameter, TimeSeries timeSeries) {
+        InsertObservation io = timeSeries.getFirst();
+        obsParameter.addNewFoiId(io.getFeatureOfInterestURI());
+        obsParameter.addNewFoiName(io.getFeatureOfInterestName());
+        obsParameter.addFoiDescription(io.getFeatureOfInterestURI());
+        if (io.hasFeatureParentFeature()) {
+            obsParameter.addFoiSampleFeature(io.getParentFeatureIdentifier());
+        }
+        // position
+        boolean eastingFirst = false;
+        if (Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode()) == null) {
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get(DEFAULT);
+        } else {
+            eastingFirst = Configuration.getEpsgEastingFirstMap().get(io.getEpsgCode());
+        }
+        String pos = eastingFirst ?
+                String.format(N_M_FORMAT,
+                io.getLongitudeValue(),
+                io.getLatitudeValue()) :
+                    String.format(N_M_FORMAT,
+                            io.getLatitudeValue(),
+                            io.getLongitudeValue());
+        if (io.isSetAltitudeValue()) {
+            pos = String.format(N_M_FORMAT, pos, io.getAltitudeValue());
+        }
+        obsParameter.addFoiPosition(pos);
+    }
+
+    private void addResult(SweArrayObservationParameters obsParameter, TimeSeries timeSeries) {
+        DataArrayDocument xbDataArrayDoc = DataArrayDocument.Factory.newInstance();
+        DataArrayType xbDataArray = xbDataArrayDoc.addNewDataArray1();
+        // count
+        xbDataArray.addNewElementCount().addNewCount().setValue(BigInteger.valueOf(timeSeries.size()));
+        DataRecordType xbDataRecord = DataRecordType.Factory.newInstance();
+        // phentime
+        Field xbPhenTime = xbDataRecord.addNewField();
+        xbPhenTime.setName("phenomenonTime");
+        TimeType xbTimeWithUom = TimeType.Factory.newInstance();
+        xbTimeWithUom.setDefinition("http://www.opengis.net/def/property/OGC/0/PhenomenonTime");
+        xbTimeWithUom.addNewUom().setHref("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian");
+        xbPhenTime.addNewAbstractDataComponent().set(xbTimeWithUom);
+        xbPhenTime
+            .getAbstractDataComponent()
+            .substitute(XMLConstants.QN_SWE_2_0_TIME, TimeType.type);
+        // obsProp
+        Field xbObsProperty = xbDataRecord.addNewField();
+        xbObsProperty.setName(NcNameResolver.fixNcName(timeSeries.getObservedProperty().getName()));
+        if (timeSeries.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_TEXT)) {
+            TextType xbTextType = TextType.Factory.newInstance();
+            xbTextType.setDefinition(timeSeries.getObservedProperty().getUri());
+            xbObsProperty.addNewAbstractDataComponent().set(xbTextType);
+            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_TEXT, TextType.type);
+        } else if (timeSeries.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_COUNT)) {
+            CountType xbCountType = CountType.Factory.newInstance();
+            xbCountType.setDefinition(timeSeries.getObservedProperty().getUri());
+            xbObsProperty.addNewAbstractDataComponent().set(xbCountType);
+            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_COUNT, CountType.type);
+        } else if (timeSeries.getMeasuredValueType().equals(Configuration.SOS_OBSERVATION_TYPE_BOOLEAN)) {
+            BooleanType xbBooleanType = BooleanType.Factory.newInstance();
+            xbBooleanType.setDefinition(timeSeries.getObservedProperty().getUri());
+            xbObsProperty.addNewAbstractDataComponent().set(xbBooleanType);
+            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_BOOLEAN, BooleanType.type);
+            throw new RuntimeException("NO YET IMPLEMENTED");
+        } else {
+            QuantityType xbQuantityWithUom = QuantityType.Factory.newInstance();
+            xbQuantityWithUom.setDefinition(timeSeries.getObservedProperty().getUri());
+            xbQuantityWithUom.addNewUom().setCode(timeSeries.getUnitOfMeasurementCode());
+            xbObsProperty.addNewAbstractDataComponent().set(xbQuantityWithUom);
+            xbObsProperty.getAbstractDataComponent().substitute(XMLConstants.QN_SWE_2_0_QUANTITY, QuantityType.type);
+        }
+        // element type
+        ElementType xbElementType = xbDataArray.addNewElementType();
+        xbElementType.setName("definition");
+        xbElementType.addNewAbstractDataComponent().set(xbDataRecord);
+        xbElementType
+            .getAbstractDataComponent()
+            .substitute(XMLConstants.QN_SWE_2_0_DATA_RECORD, DataRecordType.type);
+
+        // encoding
+        TextEncodingType textEncoding = TextEncodingType.Factory.newInstance();
+        // token
+        textEncoding.setTokenSeparator(TOKEN_SEPARATOR);
+        // block seperator
+        textEncoding.setBlockSeparator(BLOCK_SEPARATOR);
+        xbDataArray.addNewEncoding().addNewAbstractEncoding().set(textEncoding);
+        xbDataArray
+            .getEncoding().getAbstractEncoding()
+            .substitute(XMLConstants.QN_SWE_2_0_TEXT_ENCODING, TextEncodingType.type);
+
+        // values
+        xbDataArray.addNewValues().set(createValuesString(timeSeries));
+        obsParameter.addObservationValue(xbDataArrayDoc.xmlText());
+    }
+
+    private XmlString createValuesString(TimeSeries timeSeries) {
+        // values <-- linebreak every 100 lines?
+        StringBuilder sb = new StringBuilder();
+        int counter = 0;
+        for (final InsertObservation io : timeSeries.getInsertObservations()) {
+            sb.append(io.getTimeStamp().toString());
+            sb.append(TOKEN_SEPARATOR);
+            sb.append(io.getResultValue());
+            sb.append(BLOCK_SEPARATOR);
+            if (counter > 0 && counter++ % 100 == 0) {
+                sb.append("\n");
+            }
+        }
+        sb.trimToSize();
+        String valueString = sb.toString();
+        valueString = valueString.substring(0, valueString.lastIndexOf(BLOCK_SEPARATOR));
+        XmlString xbValueString = XmlString.Factory.newInstance();
+        xbValueString.setStringValue(valueString);
+        return xbValueString;
     }
 
 }
