@@ -94,39 +94,31 @@ public final class Feeder implements FeedingContext {
         collectedObservationsCount = 0;
     }
 
-    private Object initObjectByClassName(String className) {
+    public void importData(DataFile dataFile)
+            throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
+        LOG.trace("importData()");
+        CountDownLatch latch = new CountDownLatch(1);
+        LocalDateTime startImportingData = LocalDateTime.now();
+        exceptions = new ArrayList<>();
+        initCollectorThread(dataFile, latch).start();
+        importer.startImporting();
         try {
-            Class<?> clazz = Class.forName(className);
-            Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
-            return constructor.newInstance();
-        } catch (ClassNotFoundException |
-                NoSuchMethodException |
-                SecurityException |
-                InstantiationException |
-                IllegalAccessException |
-                IllegalArgumentException |
-                InvocationTargetException e) {
-            String errorMsg = String.format("Could not load defined type implementation class '%s'. Cancel import",
-                    className);
-            LOG.error(errorMsg);
+            latch.await();
+        } catch (InterruptedException e) {
             log(e);
-            throw new IllegalArgumentException(errorMsg, e);
         }
-    }
-
-    public boolean isSosAvailable() {
-        return sosClient.isInstanceAvailable();
-    }
-
-    /**
-     * Checks for <b>Register/InsertSensor</b> and <b>InsertObservation</b> operations.
-     *
-     * @return <code>true</code> if Register/InsertSensor and InsertObservation
-     *         operations are listed in the capabilities of this SOS, <br>
-     *         else <code>false</code>.
-     */
-    public boolean isSosTransactional() {
-        return sosClient.isInstanceTransactional();
+        try {
+            importer.stopImporting();
+        } catch (Exception e) {
+            exceptions.add(e);
+        }
+        if (!exceptions.isEmpty()) {
+            handleExceptions();
+        }
+        if (importer.hasFailedObservations()) {
+            handleFailedObservations(importer.getFailedObservations());
+        }
+        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
     @Override
@@ -149,42 +141,71 @@ public final class Feeder implements FeedingContext {
     }
 
     @Override
+    public int getLastReadLine() {
+        return lastLine;
+    }
+
+    @Override
+    public void setLastReadLine(final int lastLine) {
+        LOG.debug("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
+        this.lastLine = lastLine;
+    }
+
+    @Override
+    public Timestamp getLastUsedTimestamp() {
+        return lastUsedTimestamp;
+    }
+
+    @Override
+    public void setLastUsedTimestamp(final Timestamp timeStamp) {
+        LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", lastUsedTimestamp, timeStamp);
+        lastUsedTimestamp = timeStamp;
+    }
+
+    @Override
     public boolean shouldUpdateLastUsedTimestamp(Timestamp newLastUsedTimestamp) {
         return configuration.isUseLastTimestamp()
                 && newLastUsedTimestamp != null
                 && newLastUsedTimestamp.isAfter(lastUsedTimestamp);
     }
 
+    public boolean isSosAvailable() {
+        return sosClient.isInstanceAvailable();
+    }
+
+    /**
+     * Checks for <b>Register/InsertSensor</b> and <b>InsertObservation</b> operations.
+     *
+     * @return <code>true</code> if Register/InsertSensor and InsertObservation
+     *         operations are listed in the capabilities of this SOS, <br>
+     *         else <code>false</code>.
+     */
+    public boolean isSosTransactional() {
+        return sosClient.isInstanceTransactional();
+    }
+
     private synchronized void increaseCollectedObservationsCount(int collectedObservations) {
         collectedObservationsCount += collectedObservations;
     }
 
-    public void importData(DataFile dataFile)
-            throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
-        LOG.trace("importData()");
-        CountDownLatch latch = new CountDownLatch(1);
-        LocalDateTime startImportingData = LocalDateTime.now();
-        exceptions = new ArrayList<>();
-        Thread collectorThread = initCollectorThread(dataFile, latch);
-        collectorThread.start();
-        importer.startImporting();
+    private Object initObjectByClassName(String className) {
         try {
-            latch.await();
-        } catch (InterruptedException e) {
+            Class<?> clazz = Class.forName(className);
+            Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
+            return constructor.newInstance();
+        } catch (ClassNotFoundException |
+                NoSuchMethodException |
+                SecurityException |
+                InstantiationException |
+                IllegalAccessException |
+                IllegalArgumentException |
+                InvocationTargetException e) {
+            String errorMsg = String.format("Could not load defined type implementation class '%s'. Cancel import",
+                    className);
+            LOG.error(errorMsg);
             log(e);
+            throw new IllegalArgumentException(errorMsg, e);
         }
-        try {
-            importer.stopImporting();
-        } catch (Exception e) {
-            exceptions.add(e);
-        }
-        if (!exceptions.isEmpty()) {
-            handleExceptions();
-        }
-        if (importer.hasFailedObservations()) {
-            handleFailedObservations(importer.getFailedObservations());
-        }
-        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
     private Thread initCollectorThread(DataFile dataFile, CountDownLatch latch) {
@@ -226,27 +247,5 @@ public final class Feeder implements FeedingContext {
         LOG.info("New observations in SOS: {}. Failed observations: {}.",
                 newObservationsCount,
                 failedObservations.size());
-    }
-
-    @Override
-    public int getLastReadLine() {
-        return lastLine;
-    }
-
-    @Override
-    public void setLastReadLine(final int lastLine) {
-        LOG.debug("Lastline updated: old: {}; new: {}", this.lastLine, lastLine);
-        this.lastLine = lastLine;
-    }
-
-    @Override
-    public Timestamp getLastUsedTimestamp() {
-        return lastUsedTimestamp;
-    }
-
-    @Override
-    public void setLastUsedTimestamp(final Timestamp timeStamp) {
-        LOG.debug("LastUsedTimestamp updated: old: {}; new: {}", lastUsedTimestamp, timeStamp);
-        lastUsedTimestamp = timeStamp;
     }
 }
