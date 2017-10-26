@@ -42,6 +42,7 @@ import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
+import org.n52.sos.importer.feeder.web.OxfSosClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +84,7 @@ public final class Feeder implements FeedingContext {
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("Feeder(%s)", config.toString()));
         configuration = config;
-        sosClient = new SosClient(configuration);
+        sosClient = new OxfSosClient(configuration);
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
         importer.setConfiguration(configuration);
         importer.setSosClient(sosClient);
