@@ -174,10 +174,6 @@ public class SosClient {
         }
     }
 
-    public String getVersion() {
-        return sosVersion;
-    }
-
     public boolean isInstanceAvailable() {
         return sosWrapper.getServiceDescriptor() != null;
     }
