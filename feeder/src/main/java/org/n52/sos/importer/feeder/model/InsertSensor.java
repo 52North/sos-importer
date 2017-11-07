@@ -37,7 +37,7 @@ import java.util.Map;
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public class RegisterSensor {
+public class InsertSensor {
 
     private final InsertObservation io;
 
@@ -55,7 +55,7 @@ public class RegisterSensor {
      * @param measuredValueTypes a {@link java.util.Map} object.
      * @param unitOfMeasurements a {@link java.util.Map} object.
      */
-    public RegisterSensor(
+    public InsertSensor(
             final InsertObservation io,
             final Collection<ObservedProperty> observedProperties,
             final Map<ObservedProperty, String> measuredValueTypes,

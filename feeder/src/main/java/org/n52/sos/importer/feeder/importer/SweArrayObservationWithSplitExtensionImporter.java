@@ -97,7 +97,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                     if (!sosClient.isSensorRegistered(timeSeries.getSensorURI()) &&
                             !failedSensorInsertions.contains(timeSeries.getSensorURI())) {
                         final String assignedSensorId = sosClient.insertSensor(
-                                timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI())).getKey();
+                                timeSeriesRepository.getInsertSensor(timeSeries.getSensorURI())).getKey();
                         if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
                             LOG.error(String.format(
                                     "Sensor '%s'[%s] could not be registered at SOS. "

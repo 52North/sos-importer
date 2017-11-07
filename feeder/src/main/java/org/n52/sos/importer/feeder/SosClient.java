@@ -35,7 +35,7 @@ import java.util.AbstractMap.SimpleEntry;
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
-import org.n52.sos.importer.feeder.model.RegisterSensor;
+import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.web.HttpClient;
 import org.n52.svalbard.encode.exception.EncodingException;
@@ -48,9 +48,9 @@ public interface SosClient {
 
     boolean isSensorRegistered(String sensorURI);
 
-    SimpleEntry<String, String> insertSensor(RegisterSensor rs) throws OXFException, XmlException, IOException, EncodingException;
+    SimpleEntry<String, String> insertSensor(InsertSensor insertSensor) throws OXFException, XmlException, IOException, EncodingException;
 
-    String insertObservation(InsertObservation io) throws IOException;
+    String insertObservation(InsertObservation insertObservation) throws IOException;
 
     String insertSweArrayObservation(TimeSeries timeSeries) throws IOException;
 

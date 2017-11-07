@@ -57,7 +57,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
-import org.n52.sos.importer.feeder.model.RegisterSensor;
+import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
@@ -110,8 +110,8 @@ public class DescriptionBuilderTest {
                 off,
                 Optional.empty(),
                 mvType);
-    private final RegisterSensor rs =
-            new RegisterSensor(io, observedProperties, measuredValueTypes, unitOfMeasurements);
+    private final InsertSensor rs =
+            new InsertSensor(io, observedProperties, measuredValueTypes, unitOfMeasurements);
     private SystemType system;
 
     @Before

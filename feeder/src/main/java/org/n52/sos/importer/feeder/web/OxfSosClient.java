@@ -76,7 +76,7 @@ import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.SosClient;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
-import org.n52.sos.importer.feeder.model.RegisterSensor;
+import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
@@ -259,7 +259,7 @@ public class OxfSosClient implements SosClient {
     }
 
     @Override
-    public SimpleEntry<String, String> insertSensor(RegisterSensor rs) throws OXFException, XmlException, IOException {
+    public SimpleEntry<String, String> insertSensor(InsertSensor rs) throws OXFException, XmlException, IOException {
         String assignedSensorId = null;
         try {
             if (sosVersion.equals(SOS_VERSION_100)) {
@@ -333,7 +333,7 @@ public class OxfSosClient implements SosClient {
         return new SimpleEntry<>(assignedSensorId, null);
     }
 
-    private RegisterSensorParameters createRegisterSensorParametersFromRS(RegisterSensor registerSensor)
+    private RegisterSensorParameters createRegisterSensorParametersFromRS(InsertSensor registerSensor)
             throws OXFException, XmlException, IOException {
         /*
          * create SensorML
@@ -368,7 +368,7 @@ public class OxfSosClient implements SosClient {
                 observationTemplate.generateObservationTemplate());
     }
 
-    private boolean isObservationTypeMatching(RegisterSensor registerSensor,
+    private boolean isObservationTypeMatching(InsertSensor registerSensor,
             final ObservedProperty firstObservedProperty,
             final String observationType) {
         return registerSensor.getMeasuredValueType(firstObservedProperty).equals(observationType);
@@ -387,7 +387,7 @@ public class OxfSosClient implements SosClient {
         parameters.setType(mimeType);
     }
 
-    private InsertSensorParameters createInsertSensorParametersFromRS(RegisterSensor rs)
+    private InsertSensorParameters createInsertSensorParametersFromRS(InsertSensor rs)
             throws XmlException, IOException {
         return new InsertSensorParameters(sensorDescBuilder.createSML(rs),
                 SML_101_FORMAT_URI,
@@ -423,7 +423,7 @@ public class OxfSosClient implements SosClient {
         return result;
     }
 
-    private Collection<String> getObservationTypeURIs(RegisterSensor rs) {
+    private Collection<String> getObservationTypeURIs(InsertSensor rs) {
         if (rs == null || rs.getObservedProperties() == null || rs.getObservedProperties().size() < 1) {
             return Collections.emptyList();
         }

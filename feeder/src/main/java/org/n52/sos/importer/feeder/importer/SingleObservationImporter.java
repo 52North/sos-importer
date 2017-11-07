@@ -43,7 +43,7 @@ import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
-import org.n52.sos.importer.feeder.model.RegisterSensor;
+import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
@@ -73,13 +73,13 @@ public class SingleObservationImporter extends ImporterSkeleton {
                         if (io != null) {
                             if (!sosClient.isSensorRegistered(io.getSensorURI()) &&
                                     !failedSensorInsertions.contains(io.getSensorURI())) {
-                                RegisterSensor rs = new RegisterSensor(io,
-                                        getObservedProperties(io.getSensorURI(), insertObservations),
-                                        getMeasuredValueTypes(io.getSensorURI(), insertObservations),
-                                        getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
                                 String assignedSensorId = null;
                                 try {
-                                    assignedSensorId = sosClient.insertSensor(rs).getKey();
+                                    InsertSensor insertSensor = new InsertSensor(io,
+                                            getObservedProperties(io.getSensorURI(), insertObservations),
+                                            getMeasuredValueTypes(io.getSensorURI(), insertObservations),
+                                            getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
+                                    assignedSensorId = sosClient.insertSensor(insertSensor).getKey();
                                 } catch (OXFException | XmlException | IOException | EncodingException e) {
                                     log(e);
                                 }

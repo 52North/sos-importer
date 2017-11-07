@@ -70,10 +70,10 @@ public class TimeSeriesRepositoryTest {
             mvType);
         InsertObservation[] ios = {io, io2 };
         tsr.addObservations(ios);
-        RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
-        Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
-        Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
-        Assert.assertThat(registerSensor.getObservedProperties(),
+        InsertSensor insertSensor = tsr.getInsertSensor(sensorURI);
+        Assert.assertThat(insertSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
+        Assert.assertThat(insertSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
+        Assert.assertThat(insertSensor.getObservedProperties(),
                 Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
     }
 
