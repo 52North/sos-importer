@@ -39,6 +39,11 @@
         <common.xml.version>1.1.5</common.xml.version>
         <importer.xml.binding.version>0.4</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
+        <svalbard.version>1-SNAPSHOT</svalbard.version>
+        <shetland.version>1-SNAPSHOT</shetland.version>
+        <janmayen.version>1.2.0-SNAPSHOT</janmayen.version>
+        <iceland.version>2-SNAPSHOT</iceland.version>
+        <org.springframework.version>4.3.10.RELEASE</org.springframework.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
@@ -259,8 +264,7 @@
             <dependency>
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
-                <version>2.0.2</version>
-                <scope>runtime</scope>
+                <version>1.4.01</version>
                 <exclusions>
                     <exclusion>
                         <groupId>stax</groupId>
@@ -311,7 +315,170 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>23.2-jre</version>
+                <version>23.3-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>net.jodah</groupId>
+                <artifactId>failsafe</artifactId>
+                <version>1.0.4</version>
+            </dependency>
+            <dependency>
+	           <groupId>org.mockito</groupId>
+               <artifactId>mockito-core</artifactId>
+               <version>2.11.0</version>
+	           <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.svalbard</groupId>
+                <artifactId>svalbard</artifactId>
+                <version>${svalbard.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+				        <groupId>commons-codec</groupId>
+				        <artifactId>commons-codec</artifactId>
+			        </exclusion>
+			        <exclusion>
+			            <groupId>com.vividsolutions</groupId>
+			            <artifactId>jts</artifactId>
+			        </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.svalbard</groupId>
+                <artifactId>svalbard-xmlbeans</artifactId>
+                <version>${svalbard.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-wsa-v10</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-soap-v12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-sampling-v20</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-xlink-v110</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-om-v20</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.vividsolutions</groupId>
+                        <artifactId>jts</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-sampling-v100</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-gml-v321</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-om-v100</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-filter-v20</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-waterML-v20</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.sensorweb</groupId>
+                        <artifactId>52n-xml-ows-v110</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.shetland</groupId>
+                <artifactId>shetland</artifactId>
+                <version>${shetland.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-codec</groupId>
+                        <artifactId>commons-codec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.vividsolutions</groupId>
+                        <artifactId>jts</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.iceland</groupId>
+                <artifactId>iceland</artifactId>
+                <version>${iceland.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.elasticsearch</groupId>
+                        <artifactId>elasticsearch</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.n52.janmayen</groupId>
+                <artifactId>janmayen</artifactId>
+                <version>${janmayen.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${org.springframework.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -395,6 +562,10 @@
                             <exclude>**/LICENSE.gpl-2.0</exclude>
                             <exclude>**/XMLTools.java</exclude>
                         </excludes>
+                        <strictCheck>true</strictCheck>
+                        <mapping>
+                            <java>SLASHSTAR_STYLE</java>
+                        </mapping>
                         <licenseMerges>
                             <licenseMerge>The Apache Software License, Version 2.0|Apache
                                 2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>

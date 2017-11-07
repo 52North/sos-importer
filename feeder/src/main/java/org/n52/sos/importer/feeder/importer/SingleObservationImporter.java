@@ -45,6 +45,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.RegisterSensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
+import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,8 +79,8 @@ public class SingleObservationImporter extends ImporterSkeleton {
                                         getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
                                 String assignedSensorId = null;
                                 try {
-                                    assignedSensorId = sosClient.registerSensor(rs);
-                                } catch (OXFException | XmlException | IOException e) {
+                                    assignedSensorId = sosClient.insertSensor(rs).getKey();
+                                } catch (OXFException | XmlException | IOException | EncodingException e) {
                                     log(e);
                                 }
                                 if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {

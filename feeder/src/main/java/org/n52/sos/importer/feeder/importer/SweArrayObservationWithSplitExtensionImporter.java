@@ -39,6 +39,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.sos.importer.feeder.model.Timestamp;
+import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
 
     private static final Logger LOG = LoggerFactory.getLogger(SweArrayObservationWithSplitExtensionImporter.class);
 
-    private static final Lock ONE_IMPORTER_LOCK = new ReentrantLock(true);
+    protected static final Lock ONE_IMPORTER_LOCK = new ReentrantLock(true);
 
     private TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
 
@@ -64,7 +65,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
         LOG.debug("Using hunkSize '{}'", hunkSize);
         LOG.info("Using {}ms timeout buffer during insert observation requests. "
                 + "Change "
-                + "<SosImportConfiguration><SosMetadata><insertSweArrayObservationTimeoutBuffer>"
+                + "<SosImportConfiguration><SosMetadata><InsertSweArrayObservationTimeoutBuffer>"
                 + " if required.",
                 configuration.getInsertSweArrayObservationTimeoutBuffer());
     }
@@ -77,16 +78,16 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
         timeSeriesRepository.addObservations(insertObservations);
         if (currentHunk == hunkSize) {
             currentHunk = 0;
-            insertTimeSeries(timeSeriesRepository);
+            insertAllTimeSeries(timeSeriesRepository);
             timeSeriesRepository = new TimeSeriesRepository();
         } else {
             currentHunk += insertObservations.length;
         }
     }
 
-    private void insertTimeSeries(final TimeSeriesRepository timeSeriesRepository)
-            throws OXFException, XmlException, IOException {
-        LOG.trace("insertTimeSeries()");
+    protected void insertAllTimeSeries(final TimeSeriesRepository timeSeriesRepository)
+            throws OXFException, XmlException, IOException, EncodingException {
+        LOG.trace("insertAllTimeSeries()");
         ONE_IMPORTER_LOCK.lock();
         try {
             Timestamp newLastUsedTimestamp = null;
@@ -95,8 +96,8 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                     // check if sensor is registered
                     if (!sosClient.isSensorRegistered(timeSeries.getSensorURI()) &&
                             !failedSensorInsertions.contains(timeSeries.getSensorURI())) {
-                        final String assignedSensorId = sosClient.registerSensor(
-                                timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI()));
+                        final String assignedSensorId = sosClient.insertSensor(
+                                timeSeriesRepository.getRegisterSensor(timeSeries.getSensorURI())).getKey();
                         if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {
                             LOG.error(String.format(
                                     "Sensor '%s'[%s] could not be registered at SOS. "
@@ -135,7 +136,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
     @Override
     public synchronized void stopImporting() throws Exception {
         if (!timeSeriesRepository.isEmpty()) {
-            insertTimeSeries(timeSeriesRepository);
+            insertAllTimeSeries(timeSeriesRepository);
         }
     }
 

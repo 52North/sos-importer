@@ -42,13 +42,13 @@ public abstract class ImporterSkeleton implements Importer {
 
     protected Configuration configuration;
 
+    protected FeedingContext context;
+
     protected SosClient sosClient;
 
     protected List<InsertObservation> failedObservations = new LinkedList<>();
 
     protected List<String> failedSensorInsertions = new LinkedList<>();
-
-    protected FeedingContext context;
 
     public ImporterSkeleton() {
     }

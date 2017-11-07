@@ -33,6 +33,7 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -258,7 +259,7 @@ public class OxfSosClient implements SosClient {
     }
 
     @Override
-    public String registerSensor(RegisterSensor rs) throws OXFException, XmlException, IOException {
+    public SimpleEntry<String, String> insertSensor(RegisterSensor rs) throws OXFException, XmlException, IOException {
         String assignedSensorId = null;
         try {
             if (sosVersion.equals(SOS_VERSION_100)) {
@@ -329,7 +330,7 @@ public class OxfSosClient implements SosClient {
                     assignedSensorId));
             registeredSensors.add(assignedSensorId);
         }
-        return assignedSensorId;
+        return new SimpleEntry<>(assignedSensorId, null);
     }
 
     private RegisterSensorParameters createRegisterSensorParametersFromRS(RegisterSensor registerSensor)
@@ -819,6 +820,22 @@ public class OxfSosClient implements SosClient {
         XmlString xbValueString = XmlString.Factory.newInstance();
         xbValueString.setStringValue(valueString);
         return xbValueString;
+    }
+
+    @Override
+    public void setHttpClient(HttpClient client) {
+        LOG.error("Method 'setHttpClient' not implemented");
+    }
+
+    @Override
+    public void setConfiguration(Configuration configuration) throws MalformedURLException {
+        LOG.error("Method 'setConfiguration' not implemented");
+    }
+
+    @Override
+    public boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) {
+        LOG.error("Method 'isResultTemplateRegistered' not implemented");
+        return false;
     }
 
 }

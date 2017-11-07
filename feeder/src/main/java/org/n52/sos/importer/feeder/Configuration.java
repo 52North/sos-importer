@@ -82,7 +82,7 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public final class Configuration {
+public class Configuration {
 
     /**
      * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
