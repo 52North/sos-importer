@@ -308,6 +308,12 @@
                 <version>${common.xml.version}</version>
             </dependency>
             <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>52n-xml-ows-v110</artifactId>
+                <version>${common.xml.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.5</version>
