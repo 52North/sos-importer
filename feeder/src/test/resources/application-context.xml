@@ -47,6 +47,7 @@
 	<bean class="org.n52.svalbard.encode.SchemaRepository"/>
 	<bean class="org.n52.svalbard.encode.SensorMLEncoderv20"/>
 	<bean class="org.n52.svalbard.encode.SosInsertionMetadataTypeEncoder"/>
+	<bean class="org.n52.svalbard.encode.SosRequestEncoderv20"/>
 	<bean class="org.n52.svalbard.encode.SweCommonEncoderv20"/>
 	<bean class="org.n52.svalbard.encode.XlinkEncoderv1999"/>
 	<!-- SOS operation specific loaded beans -->
