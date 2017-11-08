@@ -120,7 +120,7 @@ public class TimeSeries {
         return mVType;
     }
 
-     public String getResultTime() {
+    public String getResultTime() {
         Timestamp resultTime = null;
         for (final InsertObservation io : timeseries) {
             if (resultTime == null || resultTime.isBefore(io.getTimeStamp())) {

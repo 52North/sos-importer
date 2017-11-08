@@ -45,9 +45,9 @@ import org.slf4j.LoggerFactory;
 
 public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkeleton {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SweArrayObservationWithSplitExtensionImporter.class);
-
     protected static final Lock ONE_IMPORTER_LOCK = new ReentrantLock(true);
+
+    private static final Logger LOG = LoggerFactory.getLogger(SweArrayObservationWithSplitExtensionImporter.class);
 
     private TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
 

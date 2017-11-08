@@ -40,6 +40,11 @@ import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.web.HttpClient;
 import org.n52.svalbard.encode.exception.EncodingException;
 
+/**
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ *
+ * @since 0.5.0
+ */
 public interface SosClient {
 
     boolean isInstanceAvailable();
@@ -48,7 +53,8 @@ public interface SosClient {
 
     boolean isSensorRegistered(String sensorURI);
 
-    SimpleEntry<String, String> insertSensor(InsertSensor insertSensor) throws OXFException, XmlException, IOException, EncodingException;
+    SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
+            throws OXFException, XmlException, IOException, EncodingException;
 
     String insertObservation(InsertObservation insertObservation) throws IOException;
 
