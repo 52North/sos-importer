@@ -29,6 +29,9 @@
 package org.n52.sos.importer.feeder.importer;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.xmlbeans.XmlException;
@@ -47,35 +50,40 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
 
     private static final Logger LOG = LoggerFactory.getLogger(ResultHandlingImporter.class);
 
+    private List<String> storedResultTemplates = new LinkedList<>();
+
     @Override
     protected void insertAllTimeSeries(TimeSeriesRepository timeSeriesRepository)
             throws OXFException, XmlException, IOException {
         LOG.trace("insertAllTimeSeries()");
         ONE_IMPORTER_LOCK.lock();
         try {
-            timeSeriesRepository.getTimeSeries().parallelStream().forEach(new insertTimeSeries(timeSeriesRepository));
+            timeSeriesRepository.getTimeSeries().parallelStream().forEach(new InsertTimeSeries(timeSeriesRepository));
         } finally {
             ONE_IMPORTER_LOCK.unlock();
         }
     }
 
-    private class insertTimeSeries implements Consumer<TimeSeries> {
+    private class InsertTimeSeries implements Consumer<TimeSeries> {
 
         private TimeSeriesRepository timeSeriesRepository;
 
-        insertTimeSeries(TimeSeriesRepository timeSeriesRepository) {
+        InsertTimeSeries(TimeSeriesRepository timeSeriesRepository) {
             this.timeSeriesRepository = timeSeriesRepository;
         }
 
         @Override
         public void accept(TimeSeries t) {
-            // ensure existence of each sensor if sos
+            // ensure existence of each sensor in sos
             if (!sosClient.isSensorRegistered(t.getSensorURI()) && !failedSensorInsertions.contains(t.getSensorURI())) {
                 // OPTIONAL: register/insertSensor
+                SimpleEntry<String, String> insertSensorResult = null;
                 try {
-                    sosClient.insertSensor(timeSeriesRepository.getInsertSensor(t.getSensorURI()));
+                    insertSensorResult = sosClient.insertSensor(timeSeriesRepository.getInsertSensor(t.getSensorURI()));
                 } catch (OXFException | XmlException | IOException | EncodingException e) {
                     LOG.error("Could not register sensor '{}' at sos instance.", t.getSensorURI());
+                }
+                if (insertSensorResult == null || insertSensorResult.getKey() == null) {
                     failedSensorInsertions.add(t.getSensorURI());
                     return;
                 }
@@ -83,9 +91,10 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
             // ensure existence of resultTemplate for each timeseries
             try {
                 if (!sosClient.isResultTemplateRegistered(t.getSensorURI(), t.getObservedProperty().getUri())) {
-                    System.out.println();
+                    // OPTIONAL: insertResultTemplate: store id somewhere
                     //try {
-                    //    sosClient.insertResultTemplate(timeSeriesRepository.getRegisterSensor(t.getSensorURI()));
+                    String resultTemplateId = sosClient.insertResultTemplate(t);
+                    storedResultTemplates.add(t.hashCode(), resultTemplateId);
                     //} catch (OXFException | XmlException | IOException e) {
                     //    LOG.error("Could not insert result template for '{}', '{}' at sos instance.",
                     //            t.getSensorURI(),
@@ -98,7 +107,6 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            // OPTIONAL: insertresulttemplate (store it somewhere)
             // insert result
         }
 

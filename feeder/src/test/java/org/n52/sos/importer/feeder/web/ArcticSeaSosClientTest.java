@@ -56,6 +56,14 @@ import org.n52.shetland.ogc.sos.SosObservationOffering;
 import org.n52.shetland.util.CollectionHelper;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.Position;
+import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.model.TimeSeries;
+import org.n52.sos.importer.feeder.model.Timestamp;
+import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
+import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,21 +74,25 @@ import net.opengis.ows.x11.OperationsMetadataDocument.OperationsMetadata;
 import net.opengis.sos.x20.CapabilitiesDocument;
 import net.opengis.sos.x20.CapabilitiesType;
 import net.opengis.sos.x20.GetResultTemplateResponseDocument;
+import net.opengis.sos.x20.InsertResultTemplateResponseDocument;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath*:application-context.xml")
 public class ArcticSeaSosClientTest {
 
-    private Configuration configuration;
-    private HttpClient client;
-    private HttpResponse response;
-    private HttpEntity entity;
-    private StatusLine status;
-    private SosCapabilities capabilitiesCache;
-
     @Autowired
     private ArcticSeaSosClient sosClient;
+
+    private Configuration configuration;
+    private HttpClient client;
+    private HttpEntity entity;
+    private HttpResponse response;
+    private Optional<SortedSet<SosObservationOffering>> contents;
+    private SosCapabilities capabilitiesCache;
+    private SosObservationOffering offering;
+    private StatusLine status;
+    private String sensorUri;
 
     @Before
     public void setUp() throws IOException {
@@ -100,6 +112,14 @@ public class ArcticSeaSosClientTest {
         sosClient.setConfiguration(configuration);
         sosClient.setHttpClient(client);
         sosClient.cleanCache();
+
+        offering = new SosObservationOffering();
+        sensorUri = "test-sensor";
+        offering.setProcedures(CollectionHelper.list(sensorUri));
+        offering.setIdentifier("test-offering");
+        TreeSet<SosObservationOffering> treeset = new TreeSet<>();
+        treeset.add(offering);
+        contents = Optional.of(treeset);
     }
 
     @Test
@@ -195,17 +215,38 @@ public class ArcticSeaSosClientTest {
             throws EncodingException, UnsupportedOperationException, IOException, XmlException {
         GetResultTemplateResponseDocument getResultTemplateDoc = createResultTemplateResponse();
         Mockito.when(entity.getContent()).thenReturn(getResultTemplateDoc.newInputStream());
-        SosObservationOffering offering = new SosObservationOffering();
-        String sensorUri = "test-sensor";
-        offering.setProcedures(CollectionHelper.list(sensorUri));
-        offering.setIdentifier("test-offering");
-        TreeSet<SosObservationOffering> treeset = new TreeSet<>();
-        treeset.add(offering);
-        Optional<SortedSet<SosObservationOffering>> contents = Optional.of(treeset);
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
         sosClient.setCache(capabilitiesCache);
 
         Assert.assertThat(sosClient.isResultTemplateRegistered(sensorUri, "test-property"), Is.is(true));
+    }
+
+    @Test
+    public void shouldInsertResultTemplate() throws UnsupportedOperationException, IOException, XmlException {
+        TimeSeries timeseries = new TimeSeries();
+        timeseries.addObservation(new InsertObservation(
+                new Sensor("sensor-nae", sensorUri),
+                new FeatureOfInterest("feature-name", "feature-uri",
+                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
+                52.0,
+                new Timestamp().ofUnixTimeMillis(0),
+                new UnitOfMeasurement("uom-code", "uom-uri"),
+                new ObservedProperty("prop-name", "prop-uri"),
+                new Offering("offering-name", "offering-uri"),
+                Optional.empty(),
+                "NUMERIC"));
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        Mockito.when(entity.getContent()).thenReturn(createInsertResultTemplateResponse().newInputStream());
+        sosClient.setCache(capabilitiesCache);
+
+        Assert.assertThat(sosClient.insertResultTemplate(timeseries), Is.is("template-" + sensorUri + "-prop-uri"));
+    }
+
+    private InsertResultTemplateResponseDocument createInsertResultTemplateResponse() throws XmlException {
+        return InsertResultTemplateResponseDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<sos:InsertResultTemplateResponse xmlns:sos=\"http://www.opengis.net/sos/2.0\">\n" +
+                "  <sos:acceptedTemplate>template-test-sensor-prop-uri</sos:acceptedTemplate>\n" +
+                "</sos:InsertResultTemplateResponse>");
     }
 
     private CapabilitiesDocument createCapabilitiesWithOffering(String sensorUri) throws XmlException {

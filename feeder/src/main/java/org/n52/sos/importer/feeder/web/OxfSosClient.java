@@ -838,4 +838,10 @@ public class OxfSosClient implements SosClient {
         return false;
     }
 
+    @Override
+    public String insertResultTemplate(TimeSeries timeseries) {
+        LOG.error("Method 'insertResultTemplate' not implemented");
+        return null;
+    }
+
 }

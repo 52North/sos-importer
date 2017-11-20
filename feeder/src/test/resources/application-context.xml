@@ -63,6 +63,7 @@
     <bean class="org.n52.svalbard.encode.GetResultTemplateResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertObservationResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertResultResponseEncoder"/>
+	<bean class="org.n52.svalbard.encode.InsertResultTemplateRequestEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertResultTemplateResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertSensorResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertSensorRequestEncoder"/>

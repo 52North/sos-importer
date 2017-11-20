@@ -66,4 +66,6 @@ public interface SosClient {
 
     boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException;
 
+    String insertResultTemplate(TimeSeries timeseries);
+
 }
