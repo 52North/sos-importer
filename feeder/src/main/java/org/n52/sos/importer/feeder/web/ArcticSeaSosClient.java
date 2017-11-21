@@ -80,6 +80,8 @@ import org.n52.shetland.ogc.sos.response.GetResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertSensorResponse;
 import org.n52.shetland.ogc.swe.SweAbstractDataComponent;
+import org.n52.shetland.ogc.swe.SweDataRecord;
+import org.n52.shetland.ogc.swe.SweField;
 import org.n52.shetland.ogc.swe.encoding.SweTextEncoding;
 import org.n52.shetland.ogc.swe.simpleType.SweBoolean;
 import org.n52.shetland.ogc.swe.simpleType.SweCount;
@@ -159,9 +161,9 @@ public class ArcticSeaSosClient implements SosClient {
 
     private String serviceVersion;
 
-    private String blockSeparator;
+    private String blockSeparator = "|";
 
-    private String tokenSeparator;
+    private String tokenSeparator = ";";
 
     @Override
     public void setHttpClient(HttpClient client) {
@@ -472,7 +474,7 @@ public class ArcticSeaSosClient implements SosClient {
             OmObservationConstellation sosObservationConstellation = createObservationTemplate(timeseries);
             request.setObservationTemplate(sosObservationConstellation);
             request.setResultStructure(createResultStructure(timeseries));
-            request.setResultEncoding(createResultEncoding(timeseries));
+            request.setResultEncoding(createResultEncoding());
             HttpResponse response = client.executePost(uri, encodeRequest(request));
             Object decodedResponse = decodeResponse(response);
             if (decodedResponse instanceof InsertResultTemplateResponse) {
@@ -487,12 +489,9 @@ public class ArcticSeaSosClient implements SosClient {
 
     private SosResultStructure createResultStructure(TimeSeries timeseries) {
         //FIXME are there any constants for these strings in arctic sea?
-        UoM uom = new UoM("");
-        uom.setLink("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian");
-
         SweTime sweTime = new SweTime();
         sweTime.setDefinition("http://www.opengis.net/def/property/OGC/0/PhenomenonTime");
-        sweTime.setUom(uom);
+        sweTime.setUom(new UoM("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"));
 
         SweField timestampField = new SweField("phenomenonTime", sweTime);
 
@@ -553,7 +552,7 @@ public class ArcticSeaSosClient implements SosClient {
         }
     }
 
-    private SosResultEncoding createResultEncoding(TimeSeries timeseries) {
+    private SosResultEncoding createResultEncoding() {
         SweTextEncoding encoding = new SweTextEncoding();
         encoding.setBlockSeparator(blockSeparator);
         encoding.setTokenSeparator(tokenSeparator);
