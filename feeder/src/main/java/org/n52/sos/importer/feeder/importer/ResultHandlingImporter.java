@@ -52,6 +52,8 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
 
     private List<String> storedResultTemplates = new LinkedList<>();
 
+    private List<TimeSeries> failedTimeSeries = new LinkedList<>();
+
     @Override
     protected void insertAllTimeSeries(TimeSeriesRepository timeSeriesRepository)
             throws OXFException, XmlException, IOException {
@@ -59,6 +61,10 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
         ONE_IMPORTER_LOCK.lock();
         try {
             timeSeriesRepository.getTimeSeries().parallelStream().forEach(new InsertTimeSeries(timeSeriesRepository));
+            // process failedTimeSeries
+            if (!failedTimeSeries.isEmpty()) {
+                // FIXME do something useful here
+            }
         } finally {
             ONE_IMPORTER_LOCK.unlock();
         }
@@ -73,41 +79,67 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
         }
 
         @Override
-        public void accept(TimeSeries t) {
+        public void accept(TimeSeries ts) {
             // ensure existence of each sensor in sos
-            if (!sosClient.isSensorRegistered(t.getSensorURI()) && !failedSensorInsertions.contains(t.getSensorURI())) {
-                // OPTIONAL: register/insertSensor
-                SimpleEntry<String, String> insertSensorResult = null;
-                try {
-                    insertSensorResult = sosClient.insertSensor(timeSeriesRepository.getInsertSensor(t.getSensorURI()));
-                } catch (OXFException | XmlException | IOException | EncodingException e) {
-                    LOG.error("Could not register sensor '{}' at sos instance.", t.getSensorURI());
-                }
-                if (insertSensorResult == null || insertSensorResult.getKey() == null) {
-                    failedSensorInsertions.add(t.getSensorURI());
-                    return;
-                }
+            if (!isSensorRegistered(ts) && !registerSensor(ts)) {
+                return;
             }
             // ensure existence of resultTemplate for each timeseries
             try {
-                if (!sosClient.isResultTemplateRegistered(t.getSensorURI(), t.getObservedProperty().getUri())) {
-                    // OPTIONAL: insertResultTemplate: store id somewhere
-                    //try {
-                    String resultTemplateId = sosClient.insertResultTemplate(t);
-                    storedResultTemplates.add(t.hashCode(), resultTemplateId);
-                    //} catch (OXFException | XmlException | IOException e) {
-                    //    LOG.error("Could not insert result template for '{}', '{}' at sos instance.",
-                    //            t.getSensorURI(),
-                    //            t.getObservedProperty().getUri());
-                    //    failedSensorInsertions.add(t.getSensorURI());
-                    //    return;
-                    //}
+                if (!sosClient.isResultTemplateRegistered(ts.getSensorURI(), ts.getObservedProperty().getUri()) &&
+                        !insertResultTemplate(ts)) {
+                    return;
                 }
             } catch (EncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("Could not check for result template for '{}', '{}' at sos instance",
+                        ts.getSensorURI(),
+                        ts.getObservedProperty().getUri());
+                failedTimeSeries.add(ts);
+                return;
             }
             // insert result
+            if (!sosClient.insertResult(ts)) {
+                failedTimeSeries.add(ts);
+            }
+        }
+
+        private boolean insertResultTemplate(TimeSeries ts) {
+            // OPTIONAL: insertResultTemplate: store id somewhere
+            //try {
+            String resultTemplateId = sosClient.insertResultTemplate(ts);
+            if (insertResultTemplateFailed(resultTemplateId)) {
+                LOG.error("Could not insert result template for '{}', '{}' at sos instance.",
+                        ts.getSensorURI(),
+                        ts.getObservedProperty().getUri());
+                failedSensorInsertions.add(ts.getSensorURI());
+                return false;
+            }
+            storedResultTemplates.add(ts.hashCode(), resultTemplateId);
+            return true;
+        }
+
+        private boolean registerSensor(TimeSeries ts) {
+            // OPTIONAL: register/insertSensor
+            SimpleEntry<String, String> insertSensorResult = null;
+            try {
+                insertSensorResult =
+                        sosClient.insertSensor(timeSeriesRepository.getInsertSensor(ts.getSensorURI()));
+            } catch (OXFException | XmlException | IOException | EncodingException e) {
+                LOG.error("Could not register sensor '{}' at sos instance.", ts.getSensorURI());
+            }
+            if (insertSensorResult == null || insertSensorResult.getKey() == null) {
+                failedSensorInsertions.add(ts.getSensorURI());
+                return false;
+            }
+            return true;
+        }
+
+        private boolean insertResultTemplateFailed(String resultTemplateId) {
+            return resultTemplateId == null || resultTemplateId.isEmpty();
+        }
+
+        private boolean isSensorRegistered(TimeSeries ts) {
+            return !sosClient.isSensorRegistered(ts.getSensorURI()) && !failedSensorInsertions.contains(ts.getSensorURI());
         }
 
     }

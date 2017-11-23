@@ -585,4 +585,9 @@ public class ArcticSeaSosClient implements SosClient {
         return String.format("template-%s-%s", timeseries.getSensorURI(), timeseries.getObservedProperty().getUri());
     }
 
+    @Override
+    public boolean insertResult(TimeSeries ts) {
+        return false;
+    }
+
 }

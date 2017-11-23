@@ -844,4 +844,10 @@ public class OxfSosClient implements SosClient {
         return null;
     }
 
+    @Override
+    public boolean insertResult(TimeSeries ts) {
+        LOG.error("Method 'insertResult' not implemented");
+        return false;
+    }
+
 }

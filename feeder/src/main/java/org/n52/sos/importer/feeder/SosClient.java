@@ -68,4 +68,6 @@ public interface SosClient {
 
     String insertResultTemplate(TimeSeries timeseries);
 
+    boolean insertResult(TimeSeries ts);
+
 }
