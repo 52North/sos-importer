@@ -134,6 +134,7 @@ public class Configuration {
     public static final String SOS_OBSERVATION_TYPE_COUNT = "COUNT";
     /** Constant <code>SOS_OBSERVATION_TYPE_BOOLEAN="BOOLEAN"</code> */
     public static final String SOS_OBSERVATION_TYPE_BOOLEAN = "BOOLEAN";
+    public static final String SOS_OBSERVATION_TYPE_NUMERIC = "NUMERIC";
     /** Constant <code>OGC_DISCOVERY_ID_TERM_DEFINITION="urn:ogc:def:identifier:OGC:1.0:uniqueID"</code> */
     public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
     /** Constant <code>OGC_DISCOVERY_LONG_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:longName"</code> */

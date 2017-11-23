@@ -379,16 +379,16 @@ public class ArcticSeaSosClient implements SosClient {
             String definition) {
         SweAbstractDataComponent sweType;
         switch (measuredValueType) {
-            case "TEXT":
+            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
                 sweType = new SweText();
                 break;
-            case "COUNT":
+            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
                 sweType = new SweCount();
                 break;
-            case "BOOLEAN":
+            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
                 sweType = new SweBoolean();
                 break;
-            case "NUMERIC":
+            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
             default:
                 sweType  = new SweQuantity();
                 ((SweQuantity) sweType).setUom(unitOfMeasurementCode);
@@ -478,7 +478,7 @@ public class ArcticSeaSosClient implements SosClient {
             HttpResponse response = client.executePost(uri, encodeRequest(request));
             Object decodedResponse = decodeResponse(response);
             if (decodedResponse instanceof InsertResultTemplateResponse) {
-                return ((InsertResultTemplateResponse) response).getAcceptedTemplate();
+                return ((InsertResultTemplateResponse) decodedResponse).getAcceptedTemplate();
             }
         } catch (EncodingException | IOException | DecodingException | OwsExceptionReport | XmlException |
                 InvalidSridException | NumberFormatException | ParseException e) {
@@ -508,7 +508,8 @@ public class ArcticSeaSosClient implements SosClient {
         return new SosResultStructure(dataRecord);
     }
 
-    private OmObservationConstellation createObservationTemplate(TimeSeries timeseries) throws InvalidSridException, NumberFormatException, ParseException {
+    private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
+            throws InvalidSridException, NumberFormatException, ParseException {
         SensorML procedure = new SensorML();
         procedure.setIdentifier(timeseries.getSensorURI());
 
@@ -521,8 +522,10 @@ public class ArcticSeaSosClient implements SosClient {
         return observationTemplate;
     }
 
-    private AbstractFeature createFeature(InsertObservation insertObservation) throws InvalidSridException, NumberFormatException, ParseException {
-        SamplingFeature samplingFeature = new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
+    private AbstractFeature createFeature(InsertObservation insertObservation)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        SamplingFeature samplingFeature =
+                new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
         samplingFeature.setName(new CodeType(insertObservation.getFeatureOfInterestName()));
         if (insertObservation.hasFeatureParentFeature()) {
             samplingFeature.setSampledFeatures(Arrays.asList(new SamplingFeature(
@@ -539,13 +542,13 @@ public class ArcticSeaSosClient implements SosClient {
 
     private String getObservationType(String measuredValueType) {
         switch (measuredValueType) {
-            case "BOOLEAN":
+            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
                 return OmConstants.OBS_TYPE_TRUTH_OBSERVATION;
-            case "COUNT":
+            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
                 return OmConstants.OBS_TYPE_COUNT_OBSERVATION;
-            case "TEXT":
+            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
                 return OmConstants.OBS_TYPE_TEXT_OBSERVATION;
-            case "NUMERIC":
+            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
             default:
                 return OmConstants.OBS_TYPE_MEASUREMENT;
                 // throw new IllegalArgumentException("Observation Type '" + measuredValueType + "' not supported.");

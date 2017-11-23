@@ -54,6 +54,7 @@
 	<!-- DECODER -->
 	<!-- ENCODER -->
 	<bean class="org.n52.svalbard.decode.InsertSensorResponseDecoder"/>
+	<bean class="org.n52.svalbard.decode.InsertResultTemplateResponseDecoder"/>
 	<bean class="org.n52.svalbard.encode.GetCapabilitiesRequestEncoder"/>
     <bean class="org.n52.svalbard.encode.GetCapabilitiesResponseEncoder"/>
     <bean class="org.n52.svalbard.encode.GetCapabilitiesV1RequestEncoder"/>
