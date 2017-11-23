@@ -70,6 +70,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import net.opengis.ows.x11.ExceptionReportDocument;
 import net.opengis.ows.x11.OperationsMetadataDocument.OperationsMetadata;
 import net.opengis.sos.x20.CapabilitiesDocument;
 import net.opengis.sos.x20.CapabilitiesType;
@@ -93,6 +94,8 @@ public class ArcticSeaSosClientTest {
     private SosObservationOffering offering;
     private StatusLine status;
     private String sensorUri;
+    private String propertyUri;
+    private TimeSeries timeseries;
 
     @Before
     public void setUp() throws IOException {
@@ -115,11 +118,25 @@ public class ArcticSeaSosClientTest {
 
         offering = new SosObservationOffering();
         sensorUri = "test-sensor";
+        propertyUri = "prop-uri";
         offering.setProcedures(CollectionHelper.list(sensorUri));
         offering.setIdentifier("test-offering");
         TreeSet<SosObservationOffering> treeset = new TreeSet<>();
         treeset.add(offering);
         contents = Optional.of(treeset);
+
+        timeseries = new TimeSeries();
+        timeseries.addObservation(new InsertObservation(
+                new Sensor("sensor-name", sensorUri),
+                new FeatureOfInterest("feature-name", "feature-uri",
+                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
+                52.0,
+                new Timestamp().ofUnixTimeMillis(0),
+                new UnitOfMeasurement("uom-code", "uom-uri"),
+                new ObservedProperty("prop-name", propertyUri),
+                new Offering("offering-name", "offering-uri"),
+                Optional.empty(),
+                "NUMERIC"));
     }
 
     @Test
@@ -183,11 +200,11 @@ public class ArcticSeaSosClientTest {
     }
 
     @Test
-    public void insertSensorShouldCreateRequestAndProcessResponse() throws EncodingException, OXFException, XmlException, IOException {
+    public void insertSensorShouldCreateRequestAndProcessResponse()
+            throws EncodingException, OXFException, XmlException, IOException {
         InsertSensor registerSensor = Mockito.mock(InsertSensor.class);
         Mockito.when(registerSensor.getSensorName()).thenReturn("sensor-name");
-        String procedure = "sensor-uri";
-        Mockito.when(registerSensor.getSensorURI()).thenReturn(procedure);
+        Mockito.when(registerSensor.getSensorURI()).thenReturn(sensorUri);
         Collection<ObservedProperty> properties = CollectionHelper.list(
                 new ObservedProperty("property-1-name", "porperty-1-uri"),
                 new ObservedProperty("property-2-name", "porperty-2-uri"));
@@ -197,17 +214,17 @@ public class ArcticSeaSosClientTest {
         Mockito.when(registerSensor.getMeasuredValueType(Mockito.any(ObservedProperty.class))).thenReturn("NUMERIC");
         Mockito.when(registerSensor.getUnitOfMeasurementCode(Mockito.any(ObservedProperty.class))).thenReturn("uom");
 
-        Mockito.when(entity.getContent()).thenReturn(createInsertSensorResponse(procedure, offering).newInputStream());
+        Mockito.when(entity.getContent()).thenReturn(createInsertSensorResponse(sensorUri, offering).newInputStream());
         SimpleEntry<String, String> insertSensorResponse = sosClient.insertSensor(registerSensor);
 
-        Assert.assertThat(insertSensorResponse.getKey(), Is.is(procedure));
+        Assert.assertThat(insertSensorResponse.getKey(), Is.is(sensorUri));
         Assert.assertThat(insertSensorResponse.getValue(), Is.is(offering));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void isResultTemplateRegisteredShouldThrowNoSuchElementExceptionWhenSensorIsNotRegistered()
             throws EncodingException {
-        sosClient.isResultTemplateRegistered("sensor-uri", "property");
+        sosClient.isResultTemplateRegistered(sensorUri, propertyUri);
     }
 
     @Test
@@ -218,34 +235,49 @@ public class ArcticSeaSosClientTest {
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
         sosClient.setCache(capabilitiesCache);
 
-        Assert.assertThat(sosClient.isResultTemplateRegistered(sensorUri, "test-property"), Is.is(true));
+        Assert.assertThat(sosClient.isResultTemplateRegistered(sensorUri, propertyUri), Is.is(true));
     }
 
     @Test
     public void shouldInsertResultTemplate() throws UnsupportedOperationException, IOException, XmlException {
-        TimeSeries timeseries = new TimeSeries();
-        timeseries.addObservation(new InsertObservation(
-                new Sensor("sensor-nae", sensorUri),
-                new FeatureOfInterest("feature-name", "feature-uri",
-                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
-                52.0,
-                new Timestamp().ofUnixTimeMillis(0),
-                new UnitOfMeasurement("uom-code", "uom-uri"),
-                new ObservedProperty("prop-name", "prop-uri"),
-                new Offering("offering-name", "offering-uri"),
-                Optional.empty(),
-                "NUMERIC"));
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
         Mockito.when(entity.getContent()).thenReturn(createInsertResultTemplateResponse().newInputStream());
         sosClient.setCache(capabilitiesCache);
 
-        Assert.assertThat(sosClient.insertResultTemplate(timeseries), Is.is("template-" + sensorUri + "-prop-uri"));
+        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
+                Is.is("template-" + sensorUri + "-" + propertyUri));
+    }
+
+    @Test
+    public void shouldReturnTemplateIdentifierIfTemplateWithIdentifierIsAlreadyRegistered()
+            throws UnsupportedOperationException, IOException, XmlException, EncodingException {
+        ExceptionReportDocument exceptionReportDoc = createResultTemplateResponseForDuplicateIdentifier();
+        Mockito.when(entity.getContent()).thenReturn(exceptionReportDoc.newInputStream());
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        sosClient.setCache(capabilitiesCache);
+
+        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
+                Is.is("template-" + sensorUri + "-" + propertyUri));
+    }
+
+    private ExceptionReportDocument createResultTemplateResponseForDuplicateIdentifier() throws XmlException {
+        return ExceptionReportDocument.Factory.parse("<ows:ExceptionReport " +
+                "xmlns:ows=\"http://www.opengis.net/ows/1.1\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"2.0.0\" " +
+                "xsi:schemaLocation=\"http://www.opengis.net/ows/1.1 " +
+                "http://schemas.opengis.net/ows/1.1.0/owsAll.xsd\">\n" +
+                "<ows:Exception exceptionCode=\"InvalidParameterValue\" locator=\"identifier\">\n" +
+                "<ows:ExceptionText>The requested resultTemplate identifier ("
+                + "template-" + sensorUri + "-" + propertyUri + ") " +
+                "is already registered at this service</ows:ExceptionText>\n" +
+                "</ows:Exception>\n" +
+                "</ows:ExceptionReport>");
     }
 
     private InsertResultTemplateResponseDocument createInsertResultTemplateResponse() throws XmlException {
         return InsertResultTemplateResponseDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<sos:InsertResultTemplateResponse xmlns:sos=\"http://www.opengis.net/sos/2.0\">\n" +
-                "  <sos:acceptedTemplate>template-test-sensor-prop-uri</sos:acceptedTemplate>\n" +
+                "  <sos:acceptedTemplate>template-" + sensorUri + "-" + propertyUri + "</sos:acceptedTemplate>\n" +
                 "</sos:InsertResultTemplateResponse>");
     }
 
@@ -269,9 +301,13 @@ public class ArcticSeaSosClientTest {
                 "</ObservationOffering></swes:offering></Contents></contents></Capabilities>");
     }
 
-    private InsertSensorResponseDocument createInsertSensorResponse(String procedure, String offering) throws XmlException {
+    private InsertSensorResponseDocument createInsertSensorResponse(String procedure, String offering)
+            throws XmlException {
         return InsertSensorResponseDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<swes:InsertSensorResponse xmlns:swes=\"http://www.opengis.net/swes/2.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/swes/2.0 http://schemas.opengis.net/swes/2.0/swesInsertSensor.xsd\">\n" +
+                "<swes:InsertSensorResponse xmlns:swes=\"http://www.opengis.net/swes/2.0\" "
+                + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/swes/2.0 "
+                + "http://schemas.opengis.net/swes/2.0/swesInsertSensor.xsd\">\n" +
                 "  <swes:assignedProcedure>" + procedure + "</swes:assignedProcedure>\n" +
                 "  <swes:assignedOffering>" + offering + "</swes:assignedOffering>\n" +
                 "</swes:InsertSensorResponse>");

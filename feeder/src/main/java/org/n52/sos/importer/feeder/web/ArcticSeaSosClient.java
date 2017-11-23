@@ -469,7 +469,7 @@ public class ArcticSeaSosClient implements SosClient {
     @Override
     public String insertResultTemplate(TimeSeries timeseries) {
         InsertResultTemplateRequest request = new InsertResultTemplateRequest(SosConstants.SOS, serviceVersion);
-        request.setIdentifier(createIdentifier(timeseries));
+        request.setIdentifier(createTemplateIdentifier(timeseries));
         try {
             OmObservationConstellation sosObservationConstellation = createObservationTemplate(timeseries);
             request.setObservationTemplate(sosObservationConstellation);
@@ -480,11 +480,26 @@ public class ArcticSeaSosClient implements SosClient {
             if (decodedResponse instanceof InsertResultTemplateResponse) {
                 return ((InsertResultTemplateResponse) decodedResponse).getAcceptedTemplate();
             }
-        } catch (EncodingException | IOException | DecodingException | OwsExceptionReport | XmlException |
-                InvalidSridException | NumberFormatException | ParseException e) {
+        } catch (OwsExceptionReport oer) {
+            if (isTemplateIdentifierAlreadyContainedError(timeseries, oer)) {
+                return createTemplateIdentifier(timeseries);
+            }
+           logException(oer);
+        } catch (EncodingException | IOException | DecodingException | XmlException | InvalidSridException |
+                NumberFormatException | ParseException e) {
            logException(e);
         }
         return null;
+    }
+
+    private boolean isTemplateIdentifierAlreadyContainedError(TimeSeries timeseries, OwsExceptionReport oer) {
+        return oer.getCause() != null &&
+                !oer.getExceptions().isEmpty() &&
+                oer.getExceptions().get(0).hasMessage() &&
+                oer.getExceptions().get(0).getMessage().equals(
+                        String.format("The requested resultTemplate identifier (%s) " +
+                                "is already registered at this service",
+                                createTemplateIdentifier(timeseries)));
     }
 
     private SosResultStructure createResultStructure(TimeSeries timeseries) {
@@ -566,7 +581,7 @@ public class ArcticSeaSosClient implements SosClient {
         return getOfferingByProcedure(timeseries.getSensorURI());
     }
 
-    private String createIdentifier(TimeSeries timeseries) {
+    private String createTemplateIdentifier(TimeSeries timeseries) {
         return String.format("template-%s-%s", timeseries.getSensorURI(), timeseries.getObservedProperty().getUri());
     }
 
