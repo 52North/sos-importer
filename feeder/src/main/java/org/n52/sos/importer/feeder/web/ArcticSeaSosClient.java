@@ -74,9 +74,11 @@ import org.n52.shetland.ogc.sos.SosProcedureDescription;
 import org.n52.shetland.ogc.sos.SosResultEncoding;
 import org.n52.shetland.ogc.sos.SosResultStructure;
 import org.n52.shetland.ogc.sos.request.GetResultTemplateRequest;
+import org.n52.shetland.ogc.sos.request.InsertResultRequest;
 import org.n52.shetland.ogc.sos.request.InsertResultTemplateRequest;
 import org.n52.shetland.ogc.sos.request.InsertSensorRequest;
 import org.n52.shetland.ogc.sos.response.GetResultTemplateResponse;
+import org.n52.shetland.ogc.sos.response.InsertResultResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertSensorResponse;
 import org.n52.shetland.ogc.swe.SweAbstractDataComponent;
@@ -108,6 +110,7 @@ import org.n52.svalbard.encode.OperationRequestEncoderKey;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
 import org.n52.svalbard.util.CodingHelper;
+import org.n52.svalbard.util.XmlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -433,7 +436,7 @@ public class ArcticSeaSosClient implements SosClient {
         return false;
     }
 
-    private String encodeRequest(OwsServiceRequest request) throws EncodingException {
+    private String encodeRequest(OwsServiceRequest request) throws EncodingException, DecodingException {
         request.setService(SosConstants.SOS);
         request.setVersion(serviceVersion);
         EncoderKey encoderKey = new OperationRequestEncoderKey(SosConstants.SOS,
@@ -447,6 +450,7 @@ public class ArcticSeaSosClient implements SosClient {
             throw new NoEncoderForKeyException(encoderKey);
         }
         XmlObject xmlRequest = encoder.encode(request);
+        XmlHelper.validateDocument(xmlRequest);
         return xmlRequest.xmlText();
     }
 
@@ -588,7 +592,25 @@ public class ArcticSeaSosClient implements SosClient {
 
     @Override
     public boolean insertResult(TimeSeries ts) {
+        InsertResultRequest request = new InsertResultRequest(SosConstants.SOS, serviceVersion);
+        request.setTemplateIdentifier(createTemplateIdentifier(ts));
+        request.setResultValues(encodeResultValues(ts));
+        try {
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertResultResponse) {
+                return true;
+            }
+        } catch (OwsExceptionReport | EncodingException | IOException | DecodingException | XmlException e) {
+            logException(e);
+        }
         return false;
+    }
+
+    private String encodeResultValues(TimeSeries ts) {
+        return ts.getInsertObservations().stream()
+                .map(io -> io.getTimeStamp() + tokenSeparator + io.getResultValue().toString())
+                .collect(Collectors.joining(blockSeparator));
     }
 
 }

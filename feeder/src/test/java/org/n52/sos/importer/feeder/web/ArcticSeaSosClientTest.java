@@ -75,6 +75,7 @@ import net.opengis.ows.x11.OperationsMetadataDocument.OperationsMetadata;
 import net.opengis.sos.x20.CapabilitiesDocument;
 import net.opengis.sos.x20.CapabilitiesType;
 import net.opengis.sos.x20.GetResultTemplateResponseDocument;
+import net.opengis.sos.x20.InsertResultResponseDocument;
 import net.opengis.sos.x20.InsertResultTemplateResponseDocument;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
 
@@ -126,17 +127,7 @@ public class ArcticSeaSosClientTest {
         contents = Optional.of(treeset);
 
         timeseries = new TimeSeries();
-        timeseries.addObservation(new InsertObservation(
-                new Sensor("sensor-name", sensorUri),
-                new FeatureOfInterest("feature-name", "feature-uri",
-                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
-                52.0,
-                new Timestamp().ofUnixTimeMillis(0),
-                new UnitOfMeasurement("uom-code", "uom-uri"),
-                new ObservedProperty("prop-name", propertyUri),
-                new Offering("offering-name", "offering-uri"),
-                Optional.empty(),
-                "NUMERIC"));
+        timeseries.addObservation(createInsertObservation(52.0, 0));
     }
 
     @Test
@@ -236,6 +227,61 @@ public class ArcticSeaSosClientTest {
         sosClient.setCache(capabilitiesCache);
 
         Assert.assertThat(sosClient.isResultTemplateRegistered(sensorUri, propertyUri), Is.is(true));
+    }
+
+    @Test
+    public void shouldInsertResult() throws UnsupportedOperationException, IOException, XmlException {
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        Mockito.when(entity.getContent()).thenReturn(createInsertResultResponse().newInputStream());
+        sosClient.setCache(capabilitiesCache);
+
+        timeseries.addObservation(createInsertObservation(42.0, 5000));
+        timeseries.addObservation(createInsertObservation(32.0, 15000));
+        timeseries.addObservation(createInsertObservation(22.0, 25000));
+        timeseries.addObservation(createInsertObservation(12.0, 35000));
+
+        Assert.assertThat(sosClient.insertResult(timeseries), Is.is(true));
+    }
+
+    @Test
+    public void shouldHandleInsertResultExceptionReponse() throws UnsupportedOperationException, IOException, XmlException {
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        Mockito.when(entity.getContent()).thenReturn(createInsertResultExceptionResponse().newInputStream());
+        sosClient.setCache(capabilitiesCache);
+
+        Assert.assertThat(sosClient.insertResult(timeseries), Is.is(false));
+    }
+
+    private ExceptionReportDocument createInsertResultExceptionResponse() throws XmlException {
+        return ExceptionReportDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<ows:ExceptionReport xmlns:ows=\"http://www.opengis.net/ows/1.1\" version=\"2.0.0\">\n" +
+                "  <ows:Exception exceptionCode=\"NoApplicableCode\">\n" +
+                "    <ows:ExceptionText>The observation for procedure=http://www.52north.org/test/procedure/9"
+                + "observedProperty=http://www.52north.org/test/observableProperty/9_3featureOfInter=http://www."
+                + "52north.org/test/featureOfInterest/9phenomenonTime=Time instant: 2012-11-19T13:30:00.000+02:00,"
+                + "nullresultTime=Time instant: 2012-11-19T13:30:00.000+02:00,null already exists in the database!"
+                + "</ows:ExceptionText>\n" +
+                "  </ows:Exception>\n" +
+                "</ows:ExceptionReport>");
+    }
+
+    private InsertResultResponseDocument createInsertResultResponse() throws XmlException {
+        return InsertResultResponseDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<sos:InsertResultResponse xmlns:sos=\"http://www.opengis.net/sos/2.0\" />");
+    }
+
+    private InsertObservation createInsertObservation(Object value, int offset) {
+        return new InsertObservation(
+                new Sensor("sensor-name", sensorUri),
+                new FeatureOfInterest("feature-name", "feature-uri",
+                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
+                value,
+                new Timestamp().ofUnixTimeMillis(0 + offset),
+                new UnitOfMeasurement("uom-code", "uom-uri"),
+                new ObservedProperty("prop-name", propertyUri),
+                new Offering("offering-name", "offering-uri"),
+                Optional.empty(),
+                "NUMERIC");
     }
 
     @Test
