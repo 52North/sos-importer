@@ -247,7 +247,8 @@ public class ArcticSeaSosClientTest {
     }
 
     @Test
-    public void shouldHandleInsertResultExceptionReponse() throws UnsupportedOperationException, IOException, XmlException {
+    public void shouldHandleInsertResultExceptionReponse()
+            throws UnsupportedOperationException, IOException, XmlException {
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
         Mockito.when(entity.getContent()).thenReturn(createInsertResultExceptionResponse().newInputStream());
         sosClient.setCache(capabilitiesCache);
@@ -288,13 +289,29 @@ public class ArcticSeaSosClientTest {
     }
 
     @Test
-    public void shouldNotFailOnDuplicateInsertObservation() throws UnsupportedOperationException, IOException, XmlException {
+    public void shouldNotFailOnDuplicateInsertObservation()
+            throws UnsupportedOperationException, IOException, XmlException {
         ExceptionReportDocument exceptionReportDoc = createInsertObservationDuplicationResponse();
         Mockito.when(entity.getContent()).thenReturn(exceptionReportDoc.newInputStream());
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
 
         InsertObservation io = createInsertObservation(55.0, 0);
         Assert.assertThat(sosClient.insertObservation(io), Is.is("Observation already in database"));
+    }
+
+    @Test
+    public void shouldInsertSweArrayObservation() throws XmlException, UnsupportedOperationException, IOException {
+        InsertObservationResponseDocument requestDoc = createInsertObservationResponse();
+        Mockito.when(entity.getContent()).thenReturn(requestDoc.newInputStream());
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+
+        timeseries.addObservation(createInsertObservation(42.0, 5000));
+        timeseries.addObservation(createInsertObservation(32.0, 15000));
+        timeseries.addObservation(createInsertObservation(22.0, 25000));
+        timeseries.addObservation(createInsertObservation(12.0, 35000));
+
+        Assert.assertThat(sosClient.insertSweArrayObservation(timeseries),
+                Is.is("SOS 2.0 Instances do not return the observation id"));
     }
 
     private ExceptionReportDocument createInsertObservationDuplicationResponse() throws XmlException {

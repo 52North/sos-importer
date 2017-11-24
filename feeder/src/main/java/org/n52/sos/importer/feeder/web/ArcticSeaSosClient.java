@@ -53,6 +53,7 @@ import org.n52.shetland.ogc.gml.CodeType;
 import org.n52.shetland.ogc.gml.CodeWithAuthority;
 import org.n52.shetland.ogc.gml.time.Time;
 import org.n52.shetland.ogc.gml.time.TimeInstant;
+import org.n52.shetland.ogc.om.MultiObservationValues;
 import org.n52.shetland.ogc.om.ObservationValue;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.OmObservableProperty;
@@ -63,7 +64,9 @@ import org.n52.shetland.ogc.om.features.samplingFeatures.InvalidSridException;
 import org.n52.shetland.ogc.om.features.samplingFeatures.SamplingFeature;
 import org.n52.shetland.ogc.om.values.BooleanValue;
 import org.n52.shetland.ogc.om.values.CountValue;
+import org.n52.shetland.ogc.om.values.MultiValue;
 import org.n52.shetland.ogc.om.values.QuantityValue;
+import org.n52.shetland.ogc.om.values.SweDataArrayValue;
 import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.shetland.ogc.ows.OwsOperation;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
@@ -94,6 +97,7 @@ import org.n52.shetland.ogc.sos.response.InsertResultResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertSensorResponse;
 import org.n52.shetland.ogc.swe.SweAbstractDataComponent;
+import org.n52.shetland.ogc.swe.SweDataArray;
 import org.n52.shetland.ogc.swe.SweDataRecord;
 import org.n52.shetland.ogc.swe.SweField;
 import org.n52.shetland.ogc.swe.encoding.SweTextEncoding;
@@ -273,57 +277,6 @@ public class ArcticSeaSosClient implements SosClient {
         return false;
     }
 
-    private boolean checkCache() {
-        if (!capabilitiesCache.isPresent()) {
-            requestCapabilities();
-        }
-        return capabilitiesCache.isPresent();
-    }
-
-    private void requestCapabilities() {
-        String request = uri + GET_REQUEST_CAPABILITIES;
-        try {
-            HttpResponse response = client.executeGet(request);
-            GetCapabilitiesResponse decodedResponse = (GetCapabilitiesResponse) decodeResponse(response);
-            capabilitiesCache = Optional.of((SosCapabilities) decodedResponse.getCapabilities());
-        } catch (IOException | DecodingException | XmlException e) {
-            logException(e);
-        } catch (OwsExceptionReport e) {
-            LOG.error("Request to server failed! Request: '{}' ; Error: '{}'", request, e.getMessage());
-            logException(e);
-        }
-    }
-
-    private void logException(Exception e) {
-        if (e instanceof IOException) {
-            LOG.error("Problem occured in communication with server: '{}'", e.getMessage());
-        } else if (e instanceof DecodingException) {
-            LOG.error("Response from server could not be decoded: '{}'", e.getMessage());
-        } else if (e instanceof XmlException) {
-            LOG.error("Server returned bad XML: '{}'", e.getMessage());
-        } else {
-            LOG.error("Error Occured: '{}'", e.getMessage());
-        }
-        LOG.debug("Exception thrown:", e);
-    }
-
-    protected Object decodeResponse(HttpResponse response)
-            throws OwsExceptionReport, DecodingException, XmlException, IOException {
-        try (InputStream content = response.getEntity().getContent()) {
-            XmlObject xmlResponse = XmlObject.Factory.parse(content);
-            DecoderKey decoderKey = CodingHelper.getDecoderKey(xmlResponse);
-            Decoder<Object, Object> decoder = getDecoderRepository().getDecoder(decoderKey);
-            if (decoder == null) {
-                throw new NoDecoderForKeyException(decoderKey);
-            }
-            Object decode = decoder.decode(xmlResponse);
-            if (decode instanceof OwsExceptionReport) {
-                throw (OwsExceptionReport) decode;
-            }
-            return decode;
-        }
-    }
-
     @Override
     public boolean isSensorRegistered(String sensorURI) {
         return checkCache() &&
@@ -357,6 +310,124 @@ public class ArcticSeaSosClient implements SosClient {
         return new SimpleEntry<>(null, null);
     }
 
+
+    @Override
+    public String insertObservation(InsertObservation io) {
+        InsertObservationRequest request = new InsertObservationRequest();
+        request.setOfferings(Arrays.asList(io.getOffering().getUri()));
+        request.setAssignedSensorId(io.getSensorURI());
+        try {
+            request.setObservation(createOmObservation(io));
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertObservationResponse) {
+                return SOS_2_0_OBSERVATION_INSERTED;
+            }
+        } catch (OwsExceptionReport oer) {
+            if (isDuplicateObservationError(oer, io)) {
+                return OBSERVATION_ALREADY_IN_DATABASE;
+            }
+            logException(oer);
+        } catch (IOException | DecodingException | XmlException | EncodingException |
+                InvalidSridException | NumberFormatException | ParseException e) {
+            logException(e);
+        }
+        return "";
+    }
+
+    @Override
+    public String insertSweArrayObservation(TimeSeries timeSeries) throws IOException {
+        InsertObservationRequest request = new InsertObservationRequest();
+        request.setOfferings(Arrays.asList(timeSeries.getFirst().getOffering().getUri()));
+        request.setAssignedSensorId(timeSeries.getFirst().getSensorURI());
+        try {
+            request.setObservation(createSweArrayObservation(timeSeries));
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertObservationResponse) {
+                return SOS_2_0_OBSERVATION_INSERTED;
+            }
+        } catch (IOException | DecodingException | XmlException | EncodingException |
+                InvalidSridException | NumberFormatException | OwsExceptionReport | ParseException e) {
+            logException(e);
+        }
+        return "";
+    }
+
+    @Override
+    public boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException {
+        GetResultTemplateRequest request = new GetResultTemplateRequest();
+        request.setOffering(getOfferingByProcedure(sensorURI));
+        request.setObservedProperty(observedPropertyUri);
+        try {
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof GetResultTemplateResponse) {
+                return true;
+            }
+        } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
+            logException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public String insertResultTemplate(TimeSeries timeseries) {
+        InsertResultTemplateRequest request = new InsertResultTemplateRequest(SosConstants.SOS, serviceVersion);
+        request.setIdentifier(createTemplateIdentifier(timeseries));
+        try {
+            OmObservationConstellation sosObservationConstellation = createObservationTemplate(timeseries);
+            request.setObservationTemplate(sosObservationConstellation);
+            request.setResultStructure(createResultStructure(timeseries));
+            request.setResultEncoding(createResultEncoding());
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertResultTemplateResponse) {
+                return ((InsertResultTemplateResponse) decodedResponse).getAcceptedTemplate();
+            }
+        } catch (OwsExceptionReport oer) {
+            if (isTemplateIdentifierAlreadyContainedError(timeseries, oer)) {
+                return createTemplateIdentifier(timeseries);
+            }
+           logException(oer);
+        } catch (EncodingException | IOException | DecodingException | XmlException | InvalidSridException |
+                NumberFormatException | ParseException e) {
+           logException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean insertResult(TimeSeries ts) {
+        InsertResultRequest request = new InsertResultRequest(SosConstants.SOS, serviceVersion);
+        request.setTemplateIdentifier(createTemplateIdentifier(ts));
+        request.setResultValues(encodeResultValues(ts));
+        try {
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertResultResponse) {
+                return true;
+            }
+        } catch (OwsExceptionReport | EncodingException | IOException | DecodingException | XmlException e) {
+            logException(e);
+        }
+        return false;
+    }
+
+    protected void cleanCache() {
+        capabilitiesCache = Optional.empty();
+    }
+
+    protected void setCache(SosCapabilities capabilitiesCache) {
+        this.capabilitiesCache = Optional.of(capabilitiesCache);
+    }
+
+    private boolean checkCache() {
+        if (!capabilitiesCache.isPresent()) {
+            requestCapabilities();
+        }
+        return capabilitiesCache.isPresent();
+    }
 
     private InsertSensorRequest createInsertSensorRequest(InsertSensor rs) {
 
@@ -422,51 +493,6 @@ public class ArcticSeaSosClient implements SosClient {
         return sweType;
     }
 
-    @Override
-    public String insertObservation(InsertObservation io) {
-        InsertObservationRequest request = new InsertObservationRequest();
-        request.setOfferings(Arrays.asList(io.getOffering().getUri()));
-        request.setAssignedSensorId(io.getSensorURI());
-        try {
-            request.setObservation(createOmObservation(io));
-            HttpResponse response = client.executePost(uri, encodeRequest(request));
-            Object decodedResponse = decodeResponse(response);
-            if (decodedResponse instanceof InsertObservationResponse) {
-                return SOS_2_0_OBSERVATION_INSERTED;
-            }
-        } catch (OwsExceptionReport oer) {
-            if (isDuplicateObservationError(oer, io)) {
-                return OBSERVATION_ALREADY_IN_DATABASE;
-            }
-            logException(oer);
-        } catch (IOException | DecodingException | XmlException | EncodingException |
-                InvalidSridException | NumberFormatException | ParseException e) {
-            logException(e);
-        }
-        return "";
-    }
-
-    private List<OmObservation> createOmObservation(InsertObservation io)
-            throws InvalidSridException, NumberFormatException, ParseException {
-
-        OmObservationConstellation observationConstellation = new OmObservationConstellation();
-        observationConstellation.setGmlId("o1");
-        observationConstellation.setObservationType(getObservationType(io.getMeasuredValueType()));
-        observationConstellation.setObservableProperty(new OmObservableProperty(io.getObservedPropertyURI()));
-        observationConstellation.setFeatureOfInterest(createFeature(io));
-        PhysicalSystem procedure = new PhysicalSystem();
-        procedure.setIdentifier(io.getSensorURI());
-        observationConstellation.setProcedure(procedure);
-
-        TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
-
-        OmObservation omObservation = new OmObservation();
-        omObservation.setObservationConstellation(observationConstellation);
-        omObservation.setResultTime(resultTime);
-        omObservation.setValue(createObservationValue(io));
-        return Arrays.asList(omObservation);
-    }
-
     private TimeInstant createTimeInstant(Timestamp timestamp) {
         return new TimeInstant(new DateTime(timestamp.toISO8601String()));
     }
@@ -492,35 +518,162 @@ public class ArcticSeaSosClient implements SosClient {
         }
     }
 
-    @Override
-    public String insertSweArrayObservation(TimeSeries timeSeries) throws IOException {
-        // TODO Implement
-        throw new RuntimeException("Not Yet Implemented!");
+    private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        // TODO Review
+        SensorML procedure = new SensorML();
+        procedure.setIdentifier(timeseries.getSensorURI());
+
+        OmObservationConstellation observationTemplate = new OmObservationConstellation();
+        observationTemplate.setObservationType(getObservationType(timeseries.getMeasuredValueType()));
+        observationTemplate.setProcedure(procedure);
+        observationTemplate.setObservableProperty(new OmObservableProperty(timeseries.getObservedProperty().getUri()));
+        observationTemplate.addOffering(createOffering(timeseries));
+        observationTemplate.setFeatureOfInterest(createFeature(timeseries.getFirst()));
+        return observationTemplate;
     }
 
-    protected void cleanCache() {
-        capabilitiesCache = Optional.empty();
+    private List<OmObservation> createOmObservation(InsertObservation io)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        OmObservation omObservation = createOmObservationSkeleton(io);
+        omObservation.setValue(createObservationValue(io));
+        omObservation.getObservationConstellation().setObservationType(getObservationType(io.getMeasuredValueType()));
+        return Arrays.asList(omObservation);
     }
 
-    protected void setCache(SosCapabilities capabilitiesCache) {
-        this.capabilitiesCache = Optional.of(capabilitiesCache);
+    private List<OmObservation> createSweArrayObservation(TimeSeries timeSeries)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        OmObservation omObservation = createOmObservationSkeleton(timeSeries.getFirst());
+        omObservation.setValue(createSweArrayObservationValue(timeSeries));
+        omObservation.getObservationConstellation().setObservationType(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION);
+        return Arrays.asList(omObservation);
     }
 
-    @Override
-    public boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException {
-        GetResultTemplateRequest request = new GetResultTemplateRequest();
-        request.setOffering(getOfferingByProcedure(sensorURI));
-        request.setObservedProperty(observedPropertyUri);
-        try {
-            HttpResponse response = client.executePost(uri, encodeRequest(request));
-            Object decodedResponse = decodeResponse(response);
-            if (decodedResponse instanceof GetResultTemplateResponse) {
-                return true;
-            }
-        } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
-            logException(e);
+    private MultiObservationValues<SweDataArray> createSweArrayObservationValue(TimeSeries timeSeries) {
+        SweTextEncoding encoding = new SweTextEncoding();
+        encoding.setTokenSeparator(tokenSeparator);
+        encoding.setBlockSeparator(blockSeparator);
+
+        SweDataRecord elementType = new SweDataRecord();
+        elementType.addField(createSwePhenomenonTimeField());
+        elementType.addField(createObservedPropertyField(timeSeries.getFirst()));
+
+        SweDataArray dataArray = new SweDataArray();
+        dataArray.setElementType(elementType);
+        dataArray.setEncoding(encoding);
+
+        timeSeries.getInsertObservations().forEach(io -> dataArray.add(Arrays.asList(
+                        io.getTimeStamp().toISO8601String(),
+                        io.getResultValue().toString())));
+
+        MultiValue<SweDataArray> dataArrayValue = new SweDataArrayValue();
+        dataArrayValue.setValue(dataArray);
+
+        MultiObservationValues<SweDataArray> value = new MultiObservationValues<>();
+        value.setValue(dataArrayValue);
+        return value;
+    }
+
+    private SweField createObservedPropertyField(InsertObservation first) {
+        return new SweField(first.getObservedProperty().getName(),
+                createSweType(
+                        first.getMeasuredValueType(),
+                        first.getUnitOfMeasurementCode(),
+                        first.getObservedPropertyURI()));
+    }
+
+    private SweField createSwePhenomenonTimeField() {
+        SweTime sweTime = new SweTime();
+        sweTime.setDefinition("http://www.opengis.net/def/property/OGC/0/PhenomenonTime");
+        sweTime.setUom(new UoM("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"));
+
+        SweField timestampField = new SweField("phenomenonTime", sweTime);
+        return timestampField;
+    }
+
+    private OmObservation createOmObservationSkeleton(InsertObservation io)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        OmObservationConstellation observationConstellation = new OmObservationConstellation();
+        observationConstellation.setGmlId("o1");
+        observationConstellation.setObservableProperty(new OmObservableProperty(io.getObservedPropertyURI()));
+        observationConstellation.setFeatureOfInterest(createFeature(io));
+        PhysicalSystem procedure = new PhysicalSystem();
+        procedure.setIdentifier(io.getSensorURI());
+        observationConstellation.setProcedure(procedure);
+
+        TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
+
+        OmObservation omObservation = new OmObservation();
+        omObservation.setObservationConstellation(observationConstellation);
+        omObservation.setResultTime(resultTime);
+        return omObservation;
+    }
+
+    private SosResultStructure createResultStructure(TimeSeries timeseries) {
+        //FIXME are there any constants for these strings in arctic sea?
+        SweField timestampField = createSwePhenomenonTimeField();
+
+        SweField measuredValueField = new SweField(
+                timeseries.getObservedProperty().getUri(),
+                createSweType(timeseries.getMeasuredValueType(),
+                        timeseries.getUnitOfMeasurementCode(),
+                        timeseries.getObservedProperty().getUri()));
+
+        SweDataRecord dataRecord = new SweDataRecord();
+        dataRecord.addField(timestampField);
+        dataRecord.addField(measuredValueField);
+
+        return new SosResultStructure(dataRecord);
+    }
+
+    private AbstractFeature createFeature(InsertObservation insertObservation)
+            throws InvalidSridException, NumberFormatException, ParseException {
+        SamplingFeature samplingFeature =
+                new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
+        samplingFeature.setName(new CodeType(insertObservation.getFeatureOfInterestName()));
+        if (insertObservation.hasFeatureParentFeature()) {
+            samplingFeature.setSampledFeatures(Arrays.asList(new SamplingFeature(
+                    new CodeWithAuthority(insertObservation.getParentFeatureIdentifier()))));
         }
-        return false;
+        samplingFeature.setGeometry(JTSHelper.createGeometryFromWKT(
+                String.format("POINT(%s %s)",
+                        insertObservation.getLongitudeValue(),
+                        insertObservation.getLatitudeValue()),
+                Integer.parseInt(insertObservation.getEpsgCode())));
+
+        return samplingFeature;
+    }
+
+    private SosResultEncoding createResultEncoding() {
+        SweTextEncoding encoding = new SweTextEncoding();
+        encoding.setBlockSeparator(blockSeparator);
+        encoding.setTokenSeparator(tokenSeparator);
+        return new SosResultEncoding(encoding);
+    }
+
+    private String createOffering(TimeSeries timeseries) {
+        return getOfferingByProcedure(timeseries.getSensorURI());
+    }
+
+    private String createTemplateIdentifier(TimeSeries timeseries) {
+        return String.format("template-%s-%s", timeseries.getSensorURI(), timeseries.getObservedProperty().getUri());
+    }
+
+    private Object decodeResponse(HttpResponse response)
+            throws OwsExceptionReport, DecodingException, XmlException, IOException {
+        try (InputStream content = response.getEntity().getContent()) {
+            XmlObject xmlResponse = XmlObject.Factory.parse(content);
+            DecoderKey decoderKey = CodingHelper.getDecoderKey(xmlResponse);
+            Decoder<Object, Object> decoder = getDecoderRepository().getDecoder(decoderKey);
+            if (decoder == null) {
+                throw new NoDecoderForKeyException(decoderKey);
+            }
+            Object decode = decoder.decode(xmlResponse);
+            if (decode instanceof OwsExceptionReport) {
+                throw (OwsExceptionReport) decode;
+            }
+            return decode;
+        }
     }
 
     private String encodeRequest(OwsServiceRequest request) throws EncodingException, DecodingException {
@@ -537,6 +690,12 @@ public class ArcticSeaSosClient implements SosClient {
         XmlObject xmlRequest = encoder.encode(request);
         XmlHelper.validateDocument(xmlRequest);
         return xmlRequest.xmlText();
+    }
+
+    private String encodeResultValues(TimeSeries ts) {
+        return ts.getInsertObservations().stream()
+                .map(io -> io.getTimeStamp() + tokenSeparator + io.getResultValue().toString())
+                .collect(Collectors.joining(blockSeparator));
     }
 
     private Enum<?> getOperationNameEnum(OwsServiceRequest request) {
@@ -565,30 +724,19 @@ public class ArcticSeaSosClient implements SosClient {
         return offerings.get(0);
     }
 
-    @Override
-    public String insertResultTemplate(TimeSeries timeseries) {
-        InsertResultTemplateRequest request = new InsertResultTemplateRequest(SosConstants.SOS, serviceVersion);
-        request.setIdentifier(createTemplateIdentifier(timeseries));
-        try {
-            OmObservationConstellation sosObservationConstellation = createObservationTemplate(timeseries);
-            request.setObservationTemplate(sosObservationConstellation);
-            request.setResultStructure(createResultStructure(timeseries));
-            request.setResultEncoding(createResultEncoding());
-            HttpResponse response = client.executePost(uri, encodeRequest(request));
-            Object decodedResponse = decodeResponse(response);
-            if (decodedResponse instanceof InsertResultTemplateResponse) {
-                return ((InsertResultTemplateResponse) decodedResponse).getAcceptedTemplate();
-            }
-        } catch (OwsExceptionReport oer) {
-            if (isTemplateIdentifierAlreadyContainedError(timeseries, oer)) {
-                return createTemplateIdentifier(timeseries);
-            }
-           logException(oer);
-        } catch (EncodingException | IOException | DecodingException | XmlException | InvalidSridException |
-                NumberFormatException | ParseException e) {
-           logException(e);
+    private String getObservationType(String measuredValueType) {
+        switch (measuredValueType) {
+            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
+                return OmConstants.OBS_TYPE_TRUTH_OBSERVATION;
+            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
+                return OmConstants.OBS_TYPE_COUNT_OBSERVATION;
+            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
+                return OmConstants.OBS_TYPE_TEXT_OBSERVATION;
+            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
+            default:
+                return OmConstants.OBS_TYPE_MEASUREMENT;
+                // throw new IllegalArgumentException("Observation Type '" + measuredValueType + "' not supported.");
         }
-        return null;
     }
 
     private boolean isTemplateIdentifierAlreadyContainedError(TimeSeries timeseries, OwsExceptionReport oer) {
@@ -614,111 +762,31 @@ public class ArcticSeaSosClient implements SosClient {
                                 io.getTimeStamp().toISO8601String().replaceAll(UTC_PLUS_PATTERN, "Z")));
     }
 
-    private SosResultStructure createResultStructure(TimeSeries timeseries) {
-        //FIXME are there any constants for these strings in arctic sea?
-        SweTime sweTime = new SweTime();
-        sweTime.setDefinition("http://www.opengis.net/def/property/OGC/0/PhenomenonTime");
-        sweTime.setUom(new UoM("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"));
-
-        SweField timestampField = new SweField("phenomenonTime", sweTime);
-
-        SweField measuredValueField = new SweField(
-                timeseries.getObservedProperty().getUri(),
-                createSweType(timeseries.getMeasuredValueType(),
-                        timeseries.getUnitOfMeasurementCode(),
-                        timeseries.getObservedProperty().getUri()));
-
-        SweDataRecord dataRecord = new SweDataRecord();
-        dataRecord.addField(timestampField);
-        dataRecord.addField(measuredValueField);
-
-        return new SosResultStructure(dataRecord);
-    }
-
-    private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
-            throws InvalidSridException, NumberFormatException, ParseException {
-        // TODO Review
-        SensorML procedure = new SensorML();
-        procedure.setIdentifier(timeseries.getSensorURI());
-
-        OmObservationConstellation observationTemplate = new OmObservationConstellation();
-        observationTemplate.setObservationType(getObservationType(timeseries.getMeasuredValueType()));
-        observationTemplate.setProcedure(procedure);
-        observationTemplate.setObservableProperty(new OmObservableProperty(timeseries.getObservedProperty().getUri()));
-        observationTemplate.addOffering(createOffering(timeseries));
-        observationTemplate.setFeatureOfInterest(createFeature(timeseries.getFirst()));
-        return observationTemplate;
-    }
-
-    private AbstractFeature createFeature(InsertObservation insertObservation)
-            throws InvalidSridException, NumberFormatException, ParseException {
-        SamplingFeature samplingFeature =
-                new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
-        samplingFeature.setName(new CodeType(insertObservation.getFeatureOfInterestName()));
-        if (insertObservation.hasFeatureParentFeature()) {
-            samplingFeature.setSampledFeatures(Arrays.asList(new SamplingFeature(
-                    new CodeWithAuthority(insertObservation.getParentFeatureIdentifier()))));
+    private void logException(Exception e) {
+        if (e instanceof IOException) {
+            LOG.error("Problem occured in communication with server: '{}'", e.getMessage());
+        } else if (e instanceof DecodingException) {
+            LOG.error("Response from server could not be decoded: '{}'", e.getMessage());
+        } else if (e instanceof XmlException) {
+            LOG.error("Server returned bad XML: '{}'", e.getMessage());
+        } else {
+            LOG.error("Error Occured: '{}'", e.getMessage());
         }
-        samplingFeature.setGeometry(JTSHelper.createGeometryFromWKT(
-                String.format("POINT(%s %s)",
-                        insertObservation.getLongitudeValue(),
-                        insertObservation.getLatitudeValue()),
-                Integer.parseInt(insertObservation.getEpsgCode())));
-
-        return samplingFeature;
+        LOG.debug("Exception thrown:", e);
     }
 
-    private String getObservationType(String measuredValueType) {
-        switch (measuredValueType) {
-            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
-                return OmConstants.OBS_TYPE_TRUTH_OBSERVATION;
-            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
-                return OmConstants.OBS_TYPE_COUNT_OBSERVATION;
-            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
-                return OmConstants.OBS_TYPE_TEXT_OBSERVATION;
-            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
-            default:
-                return OmConstants.OBS_TYPE_MEASUREMENT;
-                // throw new IllegalArgumentException("Observation Type '" + measuredValueType + "' not supported.");
-        }
-    }
-
-    private SosResultEncoding createResultEncoding() {
-        SweTextEncoding encoding = new SweTextEncoding();
-        encoding.setBlockSeparator(blockSeparator);
-        encoding.setTokenSeparator(tokenSeparator);
-        return new SosResultEncoding(encoding);
-    }
-
-    private String createOffering(TimeSeries timeseries) {
-        return getOfferingByProcedure(timeseries.getSensorURI());
-    }
-
-    private String createTemplateIdentifier(TimeSeries timeseries) {
-        return String.format("template-%s-%s", timeseries.getSensorURI(), timeseries.getObservedProperty().getUri());
-    }
-
-    @Override
-    public boolean insertResult(TimeSeries ts) {
-        InsertResultRequest request = new InsertResultRequest(SosConstants.SOS, serviceVersion);
-        request.setTemplateIdentifier(createTemplateIdentifier(ts));
-        request.setResultValues(encodeResultValues(ts));
+    private void requestCapabilities() {
+        String request = uri + GET_REQUEST_CAPABILITIES;
         try {
-            HttpResponse response = client.executePost(uri, encodeRequest(request));
-            Object decodedResponse = decodeResponse(response);
-            if (decodedResponse instanceof InsertResultResponse) {
-                return true;
-            }
-        } catch (OwsExceptionReport | EncodingException | IOException | DecodingException | XmlException e) {
+            HttpResponse response = client.executeGet(request);
+            GetCapabilitiesResponse decodedResponse = (GetCapabilitiesResponse) decodeResponse(response);
+            capabilitiesCache = Optional.of((SosCapabilities) decodedResponse.getCapabilities());
+        } catch (IOException | DecodingException | XmlException e) {
+            logException(e);
+        } catch (OwsExceptionReport e) {
+            LOG.error("Request to server failed! Request: '{}' ; Error: '{}'", request, e.getMessage());
             logException(e);
         }
-        return false;
-    }
-
-    private String encodeResultValues(TimeSeries ts) {
-        return ts.getInsertObservations().stream()
-                .map(io -> io.getTimeStamp() + tokenSeparator + io.getResultValue().toString())
-                .collect(Collectors.joining(blockSeparator));
     }
 
 }
