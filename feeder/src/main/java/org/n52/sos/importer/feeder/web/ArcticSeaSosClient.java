@@ -44,17 +44,27 @@ import java.util.stream.Collectors;
 import org.apache.http.HttpResponse;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
+import org.joda.time.DateTime;
 import org.n52.janmayen.http.MediaType;
 import org.n52.oxf.OXFException;
 import org.n52.shetland.ogc.UoM;
 import org.n52.shetland.ogc.gml.AbstractFeature;
 import org.n52.shetland.ogc.gml.CodeType;
 import org.n52.shetland.ogc.gml.CodeWithAuthority;
+import org.n52.shetland.ogc.gml.time.Time;
+import org.n52.shetland.ogc.gml.time.TimeInstant;
+import org.n52.shetland.ogc.om.ObservationValue;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.OmObservableProperty;
+import org.n52.shetland.ogc.om.OmObservation;
 import org.n52.shetland.ogc.om.OmObservationConstellation;
+import org.n52.shetland.ogc.om.SingleObservationValue;
 import org.n52.shetland.ogc.om.features.samplingFeatures.InvalidSridException;
 import org.n52.shetland.ogc.om.features.samplingFeatures.SamplingFeature;
+import org.n52.shetland.ogc.om.values.BooleanValue;
+import org.n52.shetland.ogc.om.values.CountValue;
+import org.n52.shetland.ogc.om.values.QuantityValue;
+import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.shetland.ogc.ows.OwsOperation;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
@@ -74,10 +84,12 @@ import org.n52.shetland.ogc.sos.SosProcedureDescription;
 import org.n52.shetland.ogc.sos.SosResultEncoding;
 import org.n52.shetland.ogc.sos.SosResultStructure;
 import org.n52.shetland.ogc.sos.request.GetResultTemplateRequest;
+import org.n52.shetland.ogc.sos.request.InsertObservationRequest;
 import org.n52.shetland.ogc.sos.request.InsertResultRequest;
 import org.n52.shetland.ogc.sos.request.InsertResultTemplateRequest;
 import org.n52.shetland.ogc.sos.request.InsertSensorRequest;
 import org.n52.shetland.ogc.sos.response.GetResultTemplateResponse;
+import org.n52.shetland.ogc.sos.response.InsertObservationResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertSensorResponse;
@@ -98,6 +110,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
+import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.svalbard.decode.Decoder;
 import org.n52.svalbard.decode.DecoderKey;
 import org.n52.svalbard.decode.DecoderRepository;
@@ -128,11 +141,21 @@ import com.vividsolutions.jts.io.ParseException;
 @Configurable
 public class ArcticSeaSosClient implements SosClient {
 
+    public static final String OBSERVATION_ALREADY_IN_DATABASE = "Observation already in database";
+
+    public static final String SOS_2_0_OBSERVATION_INSERTED = "SOS 2.0 Instances do not return the observation id";
+
+    private static final String UTC_PLUS_PATTERN = "\\+00:00";
+
     private static final String GET_REQUEST_CAPABILITIES =
             "?service=SOS&request=GetCapabilities";
 
     private static final String GET_REQUEST_SERVICE_PROVIDER =
             "?service=SOS&request=GetCapabilities&Sections=ServiceProvider";
+
+    private static final String SOS_20_DUPLICATE_OBSERVATION_FORMAT =
+            "The observation for procedure=%sobservedProperty=%sfeatureOfInter=%sphenomenonTime=Time instant: %s,null"
+            + "resultTime=Time instant: %s,null already exists in the database!";
 
     private static final Logger LOG = LoggerFactory.getLogger(ArcticSeaSosClient.class);
 
@@ -400,9 +423,73 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     @Override
-    public String insertObservation(InsertObservation io) throws IOException {
-        // TODO Implement
-        throw new RuntimeException("Not Yet Implemented! ");
+    public String insertObservation(InsertObservation io) {
+        InsertObservationRequest request = new InsertObservationRequest();
+        request.setOfferings(Arrays.asList(io.getOffering().getUri()));
+        request.setAssignedSensorId(io.getSensorURI());
+        try {
+            request.setObservation(createOmObservation(io));
+            HttpResponse response = client.executePost(uri, encodeRequest(request));
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof InsertObservationResponse) {
+                return SOS_2_0_OBSERVATION_INSERTED;
+            }
+        } catch (OwsExceptionReport oer) {
+            if (isDuplicateObservationError(oer, io)) {
+                return OBSERVATION_ALREADY_IN_DATABASE;
+            }
+            logException(oer);
+        } catch (IOException | DecodingException | XmlException | EncodingException |
+                InvalidSridException | NumberFormatException | ParseException e) {
+            logException(e);
+        }
+        return "";
+    }
+
+    private List<OmObservation> createOmObservation(InsertObservation io)
+            throws InvalidSridException, NumberFormatException, ParseException {
+
+        OmObservationConstellation observationConstellation = new OmObservationConstellation();
+        observationConstellation.setGmlId("o1");
+        observationConstellation.setObservationType(getObservationType(io.getMeasuredValueType()));
+        observationConstellation.setObservableProperty(new OmObservableProperty(io.getObservedPropertyURI()));
+        observationConstellation.setFeatureOfInterest(createFeature(io));
+        PhysicalSystem procedure = new PhysicalSystem();
+        procedure.setIdentifier(io.getSensorURI());
+        observationConstellation.setProcedure(procedure);
+
+        TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
+
+        OmObservation omObservation = new OmObservation();
+        omObservation.setObservationConstellation(observationConstellation);
+        omObservation.setResultTime(resultTime);
+        omObservation.setValue(createObservationValue(io));
+        return Arrays.asList(omObservation);
+    }
+
+    private TimeInstant createTimeInstant(Timestamp timestamp) {
+        return new TimeInstant(new DateTime(timestamp.toISO8601String()));
+    }
+
+    private ObservationValue<?> createObservationValue(InsertObservation io) {
+        Time phenomenonTime = createTimeInstant(io.getTimeStamp());
+        switch (io.getMeasuredValueType()) {
+            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
+                QuantityValue quantity = new QuantityValue((Double) io.getResultValue(), io.getUnitOfMeasurementCode());
+                return new SingleObservationValue<>(phenomenonTime, quantity);
+            case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
+                BooleanValue booleanValue = new BooleanValue((Boolean) io.getResultValue());
+                return new SingleObservationValue<>(phenomenonTime, booleanValue);
+            case Configuration.SOS_OBSERVATION_TYPE_COUNT:
+                CountValue count = new CountValue((Integer) io.getResultValue());
+                return new SingleObservationValue<>(phenomenonTime, count);
+            case Configuration.SOS_OBSERVATION_TYPE_TEXT:
+                TextValue text = new TextValue((String) io.getResultValue());
+                return new SingleObservationValue<>(phenomenonTime, text);
+            default:
+                // TODO or throw an exception
+                return null;
+        }
     }
 
     @Override
@@ -426,8 +513,8 @@ public class ArcticSeaSosClient implements SosClient {
         request.setObservedProperty(observedPropertyUri);
         try {
             HttpResponse response = client.executePost(uri, encodeRequest(request));
-            Object decodeResponse = decodeResponse(response);
-            if (decodeResponse instanceof GetResultTemplateResponse) {
+            Object decodedResponse = decodeResponse(response);
+            if (decodedResponse instanceof GetResultTemplateResponse) {
                 return true;
             }
         } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
@@ -441,9 +528,7 @@ public class ArcticSeaSosClient implements SosClient {
         request.setVersion(serviceVersion);
         EncoderKey encoderKey = new OperationRequestEncoderKey(SosConstants.SOS,
                 serviceVersion,
-                serviceVersion.equalsIgnoreCase(Sos2Constants.SERVICEVERSION) ?
-                        Sos2Constants.Operations.valueOf(request.getOperationName()) :
-                            Sos1Constants.Operations.valueOf(request.getOperationName()),
+                getOperationNameEnum(request),
                 MediaType.application("xml"));
         Encoder<XmlObject, OwsServiceRequest> encoder = encoderRepository.getEncoder(encoderKey);
         if (encoder == null) {
@@ -452,6 +537,16 @@ public class ArcticSeaSosClient implements SosClient {
         XmlObject xmlRequest = encoder.encode(request);
         XmlHelper.validateDocument(xmlRequest);
         return xmlRequest.xmlText();
+    }
+
+    private Enum<?> getOperationNameEnum(OwsServiceRequest request) {
+        try {
+            return SosConstants.Operations.valueOf(request.getOperationName());
+        } catch (IllegalArgumentException e) {
+            return serviceVersion.equalsIgnoreCase(Sos2Constants.SERVICEVERSION) ?
+                    Sos2Constants.Operations.valueOf(request.getOperationName()) :
+                        Sos1Constants.Operations.valueOf(request.getOperationName());
+        }
     }
 
     private String getOfferingByProcedure(String sensorURI) {
@@ -504,6 +599,19 @@ public class ArcticSeaSosClient implements SosClient {
                         String.format("The requested resultTemplate identifier (%s) " +
                                 "is already registered at this service",
                                 createTemplateIdentifier(timeseries)));
+    }
+
+    private boolean isDuplicateObservationError(OwsExceptionReport oer, InsertObservation io) {
+        return oer.getCause() != null &&
+                !oer.getExceptions().isEmpty() &&
+                oer.getExceptions().get(0).hasMessage() &&
+                oer.getExceptions().get(0).getMessage().equals(
+                        String.format(SOS_20_DUPLICATE_OBSERVATION_FORMAT,
+                                io.getSensorURI(),
+                                io.getObservedPropertyURI(),
+                                io.getFeatureOfInterestURI(),
+                                io.getTimeStamp().toISO8601String().replaceAll(UTC_PLUS_PATTERN, "Z"),
+                                io.getTimeStamp().toISO8601String().replaceAll(UTC_PLUS_PATTERN, "Z")));
     }
 
     private SosResultStructure createResultStructure(TimeSeries timeseries) {

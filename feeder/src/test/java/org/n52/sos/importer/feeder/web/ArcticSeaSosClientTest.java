@@ -75,6 +75,7 @@ import net.opengis.ows.x11.OperationsMetadataDocument.OperationsMetadata;
 import net.opengis.sos.x20.CapabilitiesDocument;
 import net.opengis.sos.x20.CapabilitiesType;
 import net.opengis.sos.x20.GetResultTemplateResponseDocument;
+import net.opengis.sos.x20.InsertObservationResponseDocument;
 import net.opengis.sos.x20.InsertResultResponseDocument;
 import net.opengis.sos.x20.InsertResultTemplateResponseDocument;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
@@ -97,6 +98,8 @@ public class ArcticSeaSosClientTest {
     private String sensorUri;
     private String propertyUri;
     private TimeSeries timeseries;
+
+    private String featureUri = "feature-uri";
 
     @Before
     public void setUp() throws IOException {
@@ -252,6 +255,67 @@ public class ArcticSeaSosClientTest {
         Assert.assertThat(sosClient.insertResult(timeseries), Is.is(false));
     }
 
+    @Test
+    public void shouldInsertResultTemplate() throws UnsupportedOperationException, IOException, XmlException {
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        Mockito.when(entity.getContent()).thenReturn(createInsertResultTemplateResponse().newInputStream());
+        sosClient.setCache(capabilitiesCache);
+
+        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
+                Is.is("template-" + sensorUri + "-" + propertyUri));
+    }
+
+    @Test
+    public void shouldReturnTemplateIdentifierIfTemplateWithIdentifierIsAlreadyRegistered()
+            throws UnsupportedOperationException, IOException, XmlException, EncodingException {
+        ExceptionReportDocument exceptionReportDoc = createResultTemplateResponseForDuplicateIdentifier();
+        Mockito.when(entity.getContent()).thenReturn(exceptionReportDoc.newInputStream());
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+        sosClient.setCache(capabilitiesCache);
+
+        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
+                Is.is("template-" + sensorUri + "-" + propertyUri));
+    }
+
+    @Test
+    public void shouldInsertObservation() throws UnsupportedOperationException, IOException, XmlException {
+        InsertObservationResponseDocument requestDoc = createInsertObservationResponse();
+        Mockito.when(entity.getContent()).thenReturn(requestDoc.newInputStream());
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+
+        InsertObservation io = createInsertObservation(55.0, 0);
+        Assert.assertThat(sosClient.insertObservation(io), Is.is("SOS 2.0 Instances do not return the observation id"));
+    }
+
+    @Test
+    public void shouldNotFailOnDuplicateInsertObservation() throws UnsupportedOperationException, IOException, XmlException {
+        ExceptionReportDocument exceptionReportDoc = createInsertObservationDuplicationResponse();
+        Mockito.when(entity.getContent()).thenReturn(exceptionReportDoc.newInputStream());
+        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
+
+        InsertObservation io = createInsertObservation(55.0, 0);
+        Assert.assertThat(sosClient.insertObservation(io), Is.is("Observation already in database"));
+    }
+
+    private ExceptionReportDocument createInsertObservationDuplicationResponse() throws XmlException {
+        return ExceptionReportDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<ows:ExceptionReport xmlns:ows=\"http://www.opengis.net/ows/1.1\" version=\"2.0.0\">\n" +
+                "  <ows:Exception exceptionCode=\"NoApplicableCode\">\n" +
+                "    <ows:ExceptionText>The observation for procedure=" + sensorUri +
+                "observedProperty=" + propertyUri +
+                "featureOfInter=" + featureUri +
+                "phenomenonTime=Time instant: 1970-01-01T00:00:00.000Z,null" +
+                "resultTime=Time instant: 1970-01-01T00:00:00.000Z,null already exists in the database!" +
+                "</ows:ExceptionText>\n" +
+                "  </ows:Exception>\n" +
+                "</ows:ExceptionReport>");
+    }
+
+    private InsertObservationResponseDocument createInsertObservationResponse() throws XmlException {
+        return InsertObservationResponseDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<sos:InsertObservationResponse xmlns:sos=\"http://www.opengis.net/sos/2.0\"/>");
+    }
+
     private ExceptionReportDocument createInsertResultExceptionResponse() throws XmlException {
         return ExceptionReportDocument.Factory.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<ows:ExceptionReport xmlns:ows=\"http://www.opengis.net/ows/1.1\" version=\"2.0.0\">\n" +
@@ -273,7 +337,7 @@ public class ArcticSeaSosClientTest {
     private InsertObservation createInsertObservation(Object value, int offset) {
         return new InsertObservation(
                 new Sensor("sensor-name", sensorUri),
-                new FeatureOfInterest("feature-name", "feature-uri",
+                new FeatureOfInterest("feature-name", featureUri,
                         new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
                 value,
                 new Timestamp().ofUnixTimeMillis(0 + offset),
@@ -282,28 +346,6 @@ public class ArcticSeaSosClientTest {
                 new Offering("offering-name", "offering-uri"),
                 Optional.empty(),
                 "NUMERIC");
-    }
-
-    @Test
-    public void shouldInsertResultTemplate() throws UnsupportedOperationException, IOException, XmlException {
-        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
-        Mockito.when(entity.getContent()).thenReturn(createInsertResultTemplateResponse().newInputStream());
-        sosClient.setCache(capabilitiesCache);
-
-        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
-                Is.is("template-" + sensorUri + "-" + propertyUri));
-    }
-
-    @Test
-    public void shouldReturnTemplateIdentifierIfTemplateWithIdentifierIsAlreadyRegistered()
-            throws UnsupportedOperationException, IOException, XmlException, EncodingException {
-        ExceptionReportDocument exceptionReportDoc = createResultTemplateResponseForDuplicateIdentifier();
-        Mockito.when(entity.getContent()).thenReturn(exceptionReportDoc.newInputStream());
-        Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
-        sosClient.setCache(capabilitiesCache);
-
-        Assert.assertThat(sosClient.insertResultTemplate(timeseries),
-                Is.is("template-" + sensorUri + "-" + propertyUri));
     }
 
     private ExceptionReportDocument createResultTemplateResponseForDuplicateIdentifier() throws XmlException {

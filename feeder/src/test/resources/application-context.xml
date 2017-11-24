@@ -53,9 +53,10 @@
 	<!-- SOS operation specific loaded beans -->
 	<!-- DECODER -->
 	<!-- ENCODER -->
-	<bean class="org.n52.svalbard.decode.InsertSensorResponseDecoder"/>
+	<bean class="org.n52.svalbard.decode.InsertObservationResponseV20Decoder"/>
 	<bean class="org.n52.svalbard.decode.InsertResultResponseDecoder"/>
 	<bean class="org.n52.svalbard.decode.InsertResultTemplateResponseDecoder"/>
+	<bean class="org.n52.svalbard.decode.InsertSensorResponseDecoder"/>
 	<bean class="org.n52.svalbard.encode.GetCapabilitiesRequestEncoder"/>
     <bean class="org.n52.svalbard.encode.GetCapabilitiesResponseEncoder"/>
     <bean class="org.n52.svalbard.encode.GetCapabilitiesV1RequestEncoder"/>
@@ -64,6 +65,7 @@
     <bean class="org.n52.svalbard.encode.GetResultResponseEncoder"/>
     <bean class="org.n52.svalbard.encode.GetResultTemplateResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertObservationResponseEncoder"/>
+	<bean class="org.n52.svalbard.encode.InsertObservationRequestEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertResultRequestEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertResultResponseEncoder"/>
 	<bean class="org.n52.svalbard.encode.InsertResultTemplateRequestEncoder"/>
