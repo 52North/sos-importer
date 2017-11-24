@@ -64,6 +64,7 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
             // process failedTimeSeries
             if (!failedTimeSeries.isEmpty()) {
                 // FIXME do something useful here
+                LOG.error("Not all timeseries could be imported: {}", failedObservations.toString());
             }
         } finally {
             ONE_IMPORTER_LOCK.unlock();
@@ -139,7 +140,8 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
         }
 
         private boolean isSensorRegistered(TimeSeries ts) {
-            return !sosClient.isSensorRegistered(ts.getSensorURI()) && !failedSensorInsertions.contains(ts.getSensorURI());
+            return !sosClient.isSensorRegistered(ts.getSensorURI()) &&
+                    !failedSensorInsertions.contains(ts.getSensorURI());
         }
 
     }

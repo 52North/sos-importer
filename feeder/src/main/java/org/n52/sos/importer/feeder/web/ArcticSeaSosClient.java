@@ -398,13 +398,13 @@ public class ArcticSeaSosClient implements SosClient {
 
     @Override
     public String insertObservation(InsertObservation io) throws IOException {
-        // TODO Auto-generated method stub
+        // TODO Implement
         throw new RuntimeException("Not Yet Implemented! ");
     }
 
     @Override
     public String insertSweArrayObservation(TimeSeries timeSeries) throws IOException {
-        // TODO Auto-generated method stub
+        // TODO Implement
         throw new RuntimeException("Not Yet Implemented!");
     }
 
@@ -525,6 +525,7 @@ public class ArcticSeaSosClient implements SosClient {
 
     private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
             throws InvalidSridException, NumberFormatException, ParseException {
+        // TODO Review
         SensorML procedure = new SensorML();
         procedure.setIdentifier(timeseries.getSensorURI());
 
