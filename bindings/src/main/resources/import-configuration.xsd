@@ -1230,6 +1230,15 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element ref="Credentials" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            If the sos server is protected by Basic
+                            authentication, the user name and password has to
+                            be defined.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="insertSweArrayObservationTimeoutBuffer">
                 <xs:annotation>

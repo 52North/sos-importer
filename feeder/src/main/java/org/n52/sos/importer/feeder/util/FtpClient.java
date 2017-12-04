@@ -75,7 +75,7 @@ public class FtpClient extends WebClient {
         try (FileOutputStream fos = new FileOutputStream(file);) {
             client.connect(config.getRemoteFileURL());
             if (config.areRemoteFileCredentialsSet()) {
-                client.login(config.getUser(), config.getPassword());
+                client.login(config.getFtpUser(), config.getFtpPassword());
             }
             client.enterLocalPassiveMode();
             URL remoteFileURL = new URL(config.getRemoteFileURL());
