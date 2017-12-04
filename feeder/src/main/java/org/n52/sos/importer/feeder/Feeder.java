@@ -248,9 +248,7 @@ public final class Feeder {
         }
         failedInsertObservations = new LinkedList<>();
         registeredSensors = new LinkedList<>();
-        if (sosVersion.equals(SOS_200_VERSION)) {
-            offerings = new HashMap<>();
-        }
+        offerings = new HashMap<>();
         if (config.getHunkSize() > 0) {
             hunkSize = config.getHunkSize();
         }
@@ -762,7 +760,13 @@ public final class Feeder {
         final ObservedProperty observedProperty = dataFile.getObservedProperty(mVColumnId, values);
         LOG.debug("ObservedProperty: {}", observedProperty);
         // OFFERING
-        final Offering offer = dataFile.getOffering(sensor);
+        final Offering offer;
+        if (offerings.containsKey(sensor.getUri())) {
+            String offering = offerings.get(sensor.getUri());
+            offer = new Offering(offering, offering);
+        } else {
+            offer = dataFile.getOffering(sensor);
+        }
         LOG.debug("Offering: {}", offer);
         // OM:PARAMETER
         final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(mVColumnId, values);
@@ -813,7 +817,11 @@ public final class Feeder {
                 }
             }
             // insert observation
-            final String observationId = insertSweArrayObservation(timeSeries.getSweArrayObservation(sosVersion));
+            String offering = null;
+            if (offerings.containsKey(timeSeries.getSensorURI())) {
+                offering = offerings.get(timeSeries.getSensorURI());
+            }
+            final String observationId = insertSweArrayObservation(timeSeries.getSweArrayObservation(sosVersion, offering));
             if (observationId == null || observationId.equalsIgnoreCase("")) {
                 LOG.error(String.format(INSERT_OBSERVATION_FAILED,
                         timeSeries.getSensorName(),
@@ -1315,6 +1323,7 @@ public final class Feeder {
                 final String[] sensorIds = offering.getProcedures();
                 for (final String sensorId : sensorIds) {
                     if (sensorId.equals(sensorURI)) {
+                        offerings.put(sensorId, offering.getIdentifier());
                         return true;
                     }
                 }

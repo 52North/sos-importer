@@ -195,6 +195,19 @@ public class TimeSeries {
      * @return a {@link org.n52.oxf.sos.request.InsertObservationParameters} object.
      */
     public InsertObservationParameters getSweArrayObservation(final String sosVersion) {
+        return getSweArrayObservation(sosVersion, getFirst().getOffering().getUri());
+    }
+
+    /**
+     * <p>getSweArrayObservation.</p>
+     *
+     * @param sosVersion a {@link java.lang.String} object.
+     * @param offering Optional paramater allowing to override the offering in the timeseries.
+     * if {@code null} the setted offering will be used.
+     *
+     * @return a {@link org.n52.oxf.sos.request.InsertObservationParameters} object.
+     */
+    public InsertObservationParameters getSweArrayObservation(final String sosVersion, String offering) {
         final SweArrayObservationParameters obsParameter = new SweArrayObservationParameters();
         // add extension
         obsParameter.addExtension(
@@ -216,9 +229,13 @@ public class TimeSeries {
             obsParameter.addPhenomenonTime(getPhenomenonTime());
             // temporal bbox for result time
             obsParameter.addResultTime(getResultTime());
+            // offering
+            if (offering == null) {
+                offering = getFirst().getOffering().getUri();
+            }
             return new org.n52.oxf.sos.request.v200.InsertObservationParameters(
                     obsParameter,
-                    Collections.singletonList(getFirst().getOffering().getUri()));
+                    Collections.singletonList(offering));
         }
 
         obsParameter.addSrsPosition(Configuration.SOS_100_EPSG_CODE_PREFIX + getFirst().getEpsgCode());
