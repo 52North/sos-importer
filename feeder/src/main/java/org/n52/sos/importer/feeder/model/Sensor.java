@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,11 +29,18 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Sensor class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public final class Sensor extends Resource {
-	public Sensor(String name, String uri) {
-		super(name, uri);
-	}
+    /**
+     * <p>Constructor for Sensor.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public Sensor(String name, String uri) {
+        super(name, uri);
+    }
 }

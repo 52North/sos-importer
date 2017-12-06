@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,26 +28,21 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
 public class OfferingTest {
 
-	@Test
-	public void should_set_name_for_offering()
-	{
-		final String name = "name";
-		final Offering offering = new Offering(name, null);
-		assertThat(offering.getName(), is(name));
-	}
-	
-	@Test
-	public void should_set_uri_for_offering()
-	{
-		final String uri = "uri";
-		final Offering offering = new Offering(null, uri);
-		assertThat(offering.getUri(), is(uri));
-	}
+    @Test
+    public void should_set_name_for_offering() {
+        final String name = "name";
+        final Offering offering = new Offering(name, null);
+        org.junit.Assert.assertThat(offering.getName(), org.hamcrest.CoreMatchers.is(name));
+    }
+
+    @Test
+    public void should_set_uri_for_offering() {
+        final String uri = "uri";
+        final Offering offering = new Offering(null, uri);
+        org.junit.Assert.assertThat(offering.getUri(), org.hamcrest.CoreMatchers.is(uri));
+    }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration xsi:schemaLocation="https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
+    <DataFile referenceIsARegularExpression="false">
+        <LocalFile>
+            <Path>src/test/resources/issue-066/data_obs.csv</Path>
+            <Encoding>UTF-8</Encoding>
+        </LocalFile>
+    </DataFile>
+    <SosMetadata insertSweArrayObservationTimeoutBuffer="25">
+        <URL>http://localhost:8080/52n-sos-webapp/service</URL>
+        <Offering generate="true"/>
+        <Version>2.0.0</Version>
+        <Binding>POX</Binding>
+    </SosMetadata>
+    <CsvMetadata>
+        <ColumnAssignments>
+            <Column>
+                <Number>0</Number>
+                <Type>OBSERVED_PROPERTY</Type>
+            </Column>
+            <Column>
+                <Number>1</Number>
+                <Type>DATE_TIME</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>UNIX_TIME</Value>
+                </Metadata>
+                <Metadata>
+                    <Key>GROUP</Key>
+                    <Value>U1</Value>
+                </Metadata>
+            </Column>
+            <Column>
+                <Number>2</Number>
+                <Type>MEASURED_VALUE</Type>
+                <Metadata>
+                    <Key>TYPE</Key>
+                    <Value>NUMERIC</Value>
+                </Metadata>
+                <RelatedFOI>
+                    <IdRef>foi473980759</IdRef>
+                </RelatedFOI>
+                <RelatedSensor>
+                    <IdRef>sensor965319032</IdRef>
+                </RelatedSensor>
+            </Column>
+            <Column>
+                <Number>3</Number>
+                <Type>UOM</Type>
+            </Column>
+        </ColumnAssignments>
+        <DecimalSeparator>.</DecimalSeparator>
+        <FirstLineWithData>0</FirstLineWithData>
+        <Parameter>
+            <CommentIndicator>#</CommentIndicator>
+            <ColumnSeparator>,</ColumnSeparator>
+            <TextIndicator>"</TextIndicator>
+        </Parameter>
+        <UseHeader>false</UseHeader>
+    </CsvMetadata>
+    <AdditionalMetadata>
+        <Metadata>
+            <Key>IMPORT_STRATEGY</Key>
+            <Value>SweArrayObservationWithSplitExtension</Value>
+        </Metadata>
+        <Metadata>
+            <Key>HUNK_SIZE</Key>
+            <Value>5000</Value>
+        </Metadata>
+        <Sensor>
+            <ManualResource>
+                <ID>sensor965319032</ID>
+                <URI>http://example.com/krypto-graph</URI>
+                <Name>krypto-graph</Name>
+            </ManualResource>
+        </Sensor>
+        <FeatureOfInterest>
+            <SpatialResource>
+                <ID>foi473980759</ID>
+                <URI>http://superman.me/home</URI>
+                <Name>Superman's Home</Name>
+                <Position>
+                    <Alt unit="meters">0.0</Alt>
+                    <EPSGCode>4326</EPSGCode>
+                    <Lat unit="deg">0.0</Lat>
+                    <Long unit="deg">0.0</Long>
+                </Position>
+            </SpatialResource>
+        </FeatureOfInterest>
+    </AdditionalMetadata>
+</SosImportConfiguration>

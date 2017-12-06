@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -36,30 +36,32 @@ import org.n52.sos.importer.feeder.Configuration;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
+ * <p>WrappedCSVReader class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class WrappedCSVReader implements CsvParser {
 
-	private CSVReader csvReader;
+    private CSVReader csvReader;
 
-	@Override
-	public String[] readNext() throws IOException {
-		return csvReader.readNext();
-	}
+    @Override
+    public String[] readNext() throws IOException {
+        return csvReader.readNext();
+    }
 
-	@Override
-	public void init(final BufferedReader bufferedReader,
-			final Configuration configuration) {
-		final int flwd = configuration.getFirstLineWithData();
-		final char separator = configuration.getCsvSeparator(),
-				quotechar = configuration.getCsvQuoteChar(),
-				escape = configuration.getCsvEscape();
-		csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
-	}
+    @Override
+    public void init(final BufferedReader bufferedReader,
+            final Configuration configuration) {
+        final int flwd = configuration.getFirstLineWithData();
+        final char separator = configuration.getCsvSeparator();
+        final char quotechar = configuration.getCsvQuoteChar();
+        final char escape = configuration.getCsvEscape();
+        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+    }
 
-	@Override
-	public int getSkipLimit() {
-		return 1;
-	}
+    @Override
+    public int getSkipLimit() {
+        return 1;
+    }
 
 }

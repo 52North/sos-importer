@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,24 +29,26 @@
 package org.n52.sos.importer.model;
 
 /**
- * interface for objects which can be formatted along a 
+ * interface for objects which can be formatted along a
  * certain pattern into a String
- * (e.g. Java-Date + pattern "yyyy-MM-dd" --> "2011-08-04")
- * @author Raimund, e.h.juerrens@52north.org
+ * (e.g. Java-Date + pattern "yyyy-MM-dd" --&gt; "2011-08-04")
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public interface Formatable {
 
-	/**
-	 * formats an object along a certain pattern into a String
-	 * @param o the object to format
-	 * @return
-	 */
-	public String format(Object o);
-	
-	/**
-	 * set the pattern to be used by format(String s);
-	 * @param parsePattern
-	 */
-	public void setPattern(String formatPattern);
+    /**
+     * formats an object along a certain pattern into a String
+     *
+     * @param o the object to format
+     * @return a {@link java.lang.String} object.
+     */
+    String format(Object o);
+
+    /**
+     * set the pattern to be used by format(String s);
+     *
+     * @param formatPattern a {@link java.lang.String} object.
+     */
+    void setPattern(String formatPattern);
 }

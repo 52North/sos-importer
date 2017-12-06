@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -39,74 +39,81 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Solves ambiguities in case there is more than one position group
- * (needs apparently to be implemented)
- * <br />
- * TODO Implement
- * @author Raimund
  *
+ * @author Raimund
  */
 public class Step4cController extends StepController {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step4cController.class);
-	
-	private final int firstLineWithData;
-	
-	/**
-	 * @param firstLineWithData
-	 */
-	public Step4cController(final int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-	}
-	@Override
-	public void loadSettings() {
-	}
-	@Override
-	public void saveSettings() {
-	}
-	@Override
-	public String getDescription() {
-		return null;
-	}
-	@Override
-	public JPanel getStepPanel() {
-		return null;
-	}
-	@Override
-	public StepController getNextStepController() {
-		return new Step5aController(firstLineWithData);
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(Step4cController.class);
 
-	@Override
-	public boolean isNecessary() {
-		final int positions = ModelStore.getInstance().getPositions().size();
-		
-		if (positions == 0) {
-			logger.info("Skip Step 4c since there are not any Positions");
-			return false;
-		}
-		if (positions == 1) {
-			final Position position = ModelStore.getInstance().getPositions().get(0);
-			logger.info("Skip Step 4c since there is just one " + position);
-			
-			for (final FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests()) {
-				foi.setPosition(position);
-			}
-			return false;
-		}
-		//TODO implement handling of more than one position group
-		throw new RuntimeException("NOT YET IMPLEMENTED");
-//		return true;
-	}
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
-	@Override
-	public StepController getNext() {
-		return null;
-	}
-	@Override
-	public StepModel getModel() {
-		return null;
-	}
+    private final int firstLineWithData;
+
+    /**
+     * <p>Constructor for Step4cController.</p>
+     *
+     * @param firstLineWithData a int.
+     */
+    public Step4cController(final int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+    }
+
+    @Override
+    public void loadSettings() {
+    }
+
+    @Override
+    public void saveSettings() {
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public JPanel getStepPanel() {
+        return null;
+    }
+
+    @Override
+    public StepController getNextStepController() {
+        return new Step4dController(firstLineWithData);
+    }
+
+    @Override
+    public boolean isNecessary() {
+        final int positions = ModelStore.getInstance().getPositions().size();
+
+        if (positions == 0) {
+            LOG.info("Skip Step 4c since there are not any Positions");
+            return false;
+        }
+        if (positions == 1) {
+            final Position position = ModelStore.getInstance().getPositions().get(0);
+            LOG.info("Skip Step 4c since there is just one " + position);
+
+            for (final FeatureOfInterest foi: ModelStore.getInstance().getFeatureOfInterests()) {
+                foi.setPosition(position);
+            }
+            return false;
+        }
+        //TODO implement handling of more than one position group
+        throw new RuntimeException("Handling of multiple position groups is not yet implemented.");
+        // return true;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
+    @Override
+    public StepController getNext() {
+        return null;
+    }
+
+    @Override
+    public StepModel getModel() {
+        return null;
+    }
 }

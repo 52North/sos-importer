@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -37,31 +37,42 @@ import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 
 /**
  * UTC offset
- * @author Raimund
  *
+ * @author Raimund
  */
 public class TimeZone extends DateAndTimeComponent {
 
-	public TimeZone(TableElement tableElement, String pattern) {
-		super(tableElement, pattern);
-	}
-	
-	public TimeZone(int value) {
-		super(value);
-	}
+    /**
+     * <p>Constructor for TimeZone.</p>
+     *
+     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
+    public TimeZone(TableElement tableElement, String pattern) {
+        super(tableElement, pattern);
+    }
 
-	@Override
-	public int getGregorianCalendarField() {
-		return GregorianCalendar.ZONE_OFFSET;
-	}	
-	
-	@Override
-	public String toString() {
-		return "Timezone" + super.toString();
-	}
-	
-	@Override
-	public MissingComponentPanel getMissingComponentPanel(Combination c) {
-		return new MissingTimeZonePanel((DateAndTime)c);
-	}
+    /**
+     * <p>Constructor for TimeZone.</p>
+     *
+     * @param value a int.
+     */
+    public TimeZone(int value) {
+        super(value);
+    }
+
+    @Override
+    public int getGregorianCalendarField() {
+        return GregorianCalendar.ZONE_OFFSET;
+    }
+
+    @Override
+    public String toString() {
+        return "Timezone" + super.toString();
+    }
+
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingTimeZonePanel((DateAndTime) c);
+    }
 }

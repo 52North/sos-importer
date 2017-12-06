@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,6 +26,37 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
+
+/**
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
+ * Software GmbH
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 as published
+ * by the Free Software Foundation.
+ *
+ * If the program is linked with libraries which are licensed under one of
+ * the following licenses, the combination of the program with the linked
+ * library is not considered a "derivative work" of the program:
+ *
+ *     - Apache License, version 2.0
+ *     - Apache Software License, version 1.0
+ *     - GNU Lesser General Public License, version 3
+ *     - Mozilla Public License, versions 1.0, 1.1 and 2.0
+ *     - Common Development and Distribution License (CDDL), version 1.0
+ *
+ * Therefore the distribution of the program linked with libraries licensed
+ * under the aforementioned licenses, is permitted by the copyright holders
+ * if the distribution is compliant with both the GNU General Public
+ * License version 2 and the aforementioned licenses.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ */
 package org.n52.sos.importer.model;
 
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
@@ -33,40 +64,64 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bModel implements StepModel {
-	
-	private MeasuredValue measuredValue;
-	
-	private Resource resource;
 
-	public Step6bModel(MeasuredValue measuredValue, Resource resource) {
-		setMeasuredValue(measuredValue);
-		setResource(resource);
-	}
-	
-	public void setMeasuredValue(MeasuredValue measuredValue) {
-		this.measuredValue = measuredValue;
-	}
+    private MeasuredValue measuredValue;
 
-	/**
-	 * @return the related measure value object
-	 */
-	public MeasuredValue getMeasuredValue() {
-		return measuredValue;
-	}
-	
-	public void setResource(Resource resource) {
-		this.resource = resource;
-	}
+    private Resource resource;
 
-	public Resource getResource() {
-		return resource;
-	}
+    /**
+     * <p>Constructor for Step6bModel.</p>
+     *
+     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public Step6bModel(MeasuredValue measuredValue, Resource resource) {
+        this.measuredValue = measuredValue;
+        this.resource = resource;
+    }
 
-	/**
-	 * ... RESOURCE ... ORIENTATION
-	 * @return
-	 */
-	public String getDescription() {
-		return Lang.l().step6bModelDescription();
-	}
+    /**
+     * <p>Setter for the field <code>measuredValue</code>.</p>
+     *
+     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+     */
+    public void setMeasuredValue(MeasuredValue measuredValue) {
+        this.measuredValue = measuredValue;
+    }
+
+    /**
+     * <p>Getter for the field <code>measuredValue</code>.</p>
+     *
+     * @return the related measure value object
+     */
+    public MeasuredValue getMeasuredValue() {
+        return measuredValue;
+    }
+
+    /**
+     * <p>Setter for the field <code>resource</code>.</p>
+     *
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    /**
+     * <p>Getter for the field <code>resource</code>.</p>
+     *
+     * @return a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public Resource getResource() {
+        return resource;
+    }
+
+    /**
+     * ... RESOURCE ... ORIENTATION
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getDescription() {
+        return Lang.l().step6bModelDescription();
+    }
 }

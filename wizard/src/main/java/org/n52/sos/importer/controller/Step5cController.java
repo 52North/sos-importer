@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -44,122 +44,133 @@ import org.slf4j.LoggerFactory;
 
 /**
  * lets the user add missing metadata for identified positions
- * @author Raimund
  *
+ * @author Raimund
  */
 public class Step5cController extends StepController {
 
-	private static final Logger logger = LoggerFactory.getLogger(Step5cController.class);
-	
-	private Step5cModel step5cModel;
-	
-	private Step5Panel step5Panel;
-	
-	private PositionController positionController;
-	
-	private final TableController tableController;
-	
-	private final int firstLineWithData;
-	
-	public Step5cController(final int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-		tableController = TableController.getInstance();
-	}
-	
-	public Step5cController(final Step5cModel step5cModel,final int firstLineWithData) {
-		this(firstLineWithData);
-		this.step5cModel = step5cModel;
-	}
-	
-	@Override
-	public void loadSettings() {			
-		final Position position = step5cModel.getPosition();
-		positionController = new PositionController(position);
-		final List<Component> components = step5cModel.getMissingPositionComponents();
-		positionController.setMissingComponents(components);
-		positionController.unassignMissingComponentValues();
-		
-		final String description = step5cModel.getDescription();
-		final List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();	
-		step5Panel = new Step5Panel(description, missingComponentPanels);
-		
-		tableController.turnSelectionOff();
-		positionController.markComponents();
-	}
-	
-	
-	@Override
-	public void saveSettings() {
-		positionController.assignMissingComponentValues();	
-		
-		final List<Component> components = positionController.getMissingComponents();
-		step5cModel.setMissingPositionComponents(components);
-		
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
-		
-		positionController = null;
-		step5Panel = null;
-	}
-	
-	@Override
-	public void back() {
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
-		
-		positionController = null;
-		step5Panel = null;
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(Step5cController.class);
 
-	@Override
-	public boolean isFinished() {
-		return positionController.checkMissingComponentValues();
-	}
-	
-	@Override
-	public String getDescription() {
-		return Lang.l().step5cDescription();
-	}
+    private Step5cModel step5cModel;
 
-	@Override
-	public JPanel getStepPanel() {
-		return step5Panel;
-	}
+    private Step5Panel step5Panel;
 
-	@Override
-	public boolean isNecessary() {
-		positionController = new PositionController();
-		final Position p = positionController.getNextPositionWithMissingValues();
-		
-		if (p == null) {
-			logger.info("Skip Step 5c since there are not any Positions" +
-					" with missing values");
-			return false;
-		}
-		
-		step5cModel = new Step5cModel(p);
-		return true;
-	}
-	
-	@Override
-	public StepController getNext() {
-		positionController = new PositionController();
-		final Position p = positionController.getNextPositionWithMissingValues();
-		if (p != null) {
-			return new Step5cController(new Step5cModel(p),firstLineWithData);
-		}
-		
-		positionController = null;
-		return null;	
-	}
-	
-	@Override
-	public StepController getNextStepController() {
-		return new Step6aController(firstLineWithData);
-	}
+    private PositionController positionController;
 
-	@Override
-	public StepModel getModel() {
-		return step5cModel;
-	}
+    private final TableController tableController;
+
+    private final int firstLineWithData;
+
+    /**
+     * <p>Constructor for Step5cController.</p>
+     *
+     * @param firstLineWithData a int.
+     */
+    public Step5cController(final int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+        tableController = TableController.getInstance();
+    }
+
+    /**
+     * <p>Constructor for Step5cController.</p>
+     *
+     * @param step5cModel a {@link org.n52.sos.importer.model.Step5cModel} object.
+     * @param firstLineWithData a int.
+     */
+    public Step5cController(final Step5cModel step5cModel, final int firstLineWithData) {
+        this(firstLineWithData);
+        this.step5cModel = step5cModel;
+    }
+
+    @Override
+    public void loadSettings() {
+        final Position position = step5cModel.getPosition();
+        positionController = new PositionController(position);
+        final List<Component> components = step5cModel.getMissingPositionComponents();
+        positionController.setMissingComponents(components);
+        positionController.unassignMissingComponentValues();
+
+        final String description = step5cModel.getDescription();
+        final List<MissingComponentPanel> missingComponentPanels = positionController.getMissingComponentPanels();
+        step5Panel = new Step5Panel(description, missingComponentPanels);
+
+        tableController.turnSelectionOff();
+        positionController.markComponents();
+    }
+
+
+    @Override
+    public void saveSettings() {
+        positionController.assignMissingComponentValues();
+
+        final List<Component> components = positionController.getMissingComponents();
+        step5cModel.setMissingPositionComponents(components);
+
+        tableController.clearMarkedTableElements();
+        tableController.turnSelectionOn();
+
+        positionController = null;
+        step5Panel = null;
+    }
+
+    @Override
+    public void back() {
+        tableController.clearMarkedTableElements();
+        tableController.turnSelectionOn();
+
+        positionController = null;
+        step5Panel = null;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return positionController.checkMissingComponentValues();
+    }
+
+    @Override
+    public String getDescription() {
+        return Lang.l().step5cDescription();
+    }
+
+    @Override
+    public JPanel getStepPanel() {
+        return step5Panel;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        positionController = new PositionController();
+        final Position p = positionController.getNextPositionWithMissingValues();
+
+        if (p == null) {
+            LOG.info("Skip Step 5c since there are not any Positions" +
+                    " with missing values");
+            return false;
+        }
+
+        step5cModel = new Step5cModel(p);
+        return true;
+    }
+
+    @Override
+    public StepController getNext() {
+        positionController = new PositionController();
+        final Position p = positionController.getNextPositionWithMissingValues();
+        if (p != null) {
+            return new Step5cController(new Step5cModel(p), firstLineWithData);
+        }
+
+        positionController = null;
+        return null;
+    }
+
+    @Override
+    public StepController getNextStepController() {
+        return new Step6aController(firstLineWithData);
+    }
+
+    @Override
+    public StepModel getModel() {
+        return step5cModel;
+    }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -31,73 +31,120 @@ package org.n52.sos.importer.feeder.model;
 import java.util.Arrays;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Position class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public final class Position {
-	
-	public static final int LONG = 0;
 
-	public static final int LAT = 1;
+    /** Constant <code>LONG=0</code> */
+    public static final int LONG = 0;
 
-	public static final int ALT = 2;
+    /** Constant <code>LAT=1</code> */
+    public static final int LAT = 1;
 
-	public static final String DEFAULT_UNIT_LAT = null;
+    /** Constant <code>ALT=2</code> */
+    public static final int ALT = 2;
 
-	public static final String UNIT_NOT_SET = "UNIT_NOT_SET";
+    /** Constant <code>DEFAULT_UNIT_LAT="null"</code> */
+    public static final String DEFAULT_UNIT_LAT = null;
 
-	public static final double VALUE_NOT_SET = Double.NEGATIVE_INFINITY;
+    /** Constant <code>UNIT_NOT_SET="UNIT_NOT_SET"</code> */
+    public static final String UNIT_NOT_SET = "UNIT_NOT_SET";
 
-	private final double[] values;
-	
-	private final String[] units;
-	
-	private final int epsgCode;
+    /** Constant <code>VALUE_NOT_SET=Double.NEGATIVE_INFINITY</code> */
+    public static final double VALUE_NOT_SET = Double.NEGATIVE_INFINITY;
 
-	/**
-	 * @param values order: long, lat, alt
-	 * @param units order: long, lat, alt
-	 * @param epsgCode 
-	 */
-	public Position(final double[] values, final String[] units, final int epsgCode) {
-		this.values = values;
-		this.units = units;
-		this.epsgCode = epsgCode;
-	}
+    private final double[] values;
 
-	public int getEpsgCode() {
-		return epsgCode;
-	}
-	
-	public double getAltitude() {
-		return values[Position.ALT];
-	}
-	
-	public String getAltitudeUnit() {
-		return units[Position.ALT];
-	}
-	
-	public double getLongitude() {
-		return values[Position.LONG];
-	}
-	
-	public String getLongitudeUnit() {
-		return units[Position.LONG];
-	}
-	
-	public double getLatitude() {
-		return values[Position.LAT];
-	}
-	
-	public String getLatitudeUnit() {
-		return units[Position.LAT];
-	}
+    private final String[] units;
 
-	@Override
-	public String toString() {
-		return String.format("Position [values=%s, units=%s, epsgCode=%s]",
-				Arrays.toString(values), Arrays.toString(units), epsgCode);
-	}
+    private final int epsgCode;
+
+    /**
+     * <p>Constructor for Position.</p>
+     *
+     * @param values order: long, lat, alt
+     * @param units order: long, lat, alt
+     * @param epsgCode a int.
+     */
+    public Position(final double[] values, final String[] units, final int epsgCode) {
+        if (values == null || units == null) {
+            throw new IllegalArgumentException("values/units must not be null");
+        }
+        this.values = values.clone();
+        this.units = units.clone();
+        this.epsgCode = epsgCode;
+    }
+
+    /**
+     * <p>Getter for the field <code>epsgCode</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getEpsgCode() {
+        return epsgCode;
+    }
+
+    /**
+     * <p>getAltitude.</p>
+     *
+     * @return a double.
+     */
+    public double getAltitude() {
+        return values[Position.ALT];
+    }
+
+    /**
+     * <p>getAltitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getAltitudeUnit() {
+        return units[Position.ALT];
+    }
+
+    /**
+     * <p>getLongitude.</p>
+     *
+     * @return a double.
+     */
+    public double getLongitude() {
+        return values[Position.LONG];
+    }
+
+    /**
+     * <p>getLongitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getLongitudeUnit() {
+        return units[Position.LONG];
+    }
+
+    /**
+     * <p>getLatitude.</p>
+     *
+     * @return a double.
+     */
+    public double getLatitude() {
+        return values[Position.LAT];
+    }
+
+    /**
+     * <p>getLatitudeUnit.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getLatitudeUnit() {
+        return units[Position.LAT];
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Position [values=%s, units=%s, epsgCode=%s]",
+                Arrays.toString(values), Arrays.toString(units), epsgCode);
+    }
 
 
 }

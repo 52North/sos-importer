@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,25 +29,27 @@
 package org.n52.sos.importer.model;
 
 /**
- * interface for objects which can convert Strings with the help 
+ * interface for objects which can convert Strings with the help
  * of a certain pattern into this object
- * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --> DateAndTime object)
- * @author Raimund, e.h.juerrens@52north.org
+ * (e.g. "2011-08-04" + pattern "yyyy-MM-dd" --&gt; DateAndTime object)
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public interface Parseable {
 
-	/**
-	 * converts a String with the help of a certain pattern 
-	 * into a user-defined object
-	 * @param s
-	 * @return
-	 */
-	public Object parse(String s);
-	
-	/**
-	 * set the pattern to be used by parse(String s);
-	 * @param parsePattern
-	 */
-	public void setPattern(String parsePattern); 
+    /**
+     * converts a String with the help of a certain pattern
+     * into a user-defined object
+     *
+     * @param s a {@link java.lang.String} object.
+     * @return a {@link java.lang.Object} object.
+     */
+    Object parse(String s);
+
+    /**
+     * set the pattern to be used by parse(String s);
+     *
+     * @param parsePattern a {@link java.lang.String} object.
+     */
+    void setPattern(String parsePattern);
 }

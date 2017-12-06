@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,43 +28,42 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-/**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
- */
 public final class FeatureOfInterest extends Resource {
-	
-	private Position p;
 
-	/**
-	 * @param name
-	 * @param uri
-	 * @param p
-	 */
-	public FeatureOfInterest(String name,
-			String uri,
-			Position p) {
-		super(name, uri);
-		this.p = p;
-	}
+    private Position position;
+    private String parentFeatureIdentifier;
 
-	/**
-	 * @return the p
-	 */
-	public Position getPosition() {
-		return p;
-	}
+    public FeatureOfInterest(String name,
+            String uri,
+            Position p) {
+        super(name, uri);
+        position = p;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format(
-				"FeatureOfInterest [p=%s, name=%s, uri=%s]",
-				p,
-				getName(),
-				getUri());
-	}
-	
+    public Position getPosition() {
+        return position;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "FeatureOfInterest [p=%s, name=%s, uri=%s, parent=%s]",
+                position,
+                getName(),
+                getUri(),
+                parentFeatureIdentifier);
+    }
+
+    public void setParentFeature(String parentFeatureIdentifier) {
+        this.parentFeatureIdentifier = parentFeatureIdentifier;
+    }
+
+    public boolean hasParentFeature() {
+        return parentFeatureIdentifier != null && !parentFeatureIdentifier.isEmpty();
+    }
+
+    public String getParentFeature() {
+        return parentFeatureIdentifier;
+    }
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,16 +33,17 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 /**
  * Represents a component (e.g. a day) of a combined element.
  * (e.g. DateAndTime)
- * @author Raimund
  *
+ * @author Raimund
  */
 public abstract class Component {
 
-	/**
-	 * returns a panel to complete the component
-	 * in case it is missing
-	 * @param c
-	 * @return
-	 */
-	public abstract MissingComponentPanel getMissingComponentPanel(Combination c);
+    /**
+     * returns a panel to complete the component
+     * in case it is missing
+     *
+     * @param c a {@link org.n52.sos.importer.model.Combination} object.
+     * @return a {@link org.n52.sos.importer.view.MissingComponentPanel} object.
+     */
+    public abstract MissingComponentPanel getMissingComponentPanel(Combination c);
 }

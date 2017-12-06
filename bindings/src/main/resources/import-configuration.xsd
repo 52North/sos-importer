@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+    Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
     Software GmbH
 
     This program is free software; you can redistribute it and/or modify it
@@ -29,16 +29,15 @@
     Public License for more details.
 
 -->
-<xs:schema
-        xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-        xmlns="http://52north.org/sensorweb/sos/importer/0.4/" 
-        targetNamespace="http://52north.org/sensorweb/sos/importer/0.4/" 
-        elementFormDefault="qualified" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://52north.org/sensorweb/sos/importer/0.5/"
+        targetNamespace="http://52north.org/sensorweb/sos/importer/0.5/"
+        elementFormDefault="qualified"
         attributeFormDefault="unqualified">
-    <!-- 
-            
+    <!--
+
             BASE TYPES
-            
+
     -->
     <xs:annotation>
         <xs:documentation>TODO enter documentation here.</xs:documentation>
@@ -137,6 +136,30 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:enumeration>
+                <xs:enumeration value="NO_DATA_VALUE">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Indicates a missing value of this column. <!--FIXME: more specify?-->
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="HUNK_SIZE">
+                    <xs:annotation>
+                        <xs:documentation>
+                           Use in combination with IMPORT_STRATEGY. Defines
+                           the number of observations to import per request.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="IMPORT_STRATEGY"/>
+                <xs:enumeration value="NAME">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Specifies the name of the OM_PARAMETER column
+                            it is used within.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
                 <xs:enumeration value="TIME"/>
                 <xs:enumeration value="TIME_DAY"/>
                 <xs:enumeration value="TIME_HOUR"/>
@@ -147,13 +170,20 @@
                 <xs:enumeration value="TIME_ZONE"/>
                 <xs:enumeration value="TYPE"/>
                 <xs:enumeration value="OTHER"/>
+				<xs:enumeration value="PARENT_FEATURE_IDENTIFIER">
+                    <xs:annotation>
+                        <xs:documentation>
+                            If present, the related feature of interest column
+                            will get this identifier set as sampled feature for
+                            each observation.
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:enumeration>
                 <xs:enumeration value="PARSE_PATTERN"/>
                 <xs:enumeration value="POSITION_ALTITUDE"/>
                 <xs:enumeration value="POSITION_EPSG_CODE"/>
                 <xs:enumeration value="POSITION_LATITUDE"/>
                 <xs:enumeration value="POSITION_LONGITUDE"/>
-                <xs:enumeration value="IMPORT_STRATEGY"/>
-                <xs:enumeration value="HUNK_SIZE"/>
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
@@ -202,7 +232,7 @@
             <xs:restriction base="xs:string"/>
         </xs:simpleType>
     </xs:element>
-    <xs:element name="RegularExpresssionForAllowedFileNames" nillable="false">
+    <xs:element name="RegularExpressionForAllowedFileNames" nillable="false">
         <xs:annotation>
             <xs:documentation>
                 Optional regular expression the data files have to match if
@@ -295,6 +325,11 @@
                         <xs:documentation>The sensor id.</xs:documentation>
                     </xs:annotation>
                 </xs:enumeration>
+                <xs:enumeration value="OM_PARAMETER">
+                    <xs:annotation>
+                        <xs:documentation>An additional attribute of an observation.</xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
@@ -303,6 +338,7 @@
             <xs:documentation>
                 The value of a key-value-pair. Potential values: 
                     TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; 
+                    TYPE->OM_PARAMETER: NUMERIC | COUNT | BOOLEAN | TEXT | CATEGORY
                     TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).
             </xs:documentation>
         </xs:annotation>
@@ -449,6 +485,19 @@
                 <xs:element ref="Number"/>
             </xs:choice>
         </xs:complexType>
+    </xs:element>
+    <xs:element name="RelatedOmParameter">
+        <xs:annotation>
+            <xs:documentation>
+                A O'n'M 2.0 Parameter related to THIS entity. The content of this
+                element MUST match a column Number.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:integer">
+                <xs:minInclusive value="0" />
+            </xs:restriction>
+        </xs:simpleType>
     </xs:element>
     <xs:element name="RelatedSensor">
         <xs:annotation>
@@ -686,6 +735,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element ref="RelatedOmParameter" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -720,24 +770,43 @@
                             be the decimal separator for the numeric value
                             "1234.56".
                         </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element ref="FirstLineWithData"/>
-                <xs:element ref="Parameter"/>
-                <xs:element ref="UseHeader"/>
-                <xs:element ref="CsvParserClass" minOccurs="0"/>
-            </xs:sequence>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="FirstLineWithData"/>
+				<xs:element ref="Parameter"/>
+				<xs:element ref="UseHeader"/>
+				<xs:element ref="CsvParserClass" minOccurs="0"/>
+	            <xs:element ref="UseLastTimestamp" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UseLastTimestamp" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>
+                If available and "UseLastTimestamp"
+                is set to TRUE, the saved time stamp will be used
+                to ignore data older than the specified time stamp.
+                The saved value is updated after processing an
+                entire datafile.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="CsvParserClass">
+		<xs:annotation>
+			<xs:documentation>
+                  The class that MUST be used for parsing the data file. The
+                  interface org.n52.sos.importer.feeder.CsvParser MUST be
+                  implemented. The class name MUST contain the fully qualified
+                  package name and a zero-argument constructor MUST be provided.
+              </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="ignoreColumnCountMismatch" type="xs:boolean" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
         </xs:complexType>
-    </xs:element>
-    <xs:element name="CsvParserClass" type="xs:string">
-        <xs:annotation>
-            <xs:documentation>
-                The class that MUST be used for parsing the data file. The
-                interface org.n52.sos.importer.feeder.CsvParser MUST be
-                implemented. The class name MUST contain the fully qualified
-                package name and a zero-argument constructor MUST be provided.
-            </xs:documentation>
-        </xs:annotation>    
     </xs:element>
     <xs:element name="Credentials">
         <xs:annotation>
@@ -765,13 +834,11 @@
                     <xs:element ref="IgnoreLineRegEx" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:sequence>
-                    <xs:element ref="RemoteFile" />
-                    <xs:element ref="IgnoreLineRegEx" minOccurs="0"
-                        maxOccurs="unbounded" />
+                    <xs:element ref="RemoteFile"/>
+                    <xs:element ref="IgnoreLineRegEx" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:choice>
-            <xs:attribute name="referenceIsARegularExpression"
-                type="xs:boolean" use="required">
+            <xs:attribute name="referenceIsARegularExpression" type="xs:boolean" use="required">
                 <xs:annotation>
                     <xs:documentation>
                         If set to TRUE the LocaleFile.Path or
@@ -781,8 +848,7 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="useDateFromLastModifiedDate"
-                type="xs:boolean">
+            <xs:attribute name="useDateFromLastModifiedDate" type="xs:boolean">
                 <xs:annotation>
                     <xs:documentation>
                         If set to TRUE the last modified date of the
@@ -801,12 +867,11 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute name="regExDateInfoInFileName"
-                type="xs:string">
+            <xs:attribute name="regExDateInfoInFileName" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         If present, the contained regular expression
@@ -863,12 +928,11 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute name="sampleDateExtractionRegEx"
-                type="xs:string">
+            <xs:attribute name="sampleDateExtractionRegEx" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         Regular expression to extract the date
@@ -897,7 +961,7 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -911,7 +975,7 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1" />
+                        <xs:minInclusive value="1"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -935,9 +999,9 @@
                     </xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>
-                	<xs:restriction base="xs:int">
-                		<xs:minInclusive value="1" />
-                	</xs:restriction>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
         </xs:complexType>
@@ -1003,7 +1067,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Path"/>
-                <xs:element ref="RegularExpresssionForAllowedFileNames" minOccurs="0"/>
+                <xs:element ref="RegularExpressionForAllowedFileNames" minOccurs="0"/>
                 <xs:element ref="Encoding" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
@@ -1140,7 +1204,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="URL" />
+                <xs:element ref="URL"/>
                 <xs:element ref="Offering">
                     <xs:annotation>
                         <xs:documentation>
@@ -1158,8 +1222,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="Binding" type="xs:string"
-                    minOccurs="0">
+                <xs:element name="Binding" type="xs:string" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>
                             If version 2.0.0 is used, the binding has to
@@ -1203,7 +1266,7 @@
                 observations should be imported to a running SOS instance using
                 the transactional interface. The configuration is used by the 
                 52n-sensorweb-importer to store the metadata and re-use it for
-				later import runs.
+                later import runs.
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>

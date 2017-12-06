@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,60 +29,90 @@
 package org.n52.sos.importer.feeder.util;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.n52.sos.importer.feeder.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>FileHelper class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class FileHelper {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
-	
-	public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
-		return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
-	}
 
-	public static String cleanPathToCreateFileName(final String fileName)
-	{
-		return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
-	}
-	
-	public static String shortenStringViaMD5Hash(final String longString) {
-		try {
-			final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(longString.getBytes());
-			final byte[] hash = messageDigest.digest();
+    private static final Logger LOG = LoggerFactory.getLogger(FileHelper.class);
 
-			//converting byte array to Hexadecimal String
-			final StringBuilder sb = new StringBuilder(2*hash.length);
-			for(final byte b : hash){
-				sb.append(String.format("%02x", b&0xff));
-			}
+    /**
+     * <p>createFileInImporterHomeWithUniqueFileName.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @return a {@link java.io.File} object.
+     */
+    public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
+        LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
+        return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
+    }
 
-			return sb.toString();
+    /**
+     * <p>cleanPathToCreateFileName.</p>
+     *
+     * @param fileName a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String cleanPathToCreateFileName(final String fileName) {
+        LOG.trace("cleanPathToCreateFileName({})", fileName);
+        return shortenStringViaMD5Hash(fileName.replace(":", "").replace(File.separatorChar, '_'));
+    }
 
-		} catch (final NoSuchAlgorithmException e) {
-			LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.",longString);
-			LOG.debug("Exception thrown: {}", e.getMessage(), e);
-			return longString;
-		}
-	}
+    /**
+     * <p>shortenStringViaMD5Hash.</p>
+     *
+     * @param longString a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String shortenStringViaMD5Hash(final String longString) {
+        try {
+            LOG.trace("shortenStringViaMD5Hash({})", longString);
+            final MessageDigest md5 = MessageDigest.getInstance("MD5");
+            String shortString = DatatypeConverter.printHexBinary(
+                    md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))).toLowerCase();
+            LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
+            return shortString;
+        } catch (final NoSuchAlgorithmException e) {
+            LOG.error("MessageDigest algorithm MD5 not supported. String '{}' will not be shortened.", longString);
+            logDebug(e);
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Encoding '{}' not supported. String '{}' will not be shortened.", e, longString);
+            logDebug(e);
+        }
+        return longString;
+    }
 
-	public static File getHome()
-	{
-		final String baseDir = System.getProperty("user.home") + File.separator
-				+ ".SOSImporter" + File.separator;
-		final File home = new File(baseDir);
-		if (!home.exists() && !home.mkdir()) {
-			LOG.error("Could not create importer home '{}'",home.getAbsolutePath());
-		}
-		return home;
-	}
-	
+    private static void logDebug(final Exception e) {
+        LOG.debug("Exception thrown: {}", e.getMessage(), e);
+    }
+
+    /**
+     * <p>getHome.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
+    public static File getHome() {
+        final String homePath = System.getProperty("user.home") + File.separator
+                + ".SOSImporter" + File.separator;
+        LOG.trace("Estimated importer home '{}'", homePath);
+        final File home = new File(homePath);
+        if (!home.exists() && !home.mkdir()) {
+            LOG.error("Could not create importer home '{}'", home.getAbsolutePath());
+        }
+        return home;
+    }
+
 }

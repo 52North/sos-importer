@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -38,53 +38,66 @@ import org.n52.sos.importer.model.table.TableElement;
 
 /**
  * assigns or unassigns columns to Booleans, Counts and Text
- * @author Raimund
  *
+ * @author Raimund
  */
 public class MeasuredValueSelectionPanel extends SelectionPanel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private final ParseTestLabel parseTestLabel;
-	
-	private MeasuredValue measuredValue;
-	
-	public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue,int firstLineWithData) {
-		super(containerPanel);
-		this.measuredValue = measuredValue;
-		parseTestLabel = new ParseTestLabel(measuredValue,firstLineWithData);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(parseTestLabel);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void setSelection(String s) {	}
+    private final ParseTestLabel parseTestLabel;
 
-	@Override
-	protected String getSelection() { return "0"; }
+    private MeasuredValue measuredValue;
 
-	@Override
-	public void setDefaultSelection() {	}
-	
-	protected void reInit() {
-		//parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
-	}		
-	
-	@Override
-	public void assign(TableElement tableElement) {
-		measuredValue.setTableElement(tableElement);
-		ModelStore.getInstance().add(measuredValue);
-	}
-	
-	@Override
-	public void unAssign(TableElement tableElement) {
-		MeasuredValue measuredValueToRemove = null;
-		for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues())
-			if (tableElement.equals(mv.getTableElement())) {
-				measuredValueToRemove = mv;
-				break;
-			}
-				
-		ModelStore.getInstance().remove(measuredValueToRemove);
-	}
+    /**
+     * <p>Constructor for MeasuredValueSelectionPanel.</p>
+     *
+     * @param containerPanel a {@link javax.swing.JPanel} object.
+     * @param measuredValue a {@link org.n52.sos.importer.model.measuredValue.MeasuredValue} object.
+     * @param firstLineWithData a int.
+     */
+    public MeasuredValueSelectionPanel(JPanel containerPanel, MeasuredValue measuredValue, int firstLineWithData) {
+        super(containerPanel);
+        this.measuredValue = measuredValue;
+        parseTestLabel = new ParseTestLabel(measuredValue, firstLineWithData);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(parseTestLabel);
+    }
+
+    @Override
+    protected void setSelection(String s) { }
+
+    @Override
+    protected String getSelection() {
+        // TODO check the meaning of this "magic" number!
+        return "0";
+    }
+
+    @Override
+    public void setDefaultSelection() { }
+
+    /**
+     * <p>reInit.</p>
+     */
+    protected void reInit() {
+        //parseTestLabel.parseValues(TableController.getInstance().getMarkedValues());
+    }
+
+    @Override
+    public void assign(TableElement tableElement) {
+        measuredValue.setTableElement(tableElement);
+        ModelStore.getInstance().add(measuredValue);
+    }
+
+    @Override
+    public void unAssign(TableElement tableElement) {
+        MeasuredValue measuredValueToRemove = null;
+        for (MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+            if (tableElement.equals(mv.getTableElement())) {
+                measuredValueToRemove = mv;
+                break;
+            }
+        }
+        ModelStore.getInstance().remove(measuredValueToRemove);
+    }
 }

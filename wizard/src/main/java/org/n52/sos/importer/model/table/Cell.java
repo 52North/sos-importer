@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -34,91 +34,126 @@ import org.n52.sos.importer.controller.TableController;
 
 /**
  * represents a single cell in the table
- * @author Raimund
  *
+ * @author Raimund
  */
 public class Cell extends TableElement {
-	
-	private int column;
-	
-	private int row;
-	
-	public Cell() {
-		column = -1;
-		row = -1;
-	}
-	
-	public Cell(int row, int column) {
-		setRow(row);
-		setColumn(column);
-	}
-	
-	public void setColumn(int column) {
-		this.column = column;
-	}
 
-	public int getColumn() {
-		return column;
-	}
+    private int column;
 
-	public void setRow(int row) {
-		this.row = row;
-	}
+    private int row;
 
-	public int getRow() {
-		return row;
-	}
+    /**
+     * <p>Constructor for Cell.</p>
+     */
+    public Cell() {
+        column = -1;
+        row = -1;
+    }
 
-	public void mark() {
-		TableController.getInstance().mark(this);
-	}
-	
-	@Override
-	public String getValueFor(Cell c) {
-		return TableController.getInstance().getValueAt(this);
-	}
+    /**
+     * <p>Constructor for Cell.</p>
+     *
+     * @param row a int.
+     * @param column a int.
+     */
+    public Cell(int row, int column) {
+        this.row = row;
+        this.column = column;
+    }
 
-	@Override
-	public Cell getCellFor(Cell c) {
-		return this;
-	}
+    /**
+     * <p>Setter for the field <code>column</code>.</p>
+     *
+     * @param column a int.
+     */
+    public void setColumn(int column) {
+        this.column = column;
+    }
 
-	@Override
-	public HashSet<String> getValues() {
-		HashSet<String> values = new HashSet<String>();
-		String value = TableController.getInstance().getValueAt(this);
-		values.add(value);
-		return values;
-	}
-	
-	@Override
-	public String toString() {
-		return "cell[" + row + "|" + column + "]";
-	}
+    /**
+     * <p>Getter for the field <code>column</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getColumn() {
+        return column;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + column;
-		result = prime * result + row;
-		return result;
-	}
+    /**
+     * <p>Setter for the field <code>row</code>.</p>
+     *
+     * @param row a int.
+     */
+    public void setRow(int row) {
+        this.row = row;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Cell))
-			return false;
-		Cell other = (Cell) obj;
-		if (column != other.column)
-			return false;
-		if (row != other.row)
-			return false;
-		return true;
-	}
+    /**
+     * <p>Getter for the field <code>row</code>.</p>
+     *
+     * @return a int.
+     */
+    public int getRow() {
+        return row;
+    }
+
+    /**
+     * <p>mark.</p>
+     */
+    @Override
+    public void mark() {
+        TableController.getInstance().mark(this);
+    }
+
+    @Override
+    public String getValueFor(Cell c) {
+        return TableController.getInstance().getValueAt(this);
+    }
+
+    @Override
+    public Cell getCellFor(Cell c) {
+        return this;
+    }
+
+    @Override
+    public HashSet<String> getValues() {
+        HashSet<String> values = new HashSet<>();
+        String value = TableController.getInstance().getValueAt(this);
+        values.add(value);
+        return values;
+    }
+
+    @Override
+    public String toString() {
+        return "cell[" + row + "|" + column + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + column;
+        result = prime * result + row;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Cell)) {
+            return false;
+        }
+        Cell other = (Cell) obj;
+        if (column != other.column) {
+            return false;
+        }
+        return row == other.row;
+    }
 
 }

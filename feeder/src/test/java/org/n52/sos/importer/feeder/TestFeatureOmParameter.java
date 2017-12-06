@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,18 +26,28 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.exceptions;
+package org.n52.sos.importer.feeder;
 
-/**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
- */
-public class JavaApiBugJDL6203387Exception extends IllegalArgumentException {
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 
-	public JavaApiBugJDL6203387Exception(final String name) {
-		super(name);
-	}
+import org.apache.xmlbeans.XmlException;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.n52.oxf.OXFException;
+import org.n52.oxf.ows.ExceptionReport;
 
-	private static final long serialVersionUID = 1L;
+public class TestFeatureOmParameter {
+
+    @Test
+    @Ignore("requires running SOS service instance")
+    public void integrationTestForOmParameter() throws IllegalArgumentException, MalformedURLException, IOException,
+            OXFException, XmlException, ParseException, ExceptionReport {
+        Configuration configuration = new Configuration("src/test/resources/feature_om-parameter/configuration.xml");
+        DataFile dataFile = new DataFile(configuration, new File("src/test/resources/feature_om-parameter/data.csv"));
+        new Feeder(configuration).importData(dataFile);
+    }
 
 }

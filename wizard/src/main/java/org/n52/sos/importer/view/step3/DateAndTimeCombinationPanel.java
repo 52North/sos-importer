@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -50,95 +50,100 @@ import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
- * selection panel in step 3 for date&time combinations
- * @author Raimund
+ * selection panel in step 3 for {@link DateAndTime} combinations
  *
+ * @author Raimund
  */
 public class DateAndTimeCombinationPanel extends CombinationPanel {
-	//source: 	http://download.oracle.com/javase/tutorial/uiswing/
-	// 			examples/components/ComboBoxDemo2Project/src/components/
-	// 			ComboBoxDemo2.java
-	private static final long serialVersionUID = 1L;
-	
-	private DateAndTime dateAndTime;
-	
-	public DateAndTimeCombinationPanel(JPanel containerPanel, 
-			int firstLineWithData) {	
-		super(containerPanel,firstLineWithData);
-		this.dateAndTime = new DateAndTime();
-	}
+    //source:   http://download.oracle.com/javase/tutorial/uiswing/
+    //          examples/components/ComboBoxDemo2Project/src/components/
+    //          ComboBoxDemo2.java
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public DateAndTime getCombination() {
-		if (dateAndTime == null) {
-			dateAndTime = new DateAndTime();
-		}
-		return dateAndTime;
-	}
+    private DateAndTime dateAndTime;
 
-	@Override
-	public String[] getGroupItems() {
-		return ComboBoxItems.getInstance().getDateAndTimeGroups();
-	}
+    /**
+     * <p>Constructor for DateAndTimeCombinationPanel.</p>
+     *
+     * @param containerPanel a {@link javax.swing.JPanel} object.
+     * @param firstLineWithData a int.
+     */
+    public DateAndTimeCombinationPanel(JPanel containerPanel,
+            int firstLineWithData) {
+        super(containerPanel, firstLineWithData);
+    }
 
-	@Override
-	public DefaultComboBoxModel<String> getPatterns() {
-		return EditableComboBoxItems.getInstance().getDateAndTimePatterns();
-	}
+    @Override
+    public DateAndTime getCombination() {
+        if (dateAndTime == null) {
+            dateAndTime = new DateAndTime();
+        }
+        return dateAndTime;
+    }
 
-	@Override
-	public Object getTestValue() {
-		return new Date();
-	}
-	
-	@Override
-	public String getPatternToolTip() {
-		return ToolTips.get(ToolTips.DATE_AND_TIME_PATTERNS);
-	}
-	
-	@Override
-	public String getGroupToolTip() {
-		return ToolTips.get(ToolTips.DATE_AND_TIME_GROUPS);
-	}
-	
-	@Override
-	public void assign(TableElement tableElement) {
-    	String[] part = getSelection().split(Constants.SEPARATOR_STRING);
-		String pattern = part[0];
-		String group = part[1];
+    @Override
+    public String[] getGroupItems() {
+        return ComboBoxItems.getInstance().getDateAndTimeGroups();
+    }
 
-		DateAndTime dtm = new DateAndTime();
-		dtm.setGroup(group);
-		DateAndTimeController dtc = new DateAndTimeController(dtm);
-		dtc.assignPattern(pattern, tableElement);
-		// TODO move action to controller (GUI should not manipulate the model)
-		ModelStore.getInstance().add(dtm);
-	}
+    @Override
+    public DefaultComboBoxModel<String> getPatterns() {
+        return EditableComboBoxItems.getInstance().getDateAndTimePatterns();
+    }
 
-	@Override
-	public void unAssign(TableElement tableElement) {
-		DateAndTime dateAndTimeToRemove = null;
-		for (DateAndTime dtm: ModelStore.getInstance().getDateAndTimes()) {
-			Second second = dtm.getSeconds();
-			Minute minute = dtm.getMinute();
-			Hour hour = dtm.getHour();
-			Day day = dtm.getDay();
-			Month month = dtm.getMonth();
-			Year year = dtm.getYear();
-			TimeZone timeZone = dtm.getTimeZone();
-			
-			if ((second != null && tableElement.equals(second.getTableElement())) ||
-				(minute != null && tableElement.equals(minute.getTableElement())) ||
-				(hour != null && tableElement.equals(hour.getTableElement())) ||
-				(day != null && tableElement.equals(day.getTableElement())) ||
-				(month != null && tableElement.equals(month.getTableElement())) ||
-				(year != null && tableElement.equals(year.getTableElement())) ||
-				(timeZone != null && tableElement.equals(timeZone.getTableElement()))) {
-				dateAndTimeToRemove = dtm;
-				break;
-			}
-		}
-		
-		ModelStore.getInstance().remove(dateAndTimeToRemove);
-	}
+    @Override
+    public Object getTestValue() {
+        return new Date();
+    }
+
+    @Override
+    public String getPatternToolTip() {
+        return ToolTips.get(ToolTips.DATE_AND_TIME_PATTERNS);
+    }
+
+    @Override
+    public String getGroupToolTip() {
+        return ToolTips.get(ToolTips.DATE_AND_TIME_GROUPS);
+    }
+
+    @Override
+    public void assign(TableElement tableElement) {
+        String[] part = getSelection().split(Constants.SEPARATOR_STRING);
+        String pattern = part[0];
+        String group = part[1];
+
+        DateAndTime dtm = new DateAndTime();
+        dtm.setGroup(group);
+        DateAndTimeController dtc = new DateAndTimeController(dtm);
+        dtc.assignPattern(pattern, tableElement);
+        // TODO move action to controller (GUI should not manipulate the model)
+        ModelStore.getInstance().add(dtm);
+    }
+
+    @Override
+    public void unAssign(TableElement tableElement) {
+        DateAndTime dateAndTimeToRemove = null;
+        for (DateAndTime dtm: ModelStore.getInstance().getDateAndTimes()) {
+            Second second = dtm.getSeconds();
+            Minute minute = dtm.getMinute();
+            Hour hour = dtm.getHour();
+            Day day = dtm.getDay();
+            Month month = dtm.getMonth();
+            Year year = dtm.getYear();
+            TimeZone timeZone = dtm.getTimeZone();
+
+            if ((second != null && tableElement.equals(second.getTableElement())) ||
+                    (minute != null && tableElement.equals(minute.getTableElement())) ||
+                    (hour != null && tableElement.equals(hour.getTableElement())) ||
+                    (day != null && tableElement.equals(day.getTableElement())) ||
+                    (month != null && tableElement.equals(month.getTableElement())) ||
+                    (year != null && tableElement.equals(year.getTableElement())) ||
+                    (timeZone != null && tableElement.equals(timeZone.getTableElement()))) {
+                dateAndTimeToRemove = dtm;
+                break;
+            }
+        }
+
+        ModelStore.getInstance().remove(dateAndTimeToRemove);
+    }
 }

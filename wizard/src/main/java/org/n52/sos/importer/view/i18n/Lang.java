@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -30,6 +30,7 @@ package org.n52.sos.importer.view.i18n;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -43,1096 +44,1675 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>Abstract Lang class.</p>
  *
  * @author e.h.juerrens@52north.org
- *
  */
 public abstract class Lang {
 
-	private static HashMap<Locale,Lang> availableLocales = new HashMap<Locale, Lang>();
+    private static HashMap<Locale, Lang> availableLocales = new HashMap<>();
 
-	private static Locale currentLocale = Locale.ENGLISH;// <-- default language
+    // default language
+    private static Locale currentLocale = Locale.ENGLISH;
 
-	private static Lang instance = null;
+    private static Lang instance;
 
-	private static final Logger logger = LoggerFactory.getLogger(Lang.class);
+    private static final Logger logger = LoggerFactory.getLogger(Lang.class);
 
-	// Add default locale En
-	static {
-		Lang.availableLocales.put(Locale.ENGLISH, new En());
-		En.setCurrentLocale(Locale.ENGLISH);
-		Lang.availableLocales.put(Locale.GERMAN, new De());
-	}
+    // Add default locale En
+    static {
+        Lang.availableLocales.put(Locale.ENGLISH, new En());
+        Lang.setCurrentLocale(Locale.ENGLISH);
+        Lang.availableLocales.put(Locale.GERMAN, new De());
+    }
 
-	public static Locale[] getAvailableLocales() {
-		final Set <Locale> locales = availableLocales.keySet();
-		return locales.toArray(new Locale[locales.size()]);
-	}
+    /**
+     * <p>Getter for the field <code>availableLocales</code>.</p>
+     *
+     * @return an array of {@link java.util.Locale} objects.
+     */
+    public static Locale[] getAvailableLocales() {
+        final Set <Locale> locales = availableLocales.keySet();
+        return locales.toArray(new Locale[locales.size()]);
+    }
 
-	/**
-	 * @return the currentLocale
-	 */
-	public static Locale getCurrentLocale() {
-		return currentLocale;
-	}
+    /**
+     * <p>Getter for the field <code>currentLocale</code>.</p>
+     *
+     * @return the currentLocale
+     */
+    public static Locale getCurrentLocale() {
+        return currentLocale;
+    }
 
-	/**
-	 * @return An instance of the subclass of Lang implementing the defined
-	 * Locate.
-	 */
-	public static Lang l() {
-		if(instance == null) {
-			instance = availableLocales.get(currentLocale);
-		}
-		return instance;
-	}
-	/**
-	 * @param newLocale the currentLocale to set
-	 */
-	public static void setCurrentLocale(final Locale newLocale) {
-		if (logger.isTraceEnabled()) {
-			logger.trace("setCurrentLocale(" + newLocale + ")");
-		}
-		// when the locale is changed, reset is and change instance object
-		if(!Lang.currentLocale.equals(newLocale)) {
-			Lang.currentLocale = newLocale;
-			Lang.instance = availableLocales.get(newLocale);
-		}
-	}
-	/**
-	 * @return Altitude / Height
-	 */
-	public abstract String altitude();
-	/**
-	 * @return and
-	 */
-	public abstract String and();
-	/**
-	 * @return Back
-	 */
-	public abstract String backButtonLabel();
-	/**
-	 * @return Binding
-	 */
-	public abstract String binding();
-	/**
-	 * @return Code
-	 */
-	public abstract String code();
-	/**
-	 * @return column
-	 */
-	public abstract String column();
-	/**
-	 *
-	 * @return "Data Preview"
-	 */
-	public abstract String dataPreview();
-	/**
-	 * @return Date
-	 */
-	public abstract String date();
-	/**
-	 * @return Day
-	 */
-	public abstract String day();
-	/**
-	 *
-	 * @return Delete the selected item from the list
-	 */
-	public abstract String editableComboBoxDeleteItemButton();
-	/**
-	 *
-	 * @return Add a new item to the list
-	 */
-	public abstract String editableComboBoxNewItemButton();
-	/**
-	 * @return EPSG-Code
-	 */
-	public abstract String epsgCode();
-	/**
-	 * @return The EPSG-Code has to be a natural number.
-	 */
-	public abstract String epsgCodeWarningDialogNaturalNumber();
-	/**
-	 * @return The EPSG-Code has to be in the range of 0 and 32767.
-	 */
-	public abstract String epsgCodeWarningDialogOutOfRange();
-	/**
-	 * @return Error
-	 */
-	public abstract String error();
-	/**
-	 * @return Error
-	 */
-	public abstract String errorDialogTitle();
-	/**
-	 * @return Example
-	 */
-	public abstract String example();
-	/**
-	 * @return Do you really want to exit?\n
-	 */
-	public abstract String exitDialogQuestion();
-	/**
-	 * @return Exit
-	 */
-	public abstract String exitDialogTitle();
-	/**
-	 * @return Feature of Interest
-	 */
-	public abstract String featureOfInterest();
-	/**
-	 * @return file
-	 */
-	public abstract String file();
-	/**
-	 * @return Finish
-	 */
-	public abstract String finishButtonLabel();
-	/**
-	 * @return Format
-	 */
-	public abstract String format();
-	/**
-	 * @return SOS Importer {@link org.n52.sos.importer.Constants#VERSION}
-	 */
-	public String frameTitle(){	return "SOS Importer " + Constants.VERSION; }
-	/**
-	 * @param file
-	 * @param path
-	 * @return - file: "<code>file</code>" (path: "<code>path</code>")
-	 */
-	public String frameTitleExtension(final String file, final String path) {
-		return " - " + file() + ":\"" + file + "\" (" + path() + ": \"" + path + "\")";
-	}
-	/**
-	 * @return generated
-	 */
-	public abstract String generated();
-	public abstract Locale getLocale();
-	/**
-	 * @return Group
-	 */
-	public abstract String group();
-	/**
-	 * @return The height has to be a decimal number.
-	 */
-	public abstract String heightWarningDialogDecimalNumber();
-	/**
-	 * @return Hours
-	 */
-	public abstract String hours();
-	/**
-	 * @return Information
-	 */
-	public abstract String infoDialogTitle();
-	/**
-	 * @return The latitude/northing can only be a decimal number so far.
-	 */
-	public abstract String latitudeDialogDecimalValue();
-	/**
-	 * @return Latitude / Northing
-	 */
-	public abstract String latitudeNorthing();
-	/**
-	 * @return The longitude/easting can only be a decimal number so far.
-	 */
-	public abstract String longitudeDialogDecimalValue();
-	/**
-	 * @return Longitude / Easting
-	 */
-	public abstract String longitudeEasting();
-	/**
-	 * @return measured value
-	 */
-	public abstract String measuredValue();
-	/**
-	 *
-	 * @return "Metadata"
-	 */
-	public abstract String metadata();
-	/**
-	 * @return Minutes
-	 */
-	public abstract String minutes();
-	/**
-	 * @return Month
-	 */
-	public abstract String month();
-	/**
-	 * @return Name
-	 */
-	public abstract String name();
-	/**
-	 * @return Next
-	 */
-	public abstract String nextButtonLabel();
-	/**
-	 * @return	Thousands separator
-	 */
-	public abstract String numValuePanelThousandsSeparator();
-	/**
-	 * @return Observation
-	 */
-	public abstract String observation();
-	/**
-	 * @return Observed Property
-	 */
-	public abstract String observedProperty();
-	/**
-	 *
-	 * @return Offering
-	 */
-	public abstract String offering();
-	/**
-	 * @return path
-	 */
-	public abstract String path();
-	/**
-	 * @return Position
-	 */
-	public abstract String position();
-	/**
-	 * @return Reference System
-	 */
-	public abstract String referenceSystem();
-	/**
-	 * @return row
-	 */
-	public abstract String row();
-	/**
-	 * @return Seconds
-	 */
-	public abstract String seconds();
-	/**
-	 * @return Sensor
-	 */
-	public abstract String sensor();
-	/**
-	 * @return Sensor Observation Service
-	 */
-	public String sos() {
-		return "Sensor Observation Service";
-	}
-	/**
-	 * @return Space
-	 */
-	public abstract String spaceString();
-	/**
-	 *
-	 * @return Specification Version
-	 */
-	public abstract String specificationVersion();
-	/**
-	 * @return Step
-	 */
-	public abstract String step();
-	/**
-	 * @return Select
-	 */
-	public abstract String step1BrowseButton();
-	/**
-	 * @return Step 1: Choose CSV file
-	 */
-	public abstract String step1Description();
-	/**
-	 * @return Remote Directory
-	 */
-	public abstract String step1Directory();
-	/**
-	 * @return Please select the input file encoding
-	 */
-	public abstract String step1EncodingLabel();
-	/**
-	 * @return CSV Feed Type
-	 */
-	public abstract String step1FeedTypeCSV();
-	/**
-	 * @return FTP Feed type
-	 */
-	public abstract String step1FeedTypeFTP();
-	/**
-	 * @return CSV File
-	 */
-	public abstract String step1File();
-	/**
-	 * @return Remote File Schema
-	 */
-	public abstract String step1FileSchema();
-	/**
-	 * @return FTP Server
-	 */
-	public abstract String step1FtpServer();
-	/**
-	 *
-	 * @return Please select the CSV file
-	 */
-	public abstract String step1InstructionLabel();
-	/**
-	 *
-	 * @return "Introduction"
-	 */
-	public abstract String step1Introduction();
-	/**
-	 * @return Password (FTP Server authentification)
-	 */
-	public abstract String step1Password();
-	/**
-	 * @return Regular Expression
-	 */
-	public abstract String step1Regex();
-	/**
-	 * @return Regular Expression Description
-	 */
-	public abstract String step1RegexDescription();
-	/**
-	 * @return Change language
-	 */
-	public abstract String step1SelectLanguage();
-	/**
-	 * @return User (FTP Server authentification)
-	 */
-	public abstract String step1User();
-	/**
-	 * @return Column separator
-	 */
-	public abstract String step2ColumnSeparator();
-	/**
-	 * @return Comment indicator
-	 */
-	public abstract String step2CommentIndicator();
-	/**
-	 * @return CSV-Data-Preview
-	 */
-	public abstract String step2DataPreviewLabel();
-	/**
-	 * @return Decimal separator
-	 */
-	public abstract String step2DecimalSeparator();
-	/**
-	 * @return Step 2: Import CSV file
-	 */
-	public abstract String step2Description();
-	/**
-	 * @return Ignore data until line
-	 */
-	public abstract String step2FirstLineWithData();
-	/**
-	 *
-	 * @return Is data file sample based
-	 */
-	public abstract String step2IsSampleBased();
-	/**
-	 * @return Interpret Header
-	 */
-	public abstract String step2ParseHeader();
+    /**
+     * <p>l.</p>
+     *
+     * @return An instance of the subclass of Lang implementing the defined
+     * Locate.
+     */
+    public static Lang l() {
+        if (instance == null) {
+            instance = availableLocales.get(currentLocale);
+        }
+        return instance;
+    }
 
-	/**
-	 *
-	 * @return Offset data
-	 */
-	public abstract String step2SampleBasedDataOffsetLabel();
+    /**
+     * <p>Setter for the field <code>currentLocale</code>.</p>
+     *
+     * @param newLocale the currentLocale to set
+     */
+    public static void setCurrentLocale(final Locale newLocale) {
+        if (logger.isTraceEnabled()) {
+            logger.trace("setCurrentLocale(" + newLocale + ")");
+        }
+        // when the locale is changed, reset is and change instance object
+        if (!Lang.currentLocale.equals(newLocale)) {
+            Lang.currentLocale = newLocale;
+            Lang.instance = availableLocales.get(newLocale);
+        }
+    }
 
-	/**
-	 *
-	 * @return The offset in lines from sample beginning till the first lines
-	 * 			with data.
-	 */
-	public abstract String step2SampleBasedDataOffsetToolTip();
+    /**
+     * <p>altitude.</p>
+     *
+     * @return Altitude / Height
+     */
+    public abstract String altitude();
 
-	/**
-	 * @return Regular Expression "Date Extraction"
-	 */
-	public abstract String step2SampleBasedDateExtractionRegExLabel();
+    /**
+     * <p>and.</p>
+     *
+     * @return and
+     */
+    public abstract String and();
 
-	/**
-	 * @return The regular expression to extract the date information from the
-	 * 				line containing the date information of the current sample.
-	 * 				The expression MUST result in ONE group. This group will be
-	 * 				parsed to a {@link java.util.Date} using
-	 * 				"sampleDatePattern" attribute.
-	 */
-	public abstract String step2SampleBasedDateExtractionRegExTooltip();
+    /**
+     * <p>backButtonLabel.</p>
+     *
+     * @return Back
+     */
+    public abstract String backButtonLabel();
 
-	/**
-	 * @return Offset date information
-	 */
-	public abstract String step2SampleBasedDateOffsetLabel();
+    /**
+     * <p>binding.</p>
+     *
+     * @return Binding
+     */
+    public abstract String binding();
 
-	/**
-	 *
-	 * @return The offset of the line containing the date of the
+    /**
+     * <p>code.</p>
+     *
+     * @return Code
+     */
+    public abstract String code();
+
+    /**
+     * <p>column.</p>
+     *
+     * @return column
+     */
+    public abstract String column();
+
+    /**
+     * <p>dataPreview.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String dataPreview();
+
+    /**
+     * <p>date.</p>
+     *
+     * @return Date
+     */
+    public abstract String date();
+
+    /**
+     * <p>day.</p>
+     *
+     * @return Day
+     */
+    public abstract String day();
+
+    /**
+     * <p>editableComboBoxDeleteItemButton.</p>
+     *
+     * @return Delete the selected item from the list
+     */
+    public abstract String editableComboBoxDeleteItemButton();
+
+    /**
+     * <p>editableComboBoxNewItemButton.</p>
+     *
+     * @return Add a new item to the list
+     */
+    public abstract String editableComboBoxNewItemButton();
+
+    /**
+     * <p>epsgCode.</p>
+     *
+     * @return EPSG-Code
+     */
+    public abstract String epsgCode();
+
+    /**
+     * <p>epsgCodeWarningDialogNaturalNumber.</p>
+     *
+     * @return The EPSG-Code has to be a natural number.
+     */
+    public abstract String epsgCodeWarningDialogNaturalNumber();
+
+    /**
+     * <p>epsgCodeWarningDialogOutOfRange.</p>
+     *
+     * @return The EPSG-Code has to be in the range of 0 and 32767.
+     */
+    public abstract String epsgCodeWarningDialogOutOfRange();
+
+    /**
+     * <p>error.</p>
+     *
+     * @return Error
+     */
+    public abstract String error();
+
+    /**
+     * <p>errorDialogTitle.</p>
+     *
+     * @return Error
+     */
+    public abstract String errorDialogTitle();
+
+    /**
+     * <p>example.</p>
+     *
+     * @return Example
+     */
+    public abstract String example();
+
+    /**
+     * <p>exitDialogQuestion.</p>
+     *
+     * @return Do you really want to exit?\n
+     */
+    public abstract String exitDialogQuestion();
+
+    /**
+     * <p>exitDialogTitle.</p>
+     *
+     * @return Exit
+     */
+    public abstract String exitDialogTitle();
+
+    /**
+     * <p>featureOfInterest.</p>
+     *
+     * @return Feature of Interest
+     */
+    public abstract String featureOfInterest();
+
+    /**
+     * <p>file.</p>
+     *
+     * @return file
+     */
+    public abstract String file();
+
+    /**
+     * <p>finishButtonLabel.</p>
+     *
+     * @return Finish
+     */
+    public abstract String finishButtonLabel();
+
+    /**
+     * <p>format.</p>
+     *
+     * @return Format
+     */
+    public abstract String format();
+
+    /**
+     * <p>frameTitle.</p>
+     *
+     * @return SOS Importer {@link org.n52.sos.importer.Constants#VERSION}
+     */
+    public String frameTitle() {
+        return "SOS Importer " + Constants.VERSION;
+    }
+
+    /**
+     * <p>frameTitleExtension.</p>
+     *
+     * @param file a {@link java.lang.String} object.
+     * @param path a {@link java.lang.String} object.
+     * @return - file: "<code>file</code>" (path: "<code>path</code>")
+     */
+    public String frameTitleExtension(final String file, final String path) {
+        return " - " + file() + ":\"" + file + "\" (" + path() + ": \"" + path + "\")";
+    }
+
+    /**
+     * <p>generated.</p>
+     *
+     * @return generated
+     */
+    public abstract String generated();
+
+    /**
+     * <p>getLocale.</p>
+     *
+     * @return a {@link java.util.Locale} object.
+     */
+    public abstract Locale getLocale();
+
+    /**
+     * <p>group.</p>
+     *
+     * @return Group
+     */
+    public abstract String group();
+
+    /**
+     * <p>heightWarningDialogDecimalNumber.</p>
+     *
+     * @return The height has to be a decimal number.
+     */
+    public abstract String heightWarningDialogDecimalNumber();
+
+    /**
+     * <p>hours.</p>
+     *
+     * @return Hours
+     */
+    public abstract String hours();
+
+    /**
+     * <p>infoDialogTitle.</p>
+     *
+     * @return Information
+     */
+    public abstract String infoDialogTitle();
+
+    /**
+     * <p>latitudeDialogDecimalValue.</p>
+     *
+     * @return The latitude/northing can only be a decimal number so far.
+     */
+    public abstract String latitudeDialogDecimalValue();
+
+    /**
+     * <p>latitudeNorthing.</p>
+     *
+     * @return Latitude / Northing
+     */
+    public abstract String latitudeNorthing();
+
+    /**
+     * <p>longitudeDialogDecimalValue.</p>
+     *
+     * @return The longitude/easting can only be a decimal number so far.
+     */
+    public abstract String longitudeDialogDecimalValue();
+
+    /**
+     * <p>longitudeEasting.</p>
+     *
+     * @return Longitude / Easting
+     */
+    public abstract String longitudeEasting();
+
+    /**
+     * <p>measuredValue.</p>
+     *
+     * @return measured value
+     */
+    public abstract String measuredValue();
+
+    /**
+     * <p>metadata.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String metadata();
+
+    /**
+     * <p>minutes.</p>
+     *
+     * @return Minutes
+     */
+    public abstract String minutes();
+
+    /**
+     * <p>month.</p>
+     *
+     * @return Month
+     */
+    public abstract String month();
+
+    /**
+     * <p>name.</p>
+     *
+     * @return Name
+     */
+    public abstract String name();
+
+    /**
+     * <p>nextButtonLabel.</p>
+     *
+     * @return Next
+     */
+    public abstract String nextButtonLabel();
+
+    /**
+     * <p>numValuePanelThousandsSeparator.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String numValuePanelThousandsSeparator();
+
+    /**
+     * <p>observation.</p>
+     *
+     * @return Observation
+     */
+    public abstract String observation();
+
+    /**
+     * <p>observedProperty.</p>
+     *
+     * @return Observed Property
+     */
+    public abstract String observedProperty();
+
+    /**
+     * <p>offering.</p>
+     *
+     * @return Offering
+     */
+    public abstract String offering();
+
+    /**
+     * <p>path.</p>
+     *
+     * @return path
+     */
+    public abstract String path();
+
+    /**
+     * <p>position.</p>
+     *
+     * @return Position
+     */
+    public abstract String position();
+
+    /**
+     * <p>referenceSystem.</p>
+     *
+     * @return Reference System
+     */
+    public abstract String referenceSystem();
+
+    /**
+     * <p>row.</p>
+     *
+     * @return row
+     */
+    public abstract String row();
+
+    /**
+     * <p>seconds.</p>
+     *
+     * @return Seconds
+     */
+    public abstract String seconds();
+
+    /**
+     * <p>sensor.</p>
+     *
+     * @return Sensor
+     */
+    public abstract String sensor();
+
+    /**
+     * <p>sos.</p>
+     *
+     * @return Sensor Observation Service
+     */
+    public String sos() {
+
+        return "Sensor Observation Service";
+    }
+
+    /**
+     * <p>spaceString.</p>
+     *
+     * @return Space
+     */
+    public abstract String spaceString();
+
+    /**
+     * <p>specificationVersion.</p>
+     *
+     * @return Specification Version
+     */
+    public abstract String specificationVersion();
+
+    /**
+     * <p>step.</p>
+     *
+     * @return Step
+     */
+    public abstract String step();
+
+    /**
+     * <p>step1BrowseButton.</p>
+     *
+     * @return Select
+     */
+    public abstract String step1BrowseButton();
+
+    /**
+     * <p>step1Description.</p>
+     *
+     * @return Step 1: Choose CSV file
+     */
+    public abstract String step1Description();
+
+    /**
+     * <p>step1Directory.</p>
+     *
+     * @return Remote Directory
+     */
+    public abstract String step1Directory();
+
+    /**
+     * <p>step1EncodingLabel.</p>
+     *
+     * @return Please select the input file encoding
+     */
+    public abstract String step1EncodingLabel();
+
+    /**
+     * <p>step1FeedTypeCSV.</p>
+     *
+     * @return CSV Feed Type
+     */
+    public abstract String step1FeedTypeCSV();
+
+    /**
+     * <p>step1FeedTypeFTP.</p>
+     *
+     * @return FTP Feed type
+     */
+    public abstract String step1FeedTypeFTP();
+
+    /**
+     * <p>step1File.</p>
+     *
+     * @return CSV File
+     */
+    public abstract String step1File();
+
+    /**
+     * <p>step1FileSchema.</p>
+     *
+     * @return Remote File Schema
+     */
+    public abstract String step1FileSchema();
+
+    /**
+     * <p>step1FtpServer.</p>
+     *
+     * @return FTP Server
+     */
+    public abstract String step1FtpServer();
+
+    /**
+     * <p>step1InstructionLabel.</p>
+     *
+     * @return Please select the CSV file
+     */
+    public abstract String step1InstructionLabel();
+
+    /**
+     * <p>step1Introduction.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step1Introduction();
+
+    /**
+     * <p>step1Password.</p>
+     *
+     * @return Password (FTP Server authentification)
+     */
+    public abstract String step1Password();
+
+    /**
+     * <p>step1Regex.</p>
+     *
+     * @return Regular Expression
+     */
+    public abstract String step1Regex();
+
+    /**
+     * <p>step1RegexDescription.</p>
+     *
+     * @return Regular Expression Description
+     */
+    public abstract String step1RegexDescription();
+
+    /**
+     * <p>step1SelectLanguage.</p>
+     *
+     * @return Change language
+     */
+    public abstract String step1SelectLanguage();
+
+    /**
+     * <p>step1User.</p>
+     *
+     * @return User (FTP Server authentification)
+     */
+    public abstract String step1User();
+
+    /**
+     * <p>step2ColumnSeparator.</p>
+     *
+     * @return Column separator
+     */
+    public abstract String step2ColumnSeparator();
+
+    /**
+     * <p>step2CommentIndicator.</p>
+     *
+     * @return Comment indicator
+     */
+    public abstract String step2CommentIndicator();
+
+    /**
+     * <p>step2DataPreviewLabel.</p>
+     *
+     * @return CSV-Data-Preview
+     */
+    public abstract String step2DataPreviewLabel();
+
+    /**
+     * <p>step2DecimalSeparator.</p>
+     *
+     * @return Decimal separator
+     */
+    public abstract String step2DecimalSeparator();
+
+    /**
+     * <p>step2Description.</p>
+     *
+     * @return Step 2: Import CSV file
+     */
+    public abstract String step2Description();
+
+    /**
+     * <p>step2FirstLineWithData.</p>
+     *
+     * @return Ignore data until line
+     */
+    public abstract String step2FirstLineWithData();
+
+    /**
+     * <p>step2IsSampleBased.</p>
+     *
+     * @return Is data file sample based
+     */
+    public abstract String step2IsSampleBased();
+
+    /**
+     * <p>step2ParseHeader.</p>
+     *
+     * @return Interpret Header
+     */
+    public abstract String step2ParseHeader();
+
+    /**
+     * <p>step2SampleBasedDataOffsetLabel.</p>
+     *
+     * @return Offset data
+     */
+    public abstract String step2SampleBasedDataOffsetLabel();
+
+    /**
+     * <p>step2SampleBasedDataOffsetToolTip.</p>
+     *
+     * @return The offset in lines from sample beginning till the first lines
+     *          with data.
+     */
+    public abstract String step2SampleBasedDataOffsetToolTip();
+
+    /**
+     * <p>step2SampleBasedDateExtractionRegExLabel.</p>
+     *
+     * @return Regular Expression "Date Extraction"
+     */
+    public abstract String step2SampleBasedDateExtractionRegExLabel();
+
+    /**
+     * <p>step2SampleBasedDateExtractionRegExTooltip.</p>
+     *
+     * @return The regular expression to extract the date information from the
+     *              line containing the date information of the current sample.
+     *              The expression MUST result in ONE group. This group will be
+     *              parsed to a {@link java.util.Date} using
+     *              "sampleDatePattern" attribute.
+     */
+    public abstract String step2SampleBasedDateExtractionRegExTooltip();
+
+    /**
+     * <p>step2SampleBasedDateOffsetLabel.</p>
+     *
+     * @return Offset date information
+     */
+    public abstract String step2SampleBasedDateOffsetLabel();
+
+    /**
+     * <p>step2SampleBasedDateOffsetToolTip.</p>
+     *
+     * @return The offset of the line containing the date of the
      *                      sample from the start line.
-	 */
-	public abstract String step2SampleBasedDateOffsetToolTip();
-
-	/**
-	 * @return Parse Pattern "Date Information"
-	 */
-	public abstract String step2SampleBasedDatePatternLabel();
-
-	/**
-	 * @return The pattern used to parse the date information of the
-	 * 			current sample.
-	 */
-	public abstract String step2SampleBasedDatePatternTooltip();
-
-	/**
-	 *
-	 * @return Offset sample size
-	 */
-	public abstract String step2SampleBasedSampleSizeOffsetLabel();
-
-	/**
-	 *
-	 * @return The offset in lines from sample beginning till the line
-	 * 			containing the sample size in lines with data.
-	 */
-	public abstract String step2SampleBasedSampleSizeOffsetToolTip();
-
-	/**
-	 * @return Regular Expression "Sample Size"
-	 */
-	public abstract String step2SampleBasedSampleSizeRegExLabel();
-
-	/**
-	 * @return The regular expression to extract the sample size. The regular
-	 * 				expression MUST result in ONE group which contains an
-	 * 				integer value.
-	 */
-	public abstract String step2SampleBasedSampleSizeRegExTooltip();
-
-	/**
-	 *
-	 * @return Regular Expression "Sample Start"
-	 */
-	public abstract String step2SampleBasedStartRegExLabel();
-
-	/**
-	 *
-	 * @return Used to identify the start of a new sample.\n
-	 * 							MUST match the whole line.
-	 */
-	public abstract String step2SampleBasedStartRegExTooltip();
-
-	/**
-	 * @return Text qualifier
-	 */
-	public abstract String step2TextQualifier();
-
-	/**
-	 * @return Step 3a: Choose Metadata for the selected column
-	 */
-	public abstract String step3aDescription();
-
-	/**
-	 * @return You have to specify at least one measured value column.
-	 */
-	public abstract String step3aMeasureValueColMissingDialogMessage();
-
-	/**
-	 * @return Measured value column missing
-	 */
-	public abstract String step3aMeasureValueColMissingDialogTitle();
-
-	/**
-	 * @return 1 value not parseable.
-	 */
-	public abstract String step3aParseTest1Failed();
-
-	/**
-	 * @return All values parseable.
-	 */
-	public abstract String step3aParseTestAllOk();
-
-	/**
-	 * @param n
-	 * @return <code>n</code> values not parseable.
-	 */
-	public abstract String step3aParseTestNFailed(int n);
-
-	/**
-	 * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
-	 */
-	public abstract String step3aSelectedColTypeUndefinedMsg();
-
-	/**
-	 * @return Column Type is "undefined"
-	 */
-	public abstract String step3aSelectedColTypeUndefinedTitle();
-
-	/**
-	 * @return Step 3b: Choose metadata for rows
-	 */
-	public abstract String step3bDescription();
-
-	/**
-	 * @return Date & Time
-	 */
-	public abstract String step3ColTypeDateTime();
-
-	/**
-	 * @return Do not export
-	 */
-	public abstract String step3ColTypeDoNotExport();
-
-	/**
-	 * @return Measured Value
-	 */
-	public abstract String step3ColTypeMeasuredValue();
-
-	/**
-	 * @return Undefined
-	 */
-	public abstract String step3ColTypeUndefined();
-
-	/**
-	 * @return Combination
-	 */
-	public abstract String step3DateAndTimeCombination();
-
-	/**
-	 * @return UNIX time
-	 */
-	public abstract String step3DateAndTimeUnixTime();
-
-	/**
-	 * @return Boolean
-	 */
-	public abstract String step3MeasuredValBoolean();
-
-	/**
-	 * @return Count
-	 */
-	public abstract String step3MeasuredValCount();
-
-	/**
-	 * @return Numeric Value
-	 */
-	public abstract String step3MeasuredValNumericValue();
-
-	/**
-	 * @return Text
-	 */
-	public abstract String step3MeasuredValText();
-
-	/**
-	 * @return {@linkplain org.n52.sos.importer.view.i18n.En.step3DateAndTimeCombination()}
-	 * 	<br />:= Combination
-	 */
-	public abstract String step3PositionCombination();
-
-	/**
-	 * @return Step 4a: Solve Date & Time ambiguities
-	 */
-	public abstract String step4aDescription();
-
-	/**
-	 * @return Date and Time are already set for this <code>En.measuredValue()</code>.
-	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
-	 */
-	public abstract String step4aInfoDateAndTime();
-
-	/**
-	 * @param element
-	 * @return This is not a <code>En.measuredValue()</code>.
-	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
-	 */
-	public abstract String step4aInfoMeasuredValue();
-
-	/**
-	 * @param stringReplacer
-	 * @return Select all measured value <code>Constants.STRING_REPLACER</code>s where the marked Date & Time group corresponds to.
-	 */
-	public abstract String step4aModelDescription();
-
-	/**
-	 * @return Step 4b: Solve ambiguities
-	 */
-	public abstract String step4bDescription();
-
-	/**
-	 * @return This is not a <code>En.measuredValue()</code>.
-	 * @see {@link org.n52.sos.importer.view.i18n.En.measuredValue()}
-	 * @see {@link org.n52.sos.importer.view.i18n.En.step4aInfoMeasuredValue()}
-	 *
-	 */
-	public abstract String step4bInfoNotMeasuredValue();
-	/**
-	 * @return " already set for this "
-	 */
-	public abstract String step4bInfoResourceAlreadySetText();
-	/**
-	 * @param resource resource.className already set for this <code>En.measuredValue()</code>.
-	 * @return
-	 */
-	public String step4bInfoResoureAlreadySet(final Resource resource) {
-		String res = "RESOURCE NOT FOUND!";
-		if (resource instanceof FeatureOfInterest) {
-			res = featureOfInterest();
-		} else if (resource instanceof ObservedProperty) {
-			res = observedProperty();
-		} else if (resource instanceof Sensor) {
-			res = sensor();
-		} else if (resource instanceof UnitOfMeasurement) {
-			res = unitOfMeasurement();
-		}
-		return res + step4bInfoResourceAlreadySetText() + measuredValue();
-	}
-	/**
-	 *
-	 * List how to replace the
-	 * {@link org.n52.sos.importer.Constants#STRING_REPLACER}
-	 * in the correct order:
-	 * <ol>
-	 * 	<li>The table element type of the measured values, maybe "column"</li>
-	 * 	<li>The resource type, that is linked to the measured value table element</li>
-	 *  <li>Table element of element to be selected</li>
-	 *  <li>Table element of element to be selected</li>
-	 *  <li>The resource type, that is linked to the measured value table element</li>
-	 *  <li>Table element of element to be selected</li>
-	 * </ol>
-	 * @param tableElementType
-	 * @param tableElementType2
-	 * @param resourceType
-	 * @return Please click the <code>Constants.STRING_REPLACER</code> (not the title)
-	 * containing the measured values for the marked
-	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> that is
-	 * marked. If several <code>Constants.STRING_REPLACER</code>s correspond to this
-	 * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code>, click
-	 * all of them with pressed CTRL key.
-	 */
-	public abstract String step4bModelDescription();
-	/**
-	 * @return Step 5a: Complete time data
-	 */
-	public abstract String step5aDescription();
-	/**
-	 * @return Complete missing information for the marked date and time.
-	 */
-	public abstract String step5aModelDescription();
-	/**
-	 * @return Step 5c: Complete position data
-	 */
-	public abstract String step5cDescription();
-	/**
-	 * @return Complete missing information for the marked position.
-	 */
-	public abstract String step5cModelDescription();
-	/**
-	 * @return Step 6a: Add missing dates and times
-	 */
-	public abstract String step6aDescription();
-	/**
-	 * @return <html>What is the <u>Date & Time</u> for all measured values?</html>
-	 */
-	public abstract String step6aModelDescription();
-	/**
-	 * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
-	 */
-	public abstract String step6bDefineConcatString();
-	/**
-	 * @return Step 6b: Add missing metadata
-	 */
-	public abstract String step6bDescription();
-
-	/**
-	 * Replacements: Resource &rarr; Orientation
-	 * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt; for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
-	 */
-	public abstract String step6bModelDescription();
-
-	/**
-	 * @return Please select the columns to generate the name.<br />
-	 * 			\nMultiple columns could be selected.
-	 */
-	public abstract String step6bSelectColumnsLabel();
-
-	/**
-	 * @return Step 6b (Special): Add missing sensors
-	 */
-	public abstract String step6bSpecialDescription();
-
-	/**
-	 * @return What is the sensor for
-	 */
-	public abstract String step6bSpecialModelDescription();
-
-	/**
-	 * @return Please provide a URI or a prefix if using the name as part of the URI.
-	 */
-	public abstract String step6bURIInstructions();
-
-	/**
-	 * @return Use Name after prefix?
-	 */
-	public abstract String step6bUseNameAfterPrefix();
-
-	/**
-	 * @return Step 6c: Add missing positions
-	 */
-	public abstract String step6cDescription();
-
-	/**
-	 *
-	 * @return Set Position
-	 */
-	public abstract String step6cInfoToolName();
-
-	/**
-	 *
-	 * @return Set the position by clicking on the map
-	 */
-	public abstract String step6cInfoToolTooltip();
-
-	/**
-	 * @return What is the position of
-	 */
-	public abstract String step6cModelDescription();
-
-	/**
-	 * @return Automatically Generate Identifier
-	 */
-	public abstract String step6Generation();
-
-	/**
-	 * @return Set Identifier Manually
-	 */
-	public abstract String step6ManualInput();
-
-	/**
-	 * @return Some User Input is missing. Please enter the required information.
-	 */
-	public abstract String step6MissingUserInput();
-
-	/**
-	 * @return No user input at all. Please fill in the required information.
-	 */
-	public abstract String step6NoUserInput();
-
-	/**
-	 * @return The selected config file folder <code>folder</code> is not
-	 * 			accessible for the application.
-	 */
-	public abstract String step7ConfigDirNotDirOrWriteable(String folder);
-
-	/**
-	 * @return Choose configuration file export folder
-	 */
-	public abstract String step7ConfigFileButton();
-
-	/**
-	 * @return Folder
-	 */
-	public abstract String step7ConfigFileDialogTitel();
-
-	/**
-	 * @return Configuration file folder and name
-	 */
-	public abstract String step7ConfigFileLabel();
-
-	/**
-	 *
-	 * @return Configuration File
-	 */
-	public abstract String step7ConfigurationFile();
-	
-	/**
-	 * 
-	 * @return Please set the folder for saving the configuration file.
-	 */
-	public abstract String step7ConfigFileInstructions();
-
-	/**
-	 * @return Step 7: Final Configuration
-	 */
-	public abstract String step7Description();
-
-	/**
-	 * @return Directly import data during next step
-	 */
-	public abstract String step7DirectImport();
-
-	/**
-	 * @return Import Strategy
-	 */
-	public abstract String step7ImportStrategyBorderLabel();
-
-	/**
-	 * @return Strategy
-	 */
-	public abstract String step7ImportStrategyLabel();
-
-	/**
-	 * @return Single Observation
-	 */
-	public abstract String step7ImportStrategySingleObservation();
-
-	/**
-	 * @return Hunk size
-	 */
-	public abstract String step7ImportStrategySweArrayHunksizeLabel();
-
-	/**
-	 * @return SweArrayObservation
-	 */
-	public abstract String step7ImportStrategySweArrayObservation();
-
-	/**
-	 * @return Send Buffer
-	 */
-	public abstract String step7ImportStrategySweArraySendBuffer();
-
-	/**
-	 * @return Generate Offering from Sensor name?
-	 */
-	public abstract String step7OfferingCheckBoxLabel();
-
-	/**
-	 * @return Please specify the offering name:
-	 */
-	public abstract String step7OfferingInputTextfieldLabel();
-
-	/**
-	 * @return Please specify the offering name or select to generate it.
-	 */
-	public abstract String step7OfferingNameNotGiven();
-
-	/**
-	 * The given offering "offeringName" is not valid. It should match XML-NCName specification.
-	 * @param offeringName
-	 * @return
-	 */
-	public abstract String step7OfferingNameNotValid(String offeringName);
-
-	/**
-	 * @return Save configuration to XML file
-	 */
-	public abstract String step7SaveConfig();
-
-	/**
-	 *
-	 * @return Please specify the binding.
-	 */
-	public abstract String step7SosBindingInstructions();
-
-	/**
-	 * @return Binding
-	 */
-	public abstract String step7SosBindingLabel();
-
-	/**
-	 * @param strURL
-	 * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
-	 */
-	public abstract String step7SOSConncetionStart(String strURL);
-
-	/**
-	 * @param strURL
-	 * @param responseCode
-	 * @return Could not connect to Sensor Observation Service: <code>strURL</code> . HTTP Response Code: <code>responseCode</code>
-	 */
-	public abstract String step7SOSconnectionFailed(String strURL,int responseCode);
-
-	/**
-	 * @param strURL
-	 * @param message
-	 * @param readTimeoutSeconds
-	 * @param connectTimeoutSeconds
-	 * @return Connection to Sensor Observation Service
-	 * 			\n<code>strURL</code>\n
-	 * 			failed after <code>connectTimeoutSeconds</code> seconds connect
-	 * 			and <code>readTimeoutSeconds</code> seconds read timeout.\n
-	 * 			Reason: <code>message</code>
-	 */
-	public abstract String step7SOSConnectionFailedException(String strURL,
-			String message,
-			int readTimeoutSeconds,
-			int connectTimeoutSeconds);
-
-	/**
-	 *
-	 * @return	Please specify the SOS URL including the endpoint like this "http://www.example.com/52nSOS/sos" .
-	 */
-	public abstract String step7SosUrlInstructions();
-
-	/**
-	 *
-	 * @return Please specify the specification version that is implemented by the SOS instance specified by the URL in the field above.
-	 */
-	public abstract String step7SosVersionInstructions();
-
-	/**
-	 * @return Specification
-	 */
-	public abstract String step7SosVersionLabel();
-
-	/**
-	 * @return Open Configuration File
-	 */
-	public abstract String step8ConfigFileButton();
-
-	/**
-	 *
-	 * @return "For taking a look at the generated configuration file, please click button."
-	 */
-	public abstract String step8ConfigurationFileInstructions();
-
-	/**
-	 * @return Step 8: Final Step - Summary of the Results
-	 */
-	public abstract String step8Description();
-
-	/**
-	 *
-	 * @return For importing the content of the data file one time, just click + step8DirectImportStartButton()
-	 */
-	public abstract String step8DirectImportInstructions();
-
-	/**
-	 * @return Register Sensors and Insert Observations into Sensor Observation Service
-	 */
-	public abstract String step8DirectImportLabel();
-
-	/**
-	 *
-	 * @return Start Import
-	 */
-	public abstract String step8DirectImportStartButton();
-
-	/**
-	 * @param i
-	 * @return Errors: <code>i</code>
-	 */
-	public abstract String step8ErrorLable(int i);
-
-	/**
-	 *
-	 * @param absolutePath
-	 * @return Could not find jar file!\nPlease place it there:\n\"expectedAbsolutePathToFeederJar\"
-	 */
-	public abstract String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar);
-
-	/**
-	 * @return Could not find jar file here:\n\"expectedAbsolutePathToFeederJar\". Click YES to select it.
-	 */
-	public abstract String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar);
-
-	/**
-	 * @param i
-	 * @return Insert <code>i</code> Observations...
-	 */
-	public abstract String step8InsertObservationLabel(int i);
-
-	/**
-	 *
-	 * @return "Log File"
-	 */
-	public abstract String step8LogFile();
-
-	/**
-	 * @return Check log file
-	 */
-	public abstract String step8LogFileButton();
-
-	/**
-	 *
-	 * @return "To check for additional information, please take a look at the log file created during the process."
-	 */
-	public abstract String step8LogFileInstructions();
-
-	/**
-	 * @param i
-	 * @return Register <code>i</code> Sensors...
-	 */
-	public abstract String step8RegisterSensorLabel(int i);
-
-	/**
-	 * @param f The file which was used to save the XML model
-	 * @return The configuration could not be saved to file
-	 * 						<br />"<code>f</code>".
-	 */
-	public abstract String step8SaveModelFailed(File f);
-
-	/**
-	 * @param f The file which was used to save the XML model
-	 * @param excpetionText A short String describing the exception cause
-	 * 						during saving process
-	 * @return The configuration could not be saved to file
-	 * 						<br />"<code>f</code>".
-	 * 						<br />An Exception occurred:
-	 * 						<br /><code>exceptionText</code>.
-	 * 						<br />Please check the log file for more details.
-	 */
-	public abstract String step8SaveModelFailed(File f, String exceptionText);
-
-	/**
-	 *
-	 * @return "Start Import"
-	 */
-	public abstract String step8StartImportButton();
-
-	/**
-	 * @param i
-	 * @return Successful: <code>i</code>
-	 */
-	public abstract String step8SuccessLabel(int i);
-
-	/**
-	 * @return Time
-	 */
-	public abstract String time();
-
-	/**
-	 * @return UTC offset
-	 */
-	public abstract String timeZone();
-
-	/**
-	 * @return Unit
-	 */
-	public abstract String unit();
-
-	/**
-	 * @return Unit of Measurement
-	 */
-	public abstract String unitOfMeasurement();
-
-	/**
-	 * @return URI
-	 */
-	public abstract String uri();
-
-	/**
-	 * @param uri The String with the wrong syntax entered by the user
-	 * @return The entered URI "<code>uri</code>" is syntactically not correct.
-	 */
-	public abstract String uriSyntaxNotValidDialogMessage(String uri);
-
-	/**
-	 * @return URL
-	 */
-	public abstract String url();
-
-	/**
-	 * @return Version
-	 */
-	public abstract String version();
-
-	/**
-	 * @return Testing evaluation pattern for column
-	 */
-	public abstract String waitForParseResultsLabel();
-
-	/**
-	 * @return Warning
-	 */
-	public abstract String warningDialogTitle();
-
-	/**
-	 * @return Year
-	 */
-	public abstract String year();
+     */
+    public abstract String step2SampleBasedDateOffsetToolTip();
+
+    /**
+     * <p>step2SampleBasedDatePatternLabel.</p>
+     *
+     * @return Parse Pattern "Date Information"
+     */
+    public abstract String step2SampleBasedDatePatternLabel();
+
+    /**
+     * <p>step2SampleBasedDatePatternTooltip.</p>
+     *
+     * @return The pattern used to parse the date information of the
+     *          current sample.
+     */
+    public abstract String step2SampleBasedDatePatternTooltip();
+
+    /**
+     * <p>step2SampleBasedSampleSizeOffsetLabel.</p>
+     *
+     * @return Offset sample size
+     */
+    public abstract String step2SampleBasedSampleSizeOffsetLabel();
+
+    /**
+     * <p>step2SampleBasedSampleSizeOffsetToolTip.</p>
+     *
+     * @return The offset in lines from sample beginning till the line
+     *          containing the sample size in lines with data.
+     */
+    public abstract String step2SampleBasedSampleSizeOffsetToolTip();
+
+    /**
+     * <p>step2SampleBasedSampleSizeRegExLabel.</p>
+     *
+     * @return Regular Expression "Sample Size"
+     */
+    public abstract String step2SampleBasedSampleSizeRegExLabel();
+
+    /**
+     * <p>step2SampleBasedSampleSizeRegExTooltip.</p>
+     *
+     * @return The regular expression to extract the sample size. The regular
+     *              expression MUST result in ONE group which contains an
+     *              integer value.
+     */
+    public abstract String step2SampleBasedSampleSizeRegExTooltip();
+
+    /**
+     * <p>step2SampleBasedStartRegExLabel.</p>
+     *
+     * @return Regular Expression "Sample Start"
+     */
+    public abstract String step2SampleBasedStartRegExLabel();
+
+    /**
+     * <p>step2SampleBasedStartRegExTooltip.</p>
+     *
+     * @return Used to identify the start of a new sample.\n
+     *                          MUST match the whole line.
+     */
+    public abstract String step2SampleBasedStartRegExTooltip();
+
+    /**
+     * <p>step2TextQualifier.</p>
+     *
+     * @return Text qualifier
+     */
+    public abstract String step2TextQualifier();
+
+    /**
+     * <p>step3Description.</p>
+     *
+     * @return Step 3: Choose Metadata for the selected column
+     */
+    public abstract String step3Description();
+
+    /**
+     * <p>step3HasParentFeatureCheckBox</p>
+     *
+     * @return Do you want to configure a global parent feature for this {@link #featureOfInterest()}?
+     */
+    public abstract String step3HasParentFeatureCheckBox();
+
+    /**
+     * <p>step3ParentFeatureIdentifierLabel</p>
+     *
+     * @return Parent {@link #featureOfInterest()} identifier
+     */
+    public abstract String step3ParentFeatureIdentifierLabel();
+
+    /**
+     * <p>step3MeasureValueColMissingDialogMessage.</p>
+     *
+     * @return You have to specify at least one measured value column.
+     */
+    public abstract String step3MeasureValueColMissingDialogMessage();
+
+    /**
+     * <p>step3MeasureValueColMissingDialogTitle.</p>
+     *
+     * @return Measured value column missing
+     */
+    public abstract String step3MeasureValueColMissingDialogTitle();
+
+
+    /**
+     * <p>step3OmParameterCategory.</p>
+     *
+     * @return Category
+     */
+    public abstract String step3OmParameterCategory();
+
+    /**
+     * <p>step3OmParameterNameLabel.</p>
+     *
+     * @return Name
+     * @see #name()
+     */
+    public abstract String step3OmParameterNameLabel();
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogMessage</p>
+     *
+     * @param parameterIdentifier the identifier of the invalid parameter
+     * @param givenValue the user defined parameter name.
+     *
+     * @return The given om:Parameter-&gt;Name is invalid:
+     *         <br><br>
+     *         "<code>givenValue</code>"
+     *         <br><br>
+     *         Please provide a name with at least three characters.
+     */
+    public abstract String step3InvalidSelectionParameterDialogMessage(String parameterIdentifier, String givenValue);
+
+    /**
+     * <p>step3OmParameterNameInvalidDialogTitle</p>
+     *
+     * @param parameterIdentifier the identifier of the invalid parameter
+     *
+     * @return <code>parameterIdentifier</code> is invalid
+     */
+    public abstract String step3InvalidSelectionParameterDialogTitle(String parameterIdentifier);
+
+    /**
+     * <p>step3ParseTest1Failed.</p>
+     *
+     * @return 1 value not parseable.
+     */
+    public abstract String step3ParseTest1Failed();
+
+    /**
+     * <p>step3ParseTestAllOk.</p>
+     *
+     * @return All values parseable.
+     */
+    public abstract String step3ParseTestAllOk();
+
+    /**
+     * <p>step3ParseTestNFailed.</p>
+     *
+     * @param n a int.
+     * @return <code>n</code> values not parseable.
+     */
+    public abstract String step3ParseTestNFailed(int n);
+
+    /**
+     * <p>step3SelectedColTypeUndefinedMsg.</p>
+     *
+     * @return The type for this column is "undefined" please select one. Chose "Do Not Export" for skipping it.
+     */
+    public abstract String step3SelectedColTypeUndefinedMsg();
+
+    /**
+     * <p>step3SelectedColTypeUndefinedTitle.</p>
+     *
+     * @return Column Type is "undefined"
+     */
+    public abstract String step3SelectedColTypeUndefinedTitle();
+
+    /**
+     * <p>step3ColTypeDateTime.</p>
+     *
+     * @return Date &amp; Time
+     */
+    public abstract String step3ColTypeDateTime();
+
+    /**
+     * <p>step3ColTypeDoNotExport.</p>
+     *
+     * @return Do not export
+     */
+    public abstract String step3ColTypeDoNotExport();
+
+    /**
+     * <p>step3ColTypeMeasuredValue.</p>
+     *
+     * @return Measured Value
+     */
+    public abstract String step3ColTypeMeasuredValue();
+
+    /**
+     * <p>step3ColTypeUndefined.</p>
+     *
+     * @return Undefined
+     */
+    public abstract String step3ColTypeUndefined();
+
+    /**
+     * <p>step3ColTypeOmParameter.</p>
+     *
+     * @return om:Parameter
+     */
+    public abstract String step3ColTypeOmParameter();
+
+    /**
+     * <p>step3DateAndTimeCombination.</p>
+     *
+     * @return Combination
+     */
+    public abstract String step3DateAndTimeCombination();
+
+    /**
+     * <p>step3DateAndTimeUnixTime.</p>
+     *
+     * @return UNIX time
+     */
+    public abstract String step3DateAndTimeUnixTime();
+
+    /**
+     * <p>step3MeasuredValBoolean.</p>
+     *
+     * @return Boolean
+     */
+    public abstract String step3MeasuredValBoolean();
+
+    /**
+     * <p>step3MeasuredValCount.</p>
+     *
+     * @return Count
+     */
+    public abstract String step3MeasuredValCount();
+
+    /**
+     * <p>step3MeasuredValNumericValue.</p>
+     *
+     * @return Numeric Value
+     */
+    public abstract String step3MeasuredValNumericValue();
+
+    /**
+     * <p>step3MeasuredValText.</p>
+     *
+     * @return Text
+     */
+    public abstract String step3MeasuredValText();
+
+    /**
+     * <p>step3PositionCombination.</p>
+     *
+     * @return Combination
+     *
+     * @see Lang#step3DateAndTimeCombination()
+     */
+    public abstract String step3PositionCombination();
+
+    /**
+     * <p>step4aDescription.</p>
+     *
+     * @return Step 4a: Solve Date &amp; Time ambiguities
+     */
+    public abstract String step4aDescription();
+
+    /**
+     * <p>step4aInfoDateAndTime.</p>
+     *
+     * @return Date and Time are already set for this <code>En.measuredValue()</code>.
+     * @see Lang#measuredValue()
+     */
+    public abstract String step4aInfoDateAndTime();
+
+    /**
+     * <p>step4aInfoMeasuredValue.</p>
+     *
+     * @return This is not a <code>En.measuredValue()</code>.
+     * @see Lang#measuredValue()
+     */
+    public abstract String step4aInfoMeasuredValue();
+
+    /**
+     * <p>step4aModelDescription.</p>
+     *
+     * @return Select all measured value <code>Constants.STRING_REPLACER</code>s
+     *      where the marked Date &amp; Time group corresponds to.
+     */
+    public abstract String step4aModelDescription();
+
+    /**
+     * <p>step4bDescription.</p>
+     *
+     * @return Step 4b: Solve ambiguities
+     */
+    public abstract String step4bDescription();
+
+    /**
+     * <p>step4bInfoNotMeasuredValue.</p>
+     *
+     * @return This is not a <code>En.measuredValue()</code>.
+     * @see Lang#measuredValue()
+     * @see Lang#step4aInfoMeasuredValue()
+     */
+    public abstract String step4bInfoNotMeasuredValue();
+
+    /**
+     * <p>step4bInfoResourceAlreadySetText.</p>
+     *
+     * @return a java.lang.String object.
+     */
+    public abstract String step4bInfoResourceAlreadySetText();
+
+    /**
+     * <p>step4bInfoResoureAlreadySet.</p>
+     *
+     * @param resource resource.className already set for this <code>En.measuredValue()</code>.
+     * @return a java.lang.String object.
+     */
+    public String step4bInfoResoureAlreadySet(final Resource resource) {
+        String res = "RESOURCE NOT FOUND!";
+        if (resource instanceof FeatureOfInterest) {
+            res = featureOfInterest();
+        } else if (resource instanceof ObservedProperty) {
+            res = observedProperty();
+        } else if (resource instanceof Sensor) {
+            res = sensor();
+        } else if (resource instanceof UnitOfMeasurement) {
+            res = unitOfMeasurement();
+        }
+        return res + step4bInfoResourceAlreadySetText() + measuredValue();
+    }
+
+    /**
+     *
+     * List how to replace the
+     * {@link org.n52.sos.importer.Constants#STRING_REPLACER}
+     * in the correct order:
+     * <ol>
+     *  <li>The table element type of the measured values, maybe "column"</li>
+     *  <li>The resource type, that is linked to the measured value table element</li>
+     *  <li>Table element of element to be selected</li>
+     *  <li>Table element of element to be selected</li>
+     *  <li>The resource type, that is linked to the measured value table element</li>
+     *  <li>Table element of element to be selected</li>
+     * </ol>
+     *
+     * @return Please click the <code>Constants.STRING_REPLACER</code> (not the title)
+     * containing the measured values for the marked
+     * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code> that is
+     * marked. If several <code>Constants.STRING_REPLACER</code>s correspond to this
+     * <code>Constants.STRING_REPLACER</code> <code>Constants.STRING_REPLACER</code>, click
+     * all of them with pressed CTRL key.
+     */
+    public abstract String step4bModelDescription();
+
+    /**
+     * @param orientation row or column
+     *
+     * @return Please click the <code>orientation</code> (not the title)
+     * containing the measured values for the marked
+     * {@link #step3ColTypeOmParameter()} <code>column/row</code> that is
+     * marked.
+     *
+     */
+    public abstract String step4dModelDescription(String orientation);
+
+    /**
+     * <p>step5aDescription.</p>
+     *
+     * @return Step 5a: Complete time data
+     */
+    public abstract String step5aDescription();
+
+    /**
+     * <p>step5aModelDescription.</p>
+     *
+     * @return Complete missing information for the marked date and time.
+     */
+    public abstract String step5aModelDescription();
+
+    /**
+     * <p>step5cDescription.</p>
+     *
+     * @return Step 5c: Complete position data
+     */
+    public abstract String step5cDescription();
+
+    /**
+     * <p>step5cModelDescription.</p>
+     *
+     * @return Complete missing information for the marked position.
+     */
+    public abstract String step5cModelDescription();
+
+    /**
+     * <p>step6aDescription.</p>
+     *
+     * @return Step 6a: Add missing dates and times
+     */
+    public abstract String step6aDescription();
+
+    /**
+     * <p>step6aModelDescription.</p>
+     *
+     * @return What is the Date &amp; Time for all measured values?
+     */
+    public abstract String step6aModelDescription();
+
+    /**
+     * <p>step6bDefineConcatString.</p>
+     *
+     * @return Please provide a String to used to link the values in the columns (Empty String is allowed).
+     */
+    public abstract String step6bDefineConcatString();
+
+    /**
+     * <p>step6bDescription.</p>
+     *
+     * @return Step 6b: Add missing metadata
+     */
+    public abstract String step6bDescription();
+
+    /**
+     * Replacements: Resource &rarr; Orientation
+     *
+     * @return &lt;html&gt;What is the &lt;u&gt;<code>Constants.STRING_REPLACER</code>&lt;/u&gt;
+     *      for the marked measured value <code>Constants.STRING_REPLACER</code>?&lt;/html&gt;
+     */
+    public abstract String step6bModelDescription();
+
+    /**
+     * <p>step6bSelectColumnsLabel.</p>
+     *
+     * @return Please select the columns to generate the name.<br>
+     *          \nMultiple columns could be selected.
+     */
+    public abstract String step6bSelectColumnsLabel();
+
+    /**
+     * <p>step6bSpecialDescription.</p>
+     *
+     * @return Step 6b (Special): Add missing sensors
+     */
+    public abstract String step6bSpecialDescription();
+
+    /**
+     * <p>step6bSpecialModelDescription.</p>
+     *
+     * @return What is the sensor for
+     */
+    public abstract String step6bSpecialModelDescription();
+
+    /**
+     * <p>step6bURIInstructions.</p>
+     *
+     * @return Please provide a URI or a prefix if using the name as part of the URI.
+     */
+    public abstract String step6bURIInstructions();
+
+    /**
+     * <p>step6bUseNameAfterPrefix.</p>
+     *
+     * @return Use Name after prefix?
+     */
+    public abstract String step6bUseNameAfterPrefix();
+
+    /**
+     * <p>step6cDescription.</p>
+     *
+     * @return Step 6c: Add missing positions
+     */
+    public abstract String step6cDescription();
+
+    /**
+     * <p>step6cInfoToolName.</p>
+     *
+     * @return Set Position
+     */
+    public abstract String step6cInfoToolName();
+
+    /**
+     * <p>step6cInfoToolTooltip.</p>
+     *
+     * @return Set the position by clicking on the map
+     */
+    public abstract String step6cInfoToolTooltip();
+
+    /**
+     * <p>step6cModelDescription.</p>
+     *
+     * @return What is the position of
+     */
+    public abstract String step6cModelDescription();
+
+    /**
+     * <p>step6Generation.</p>
+     *
+     * @return Automatically Generate Identifier
+     */
+    public abstract String step6Generation();
+
+    /**
+     * <p>step6ManualInput.</p>
+     *
+     * @return Set Identifier Manually
+     */
+    public abstract String step6ManualInput();
+
+    /**
+     * <p>step6MissingUserInput.</p>
+     *
+     * @return Some User Input is missing. Please enter the required information.
+     */
+    public abstract String step6MissingUserInput();
+
+    /**
+     * <p>step6NoUserInput.</p>
+     *
+     * @return No user input at all. Please fill in the required information.
+     */
+    public abstract String step6NoUserInput();
+
+    /**
+     * <p>step7ConfigDirNotDirOrWriteable.</p>
+     *
+     * @return The selected config file folder <code>folder</code> is not
+     *          accessible for the application.
+     * @param folder a {@link java.lang.String} object.
+     */
+    public abstract String step7ConfigDirNotDirOrWriteable(String folder);
+
+    /**
+     * <p>step7ConfigFileButton.</p>
+     *
+     * @return Choose configuration file export folder
+     */
+    public abstract String step7ConfigFileButton();
+
+    /**
+     * <p>step7ConfigFileDialogTitel.</p>
+     *
+     * @return Folder
+     */
+    public abstract String step7ConfigFileDialogTitel();
+
+    /**
+     * <p>step7ConfigFileLabel.</p>
+     *
+     * @return Configuration file folder and name
+     */
+    public abstract String step7ConfigFileLabel();
+
+    /**
+     * <p>step7ConfigurationFile.</p>
+     *
+     * @return Configuration File
+     */
+    public abstract String step7ConfigurationFile();
+
+    /**
+     * <p>step7ConfigFileInstructions.</p>
+     *
+     * @return Please set the folder for saving the configuration file.
+     */
+    public abstract String step7ConfigFileInstructions();
+
+    /**
+     * <p>step7Description.</p>
+     *
+     * @return Step 7: Final Configuration
+     */
+    public abstract String step7Description();
+
+    /**
+     * <p>step7DirectImport.</p>
+     *
+     * @return Directly import data during next step
+     */
+    public abstract String step7DirectImport();
+
+    /**
+     * @return Should lines with wrong number of columns be ignored?
+     */
+    public abstract String step7IgnoreColumnMismatchCheckBoxLabel();
+
+    /**
+     * @return Additional Settings
+     */
+    public abstract String step7IgnoreColumnMismatchBorderLabel();
+
+    /**
+     * <p>step7ImportStrategyBorderLabel.</p>
+     *
+     * @return Import Strategy
+     */
+    public abstract String step7ImportStrategyBorderLabel();
+
+    /**
+     * <p>step7ImportStrategyLabel.</p>
+     *
+     * @return Strategy
+     */
+    public abstract String step7ImportStrategyLabel();
+
+    /**
+     * <p>step7ImportStrategySingleObservation.</p>
+     *
+     * @return Single Observation
+     */
+    public abstract String step7ImportStrategySingleObservation();
+
+    /**
+     * <p>step7ImportStrategySweArrayHunksizeLabel.</p>
+     *
+     * @return Hunk size
+     */
+    public abstract String step7ImportStrategySweArrayHunksizeLabel();
+
+    /**
+     * <p>step7ImportStrategySweArrayObservation.</p>
+     *
+     * @return SweArrayObservation
+     */
+    public abstract String step7ImportStrategySweArrayObservation();
+
+    /**
+     * <p>step7ImportStrategySweArraySendBuffer.</p>
+     *
+     * @return Send Buffer
+     */
+    public abstract String step7ImportStrategySweArraySendBuffer();
+
+    /**
+     * <p>step7OfferingCheckBoxLabel.</p>
+     *
+     * @return Generate Offering from Sensor name?
+     */
+    public abstract String step7OfferingCheckBoxLabel();
+
+    /**
+     * <p>step7OfferingInputTextfieldLabel.</p>
+     *
+     * @return Please specify the offering name:
+     */
+    public abstract String step7OfferingInputTextfieldLabel();
+
+    /**
+     * <p>step7OfferingNameNotGiven.</p>
+     *
+     * @return Please specify the offering name or select to generate it.
+     */
+    public abstract String step7OfferingNameNotGiven();
+
+    /**
+     * The given offering "offeringName" is not valid. It should match XML-NCName specification.
+     *
+     * @param offeringName a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step7OfferingNameNotValid(String offeringName);
+
+    /**
+     * <p>step7SaveConfig.</p>
+     *
+     * @return Save configuration to XML file
+     */
+    public abstract String step7SaveConfig();
+
+    /**
+     * <p>step7SosBindingInstructions.</p>
+     *
+     * @return Please specify the binding.
+     */
+    public abstract String step7SosBindingInstructions();
+
+    /**
+     * <p>step7SosBindingLabel.</p>
+     *
+     * @return Binding
+     */
+    public abstract String step7SosBindingLabel();
+
+    /**
+     * <p>step7SOSConncetionStart.</p>
+     *
+     * @param strURL a {@link java.lang.String} object.
+     * @return To start connection testing to URL "<code>strURL</code>" select YES.\n To change values select NO.
+     */
+    public abstract String step7SOSConncetionStart(String strURL);
+
+    /**
+     * <p>step7SOSconnectionFailed.</p>
+     *
+     * @param strURL a {@link java.lang.String} object.
+     * @param responseCode a int.
+     * @return Could not connect to Sensor Observation Service: <code>strURL</code>.
+     *      HTTP Response Code: <code>responseCode</code>
+     */
+    public abstract String step7SOSconnectionFailed(String strURL, int responseCode);
+
+    /**
+     * <p>step7SOSConnectionFailedException.</p>
+     *
+     * @param strURL a {@link java.lang.String} object.
+     * @param message a {@link java.lang.String} object.
+     * @param readTimeoutSeconds a int.
+     * @param connectTimeoutSeconds a int.
+     * @return Connection to Sensor Observation Service
+     *          \n<code>strURL</code>\n
+     *          failed after <code>connectTimeoutSeconds</code> seconds connect
+     *          and <code>readTimeoutSeconds</code> seconds read timeout.\n
+     *          Reason: <code>message</code>
+     */
+    public abstract String step7SOSConnectionFailedException(String strURL,
+            String message,
+            int readTimeoutSeconds,
+            int connectTimeoutSeconds);
+
+    /**
+     * <p>step7SosUrlInstructions.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step7SosUrlInstructions();
+
+    /**
+     * <p>step7SosVersionInstructions.</p>
+     *
+     * @return Please specify the specification version that is implemented by
+     *      the SOS instance specified by the URL in the field above.
+     */
+    public abstract String step7SosVersionInstructions();
+
+    /**
+     * <p>step7SosVersionLabel.</p>
+     *
+     * @return Specification
+     */
+    public abstract String step7SosVersionLabel();
+
+    /**
+     * <p>step7RequiredParentFeatureAbsent.</p>
+     *
+     * @param absentParentFeatures a list of missing parent features in SOS
+     *
+     * @return <code>&lt;html&gt;</code>The following list of parent  <code>featureOfInterest()</code>s could not
+     *      be found in the given SOS instance:<code>&lt;ul&gt;</code><br>
+     *          <code>&lt;li&gt;</code>absentParentFeatures<code>&lt;/li&gt;</code> <code>&lt;-- n times</code><br>
+     *      <code>&lt;/ul&gt;</code>Please ensure their existence before importing the data.<code>&lt;/html&gt;</code>
+     */
+    public abstract String step7RequiredParentFeatureAbsent(List<String> absentParentFeatures);
+
+    /**
+     * <p>step8ConfigFileButton.</p>
+     *
+     * @return Open Configuration File
+     */
+    public abstract String step8ConfigFileButton();
+
+    /**
+     * <p>step8ConfigurationFileInstructions.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step8ConfigurationFileInstructions();
+
+    /**
+     * <p>step8Description.</p>
+     *
+     * @return Step 8: Final Step - Summary of the Results
+     */
+    public abstract String step8Description();
+
+    /**
+     * <p>step8DirectImportInstructions.</p>
+     *
+     * @return For importing the content of the data file one time, just click + step8DirectImportStartButton()
+     */
+    public abstract String step8DirectImportInstructions();
+
+    /**
+     * <p>step8DirectImportLabel.</p>
+     *
+     * @return Register Sensors and Insert Observations into Sensor Observation Service
+     */
+    public abstract String step8DirectImportLabel();
+
+    /**
+     * <p>step8DirectImportStartButton.</p>
+     *
+     * @return Start Import
+     */
+    public abstract String step8DirectImportStartButton();
+
+    /**
+     * <p>step8ErrorLable.</p>
+     *
+     * @param i a int.
+     * @return Errors: <code>i</code>
+     */
+    public abstract String step8ErrorLable(int i);
+
+    /**
+     * <p>step8ErrorDesktopNotSupportedMesage</p>
+     *
+     * @param pathToFile this path will be shown to the user
+     * @return Could not open file. Please open it manually: PATH
+     */
+    public abstract String step8ErrorDesktopNotSupportedMesage(String pathToFile);
+
+    /**
+     * <p>step8ErrorDesktopNotSupportedTitle</p>
+     *
+     * @return Opening File Failed
+     */
+    public abstract String step8ErrorDesktopNotSupportedTitle();
+
+    /**
+     * <p>step8FeederJarNotFound.</p>
+     *
+     * @return Could not find jar file!\nPlease place it there:\n\"expectedAbsolutePathToFeederJar\"
+     * @param expectedAbsolutePathToFeederJar a {@link java.lang.String} object.
+     */
+    public abstract String step8FeederJarNotFound(String expectedAbsolutePathToFeederJar);
+
+    /**
+     * <p>step8FeederJarNotFoundSelectByUser.</p>
+     *
+     * @return Could not find jar file here:\n\"expectedAbsolutePathToFeederJar\". Click YES to select it.
+     * @param pathToDirectoryWithFeederJar a {@link java.lang.String} object.
+     */
+    public abstract String step8FeederJarNotFoundSelectByUser(String pathToDirectoryWithFeederJar);
+
+    /**
+     * <p>step8InsertObservationLabel.</p>
+     *
+     * @param i a int.
+     * @return Insert <code>i</code> Observations...
+     */
+    public abstract String step8InsertObservationLabel(int i);
+
+    /**
+     * <p>step8LogFile.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step8LogFile();
+
+    /**
+     * <p>step8LogFileButton.</p>
+     *
+     * @return Check log file
+     */
+    public abstract String step8LogFileButton();
+
+    /**
+     * <p>step8LogFileInstructions.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step8LogFileInstructions();
+
+    /**
+     * <p>step8RegisterSensorLabel.</p>
+     *
+     * @param i a int.
+     * @return Register <code>i</code> Sensors...
+     */
+    public abstract String step8RegisterSensorLabel(int i);
+
+    /**
+     * <p>step8SaveModelFailed.</p>
+     *
+     * @param f The file which was used to save the XML model
+     * @return The configuration could not be saved to file
+     *                      <br>"<code>f</code>".
+     */
+    public abstract String step8SaveModelFailed(File f);
+
+    /**
+     * <p>step8SaveModelFailed.</p>
+     *
+     * @param f The file which was used to save the XML model
+     * @return The configuration could not be saved to file
+     *                      <br>"<code>f</code>".
+     *                      <br>An Exception occurred:
+     *                      <br><code>exceptionText</code>.
+     *                      <br>Please check the log file for more details.
+     * @param exceptionText a {@link java.lang.String} object.
+     */
+    public abstract String step8SaveModelFailed(File f, String exceptionText);
+
+    /**
+     * <p>step8StartImportButton.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public abstract String step8StartImportButton();
+
+    /**
+     * <p>step8SuccessLabel.</p>
+     *
+     * @param i a int.
+     * @return Successful: <code>i</code>
+     */
+    public abstract String step8SuccessLabel(int i);
+
+    /**
+     * <p>time.</p>
+     *
+     * @return Time
+     */
+    public abstract String time();
+
+    /**
+     * <p>timeZone.</p>
+     *
+     * @return UTC offset
+     */
+    public abstract String timeZone();
+
+    /**
+     * <p>unit.</p>
+     *
+     * @return Unit
+     */
+    public abstract String unit();
+
+    /**
+     * <p>unitOfMeasurement.</p>
+     *
+     * @return Unit of Measurement
+     */
+    public abstract String unitOfMeasurement();
+
+    /**
+     * <p>uri.</p>
+     *
+     * @return URI
+     */
+    public abstract String uri();
+
+    /**
+     * <p>uriSyntaxNotValidDialogMessage.</p>
+     *
+     * @param uri The String with the wrong syntax entered by the user
+     * @return The entered URI "<code>uri</code>" is syntactically not correct.
+     */
+    public abstract String uriSyntaxNotValidDialogMessage(String uri);
+
+    /**
+     * <p>url.</p>
+     *
+     * @return URL
+     */
+    public abstract String url();
+
+    /**
+     * <p>version.</p>
+     *
+     * @return Version
+     */
+    public abstract String version();
+
+    /**
+     * <p>waitForParseResultsLabel.</p>
+     *
+     * @return Testing evaluation pattern for column
+     */
+    public abstract String waitForParseResultsLabel();
+
+    /**
+     * <p>warningDialogTitle.</p>
+     *
+     * @return Warning
+     */
+    public abstract String warningDialogTitle();
+
+    /**
+     * <p>year.</p>
+     *
+     * @return Year
+     */
+    public abstract String year();
 
 }

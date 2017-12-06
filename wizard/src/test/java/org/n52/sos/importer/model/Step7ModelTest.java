@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,55 +28,80 @@
  */
 package org.n52.sos.importer.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
 
 /**
+ * <p>Step7ModelTest class.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @since 0.5.0
  */
 public class Step7ModelTest {
 
-	private Step7Model model;
+    private Step7Model model;
 
-	@Before
-	public void init() {
-		model = new Step7Model();
-	}
+    /**
+     * <p>init.</p>
+     */
+    @Before
+    public void init() {
+        model = new Step7Model();
+    }
 
-	@Test
-	public void shouldReturnSingleObservationAsDefaultImportStrategie() {
-		assertThat(model.getImportStrategy(), is(ImportStrategy.SingleObservation));
-	}
+    /**
+     * <p>shouldReturnSingleObservationAsDefaultImportStrategie.</p>
+     */
+    @Test
+    public void shouldReturnSingleObservationAsDefaultImportStrategie() {
+        Assert.assertThat(model.getImportStrategy(), Is.is(ImportStrategy.SingleObservation));
+    }
 
-	@Test
-	public void shouldReturnImportStrategie() {
-		model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
-		assertThat(model.getImportStrategy(), is(ImportStrategy.SweArrayObservationWithSplitExtension));
-	}
+    /**
+     * <p>shouldReturnImportStrategie.</p>
+     */
+    @Test
+    public void shouldReturnImportStrategie() {
+        model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        Assert.assertThat(
+                model.getImportStrategy(),
+                Is.is(ImportStrategy.SweArrayObservationWithSplitExtension));
+    }
 
-	@Test
-	public void shouldReturn25AsDefaultSendBuffer() {
-		assertThat(model.getSendBuffer(), is(25));
-	}
+    /**
+     * <p>shouldReturn25AsDefaultSendBuffer.</p>
+     */
+    @Test
+    public void shouldReturn25AsDefaultSendBuffer() {
+        Assert.assertThat(model.getSendBuffer(), Is.is(25));
+    }
 
-	@Test
-	public void shouldReturnSendBuffer() {
-		model.setSendBuffer(42);
-		assertThat(model.getSendBuffer(), is(42));
-	}
+    /**
+     * <p>shouldReturnSendBuffer.</p>
+     */
+    @Test
+    public void shouldReturnSendBuffer() {
+        model.setSendBuffer(42);
+        Assert.assertThat(model.getSendBuffer(), Is.is(42));
+    }
 
-	@Test
-	public void shouldReturn5000AsDefaultHunkSize() {
-		assertThat(model.getHunkSize(), is(5000));
-	}
+    /**
+     * <p>shouldReturn5000AsDefaultHunkSize.</p>
+     */
+    @Test
+    public void shouldReturn5000AsDefaultHunkSize() {
+        Assert.assertThat(model.getHunkSize(), Is.is(5000));
+    }
 
-	@Test
-	public void shouldReturnHunkSize() {
-		model.setHunkSize(52);
-		assertThat(model.getHunkSize(), is(52));
-	}
+    /**
+     * <p>shouldReturnHunkSize.</p>
+     */
+    @Test
+    public void shouldReturnHunkSize() {
+        model.setHunkSize(52);
+        Assert.assertThat(model.getHunkSize(), Is.is(52));
+    }
 }

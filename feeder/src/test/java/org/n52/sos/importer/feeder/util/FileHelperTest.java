@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,23 +28,22 @@
  */
 package org.n52.sos.importer.feeder.util;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
-import org.n52.sos.importer.feeder.util.FileHelper;
 
 public class FileHelperTest {
-	
-	@Test
-	public void shouldShortenALongString()
-	{
-		// Don't change this value or the test breaks!
-		final String longString = "This is a very long string that should be shortened to a shorter one";
-		final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
-		assertThat(shorterString.length(),is(32));
-		// Don't change this value or the test breaks!
-		assertThat(shorterString,is("c42073bd88ccb323a36b57092093b139"));
-	}
+
+    @Test
+    public void shouldShortenALongString() {
+        // given
+        final String expectedMD5Hash = "c42073bd88ccb323a36b57092093b139";
+        final String longString = "This is a very long string that should be shortened to a shorter one";
+
+        // when
+        final String shorterString = FileHelper.shortenStringViaMD5Hash(longString);
+
+        // then
+        org.junit.Assert.assertThat(shorterString.length(), org.hamcrest.CoreMatchers.is(32));
+        org.junit.Assert.assertThat(shorterString, org.hamcrest.CoreMatchers.is(expectedMD5Hash));
+    }
 
 }

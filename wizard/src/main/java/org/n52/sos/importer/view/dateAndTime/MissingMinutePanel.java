@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -41,47 +41,53 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 /**
  * consists of a label and a JSpinner for a single minute
+ *
  * @author Raimund
  */
 public class MissingMinutePanel extends MissingDateAndTimePanel {
-	
-	private static final long serialVersionUID = 1L;
 
-	private JLabel minuteLabel;
-	
-	private SpinnerNumberModel minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
-	private JSpinner minuteSpinner = new JSpinner(minuteModel);
-	
-	public MissingMinutePanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.minuteLabel = new JLabel(Lang.l().minutes() + ": ");
-		this.add(minuteLabel);
-		this.add(minuteSpinner);
-	}
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public void assignValues() {
-		dateAndTime.setMinute(new Minute(minuteModel.getNumber().intValue()));	
-	}
+    private JLabel minuteLabel;
 
-	@Override
-	public void unassignValues() {
-		dateAndTime.setMinute(null);	
-	}
-	
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
-	
-	@Override
-	public Component getMissingComponent() {
-		return new Minute(minuteModel.getNumber().intValue());
-	}
+    private SpinnerNumberModel minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
+    private JSpinner minuteSpinner = new JSpinner(minuteModel);
 
-	@Override
-	public void setMissingComponent(Component c) {
-		minuteModel.setValue(((Minute)c).getValue());
-	}
+    /**
+     * <p>Constructor for MissingMinutePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingMinutePanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.minuteLabel = new JLabel(Lang.l().minutes() + ": ");
+        this.add(minuteLabel);
+        this.add(minuteSpinner);
+    }
+
+    @Override
+    public void assignValues() {
+        dateAndTime.setMinute(new Minute(minuteModel.getNumber().intValue()));
+    }
+
+    @Override
+    public void unassignValues() {
+        dateAndTime.setMinute(null);
+    }
+
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
+
+    @Override
+    public Component getMissingComponent() {
+        return new Minute(minuteModel.getNumber().intValue());
+    }
+
+    @Override
+    public void setMissingComponent(Component c) {
+        minuteModel.setValue(((Minute) c).getValue());
+    }
 }

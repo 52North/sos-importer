@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -39,51 +39,56 @@ import org.n52.sos.importer.Constants;
 
 /**
  * consists of a short instruction label and the table
- * @author Raimund
  *
+ * @author Raimund
  */
 public class Step4Panel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private JTextArea instructionsJTA;
-	
-	private JPanel tablePanel;
-	
-	public Step4Panel(String text) {
-		super();
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{450, 0};
-		gridBagLayout.rowHeights = new int[]{50, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
-		tablePanel = TablePanel.getInstance();
-		instructionsJTA = new JTextArea();
-		instructionsJTA.setText(text);
-		instructionsJTA.setFont(Constants.DEFAULT_LABEL_FONT);
-		instructionsJTA.setFocusable(false);
-		instructionsJTA.setEditable(false);
-		instructionsJTA.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
-		instructionsJTA.setLineWrap(true);
-		instructionsJTA.setWrapStyleWord(true);
-		GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(0, 0, 5, 0);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(instructionsJTA, c);
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 1;
-		add(tablePanel,c);
-		
-		JPanel panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 2;
-		add(panel, gbc_panel);
-	}
+    private static final long serialVersionUID = 1L;
+
+    private JTextArea instructionsJTA;
+
+    private JPanel tablePanel;
+
+    /**
+     * <p>Constructor for Step4Panel.</p>
+     *
+     * @param text a {@link java.lang.String} object.
+     */
+    public Step4Panel(String text) {
+        super();
+        GridBagLayout gridBagLayout = new GridBagLayout();
+        gridBagLayout.columnWidths = new int[]{450, 0};
+        gridBagLayout.rowHeights = new int[]{50, 0, 0, 0};
+        gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+        gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+        setLayout(gridBagLayout);
+        tablePanel = TablePanel.getInstance();
+        instructionsJTA = new JTextArea();
+        instructionsJTA.setText(text);
+        instructionsJTA.setFont(Constants.DEFAULT_LABEL_FONT);
+        instructionsJTA.setFocusable(false);
+        instructionsJTA.setEditable(false);
+        instructionsJTA.setBackground(Constants.DEFAULT_COLOR_BACKGROUND);
+        instructionsJTA.setLineWrap(true);
+        instructionsJTA.setWrapStyleWord(true);
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(0, 0, 5, 0);
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 0;
+        add(instructionsJTA, c);
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 1;
+        add(tablePanel, c);
+
+        JPanel panel = new JPanel();
+        GridBagConstraints gbc_panel = new GridBagConstraints();
+        gbc_panel.fill = GridBagConstraints.BOTH;
+        gbc_panel.gridx = 0;
+        gbc_panel.gridy = 2;
+        add(panel, gbc_panel);
+    }
 }

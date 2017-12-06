@@ -1,0 +1,7 @@
+foi,   sensor,   position-lat, position-lon, mv-numeric,obs-prop,      uom,      timestamp,           om-parameter-count, om-parameter-numeric
+foi-1, sensor-1, 51.93504,     7.65209,      42.0,      test-property, test-uom, 04.05.2017 10:52:42, 1,                  0.5
+foi-1, sensor-1, 51.93504,     7.65209,      43.0,      test-property, test-uom, 04.05.2017 11:52:42, 2,                  0.55
+foi-1, sensor-1, 51.93504,     7.65209,      44.0,      test-property, test-uom, 04.05.2017 12:52:42, 3,                  0.25
+foi-1, sensor-1, 51.93504,     7.65209,      45.0,      test-property, test-uom, 04.05.2017 13:52:42, 4,                  0.35
+foi-1, sensor-1, 51.93504,     7.65209,      46.0,      test-property, test-uom, 04.05.2017 14:52:42, 5,                  0.85
+foi-1, sensor-1, 51.93504,     7.65209,      47.0,      test-property, test-uom, 04.05.2017 15:52:42, 6,                  0.95

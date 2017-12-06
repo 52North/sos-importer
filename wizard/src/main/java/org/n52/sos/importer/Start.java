@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,12 +33,20 @@ import org.n52.sos.importer.controller.Step1Controller;
 
 /**
  * Starts the SOS-Importer
+ *
  * @author Raimund Schn&uuml;rer
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Start {
-	
-	public static void main(String[] args) {
-		MainController.getInstance().setStepController(new Step1Controller());
-	}
+
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    //CHECKSTYLE:OFF
+    public static void main(String[] args) {
+        //CHECKSTYLE:ON
+        MainController.getInstance().setStepController(new Step1Controller());
+    }
 }

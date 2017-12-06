@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.n52.sensorweb</groupId>
         <artifactId>52n-sos-importer</artifactId>
-        <version>0.4.0</version>
+        <version>0.5.0-SNAPSHOT</version>
     </parent>
     <artifactId>52n-sos-importer-bindings</artifactId>
     <name>XMLbeans Module</name>
     <description>52North SOS Importer XML Bindings Module</description>
     <licenses>
-       <license>
-           <name>GNU General Public License v2.0 only</name>
-           <url>http://www.spdx.org/licenses/GPL-2.0</url>
-       </license>
+        <license>
+            <name>GNU General Public License v2.0 only</name>
+            <url>http://www.spdx.org/licenses/GPL-2.0</url>
+        </license>
     </licenses>
+    <properties>
+        <checkstyle.skip>true</checkstyle.skip>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -41,50 +45,52 @@
                 </configuration>
             </plugin>
             <plugin>
-				   <groupId>com.mycila</groupId>
-				   <artifactId>license-maven-plugin</artifactId>
-				   <inherited>false</inherited>
-				   <configuration>
-				      <header>src/main/resources/52n_license_header.txt</header>
-				      <aggregate>true</aggregate>
-				      <properties>
-				         <inceptionYear>${project.inceptionYear}</inceptionYear>
-				         <latestYearOfContribution>${currentYear}</latestYearOfContribution>
-						<!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
-				      </properties>
-				      <includes>
-				         <include>src/**/*.java</include>
-				         <include>src/**/*.xml</include>
-				         <include>src/**/*.xsd</include>
-				         <include>src/**/*.properties</include>
-				      </includes>
-				      <excludes>
-				         <exclude>**/logback.xml</exclude>
-				         <exclude>**/logback-test.xml</exclude>
-				         <exclude>**/src/test/resources/**</exclude>
-				         <exclude>**/*.txt</exclude>
-				         <exclude>**/*.odt</exclude>
-				         <exclude>**/THIRD-PARTY.properties</exclude>
-				         <exclude>**/NOTICE.template</exclude>
-				         <exclude>**/*.md</exclude>
-				         <exclude>**/RELEASE_NOTES</exclude>
-				         <exclude>**/LICENSE.gpl-2.0</exclude>
-				      </excludes>
-				   </configuration>
-				   <executions>
-				      <execution>
-				         <id>check-license</id>
-				         <phase>initialize</phase>
-				         <goals>
-				            <goal>check</goal>
-				         </goals>
-				      </execution>
-				   </executions>
-			</plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <header>src/main/resources/52n_license_header.txt</header>
+                    <aggregate>true</aggregate>
+                    <properties>
+                        <inceptionYear>${project.inceptionYear}</inceptionYear>
+                        <latestYearOfContribution>${currentYear}</latestYearOfContribution>
+                        <!-- <latestYearOfContribution>${currentYearDynamic}</latestYearOfContribution> -->
+                    </properties>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                        <include>src/**/*.xsd</include>
+                        <include>src/**/*.properties</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/logback.xml</exclude>
+                        <exclude>**/logback-test.xml</exclude>
+                        <exclude>**/src/test/resources/**</exclude>
+                        <exclude>**/*.txt</exclude>
+                        <exclude>**/*.odt</exclude>
+                        <exclude>**/THIRD-PARTY.properties</exclude>
+                        <exclude>**/NOTICE.template</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/RELEASE_NOTES</exclude>
+                        <exclude>**/LICENSE.gpl-2.0</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-license</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -92,6 +98,17 @@
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

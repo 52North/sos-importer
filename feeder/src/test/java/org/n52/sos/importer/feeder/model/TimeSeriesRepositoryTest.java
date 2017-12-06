@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,39 +28,53 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import java.util.Optional;
 
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
-import org.n52.sos.importer.feeder.model.requests.InsertObservation;
-import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
-
 
 public class TimeSeriesRepositoryTest {
-	
-	@Test
-	public void shouldReturnRegisterSensorForCorrectSensor() {
-		TimeSeriesRepository tsr = new TimeSeriesRepository(2);
-		String sensorURI = "test-sensor-1-uri";
-		ObservedProperty observedProperty1 = new ObservedProperty("test-obs-prop-1-name", "test-obs-prop-1-uri");
-		ObservedProperty observedProperty2 = new ObservedProperty("test-obs-prop-2-name", "test-obs-prop-2-uri");
-		UnitOfMeasurement uom = new UnitOfMeasurement("uom-code", "uom-uri");
-		Sensor sensor = new Sensor("test-sensor-1-name", sensorURI);
-		FeatureOfInterest foi = new FeatureOfInterest("foi-name", "foi-uri", null);
-		Object value = 1;
-		Timestamp timeStamp = new Timestamp().set(System.currentTimeMillis());
-		Offering off = new Offering("offering-name", "offering-uri");
-		String mvType = "mv-type";
-		InsertObservation io = new InsertObservation(sensor, foi, value, timeStamp, uom , observedProperty1, off, mvType);
-		InsertObservation io2 = new InsertObservation(sensor, foi, 2, timeStamp, uom, observedProperty2, off, mvType);
-		InsertObservation[] ios = {io, io2 };
-		tsr.addObservations(ios);
-		RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
-		assertThat(registerSensor.getSensorURI(), is(sensorURI));
-		assertThat(registerSensor.getObservedProperties(), hasSize(2));
-		assertThat(registerSensor.getObservedProperties(), Matchers.containsInAnyOrder(observedProperty1,observedProperty2));
-	}
+
+    @Test
+    public void shouldReturnRegisterSensorForCorrectSensor() {
+        TimeSeriesRepository tsr = new TimeSeriesRepository();
+        String sensorURI = "test-sensor-1-uri";
+        ObservedProperty observedProperty1 = new ObservedProperty("test-obs-prop-1-name", "test-obs-prop-1-uri");
+        ObservedProperty observedProperty2 = new ObservedProperty("test-obs-prop-2-name", "test-obs-prop-2-uri");
+        UnitOfMeasurement uom = new UnitOfMeasurement("uom-code", "uom-uri");
+        Sensor sensor = new Sensor("test-sensor-1-name", sensorURI);
+        FeatureOfInterest foi = new FeatureOfInterest("foi-name", "foi-uri", null);
+        Object value = 1;
+        Timestamp timeStamp = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());
+        Offering off = new Offering("offering-name", "offering-uri");
+        String mvType = "mv-type";
+        InsertObservation io =
+                new InsertObservation(sensor,
+                    foi,
+                    value,
+                    timeStamp,
+                    uom,
+                    observedProperty1,
+                    off,
+                    Optional.empty(),
+                    mvType);
+        InsertObservation io2 = new InsertObservation(sensor,
+            foi,
+            2,
+            timeStamp,
+            uom,
+            observedProperty2,
+            off,
+            Optional.empty(),
+            mvType);
+        InsertObservation[] ios = {io, io2 };
+        tsr.addObservations(ios);
+        RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
+        Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
+        Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
+        Assert.assertThat(registerSensor.getObservedProperties(),
+                Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
+    }
 
 }

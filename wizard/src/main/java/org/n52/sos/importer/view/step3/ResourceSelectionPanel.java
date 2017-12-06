@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -35,50 +35,60 @@ import org.n52.sos.importer.model.resources.Resource;
 import org.n52.sos.importer.model.table.TableElement;
 
 /**
- * assigns or unassigns columns to Feature of Interests, Observed 
+ * assigns or unassigns columns to Feature of Interests, Observed
  * Properties, Units of Measurement and Sensors
- * @author Raimund
  *
+ * @author Raimund
  */
 public class ResourceSelectionPanel extends SelectionPanel {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Resource resource;
+    private static final long serialVersionUID = 1L;
 
-	public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
-		super(containerPanel);
-		this.resource = resource;
-	}
+    private Resource resource;
 
-	@Override
-	protected void setSelection(String s) {	
-	}
+    /**
+     * <p>Constructor for ResourceSelectionPanel.</p>
+     *
+     * @param containerPanel a {@link javax.swing.JPanel} object.
+     * @param resource a {@link org.n52.sos.importer.model.resources.Resource} object.
+     */
+    public ResourceSelectionPanel(JPanel containerPanel, Resource resource) {
+        super(containerPanel);
+        this.resource = resource;
+    }
 
-	@Override
-	protected String getSelection() {
-		return "0";
-	}
+    @Override
+    protected void setSelection(String s) {
+    }
 
-	@Override
-	public void setDefaultSelection() {		
-	}
-	
-	@Override
-	public void assign(TableElement tableElement) {
-		resource.setTableElement(tableElement);
-		ModelStore.getInstance().add(resource);
-	}
+    @Override
+    protected String getSelection() {
+        return "0";
+    }
 
-	@Override
-	public void unAssign(TableElement tableElement) {
-		Resource resourceToRemove = null;
-		for (Resource r: resource.getList())
-			if (tableElement.equals(r.getTableElement())) {
-				resourceToRemove = r;
-				break;
-			}
-				
-		ModelStore.getInstance().remove(resourceToRemove);
-	}
+    protected Resource getResource() {
+        return resource;
+    }
+
+    @Override
+    public void setDefaultSelection() {
+    }
+
+    @Override
+    public void assign(TableElement tableElement) {
+        resource.setTableElement(tableElement);
+        ModelStore.getInstance().add(resource);
+    }
+
+    @Override
+    public void unAssign(TableElement tableElement) {
+        Resource resourceToRemove = null;
+        for (Resource r: resource.getList()) {
+            if (tableElement.equals(r.getTableElement())) {
+                resourceToRemove = r;
+                break;
+            }
+        }
+        ModelStore.getInstance().remove(resourceToRemove);
+    }
 }

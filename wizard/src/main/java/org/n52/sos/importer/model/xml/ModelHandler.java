@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,18 +29,40 @@
 package org.n52.sos.importer.model.xml;
 
 import org.n52.sos.importer.model.StepModel;
-import org.x52North.sensorweb.sos.importer.x04.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
+ * <p>ModelHandler interface.</p>
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public interface ModelHandler<T extends StepModel>{
-	/**
-	 * Handles the given StepModel.<br />
-	 * The given SosImportConfiguration is updated with the values from the 
-	 * given StepModel.
-	 * @param stepModel The StepModel to update the SosImportConfiguation
-	 * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
-	 */
-	public void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+public interface ModelHandler<T extends StepModel> {
+    /**
+     * Handles the given StepModel.<br>
+     * The given SosImportConfiguration is updated with the values from the
+     * given StepModel.
+     *
+     * @param stepModel The StepModel to update the SosImportConfiguation
+     * @param sosImportConf The SosImportConfiguration to be updated with the given StepModel
+     */
+    void handleModel(T stepModel, SosImportConfiguration sosImportConf);
+
+    /**
+     * @param number
+     *            the number of the column in the data file
+     * @param cols
+     *            all columns in the configuration
+     * @return the
+     *         <code>org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column</code>
+     *         with the given number
+     */
+    default Column getColumnForKey(final int number, final Column[] cols) {
+        for (final Column col : cols) {
+            if (col.getNumber() == number) {
+                return col;
+            }
+        }
+        return null;
+    }
 }

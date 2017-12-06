@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,8 +29,9 @@
 package org.n52.sos.importer.model;
 
 /**
- * @author e.h.juerrens@52north.org
+ * <p>StepModel interface.</p>
  *
+ * @author e.h.juerrens@52north.org
  */
 public interface StepModel {
 

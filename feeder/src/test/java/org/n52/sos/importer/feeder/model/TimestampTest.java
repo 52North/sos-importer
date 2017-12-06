@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,179 +28,201 @@
  */
 package org.n52.sos.importer.feeder.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TimestampTest {
 
-	private static final int millisPerDay = 1000 * 60 * 60 * 24;
+    // 12:01 UTZ in millis
+    private static final int UTC_12_01 = 43260000;
 
-	private Timestamp timestamp;
+    private static final int MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
-	private final int millisPerMinute = 1000 * 60;
+    private Timestamp timestamp;
 
-	private final int millisPerHour = millisPerMinute * 60;
+    private final int millisPerMinute = 1000 * 60;
 
-	@Before
-	public void createTimestamp() throws Exception
-	{
-		timestamp = new Timestamp();
-	}
+    private final int millisPerHour = millisPerMinute * 60;
 
-	@Test public void
-	shouldSetAllValuesViaSetLong() {
-		timestamp.set(86401000);
+    @Before
+    public void createTimestamp() throws Exception {
+        timestamp = new Timestamp();
+    }
 
-		final TimeZone tz = TimeZone.getDefault();
-		String sign = "-";
-		int rawOffset = tz.getRawOffset();
-		if (rawOffset>= 0) {
-			sign = "+";
-		}
-		rawOffset = Math.abs(rawOffset);
-		final int hours = rawOffset / millisPerHour;
-		final int minutes = (rawOffset - (hours * millisPerHour)) / millisPerMinute;
-		final String minutesString = minutes < 10? "0"+minutes : minutes < 60? Integer.toString(minutes) : "00";
-		final String hoursString = hours < 10? "0"+hours : Integer.toString(hours);
-		final int minutesTime = Integer.parseInt(minutesString)+1;
-		final String timeMinutesString = minutesTime < 10? "0"+minutesTime : Integer.toString(minutesTime);
-		final String asExpected = String.format("1970-01-02T%s:00:%s%s%s:%s",
-				hoursString,
-				timeMinutesString,
-				sign, hoursString, minutesString);
+    @Test
+    public void shouldSetAllValuesViaSetLong() {
+        shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getDefault());
+    }
 
-		assertThat(timestamp.toString(),is(asExpected));
-	}
+    /*
+     * Test for Issue #63: Cannot build importer when host in timezone MST (-07:00)
+     *
+     * https://github.com/52North/sos-importer/issues/63
+     */
+    @Test
+    public void shouldSetAllValuesViaSetLongUsingTimeZoneMST() {
+        timestamp.setTimezone((byte) -7);
+        shouldSetAllValuesViaSetLongUsingTimeZone(TimeZone.getTimeZone("MST"));
+    }
 
-	@Test public void
-	shouldCreateDateFromTimestamp() {
-		final long time = getCurrentTimeMillisTimestampCompatible();
-		final Date dateFromTimestamp = timestamp.set(time).toDate();
-		final Date dateFromSystem = new Date(time);
-		assertThat(dateFromTimestamp.compareTo(dateFromSystem), is(0));
+    private void shouldSetAllValuesViaSetLongUsingTimeZone(final TimeZone tz) {
+        // given
+        String sign = "-";
+        int rawOffset = tz.getRawOffset();
+        if (rawOffset >= 0) {
+            sign = "+";
+        }
+        final int offsetInHours = rawOffset / millisPerHour;
+        final int hours = 12 + offsetInHours;
+        final int minutes = (rawOffset - (offsetInHours * millisPerHour)) / millisPerMinute;
+        final String minutesString = minutes < 10 ? "0" + minutes : minutes < 60 ? Integer.toString(minutes) : "00";
+        final String DECIMAL = "%02d";
+        final String hoursString = String.format(DECIMAL, hours);
+        // why minutes+1?
+        final int minutesTime = Integer.parseInt(minutesString) + 1;
+        final String timeMinutesString = String.format(DECIMAL, minutesTime);
+        final String offsetInHoursString = String.format(DECIMAL, Math.abs(offsetInHours));
+        final String asExpected = String.format("1970-01-01T%s:%s:00.000%s%s:%s",
+                hoursString,
+                timeMinutesString,
+                sign,
+                offsetInHoursString,
+                minutesString);
 
-	}
+        // when
+        timestamp.ofUnixTimeMillis(UTC_12_01);
+        ZonedDateTime a = ZonedDateTime.parse(timestamp.toISO8601String());
+        ZonedDateTime b = ZonedDateTime.parse(asExpected);
 
-	@Test public final void
-	shouldGetAdditionalTimestampValuesFromFileName()
-			throws ParseException {
-		final String fileName = "test-sensor_20140615.csv";
-		final Timestamp ts = new Timestamp();
+        // then
+        Assert.assertThat(a.isEqual(b), CoreMatchers.is(true));
+    }
 
-		ts.enrich(fileName,"test-sensor_(\\d{8})\\.csv","yyyyMMdd");
+    @Test
+    public void shouldCreateInstantFromTimestamp() {
+        final long time = UTC_12_01;
+        final Instant instantFromTimestamp = timestamp.ofUnixTimeMillis(time).toInstant();
+        final Instant instantFromSystem = Instant.ofEpochMilli(time);
 
-		assertThat(ts.toString(), is("2014-06-15"));
-	}
+        Assert.assertThat(instantFromTimestamp.compareTo(instantFromSystem), CoreMatchers.is(0));
+    }
 
-	@Test public final void
-	shouldReturnSameValueIfParametersAreInvalid()
-			throws ParseException {
-		Timestamp ts = new Timestamp();
-		ts.enrich(null, null, null);
-		assertThat(ts.toString(), is(""));
+    @Test
+    public final void shouldGetAdditionalTimestampValuesFromFileName()
+            throws ParseException {
+        final String fileName = "test-sensor_20140615.csv";
+        final Timestamp ts = new Timestamp();
 
-		ts = new Timestamp();
-		ts.enrich("", null, null);
-		assertThat(ts.toString(), is(""));
+        ts.enrich(fileName, "test-sensor_(\\d{8})\\.csv", "yyyyMMdd");
 
-		ts = new Timestamp();
-		ts.enrich("-", null, null);
-		assertThat(ts.toString(), is(""));
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is("2014-06-15"));
+    }
 
-		ts = new Timestamp();
-		ts.enrich("-", "", null);
-		assertThat(ts.toString(), is(""));
+    @Test
+    public final void shouldReturnSameValueIfParametersAreInvalid()
+            throws ParseException {
+        Timestamp ts = new Timestamp();
+        ts.enrich(null, null, null);
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
 
-		ts = new Timestamp();
-		ts.enrich("-", "-", null);
-		assertThat(ts.toString(), is(""));
+        ts = new Timestamp();
+        ts.enrich("", null, null);
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
 
-		ts = new Timestamp();
-		ts.enrich("-", "-", "");
-		assertThat(ts.toString(), is(""));
-	}
+        ts = new Timestamp();
+        ts.enrich("-", null, null);
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
 
-	@Test public final void
-	shouldEnrichWithLastModificationDate() {
-		final long lastModified = getCurrentTimeMillisTimestampCompatible();
-		timestamp.enrich(lastModified, -1);
-		final Timestamp expected = new Timestamp().set(lastModified);
-		assertThat(timestamp.getYear(), is(expected.getYear()));
-		assertThat(timestamp.getMonth(), is(expected.getMonth()));
-		assertThat(timestamp.getDay(), is(expected.getDay()));
-	}
+        ts = new Timestamp();
+        ts.enrich("-", "", null);
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
 
-	@Test public final void
-	shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
-		final long lastModified = getCurrentTimeMillisTimestampCompatible();
-		final int lastModifiedDelta = 2;
-		timestamp.enrich(lastModified, lastModifiedDelta);
-		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
-		final Timestamp expected = new Timestamp().set(expectedMillis);
-		assertThat(timestamp.getYear(), is(expected.getYear()));
-		assertThat(timestamp.getMonth(), is(expected.getMonth()));
-		assertThat(timestamp.getDay(), is(expected.getDay()));
-	}
+        ts = new Timestamp();
+        ts.enrich("-", "-", null);
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
 
-	@Test public final void
-	shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
-		final long lastModified = 0;
-		final int lastModifiedDelta = 2;
-		final long expectedMillis = lastModified - (lastModifiedDelta * millisPerDay);
-		timestamp.enrich(lastModified, lastModifiedDelta);
-		final Timestamp expected = new Timestamp().set(expectedMillis);
-		assertThat(timestamp.getYear(), is(expected.getYear()));
-		assertThat(timestamp.getMonth(), is(expected.getMonth()));
-		assertThat(timestamp.getDay(), is(expected.getDay()));
-	}
+        ts = new Timestamp();
+        ts.enrich("-", "-", "");
+        Assert.assertThat(ts.toISO8601String(), CoreMatchers.is(""));
+    }
 
-	@Test public final void
-	shouldEnrichDateInformationFromOtherTimeStamp() {
-		final Timestamp other = new Timestamp().set(getCurrentTimeMillisTimestampCompatible());
-		timestamp.set(0).enrich(other);
+    @Test
+    public final void shouldEnrichWithLastModificationDate() {
+        final long lastModified = UTC_12_01;
+        timestamp.adjustBy(lastModified, -1);
+        final Timestamp expected = new Timestamp().ofUnixTimeMillis(lastModified);
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(expected.getYear()));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(expected.getMonth()));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(expected.getDay()));
+    }
 
-		assertThat(timestamp.getYear(), is(other.getYear()));
-		assertThat(timestamp.getMonth(), is(other.getMonth()));
-		assertThat(timestamp.getDay(), is(other.getDay()));
-	}
+    @Test
+    public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDelta() {
+        final long lastModified = UTC_12_01;
+        final int lastModifiedDelta = 2;
+        timestamp.adjustBy(lastModified, lastModifiedDelta);
+        final long expectedMillis = lastModified - (lastModifiedDelta * MILLIS_PER_DAY);
+        final Timestamp expected = new Timestamp().ofUnixTimeMillis(expectedMillis);
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(expected.getYear()));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(expected.getMonth()));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(expected.getDay()));
+    }
 
-	@Test public void
-	shouldAddDayDelta() {
-		timestamp.set(0).applyDayDelta(2);
+    @Test
+    public final void shouldEnrichWithLastModificationDateWithLastModifiedDayDeltaWithYearChange() {
+        final long lastModified = 0;
+        final int lastModifiedDelta = 2;
+        final long expectedMillis = lastModified - (lastModifiedDelta * MILLIS_PER_DAY);
+        timestamp.adjustBy(lastModified, lastModifiedDelta);
+        final Timestamp expected = new Timestamp().ofUnixTimeMillis(expectedMillis);
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(expected.getYear()));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(expected.getMonth()));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(expected.getDay()));
+    }
 
-		assertThat(timestamp.getYear(), is((short)1970));
-		assertThat(timestamp.getMonth(), is((byte)1));
-		assertThat(timestamp.getDay(), is((byte)3));
+    @Test
+    public final void shouldEnrichDateInformationFromOtherTimeStamp() {
+        final Timestamp other = new Timestamp().ofUnixTimeMillis(UTC_12_01);
+        timestamp.ofUnixTimeMillis(0).enrich(other);
 
-		timestamp.set(0).applyDayDelta(-2);
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(other.getYear()));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(other.getMonth()));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(other.getDay()));
+    }
 
-		assertThat(timestamp.getYear(), is((short)1969));
-		assertThat(timestamp.getMonth(), is((byte)12));
-		assertThat(timestamp.getDay(), is((byte)30));
-	}
+    @Test
+    public void shouldAddDayDelta() {
+        timestamp.ofUnixTimeMillis(0).applyDayDelta(2);
 
-	@Test public void
-	shouldWorkWithoutTimezonesAddDayDelta() throws ParseException {
-		timestamp.enrich(new Timestamp().enrich("1970-01-01", "(\\d{4}-\\d{2}-\\d{2})", "yyyy-MM-dd").applyDayDelta(1));
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(1970));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(1));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(3));
 
-		assertThat(timestamp.getYear(), is((short)1970));
-		assertThat(timestamp.getMonth(), is((byte)1));
-		assertThat(timestamp.getDay(), is((byte)2));
-		assertThat(timestamp.getSeconds(), is(Byte.MIN_VALUE));
-		assertThat(timestamp.getMinute(), is(Byte.MIN_VALUE));
-		assertThat(timestamp.getHour(), is(Byte.MIN_VALUE));
-		assertThat(timestamp.getTimezone(), is(Byte.MIN_VALUE));
-	}
+        timestamp.ofUnixTimeMillis(0).applyDayDelta(-2);
 
-	private long getCurrentTimeMillisTimestampCompatible() {
-		// Timestamp is not storing milliseconds now => remove them
-		return (System.currentTimeMillis() / 1000) * 1000;
-	}
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(1969));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(12));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is(30));
+    }
+
+    @Test
+    public void shouldWorkWithoutTimezonesAddDayDelta() throws ParseException {
+        timestamp.enrich(new Timestamp().enrich("1970-01-01", "(\\d{4}-\\d{2}-\\d{2})", "yyyy-MM-dd").applyDayDelta(1));
+
+        Assert.assertThat(timestamp.getYear(), CoreMatchers.is(1970));
+        Assert.assertThat(timestamp.getMonth(), CoreMatchers.is(1));
+        Assert.assertThat(timestamp.getDay(), CoreMatchers.is( 2));
+        Assert.assertThat(timestamp.getSeconds(), CoreMatchers.is(Integer.MIN_VALUE));
+        Assert.assertThat(timestamp.getMinute(), CoreMatchers.is(Integer.MIN_VALUE));
+        Assert.assertThat(timestamp.getHour(), CoreMatchers.is(Integer.MIN_VALUE));
+        Assert.assertThat(timestamp.getTimezone(), CoreMatchers.is(Integer.MIN_VALUE));
+    }
+
 }

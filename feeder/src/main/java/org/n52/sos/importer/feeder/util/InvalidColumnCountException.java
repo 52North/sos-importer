@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,39 +26,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.view.utils;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
-import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.n52.sos.importer.feeder.util;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>InvalidColumnCountException class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public class n52Utils {
-	
-	private static final Logger logger = LoggerFactory.getLogger(n52Utils.class);
+public class InvalidColumnCountException extends IllegalArgumentException {
 
-	public static Double parseDouble(final String text){
-		final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+    private static final long serialVersionUID = 1L;
 
-		Number n;
-		final DecimalFormat formatter = new DecimalFormat();
-		formatter.setDecimalFormatSymbols(symbols);
-		try {
-			n = formatter.parse(text);
-			return n.doubleValue();
-		} catch (final ParseException e) {
-			logger.error(String.format("Exception thrown: %s",
-						e.getMessage()),
-					e);
-		}
-		return null;
-	}
+    /**
+     * <p>Constructor for InvalidColumnCountException.</p>
+     *
+     * @param errorMsg a {@link java.lang.String} object.
+     */
+    public InvalidColumnCountException(final String errorMsg) {
+        super(errorMsg);
+    }
 
 }

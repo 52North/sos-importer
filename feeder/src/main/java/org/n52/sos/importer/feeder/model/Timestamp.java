@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,344 +29,536 @@
 package org.n52.sos.importer.feeder.model;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Timestamp class.</p>
  *
- * TODO switch to Joda time or java 8 to get time zone problems fixed
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class Timestamp {
 
-	private static final int millisPerHour = 1000 * 60 * 60;
-	private static final int millisPerDay = millisPerHour * 24;
-	private short year = Short.MIN_VALUE;
-	private byte month = Byte.MIN_VALUE;
-	private byte day = Byte.MIN_VALUE;
-	private byte hour = Byte.MIN_VALUE;
-	private byte minute = Byte.MIN_VALUE;
-	private byte seconds = Byte.MIN_VALUE;
-	private byte timezone = Byte.MIN_VALUE;
+    private static final String UTC = "UTC";
+    private static final String SINGLE_ZERO = "0";
+    private static final String DOUBLE_ZERO = SINGLE_ZERO + SINGLE_ZERO;
+    private static final String PARAMETER_TIME_STAMP_IS_MANDATORY = "parameter timeStamp is mandatory.";
+    private static final String SS = "ss";
+    private static final String MM = "mm:";
+    private static final long MILLIS_PER_HOUR = 1000 * 60 * 60;
+    private static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24;
+    private int year = Integer.MIN_VALUE;
+    private int month = Integer.MIN_VALUE;
+    private int day = Integer.MIN_VALUE;
+    private int hour = Integer.MIN_VALUE;
+    private int minute = Integer.MIN_VALUE;
+    private int seconds = Integer.MIN_VALUE;
+    private int millis = Integer.MIN_VALUE;
+    private int timezone = Integer.MIN_VALUE;
 
-	@Override
-	public String toString() {
-		// yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
-		final StringBuffer ts = new StringBuffer(31);
-		if (year != Short.MIN_VALUE) {
-			ts.append(year);
-			if (month != Byte.MIN_VALUE) {
-				ts.append("-");
-			}
-		}
-		if (month != Byte.MIN_VALUE) {
-			ts.append(month<10?"0"+month:month);
-			if (day != Byte.MIN_VALUE) {
-				ts.append("-");
-			}
-		}
-		if (day != Byte.MIN_VALUE) {
-			ts.append(day<10?"0"+day:day);
-		}
-		if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
-				&& (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-			ts.append("T");
-		}
-		if (hour != Byte.MIN_VALUE) {
-			ts.append(hour<10?"0"+hour:hour);
-			if (minute != Byte.MIN_VALUE) {
-				ts.append(":");
-			}
-		}
-		if (minute != Byte.MIN_VALUE) {
-			ts.append( (minute<10?"0"+minute:minute)+":");
-		} else if (hour != Byte.MIN_VALUE) {
-			ts.append("00:");
-		}
-		if (seconds != Byte.MIN_VALUE ) {
-			ts.append(seconds<10?"0"+seconds:seconds);
-		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
-			ts.append("00");
-		}
-		if (timezone != Byte.MIN_VALUE &&
-				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-			ts.append(convertTimeZone(timezone));
-		}
-		return ts.toString();
-	}
+    public Timestamp() {
+        // do nothing
+    }
 
-	private String convertTimeZone(final int timeZone) {
-		if (timeZone >= 0) {
-			if (timeZone >= 10) {
-				return "+" + timeZone + ":00";
-			} else {
-				return "+0" + timeZone + ":00";
-			}
-		} else {
-			if (timeZone <= -10) {
-				return timeZone + ":00";
-			} else {
-				return "-0" + Math.abs(timeZone) + ":00";
-			}
-		}
-	}
+    /**
+     * Creates a Timestamp from a ISO8601String
+     * @param ISO8601String The Timestamp as String in ISO8601 pattern.
+     */
+    public Timestamp(String ISO8601String) {
+        // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
+        year = Integer.parseInt(
+                ISO8601String.substring(0, 3)
+                );
+        month = Integer.parseInt(
+                ISO8601String.substring(5, 6)
+                );
+        day = Integer.parseInt(
+                ISO8601String.substring(8, 9)
+                );
+        hour = Integer.parseInt(
+                ISO8601String.substring(11, 12)
+                );
+        minute = Integer.parseInt(
+                ISO8601String.substring(14, 15)
+                );
+        seconds = Integer.parseInt(
+                ISO8601String.substring(17, 18)
+                );
+    }
 
-	public Timestamp set(final long dateToSet) {
-		final Calendar cal = new GregorianCalendar();
-		if (timezone != Byte.MIN_VALUE) {
-			cal.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs(timezone*millisPerHour)[0]));
-		}
-		cal.setTimeInMillis(dateToSet);
-		year = (short) cal.get(Calendar.YEAR);
-		month = (byte) (cal.get(Calendar.MONTH)+1);
-		day = (byte) cal.get(Calendar.DAY_OF_MONTH);
-		hour = (byte) cal.get(Calendar.HOUR_OF_DAY);
-		minute = (byte) cal.get(Calendar.MINUTE);
-		seconds = (byte) cal.get(Calendar.SECOND);
-		timezone = (byte) (cal.getTimeZone().getOffset(dateToSet)/millisPerHour);
-		return this;
-	}
+    @Override
+    public String toString() {
+        return toISO8601String();
+    }
 
-	/**
-	 * @param timestampInformation the filename that might contain additional information
-	 * 			for the {@link Timestamp}
-	 * @param regExToExtractFileInfo
-	 * @param dateInfoPattern
-	 * @throws ParseException in the case the filename could not be parsed using
-	 * 			the Datafile attributes "regExDateInfoInFileName" and
-	 * 			"DateInfoPattern".
-	 * @throws PatternSyntaxException in the case of not being able to parse the
-	 * 			value of the Datafile attribute "regExDateInfoInFileName".
-	 * @throws IndexOutOfBoundsException in the case of no group is found using
-	 * 			the value of the Datafile attribute "regExDateInfoInFileName".
-	 */
-	public Timestamp enrich(
-			final String timestampInformation,
-			final String regExToExtractFileInfo,
-			final String dateInfoPattern)
-					throws ParseException {
-		if (timestampInformation == null || timestampInformation.isEmpty() ||
-				regExToExtractFileInfo == null || regExToExtractFileInfo.isEmpty() ||
-				dateInfoPattern == null || dateInfoPattern.isEmpty()) {
-			return this;
-		}
-		final Pattern pattern = Pattern.compile(regExToExtractFileInfo);
-		final Matcher matcher = pattern.matcher(timestampInformation);
-		if (matcher.matches() && matcher.groupCount() == 1) {
-			final SimpleDateFormat sdf = new SimpleDateFormat(dateInfoPattern);
-			final String dateInformation = matcher.group(1);
-			final GregorianCalendar cal = new GregorianCalendar();
-			cal.setTime(sdf.parse(dateInformation));
+    public String toISO8601String() {
+        // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
+        final StringBuilder ts = new StringBuilder(31);
+        if (year != Integer.MIN_VALUE) {
+            ts.append(year);
+            if (month != Integer.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (month != Integer.MIN_VALUE) {
+            ts.append(month < 10 ? SINGLE_ZERO + month : month);
+            if (day != Integer.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (day != Integer.MIN_VALUE) {
+            ts.append(day < 10 ? SINGLE_ZERO + day : day);
+        }
+        if ((year != Integer.MIN_VALUE || month != Integer.MIN_VALUE || day != Integer.MIN_VALUE)
+                && (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
+            ts.append("T");
+        }
+        if (hour != Integer.MIN_VALUE) {
+            ts.append(hour < 10 ? SINGLE_ZERO + hour : hour);
+            if (minute != Integer.MIN_VALUE) {
+                ts.append(":");
+            }
+        }
+        if (minute != Integer.MIN_VALUE) {
+            ts.append(minute < 10 ? SINGLE_ZERO + minute : minute).append(":");
+        } else if (hour != Integer.MIN_VALUE) {
+            ts.append(DOUBLE_ZERO);
+            ts.append(":");
+        }
+        if (seconds != Integer.MIN_VALUE) {
+            ts.append(seconds < 10 ? SINGLE_ZERO + seconds : seconds);
+        } else if (minute != Integer.MIN_VALUE && hour != Integer.MIN_VALUE) {
+            ts.append(DOUBLE_ZERO);
+        }
+        if (millis != Integer.MIN_VALUE) {
+            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis));
+        }
+        if (timezone != Integer.MIN_VALUE &&
+                (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
+            if (timezone >= 0) {
+                if (timezone >= 10) {
+                    ts.append("+").append(timezone).append(":").append(DOUBLE_ZERO);
+                } else {
+                    ts.append("+0").append(timezone).append(":").append(DOUBLE_ZERO);
+                }
+            } else {
+                if (timezone <= -10) {
+                    ts.append(timezone).append(":").append(DOUBLE_ZERO);
+                } else {
+                    ts.append("-0").append(Math.abs(timezone)).append(":").append(DOUBLE_ZERO);
+                }
+            }
+        }
+        return ts.toString();
+    }
 
-			if (dateInfoPattern.indexOf("y") > -1) {
-				setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
-			}
-			if (dateInfoPattern.indexOf("M") > -1) {
-				setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
-			}
-			if (dateInfoPattern.indexOf("d") > -1) {
-				setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
-			}
-			if (dateInfoPattern.indexOf("H") > -1) {
-				setHour(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.HOUR_OF_DAY))));
-			}
-			if (dateInfoPattern.indexOf("m") > -1) {
-				setMinute(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MINUTE))));
-			}
-			if (dateInfoPattern.indexOf("s") > -1) {
-				setSeconds(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.SECOND))));
-			}
-			if (dateInfoPattern.indexOf("z") > -1 || dateInfoPattern.indexOf("Z") > -1) {
-				setTimezone(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.ZONE_OFFSET))));
-			}
-		}
-		return this;
-	}
+    /**
+     * <p>ofUnixTimeMillis</p>
+     * @param unixTimeMillis Milliseconds since 1970-01-01T00:00:00Z.
+     *
+     * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     */
+    public Timestamp ofUnixTimeMillis(final long unixTimeMillis) {
+        OffsetDateTime timestamp = OffsetDateTime.ofInstant(Instant.ofEpochMilli(unixTimeMillis), ZoneId.of(UTC));
+        year = timestamp.getYear();
+        month = timestamp.getMonthValue();
+        day = timestamp.getDayOfMonth();
+        hour = timestamp.getHour();
+        minute = timestamp.getMinute();
+        seconds = timestamp.getSecond();
+        millis = timestamp.getNano() / 1000;
+        timezone = timestamp.getOffset().getTotalSeconds() / 3600;
+        return this;
+    }
 
-	protected Date toDate() {
-		final String datePattern = getDatePattern();
-		try {
-			return new SimpleDateFormat(datePattern).parse(toString());
-		} catch (final ParseException e) {
-			throw new RuntimeException("Could not execute toDate()",e);
-		}
-	}
+    /**
+     * <p>enrich with values from another timestamp.</p>
+     *
+     * @param other a {@link Timestamp} object.
+     * @return a {@link Timestamp} object.
+     */
+    public Timestamp enrich(final Timestamp other) {
+        if (other != null) {
+            if (other.getYear() > Integer.MIN_VALUE) {
+                setYear(other.getYear());
+            }
+            if (other.getMonth() > Integer.MIN_VALUE) {
+                setMonth(other.getMonth());
+            }
+            if (other.getDay() > Integer.MIN_VALUE) {
+                setDay(other.getDay());
+            }
+            if (other.getHour() > Integer.MIN_VALUE) {
+                setHour(other.getHour());
+            }
+            if (other.getMinute() > Integer.MIN_VALUE) {
+                setMinute(other.getMinute());
+            }
+            if (other.getSeconds() > Integer.MIN_VALUE) {
+                setSeconds(other.getSeconds());
+            }
+            if (other.getTimezone() > Integer.MIN_VALUE) {
+                setTimezone(other.getTimezone());
+            }
+            if (other.getMillis() > Integer.MIN_VALUE) {
+                setMillis(other.getMillis());
+            }
+        }
+        return this;
+    }
 
-	private String getDatePattern() {
-		// "yyyy-MM-dd'T'HH:mm:ssX";
-		final StringBuffer ts = new StringBuffer(31);
-		if (year != Short.MIN_VALUE) {
-			ts.append("yyyy");
-			if (month != Byte.MIN_VALUE) {
-				ts.append("-");
-			}
-		}
-		if (month != Byte.MIN_VALUE) {
-			ts.append("MM");
-			if (day != Byte.MIN_VALUE) {
-				ts.append("-");
-			}
-		}
-		if (day != Byte.MIN_VALUE) {
-			ts.append("dd");
-		}
-		if ( (year != Short.MIN_VALUE || month != Byte.MIN_VALUE || day != Byte.MIN_VALUE )
-				&& (hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-			ts.append("'T'");
-		}
-		if (hour != Byte.MIN_VALUE) {
-			ts.append("HH");
-			if (minute != Byte.MIN_VALUE) {
-				ts.append(":");
-			}
-		}
-		if (minute != Byte.MIN_VALUE) {
-			ts.append("mm:");
-		} else if (hour != Byte.MIN_VALUE) {
-			ts.append("mm:");
-		}
-		if (seconds != Byte.MIN_VALUE ) {
-			ts.append("ss");
-		} else if (minute != Byte.MIN_VALUE && hour != Byte.MIN_VALUE) {
-			ts.append("ss");
-		}
-		if (timezone != Byte.MIN_VALUE &&
-				(hour != Byte.MIN_VALUE || minute != Byte.MIN_VALUE || seconds != Byte.MIN_VALUE)) {
-			ts.append("X");
-		}
-		final String datePattern = ts.toString();
-		if (datePattern.isEmpty()) {
-			return "yyyy-MM-dd'T'HH:mm:ssX";
-		}
-		return datePattern;
-	}
+    /**
+     * <p>enrich.</p>
+     * @param timestampInformation the filename that might contain additional information
+     *          for the {@link org.n52.sos.importer.feeder.model.Timestamp}
+     * @param regExToExtractFileInfo a {@link java.lang.String} object.
+     * @param dateInfoPattern a {@link java.lang.String} object.
+     * @throws java.text.ParseException in the case the filename could not be parsed using
+     *          the Datafile attributes "regExDateInfoInFileName" and
+     *          "DateInfoPattern".
+     * @throws PatternSyntaxException in the case of not being able to parse the
+     *          value of the Datafile attribute "regExDateInfoInFileName".
+     * @throws java.lang.IndexOutOfBoundsException in the case of no group is found using
+     *          the value of the Datafile attribute "regExDateInfoInFileName".
+     * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     */
+    public Timestamp enrich(
+            final String timestampInformation,
+            final String regExToExtractFileInfo,
+            final String dateInfoPattern)
+                    throws ParseException {
+        if (timestampInformation == null || timestampInformation.isEmpty() ||
+                regExToExtractFileInfo == null || regExToExtractFileInfo.isEmpty() ||
+                dateInfoPattern == null || dateInfoPattern.isEmpty()) {
+            return this;
+        }
+        final Pattern pattern = Pattern.compile(regExToExtractFileInfo);
+        final Matcher matcher = pattern.matcher(timestampInformation);
+        if (matcher.matches() && matcher.groupCount() == 1) {
+            final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateInfoPattern);
+            final String dateInformation = matcher.group(1);
 
-	public boolean after(final Timestamp timeStamp) {
-		if (timeStamp == null) {
-			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-		}
-		return toDate().after(timeStamp.toDate());
-	}
+            TemporalAccessor ta = dtf.parse(dateInformation);
 
-	public boolean before(final Timestamp timeStamp) {
-		if (timeStamp == null) {
-			throw new IllegalArgumentException("parameter timeStamp is mandatory.");
-		}
-		return toDate().before(timeStamp.toDate());
-	}
+            if (dateInfoPattern.contains("y")) {
+                setYear(ta.get(ChronoField.YEAR));
+            }
+            if (dateInfoPattern.contains("M")) {
+                setMonth(ta.get(ChronoField.MONTH_OF_YEAR));
+            }
+            if (dateInfoPattern.contains("d")) {
+                setDay(ta.get(ChronoField.DAY_OF_MONTH));
+            }
+            if (dateInfoPattern.contains("H")) {
+                setHour(ta.get(ChronoField.HOUR_OF_DAY));
+            }
+            if (dateInfoPattern.contains("m")) {
+                setMinute(ta.get(ChronoField.MINUTE_OF_HOUR));
+            }
+            if (dateInfoPattern.contains("s")) {
+                setSeconds(ta.get(ChronoField.SECOND_OF_MINUTE));
+            }
+            if (dateInfoPattern.contains("S")) {
+                setMillis(ta.get(ChronoField.MILLI_OF_SECOND));
+            }
+            if (dateInfoPattern.contains("Z")) {
+                setTimezone(ta.get(ChronoField.OFFSET_SECONDS) / 3600);
+            }
+        }
+        return this;
+    }
 
-	/**
-	 * @param lastModified long
-	 * @param lastModifiedDelta -1, if it should be ignored, else > 0.
-	 */
-	public Timestamp enrich(long lastModified,
-			final int lastModifiedDelta) {
-		final GregorianCalendar cal = new GregorianCalendar();
-		if (lastModifiedDelta > 0) {
-			lastModified = lastModified - (lastModifiedDelta * millisPerDay);
-		}
-		cal.setTime(new Date(lastModified));
-		setYear(Short.parseShort(Integer.toString(cal.get(GregorianCalendar.YEAR))));
-		setMonth(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.MONTH)+1)));
-		setDay(Byte.parseByte(Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH))));
-		return this;
-	}
+    /**
+     * <p>enrich.</p>
+     * @param lastModified long
+     * @param lastModifiedDeltaDays -1, if it should be ignored, else &gt; 0.
+     * @return a {@link Timestamp} object.
+     */
+    public Timestamp adjustBy(
+            final long lastModified,
+            final int lastModifiedDeltaDays) {
+        long lastModifiedTmp = lastModified;
+        if (lastModifiedDeltaDays > 0) {
+            lastModifiedTmp = lastModified - (lastModifiedDeltaDays * MILLIS_PER_DAY);
+        }
+        ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedTmp), ZoneId.of(UTC));
+        setYear(zdt.get(ChronoField.YEAR));
+        setMonth(zdt.get(ChronoField.MONTH_OF_YEAR));
+        setDay(zdt.get(ChronoField.DAY_OF_MONTH));
+        return this;
+    }
 
-	public Timestamp applyDayDelta(final int daysToAdd) {
-		final Timestamp tmp = new Timestamp().set(toDate().getTime() + (daysToAdd * millisPerDay));
-		setYear(tmp.getYear());
-		setMonth(tmp.getMonth());
-		setDay(tmp.getDay());
-		return this;
-	}
+    /**
+     * @return Instant of the current {@link Timestamp} object.
+     */
+    protected Instant toInstant() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(getDatePattern());
+        String iso8601String = toISO8601String();
+        try {
+            return dtf.parse(iso8601String, ZonedDateTime::from).toInstant();
+        } catch (DateTimeException e) {
+            //
+        }
+        try {
+            return dtf.parse(iso8601String, OffsetDateTime::from).toInstant();
+        } catch (DateTimeException e) {
+            //
+        }
+        try {
+            return dtf.parse(iso8601String, LocalDateTime::from).toInstant(ZoneOffset.of(UTC));
+        } catch (DateTimeException e) {
+            //
+        }
+        try {
+            return Instant.ofEpochMilli(dtf.parse(iso8601String, LocalDate::from).toEpochDay() * MILLIS_PER_DAY);
+        } catch (DateTimeException e) {
+            //
+        }
+        return Instant.ofEpochMilli(0);
+    }
 
-	public Timestamp enrich(final Timestamp other) {
-		if (other != null) {
-			if (other.getYear() > Short.MIN_VALUE) {
-				setYear(other.getYear());
-			}
-			if (other.getMonth() > Byte.MIN_VALUE) {
-				setMonth(other.getMonth());
-			}
-			if (other.getDay() > Byte.MIN_VALUE) {
-				setDay(other.getDay());
-			}
-			if (other.getHour() > Byte.MIN_VALUE) {
-				setHour(other.getHour());
-			}
-			if (other.getMinute() > Byte.MIN_VALUE) {
-				setMinute(other.getMinute());
-			}
-			if (other.getSeconds() > Byte.MIN_VALUE) {
-				setSeconds(other.getSeconds());
-			}
-			if (other.getTimezone() > Byte.MIN_VALUE) {
-				setTimezone(other.getTimezone());
-			}
-		}
-		return this;
-	}
+    private String getDatePattern() {
+        // "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        final StringBuffer ts = new StringBuffer(31);
+        if (year != Integer.MIN_VALUE) {
+            ts.append("yyyy");
+            if (month != Integer.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (month != Integer.MIN_VALUE) {
+            ts.append("MM");
+            if (day != Integer.MIN_VALUE) {
+                ts.append("-");
+            }
+        }
+        if (day != Integer.MIN_VALUE) {
+            ts.append("dd");
+        }
+        if ((year != Integer.MIN_VALUE || month != Integer.MIN_VALUE || day != Integer.MIN_VALUE)
+                && (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
+            ts.append("'T'");
+        }
+        if (hour != Integer.MIN_VALUE) {
+            ts.append("HH");
+            if (minute != Integer.MIN_VALUE) {
+                ts.append(":");
+            }
+        }
+        if (minute != Integer.MIN_VALUE) {
+            ts.append(MM);
+        } else if (hour != Integer.MIN_VALUE) {
+            ts.append(MM);
+        }
+        if (seconds != Integer.MIN_VALUE) {
+            ts.append(SS);
+        } else if (minute != Integer.MIN_VALUE && hour != Integer.MIN_VALUE) {
+            ts.append(SS);
+        }
+        if (millis != Integer.MIN_VALUE) {
+            ts.append(".SSS");
+        }
+        if (timezone != Integer.MIN_VALUE &&
+                (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
+            ts.append("XXX");
+        }
+        final String datePattern = ts.toString();
+        if (datePattern.isEmpty()) {
+            return "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+        }
+        return datePattern;
+    }
 
-	public void setYear(final short year) {
-		this.year = year;
-	}
+    /**
+     * <p>after.</p>
+     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     * @return a boolean.
+     */
+    public boolean isAfter(final Timestamp timeStamp) {
+        if (timeStamp == null) {
+            throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
+        }
+        return toInstant().isAfter(timeStamp.toInstant());
+    }
 
-	public void setMonth(final byte month) {
-		this.month = month;
-	}
+    /**
+     * <p>before.</p>
+     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
+     * @return a boolean.
+     */
+    public boolean isBefore(final Timestamp timeStamp) {
+        if (timeStamp == null) {
+            throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
+        }
+        return toInstant().isBefore(timeStamp.toInstant());
+    }
 
-	public void setDay(final byte day) {
-		this.day = day;
-	}
+    /**
+     * <p>applyDayDelta.</p>
+     * @param daysToAdd a int.
+     * @return a {@link Timestamp} object.
+     */
+    public Timestamp applyDayDelta(final int daysToAdd) {
+        TemporalAccessor ta = DateTimeFormatter.ofPattern(getDatePattern()).parse(toISO8601String());
+        if (ta.isSupported(ChronoField.YEAR) &&
+                ta.isSupported(ChronoField.MONTH_OF_YEAR) &&
+                ta.isSupported(ChronoField.DAY_OF_MONTH)) {
+            LocalDate ld = LocalDate.of(
+                    ta.get(ChronoField.YEAR),
+                    ta.get(ChronoField.MONTH_OF_YEAR),
+                    ta.get(ChronoField.DAY_OF_MONTH));
+            ld = ld.plusDays(daysToAdd);
+            setYear(ld.getYear());
+            setMonth(ld.getMonthValue());
+            setDay(ld.getDayOfMonth());
+        }
+        return this;
+    }
 
-	public void setHour(final byte hour) {
-		this.hour = hour;
-	}
+    /**
+     * <p>Setter for the field <code>year</code>.</p>
+     *
+     * @param year a short.
+     */
+    public void setYear(final int year) {
+        this.year = year;
+    }
 
-	public void setMinute(final byte minute) {
-		this.minute = minute;
-	}
+    /**
+     * <p>Setter for the field <code>month</code>.</p>
+     *
+     * @param month a byte.
+     */
+    public void setMonth(final int month) {
+        this.month = month;
+    }
 
-	public void setSeconds(final byte seconds) {
-		this.seconds = seconds;
-	}
+    /**
+     * <p>Setter for the field <code>day</code>.</p>
+     *
+     * @param day a byte.
+     */
+    public void setDay(final int day) {
+        this.day = day;
+    }
 
-	public void setTimezone(final byte timezone) {
-		this.timezone = timezone;
-	}
+    /**
+     * <p>Setter for the field <code>hour</code>.</p>
+     *
+     * @param hour a byte.
+     */
+    public void setHour(final int hour) {
+        this.hour = hour;
+    }
 
-	public short getYear() {
-		return year;
-	}
+    /**
+     * <p>Setter for the field <code>minute</code>.</p>
+     *
+     * @param minute a byte.
+     */
+    public void setMinute(final int minute) {
+        this.minute = minute;
+    }
 
-	public byte getMonth() {
-		return month;
-	}
+    /**
+     * <p>Setter for the field <code>seconds</code>.</p>
+     *
+     * @param seconds a byte.
+     */
+    public void setSeconds(final int seconds) {
+        this.seconds = seconds;
+    }
 
-	public byte getDay() {
-		return day;
-	}
+    /**
+     * <p>Setter for the field <code>timezone</code>.</p>
+     *
+     * @param timezone a byte.
+     */
+    public void setTimezone(final int timezone) {
+        this.timezone = timezone;
+    }
 
-	public byte getHour() {
-		return hour;
-	}
+    /**
+     * <p>Getter for the field <code>year</code>.</p>
+     *
+     * @return a short.
+     */
+    public int getYear() {
+        return year;
+    }
 
-	public byte getMinute() {
-		return minute;
-	}
+    /**
+     * <p>Getter for the field <code>month</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getMonth() {
+        return month;
+    }
 
-	public byte getSeconds() {
-		return seconds;
-	}
+    /**
+     * <p>Getter for the field <code>day</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getDay() {
+        return day;
+    }
 
-	public byte getTimezone() {
-		return timezone;
-	}
+    /**
+     * <p>Getter for the field <code>hour</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getHour() {
+        return hour;
+    }
+
+    /**
+     * <p>Getter for the field <code>minute</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getMinute() {
+        return minute;
+    }
+
+    /**
+     * <p>Getter for the field <code>seconds</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getSeconds() {
+        return seconds;
+    }
+
+    /**
+     * <p>Getter for the field <code>timezone</code>.</p>
+     *
+     * @return a byte.
+     */
+    public int getTimezone() {
+        return timezone;
+    }
+
+    private void setMillis(int millis) {
+        this.millis = millis;
+    }
+
+    private int getMillis() {
+        return millis;
+    }
 
 }

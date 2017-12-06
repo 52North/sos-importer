@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,13 +29,28 @@
 package org.n52.sos.importer.feeder.model;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>UnitOfMeasurement class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class UnitOfMeasurement extends Resource {
 
-	public UnitOfMeasurement(String code, String uri) {
-		super(code, uri);
-	}
-	public String getCode() { return getName(); }
+    /**
+     * <p>Constructor for UnitOfMeasurement.</p>
+     *
+     * @param code a {@link java.lang.String} object.
+     * @param uri a {@link java.lang.String} object.
+     */
+    public UnitOfMeasurement(String code, String uri) {
+        super(code, uri);
+    }
+
+    /**
+     * <p>getCode.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    public String getCode() {
+        return getName();
+    }
 }

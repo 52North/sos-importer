@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -51,190 +51,201 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Lets the user choose feature of interest, observed property, 
+ * Lets the user choose feature of interest, observed property,
  * unit of measurement and sensor for each measured value column
  * in case they do not appear in the CSV file.
+ *
  * @author Raimund
- * 
  */
 public class Step6bController extends StepController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(Step6bController.class);
-		
-	private Step6bModel step6bModel;
-	
-	private Step5Panel step5Panel;
-	
-	private MissingResourcePanel missingResourcePanel;
-	
-	private final TableController tableController;
 
-	private final int firstLineWithData;
-	
-	public Step6bController(final int firstLineWithData) {
-		this.firstLineWithData = firstLineWithData;
-		tableController = TableController.getInstance();
-	}
-	
-	public Step6bController(final Step6bModel step6bModel,final int firstLineWithData) {
-		this(firstLineWithData);
-		this.step6bModel = step6bModel;
-	}
-	
-	@Override
-	public void loadSettings() {
-		final Resource resource = step6bModel.getResource();
-		final MeasuredValue measuredValue = step6bModel.getMeasuredValue();
-		
-		//when this resource is still assigned with measured values,
-		//do not remove it from the ModelStore
-		int count = 0;
-		for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
-			if (resource.isAssignedTo(mv)) {
-				count++;
-			}
-		}
-		if (count == 1) {
-			ModelStore.getInstance().remove(resource);
-		}
-		
-		resource.unassign(measuredValue);
-		
-		missingResourcePanel = new MissingResourcePanel(resource);
-		missingResourcePanel.setMissingComponent(resource);
-		missingResourcePanel.unassignValues();
-		
-		final List<MissingComponentPanel> missingComponentPanels = new ArrayList<MissingComponentPanel>();
-		missingComponentPanels.add(missingResourcePanel);
-		
-		String question = step6bModel.getDescription();
-		question = question.replaceFirst(Constants.STRING_REPLACER, resource.toString());
-		question = question.replaceFirst(Constants.STRING_REPLACER, tableController.getOrientationString());
-		step5Panel = new Step5Panel(question, missingComponentPanels);
-		
-		tableController.turnSelectionOff();
-		measuredValue.getTableElement().mark();		
-	}	
-	
-	@Override
-	public void saveSettings() {
-		missingResourcePanel.assignValues();
-		final ModelStore ms = ModelStore.getInstance(); 
-		Resource resource = step6bModel.getResource();
-		final MeasuredValue measuredValue = step6bModel.getMeasuredValue();
-		
-		//check if there is already such a resource
-		final List<Resource> resources = resource.getList();
-		final int index = resources.indexOf(resource);
-		if (index == -1) {
-			ms.add(resource);
-		} else { 
-			resource = resources.get(index);
-		}
-		resource.assign(measuredValue);
-		// TODO handle the case one manual/generated foi and one position in file
-		if (resource instanceof FeatureOfInterest) {
-			if (ms.getFeatureOfInterests() != null &&
-					ms.getFeatureOfInterests().size() == 1 &&
-					ms.getPositions() != null &&
-					ms.getPositions().size() == 1) {
-				((FeatureOfInterest) resource).setPosition(ms.getPositions().get(0));
-			}
-		}
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
-		
-		step5Panel = null;
-		missingResourcePanel = null;
-	}
-	
-	@Override
-	public void back() {
-		tableController.clearMarkedTableElements();
-		tableController.turnSelectionOn();
-		
-		step5Panel = null;
-		missingResourcePanel = null;
-	}
-	
-	@Override
-	public StepController getNextStepController() {		
-		return new Step6bSpecialController(firstLineWithData);	
-	}
+    private static final Logger LOG = LoggerFactory.getLogger(Step6bController.class);
 
-	@Override
-	public String getDescription() {
-		return Lang.l().step6bDescription();
-	}
+    private Step6bModel step6bModel;
 
-	@Override
-	public JPanel getStepPanel() {
-		return step5Panel;
-	}
+    private Step5Panel step5Panel;
 
-	@Override
-	public boolean isNecessary() {
-		step6bModel = getMissingResourceForMeasuredValue();	
-		if (step6bModel == null) {
-			logger.info("Skip Step 6b since all Measured Values are already" +
-					" assigned to Features Of Interest, Observed Properties," +
-					" Unit Of Measurements and Sensors");
-			return false;
-		}
-		
-		return true;
-	}
-	
-	@Override
-	public StepController getNext() {
-		final Step6bModel model = getMissingResourceForMeasuredValue();	
-		if (model != null) {
-			return new Step6bController(model,firstLineWithData);
-		}
-			
-		return null;
-	}
-	
-	private Step6bModel getMissingResourceForMeasuredValue() {
-		final List<MeasuredValue> measuredValues = ModelStore.getInstance().getMeasuredValues();
-		
-		for (final MeasuredValue mv: measuredValues) {
-			if (mv.getFeatureOfInterest() == null) {
-				return new Step6bModel(mv, new FeatureOfInterest());
-			}
-		}
-		for (final MeasuredValue mv: measuredValues) {
-			if (mv.getObservedProperty() == null) {
-				return new Step6bModel(mv, new ObservedProperty());
-			}
-		}
-		for (final MeasuredValue mv: measuredValues) {
-			if (mv.getUnitOfMeasurement() == null) {
-				return new Step6bModel(mv, new UnitOfMeasurement());
-			}
-		}
-		
-		if (ModelStore.getInstance().getFeatureOfInterestsInTable().size() == 0 &&
-			ModelStore.getInstance().getObservedPropertiesInTable().size() == 0 &&
-			ModelStore.getInstance().getSensorsInTable().size() == 0) {
-			for (final MeasuredValue mv: measuredValues) {
-				if (mv.getSensor() == null) {
-					return new Step6bModel(mv, new Sensor());
-				}
-			}
-			
-		}
+    private MissingResourcePanel missingResourcePanel;
 
-		return null;
-	}
+    private final TableController tableController;
 
-	@Override
-	public boolean isFinished() {
-		return missingResourcePanel.checkValues();
-	}
+    private final int firstLineWithData;
 
-	@Override
-	public StepModel getModel() {
-		return step6bModel;
-	}
+    /**
+     * <p>Constructor for Step6bController.</p>
+     *
+     * @param firstLineWithData a int.
+     */
+    public Step6bController(final int firstLineWithData) {
+        this.firstLineWithData = firstLineWithData;
+        tableController = TableController.getInstance();
+    }
+
+    /**
+     * <p>Constructor for Step6bController.</p>
+     *
+     * @param step6bModel a {@link org.n52.sos.importer.model.Step6bModel} object.
+     * @param firstLineWithData a int.
+     */
+    public Step6bController(final Step6bModel step6bModel, final int firstLineWithData) {
+        this(firstLineWithData);
+        this.step6bModel = step6bModel;
+    }
+
+    @Override
+    public void loadSettings() {
+        final Resource resource = step6bModel.getResource();
+        final MeasuredValue measuredValue = step6bModel.getMeasuredValue();
+
+        //when this resource is still assigned with measured values,
+        //do not remove it from the ModelStore
+        int count = 0;
+        for (final MeasuredValue mv: ModelStore.getInstance().getMeasuredValues()) {
+            if (resource.isAssignedTo(mv)) {
+                count++;
+            }
+        }
+        if (count == 1) {
+            ModelStore.getInstance().remove(resource);
+        }
+
+        resource.unassign(measuredValue);
+
+        missingResourcePanel = new MissingResourcePanel(resource);
+        missingResourcePanel.setMissingComponent(resource);
+        missingResourcePanel.unassignValues();
+
+        final List<MissingComponentPanel> missingComponentPanels = new ArrayList<>();
+        missingComponentPanels.add(missingResourcePanel);
+
+        String question = step6bModel.getDescription();
+        question = question.replaceFirst(Constants.STRING_REPLACER, resource.toString());
+        question = question.replaceFirst(Constants.STRING_REPLACER, tableController.getOrientationString());
+        step5Panel = new Step5Panel(question, missingComponentPanels);
+
+        tableController.turnSelectionOff();
+        measuredValue.getTableElement().mark();
+    }
+
+    @Override
+    public void saveSettings() {
+        missingResourcePanel.assignValues();
+        final ModelStore ms = ModelStore.getInstance();
+        Resource resource = step6bModel.getResource();
+        final MeasuredValue measuredValue = step6bModel.getMeasuredValue();
+
+        //check if there is already such a resource
+        final List<Resource> resources = resource.getList();
+        final int index = resources.indexOf(resource);
+        if (index == -1) {
+            ms.add(resource);
+        } else {
+            resource = resources.get(index);
+        }
+        resource.assign(measuredValue);
+        // TODO handle the case one manual/generated foi and one position in file
+        if (resource instanceof FeatureOfInterest) {
+            if (ms.getFeatureOfInterests() != null &&
+                    ms.getFeatureOfInterests().size() == 1 &&
+                    ms.getPositions() != null &&
+                    ms.getPositions().size() == 1) {
+                ((FeatureOfInterest) resource).setPosition(ms.getPositions().get(0));
+            }
+        }
+        tableController.clearMarkedTableElements();
+        tableController.turnSelectionOn();
+
+        step5Panel = null;
+        missingResourcePanel = null;
+    }
+
+    @Override
+    public void back() {
+        tableController.clearMarkedTableElements();
+        tableController.turnSelectionOn();
+
+        step5Panel = null;
+        missingResourcePanel = null;
+    }
+
+    @Override
+    public StepController getNextStepController() {
+        return new Step6bSpecialController(firstLineWithData);
+    }
+
+    @Override
+    public String getDescription() {
+        return Lang.l().step6bDescription();
+    }
+
+    @Override
+    public JPanel getStepPanel() {
+        return step5Panel;
+    }
+
+    @Override
+    public boolean isNecessary() {
+        step6bModel = getMissingResourceForMeasuredValue();
+        if (step6bModel == null) {
+            LOG.info("Skip Step 6b since all Measured Values are already" +
+                    " assigned to Features Of Interest, Observed Properties," +
+                    " Unit Of Measurements and Sensors");
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public StepController getNext() {
+        final Step6bModel model = getMissingResourceForMeasuredValue();
+        if (model != null) {
+            return new Step6bController(model, firstLineWithData);
+        }
+
+        return null;
+    }
+
+    private Step6bModel getMissingResourceForMeasuredValue() {
+        final List<MeasuredValue> measuredValues = ModelStore.getInstance().getMeasuredValues();
+
+        for (final MeasuredValue mv: measuredValues) {
+            if (mv.getFeatureOfInterest() == null) {
+                return new Step6bModel(mv, new FeatureOfInterest());
+            }
+        }
+        for (final MeasuredValue mv: measuredValues) {
+            if (mv.getObservedProperty() == null) {
+                return new Step6bModel(mv, new ObservedProperty());
+            }
+        }
+        for (final MeasuredValue mv: measuredValues) {
+            if (mv.getUnitOfMeasurement() == null) {
+                return new Step6bModel(mv, new UnitOfMeasurement());
+            }
+        }
+
+        if (ModelStore.getInstance().getFeatureOfInterestsInTable().isEmpty() &&
+                ModelStore.getInstance().getObservedPropertiesInTable().isEmpty() &&
+                ModelStore.getInstance().getSensorsInTable().isEmpty()) {
+            for (final MeasuredValue mv: measuredValues) {
+                if (mv.getSensor() == null) {
+                    return new Step6bModel(mv, new Sensor());
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return missingResourcePanel.checkValues();
+    }
+
+    @Override
+    public StepModel getModel() {
+        return step6bModel;
+    }
 }

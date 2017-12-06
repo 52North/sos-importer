@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,18 +26,40 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.exceptions;
+package org.n52.sos.importer.model;
 
-/**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- *
- */
-public class InvalidColumnCountException extends IllegalArgumentException {
+import org.n52.sos.importer.model.resources.OmParameter;
+import org.n52.sos.importer.view.i18n.Lang;
 
-	private static final long serialVersionUID = 1L;
+public class Step4dModel implements StepModel {
 
-	public InvalidColumnCountException(final String errorMsg) {
-		super(errorMsg);
-	}
+    private OmParameter parameter;
+    private int[] selectedColumns;
+    private String orientation = Lang.l().column();
+
+    public Step4dModel(OmParameter parameter) {
+        this.parameter = parameter;
+        selectedColumns = new int[0];
+    }
+
+    public OmParameter getOmParameter() {
+        return parameter;
+    }
+
+    public void setSelectedColumns(int[] selectedColumns) {
+        this.selectedColumns = selectedColumns.clone();
+    }
+
+    public int[] getSelectedColumns() {
+        return selectedColumns.clone();
+    }
+
+    public String getDescription() {
+        return Lang.l().step4dModelDescription(orientation);
+    }
+
+    public void setOrientation(String orientation) {
+        this.orientation = orientation;
+    }
 
 }

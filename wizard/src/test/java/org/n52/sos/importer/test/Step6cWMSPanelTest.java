@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -44,43 +44,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * <p>Step6cWMSPanelTest class.</p>
  *
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @since 0.5.0
  */
 public class Step6cWMSPanelTest extends JFrame {
-	
-	private static final long serialVersionUID = 1L;
-	
-	private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
-	
-	public static void main(final String[] args) {
-		Constants.GUI_DEBUG = true;
-		final FeatureOfInterest foi = new FeatureOfInterest();
-		foi.setName("testFOIname");
-		foi.setPosition(new Position());
-		final Step6cModel s6cM = new Step6cModel(foi);
-		
-		final JFrame frame = new Step6cWMSPanelTest(s6cM);
-		frame.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT));
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		if (Constants.GUI_DEBUG) {
-			final long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
-			Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener() {
-			    @Override
-				public void eventDispatched(final AWTEvent e)
-			    {
-			        if (logger.isDebugEnabled() && e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
-						logger.debug("AWTEvent: {}",e);
-					}
-			    }
-			}, eventMask);
-		}
-	}
 
-	public Step6cWMSPanelTest(final Step6cModel s6cM) {
-		getContentPane().add(new Step6cPanel("test description", "testFOIname", s6cM));
-	}
+    /**
+     *
+     */
+    private static final String TEST_FOI_NAME = "testFOIname";
 
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = LoggerFactory.getLogger(Step6cWMSPanelTest.class);
+
+    /**
+     * <p>Constructor for Step6cWMSPanelTest.</p>
+     *
+     * @param s6cM a {@link org.n52.sos.importer.model.Step6cModel} object.
+     */
+    public Step6cWMSPanelTest(final Step6cModel s6cM) {
+        getContentPane().add(new Step6cPanel("test description", TEST_FOI_NAME, s6cM));
+    }
+
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
+    //CHECKSTYLE:OFF
+    public static void main(final String[] args) {
+        //CHECKSTYLE:ON
+        Constants.setGuiDebug(true);
+        final FeatureOfInterest foi = new FeatureOfInterest();
+        foi.setName(TEST_FOI_NAME);
+        foi.setPosition(new Position());
+        final Step6cModel s6cM = new Step6cModel(foi);
+
+        final JFrame frame = new Step6cWMSPanelTest(s6cM);
+        frame.setPreferredSize(new Dimension(Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT));
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        if (Constants.isGuiDebug()) {
+            final long eventMask = AWTEvent.COMPONENT_EVENT_MASK + AWTEvent.ADJUSTMENT_EVENT_MASK;
+            Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+                @Override
+                public void eventDispatched(final AWTEvent e) {
+                    if (logger.isDebugEnabled() &&
+                            e.getSource().getClass().getName().indexOf("org.geotools.swing") != -1) {
+                        logger.debug("AWTEvent: {}", e);
+                    }
+                }
+            }, eventMask);
+        }
+    }
 }

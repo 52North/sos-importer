@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,74 +33,99 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 /**
- * @author http://www.java-tips.org/java-se-tips/javax.swing/apply-special-filter-to-a-jtextfield.html
+ * <p>JTextFieldFilter class.</p>
  *
+ * @author http://www.java-tips.org/java-se-tips/javax.swing/apply-special-filter-to-a-jtextfield.html
  */
 public class JTextFieldFilter extends PlainDocument {
 
-	private static final long serialVersionUID = 1L;
-	public static final String LOWERCASE  =
-		"abcdefghijklmnopqrstuvwxyz";
-	public static final String UPPERCASE  =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	public static final String ALPHA   =
-		LOWERCASE + UPPERCASE;
-	public static final String NUMERIC =
-		"0123456789";
-	public static final String FLOAT =
-		NUMERIC + ".";
-	public static final String ALPHA_NUMERIC =
-		ALPHA + NUMERIC;
+    /** Constant <code>LOWERCASE="abcdefghijklmnopqrstuvwxyz"</code> */
+    public static final String LOWERCASE  =
+            "abcdefghijklmnopqrstuvwxyz";
+    /** Constant <code>UPPERCASE="ABCDEFGHIJKLMNOPQRSTUVWXYZ"</code> */
+    public static final String UPPERCASE  =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    /** Constant <code>ALPHA="LOWERCASE + UPPERCASE"</code> */
+    public static final String ALPHA   =
+            LOWERCASE + UPPERCASE;
+    /** Constant <code>NUMERIC="0123456789"</code> */
+    public static final String NUMERIC =
+            "0123456789";
+    /** Constant <code>FLOAT="NUMERIC + ."</code> */
+    public static final String FLOAT =
+            NUMERIC + ".";
+    /** Constant <code>ALPHA_NUMERIC="ALPHA + NUMERIC"</code> */
+    public static final String ALPHA_NUMERIC =
+            ALPHA + NUMERIC;
 
-	protected String acceptedChars = null;
-	protected boolean negativeAccepted = false;
+    private static final long serialVersionUID = 1L;
+    protected String acceptedChars;
+    protected boolean negativeAccepted;
 
-	public JTextFieldFilter() {
-		this(ALPHA_NUMERIC);
-	}
-	public JTextFieldFilter(String acceptedchars) {
-		acceptedChars = acceptedchars;
-	}
+    /**
+     * <p>Constructor for JTextFieldFilter.</p>
+     */
+    public JTextFieldFilter() {
+        this(ALPHA_NUMERIC);
+    }
 
-	public void setNegativeAccepted(boolean negativeaccepted) {
-		if (acceptedChars.equals(NUMERIC) ||
-				acceptedChars.equals(FLOAT) ||
-				acceptedChars.equals(ALPHA_NUMERIC)){
-			negativeAccepted = negativeaccepted;
-			acceptedChars += "-";
-		}
-	}
+    /**
+     * <p>Constructor for JTextFieldFilter.</p>
+     *
+     * @param acceptedchars a {@link java.lang.String} object.
+     */
+    public JTextFieldFilter(String acceptedchars) {
+        acceptedChars = acceptedchars;
+    }
 
-	public void insertString
-	(int offset, String  str, AttributeSet attr)
-	throws BadLocationException {
-		if (str == null) return;
+    /**
+     * <p>Setter for the field <code>negativeAccepted</code>.</p>
+     *
+     * @param negativeaccepted a boolean.
+     */
+    public void setNegativeAccepted(boolean negativeaccepted) {
+        if (acceptedChars.equals(NUMERIC) ||
+                acceptedChars.equals(FLOAT) ||
+                acceptedChars.equals(ALPHA_NUMERIC)) {
+            negativeAccepted = negativeaccepted;
+            acceptedChars += "-";
+        }
+    }
 
-		if (acceptedChars.equals(UPPERCASE))
-			str = str.toUpperCase();
-		else if (acceptedChars.equals(LOWERCASE))
-			str = str.toLowerCase();
+    @Override
+    public void insertString(int offset, final String  string, final AttributeSet attr) throws BadLocationException {
+        if (string == null) {
+            return;
+        }
 
-		for (int i=0; i < str.length(); i++) {
-			if (acceptedChars.indexOf(String.valueOf(str.charAt(i))) == -1)
-				return;
-		}
+        String str = string;
+        if (acceptedChars.equals(UPPERCASE)) {
+            str = str.toUpperCase();
+        } else if (acceptedChars.equals(LOWERCASE)) {
+            str = str.toLowerCase();
+        }
 
-		if (acceptedChars.equals(FLOAT) ||
-				(acceptedChars.equals(FLOAT + "-") && negativeAccepted)) {
-			if (str.indexOf(".") != -1) {
-				if (getText(0, getLength()).indexOf(".") != -1) {
-					return;
-				}
-			}
-		}
+        for (int i = 0; i < str.length(); i++) {
+            if (acceptedChars.indexOf(String.valueOf(str.charAt(i))) == -1) {
+                return;
+            }
+        }
 
-		if (negativeAccepted && str.indexOf("-") != -1) {
-			if (str.indexOf("-") != 0 || offset != 0 ) {
-				return;
-			}
-		}
+        if (acceptedChars.equals(FLOAT) ||
+                (acceptedChars.equals(FLOAT + "-") && negativeAccepted)) {
+            if (str.indexOf(".") != -1) {
+                if (getText(0, getLength()).indexOf(".") != -1) {
+                    return;
+                }
+            }
+        }
 
-		super.insertString(offset, str, attr);
-	}
+        if (negativeAccepted && str.indexOf("-") != -1) {
+            if (str.indexOf("-") != 0 || offset != 0) {
+                return;
+            }
+        }
+
+        super.insertString(offset, str, attr);
+    }
 }

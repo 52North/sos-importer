@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2015 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -42,48 +42,54 @@ import org.n52.sos.importer.view.utils.ToolTips;
 
 /**
  * consists of a label and a JSpinner for the UTC offset
+ *
  * @author Raimund
  */
 public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JLabel timeZoneLabel;
-	
-	private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
-	private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
-	
-	public MissingTimeZonePanel(DateAndTime dateAndTime) {
-		super(dateAndTime);
-		timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
-		this.add(timeZoneLabel);
-		this.add(timeZoneSpinner);
-	}
+    private JLabel timeZoneLabel;
 
-	@Override
-	public void assignValues() {
-		dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));	
-	}
+    private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
+    private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
 
-	@Override
-	public void unassignValues() {
-		dateAndTime.setTimeZone(null);	
-	}
-	
-	@Override
-	public boolean checkValues() {
-		return true;
-	}
+    /**
+     * <p>Constructor for MissingTimeZonePanel.</p>
+     *
+     * @param dateAndTime a {@link org.n52.sos.importer.model.dateAndTime.DateAndTime} object.
+     */
+    public MissingTimeZonePanel(DateAndTime dateAndTime) {
+        super(dateAndTime);
+        timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
+        this.add(timeZoneLabel);
+        this.add(timeZoneSpinner);
+    }
 
-	@Override
-	public Component getMissingComponent() {
-		return new TimeZone(timeZoneModel.getNumber().intValue());
-	}
+    @Override
+    public void assignValues() {
+        dateAndTime.setTimeZone(new TimeZone(timeZoneModel.getNumber().intValue()));
+    }
 
-	@Override
-	public void setMissingComponent(Component c) {
-		timeZoneModel.setValue(((TimeZone)c).getValue());
-	}
+    @Override
+    public void unassignValues() {
+        dateAndTime.setTimeZone(null);
+    }
+
+    @Override
+    public boolean checkValues() {
+        return true;
+    }
+
+    @Override
+    public Component getMissingComponent() {
+        return new TimeZone(timeZoneModel.getNumber().intValue());
+    }
+
+    @Override
+    public void setMissingComponent(Component c) {
+        timeZoneModel.setValue(((TimeZone) c).getValue());
+    }
 }
