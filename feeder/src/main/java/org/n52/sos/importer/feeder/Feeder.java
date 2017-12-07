@@ -42,9 +42,10 @@ import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
-import org.n52.sos.importer.feeder.web.OxfSosClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Handles connection to SOS and provides an easy to use interface.<br>
@@ -52,6 +53,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+@ContextConfiguration("classpath*:application-context.xml")
 public final class Feeder implements FeedingContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
@@ -70,6 +72,7 @@ public final class Feeder implements FeedingContext {
 
     private List<Exception> exceptions;
 
+    @Autowired
     private SosClient sosClient;
 
     /**
@@ -84,7 +87,6 @@ public final class Feeder implements FeedingContext {
             throws ExceptionReport, OXFException, MalformedURLException {
         LOG.trace(String.format("Feeder(%s)", config.toString()));
         configuration = config;
-        sosClient = new OxfSosClient(configuration);
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
         importer.setConfiguration(configuration);
         importer.setSosClient(sosClient);
