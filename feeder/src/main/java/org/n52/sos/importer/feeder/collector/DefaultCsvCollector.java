@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
-import org.n52.oxf.om.x20.OmParameter;
+import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
@@ -148,7 +148,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
         // OM:PARAMETER
-        Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
+        Optional<List<NamedValue<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
         return new InsertObservation(sensor,
                 foi,
                 value,

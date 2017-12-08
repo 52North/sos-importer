@@ -22,10 +22,6 @@
             <artifactId>52n-sos-importer-bindings</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>52n-oxf-xmlbeans</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

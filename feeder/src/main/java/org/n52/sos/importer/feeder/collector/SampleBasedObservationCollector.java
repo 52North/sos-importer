@@ -37,7 +37,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.n52.oxf.om.x20.OmParameter;
+import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
@@ -206,7 +206,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
         final Offering offer = dataFile.getOffering(sensor);
         LOG.debug("Offering: {}", offer);
         // OM:PARAMETER
-        final Optional<List<OmParameter<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
+        final Optional<List<NamedValue<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
         return new InsertObservation(sensor,
                 foi,
                 value,

@@ -33,7 +33,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.TimeSeries;
@@ -86,7 +85,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
     }
 
     protected void insertAllTimeSeries(final TimeSeriesRepository timeSeriesRepository)
-            throws OXFException, XmlException, IOException, EncodingException {
+            throws XmlException, IOException, EncodingException {
         LOG.trace("insertAllTimeSeries()");
         ONE_IMPORTER_LOCK.lock();
         try {

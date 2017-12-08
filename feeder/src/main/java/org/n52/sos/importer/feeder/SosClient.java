@@ -33,7 +33,6 @@ import java.net.MalformedURLException;
 import java.util.AbstractMap.SimpleEntry;
 
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
@@ -54,7 +53,7 @@ public interface SosClient {
     boolean isSensorRegistered(String sensorURI);
 
     SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
-            throws OXFException, XmlException, IOException, EncodingException;
+            throws XmlException, IOException, EncodingException;
 
     String insertObservation(InsertObservation insertObservation) throws IOException;
 

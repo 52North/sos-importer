@@ -46,7 +46,6 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
 import org.n52.janmayen.http.MediaType;
-import org.n52.oxf.OXFException;
 import org.n52.shetland.ogc.UoM;
 import org.n52.shetland.ogc.gml.AbstractFeature;
 import org.n52.shetland.ogc.gml.CodeType;
@@ -290,7 +289,7 @@ public class ArcticSeaSosClient implements SosClient {
 
     @Override
     public SimpleEntry<String, String> insertSensor(InsertSensor rs)
-            throws OXFException, XmlException, IOException, EncodingException {
+            throws XmlException, IOException, EncodingException {
         if (serviceVersion.equals(Sos2Constants.SERVICEVERSION)) {
             try {
                 InsertSensorRequest request = createInsertSensorRequest(rs);

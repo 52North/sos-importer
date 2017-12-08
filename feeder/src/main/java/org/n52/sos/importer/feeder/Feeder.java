@@ -38,14 +38,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
-import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Handles connection to SOS and provides an easy to use interface.<br>
@@ -53,7 +50,7 @@ import org.springframework.test.context.ContextConfiguration;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-@ContextConfiguration("classpath*:application-context.xml")
+@org.springframework.context.annotation.Configuration
 public final class Feeder implements FeedingContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
@@ -79,12 +76,10 @@ public final class Feeder implements FeedingContext {
      * <p>Constructor for Feeder.</p>
      *
      * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @throws org.n52.oxf.ows.ExceptionReport if any.
-     * @throws org.n52.oxf.OXFException if any.
      * @throws java.net.MalformedURLException if any.
      */
     public Feeder(final Configuration config)
-            throws ExceptionReport, OXFException, MalformedURLException {
+            throws MalformedURLException {
         LOG.trace(String.format("Feeder(%s)", config.toString()));
         configuration = config;
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
@@ -98,7 +93,7 @@ public final class Feeder implements FeedingContext {
     }
 
     public void importData(DataFile dataFile)
-            throws IOException, OXFException, XmlException, IllegalArgumentException, ParseException {
+            throws IOException, XmlException, IllegalArgumentException, ParseException {
         LOG.trace("importData()");
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();

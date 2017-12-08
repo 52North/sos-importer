@@ -39,7 +39,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -58,7 +57,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
 
     @Override
     public void addObservationForImporting(InsertObservation... insertObservations)
-            throws OXFException, XmlException, IOException {
+            throws XmlException, IOException {
         if (insertObservations == null) {
             return;
         }
@@ -80,7 +79,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
                                             getMeasuredValueTypes(io.getSensorURI(), insertObservations),
                                             getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
                                     assignedSensorId = sosClient.insertSensor(insertSensor).getKey();
-                                } catch (OXFException | XmlException | IOException | EncodingException e) {
+                                } catch (XmlException | IOException | EncodingException e) {
                                     log(e);
                                 }
                                 if (assignedSensorId == null || assignedSensorId.equalsIgnoreCase("")) {

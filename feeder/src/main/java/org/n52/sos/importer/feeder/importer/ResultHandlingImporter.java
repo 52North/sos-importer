@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.svalbard.encode.exception.EncodingException;
@@ -56,7 +55,7 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
 
     @Override
     protected void insertAllTimeSeries(TimeSeriesRepository timeSeriesRepository)
-            throws OXFException, XmlException, IOException {
+            throws XmlException, IOException {
         LOG.trace("insertAllTimeSeries()");
         ONE_IMPORTER_LOCK.lock();
         try {
@@ -125,7 +124,7 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
             try {
                 insertSensorResult =
                         sosClient.insertSensor(timeSeriesRepository.getInsertSensor(ts.getSensorURI()));
-            } catch (OXFException | XmlException | IOException | EncodingException e) {
+            } catch (XmlException | IOException | EncodingException e) {
                 LOG.error("Could not register sensor '{}' at sos instance.", ts.getSensorURI());
             }
             if (insertSensorResult == null || insertSensorResult.getKey() == null) {

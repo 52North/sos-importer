@@ -49,7 +49,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.n52.oxf.OXFException;
 import org.n52.shetland.ogc.sos.Sos2Constants;
 import org.n52.shetland.ogc.sos.SosCapabilities;
 import org.n52.shetland.ogc.sos.SosObservationOffering;
@@ -81,7 +80,7 @@ import net.opengis.sos.x20.InsertResultTemplateResponseDocument;
 import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath*:application-context.xml")
+@ContextConfiguration("classpath:application-context.xml")
 public class ArcticSeaSosClientTest {
 
     @Autowired
@@ -195,7 +194,7 @@ public class ArcticSeaSosClientTest {
 
     @Test
     public void insertSensorShouldCreateRequestAndProcessResponse()
-            throws EncodingException, OXFException, XmlException, IOException {
+            throws EncodingException, XmlException, IOException {
         InsertSensor registerSensor = Mockito.mock(InsertSensor.class);
         Mockito.when(registerSensor.getSensorName()).thenReturn("sensor-name");
         Mockito.when(registerSensor.getSensorURI()).thenReturn(sensorUri);

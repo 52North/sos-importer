@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.n52.oxf.om.x20.OmParameter;
+import org.n52.shetland.ogc.om.NamedValue;
 
 /**
  * Holds all information for the InsertObservation request
@@ -52,7 +52,7 @@ public class InsertObservation {
     private final UnitOfMeasurement unitOfMeasurement;
     private final Offering offering;
     private final String measuredValueType;
-    private List<OmParameter<?>> omParameters;
+    private List<NamedValue<?>> omParameters;
 
     /**
      * <p>Constructor for InsertObservation.</p>
@@ -74,7 +74,7 @@ public class InsertObservation {
             final UnitOfMeasurement uom,
             final ObservedProperty obsProp,
             final Offering off,
-            Optional<List<OmParameter<?>>> omParameters,
+            Optional<List<NamedValue<?>>> omParameters,
             final String mvType) {
         featureOfInterest = foi;
         this.sensor = sensor;
@@ -283,10 +283,10 @@ public class InsertObservation {
         return omParameters != null && !omParameters.isEmpty();
     }
 
-    public OmParameter<?>[] getOmParameters() {
+    public NamedValue<?>[] getOmParameters() {
         return isSetOmParameters() ? Collections.unmodifiableList(omParameters)
-                .toArray(new OmParameter<?>[omParameters.size()])
-                : new OmParameter<?>[0];
+                .toArray(new NamedValue<?>[omParameters.size()])
+                : new NamedValue<?>[0];
     }
 
     public boolean hasFeatureParentFeature() {

@@ -88,7 +88,7 @@ public class SingleProfileCollectorTest {
         Assert.assertThat(io.getObservedProperty().getName(), Is.is("Conductivity"));
         Assert.assertThat(io.getObservedProperty().getUri(), Is.is("Conductivity"));
         Assert.assertThat(io.getOffering().getUri(), Is.is("CC1305009-offering"));
-        Assert.assertThat(io.getOffering().getName(), Is.is("CC1305009-offering"));
+        Assert.assertThat(io.getOffering().getName(), Is.is("CC1305009_offering"));
     }
 
     private class MyFeedingContext implements FeedingContext {

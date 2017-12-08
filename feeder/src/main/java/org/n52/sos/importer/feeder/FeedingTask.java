@@ -38,8 +38,6 @@ import java.util.Scanner;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
-import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.n52.sos.importer.feeder.util.HTTPClient;
@@ -139,12 +137,7 @@ public class FeedingTask {
             // check SOS
             Feeder feeder = null;
             String sosURL = config.getSosUrl().toString();
-            try {
-                feeder = new Feeder(config);
-            } catch (ExceptionReport | OXFException e) {
-                LOG.error("SOS " + sosURL + " is not available. Please check the configuration!");
-                LOG.debug("Exception thrown:", e);
-            }
+            feeder = new Feeder(config);
             if (feeder == null || !feeder.isSosAvailable()) {
                 LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
             } else if (!feeder.isSosTransactional()) {
@@ -237,7 +230,7 @@ public class FeedingTask {
                      config.getFileName(),
                      mue.getMessage());
             LOG.debug(EXCEPTION_STACK_TRACE, mue);
-        } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
+        } catch (final IOException |  XmlException | ParseException | IllegalArgumentException e) {
             log(e);
         }
     }

@@ -31,14 +31,11 @@ package org.n52.sos.importer.model.xml;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.n52.oxf.xmlbeans.parser.XMLBeansParser;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
@@ -149,8 +146,7 @@ public class Model {
         if (logger.isTraceEnabled()) {
             logger.trace("save(" + (file != null ? file.getName() : null) + ")");
         }
-        // laxValidate or validate?
-        if (!laxValidate() ||
+        if (!validate() ||
                 sosImpConf.getCsvMetadata() == null ||
                 sosImpConf.getDataFile() == null ||
                 sosImpConf.getSosMetadata() == null) {
@@ -268,39 +264,16 @@ public class Model {
         }
     }
 
-    /**
-     * Should be called after final step to validate the final model.
-     *
-     * @return a boolean.
-     */
-    public boolean validate() {
+    private boolean validate() {
         logger.trace("validate()");
         //
         final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
         doc.setSosImportConfiguration(sosImpConf);
-        final boolean modelValid = doc.validate();
-        if (!modelValid) {
+        if (!doc.validate()) {
             logger.error("The model is not valid. Please update your values.");
+            return false;
         }
-        return modelValid;
-    }
-
-    public boolean laxValidate() {
-        final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
-        doc.setSosImportConfiguration(sosImpConf);
-        final Collection<XmlError> exs = XMLBeansParser.validate(doc);
-        if (exs.isEmpty()) {
-            return true;
-        }
-        logger.error("XML of configuration model is not valid. See the following output for details");
-        for (final XmlError xmlError : exs) {
-            logger.error("Xml error: Message: {}; Location: Line: {}, Column: {}; ErrorCode: {}",
-                    xmlError.getMessage(),
-                    xmlError.getLine(),
-                    xmlError.getColumn(),
-                    xmlError.getErrorCode());
-        }
-        return false;
+        return true;
     }
 
 }

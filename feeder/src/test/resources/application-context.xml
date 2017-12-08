@@ -15,7 +15,7 @@
 	<bean id="decoderRepository" class="org.n52.svalbard.decode.DecoderRepository"/>
 	<bean id="encoderRepository" class="org.n52.svalbard.encode.EncoderRepository"/>
 	<bean id="sosClient" class="org.n52.sos.importer.feeder.web.ArcticSeaSosClient"/>
-	<bean id="xmlOptionsHelper" class="org.n52.svalbard.util.XmlOptionsHelper" />
+ 	<bean id="xmlOptionsHelper" class="org.n52.svalbard.util.XmlOptionsHelper" />
     <!-- loaded beans -->
     <!-- DECODER -->
 	<bean class="org.n52.svalbard.decode.CapabilitiesBaseTypeDecoder"/>

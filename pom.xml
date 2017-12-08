@@ -35,14 +35,13 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <oxf.version>2.2.0</oxf.version>
         <common.xml.version>1.1.5</common.xml.version>
         <importer.xml.binding.version>0.4</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
-        <svalbard.version>1-SNAPSHOT</svalbard.version>
-        <shetland.version>1-SNAPSHOT</shetland.version>
-        <janmayen.version>1.2.0-SNAPSHOT</janmayen.version>
-        <iceland.version>2-SNAPSHOT</iceland.version>
+        <svalbard.version>1.1.0-SNAPSHOT</svalbard.version>
+        <shetland.version>1.0.0</shetland.version>
+        <janmayen.version>1.2.0</janmayen.version>
+        <iceland.version>2.0.0</iceland.version>
         <org.springframework.version>4.3.10.RELEASE</org.springframework.version>
     </properties>
     <scm>
@@ -154,37 +153,6 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>52n-sos-importer-bindings</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>oxf-sos-adapter</artifactId>
-                <version>${oxf.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>oxf-third-party-ncname-resolver</artifactId>
-                <version>${oxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>52n-oxf-xmlbeans</artifactId>
-                <version>${oxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>oxf-adapter-api</artifactId>
-                <version>${oxf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>oxf-common</artifactId>
-                <version>${oxf.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -350,6 +318,10 @@
 			        <exclusion>
 			            <groupId>com.vividsolutions</groupId>
 			            <artifactId>jts</artifactId>
+			        </exclusion>
+			        <exclusion>
+			            <groupId>org.n52.faroe</groupId>
+			            <artifactId>faroe-annotations</artifactId>
 			        </exclusion>
                 </exclusions>
             </dependency>
