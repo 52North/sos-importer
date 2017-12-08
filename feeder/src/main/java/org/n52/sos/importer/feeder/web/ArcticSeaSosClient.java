@@ -41,6 +41,8 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpResponse;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
@@ -129,7 +131,6 @@ import org.n52.svalbard.util.CodingHelper;
 import org.n52.svalbard.util.XmlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.vividsolutions.jts.io.ParseException;
@@ -219,7 +220,7 @@ public class ArcticSeaSosClient implements SosClient {
         return decoderRepository;
     }
 
-    @Autowired
+    @Inject
     public void setDecoderRepository(DecoderRepository decoderRepository) {
         this.decoderRepository = decoderRepository;
     }
@@ -228,7 +229,7 @@ public class ArcticSeaSosClient implements SosClient {
         return encoderRepository;
     }
 
-    @Autowired
+    @Inject
     public void setEncoderRepository(EncoderRepository encoderRepository) {
         this.encoderRepository = encoderRepository;
     }

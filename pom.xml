@@ -5,7 +5,7 @@
         <artifactId>parent</artifactId>
         <groupId>org.n52</groupId>
         <relativePath />
-        <version>8</version>
+        <version>10</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.n52.sensorweb</groupId>
@@ -35,14 +35,14 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <common.xml.version>1.1.5</common.xml.version>
+        <common.xml.version>2.3.0</common.xml.version>
         <importer.xml.binding.version>0.4</importer.xml.binding.version>
-        <geotools.version>9.5</geotools.version>
+        <geotools.version>18.1</geotools.version>
         <svalbard.version>1.1.0-SNAPSHOT</svalbard.version>
         <shetland.version>1.0.0</shetland.version>
         <janmayen.version>1.2.0</janmayen.version>
         <iceland.version>2.0.0</iceland.version>
-        <org.springframework.version>4.3.10.RELEASE</org.springframework.version>
+        <org.springframework.version>5.0.2.RELEASE</org.springframework.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
@@ -132,7 +132,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.3</version>
+                <version>4.5.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -277,6 +277,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>52n-xml-sampling-v20</artifactId>
+                <version>${common.xml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>52n-xml-ows-v110</artifactId>
                 <version>${common.xml.version}</version>
                 <scope>test</scope>
@@ -284,12 +289,12 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.5</version>
+                <version>2.6</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>23.3-jre</version>
+                <version>23.5-jre</version>
             </dependency>
             <dependency>
                 <groupId>net.jodah</groupId>
@@ -299,7 +304,7 @@
             <dependency>
 	           <groupId>org.mockito</groupId>
                <artifactId>mockito-core</artifactId>
-               <version>2.11.0</version>
+               <version>2.13.0</version>
 	           <scope>test</scope>
             </dependency>
             <dependency>
@@ -461,13 +466,18 @@
             <dependency>
                 <groupId>com.vividsolutions</groupId>
                 <artifactId>jts</artifactId>
-                <version>1.11</version>
+                <version>1.13</version>
                 <exclusions>
                     <exclusion>
                         <groupId>xerces</groupId>
                         <artifactId>xercesImpl</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

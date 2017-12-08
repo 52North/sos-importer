@@ -37,12 +37,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * Handles connection to SOS and provides an easy to use interface.<br>
@@ -50,7 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-@org.springframework.context.annotation.Configuration
+@Configurable
 public final class Feeder implements FeedingContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
@@ -69,7 +73,7 @@ public final class Feeder implements FeedingContext {
 
     private List<Exception> exceptions;
 
-    @Autowired
+    @Inject
     private SosClient sosClient;
 
     /**
@@ -84,12 +88,16 @@ public final class Feeder implements FeedingContext {
         configuration = config;
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
         importer.setConfiguration(configuration);
-        importer.setSosClient(sosClient);
         importer.setFeedingContext(this);
         collector = (Collector) initObjectByClassName(configuration.getCollectorClassName());
         collector.setConfiguration(configuration);
         collector.setFeedingContext(this);
         collectedObservationsCount = 0;
+    }
+
+    @PostConstruct
+    public void init() {
+        importer.setSosClient(sosClient);
     }
 
     public void importData(DataFile dataFile)
