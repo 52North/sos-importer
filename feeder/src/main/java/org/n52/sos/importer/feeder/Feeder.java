@@ -38,15 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Handles connection to SOS and provides an easy to use interface.<br>
@@ -73,8 +71,9 @@ public final class Feeder implements FeedingContext {
 
     private List<Exception> exceptions;
 
-    @Inject
     private SosClient sosClient;
+
+    private ClassPathXmlApplicationContext applicationContext;
 
     /**
      * <p>Constructor for Feeder.</p>
@@ -85,19 +84,25 @@ public final class Feeder implements FeedingContext {
     public Feeder(final Configuration config)
             throws MalformedURLException {
         LOG.trace(String.format("Feeder(%s)", config.toString()));
+
         configuration = config;
+
+        applicationContext = new ClassPathXmlApplicationContext("/application-context.xml");
+
+        sosClient = (SosClient) applicationContext.getBean("sosClient");
+        sosClient.setConfiguration(configuration);
+        sosClient.setHttpClient(null);
+
         importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
         importer.setConfiguration(configuration);
         importer.setFeedingContext(this);
+        importer.setSosClient(sosClient);
+
         collector = (Collector) initObjectByClassName(configuration.getCollectorClassName());
         collector.setConfiguration(configuration);
         collector.setFeedingContext(this);
-        collectedObservationsCount = 0;
-    }
 
-    @PostConstruct
-    public void init() {
-        importer.setSosClient(sosClient);
+        collectedObservationsCount = 0;
     }
 
     public void importData(DataFile dataFile)
@@ -123,6 +128,9 @@ public final class Feeder implements FeedingContext {
         }
         if (importer.hasFailedObservations()) {
             handleFailedObservations(importer.getFailedObservations());
+        }
+        if (applicationContext != null) {
+            applicationContext.close();
         }
         LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }

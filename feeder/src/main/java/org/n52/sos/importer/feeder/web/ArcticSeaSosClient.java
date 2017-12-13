@@ -131,8 +131,6 @@ import org.n52.svalbard.util.CodingHelper;
 import org.n52.svalbard.util.XmlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Configurable;
-
 import com.vividsolutions.jts.io.ParseException;
 
 /**
@@ -142,7 +140,6 @@ import com.vividsolutions.jts.io.ParseException;
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  *
  */
-@Configurable
 public class ArcticSeaSosClient implements SosClient {
 
     public static final String OBSERVATION_ALREADY_IN_DATABASE = "Observation already in database";

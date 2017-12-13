@@ -42,7 +42,7 @@
         <shetland.version>1.0.0</shetland.version>
         <janmayen.version>1.2.0</janmayen.version>
         <iceland.version>2.0.0</iceland.version>
-        <org.springframework.version>5.0.2.RELEASE</org.springframework.version>
+        <org.springframework.version>4.3.12.RELEASE</org.springframework.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
