@@ -85,6 +85,7 @@ import org.n52.shetland.ogc.sos.SosCapabilities;
 import org.n52.shetland.ogc.sos.SosConstants;
 import org.n52.shetland.ogc.sos.SosInsertionMetadata;
 import org.n52.shetland.ogc.sos.SosProcedureDescription;
+import org.n52.shetland.ogc.sos.SosProcedureDescriptionUnknownType;
 import org.n52.shetland.ogc.sos.SosResultEncoding;
 import org.n52.shetland.ogc.sos.SosResultStructure;
 import org.n52.shetland.ogc.sos.request.GetResultTemplateRequest;
@@ -515,13 +516,10 @@ public class ArcticSeaSosClient implements SosClient {
 
     private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
             throws InvalidSridException, NumberFormatException, ParseException {
-        // TODO Review
-        SensorML procedure = new SensorML();
-        procedure.setIdentifier(timeseries.getSensorURI());
 
         OmObservationConstellation observationTemplate = new OmObservationConstellation();
         observationTemplate.setObservationType(getObservationType(timeseries.getMeasuredValueType()));
-        observationTemplate.setProcedure(procedure);
+        observationTemplate.setProcedure(new SosProcedureDescriptionUnknownType(timeseries.getSensorURI()));
         observationTemplate.setObservableProperty(new OmObservableProperty(timeseries.getObservedProperty().getUri()));
         observationTemplate.addOffering(createOffering(timeseries));
         observationTemplate.setFeatureOfInterest(createFeature(timeseries.getFirst()));
