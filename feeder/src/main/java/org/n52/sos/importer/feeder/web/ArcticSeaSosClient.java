@@ -155,10 +155,6 @@ public class ArcticSeaSosClient implements SosClient {
     private static final String GET_REQUEST_SERVICE_PROVIDER =
             "?service=SOS&request=GetCapabilities&Sections=ServiceProvider";
 
-    private static final String SOS_20_DUPLICATE_OBSERVATION_FORMAT =
-            "The observation for procedure=%sobservedProperty=%sfeatureOfInter=%sphenomenonTime=Time instant: %s,null"
-            + "resultTime=Time instant: %s,null already exists in the database!";
-
     private static final Logger LOG = LoggerFactory.getLogger(ArcticSeaSosClient.class);
 
     private HttpClient client;
@@ -744,13 +740,12 @@ public class ArcticSeaSosClient implements SosClient {
         return oer.getCause() != null &&
                 !oer.getExceptions().isEmpty() &&
                 oer.getExceptions().get(0).hasMessage() &&
-                oer.getExceptions().get(0).getMessage().equals(
-                        String.format(SOS_20_DUPLICATE_OBSERVATION_FORMAT,
-                                io.getSensorURI(),
-                                io.getObservedPropertyURI(),
-                                io.getFeatureOfInterestURI(),
-                                io.getTimeStamp().toISO8601String().replaceAll(UTC_PLUS_PATTERN, "Z"),
-                                io.getTimeStamp().toISO8601String().replaceAll(UTC_PLUS_PATTERN, "Z")));
+                oer.getExceptions().get(0).getMessage().contains(io.getSensorURI()) &&
+                oer.getExceptions().get(0).getMessage().contains(io.getObservedPropertyURI()) &&
+                oer.getExceptions().get(0).getMessage().contains(io.getFeatureOfInterestURI()) &&
+                oer.getExceptions().get(0).getMessage().contains(new DateTime(io.getTimeStamp().toISO8601String())
+                        .toString()) &&
+                oer.getExceptions().get(0).getMessage().endsWith("already exists in the database!");
     }
 
     private void logException(Exception e) {
