@@ -32,11 +32,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.SortedSet;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -73,11 +76,11 @@ import org.n52.shetland.ogc.ows.OwsOperation;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
 import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
-import org.n52.shetland.ogc.sensorML.SensorML;
 import org.n52.shetland.ogc.sensorML.elements.SmlCapabilities;
 import org.n52.shetland.ogc.sensorML.elements.SmlCapability;
 import org.n52.shetland.ogc.sensorML.elements.SmlIdentifier;
 import org.n52.shetland.ogc.sensorML.elements.SmlIo;
+import org.n52.shetland.ogc.sensorML.elements.SmlPosition;
 import org.n52.shetland.ogc.sensorML.v20.PhysicalSystem;
 import org.n52.shetland.ogc.sos.Sos1Constants;
 import org.n52.shetland.ogc.sos.Sos2Constants;
@@ -99,9 +102,11 @@ import org.n52.shetland.ogc.sos.response.InsertResultResponse;
 import org.n52.shetland.ogc.sos.response.InsertResultTemplateResponse;
 import org.n52.shetland.ogc.sos.response.InsertSensorResponse;
 import org.n52.shetland.ogc.swe.SweAbstractDataComponent;
+import org.n52.shetland.ogc.swe.SweCoordinate;
 import org.n52.shetland.ogc.swe.SweDataArray;
 import org.n52.shetland.ogc.swe.SweDataRecord;
 import org.n52.shetland.ogc.swe.SweField;
+import org.n52.shetland.ogc.swe.SweVector;
 import org.n52.shetland.ogc.swe.encoding.SweTextEncoding;
 import org.n52.shetland.ogc.swe.simpleType.SweBoolean;
 import org.n52.shetland.ogc.swe.simpleType.SweCount;
@@ -109,14 +114,15 @@ import org.n52.shetland.ogc.swe.simpleType.SweQuantity;
 import org.n52.shetland.ogc.swe.simpleType.SweText;
 import org.n52.shetland.ogc.swe.simpleType.SweTime;
 import org.n52.shetland.util.CollectionHelper;
-import org.n52.shetland.util.JTSHelper;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.SosClient;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
+import org.n52.sos.importer.feeder.util.CoordinateHelper;
 import org.n52.svalbard.decode.Decoder;
 import org.n52.svalbard.decode.DecoderKey;
 import org.n52.svalbard.decode.DecoderRepository;
@@ -130,8 +136,11 @@ import org.n52.svalbard.encode.exception.EncodingException;
 import org.n52.svalbard.encode.exception.NoEncoderForKeyException;
 import org.n52.svalbard.util.CodingHelper;
 import org.n52.svalbard.util.XmlHelper;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.vividsolutions.jts.io.ParseException;
 
 /**
@@ -147,8 +156,6 @@ public class ArcticSeaSosClient implements SosClient {
 
     public static final String SOS_2_0_OBSERVATION_INSERTED = "SOS 2.0 Instances do not return the observation id";
 
-    private static final String UTC_PLUS_PATTERN = "\\+00:00";
-
     private static final String GET_REQUEST_CAPABILITIES =
             "?service=SOS&request=GetCapabilities";
 
@@ -156,6 +163,10 @@ public class ArcticSeaSosClient implements SosClient {
             "?service=SOS&request=GetCapabilities&Sections=ServiceProvider";
 
     private static final Logger LOG = LoggerFactory.getLogger(ArcticSeaSosClient.class);
+
+    private static final Lock INSERT_SENSOR_LOCK = new ReentrantLock(true);
+
+    private static Map<String, String> INSERTED_SENSORS = new ConcurrentSkipListMap<>();
 
     private HttpClient client;
 
@@ -180,8 +191,6 @@ public class ArcticSeaSosClient implements SosClient {
             SosConstants.Operations.InsertObservation.name(),
             Sos2Constants.Operations.InsertResultTemplate.name(),
             Sos2Constants.Operations.InsertResult.name());
-
-    private List<String> registeredSensors = new LinkedList<>();
 
     private String serviceVersion;
 
@@ -279,31 +288,41 @@ public class ArcticSeaSosClient implements SosClient {
                 .map(o -> o.getProcedures().first())
                 .filter(s -> s.equals(sensorURI))
                 .collect(Collectors.toList())
-                .isEmpty() || registeredSensors.contains(sensorURI);
+                .isEmpty() || INSERTED_SENSORS.containsKey(sensorURI);
     }
 
     @Override
-    public SimpleEntry<String, String> insertSensor(InsertSensor rs)
+    public SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
             throws XmlException, IOException, EncodingException {
-        if (serviceVersion.equals(Sos2Constants.SERVICEVERSION)) {
-            try {
-                InsertSensorRequest request = createInsertSensorRequest(rs);
-                HttpResponse response = client.executePost(uri, encodeRequest(request));
-                Object decodeResponse = decodeResponse(response);
-                if (decodeResponse.getClass().isAssignableFrom(InsertSensorResponse.class)) {
-                    return new SimpleEntry<>(
-                            ((InsertSensorResponse) decodeResponse).getAssignedProcedure(),
-                            ((InsertSensorResponse) decodeResponse).getAssignedOffering());
-                }
-            } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
-                logException(e);
+        INSERT_SENSOR_LOCK.lock();
+        try {
+            if (!INSERTED_SENSORS.isEmpty() && INSERTED_SENSORS.containsKey(insertSensor.getSensorURI())) {
+                return new SimpleEntry<>(insertSensor.getSensorURI(), insertSensor.getOfferingUri());
             }
-        } else {
-            LOG.error("insertSensor for SOS 1.0 is NOT supported!");
+            // ein insert sensor lock für alles bzw. methode synchronzied
+            if (serviceVersion.equals(Sos2Constants.SERVICEVERSION)) {
+                try {
+                    InsertSensorRequest request = createInsertSensorRequest(insertSensor);
+                    HttpResponse response = client.executePost(uri, encodeRequest(request));
+                    Object decodeResponse = decodeResponse(response);
+                    if (decodeResponse.getClass().isAssignableFrom(InsertSensorResponse.class)) {
+                        SimpleEntry<String, String> insertedSensor = new SimpleEntry<>(
+                                ((InsertSensorResponse) decodeResponse).getAssignedProcedure(),
+                                ((InsertSensorResponse) decodeResponse).getAssignedOffering());
+                        INSERTED_SENSORS.put(insertedSensor.getKey(), insertedSensor.getValue());
+                        return insertedSensor;
+                    }
+                } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
+                    logException(e);
+                }
+            } else {
+                LOG.error("insertSensor for SOS 1.0 is NOT supported!");
+            }
+            return new SimpleEntry<>(null, null);
+        } finally {
+            INSERT_SENSOR_LOCK.unlock();
         }
-        return new SimpleEntry<>(null, null);
     }
-
 
     @Override
     public String insertObservation(InsertObservation io) {
@@ -323,7 +342,7 @@ public class ArcticSeaSosClient implements SosClient {
             }
             logException(oer);
         } catch (IOException | DecodingException | XmlException | EncodingException |
-                InvalidSridException | NumberFormatException | ParseException e) {
+                InvalidSridException | NumberFormatException | ParseException | FactoryException e) {
             logException(e);
         }
         return "";
@@ -342,7 +361,8 @@ public class ArcticSeaSosClient implements SosClient {
                 return SOS_2_0_OBSERVATION_INSERTED;
             }
         } catch (IOException | DecodingException | XmlException | EncodingException |
-                InvalidSridException | NumberFormatException | OwsExceptionReport | ParseException e) {
+                InvalidSridException | NumberFormatException | OwsExceptionReport | ParseException |
+                FactoryException e) {
             logException(e);
         }
         return "";
@@ -385,7 +405,7 @@ public class ArcticSeaSosClient implements SosClient {
             }
            logException(oer);
         } catch (EncodingException | IOException | DecodingException | XmlException | InvalidSridException |
-                NumberFormatException | ParseException e) {
+                NumberFormatException | ParseException | /*NoSuchAuthorityCodeException |*/ FactoryException e) {
            logException(e);
         }
         return null;
@@ -423,21 +443,22 @@ public class ArcticSeaSosClient implements SosClient {
         return capabilitiesCache.isPresent();
     }
 
-    private InsertSensorRequest createInsertSensorRequest(InsertSensor rs) {
+    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) {
 
         SosInsertionMetadata metadata = new SosInsertionMetadata();
         metadata.setFeatureOfInterestTypes(CollectionHelper.list(
                 "http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint"));
-        metadata.setObservationTypes(rs.getObservedProperties().stream()
-                .map(o -> rs.getMeasuredValueType(o)).collect(Collectors.toList()));
+        metadata.setObservationTypes(insertSensor.getObservedProperties().stream()
+                .map(o -> getObservationType(insertSensor.getMeasuredValueType(o)))
+                .collect(Collectors.toList()));
 
-        List<SmlIo> outputs = new ArrayList<>(rs.getObservedProperties().size());
-        for (ObservedProperty observedProperty : rs.getObservedProperties()) {
+        List<SmlIo> outputs = new ArrayList<>(insertSensor.getObservedProperties().size());
+        for (ObservedProperty observedProperty : insertSensor.getObservedProperties()) {
             SmlIo output = new SmlIo();
             output.setIoName(observedProperty.getName());
             output.setIoValue(createSweType(
-                    rs.getMeasuredValueType(observedProperty),
-                    rs.getUnitOfMeasurementCode(observedProperty),
+                    insertSensor.getMeasuredValueType(observedProperty),
+                    insertSensor.getUnitOfMeasurementCode(observedProperty),
                     observedProperty.getUri()));
             outputs.add(output);
         }
@@ -445,25 +466,94 @@ public class ArcticSeaSosClient implements SosClient {
         SmlCapabilities offeringCapabilities = new SmlCapabilities("offerings");
         SweText offeringSweText = new SweText();
         offeringSweText.setDefinition("urn:ogc:def:identifier:OGC:offeringID");
-        offeringSweText.setLabel(String.format("Offering of Sensor '%s'.", rs.getSensorName()));
-        offeringSweText.setValue(rs.getOfferingUri());
+        offeringSweText.setLabel(String.format("Offering of Sensor '%s'.", insertSensor.getSensorName()));
+        offeringSweText.setValue(insertSensor.getOfferingUri());
         offeringCapabilities.addCapability(new SmlCapability("offeringID", offeringSweText));
 
         PhysicalSystem system = new PhysicalSystem();
-        system.setIdentifier(rs.getSensorURI());
+        system.setIdentifier(insertSensor.getSensorURI());
         system.setIdentifications(CollectionHelper.list(
-                new SmlIdentifier("longName", "urn:ogc:def:identifier:OGC:1.0:longName", rs.getSensorName()),
-                new SmlIdentifier("shortName", "urn:ogc:def:identifier:OGC:1.0:shortName", rs.getSensorURI())));
+                new SmlIdentifier("longName", "urn:ogc:def:identifier:OGC:1.0:longName",
+                        insertSensor.getSensorName()),
+                new SmlIdentifier("shortName", "urn:ogc:def:identifier:OGC:1.0:shortName",
+                        insertSensor.getSensorURI())));
         system.setOutputs(outputs);
         system.addCapabilities(offeringCapabilities);
+
+        if (isPositionAvailable(insertSensor)) {
+            addPosition(insertSensor, system);
+        }
 
         InsertSensorRequest request = new InsertSensorRequest(SosConstants.SOS, serviceVersion);
         request.setProcedureDescriptionFormat("http://www.opengis.net/sensorml/2.0");
         request.setProcedureDescription(new SosProcedureDescription<>(system));
-        request.setObservableProperty(rs.getObservedProperties().stream()
+        request.setObservableProperty(insertSensor.getObservedProperties().stream()
                 .map(p -> p.getUri()).collect(Collectors.toList()));
         request.setMetadata(metadata);
         return request;
+    }
+
+    private void addPosition(InsertSensor insertSensor, PhysicalSystem system) {
+        //    <sml:position>
+        //        <swe:Vector referenceFrame="urn:ogc:def:crs:EPSG::4326">
+        //            <swe:coordinate name="easting">
+        //                <swe:Quantity axisID="x">
+        //                    <swe:uom code="degree"/>
+        //                    <swe:value>7.651968812254194</swe:value>
+        //                </swe:Quantity>
+        //            </swe:coordinate>
+        //            <swe:coordinate name="northing">
+        //                <swe:Quantity axisID="y">
+        //                    <swe:uom code="degree"/>
+        //                    <swe:value>51.935101100104916</swe:value>
+        //                </swe:Quantity>
+        //            </swe:coordinate>
+        //            <swe:coordinate name="altitude">
+        //                <swe:Quantity axisID="z">
+        //                    <swe:uom code="m"/>
+        //                    <swe:value>52.0</swe:value>
+        //                </swe:Quantity>
+        //            </swe:coordinate>
+        //        </swe:Vector>
+        //    </sml:position>
+        SweQuantity longitudeValue = new QuantityValue(insertSensor.getLongitudeValue(),
+                insertSensor.getLongitudeUnit());
+        SweCoordinate<Double> longitude = new SweCoordinate<>("longitude", longitudeValue);
+
+        SweQuantity latitudeValue = new QuantityValue(insertSensor.getLatitudeValue(),
+                insertSensor.getLatitudeUnit());
+        SweCoordinate<Double> latitude = new SweCoordinate<>("latitude", latitudeValue);
+
+        List<SweCoordinate<Double>> coordinates;
+
+        if (isAltitudeAvailable(insertSensor)) {
+            SweQuantity altitudeValue = new QuantityValue(insertSensor.getAltitudeValue(),
+                    insertSensor.getAltitudeUnit());
+            SweCoordinate<Double> altitude = new SweCoordinate<>("altitude", altitudeValue);
+            coordinates = CollectionHelper.list(longitude, latitude, altitude);
+        } else {
+            coordinates = CollectionHelper.list(longitude, latitude);
+        }
+
+        SweVector vector = new SweVector();
+        vector.setReferenceFrame("urn:ogc:def:crs:EPSG::" + insertSensor.getEpsgCode());
+        vector.setCoordinates(coordinates);
+
+        SmlPosition position = new SmlPosition();
+        position.setVector(vector);
+        system.setPosition(position);
+    }
+
+    private boolean isPositionAvailable(InsertSensor insertSensor) {
+        return insertSensor.getLongitudeValue() != Position.VALUE_NOT_SET &&
+                insertSensor.getLongitudeUnit() != null && !insertSensor.getLongitudeUnit().isEmpty() &&
+                insertSensor.getLatitudeValue() != Position.VALUE_NOT_SET &&
+                insertSensor.getLatitudeUnit() != null && !insertSensor.getLatitudeUnit().isEmpty();
+    }
+
+    private boolean isAltitudeAvailable(InsertSensor insertSensor) {
+        return insertSensor.isSetAltitude() && insertSensor.getAltitudeUnit() != null &&
+                !insertSensor.getAltitudeUnit().isEmpty();
     }
 
     private SweAbstractDataComponent createSweType(String measuredValueType, String unitOfMeasurementCode,
@@ -511,8 +601,8 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private OmObservationConstellation createObservationTemplate(TimeSeries timeseries)
-            throws InvalidSridException, NumberFormatException, ParseException {
-
+            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
+            FactoryException {
         OmObservationConstellation observationTemplate = new OmObservationConstellation();
         observationTemplate.setObservationType(getObservationType(timeseries.getMeasuredValueType()));
         observationTemplate.setProcedure(new SosProcedureDescriptionUnknownType(timeseries.getSensorURI()));
@@ -523,7 +613,8 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private List<OmObservation> createOmObservation(InsertObservation io)
-            throws InvalidSridException, NumberFormatException, ParseException {
+            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
+            FactoryException {
         OmObservation omObservation = createOmObservationSkeleton(io);
         omObservation.setValue(createObservationValue(io));
         omObservation.getObservationConstellation().setObservationType(getObservationType(io.getMeasuredValueType()));
@@ -531,7 +622,8 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private List<OmObservation> createSweArrayObservation(TimeSeries timeSeries)
-            throws InvalidSridException, NumberFormatException, ParseException {
+            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
+            FactoryException {
         OmObservation omObservation = createOmObservationSkeleton(timeSeries.getFirst());
         omObservation.setValue(createSweArrayObservationValue(timeSeries));
         omObservation.getObservationConstellation().setObservationType(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION);
@@ -581,14 +673,13 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private OmObservation createOmObservationSkeleton(InsertObservation io)
-            throws InvalidSridException, NumberFormatException, ParseException {
+            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
+            FactoryException {
         OmObservationConstellation observationConstellation = new OmObservationConstellation();
         observationConstellation.setGmlId("o1");
         observationConstellation.setObservableProperty(new OmObservableProperty(io.getObservedPropertyURI()));
         observationConstellation.setFeatureOfInterest(createFeature(io));
-        PhysicalSystem procedure = new PhysicalSystem();
-        procedure.setIdentifier(io.getSensorURI());
-        observationConstellation.setProcedure(procedure);
+        observationConstellation.setProcedure(new SosProcedureDescriptionUnknownType(io.getSensorURI()));
 
         TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
 
@@ -615,7 +706,8 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private AbstractFeature createFeature(InsertObservation insertObservation)
-            throws InvalidSridException, NumberFormatException, ParseException {
+            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
+            FactoryException {
         SamplingFeature samplingFeature =
                 new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
         samplingFeature.setName(new CodeType(insertObservation.getFeatureOfInterestName()));
@@ -623,12 +715,16 @@ public class ArcticSeaSosClient implements SosClient {
             samplingFeature.setSampledFeatures(Arrays.asList(new SamplingFeature(
                     new CodeWithAuthority(insertObservation.getParentFeatureIdentifier()))));
         }
-        samplingFeature.setGeometry(JTSHelper.createGeometryFromWKT(
-                String.format("POINT(%s %s)",
-                        insertObservation.getLongitudeValue(),
-                        insertObservation.getLatitudeValue()),
-                Integer.parseInt(insertObservation.getEpsgCode())));
 
+        samplingFeature.setGeometry(insertObservation.isSetAltitudeValue() ?
+                CoordinateHelper.createPoint(insertObservation.getLongitudeValue(),
+                        insertObservation.getLatitudeValue(),
+                        insertObservation.getAltitudeValue(),
+                        Integer.parseInt(insertObservation.getEpsgCode())) :
+                            CoordinateHelper.createPoint(
+                                    insertObservation.getLongitudeValue(),
+                                    insertObservation.getLatitudeValue(),
+                                    Integer.parseInt(insertObservation.getEpsgCode())));
         return samplingFeature;
     }
 

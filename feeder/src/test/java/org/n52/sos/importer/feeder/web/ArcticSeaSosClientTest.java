@@ -44,6 +44,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -320,8 +321,8 @@ public class ArcticSeaSosClientTest {
                 "    <ows:ExceptionText>The observation for procedure=" + sensorUri +
                 "observedProperty=" + propertyUri +
                 "featureOfInter=" + featureUri +
-                "phenomenonTime=Time instant: 1970-01-01T00:00:00.000Z,null" +
-                "resultTime=Time instant: 1970-01-01T00:00:00.000Z,null already exists in the database!" +
+                "phenomenonTime=Time instant: " + new DateTime("1970-01-01T00:00:00.000Z") + ",null" +
+                "resultTime=Time instant: " + new DateTime("1970-01-01T00:00:00.000Z") + ",null already exists in the database!" +
                 "</ows:ExceptionText>\n" +
                 "  </ows:Exception>\n" +
                 "</ows:ExceptionReport>");

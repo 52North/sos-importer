@@ -138,4 +138,8 @@ public class InsertSensor {
         return unitOfMeasurements.get(observedProperty);
     }
 
+    public boolean isSetAltitude() {
+        return io.isSetAltitudeValue();
+    }
+
 }

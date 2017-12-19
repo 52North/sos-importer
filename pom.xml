@@ -39,7 +39,7 @@
         <importer.xml.binding.version>0.4</importer.xml.binding.version>
         <geotools.version>18.1</geotools.version>
         <svalbard.version>1.1.0-SNAPSHOT</svalbard.version>
-        <shetland.version>1.0.0</shetland.version>
+        <shetland.version>1.1.0-SNAPSHOT</shetland.version>
         <janmayen.version>1.2.0</janmayen.version>
         <iceland.version>2.0.0</iceland.version>
         <org.springframework.version>4.3.12.RELEASE</org.springframework.version>
@@ -450,11 +450,6 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>${org.springframework.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
                 <version>${org.springframework.version}</version>
             </dependency>
             <dependency>

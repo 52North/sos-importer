@@ -140,13 +140,13 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-        	<groupId>net.jodah</groupId>
-        	<artifactId>failsafe</artifactId>
+            <groupId>net.jodah</groupId>
+            <artifactId>failsafe</artifactId>
         </dependency>
         <dependency>
-        	<groupId>org.mockito</groupId>
-        	<artifactId>mockito-core</artifactId>
-        	<scope>test</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.n52.svalbard</groupId>
@@ -178,7 +178,7 @@
                     <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.n52.janmayen</groupId>
@@ -195,12 +195,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -216,8 +210,17 @@
             <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.n52.iceland</groupId>
-            <artifactId>iceland</artifactId>
+             <groupId>org.geotools</groupId>
+             <artifactId>gt-referencing</artifactId>
+        </dependency>
+        <dependency>
+             <groupId>org.geotools</groupId>
+             <artifactId>gt-epsg-hsql</artifactId>
+             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-opengis</artifactId>
         </dependency>
     </dependencies>
     <build>
