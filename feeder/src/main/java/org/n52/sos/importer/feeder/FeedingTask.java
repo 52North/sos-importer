@@ -65,21 +65,10 @@ public class FeedingTask {
 
     private DataFile dataFile;
 
-    /**
-     * <p>Constructor for OneTimeFeeder.</p>
-     *
-     * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     */
     public FeedingTask(final Configuration config) {
         this.config = config;
     }
 
-    /**
-     * <p>Constructor for OneTimeFeeder.</p>
-     *
-     * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param datafile a {@link java.io.File} object.
-     */
     public FeedingTask(final Configuration config, final File datafile) {
         this.config = config;
         dataFile = new DataFile(config, datafile);
