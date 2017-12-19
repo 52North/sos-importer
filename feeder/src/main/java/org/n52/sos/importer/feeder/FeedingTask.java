@@ -57,8 +57,6 @@ import org.slf4j.LoggerFactory;
 public class FeedingTask {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
-    private static final String COUNTER_FILE_POSTFIX = "_counter";
-    private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
     private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
 
     private final Configuration config;
@@ -149,7 +147,7 @@ public class FeedingTask {
                 File counterFile = null;
                 if (config.isUseLastTimestamp()) {
                     timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
-                            generateFileNameWithPostfix(TIMESTAMP_FILE_POSTFIX));
+                            generateFileNameWithPostfix(Configuration.TIMESTAMP_FILE_POSTFIX));
                     LOG.debug("Check last timestamp file '{}'.", timeStampFile.getCanonicalPath());
                     if (timeStampFile.exists()) {
                         // read already inserted UsedLastTimeStamp
@@ -164,7 +162,7 @@ public class FeedingTask {
                     }
                 } else {
                     counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
-                            generateFileNameWithPostfix(COUNTER_FILE_POSTFIX));
+                            generateFileNameWithPostfix(Configuration.COUNTER_FILE_POSTFIX));
                     LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
                     // read already inserted line count
                     if (counterFile.exists()) {

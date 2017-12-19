@@ -178,6 +178,10 @@ public class Configuration {
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
+    public static final String TIMESTAMP_FILE_POSTFIX = ".timestamp";
+
+    public static final String COUNTER_FILE_POSTFIX = ".counter";
+
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     private static final HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
 

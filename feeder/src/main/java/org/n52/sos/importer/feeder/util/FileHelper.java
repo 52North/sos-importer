@@ -57,7 +57,13 @@ public class FileHelper {
      */
     public static File createFileInImporterHomeWithUniqueFileName(final String fileName) {
         LOG.trace("createFileInImporterHomeWithUniqueFileName({})", fileName);
-        return new File(getHome().getAbsolutePath() + File.separator + cleanPathToCreateFileName(fileName));
+        String myFileName = cleanPathToCreateFileName(fileName);
+        if (fileName.endsWith(Configuration.COUNTER_FILE_POSTFIX)) {
+            myFileName += Configuration.COUNTER_FILE_POSTFIX;
+        } else if (fileName.endsWith(Configuration.TIMESTAMP_FILE_POSTFIX)) {
+            myFileName += Configuration.TIMESTAMP_FILE_POSTFIX;
+        }
+        return new File(getHome().getAbsolutePath() + File.separator + myFileName);
     }
 
     /**
