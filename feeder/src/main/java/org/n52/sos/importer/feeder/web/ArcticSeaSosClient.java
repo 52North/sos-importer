@@ -497,9 +497,6 @@ public class ArcticSeaSosClient implements SosClient {
     private ObservationValue<?> createObservationValue(InsertObservation io) {
         Time phenomenonTime = createTimeInstant(io.getTimeStamp());
         switch (io.getMeasuredValueType()) {
-            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
-                QuantityValue quantity = new QuantityValue((Double) io.getResultValue(), io.getUnitOfMeasurementCode());
-                return new SingleObservationValue<>(phenomenonTime, quantity);
             case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
                 BooleanValue booleanValue = new BooleanValue((Boolean) io.getResultValue());
                 return new SingleObservationValue<>(phenomenonTime, booleanValue);
@@ -509,9 +506,10 @@ public class ArcticSeaSosClient implements SosClient {
             case Configuration.SOS_OBSERVATION_TYPE_TEXT:
                 TextValue text = new TextValue((String) io.getResultValue());
                 return new SingleObservationValue<>(phenomenonTime, text);
+            case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
             default:
-                // TODO or throw an exception
-                return null;
+                QuantityValue quantity = new QuantityValue((Double) io.getResultValue(), io.getUnitOfMeasurementCode());
+                return new SingleObservationValue<>(phenomenonTime, quantity);
         }
     }
 
