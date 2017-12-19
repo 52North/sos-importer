@@ -581,10 +581,10 @@ public class ArcticSeaSosClient implements SosClient {
 
     private SweField createSwePhenomenonTimeField() {
         SweTime sweTime = new SweTime();
-        sweTime.setDefinition("http://www.opengis.net/def/property/OGC/0/PhenomenonTime");
-        sweTime.setUom(new UoM("http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"));
+        sweTime.setDefinition(OmConstants.PHENOMENON_TIME);
+        sweTime.setUom(new UoM(OmConstants.PHEN_UOM_ISO8601));
 
-        SweField timestampField = new SweField("phenomenonTime", sweTime);
+        SweField timestampField = new SweField(OmConstants.EN_PHENOMENON_TIME, sweTime);
         return timestampField;
     }
 
@@ -607,7 +607,6 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private SosResultStructure createResultStructure(TimeSeries timeseries) {
-        //FIXME are there any constants for these strings in arctic sea?
         SweField timestampField = createSwePhenomenonTimeField();
 
         SweField measuredValueField = new SweField(
@@ -732,7 +731,6 @@ public class ArcticSeaSosClient implements SosClient {
             case Configuration.SOS_OBSERVATION_TYPE_NUMERIC:
             default:
                 return OmConstants.OBS_TYPE_MEASUREMENT;
-                // throw new IllegalArgumentException("Observation Type '" + measuredValueType + "' not supported.");
         }
     }
 
