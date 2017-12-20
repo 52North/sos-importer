@@ -296,7 +296,7 @@ public class ArcticSeaSosClientTest {
         Mockito.when(capabilitiesCache.getContents()).thenReturn(contents);
 
         InsertObservation io = createInsertObservation(55.0, 0);
-        Assert.assertThat(sosClient.insertObservation(io), Is.is("Observation already in database"));
+        Assert.assertThat(sosClient.insertObservation(io), Is.is(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED));
     }
 
     @Test

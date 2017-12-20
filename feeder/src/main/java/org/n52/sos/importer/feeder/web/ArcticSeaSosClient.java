@@ -152,8 +152,6 @@ import com.vividsolutions.jts.io.ParseException;
  */
 public class ArcticSeaSosClient implements SosClient {
 
-    public static final String OBSERVATION_ALREADY_IN_DATABASE = "Observation already in database";
-
     public static final String SOS_2_0_OBSERVATION_INSERTED = "SOS 2.0 Instances do not return the observation id";
 
     private static final String GET_REQUEST_CAPABILITIES =
@@ -338,7 +336,7 @@ public class ArcticSeaSosClient implements SosClient {
             }
         } catch (OwsExceptionReport oer) {
             if (isDuplicateObservationError(oer, io)) {
-                return OBSERVATION_ALREADY_IN_DATABASE;
+                return Configuration.SOS_OBSERVATION_ALREADY_CONTAINED;
             }
             logException(oer);
         } catch (IOException | DecodingException | XmlException | EncodingException |
