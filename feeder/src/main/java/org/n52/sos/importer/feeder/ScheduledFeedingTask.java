@@ -97,7 +97,7 @@ public class ScheduledFeedingTask extends TimerTask {
                 for (final File fileToFeed : filesToFeed) {
                     LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
-                        new FeedingTask(configuration, fileToFeed).startFeeding();
+                        new FeedingTask(configuration, fileToFeed).feedData();
                         setLastUsedDataFile(fileToFeed);
                         saveLastFeedFile();
                         LOG.info("Finished feeding file {}.", fileToFeed.getName());
@@ -110,7 +110,7 @@ public class ScheduledFeedingTask extends TimerTask {
             } else {
                 datafile = file;
                 // OneTimeFeeder with file override used not as thread
-                new FeedingTask(configuration, datafile).startFeeding();
+                new FeedingTask(configuration, datafile).feedData();
                 LOG.info("Finished feeding file {}. Next run in {} minute{}.",
                         datafile.getName(),
                         periodInMinutes,

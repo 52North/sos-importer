@@ -98,7 +98,7 @@ public class MultiFeederTask {
 
                                 @Override
                                 public void run() {
-                                    new FeedingTask(config).startFeeding();
+                                    new FeedingTask(config).feedData();
                                 }
                             });
                         } catch (XmlException | IOException e) {

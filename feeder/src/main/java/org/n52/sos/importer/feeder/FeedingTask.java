@@ -101,7 +101,6 @@ public class FeedingTask {
         }
     }
 
-    public void startFeeding() {
         LOG.trace("startFeeding()");
         LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
         // local or remote
@@ -120,6 +119,7 @@ public class FeedingTask {
             LOG.error("Datafile is not available. Cancel feeding!");
             return;
         }
+    public void feedData() {
         try {
             // check SOS
             Feeder feeder = null;
