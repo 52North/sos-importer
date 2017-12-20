@@ -397,10 +397,13 @@ You may first get in touch using the [sensor web mailinglist](mailto:swe@52north
 
 ## Project Funding
 
+The project received funding by
+
    * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="\_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
    * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="\_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
    * by University of Leicester during 2014.
 
+## End Section
 
 # Users
 ## How to Run
