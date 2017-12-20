@@ -1779,4 +1779,8 @@ public class Configuration {
         }
         return null;
     }
+
+    public String getAbsolutePath() {
+        return configFile.getAbsolutePath();
+    }
 }
