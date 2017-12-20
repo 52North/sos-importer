@@ -33,7 +33,11 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.cs.CoordinateSystem;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.PrecisionModel;
+import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 import com.vividsolutions.jts.io.ParseException;
 
 /**
@@ -88,13 +92,15 @@ public class CoordinateHelper extends org.n52.shetland.util.JTSHelper {
             }
 
         }
-        String wkt = "";
+        GeometryFactory fac = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), epsgCode);
         if (Double.isNaN(altitude) || cs.getDimension() == 2) {
-            wkt = String.format(FORMAT_POINT_2D, coordinateValues[0], coordinateValues[1]);
+            return fac.createPoint(new CoordinateArraySequence(new Coordinate[] {
+                    new Coordinate(coordinateValues[0], coordinateValues[1])}, 2));
         } else if (cs.getDimension() > 2) {
-            wkt = String.format(FORMAT_POINT_3D, coordinateValues[0], coordinateValues[1] , coordinateValues[2]);
+            return fac.createPoint(new CoordinateArraySequence(new Coordinate[] {
+                    new Coordinate(coordinateValues[0], coordinateValues[1] , coordinateValues[2])}, 3));
         }
-        return (Point) org.n52.shetland.util.JTSHelper.createGeometryFromWKT(wkt, epsgCode);
+        throw new IllegalArgumentException("Only CRS with 2 or 3 dimensions are supported!");
     }
 
     /**
