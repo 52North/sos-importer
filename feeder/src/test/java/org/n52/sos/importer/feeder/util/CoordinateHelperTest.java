@@ -36,8 +36,8 @@ import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.io.ParseException;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>

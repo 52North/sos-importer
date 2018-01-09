@@ -141,7 +141,7 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.io.ParseException;
+import org.locationtech.jts.io.ParseException;
 
 /**
  * SosClient using the <a href="https://github.com/52North/arctic-sea">52&deg;North Arctic-Sea project</a>
