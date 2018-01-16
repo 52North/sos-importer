@@ -509,6 +509,21 @@
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
+    <xs:element name="RelatedReferenceValue">
+        <xs:annotation>
+            <xs:documentation>
+                A value with the same type, optional unit and observed property
+                of the related column that defines an upper or lower limit.
+                An additional label MUST be given.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Label" type="xs:string"/>
+                <xs:element name="Value" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="RelatedSensor">
         <xs:annotation>
             <xs:documentation>
@@ -746,6 +761,7 @@
                     </xs:annotation>
                 </xs:element>
                 <xs:element ref="RelatedOmParameter" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="RelatedReferenceValue" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
