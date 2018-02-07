@@ -95,10 +95,10 @@ public class CoordinateHelper extends org.n52.shetland.util.JTSHelper {
         GeometryFactory fac = new GeometryFactory(new PrecisionModel(PrecisionModel.FLOATING), epsgCode);
         if (Double.isNaN(altitude) || cs.getDimension() == 2) {
             return fac.createPoint(new CoordinateArraySequence(new Coordinate[] {
-                    new Coordinate(coordinateValues[0], coordinateValues[1])}, 2));
+                new Coordinate(coordinateValues[0], coordinateValues[1])}, 2));
         } else if (cs.getDimension() > 2) {
             return fac.createPoint(new CoordinateArraySequence(new Coordinate[] {
-                    new Coordinate(coordinateValues[0], coordinateValues[1] , coordinateValues[2])}, 3));
+                new Coordinate(coordinateValues[0], coordinateValues[1] , coordinateValues[2])}, 3));
         }
         throw new IllegalArgumentException("Only CRS with 2 or 3 dimensions are supported!");
     }

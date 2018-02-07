@@ -132,7 +132,7 @@ public class SimpleHttpClient implements HttpClient {
     @Override
     public HttpResponse executeMethod(HttpRequestBase method) throws IOException {
         return Failsafe.with(RETRY_POLICY)
-                .onFailedAttempt((ex) -> LOG.warn("Could not connect to host; retrying", ex))
+                .onFailedAttempt(ex -> LOG.warn("Could not connect to host; retrying", ex))
                 .get(() -> httpclient.execute(method));
     }
 

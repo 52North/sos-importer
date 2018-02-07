@@ -401,10 +401,10 @@ public class ArcticSeaSosClient implements SosClient {
             if (isTemplateIdentifierAlreadyContainedError(timeseries, oer)) {
                 return createTemplateIdentifier(timeseries);
             }
-           logException(oer);
+            logException(oer);
         } catch (EncodingException | IOException | DecodingException | XmlException | InvalidSridException |
                 NumberFormatException | ParseException | /*NoSuchAuthorityCodeException |*/ FactoryException e) {
-           logException(e);
+            logException(e);
         }
         return null;
     }
