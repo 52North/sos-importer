@@ -5,7 +5,7 @@
         <artifactId>parent</artifactId>
         <groupId>org.n52</groupId>
         <relativePath />
-        <version>10</version>
+        <version>11</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.n52.sensorweb</groupId>
@@ -35,9 +35,9 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
-        <version.common-xml>2.3.0</version.common-xml>
-        <version.geotools>18.1</version.geotools>
-        <version.arctic-sea>3.0.0</version.arctic-sea>
+        <version.common-xml>2.4.0</version.common-xml>
+        <version.geotools>18.2</version.geotools>
+        <version.arctic-sea>3.1.0</version.arctic-sea>
         <version.springframework>4.3.12.RELEASE</version.springframework>
     </properties>
     <scm>
@@ -128,12 +128,12 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.4</version>
+                <version>4.5.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.4.8</version>
+                <version>4.4.9</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.opencsv</groupId>
@@ -226,6 +226,7 @@
                 <version>1.0.1</version>
             </dependency>
             <dependency>
+                <!-- keep this version because the newer ones have a bug that breaks the software -->
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
                 <version>1.4.01</version>
@@ -290,12 +291,12 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>23.5-jre</version>
+                <version>24.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>net.jodah</groupId>
                 <artifactId>failsafe</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5</version>
             </dependency>
             <dependency>
 	           <groupId>org.mockito</groupId>
