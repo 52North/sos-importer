@@ -147,26 +147,7 @@ public class Helper {
         return null;
     }
 
-    /**
-     * <p>isSensorInArray.</p>
-     *
-     * @param relatedSensors an array of {@link RelatedSensor} objects.
-     * @param sensorXmlId a {@link java.lang.String} object.
-     * @return <b>true</b>, if the <code>sensorXmlId</code> is contained in the
-     *      given <code>RelatedSensors[]</code> , <br>
-     *      else <b>false</b>
-     */
-    protected static boolean isSensorInArray(final RelatedSensor[] relatedSensors,
-            final String sensorXmlId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isSensorInArray()");
-        }
-        for (final RelatedSensor relatedSensorFromArray : relatedSensors) {
-            if (relatedSensorFromArray.isSetIdRef() &&
-                    relatedSensorFromArray.getIdRef().equalsIgnoreCase(sensorXmlId)) {
-                return true;
-            }
-        }
-        return false;
+    protected static boolean isIdOfRelatedSensorMatching(final RelatedSensor relatedSensor, final String sensorXmlId) {
+        return relatedSensor.isSetIdRef() && relatedSensor.getIdRef().equalsIgnoreCase(sensorXmlId);
     }
 }

@@ -169,7 +169,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
         FeatureOfInterestType foiXB = null;
         final FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
-        RelatedFOI[] relatedFOIs;
+        RelatedFOI relatedFOI;
         boolean addNew;
         org.n52.sos.importer.model.position.Position pos;
         Position posXB = null;
@@ -258,16 +258,16 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
          * the FOI is in the model.
          * Next is to link measure value column to this entity by its URI
          */
-        relatedFOIs = mVColumn.getRelatedFOIArray();
-        addNew = !isFoiInArray(relatedFOIs, foi.getXMLId());
+        relatedFOI = mVColumn.getRelatedFOI();
+        addNew = !isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
         if (addNew) {
             mVColumn.addNewRelatedFOI().setIdRef(foi.getXMLId());
             if (logger.isDebugEnabled()) {
                 logger.debug("Added new related FOI element");
             }
         }
-        relatedFOIs = mVColumn.getRelatedFOIArray();
-        return isFoiInArray(relatedFOIs, foi.getXMLId());
+        relatedFOI = mVColumn.getRelatedFOI();
+        return isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
     }
 
     private void fillXBPosition(final Position posXB,
@@ -355,7 +355,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
         ObservedPropertyType obsPropXB = null;
         final ObservedPropertyType[] obsPropsXB = addiMeta.getObservedPropertyArray();
-        RelatedObservedProperty[] relatedObsProps;
+        RelatedObservedProperty relatedObsProp;
         boolean addNew;
 
         if (obsPropsXB != null && obsPropsXB.length > 0) {
@@ -427,13 +427,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
          * the ObservedProperty is in the model.
          * Next is to link measure value column to this entity by its URI
          */
-        relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-        addNew = !isObsPropInArray(relatedObsProps, obsProp.getXMLId());
+        relatedObsProp = mVColumn.getRelatedObservedProperty();
+        addNew = !isIdOfObservedPropertyMatching(relatedObsProp, obsProp.getXMLId());
         if (addNew) {
             mVColumn.addNewRelatedObservedProperty().setIdRef(obsProp.getXMLId());
         }
-        relatedObsProps = mVColumn.getRelatedObservedPropertyArray();
-        return isObsPropInArray(relatedObsProps, obsProp.getXMLId());
+        relatedObsProp = mVColumn.getRelatedObservedProperty();
+        return isIdOfObservedPropertyMatching(relatedObsProp, obsProp.getXMLId());
     }
 
     private boolean addRelatedSensor(
@@ -446,7 +446,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
         SensorType sensorXB = null;
         final SensorType[] sensorsXB = addiMeta.getSensorArray();
-        RelatedSensor[] relatedSensors;
+        RelatedSensor relatedSensor;
         boolean addNew;
 
         if (sensorsXB != null && sensorsXB.length > 0) {
@@ -521,13 +521,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
          * the Sensor is in the model.
          * Next is to link measure value column to this entity by its URI
          */
-        relatedSensors = mVColumn.getRelatedSensorArray();
-        addNew = !Helper.isSensorInArray(relatedSensors, sensor.getXMLId());
+        relatedSensor = mVColumn.getRelatedSensor();
+        addNew = !Helper.isIdOfRelatedSensorMatching(relatedSensor, sensor.getXMLId());
         if (addNew) {
             mVColumn.addNewRelatedSensor().setIdRef(sensor.getXMLId());
         }
-        relatedSensors = mVColumn.getRelatedSensorArray();
-        return Helper.isSensorInArray(relatedSensors, sensor.getXMLId());
+        relatedSensor = mVColumn.getRelatedSensor();
+        return Helper.isIdOfRelatedSensorMatching(relatedSensor, sensor.getXMLId());
     }
 
     private boolean addRelatedUOM(
@@ -540,7 +540,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
         UnitOfMeasurementType uOMXB = null;
         final UnitOfMeasurementType[] uOMsXB = addiMeta.getUnitOfMeasurementArray();
-        RelatedUnitOfMeasurement[] relatedUOMs;
+        RelatedUnitOfMeasurement relatedUOM;
         boolean addNew;
 
         if (uOMsXB != null && uOMsXB.length > 0) {
@@ -614,53 +614,24 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
          * the UOM is in the model.
          * Next is to link measure value column to this entity by its URI
          */
-        relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
-        addNew = !isUOMInArray(relatedUOMs, uOM.getXMLId());
+        relatedUOM = mVColumn.getRelatedUnitOfMeasurement();
+        addNew = !isIdOfRelatedUnitOfMeasurementMatching(relatedUOM, uOM.getXMLId());
         if (addNew) {
             mVColumn.addNewRelatedUnitOfMeasurement().setIdRef(uOM.getXMLId());
         }
-        relatedUOMs = mVColumn.getRelatedUnitOfMeasurementArray();
-        return isUOMInArray(relatedUOMs, uOM.getURIString());
+        relatedUOM = mVColumn.getRelatedUnitOfMeasurement();
+        return isIdOfRelatedUnitOfMeasurementMatching(relatedUOM, uOM.getURIString());
     }
 
-    private boolean isFoiInArray(final RelatedFOI[] relatedFOIs, final String foiXmlId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\tisFoiInArray()");
-        }
-        for (final RelatedFOI relatedFoiFromArray : relatedFOIs) {
-            if (relatedFoiFromArray.isSetIdRef()  &&
-                    relatedFoiFromArray.getIdRef().equalsIgnoreCase(foiXmlId)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isIdOfRelatedFOIMatching(final RelatedFOI relatedFOI, final String foiXmlId) {
+        return relatedFOI.isSetIdRef() && relatedFOI.getIdRef().equalsIgnoreCase(foiXmlId);
     }
 
-    private boolean isObsPropInArray(final RelatedObservedProperty[] relatedObsProps,
-            final String obsPropXmlId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\t\tisObsPropInArray()");
-        }
-        for (final RelatedObservedProperty relatedObsPropFromArray : relatedObsProps) {
-            if (relatedObsPropFromArray.isSetIdRef() &&
-                    relatedObsPropFromArray.getIdRef().equalsIgnoreCase(obsPropXmlId)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isIdOfObservedPropertyMatching(final RelatedObservedProperty relatedObsProp, final String obsPropXmlId) {
+        return relatedObsProp.isSetIdRef() && relatedObsProp.getIdRef().equalsIgnoreCase(obsPropXmlId);
     }
 
-    private boolean isUOMInArray(final RelatedUnitOfMeasurement[] relatedUOMs,
-            final String uomUriXmlId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isUOMInArray()");
-        }
-        for (final RelatedUnitOfMeasurement relatedUOMFromArray : relatedUOMs) {
-            if (relatedUOMFromArray.isSetIdRef() &&
-                    relatedUOMFromArray.getIdRef().equalsIgnoreCase(uomUriXmlId)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isIdOfRelatedUnitOfMeasurementMatching(final RelatedUnitOfMeasurement relatedUOM, final String uomUriXmlId) {
+        return relatedUOM.isSetIdRef() && relatedUOM.getIdRef().equalsIgnoreCase(uomUriXmlId);
     }
 }

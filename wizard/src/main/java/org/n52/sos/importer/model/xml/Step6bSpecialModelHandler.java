@@ -202,10 +202,9 @@ public class Step6bSpecialModelHandler implements ModelHandler<Step6bSpecialMode
             final int mvColId = Helper.getColumnIdFromTableElement(tabE);
             final org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column
                         mvColumn = Helper.getColumnById(mvColId, sosImportConf);
-            final RelatedSensor[] relSensors = mvColumn.getRelatedSensorArray();
-            if (!Helper.isSensorInArray(relSensors, sensor.getXMLId())) {
-                final RelatedSensor relSensor = mvColumn.addNewRelatedSensor();
-                relSensor.setIdRef(sensor.getXMLId());
+            final RelatedSensor relSensor = mvColumn.getRelatedSensor();
+            if (!Helper.isIdOfRelatedSensorMatching(relSensor, sensor.getXMLId())) {
+                mvColumn.addNewRelatedSensor().setIdRef(sensor.getXMLId());
                 if (logger.isDebugEnabled()) {
                     logger.debug("Added new related sensor" +
                             "[" + sensor.getXMLId() + "]" +

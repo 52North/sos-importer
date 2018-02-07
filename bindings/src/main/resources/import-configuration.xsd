@@ -707,7 +707,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element ref="RelatedFOI" minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="RelatedFOI" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>
                             The feature of interest related to THIS measured
@@ -730,7 +730,7 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element ref="RelatedObservedProperty" minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="RelatedObservedProperty" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>
                             The observed property related to THIS measured
@@ -740,17 +740,17 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element ref="RelatedSensor" minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="RelatedSensor" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>
-                            WHY NOT LIMITED TO 1? The sensor related to THIS
+                            The sensor related to THIS
                             measured value column. The content of this element
                             MUST match a ID element of a Sensor from
                             AdditionalMetadata OR a column Number.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element ref="RelatedUnitOfMeasurement" minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="RelatedUnitOfMeasurement" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>
                             The unit of measurement related to THIS measured

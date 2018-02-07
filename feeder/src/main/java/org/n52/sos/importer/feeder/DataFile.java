@@ -650,9 +650,8 @@ public class DataFile {
         Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
-        if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
-                mvColumn.getRelatedUnitOfMeasurementArray().length > 0) {
-            RelatedUnitOfMeasurement relUom = mvColumn.getRelatedUnitOfMeasurementArray(0);
+        if (mvColumn.isSetRelatedUnitOfMeasurement()) {
+            RelatedUnitOfMeasurement relUom = mvColumn.getRelatedUnitOfMeasurement();
 
             // Case A.1.*: idRef
             if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
@@ -724,10 +723,8 @@ public class DataFile {
         Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
-        if (mvColumn.getRelatedObservedPropertyArray() != null &&
-                mvColumn.getRelatedObservedPropertyArray().length > 0) {
-            RelatedObservedProperty relOp =
-                    mvColumn.getRelatedObservedPropertyArray(0);
+        if (mvColumn.isSetRelatedObservedProperty()) {
+            RelatedObservedProperty relOp = mvColumn.getRelatedObservedProperty();
 
             // Case A.1.*: idRef
             if (relOp.isSetIdRef() && !relOp.isSetNumber()) {

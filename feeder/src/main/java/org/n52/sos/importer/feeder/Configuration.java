@@ -416,7 +416,7 @@ public class Configuration {
      */
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
-        Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        Column[] cols = getColumns();
         ArrayList<Integer> ids = new ArrayList<>();
         for (Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)) {
@@ -442,7 +442,7 @@ public class Configuration {
      */
     public int[] getIgnoredColumnIds() {
         LOG.trace("getIgnoredColumnIds()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)) {
@@ -474,8 +474,8 @@ public class Configuration {
                 mvColumnId));
         // check for RelatedSensor element and if its a number -> return number
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedSensorArray() != null && c.getRelatedSensorArray().length > 0) {
-            final RelatedSensor rS = c.getRelatedSensorArray(0);
+        if (c.isSetRelatedSensor()) {
+            final RelatedSensor rS = c.getRelatedSensor();
             if (rS.isSetNumber()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Found RelatedSensor column for measured value column %d: %d",
@@ -493,7 +493,7 @@ public class Configuration {
         }
         // if element is not set
         //    get column id from ColumnAssignments
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getType().equals(Type.SENSOR)) {
                 if (LOG.isDebugEnabled()) {
@@ -515,7 +515,7 @@ public class Configuration {
      */
     public Column getColumnById(final int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
@@ -542,11 +542,9 @@ public class Configuration {
         LOG.trace(String.format("getRelatedSensor(%d)",
                     mvColumnId));
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedSensorArray() != null &&
-                c.getRelatedSensorArray().length > 0 &&
-                c.getRelatedSensorArray(0) != null &&
-                c.getRelatedSensorArray(0).isSetIdRef()) {
-            final String sensorXmlId = c.getRelatedSensorArray(0).getIdRef();
+        if (c.isSetRelatedSensor() &&
+                c.getRelatedSensor().isSetIdRef()) {
+            final String sensorXmlId = c.getRelatedSensor().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
                     importConf.getAdditionalMetadata().getSensorArray() != null &&
                     importConf.getAdditionalMetadata().getSensorArray().length > 0) {
@@ -590,8 +588,8 @@ public class Configuration {
                 mvColumnId));
         // check for RelatedFOI element and if its a number -> return number
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedFOIArray() != null && c.getRelatedFOIArray().length > 0) {
-            final RelatedFOI rF = c.getRelatedFOIArray(0);
+        if (c.isSetRelatedFOI()) {
+            final RelatedFOI rF = c.getRelatedFOI();
             if (rF.isSetNumber()) {
                 LOG.debug(String.format("Found RelatedFOI column for measured value column %d: %d",
                         mvColumnId,
@@ -605,7 +603,7 @@ public class Configuration {
         }
         // if element is not set
         //    get column id from ColumnAssignments
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getType().equals(Type.FOI)) {
                 LOG.debug(String.format("Found related feature of interest column for measured value column %d: %d",
@@ -688,10 +686,9 @@ public class Configuration {
         LOG.trace(String.format("getRelatedFoi(%d)",
                 mvColumnId));
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedFOIArray() != null &&
-                c.getRelatedFOIArray(0) != null &&
-                c.getRelatedFOIArray(0).isSetIdRef()) {
-            final String foiXmlId = c.getRelatedFOIArray(0).getIdRef();
+        if (c.isSetRelatedFOI() &&
+                c.getRelatedFOI().isSetIdRef()) {
+            final String foiXmlId = c.getRelatedFOI().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
                     importConf.getAdditionalMetadata().getFeatureOfInterestArray() != null &&
                     importConf.getAdditionalMetadata().getFeatureOfInterestArray().length > 0) {
@@ -732,7 +729,7 @@ public class Configuration {
         String group = "";
         // get first group in Document for position column
         outerfor:
-        for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+        for (Column column : getColumns()) {
             if (column.getType().equals(Type.POSITION)) {
                 for (Metadata metadata : column.getMetadataArray()) {
                     if (metadata.getKey().equals(Key.GROUP)) {
@@ -973,7 +970,7 @@ public class Configuration {
         if (group == null) {
             return null;
         }
-        final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] allCols = getColumns();
         final ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
         for (final Column col : allCols) {
             if (col.getType() != null &&
@@ -1006,7 +1003,7 @@ public class Configuration {
      */
     public String getFirstDateTimeGroup() {
         LOG.trace("getFirstDateTimeGroup()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.DATE_TIME)) {
                 // it's DATE_TIME -> get group id from metadata[]
@@ -1056,8 +1053,7 @@ public class Configuration {
     public int getColumnIdForUom(final int mVColumnId) {
         LOG.trace(String.format("getColumnIdForUom(%s)",
                 mVColumnId));
-        final Column[] cols = importConf.getCsvMetadata().
-                getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.UOM)) {
                 return col.getNumber();
@@ -1095,8 +1091,7 @@ public class Configuration {
     public int getColumnIdForOpsProp(final int mVColumnId) {
         LOG.trace(String.format("getColumnIdForOpsProp(%s)",
                 mVColumnId));
-        final Column[] cols = importConf.getCsvMetadata().
-                getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.OBSERVED_PROPERTY)) {
                 return col.getNumber();
@@ -1143,7 +1138,7 @@ public class Configuration {
      * @return a {@link java.lang.String} object.
      */
     public String getType(final int mVColumnId) {
-        for (final Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+        for (final Column col : getColumns()) {
             if (col.getNumber() == mVColumnId) {
                 for (final Metadata m : col.getMetadataArray()) {
                     if (m.getKey().equals(Key.TYPE)) {
@@ -1639,7 +1634,7 @@ public class Configuration {
             return true;
         } else {
             // Case B: column with type omParameter
-            for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+            for (Column column : getColumns()) {
                 if (column.getType().equals(Type.OM_PARAMETER)) {
                     return true;
                 }
@@ -1660,7 +1655,7 @@ public class Configuration {
                 }
             } else {
                 // collect all
-                for (Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                for (Column col : getColumns()) {
                     if (col.getType().equals(Type.OM_PARAMETER)) {
                         cols.add(col);
                     }
@@ -1782,5 +1777,13 @@ public class Configuration {
 
     public String getAbsolutePath() {
         return configFile.getAbsolutePath();
+    }
+
+    private Column[] getColumns() {
+        if (importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray() > 0) {
+            return importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        } else {
+            return new Column[0];
+        }
     }
 }

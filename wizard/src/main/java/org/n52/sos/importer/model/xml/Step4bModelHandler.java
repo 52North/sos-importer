@@ -92,7 +92,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                     ERROR_INSTRUCTIONS);
             return;
         }
-        relCol = new ArrayList<Column>(availableCols.length);
+        relCol = new ArrayList<>(availableCols.length);
         for (final Column column : availableCols) {
             // check for correct column id
             if (isIntInArray(relatedColumnsIds, column.getNumber())) {
@@ -144,8 +144,8 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
              *  FEATURE_OF_INTEREST
              */
             if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
-                final RelatedFOI[] relFois = column.getRelatedFOIArray();
-                addNew = !isFoiColIdInArray(relFois, colId);
+                final RelatedFOI relFoi = column.getRelatedFOI();
+                addNew = !isRelatedFoiLinked(relFoi, colId);
                 if (addNew) {
                     column.addNewRelatedFOI().setNumber(colId);
                     if (logger.isDebugEnabled()) {
@@ -154,13 +154,13 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                 } else if (logger.isDebugEnabled()) {
                     logger.debug("Related foi was already there");
                 }
-                result = result && isFoiColIdInArray(relFois, colId);
+                result = result && isRelatedFoiLinked(relFoi, colId);
                 /*
                  *  SENSOR
                  */
             } else if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
-                final RelatedSensor[] relSensors = column.getRelatedSensorArray();
-                addNew = !isSensorInArray(relSensors, colId);
+                final RelatedSensor relSensor = column.getRelatedSensor();
+                addNew = !isRelatedSensorLinked(relSensor, colId);
                 if (addNew) {
                     column.addNewRelatedSensor().setNumber(colId);
                     if (logger.isDebugEnabled()) {
@@ -169,14 +169,14 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                 } else if (logger.isDebugEnabled()) {
                     logger.debug("Related sensor was already there");
                 }
-                result = result && isSensorInArray(relSensors, colId);
+                result = result && isRelatedSensorLinked(relSensor, colId);
                 /*
                  *  UNIT_OF_MEASUREMENT
                  */
             } else if (res instanceof
                     org.n52.sos.importer.model.resources.UnitOfMeasurement) {
-                final RelatedUnitOfMeasurement[] relUOMs = column.getRelatedUnitOfMeasurementArray();
-                addNew = !isUOMInArray(relUOMs, colId);
+                final RelatedUnitOfMeasurement relUOM = column.getRelatedUnitOfMeasurement();
+                addNew = !isRelatedUOMLinked(relUOM, colId);
                 if (addNew) {
                     column.addNewRelatedUnitOfMeasurement().setNumber(colId);
                     if (logger.isDebugEnabled()) {
@@ -185,14 +185,14 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                 } else if (logger.isDebugEnabled()) {
                     logger.debug("Related UOM was already there");
                 }
-                result = result && isUOMInArray(relUOMs, colId);
+                result = result && isRelatedUOMLinked(relUOM, colId);
                 /*
                  *  OBSERVED_PROPERTY
                  */
             } else if (res instanceof
                     org.n52.sos.importer.model.resources.ObservedProperty) {
-                final RelatedObservedProperty[] relObsProps = column.getRelatedObservedPropertyArray();
-                addNew = !isObsPropInArray(relObsProps, colId);
+                final RelatedObservedProperty relObsProp = column.getRelatedObservedProperty();
+                addNew = !isRelatedObservedPropertyLinked(relObsProp, colId);
                 if (addNew) {
                     column.addNewRelatedObservedProperty().setNumber(colId);
                     if (logger.isDebugEnabled()) {
@@ -201,7 +201,7 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
                 } else if (logger.isDebugEnabled()) {
                     logger.debug("Related observed property was already there");
                 }
-                result = result && isObsPropInArray(relObsProps, colId);
+                result = result && isRelatedObservedPropertyLinked(relObsProp, colId);
             }
         }
         return result;
@@ -210,23 +210,11 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
     /**
      * Check if the column is already referenced.
      */
-    private boolean isFoiColIdInArray(final RelatedFOI[] relFois, final int colId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isFoiInArray()");
-        }
-        for (final RelatedFOI relatedFOI : relFois) {
-            if (relatedFOI.isSetNumber() &&
-                    relatedFOI.getNumber() == colId) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isRelatedFoiLinked(final RelatedFOI relatedFOI, final int colId) {
+        return relatedFOI.isSetNumber() && relatedFOI.getNumber() == colId;
     }
 
     private boolean isIntInArray(final int[] array, final int i) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\t\tisIntInArray()");
-        }
         for (final int intFromArray : array) {
             if (intFromArray == i) {
                 return true;
@@ -235,43 +223,16 @@ public class Step4bModelHandler implements ModelHandler<Step4bModel> {
         return false;
     }
 
-    private boolean isObsPropInArray(final RelatedObservedProperty[] relObsProps,
+    private boolean isRelatedObservedPropertyLinked(final RelatedObservedProperty relatedObsProp,
             final int colId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isObsPropInArray()");
-        }
-        for (final RelatedObservedProperty relatedObsProp : relObsProps) {
-            if (relatedObsProp.isSetNumber() &&
-                    relatedObsProp.getNumber() == colId) {
-                return true;
-            }
-        }
-        return false;
+        return relatedObsProp.isSetNumber() && relatedObsProp.getNumber() == colId;
     }
 
-    private boolean isSensorInArray(final RelatedSensor[] relSensors, final int colId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isSensorInArray()");
-        }
-        for (final RelatedSensor relatedSensor : relSensors) {
-            if (relatedSensor.isSetNumber() &&
-                    relatedSensor.getNumber() == colId) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isRelatedSensorLinked(final RelatedSensor relatedSensor, final int colId) {
+        return relatedSensor.isSetNumber() && relatedSensor.getNumber() == colId;
     }
 
-    private boolean isUOMInArray(final RelatedUnitOfMeasurement[] relUOMs, final int colId) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("isUOMInArray()");
-        }
-        for (final RelatedUnitOfMeasurement relatedUOM : relUOMs) {
-            if (relatedUOM.isSetNumber() &&
-                    relatedUOM.getNumber() == colId) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isRelatedUOMLinked(final RelatedUnitOfMeasurement relatedUOM, final int colId) {
+        return relatedUOM.isSetNumber() && relatedUOM.getNumber() == colId;
     }
 }
