@@ -37,11 +37,13 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -54,20 +56,26 @@ import org.n52.sos.importer.feeder.collector.SampleBasedObservationCollector;
 import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
 import org.n52.sos.importer.feeder.importer.SingleObservationImporter;
 import org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter;
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
 import org.x52North.sensorweb.sos.importer.x05.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x05.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x05.RelatedReferenceValueDocument.RelatedReferenceValue;
 import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x05.ResourceType;
 import org.x52North.sensorweb.sos.importer.x05.SensorType;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
@@ -690,8 +698,7 @@ public class Configuration {
                 c.getRelatedFOI().isSetIdRef()) {
             final String foiXmlId = c.getRelatedFOI().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
-                    importConf.getAdditionalMetadata().getFeatureOfInterestArray() != null &&
-                    importConf.getAdditionalMetadata().getFeatureOfInterestArray().length > 0) {
+                    importConf.getAdditionalMetadata().sizeOfFeatureOfInterestArray() > 0) {
                 for (final FeatureOfInterestType foi : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
                     if (isFoiIdMatching(foiXmlId, foi)) {
                         LOG.debug(String.format("Feature of Interest found for id '%s': %s",
@@ -1777,6 +1784,110 @@ public class Configuration {
 
     public String getAbsolutePath() {
         return configFile.getAbsolutePath();
+    }
+
+    public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues(String sensorURI) {
+        if (!hasReferenceValues()) {
+            return Collections.emptyMap();
+        }
+        Map<ObservedProperty, List<SimpleEntry<String, String>>> result = new HashMap<>();
+        for (Column column : getColumns()) {
+            // if sensor matches and reference value is available
+            if (!column.isSetRelatedSensor() ||
+                    !column.getRelatedSensor().isSetIdRef() ||
+                    !column.isSetRelatedObservedProperty() ||
+                    !column.getRelatedObservedProperty().isSetIdRef()) {
+                continue;
+            }
+            ResourceType resource = getRelatedSensor(column.getNumber()).getResource();
+            if (resource == null || !(resource instanceof ManualResourceType)) {
+                continue;
+            }
+            ManualResourceType relatedSensor = (ManualResourceType) resource;
+            if (!relatedSensor.getURI().getStringValue().equalsIgnoreCase(sensorURI)) {
+                continue;
+            }
+            // This column contains the correct sensor
+            ObservedProperty observedProperty = getObservedProperty(column.getRelatedObservedProperty());
+            if (observedProperty == null) {
+                continue;
+            }
+            if (column.sizeOfRelatedReferenceValueArray() < 1) {
+                continue;
+            }
+            // Next: check for reference values
+            for (RelatedReferenceValue refValue : column.getRelatedReferenceValueArray()) {
+                List<SimpleEntry<String, String>> list;
+                if (result.containsKey(observedProperty)) {
+                    list = result.get(observedProperty);
+                } else {
+                    list = Collections.synchronizedList(new LinkedList<>());
+                    result.put(observedProperty, list);
+                }
+                list.add(new SimpleEntry<>(refValue.getLabel(), refValue.getValue()));
+            }
+        }
+        return result;
+    }
+
+    private ObservedProperty getObservedProperty(RelatedObservedProperty relatedObservedProperty) {
+        ManualResourceType observedPropertyResource = getRelatedResourceById(relatedObservedProperty.getIdRef());
+        if (observedPropertyResource == null) {
+            return null;
+        }
+        return new ObservedProperty(observedPropertyResource.getName(),
+                observedPropertyResource.getURI().getStringValue());
+    }
+
+    private ManualResourceType getRelatedResourceById(String idRef) {
+        if (importConf.isSetAdditionalMetadata()) {
+            AdditionalMetadata additionalMetadata = importConf.getAdditionalMetadata();
+            // check features
+            for (FeatureOfInterestType feature : additionalMetadata.getFeatureOfInterestArray()) {
+                if (feature.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return feature.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) feature.getResource() :
+                                null;
+                }
+            }
+            // check sensors
+            for (SensorType sensor : additionalMetadata.getSensorArray()) {
+                if (sensor.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return sensor.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) sensor.getResource() :
+                                null;
+                }
+            }
+            // observed property
+            for (ObservedPropertyType property : additionalMetadata.getObservedPropertyArray()) {
+                if (property.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return property.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) property.getResource() :
+                                null;
+                }
+            }
+            // unitofmeasurement
+            for (UnitOfMeasurementType uom : additionalMetadata.getUnitOfMeasurementArray()) {
+                if (uom.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return uom.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) uom.getResource() :
+                                null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean hasReferenceValues() {
+        Column[] cols = getColumns();
+        if (cols.length > 0) {
+            for (Column column : cols) {
+                if (column.sizeOfRelatedReferenceValueArray() > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Column[] getColumns() {

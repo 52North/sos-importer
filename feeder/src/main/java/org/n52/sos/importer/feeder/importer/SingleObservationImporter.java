@@ -77,7 +77,8 @@ public class SingleObservationImporter extends ImporterSkeleton {
                                     InsertSensor insertSensor = new InsertSensor(io,
                                             getObservedProperties(io.getSensorURI(), insertObservations),
                                             getMeasuredValueTypes(io.getSensorURI(), insertObservations),
-                                            getUnitsOfMeasurement(io.getSensorURI(), insertObservations));
+                                            getUnitsOfMeasurement(io.getSensorURI(), insertObservations),
+                                            configuration.getReferenceValues(io.getSensorURI()));
                                     assignedSensorId = sosClient.insertSensor(insertSensor).getKey();
                                 } catch (XmlException | IOException | EncodingException e) {
                                     log(e);

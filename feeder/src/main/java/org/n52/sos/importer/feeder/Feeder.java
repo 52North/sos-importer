@@ -37,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
@@ -75,6 +76,8 @@ public final class Feeder implements FeedingContext {
 
     private ClassPathXmlApplicationContext applicationContext;
 
+    private Phaser collectorPhaser;
+
     /**
      * <p>Constructor for Feeder.</p>
      *
@@ -103,6 +106,9 @@ public final class Feeder implements FeedingContext {
         collector.setFeedingContext(this);
 
         collectedObservationsCount = 0;
+
+        collectorPhaser = new Phaser();
+        collectorPhaser.register();
     }
 
     public void importData(DataFile dataFile)
@@ -114,7 +120,9 @@ public final class Feeder implements FeedingContext {
         initCollectorThread(dataFile, latch).start();
         importer.startImporting();
         try {
+            // FIXME is this double synchronization? e.g. latch not required anymore
             latch.await();
+            collectorPhaser.arriveAndAwaitAdvance();
         } catch (InterruptedException e) {
             log(e);
         }
@@ -132,6 +140,11 @@ public final class Feeder implements FeedingContext {
         if (applicationContext != null) {
             applicationContext.close();
         }
+        int failedObservations = importer.getFailedObservations().size();
+        final int newObservationsCount = getCollectedObservationsCount() - failedObservations;
+        LOG.info("New observations in SOS: {}. Failed observations: {}.",
+                newObservationsCount,
+                failedObservations);
         LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
@@ -145,10 +158,13 @@ public final class Feeder implements FeedingContext {
             @Override
             public void run() {
                 try {
+                    collectorPhaser.register();
                     importer.addObservationForImporting(insertObservations);
                 } catch (Exception e) {
                     exceptions.add(e);
                     collector.stopCollecting();
+                } finally {
+                    collectorPhaser.arriveAndDeregister();
                 }
             }
         }).start();
@@ -200,6 +216,10 @@ public final class Feeder implements FeedingContext {
 
     private synchronized void increaseCollectedObservationsCount(int collectedObservations) {
         collectedObservationsCount += collectedObservations;
+    }
+
+    private synchronized int getCollectedObservationsCount() {
+        return collectedObservationsCount;
     }
 
     private Object initObjectByClassName(String className) {
@@ -257,9 +277,5 @@ public final class Feeder implements FeedingContext {
     private void handleFailedObservations(List<InsertObservation> failedObservations) {
         // TODO the failed insert observations should be handled here!
         // FIXME implement
-        final int newObservationsCount = collectedObservationsCount - failedObservations.size();
-        LOG.info("New observations in SOS: {}. Failed observations: {}.",
-                newObservationsCount,
-                failedObservations.size());
     }
 }

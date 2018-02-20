@@ -40,7 +40,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 
 public abstract class ImporterSkeleton implements Importer {
 
-    protected Configuration configuration;
+    protected volatile Configuration configuration;
 
     protected FeedingContext context;
 

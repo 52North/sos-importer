@@ -96,7 +96,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
                     LineHelper.trimValues(line);
                     LOG.debug(String.format("Handling CSV line #%d: %s", lineCounter + 1, Arrays.toString(line)));
                     final InsertObservation[] ios = getInsertObservationsForOneLine(line);
-                    if (ios != null && ios.length > 1) {
+                    if (ios != null && ios.length > 0) {
                         context.addObservationForImporting(ios);
                     }
                     LOG.debug(Application.heapSizeInformation());

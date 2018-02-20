@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.n52.sos.importer.feeder.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,12 +52,15 @@ public class TimeSeriesRepository {
 
     private final Map<TimeSeriesId, TimeSeries> repo;
 
+    private Configuration configuration;
+
     /**
      * <p>Constructor for TimeSeriesRepository.</p>
      *
      */
-    public TimeSeriesRepository() {
+    public TimeSeriesRepository(Configuration configuration) {
         repo = Maps.newHashMap();
+        this.configuration = configuration;
     }
 
     /**
@@ -94,6 +98,7 @@ public class TimeSeriesRepository {
      *              <li>ObservedProperty</li>
      *              <li>MeasureValueType</li>
      *              <li>UnitOfMeasurement</li>
+     *              <li>ReferenceValues</li>
      *          </ul>
      *          from all timeseries in this {@link org.n52.sos.importer.feeder.model.TimeSeriesRepository}
      *          having the Sensor with given URI <code>sensorURI</code>.
@@ -116,7 +121,8 @@ public class TimeSeriesRepository {
         return new InsertSensor(io,
                 getObservedProperties(timeseries),
                 getMeasuredValueTypes(timeseries),
-                getUnitsOfMeasurement(timeseries));
+                getUnitsOfMeasurement(timeseries),
+                configuration.getReferenceValues(io.getSensorURI()));
     }
 
     private Map<ObservedProperty, String> getUnitsOfMeasurement(List<TimeSeries> timeseries) {

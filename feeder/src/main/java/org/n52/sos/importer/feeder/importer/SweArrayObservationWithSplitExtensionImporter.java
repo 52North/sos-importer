@@ -48,7 +48,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
 
     private static final Logger LOG = LoggerFactory.getLogger(SweArrayObservationWithSplitExtensionImporter.class);
 
-    private TimeSeriesRepository timeSeriesRepository = new TimeSeriesRepository();
+    private TimeSeriesRepository timeSeriesRepository;
 
     private int currentHunk;
 
@@ -74,11 +74,17 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
         if (insertObservations == null) {
             return;
         }
+        if (configuration == null) {
+            throw new IllegalStateException("Field 'configuration' MUST NOT be null! Call setConfiguration() before.");
+        }
+        if (timeSeriesRepository == null) {
+            timeSeriesRepository = new TimeSeriesRepository(configuration);
+        }
         timeSeriesRepository.addObservations(insertObservations);
         if (currentHunk == hunkSize) {
             currentHunk = 0;
             insertAllTimeSeries(timeSeriesRepository);
-            timeSeriesRepository = new TimeSeriesRepository();
+            timeSeriesRepository = new TimeSeriesRepository(configuration);
         } else {
             currentHunk += insertObservations.length;
         }
@@ -134,7 +140,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
 
     @Override
     public synchronized void stopImporting() throws Exception {
-        if (!timeSeriesRepository.isEmpty()) {
+        if (timeSeriesRepository != null && !timeSeriesRepository.isEmpty()) {
             insertAllTimeSeries(timeSeriesRepository);
         }
     }

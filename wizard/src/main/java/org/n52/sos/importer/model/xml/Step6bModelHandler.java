@@ -623,15 +623,15 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         return isIdOfRelatedUnitOfMeasurementMatching(relatedUOM, uOM.getURIString());
     }
 
-    private boolean isIdOfRelatedFOIMatching(final RelatedFOI relatedFOI, final String foiXmlId) {
+    private boolean isIdOfRelatedFOIMatching(RelatedFOI relatedFOI, String foiXmlId) {
         return relatedFOI.isSetIdRef() && relatedFOI.getIdRef().equalsIgnoreCase(foiXmlId);
     }
 
-    private boolean isIdOfObservedPropertyMatching(final RelatedObservedProperty relatedObsProp, final String obsPropXmlId) {
+    private boolean isIdOfObservedPropertyMatching(RelatedObservedProperty relatedObsProp, String obsPropXmlId) {
         return relatedObsProp.isSetIdRef() && relatedObsProp.getIdRef().equalsIgnoreCase(obsPropXmlId);
     }
 
-    private boolean isIdOfRelatedUnitOfMeasurementMatching(final RelatedUnitOfMeasurement relatedUOM, final String uomUriXmlId) {
+    private boolean isIdOfRelatedUnitOfMeasurementMatching(RelatedUnitOfMeasurement relatedUOM, String uomUriXmlId) {
         return relatedUOM.isSetIdRef() && relatedUOM.getIdRef().equalsIgnoreCase(uomUriXmlId);
     }
 }

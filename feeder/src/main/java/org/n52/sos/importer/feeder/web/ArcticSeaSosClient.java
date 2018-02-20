@@ -34,6 +34,7 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -297,7 +298,6 @@ public class ArcticSeaSosClient implements SosClient {
             if (!INSERTED_SENSORS.isEmpty() && INSERTED_SENSORS.containsKey(insertSensor.getSensorURI())) {
                 return new SimpleEntry<>(insertSensor.getSensorURI(), insertSensor.getOfferingUri());
             }
-            // ein insert sensor lock für alles bzw. methode synchronzied
             if (serviceVersion.equals(Sos2Constants.SERVICEVERSION)) {
                 try {
                     InsertSensorRequest request = createInsertSensorRequest(insertSensor);
@@ -351,6 +351,7 @@ public class ArcticSeaSosClient implements SosClient {
         InsertObservationRequest request = new InsertObservationRequest();
         request.setOfferings(Arrays.asList(timeSeries.getFirst().getOffering().getUri()));
         request.setAssignedSensorId(timeSeries.getFirst().getSensorURI());
+        request.addSweBooleanExtension(Sos2Constants.Extensions.SplitDataArrayIntoObservations.name(), true);
         try {
             request.setObservation(createSweArrayObservation(timeSeries));
             HttpResponse response = client.executePost(uri, encodeRequest(request));
@@ -441,14 +442,19 @@ public class ArcticSeaSosClient implements SosClient {
         return capabilitiesCache.isPresent();
     }
 
-    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) {
+    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) throws IOException {
 
         SosInsertionMetadata metadata = new SosInsertionMetadata();
         metadata.setFeatureOfInterestTypes(CollectionHelper.list(
                 "http://www.opengis.net/def/samplingFeatureType/OGC-OM/2.0/SF_SamplingPoint"));
-        metadata.setObservationTypes(insertSensor.getObservedProperties().stream()
+        List<String> observationTypes = insertSensor.getObservedProperties().stream()
                 .map(o -> getObservationType(insertSensor.getMeasuredValueType(o)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        if (!observationTypes.isEmpty()
+                && !observationTypes.contains(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION)) {
+            observationTypes.add(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION);
+        }
+        metadata.setObservationTypes(observationTypes);
 
         List<SmlIo> outputs = new ArrayList<>(insertSensor.getObservedProperties().size());
         for (ObservedProperty observedProperty : insertSensor.getObservedProperties()) {
@@ -468,6 +474,8 @@ public class ArcticSeaSosClient implements SosClient {
         offeringSweText.setValue(insertSensor.getOfferingUri());
         offeringCapabilities.addCapability(new SmlCapability("offeringID", offeringSweText));
 
+
+
         PhysicalSystem system = new PhysicalSystem();
         system.setIdentifier(insertSensor.getSensorURI());
         system.setIdentifications(CollectionHelper.list(
@@ -477,6 +485,10 @@ public class ArcticSeaSosClient implements SosClient {
                         insertSensor.getSensorURI())));
         system.setOutputs(outputs);
         system.addCapabilities(offeringCapabilities);
+
+        if (insertSensor.isSetReferenceValues()) {
+            system.addCapabilities(createReferenceValueCapabilities(insertSensor));
+        }
 
         if (isPositionAvailable(insertSensor)) {
             addPosition(insertSensor, system);
@@ -489,6 +501,29 @@ public class ArcticSeaSosClient implements SosClient {
                 .map(p -> p.getUri()).collect(Collectors.toList()));
         request.setMetadata(metadata);
         return request;
+    }
+
+    private SmlCapabilities createReferenceValueCapabilities(InsertSensor insertSensor) throws IOException {
+        // FIXME is this identifier available as SOS constant? yes, but dependency wanted?
+        // @see SensorMLConstants.ELEMENT_NAME_REFERENCE_VALUES
+        SmlCapabilities refValueCapabilities = new SmlCapabilities("referenceValues");
+        for (Entry<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMapping :
+            insertSensor.getReferenceValues().entrySet()) {
+            for (SimpleEntry<String, String> refValueLabelAndValue : referenceValueMapping.getValue()) {
+                try {
+                    SweQuantity sweQuantity = new SweQuantity(Double.valueOf(refValueLabelAndValue.getValue()),
+                            insertSensor.getUnitOfMeasurementCode(referenceValueMapping.getKey()));
+                    sweQuantity.setDefinition(referenceValueMapping.getKey().getUri());
+                    refValueCapabilities.addCapability(new SmlCapability(refValueLabelAndValue.getKey(), sweQuantity));
+                } catch (NumberFormatException nfe) {
+                    throw new IOException(String.format(
+                            "Could not parse value '%s' of reference value with label '%s' to java.lang.Double.",
+                            refValueLabelAndValue.getValue(),
+                            refValueLabelAndValue.getKey()), nfe);
+                }
+            }
+        }
+        return refValueCapabilities;
     }
 
     private void addPosition(InsertSensor insertSensor, PhysicalSystem system) {
@@ -572,6 +607,7 @@ public class ArcticSeaSosClient implements SosClient {
                 sweType  = new SweQuantity();
                 ((SweQuantity) sweType).setUom(unitOfMeasurementCode);
         }
+        sweType.setDefinition(definition);
         return sweType;
     }
 

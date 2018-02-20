@@ -28,7 +28,9 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,15 +49,19 @@ public class InsertSensor {
 
     private final Map<ObservedProperty, String> unitOfMeasurements;
 
+    private final Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValues;
+
     public InsertSensor(
             final InsertObservation io,
             final Collection<ObservedProperty> observedProperties,
             final Map<ObservedProperty, String> measuredValueTypes,
-            final Map<ObservedProperty, String> unitOfMeasurements) {
+            final Map<ObservedProperty, String> unitOfMeasurements,
+            final Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValues) {
         this.io = io;
         this.observedProperties = observedProperties;
         this.measuredValueTypes = measuredValueTypes;
         this.unitOfMeasurements = unitOfMeasurements;
+        this.referenceValues = referenceValues;
     }
 
     public String getAltitudeUnit() {
@@ -140,6 +146,14 @@ public class InsertSensor {
 
     public boolean isSetAltitude() {
         return io.isSetAltitudeValue();
+    }
+
+    public boolean isSetReferenceValues() {
+        return referenceValues != null && !referenceValues.isEmpty();
+    }
+
+    public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues() {
+        return referenceValues;
     }
 
 }
