@@ -29,13 +29,17 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
@@ -126,7 +130,41 @@ public class ConfigurationTest {
                 "src/test/resources/features/configWithRemoteFile.xml");
         // URL taken from config file
         Assert.assertThat(configuration.getRemoteFileURL(), Is.is("http://www.example.com/my/fancy/directoryTree/data.csv"));
+    }
 
+    @Test
+    public void hasReferenceValuesShouldReturnFalse() throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/reference-values_without.xml");
+        Assert.assertThat(configuration.hasReferenceValues(), Is.is(false));
+    }
+
+    @Test
+    public void hasReferenceValuesShouldReturnTrueIfPresent() throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/reference-values_with.xml");
+        Assert.assertThat(configuration.hasReferenceValues(), Is.is(true));
+    }
+
+    @Test
+    public void getReferenceValuesShouldReturnEmptyListWhenNoneAreAvailable() throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/reference-values_with.xml");
+        String sensorURI = "not-existing-sensor"; //"http://example.com/krypto-graph";
+        Assert.assertThat(configuration.getReferenceValues(sensorURI).size(), Matchers.is(0));
+    }
+
+    @Test
+    public void getReferenceValuesTest() throws XmlException, IOException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/reference-values_with.xml");
+        String sensorURI = "http://example.com/krypto-graph";
+        Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMap = configuration.getReferenceValues(sensorURI);
+        Assert.assertThat(referenceValueMap.size(), Matchers.is(1));
+        List<SimpleEntry<String, String>> referenceValues = referenceValueMap.get(referenceValueMap.keySet().iterator().next());
+        Assert.assertThat(referenceValues, Matchers.hasSize(2));
+        Assert.assertThat(referenceValues, Matchers.hasItem(new SimpleEntry<>("ref-value-1-label","42.0")));
+        Assert.assertThat(referenceValues, Matchers.hasItem(new SimpleEntry<>("ref-value-2-label","23.0")));
     }
 
 }

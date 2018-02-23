@@ -50,7 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * used to determine sensors in case there is one of the following
+ * Used to determine sensors in case there is one of the following
  * relationships between feature of interest and observed property
  * column: 0:1, 0:n, n:0, 1:0, 1:1, n:n
  *
@@ -60,9 +60,9 @@ public class Step6bSpecialController extends StepController {
 
     private static final Logger LOG = LoggerFactory.getLogger(Step6bSpecialController.class);
 
-    private Step6bSpecialModel step6bSpecialModel;
+    private Step6bSpecialModel model;
 
-    private Step6Panel step6cPanel;
+    private Step6Panel panel;
 
     private MissingResourcePanel missingResourcePanel;
 
@@ -70,68 +70,42 @@ public class Step6bSpecialController extends StepController {
 
     private final int firstLineWithData;
 
-    /**
-     * <p>Constructor for Step6bSpecialController.</p>
-     *
-     * @param firstLineWithData a int.
-     */
     public Step6bSpecialController(final int firstLineWithData) {
         this.firstLineWithData = firstLineWithData;
         tableController = TableController.getInstance();
     }
 
-    /**
-     * <p>Constructor for Step6bSpecialController.</p>
-     *
-     * @param step6bSpecialModel a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
-     * @param firstLineWithData a int.
-     */
     public Step6bSpecialController(final Step6bSpecialModel step6bSpecialModel, final int firstLineWithData) {
         this(firstLineWithData);
-        this.step6bSpecialModel = step6bSpecialModel;
+        model = step6bSpecialModel;
     }
 
     @Override
     public void loadSettings() {
         // FIXME does not work with generated
-        final String description = step6bSpecialModel.getDescription();
-        final String foiName = step6bSpecialModel.getFeatureOfInterest().getName();
-        final String opName = step6bSpecialModel.getObservedProperty().getName();
+        final String description = model.getDescription();
+        final String foiName = model.getFeatureOfInterest().getName();
+        final String opName = model.getObservedProperty().getName();
 
-        final Sensor sensor = step6bSpecialModel.getSensor();
+        final Sensor sensor = model.getSensor();
         missingResourcePanel = new MissingResourcePanel(sensor);
         missingResourcePanel.setMissingComponent(sensor);
-        ModelStore.getInstance().remove(step6bSpecialModel);
+        ModelStore.getInstance().remove(model);
         missingResourcePanel.unassignValues();
 
         final List<MissingComponentPanel> missingComponentPanels = new ArrayList<>();
         missingComponentPanels.add(missingResourcePanel);
 
-        step6cPanel = new Step6Panel(description, foiName, opName, missingComponentPanels);
+        panel = new Step6Panel(description, foiName, opName, missingComponentPanels);
     }
 
     @Override
     public void saveSettings() {
         missingResourcePanel.assignValues();
-        ModelStore.getInstance().add(step6bSpecialModel);
+        ModelStore.getInstance().add(model);
 
-        step6cPanel = null;
+        panel = null;
         missingResourcePanel = null;
-    }
-
-    @Override
-    public String getDescription() {
-        return Lang.l().step6bSpecialDescription();
-    }
-
-    @Override
-    public JPanel getStepPanel() {
-        return step6cPanel;
-    }
-
-    @Override
-    public StepController getNextStepController() {
-        return new Step6cController();
     }
 
     @Override
@@ -148,58 +122,47 @@ public class Step6bSpecialController extends StepController {
             return false;
         }
 
-        step6bSpecialModel = getNextModel();
+        model = getNextModel();
         return true;
 
     }
 
-    /**
-     * <p>getNextModel.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.Step6bSpecialModel} object.
-     */
     public Step6bSpecialModel getNextModel() {
-        final int rows = tableController.getRowCount();
-        final int flwd = tableController.getFirstLineWithData();
         final ModelStore ms = ModelStore.getInstance();
 
-        //iterate through all measured value columns/rows
+        // iterate through all measured value columns/rows
         mvLoop:
             for (final MeasuredValue mv: ms.getMeasuredValues()) {
 
-                for (int i = flwd; i < rows; i++) {
-                    //test if the measuredValue can be parsed
+                for (int i = tableController.getFirstLineWithData(); i < tableController.getRowCount(); i++) {
+                    // test if the measuredValue can be parsed
                     final Cell cell = new Cell(i, ((Column) mv.getTableElement()).getNumber());
                     final String value = tableController.getValueAt(cell);
                     if (i >= firstLineWithData) {
                         try {
                             mv.parse(value);
                         } catch (final Exception e) {
-                            if (LOG.isTraceEnabled()) {
-                                LOG.trace("Value could not be parsed: " + value, e);
-                            }
-                            // it okay this way because parsing test happened during step 3
+                            LOG.trace("Value could not be parsed: " + value, e);
+                            // it is okay this way because parsing test happened during step 3
                             continue;
                         }
 
                         final FeatureOfInterest foi = mv.getFeatureOfInterest().forThis(cell);
                         final ObservedProperty op = mv.getObservedProperty().forThis(cell);
-                        final Step6bSpecialModel model = new Step6bSpecialModel(foi, op);
+                        final Step6bSpecialModel tmpModel = new Step6bSpecialModel(mv, foi, op);
                         /*
                          * check, if for the column of foi and obsProp a model is
                          * available and if the sensor is generated in this model
                          */
                         for (final Step6bSpecialModel s6bsM : ms.getStep6bSpecialModels()) {
                             if (s6bsM.getSensor().isGenerated() &&
-                                    // XXX maybe own equals
-                                    s6bsM.getFeatureOfInterest().getTableElement().equals(foi.getTableElement()) &&
-                                    // XXX check if foi and obsprop
-                                    s6bsM.getObservedProperty().getTableElement().equals(op.getTableElement())) {
+                                    s6bsM.getFeatureOfInterest().equals(foi) &&
+                                    s6bsM.getObservedProperty().equals(op)) {
                                 continue mvLoop;
                             }
                         }
-                        if (!ms.getStep6bSpecialModels().contains(model)) {
-                            return model;
+                        if (!ms.getStep6bSpecialModels().contains(tmpModel)) {
+                            return tmpModel;
                         }
                     }
                 }
@@ -214,17 +177,31 @@ public class Step6bSpecialController extends StepController {
 
     @Override
     public StepController getNext() {
-        final Step6bSpecialModel step6bSpecialModelTmp = getNextModel();
-        if (step6bSpecialModelTmp != null) {
-            return new Step6bSpecialController(step6bSpecialModelTmp, firstLineWithData);
+        final Step6bSpecialModel tmpModel = getNextModel();
+        if (tmpModel != null) {
+            return new Step6bSpecialController(tmpModel, firstLineWithData);
         }
-
         return null;
     }
 
     @Override
     public StepModel getModel() {
-        return step6bSpecialModel;
+        return model;
+    }
+
+    @Override
+    public String getDescription() {
+        return Lang.l().step6bSpecialDescription();
+    }
+
+    @Override
+    public JPanel getStepPanel() {
+        return panel;
+    }
+
+    @Override
+    public StepController getNextStepController() {
+        return new Step6cController();
     }
 
 }

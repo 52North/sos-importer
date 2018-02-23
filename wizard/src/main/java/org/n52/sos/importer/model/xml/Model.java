@@ -31,13 +31,11 @@ package org.n52.sos.importer.model.xml;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.xmlbeans.XmlCursor;
-import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.n52.oxf.xmlbeans.parser.XMLBeansParser;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
@@ -74,7 +72,7 @@ public class Model {
 
     private final SosImportConfiguration sosImpConf;
 
-    private StepModel[] stepModells = new StepModel[1];
+    private final List<StepModel> stepModells = new ArrayList<>();
 
     /**
      * Create a new and empty model
@@ -134,67 +132,21 @@ public class Model {
         return result;
     }
 
-    /**
-     * <p>registerProvider.</p>
-     *
-     * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
-     * @return a boolean.
-     */
-    public boolean registerProvider(final StepModel sm) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("registerProvider(" +
-                    (sm == null
-                    ? null
-                            : sm.getClass().getSimpleName()) +
-                    ")");
-        }
-        //
-        ArrayList<StepModel> sMs;
-        //
-        sMs = createArrayListFromArray(stepModells);
-        final boolean result = sMs.add(sm);
-        saveProvidersInArray(sMs);
-        //
-        return result;
+    public boolean registerProvider(StepModel sm) {
+        logger.trace("registerProvider()");
+        return stepModells.add(sm);
     }
 
-    /**
-     * <p>removeProvider.</p>
-     *
-     * @param sm a {@link org.n52.sos.importer.model.StepModel} object.
-     * @return a boolean.
-     */
     public boolean removeProvider(final StepModel sm) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("removeProvider(" +
-                    (sm == null
-                    ? null
-                            : sm.getClass().getSimpleName()) +
-                                ")");
-        }
-        //
-        ArrayList<StepModel> provider;
-        //
-        provider = createArrayListFromArray(stepModells);
-        final boolean result = provider.remove(sm);
-        saveProvidersInArray(provider);
-        //
-        return result;
+        logger.trace("removeProvider()");
+        return stepModells.remove(sm);
     }
 
-    /**
-     * <p>save.</p>
-     *
-     * @param file a {@link java.io.File} object.
-     * @return a boolean.
-     * @throws java.io.IOException if any.
-     */
     public boolean save(final File file) throws IOException {
         if (logger.isTraceEnabled()) {
             logger.trace("save(" + (file != null ? file.getName() : null) + ")");
         }
-        // laxValidate or validate?
-        if (!laxValidate() ||
+        if (!validate() ||
                 sosImpConf.getCsvMetadata() == null ||
                 sosImpConf.getDataFile() == null ||
                 sosImpConf.getSosMetadata() == null) {
@@ -205,16 +157,11 @@ public class Model {
         if (file != null) {
             if (!file.exists()) {
                 final String fileString = "File ";
-                if (logger.isDebugEnabled()) {
-                    logger.debug(fileString + file
-                            + " does not exist. Try to create it.");
-                }
+                logger.debug(fileString + file + " does not exist. Try to create it.");
                 if (!file.createNewFile()) {
                     logger.error("Could not create file " + file);
                 } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(fileString + file + " created");
-                    }
+                    logger.debug(fileString + file + " created");
                 }
             }
             if (file.isFile()) {
@@ -236,8 +183,7 @@ public class Model {
                     doc.save(file, xmlOpts);
                     return true;
                 } else {
-                    logger.error("model not saved: could not write to file: "
-                            + file);
+                    logger.error("model not saved: could not write to file: " + file);
                 }
             } else {
                 logger.error("model not saved: file is not a file: " + file);
@@ -245,7 +191,6 @@ public class Model {
         } else {
             logger.error("model not saved: file is null");
         }
-        // }
         return false;
     }
 
@@ -260,7 +205,7 @@ public class Model {
          * using ModelHandler for each StepModel
          */
 
-        if (stepModells != null && stepModells.length > 0) {
+        if (stepModells != null && stepModells.size() > 0) {
             //
             for (final StepModel model : stepModells) {
                 //
@@ -319,76 +264,16 @@ public class Model {
         }
     }
 
-    /**
-     * Should be called after final step to validate the final model.
-     *
-     * @return a boolean.
-     */
-    public boolean validate() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("validate()");
-        }
+    private boolean validate() {
+        logger.trace("validate()");
         //
         final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
         doc.setSosImportConfiguration(sosImpConf);
-        final boolean modelValid = doc.validate();
-        if (!modelValid) {
+        if (!doc.validate()) {
             logger.error("The model is not valid. Please update your values.");
+            return false;
         }
-        return modelValid;
-    }
-
-    /**
-     * <p>laxValidate.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean laxValidate() {
-        final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
-        doc.setSosImportConfiguration(sosImpConf);
-        final Collection<XmlError> exs = XMLBeansParser.validate(doc);
-        if (exs.isEmpty()) {
-            return true;
-        }
-        logger.error("XML of configuration model is not valid. See the following output for details");
-        for (final XmlError xmlError : exs) {
-            logger.error("Xml error: Message: {}; Location: Line: {}, Column: {}; ErrorCode: {}",
-                    xmlError.getMessage(),
-                    xmlError.getLine(),
-                    xmlError.getColumn(),
-                    xmlError.getErrorCode());
-        }
-        return false;
-    }
-
-    /*
-     * Private Helper methods for provider and model handling
-     */
-    private ArrayList<StepModel> createArrayListFromArray(final StepModel[] models) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\tcreateArrayListFromArray()");
-        }
-        //
-        ArrayList<StepModel> result;
-        //
-        result = new ArrayList<>(stepModells.length + 1);
-        for (final StepModel stepModel : stepModells) {
-            if (stepModel != null) {
-                result.add(stepModel);
-            }
-        }
-        result.trimToSize();
-        //
-        return result;
-    }
-
-    private void saveProvidersInArray(final ArrayList<StepModel> aL) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\tsaveProvidersInArray()");
-        }
-        //
-        aL.trimToSize();
-        stepModells = aL.toArray(new StepModel[aL.size()]);
+        return true;
     }
 
 }

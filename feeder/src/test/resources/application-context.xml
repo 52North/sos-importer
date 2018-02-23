@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
+    Software GmbH
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License version 2 as published
+    by the Free Software Foundation.
+
+    If the program is linked with libraries which are licensed under one of
+    the following licenses, the combination of the program with the linked
+    library is not considered a "derivative work" of the program:
+
+        - Apache License, version 2.0
+        - Apache Software License, version 1.0
+        - GNU Lesser General Public License, version 3
+        - Mozilla Public License, versions 1.0, 1.1 and 2.0
+        - Common Development and Distribution License (CDDL), version 1.0
+
+    Therefore the distribution of the program linked with libraries licensed
+    under the aforementioned licenses, is permitted by the copyright holders
+    if the distribution is compliant with both the GNU General Public
+    License version 2 and the aforementioned licenses.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+    Public License for more details.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ctx="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+    <ctx:annotation-config />
+    <bean class="org.n52.iceland.config.spring.LifecycleBeanPostProcessor">
+        <description>This calls Constructable#init and Destroyable#destroy for all beans.</description>
+    </bean>
+    <!-- injected beans -->
+    <bean id="decoderRepository" class="org.n52.svalbard.decode.DecoderRepository"/>
+    <bean id="encoderRepository" class="org.n52.svalbard.encode.EncoderRepository"/>
+    <bean id="xmlOptionsHelper" class="org.n52.svalbard.util.XmlOptionsHelper"/>
+    <bean id="sosClient" class="org.n52.sos.importer.feeder.web.ArcticSeaSosClient"/>
+    <bean id="sweHelper" class="org.n52.svalbard.util.SweHelper"/>
+    <!-- loaded beans -->
+    <!-- DECODER -->
+    <bean class="org.n52.svalbard.decode.CapabilitiesBaseTypeDecoder"/>
+    <bean class="org.n52.svalbard.decode.CapabilitiesDecoder"/>
+    <bean class="org.n52.svalbard.decode.CapabilitiesDocumentDecoder"/>
+    <bean class="org.n52.svalbard.decode.CapabilitiesTypeDecoder"/>
+    <bean class="org.n52.svalbard.decode.CapabilitiesV1DocumentDecoder"/>
+    <bean class="org.n52.svalbard.decode.FesDecoderv20" />
+    <bean class="org.n52.svalbard.decode.GmlDecoderv321"/>
+    <bean class="org.n52.svalbard.decode.OmDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.OwsExceptionReportDecoder"/>
+    <bean class="org.n52.svalbard.decode.RelatedOfferingTypeDecoder"/>
+    <bean class="org.n52.svalbard.decode.SamplingDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.SensorMLDecoderV101"/>
+    <bean class="org.n52.svalbard.decode.SosDecoderv100"/>
+    <bean class="org.n52.svalbard.decode.SosDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.SosStringDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.SweCommonDecoderV20"/>
+    <bean class="org.n52.svalbard.decode.SwesDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.SwesExtensionDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.SwesStringDecoderv20"/>
+    <bean class="org.n52.svalbard.decode.XlinkDecoderv1999"/>
+    <!-- ENCODER -->
+    <bean class="org.n52.svalbard.encode.FesEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.GmlEncoderv321"/>
+    <bean class="org.n52.svalbard.encode.OmEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.OwsEncoderv110"/>
+    <bean class="org.n52.svalbard.encode.SamplingEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SchemaRepository"/>
+    <bean class="org.n52.svalbard.encode.SensorMLEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SosInsertionMetadataTypeEncoder"/>
+    <bean class="org.n52.svalbard.encode.SosRequestEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SweCommonEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SwesExtensionEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.XlinkEncoderv1999"/>
+    <!-- SOS operation specific loaded beans -->
+    <!-- DECODER -->
+    <!-- ENCODER -->
+    <bean class="org.n52.svalbard.decode.InsertObservationResponseV20Decoder"/>
+    <bean class="org.n52.svalbard.decode.InsertResultResponseDecoder"/>
+    <bean class="org.n52.svalbard.decode.InsertResultTemplateResponseDecoder"/>
+    <bean class="org.n52.svalbard.decode.InsertSensorResponseDecoder"/>
+    <bean class="org.n52.svalbard.encode.GetCapabilitiesRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetCapabilitiesResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetCapabilitiesV1RequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetObservationRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetObservationResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetResultResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.GetResultTemplateResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertObservationResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertObservationRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertResultRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertResultResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertResultTemplateRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertResultTemplateResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertSensorResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.InsertSensorRequestEncoder"/>
+    <bean class="org.n52.svalbard.encode.SosRequestEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SosV1GetCapabilitiesResponseEncoder"/>
+    <bean class="org.n52.svalbard.encode.UpdateSensorResponseEncoder"/>
+</beans>

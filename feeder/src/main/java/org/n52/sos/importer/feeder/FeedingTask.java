@@ -34,12 +34,14 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlException;
-import org.n52.oxf.OXFException;
-import org.n52.oxf.ows.ExceptionReport;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.n52.sos.importer.feeder.util.HTTPClient;
@@ -56,12 +58,13 @@ import org.slf4j.LoggerFactory;
 /*
  * TODO if failed observations -&gt; store in file
  */
-public class FeedingTask implements Runnable {
+public class FeedingTask {
 
     private static final String EXCEPTION_STACK_TRACE = "Exception Stack Trace:";
-    private static final String COUNTER_FILE_POSTFIX = "_counter";
-    private static final String TIMESTAMP_FILE_POSTFIX = "_timestamp";
+
     private static final Logger LOG = LoggerFactory.getLogger(FeedingTask.class);
+
+    private static final Map<String, Lock> FEEDER_LOCKS = new ConcurrentSkipListMap<>();
 
     private final Configuration config;
 
@@ -69,23 +72,12 @@ public class FeedingTask implements Runnable {
 
     private DataFile dataFile;
 
-    /**
-     * <p>Constructor for OneTimeFeeder.</p>
-     *
-     * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     */
     public FeedingTask(final Configuration config) {
         this.config = config;
     }
 
-    /**
-     * <p>Constructor for OneTimeFeeder.</p>
-     *
-     * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param datafile a {@link java.io.File} object.
-     */
     public FeedingTask(final Configuration config, final File datafile) {
-        this.config = config;
+        this(config);
         dataFile = new DataFile(config, datafile);
     }
 
@@ -116,32 +108,34 @@ public class FeedingTask implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        LOG.trace("run()");
-        LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
-        // csv / ftp
-        if (config.isRemoteFile()) {
-            dataFile = downloadRemoteFile();
-        } else if (dataFile == null) {
-            dataFile = new DataFile(config, config.getDataFile());
-        }
-        if (dataFile == null) {
-            LOG.error("No datafile was found!");
-            // no data -> nothing to do
-            return;
-        }
-        LOG.info("Datafile: '{}'.", dataFile.getAbsolutePath());
-        if (dataFile.isAvailable()) {
+    public void feedData() {
+        Lock lock = getLock();
+        try {
+            lock.lock();
+
+            LOG.trace("startFeeding()");
+            LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
+            // local or remote
+            if (config.isRemoteFile()) {
+                dataFile = downloadRemoteFile();
+            } else if (dataFile == null) {
+                dataFile = new DataFile(config, config.getDataFile());
+            }
+            if (dataFile == null) {
+                LOG.error("No datafile was found!");
+                // no data -> nothing to do
+                return;
+            }
+            LOG.info("Datafile: '{}'.", dataFile.getAbsolutePath());
+            if (!dataFile.isAvailable()) {
+                LOG.error("Datafile is not available. Cancel feeding!");
+                return;
+            }
             try {
                 // check SOS
                 Feeder feeder = null;
-                final String sosURL = config.getSosUrl().toString();
-                try {
-                    feeder = new Feeder(config);
-                } catch (final ExceptionReport | OXFException e) {
-                    LOG.error("SOS " + sosURL + " is not available. Please check the configuration!", e);
-                }
+                String sosURL = config.getSosUrl().toString();
+                feeder = new Feeder(config);
                 if (feeder == null || !feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
                 } else if (!feeder.isSosTransactional()) {
@@ -149,45 +143,32 @@ public class FeedingTask implements Runnable {
                             + "InsertSensor, InsertObservation. Please enable.",
                             sosURL));
                 } else {
-                    final String directory = dataFile.getFileName();
                     File timeStampFile = null;
                     File counterFile = null;
                     if (config.isUseLastTimestamp()) {
-                        String timeStampFileName = null;
-                        if (config.isRemoteFile()) {
-                            timeStampFileName = getLocalTimeStampFilename();
-                        } else {
-                            timeStampFileName = directory + TIMESTAMP_FILE_POSTFIX;
-                        }
-                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(timeStampFileName);
+                        timeStampFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
+                                generateFileNameWithPostfix(Configuration.TIMESTAMP_FILE_POSTFIX));
+                        LOG.debug("Check last timestamp file '{}'.", timeStampFile.getCanonicalPath());
                         if (timeStampFile.exists()) {
                             // read already inserted UsedLastTimeStamp
-                            LOG.debug("Read already inserted LastUsedTimeStamp from file '{}'.",
-                                    timeStampFile.getCanonicalPath());
-                            try (Scanner sc = new Scanner(timeStampFile,
-                                    Configuration.DEFAULT_CHARSET)) {
+                            LOG.debug("Read already inserted LastUsedTimeStamp from file.");
+                            try (Scanner sc = new Scanner(timeStampFile, Configuration.DEFAULT_CHARSET)) {
                                 String storedTimeStamp = sc.next();
                                 Timestamp tmp = new Timestamp(storedTimeStamp);
-                                feeder.setLastUsedTimeStamp(tmp);
+                                feeder.setLastUsedTimestamp(tmp);
                             }
                         } else {
                             LOG.debug("Timestamp file does not exist.");
                         }
                     } else {
-                        String fileName = null;
-                        if (config.isRemoteFile()) {
-                            fileName = directory + COUNTER_FILE_POSTFIX;
-                        } else {
-                            fileName = getLocalFilename();
-                        }
-                        counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(fileName);
+                        counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
+                                generateFileNameWithPostfix(Configuration.COUNTER_FILE_POSTFIX));
                         LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
                         // read already inserted line count
                         if (counterFile.exists()) {
                             LOG.debug("Read already read lines from file");
                             try (Scanner sc = new Scanner(counterFile, Configuration.DEFAULT_CHARSET)) {
-                                final int count = sc.nextInt();
-                                feeder.setLastLine(count);
+                                feeder.setLastReadLine(sc.nextInt());
                             }
                         } else {
                             LOG.debug("Counter file does not exist.");
@@ -212,7 +193,7 @@ public class FeedingTask implements Runnable {
                             out.println(timestamp.toISO8601String());
                         }
                     } else {
-                        int lastLine = feeder.getLastLine();
+                        int lastLine = feeder.getLastReadLine();
                         LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
                                 lastLine,
                                 counterFile.getCanonicalPath());
@@ -247,38 +228,35 @@ public class FeedingTask implements Runnable {
                         config.getFileName(),
                         mue.getMessage());
                 LOG.debug(EXCEPTION_STACK_TRACE, mue);
-            } catch (final IOException |  OXFException | XmlException | ParseException | IllegalArgumentException e) {
+            } catch (final IOException |  XmlException | ParseException | IllegalArgumentException e) {
                 log(e);
             }
+        } finally {
+            lock.unlock();
         }
     }
 
-    /**
-     * <p>getLocalFilename.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
-     * @since 0.5.0
-     */
-    protected String getLocalFilename() throws IOException {
-        return config.getConfigFile().getCanonicalPath() +
-                "_" +
-                dataFile.getCanonicalPath() +
-                COUNTER_FILE_POSTFIX;
+    private synchronized Lock getLock() {
+        String key = FileHelper.shortenStringViaMD5Hash(config.getAbsolutePath());
+        if (!FEEDER_LOCKS.containsKey(key)) {
+            FEEDER_LOCKS.put(key, new ReentrantLock(true));
+        }
+        return  FEEDER_LOCKS.get(key);
     }
 
-    /**
-     * <p>getLocalTimeStampFilename.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
-     * @since 0.5.0
-     */
-    protected String getLocalTimeStampFilename() throws IOException {
+    private String generateFileNameWithPostfix(String postfix) throws IOException {
+        String fileName = dataFile.getFileName() + postfix;
+        if (!config.isRemoteFile()) {
+            fileName = getLocalFilename(postfix);
+        }
+        return fileName;
+    }
+
+    private String getLocalFilename(String postfix) throws IOException {
         return config.getConfigFile().getCanonicalPath() +
                 "_" +
                 dataFile.getCanonicalPath() +
-                TIMESTAMP_FILE_POSTFIX;
+                postfix;
     }
 
     private boolean isLinuxOrSimilar() {

@@ -28,7 +28,6 @@
  */
 package org.n52.sos.importer.feeder;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,8 +35,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -51,14 +49,14 @@ import java.util.Optional;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 
-import org.n52.oxf.om.x20.BooleanParameter;
-import org.n52.oxf.om.x20.CountParameter;
-import org.n52.oxf.om.x20.OmParameter;
-import org.n52.oxf.om.x20.QuantityParameter;
-import org.n52.oxf.om.x20.TextParameter;
-import org.n52.oxf.xml.NcNameResolver;
-import org.n52.sos.importer.feeder.csv.CsvParser;
-import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
+import org.n52.janmayen.NcName;
+import org.n52.shetland.ogc.gml.ReferenceType;
+import org.n52.shetland.ogc.om.NamedValue;
+import org.n52.shetland.ogc.om.values.BooleanValue;
+import org.n52.shetland.ogc.om.values.CategoryValue;
+import org.n52.shetland.ogc.om.values.CountValue;
+import org.n52.shetland.ogc.om.values.QuantityValue;
+import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
@@ -201,54 +199,6 @@ public class DataFile {
     }
 
     /**
-     * Returns a CSVReader instance for the current DataFile using the configuration
-     * including the defined values for: first line with data, separator, escape, and text qualifier.
-     *
-     * @return a <code>CSVReader</code> instance
-     * @throws java.io.IOException if any.
-     */
-    public CsvParser getCSVReader() throws IOException {
-        LOG.trace("getCSVReader()");
-        Reader fr = new InputStreamReader(new FileInputStream(dataFile), Configuration.DEFAULT_CHARSET);
-        BufferedReader br = new BufferedReader(fr);
-        CsvParser cr = null;
-        if (configuration.isCsvParserDefined()) {
-            String csvParser = configuration.getCsvParser();
-            try {
-                Class<?> clazz = Class.forName(csvParser);
-                Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
-                Object instance = constructor.newInstance();
-                if (CsvParser.class.isAssignableFrom(instance.getClass())) {
-                    cr = (CsvParser) instance;
-                }
-            } catch (ClassNotFoundException |
-                    NoSuchMethodException |
-                    SecurityException |
-                    InstantiationException |
-                    IllegalAccessException |
-                    IllegalArgumentException |
-                    InvocationTargetException e) {
-                String errorMsg = String.format("Could not load defined CsvParser implementation class '%s'. "
-                        + "Cancel import",
-                        csvParser);
-                LOG.error(errorMsg);
-                LOG.debug("Exception thrown: {}", e.getMessage(), e);
-                try {
-                    br.close();
-                } catch (IOException e1) {
-                    LOG.error("Could not close BufferedReader: {}", e1.getMessage(), e1);
-                }
-                throw new IllegalArgumentException(errorMsg, e);
-            }
-        }
-        if (cr == null) {
-            cr = new WrappedCSVReader();
-        }
-        cr.init(br, configuration);
-        return cr;
-    }
-
-    /**
      * <p>getMeasuredValueColumnIds.</p>
      *
      * @see Configuration#getMeasureValueColumnIds()
@@ -379,7 +329,7 @@ public class DataFile {
                         p);
             }
         }
-        if (!NcNameResolver.isNCName(foi.getName())) {
+        if (!NcName.isValid(foi.getName())) {
             String[] a = createCleanNCName(foi);
             foi.setName(a[0]);
             if (!a[0].equals(a[1])) {
@@ -419,17 +369,8 @@ public class DataFile {
      */
     private String[] createCleanNCName(Resource res) {
         // implement check for NCName compliance and remove bad values
-        String name = res.getName();
+        String name = NcName.makeValid(res.getName(), Configuration.UNICODE_REPLACER);
         String origName = name;
-        // clean rest of string using Constants.UNICODE_REPLACER
-        char[] foiNameChars = name.toCharArray();
-        for (int i = 0; i < foiNameChars.length; i++) {
-            char c = foiNameChars[i];
-            if (!NcNameResolver.isNCNameChar(c)) {
-                foiNameChars[i] = Configuration.UNICODE_REPLACER;
-            }
-        }
-        name = String.valueOf(foiNameChars);
         // check if name is only containing "_"
         Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
         if (matcher.matches()) {
@@ -710,9 +651,8 @@ public class DataFile {
         Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
-        if (mvColumn.getRelatedUnitOfMeasurementArray() != null &&
-                mvColumn.getRelatedUnitOfMeasurementArray().length > 0) {
-            RelatedUnitOfMeasurement relUom = mvColumn.getRelatedUnitOfMeasurementArray(0);
+        if (mvColumn.isSetRelatedUnitOfMeasurement()) {
+            RelatedUnitOfMeasurement relUom = mvColumn.getRelatedUnitOfMeasurement();
 
             // Case A.1.*: idRef
             if (relUom.isSetIdRef() && !relUom.isSetNumber()) {
@@ -784,10 +724,8 @@ public class DataFile {
         Column mvColumn = configuration.getColumnById(mVColumnId);
 
         // Case A*
-        if (mvColumn.getRelatedObservedPropertyArray() != null &&
-                mvColumn.getRelatedObservedPropertyArray().length > 0) {
-            RelatedObservedProperty relOp =
-                    mvColumn.getRelatedObservedPropertyArray(0);
+        if (mvColumn.isSetRelatedObservedProperty()) {
+            RelatedObservedProperty relOp = mvColumn.getRelatedObservedProperty();
 
             // Case A.1.*: idRef
             if (relOp.isSetIdRef() && !relOp.isSetNumber()) {
@@ -842,7 +780,7 @@ public class DataFile {
      */
     public Offering getOffering(Sensor s) {
         Offering off = configuration.getOffering(s);
-        if (!NcNameResolver.isNCName(off.getName())) {
+        if (!NcName.isValid(off.getName())) {
             String[] a = createCleanNCName(off);
             off.setName(a[0]);
             if (!a[0].equals(a[1])) {
@@ -871,15 +809,6 @@ public class DataFile {
      */
     public String getCanonicalPath() throws IOException {
         return dataFile.getCanonicalPath();
-    }
-
-    /**
-     * <p>getConfigurationFileName.</p>
-     *
-     * @return a {@link String} object.
-     */
-    public String getConfigurationFileName() {
-        return configuration.getFileName();
     }
 
     /**
@@ -1085,15 +1014,6 @@ public class DataFile {
     }
 
     /**
-     * <p>getExpectedColumnCount.</p>
-     *
-     * @return a int.
-     */
-    public int getExpectedColumnCount() {
-        return configuration.getExpectedColumnCount();
-    }
-
-    /**
      * <p>getHeaderLine.</p>
      *
      * @return a int.
@@ -1111,42 +1031,47 @@ public class DataFile {
         return configuration.getDataFileEncoding();
     }
 
-    /**
-     * <p>getSeparatorChar.</p>
-     *
-     * @return a char.
-     */
-    public char getSeparatorChar() {
-        return configuration.getCsvSeparator();
-    }
-
-    public Optional<List<OmParameter<?>>> getOmParameters(int mVColumnId, String[] values) {
+    public Optional<List<NamedValue<?>>> getOmParameters(int mVColumnId, String[] values) {
         if (mVColumnId < 0 || values == null || values.length == 0) {
             return Optional.empty();
         }
         // get om column id by relatedOM value or all columns with om:parameter as column type
         if (configuration.isOmParameterAvailableFor(mVColumnId)) {
             List<Column> omParameterColumns = configuration.getColumnsForOmParameter(mVColumnId);
-            List<OmParameter<?>> omParameters = new LinkedList<>();
+            List<NamedValue<?>> omParameters = new LinkedList<>();
             // create om:parameter from om:parameter column
             for (Column col : omParameterColumns) {
                 switch (getOmParameterType(col)) {
                     case BOOLEAN:
-                        omParameters.add(new BooleanParameter(getOmParameterName(col),
-                                Boolean.parseBoolean(values[col.getNumber()])));
+                        NamedValue<Boolean> booleanParameter = new NamedValue<>();
+                        booleanParameter.setValue(new BooleanValue(Boolean.parseBoolean(values[col.getNumber()])));
+                        booleanParameter.setName(new ReferenceType(getOmParameterName(col)));
+                        omParameters.add(booleanParameter);
                         break;
                     case COUNT:
-                        omParameters.add(
-                                new CountParameter(getOmParameterName(col), Integer.parseInt(values[col.getNumber()])));
+                        NamedValue<Integer> countParameter = new NamedValue<>();
+                        countParameter.setValue(new CountValue(Integer.parseInt(values[col.getNumber()])));
+                        countParameter.setName(new ReferenceType(getOmParameterName(col)));
+                        omParameters.add(countParameter);
                         break;
                     case NUMERIC:
-                        omParameters.add(new QuantityParameter(getOmParameterName(col),
-                                getUnitOfMeasurement(col.getNumber(), values).getUri(),
-                                Double.parseDouble(values[col.getNumber()])));
+                        NamedValue<BigDecimal> quantityParameter = new NamedValue<>();
+                        quantityParameter.setValue(new QuantityValue(Double.parseDouble(values[col.getNumber()]),
+                                getUnitOfMeasurement(col.getNumber(), values).getUri()));
+                        quantityParameter.setName(new ReferenceType(getOmParameterName(col)));
+                        omParameters.add(quantityParameter);
                         break;
                     case "CATEGORY":
+                        NamedValue<String> categoryParameter = new NamedValue<>();
+                        categoryParameter.setValue(new CategoryValue(values[col.getNumber()]));
+                        categoryParameter.setName(new ReferenceType(getOmParameterName(col)));
+                        omParameters.add(categoryParameter);
+                        break;
                     case TEXT:
-                        omParameters.add(new TextParameter(getOmParameterName(col), values[col.getNumber()]));
+                        NamedValue<String> textParameter = new NamedValue<>();
+                        textParameter.setValue(new TextValue(values[col.getNumber()]));
+                        textParameter.setName(new ReferenceType(getOmParameterName(col)));
+                        omParameters.add(textParameter);
                         break;
                     default:
                         throw new IllegalArgumentException(
@@ -1157,6 +1082,11 @@ public class DataFile {
         } else {
             return Optional.empty();
         }
+    }
+
+    public boolean areMeasureValuesAvailable() {
+        int[] measuredValueColumnIds = getMeasuredValueColumnIds();
+        return measuredValueColumnIds != null && measuredValueColumnIds.length > 0;
     }
 
     private String getOmParameterName(Column col) {

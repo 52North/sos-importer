@@ -40,11 +40,6 @@ import org.n52.sos.importer.controller.TableController;
 
 public class Step3TestMultipleDateTimeColumns {
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON

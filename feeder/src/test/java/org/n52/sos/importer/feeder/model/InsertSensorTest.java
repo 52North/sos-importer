@@ -26,42 +26,36 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.csv;
+package org.n52.sos.importer.feeder.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
-import org.n52.sos.importer.feeder.Configuration;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVReader;
+import org.junit.Test;
 
-/**
- * <p>WrappedCSVReader class.</p>
- *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- */
-public class WrappedCSVReader implements CsvParser {
+public class InsertSensorTest {
 
-    private CSVReader csvReader;
-
-    @Override
-    public String[] readNext() throws IOException {
-        return csvReader.readNext();
+    @Test
+    public void isSetReferenceValueShouldReturnFalseIfNullOrEmpty() {
+        assertThat(new InsertSensor(null, null, null, null, null).isSetReferenceValues(), is(false));
     }
 
-    @Override
-    public void init(final BufferedReader bufferedReader,
-            final Configuration configuration) {
-        final int flwd = configuration.getFirstLineWithData();
-        final char separator = configuration.getCsvSeparator();
-        final char quotechar = configuration.getCsvQuoteChar();
-        final char escape = configuration.getCsvEscape();
-        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+    @Test
+    public void isSetReferenceValueShouldReturnTrueIfSet() {
+        ObservedProperty obsProp = new ObservedProperty("name", "uri");
+        List<SimpleEntry<String, String>> entry = Collections.singletonList(new SimpleEntry<>("key", "value"));
+        Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValues =
+                Collections.singletonMap(obsProp, entry);
+        InsertSensor insertSensor = new InsertSensor(null, null, null, null, referenceValues);
+
+        assertThat(insertSensor.isSetReferenceValues(), is(true));
+        assertThat(insertSensor.getReferenceValues().get(obsProp), is(entry));
     }
 
-    @Override
-    public int getSkipLimit() {
-        return 1;
-    }
 
 }

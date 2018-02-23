@@ -162,10 +162,8 @@ public abstract class CombinationPanel extends SelectionPanel {
     public abstract String getGroupToolTip();
 
     @Override
-    public void setSelection(final String s) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("setSelection()");
-        }
+    public void setSelection(String s) {
+        logger.trace("setSelection()");
         final String[] part = s.split(Constants.SEPARATOR_STRING);
         patternComboBox.setSelectedItem(part[0]);
         groupComboBox.setSelectedItem(part[1]);
@@ -173,11 +171,9 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
     public void setDefaultSelection() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("setDefaultSelection()");
-        }
-        final String pattern = getPatterns().getElementAt(0);
-        final String group = getGroupItems()[0];
+        logger.trace("setDefaultSelection()");
+        String pattern = getPatterns().getElementAt(0);
+        String group = getGroupItems()[0];
         patternComboBox.setSelectedItem(pattern);
         getCombination().setPattern(pattern);
         groupComboBox.setSelectedItem(group);
@@ -185,19 +181,17 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
     public String getSelection() {
-        final String pattern = (String) patternComboBox.getSelectedItem();
-        final String group = (String) groupComboBox.getSelectedItem();
+        String pattern = (String) patternComboBox.getSelectedItem();
+        String group = (String) groupComboBox.getSelectedItem();
         return pattern + Constants.SEPARATOR_STRING + group;
     }
 
     @Override
     protected void patternChanged() {
-        final String pattern = (String) patternComboBox.getSelectedItem();
-        if (logger.isTraceEnabled()) {
-            logger.trace("patternChanged(" + pattern + ")");
-        }
-        final List<String> values = TableController.getInstance().getMarkedValues();
-        final Object tester = getTestValue();
+        String pattern = (String) patternComboBox.getSelectedItem();
+        logger.trace("patternChanged({})", pattern);
+        List<String> values = TableController.getInstance().getMarkedValues();
+        Object tester = getTestValue();
         //
         getCombination().setPattern(pattern);
         exampleFormatLabel.getFormatter().setPattern(pattern);
@@ -209,16 +203,14 @@ public abstract class CombinationPanel extends SelectionPanel {
 
     @Override
     protected void reInit() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("reInit()");
-        }
+        logger.trace("reInit()");
         patternChanged();
     }
 
     private class FormatChanged implements ActionListener {
 
         @Override
-        public void actionPerformed(final ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
             if (!patternComboBox.isEditable()) {
                 patternChanged();
             }

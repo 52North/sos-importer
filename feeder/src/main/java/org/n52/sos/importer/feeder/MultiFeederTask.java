@@ -45,7 +45,10 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>MultiFeederTask class.</p>
  *
+ * TODO add more log statements
+ *
  * @author <a href="mailto:m.radtke@52north.org">Maurin Radtke</a>
+ * @author <a href="mailto:e.h.juerrens@52north.org">J6uuml;rrens, Eike Hinderk</a>
  */
 public class MultiFeederTask {
 
@@ -91,7 +94,13 @@ public class MultiFeederTask {
                     for (final File fileEntry : files) {
                         try {
                             Configuration config = new Configuration(fileEntry.getAbsolutePath());
-                            threads.submit(new FeedingTask(config));
+                            threads.submit(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    new FeedingTask(config).feedData();
+                                }
+                            });
                         } catch (XmlException | IOException e) {
                             LOG.error("Only valid XML format is supported.");
                             continue;

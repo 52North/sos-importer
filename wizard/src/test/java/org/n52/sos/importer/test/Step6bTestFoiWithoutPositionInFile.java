@@ -78,11 +78,6 @@ import org.n52.sos.importer.view.i18n.Lang;
 
 public class Step6bTestFoiWithoutPositionInFile {
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
@@ -112,7 +107,7 @@ public class Step6bTestFoiWithoutPositionInFile {
          * Set-Up Column metadata
          */
         final Step3Model s3M = new Step3Model(4, firstLineWithData, false);
-        final List<String> selection = new ArrayList<String>(1);
+        final List<String> selection = new ArrayList<>(1);
         selection.add(Lang.l().step3ColTypeMeasuredValue());
         selection.add(Lang.l().step3MeasuredValNumericValue());
         selection.add(".SEP,");

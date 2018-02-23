@@ -33,12 +33,14 @@ import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.n52.sos.importer.feeder.Configuration;
 
 public class TimeSeriesRepositoryTest {
 
     @Test
     public void shouldReturnRegisterSensorForCorrectSensor() {
-        TimeSeriesRepository tsr = new TimeSeriesRepository();
+        TimeSeriesRepository tsr = new TimeSeriesRepository(Mockito.mock(Configuration.class));
         String sensorURI = "test-sensor-1-uri";
         ObservedProperty observedProperty1 = new ObservedProperty("test-obs-prop-1-name", "test-obs-prop-1-uri");
         ObservedProperty observedProperty2 = new ObservedProperty("test-obs-prop-2-name", "test-obs-prop-2-uri");
@@ -70,10 +72,10 @@ public class TimeSeriesRepositoryTest {
             mvType);
         InsertObservation[] ios = {io, io2 };
         tsr.addObservations(ios);
-        RegisterSensor registerSensor = tsr.getRegisterSensor(sensorURI);
-        Assert.assertThat(registerSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
-        Assert.assertThat(registerSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
-        Assert.assertThat(registerSensor.getObservedProperties(),
+        InsertSensor insertSensor = tsr.getInsertSensor(sensorURI);
+        Assert.assertThat(insertSensor.getSensorURI(), org.hamcrest.CoreMatchers.is(sensorURI));
+        Assert.assertThat(insertSensor.getObservedProperties(), org.hamcrest.Matchers.hasSize(2));
+        Assert.assertThat(insertSensor.getObservedProperties(),
                 Matchers.containsInAnyOrder(observedProperty1, observedProperty2));
     }
 

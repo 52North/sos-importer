@@ -43,7 +43,7 @@ public class InsertObservationTest {
     private static final String DEG = "deg";
 
     @Test
-    public void houldReturnTrueIfAltitudeIsAvailable() {
+    public void shouldReturnTrueIfAltitudeIsAvailable() {
         double alt = 2.0;
         FeatureOfInterest foi =
                 new FeatureOfInterest(null, null,

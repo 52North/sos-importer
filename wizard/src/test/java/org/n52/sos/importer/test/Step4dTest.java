@@ -40,21 +40,10 @@ import org.n52.sos.importer.view.i18n.Lang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * <p>Step4bTest class.</p>
- *
- * @author e.h.juerrens@52north.org
- * @since 0.5.0
- */
 public class Step4dTest {
 
     private static final Logger logger = LoggerFactory.getLogger(Step4dTest.class);
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON

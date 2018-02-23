@@ -292,4 +292,51 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
                 !parentFeatureIdentifier.isEmpty() &&
                 parentFeatureIdentifier.length() > 3;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (parentFeatureIdentifier == null ? 0 : parentFeatureIdentifier.hashCode());
+        result = prime * result + (position == null ? 0 : position.hashCode());
+        result = prime * result + (positions == null ? 0 : positions.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FeatureOfInterest other = (FeatureOfInterest) obj;
+        if (parentFeatureIdentifier == null) {
+            if (other.parentFeatureIdentifier != null) {
+                return false;
+            }
+        } else if (!parentFeatureIdentifier.equals(other.parentFeatureIdentifier)) {
+            return false;
+        }
+        if (position == null) {
+            if (other.position != null) {
+                return false;
+            }
+        } else if (!position.equals(other.position)) {
+            return false;
+        }
+        if (positions == null) {
+            if (other.positions != null) {
+                return false;
+            }
+        } else if (!positions.equals(other.positions)) {
+            return false;
+        }
+        return true;
+    }
+
 }

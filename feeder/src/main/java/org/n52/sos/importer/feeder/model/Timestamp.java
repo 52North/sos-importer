@@ -78,24 +78,17 @@ public class Timestamp {
      */
     public Timestamp(String ISO8601String) {
         // yyyy-MM-ddTHH:mm:ss+hh:mm => 31 chars
-        year = Integer.parseInt(
-                ISO8601String.substring(0, 3)
-                );
-        month = Integer.parseInt(
-                ISO8601String.substring(5, 6)
-                );
-        day = Integer.parseInt(
-                ISO8601String.substring(8, 9)
-                );
-        hour = Integer.parseInt(
-                ISO8601String.substring(11, 12)
-                );
-        minute = Integer.parseInt(
-                ISO8601String.substring(14, 15)
-                );
-        seconds = Integer.parseInt(
-                ISO8601String.substring(17, 18)
-                );
+        year = Integer.parseInt(ISO8601String.substring(0, 4));
+        month = Integer.parseInt(ISO8601String.substring(5, 7));
+        day = Integer.parseInt(ISO8601String.substring(8, 10));
+        hour = Integer.parseInt(ISO8601String.substring(11, 13));
+        minute = Integer.parseInt(ISO8601String.substring(14, 16));
+        seconds = Integer.parseInt(ISO8601String.substring(17, 19));
+        if (ISO8601String.indexOf("+") == 19 || ISO8601String.indexOf("-") == 19) {
+            timezone = Integer.parseInt(ISO8601String.substring(20, 22));
+        } else if (ISO8601String.contains("Z")) {
+            timezone = 0;
+        }
     }
 
     @Override
@@ -143,7 +136,7 @@ public class Timestamp {
             ts.append(DOUBLE_ZERO);
         }
         if (millis != Integer.MIN_VALUE) {
-            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : (millis < 100 ? SINGLE_ZERO + millis : millis));
+            ts.append(".").append(millis < 10 ? DOUBLE_ZERO + millis : millis < 100 ? SINGLE_ZERO + millis : millis);
         }
         if (timezone != Integer.MIN_VALUE &&
                 (hour != Integer.MIN_VALUE || minute != Integer.MIN_VALUE || seconds != Integer.MIN_VALUE)) {
@@ -161,6 +154,7 @@ public class Timestamp {
                 }
             }
         }
+
         return ts.toString();
     }
 
@@ -286,12 +280,10 @@ public class Timestamp {
      * @param lastModifiedDeltaDays -1, if it should be ignored, else &gt; 0.
      * @return a {@link Timestamp} object.
      */
-    public Timestamp adjustBy(
-            final long lastModified,
-            final int lastModifiedDeltaDays) {
+    public Timestamp adjustBy(long lastModified, int lastModifiedDeltaDays) {
         long lastModifiedTmp = lastModified;
         if (lastModifiedDeltaDays > 0) {
-            lastModifiedTmp = lastModified - (lastModifiedDeltaDays * MILLIS_PER_DAY);
+            lastModifiedTmp = lastModified - lastModifiedDeltaDays * MILLIS_PER_DAY;
         }
         ZonedDateTime zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(lastModifiedTmp), ZoneId.of(UTC));
         setYear(zdt.get(ChronoField.YEAR));
@@ -386,7 +378,7 @@ public class Timestamp {
      * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @return a boolean.
      */
-    public boolean isAfter(final Timestamp timeStamp) {
+    public boolean isAfter(Timestamp timeStamp) {
         if (timeStamp == null) {
             throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
         }
@@ -398,7 +390,7 @@ public class Timestamp {
      * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @return a boolean.
      */
-    public boolean isBefore(final Timestamp timeStamp) {
+    public boolean isBefore(Timestamp timeStamp) {
         if (timeStamp == null) {
             throw new IllegalArgumentException(PARAMETER_TIME_STAMP_IS_MANDATORY);
         }
@@ -410,7 +402,7 @@ public class Timestamp {
      * @param daysToAdd a int.
      * @return a {@link Timestamp} object.
      */
-    public Timestamp applyDayDelta(final int daysToAdd) {
+    public Timestamp applyDayDelta(int daysToAdd) {
         TemporalAccessor ta = DateTimeFormatter.ofPattern(getDatePattern()).parse(toISO8601String());
         if (ta.isSupported(ChronoField.YEAR) &&
                 ta.isSupported(ChronoField.MONTH_OF_YEAR) &&
@@ -427,128 +419,58 @@ public class Timestamp {
         return this;
     }
 
-    /**
-     * <p>Setter for the field <code>year</code>.</p>
-     *
-     * @param year a short.
-     */
-    public void setYear(final int year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
-    /**
-     * <p>Setter for the field <code>month</code>.</p>
-     *
-     * @param month a byte.
-     */
-    public void setMonth(final int month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
-    /**
-     * <p>Setter for the field <code>day</code>.</p>
-     *
-     * @param day a byte.
-     */
-    public void setDay(final int day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    /**
-     * <p>Setter for the field <code>hour</code>.</p>
-     *
-     * @param hour a byte.
-     */
-    public void setHour(final int hour) {
+    public void setHour(int hour) {
         this.hour = hour;
     }
 
-    /**
-     * <p>Setter for the field <code>minute</code>.</p>
-     *
-     * @param minute a byte.
-     */
-    public void setMinute(final int minute) {
+    public void setMinute(int minute) {
         this.minute = minute;
     }
 
-    /**
-     * <p>Setter for the field <code>seconds</code>.</p>
-     *
-     * @param seconds a byte.
-     */
-    public void setSeconds(final int seconds) {
+    public void setSeconds(int seconds) {
         this.seconds = seconds;
     }
 
-    /**
-     * <p>Setter for the field <code>timezone</code>.</p>
-     *
-     * @param timezone a byte.
-     */
-    public void setTimezone(final int timezone) {
+    public void setTimezone(int timezone) {
         this.timezone = timezone;
     }
 
-    /**
-     * <p>Getter for the field <code>year</code>.</p>
-     *
-     * @return a short.
-     */
     public int getYear() {
         return year;
     }
 
-    /**
-     * <p>Getter for the field <code>month</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getMonth() {
         return month;
     }
 
-    /**
-     * <p>Getter for the field <code>day</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getDay() {
         return day;
     }
 
-    /**
-     * <p>Getter for the field <code>hour</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getHour() {
         return hour;
     }
 
-    /**
-     * <p>Getter for the field <code>minute</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getMinute() {
         return minute;
     }
 
-    /**
-     * <p>Getter for the field <code>seconds</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getSeconds() {
         return seconds;
     }
 
-    /**
-     * <p>Getter for the field <code>timezone</code>.</p>
-     *
-     * @return a byte.
-     */
     public int getTimezone() {
         return timezone;
     }
@@ -559,6 +481,60 @@ public class Timestamp {
 
     private int getMillis() {
         return millis;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + day;
+        result = prime * result + hour;
+        result = prime * result + millis;
+        result = prime * result + minute;
+        result = prime * result + month;
+        result = prime * result + seconds;
+        result = prime * result + timezone;
+        result = prime * result + year;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Timestamp other = (Timestamp) obj;
+        if (day != other.day) {
+            return false;
+        }
+        if (hour != other.hour) {
+            return false;
+        }
+        if (millis != other.millis) {
+            return false;
+        }
+        if (minute != other.minute) {
+            return false;
+        }
+        if (month != other.month) {
+            return false;
+        }
+        if (seconds != other.seconds) {
+            return false;
+        }
+        if (timezone != other.timezone) {
+            return false;
+        }
+        if (year != other.year) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -29,6 +29,7 @@
 package org.n52.sos.importer.model.resources;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -90,7 +91,7 @@ public abstract class Resource extends Component {
      * @param newUri a {@link java.net.URI} object.
      */
     public void setURI(final URI newUri) {
-        this.uri = newUri;
+        uri = newUri;
     }
 
     /**
@@ -235,13 +236,6 @@ public abstract class Resource extends Component {
      */
     public abstract Resource forThis(Cell measuredValuePosition);
 
-    /**
-     * <p>getXMLId.</p>
-     *
-     * @return XML prefix combined with hash code
-     * @see #XML_PREFIX()
-     * @see #hashCode()
-     */
     public String getXMLId() {
         return XML_PREFIX() + hashCode();
     }
@@ -257,40 +251,51 @@ public abstract class Resource extends Component {
         return "";
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result
-                + ((tableElement == null) ? 0 : tableElement.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        result = prime * result + (concatString == null ? 0 : concatString.hashCode());
+        result = prime * result + (generated ? 1231 : 1237);
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + Arrays.hashCode(relatedCols);
+        result = prime * result + (tableElement == null ? 0 : tableElement.hashCode());
+        result = prime * result + (uri == null ? 0 : uri.hashCode());
+        result = prime * result + (uriPrefix == null ? 0 : uriPrefix.hashCode());
+        result = prime * result + (useNameAfterPrefixAsURI ? 1231 : 1237);
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Resource)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        final Resource other = (Resource) obj;
+        Resource other = (Resource) obj;
+        if (concatString == null) {
+            if (other.concatString != null) {
+                return false;
+            }
+        } else if (!concatString.equals(other.concatString)) {
+            return false;
+        }
+        if (generated != other.generated) {
+            return false;
+        }
         if (name == null) {
             if (other.name != null) {
                 return false;
             }
         } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (!Arrays.equals(relatedCols, other.relatedCols)) {
             return false;
         }
         if (tableElement == null) {
@@ -305,6 +310,16 @@ public abstract class Resource extends Component {
                 return false;
             }
         } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        if (uriPrefix == null) {
+            if (other.uriPrefix != null) {
+                return false;
+            }
+        } else if (!uriPrefix.equals(other.uriPrefix)) {
+            return false;
+        }
+        if (useNameAfterPrefixAsURI != other.useNameAfterPrefixAsURI) {
             return false;
         }
         return true;

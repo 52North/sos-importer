@@ -37,11 +37,13 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -49,20 +51,31 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
-import org.n52.sos.importer.feeder.csv.WrappedCSVReader;
+import org.n52.sos.importer.feeder.collector.DefaultCsvCollector;
+import org.n52.sos.importer.feeder.collector.SampleBasedObservationCollector;
+import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
+import org.n52.sos.importer.feeder.importer.SingleObservationImporter;
+import org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter;
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
 import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
 import org.x52North.sensorweb.sos.importer.x05.RelatedFOIDocument.RelatedFOI;
+import org.x52North.sensorweb.sos.importer.x05.RelatedObservedPropertyDocument.RelatedObservedProperty;
+import org.x52North.sensorweb.sos.importer.x05.RelatedReferenceValueDocument.RelatedReferenceValue;
 import org.x52North.sensorweb.sos.importer.x05.RelatedSensorDocument.RelatedSensor;
+import org.x52North.sensorweb.sos.importer.x05.ResourceType;
 import org.x52North.sensorweb.sos.importer.x05.SensorType;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
@@ -77,7 +90,7 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-public final class Configuration {
+public class Configuration {
 
     /**
      * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
@@ -129,6 +142,7 @@ public final class Configuration {
     public static final String SOS_OBSERVATION_TYPE_COUNT = "COUNT";
     /** Constant <code>SOS_OBSERVATION_TYPE_BOOLEAN="BOOLEAN"</code> */
     public static final String SOS_OBSERVATION_TYPE_BOOLEAN = "BOOLEAN";
+    public static final String SOS_OBSERVATION_TYPE_NUMERIC = "NUMERIC";
     /** Constant <code>OGC_DISCOVERY_ID_TERM_DEFINITION="urn:ogc:def:identifier:OGC:1.0:uniqueID"</code> */
     public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
     /** Constant <code>OGC_DISCOVERY_LONG_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:longName"</code> */
@@ -171,6 +185,10 @@ public final class Configuration {
     public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
 
     public static final String DEFAULT_CHARSET = "UTF-8";
+
+    public static final String TIMESTAMP_FILE_POSTFIX = ".timestamp";
+
+    public static final String COUNTER_FILE_POSTFIX = ".counter";
 
     /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
     private static final HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
@@ -218,6 +236,8 @@ public final class Configuration {
 
     private Pattern localeFilePattern;
 
+    private Pattern[] ignorePatterns;
+
     /**
      * <p>Constructor for Configuration.</p>
      *
@@ -254,6 +274,8 @@ public final class Configuration {
             importConf = sosImportDoc.getSosImportConfiguration();
             setLocaleFilePattern();
         }
+
+        ignorePatterns = getIgnoreLineRegExPatterns();
     }
 
     private void setLocaleFilePattern() {
@@ -402,9 +424,9 @@ public final class Configuration {
      */
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<>();
-        for (final Column column : cols) {
+        Column[] cols = getColumns();
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)) {
                 LOG.debug("Found measured value column: {}", column.getNumber());
                 ids.add(column.getNumber());
@@ -412,7 +434,7 @@ public final class Configuration {
         }
         ids.trimToSize();
         if (ids.size() > 0) {
-            final int[] result = new int[ids.size()];
+            int[] result = new int[ids.size()];
             for (int i = 0; i < result.length; i++) {
                 result[i] = ids.get(i);
             }
@@ -428,7 +450,7 @@ public final class Configuration {
      */
     public int[] getIgnoredColumnIds() {
         LOG.trace("getIgnoredColumnIds()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)) {
@@ -460,8 +482,8 @@ public final class Configuration {
                 mvColumnId));
         // check for RelatedSensor element and if its a number -> return number
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedSensorArray() != null && c.getRelatedSensorArray().length > 0) {
-            final RelatedSensor rS = c.getRelatedSensorArray(0);
+        if (c.isSetRelatedSensor()) {
+            final RelatedSensor rS = c.getRelatedSensor();
             if (rS.isSetNumber()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Found RelatedSensor column for measured value column %d: %d",
@@ -479,7 +501,7 @@ public final class Configuration {
         }
         // if element is not set
         //    get column id from ColumnAssignments
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getType().equals(Type.SENSOR)) {
                 if (LOG.isDebugEnabled()) {
@@ -501,7 +523,7 @@ public final class Configuration {
      */
     public Column getColumnById(final int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
@@ -528,11 +550,9 @@ public final class Configuration {
         LOG.trace(String.format("getRelatedSensor(%d)",
                     mvColumnId));
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedSensorArray() != null &&
-                c.getRelatedSensorArray().length > 0 &&
-                c.getRelatedSensorArray(0) != null &&
-                c.getRelatedSensorArray(0).isSetIdRef()) {
-            final String sensorXmlId = c.getRelatedSensorArray(0).getIdRef();
+        if (c.isSetRelatedSensor() &&
+                c.getRelatedSensor().isSetIdRef()) {
+            final String sensorXmlId = c.getRelatedSensor().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
                     importConf.getAdditionalMetadata().getSensorArray() != null &&
                     importConf.getAdditionalMetadata().getSensorArray().length > 0) {
@@ -576,8 +596,8 @@ public final class Configuration {
                 mvColumnId));
         // check for RelatedFOI element and if its a number -> return number
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedFOIArray() != null && c.getRelatedFOIArray().length > 0) {
-            final RelatedFOI rF = c.getRelatedFOIArray(0);
+        if (c.isSetRelatedFOI()) {
+            final RelatedFOI rF = c.getRelatedFOI();
             if (rF.isSetNumber()) {
                 LOG.debug(String.format("Found RelatedFOI column for measured value column %d: %d",
                         mvColumnId,
@@ -591,7 +611,7 @@ public final class Configuration {
         }
         // if element is not set
         //    get column id from ColumnAssignments
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column column : cols) {
             if (column.getType().equals(Type.FOI)) {
                 LOG.debug(String.format("Found related feature of interest column for measured value column %d: %d",
@@ -674,13 +694,11 @@ public final class Configuration {
         LOG.trace(String.format("getRelatedFoi(%d)",
                 mvColumnId));
         final Column c = getColumnById(mvColumnId);
-        if (c.getRelatedFOIArray() != null &&
-                c.getRelatedFOIArray(0) != null &&
-                c.getRelatedFOIArray(0).isSetIdRef()) {
-            final String foiXmlId = c.getRelatedFOIArray(0).getIdRef();
+        if (c.isSetRelatedFOI() &&
+                c.getRelatedFOI().isSetIdRef()) {
+            final String foiXmlId = c.getRelatedFOI().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
-                    importConf.getAdditionalMetadata().getFeatureOfInterestArray() != null &&
-                    importConf.getAdditionalMetadata().getFeatureOfInterestArray().length > 0) {
+                    importConf.getAdditionalMetadata().sizeOfFeatureOfInterestArray() > 0) {
                 for (final FeatureOfInterestType foi : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
                     if (isFoiIdMatching(foiXmlId, foi)) {
                         LOG.debug(String.format("Feature of Interest found for id '%s': %s",
@@ -718,7 +736,7 @@ public final class Configuration {
         String group = "";
         // get first group in Document for position column
         outerfor:
-        for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+        for (Column column : getColumns()) {
             if (column.getType().equals(Type.POSITION)) {
                 for (Metadata metadata : column.getMetadataArray()) {
                     if (metadata.getKey().equals(Key.GROUP)) {
@@ -959,7 +977,7 @@ public final class Configuration {
         if (group == null) {
             return null;
         }
-        final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] allCols = getColumns();
         final ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
         for (final Column col : allCols) {
             if (col.getType() != null &&
@@ -992,7 +1010,7 @@ public final class Configuration {
      */
     public String getFirstDateTimeGroup() {
         LOG.trace("getFirstDateTimeGroup()");
-        final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.DATE_TIME)) {
                 // it's DATE_TIME -> get group id from metadata[]
@@ -1042,8 +1060,7 @@ public final class Configuration {
     public int getColumnIdForUom(final int mVColumnId) {
         LOG.trace(String.format("getColumnIdForUom(%s)",
                 mVColumnId));
-        final Column[] cols = importConf.getCsvMetadata().
-                getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.UOM)) {
                 return col.getNumber();
@@ -1081,8 +1098,7 @@ public final class Configuration {
     public int getColumnIdForOpsProp(final int mVColumnId) {
         LOG.trace(String.format("getColumnIdForOpsProp(%s)",
                 mVColumnId));
-        final Column[] cols = importConf.getCsvMetadata().
-                getColumnAssignments().getColumnArray();
+        final Column[] cols = getColumns();
         for (final Column col : cols) {
             if (col.getType().equals(Type.OBSERVED_PROPERTY)) {
                 return col.getNumber();
@@ -1129,7 +1145,7 @@ public final class Configuration {
      * @return a {@link java.lang.String} object.
      */
     public String getType(final int mVColumnId) {
-        for (final Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+        for (final Column col : getColumns()) {
             if (col.getNumber() == mVColumnId) {
                 for (final Metadata m : col.getMetadataArray()) {
                     if (m.getKey().equals(Key.TYPE)) {
@@ -1470,6 +1486,50 @@ public final class Configuration {
         return -1;
     }
 
+    public boolean isParsedColumnCountCorrect(int count) {
+        if (count != getExpectedColumnCount()) {
+            if (isIgnoreColumnMismatch()) {
+                return false;
+            } else {
+                final String errorMsg = String.format(
+                        "Number of Expected columns '%s' does not match number of "
+                                + "found columns '%s' -> Cancel import! Please update your "
+                                + "configuration to match the number of columns.",
+                                getExpectedColumnCount(),
+                                count);
+                LOG.error(errorMsg);
+                throw new InvalidColumnCountException(errorMsg);
+            }
+        }
+        return true;
+    }
+
+    public boolean containsData(final String[] values) {
+        if (values != null && values.length > 0) {
+            for (int i = 0; i < values.length; i++) {
+                final String value = values[i];
+                if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
+                    LOG.debug("Value of column '{}' is null or empty but shouldn't.", i);
+                    return false;
+                }
+            }
+            return true;
+        }
+        LOG.debug("Line is empty");
+        return false;
+    }
+
+    private boolean isColumnIgnored(final int i) {
+        int[] ignoredColumns = getIgnoredColumnIds();
+        if (ignoredColumns != null && ignoredColumns.length > 0) {
+            for (final int ignoredColumn : ignoredColumns) {
+                if (i == ignoredColumn) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * <p>isIgnoreLineRegExSet.</p>
@@ -1481,12 +1541,20 @@ public final class Configuration {
                 importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
     }
 
-    /**
-     * <p>getIgnoreLineRegExPatterns.</p>
-     *
-     * @return an array of {@link java.util.regex.Pattern} objects.
-     */
-    public Pattern[] getIgnoreLineRegExPatterns() {
+    public boolean isLineIgnorable(String[] values) {
+        if (ignorePatterns != null && ignorePatterns.length > 0) {
+            String line = restoreLine(values);
+            for (Pattern pattern : ignorePatterns) {
+                if (pattern.matcher(line).matches()) {
+                    LOG.info("Line '{}' matches ingore patter '{}'", line, pattern.toString());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Pattern[] getIgnoreLineRegExPatterns() {
         if (!isIgnoreLineRegExSet()) {
             return new Pattern[0];
         }
@@ -1552,7 +1620,7 @@ public final class Configuration {
     public String getCsvParser() {
         return isCsvParserDefined()
                 ? importConf.getCsvMetadata().getCsvParserClass().getStringValue()
-                : WrappedCSVReader.class.getName();
+                : WrappedCSVParser.class.getName();
     }
 
     public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
@@ -1573,7 +1641,7 @@ public final class Configuration {
             return true;
         } else {
             // Case B: column with type omParameter
-            for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+            for (Column column : getColumns()) {
                 if (column.getType().equals(Type.OM_PARAMETER)) {
                     return true;
                 }
@@ -1594,7 +1662,7 @@ public final class Configuration {
                 }
             } else {
                 // collect all
-                for (Column col : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+                for (Column col : getColumns()) {
                     if (col.getType().equals(Type.OM_PARAMETER)) {
                         cols.add(col);
                     }
@@ -1662,5 +1730,171 @@ public final class Configuration {
             }
         }
         return "";
+    }
+
+    public String restoreLine(String[] values) {
+        if (values == null || values.length == 0) {
+            return "";
+        }
+        final StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < values.length; i++) {
+            sb.append(values[i]);
+            if (i != values.length - 1) {
+                sb.append(getCsvSeparator());
+            }
+        }
+        return sb.toString();
+    }
+
+    public String getImporterClassName() {
+        // TODO change to collection of all classes implementing an interface and search for matching one
+        switch (getImportStrategy()) {
+            case SingleObservation:
+                return SingleObservationImporter.class.getName();
+            case SweArrayObservationWithSplitExtension:
+                return SweArrayObservationWithSplitExtensionImporter.class.getName();
+            default:
+                LOG.error("Not supported strategy given '{}'.", getImportStrategy());
+                return "";
+        }
+    }
+
+    // FIXME improve loading here
+    public String getCollectorClassName() {
+        if (importConf.getCsvMetadata().isSetObservationCollectorClass()) {
+            return importConf.getCsvMetadata().getObservationCollectorClass();
+        } else if (isSamplingFile()) {
+            return SampleBasedObservationCollector.class.getName();
+        } else {
+            LOG.error("Collector implementation not defined! Using default: {}", DefaultCsvCollector.class.getName());
+            return DefaultCsvCollector.class.getName();
+        }
+    }
+
+    public String getParentFeatureFromAdditionalMetadata() {
+        if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().sizeOfMetadataArray() > 0) {
+            for (Metadata metadata : importConf.getAdditionalMetadata().getMetadataArray()) {
+                if (metadata.getKey().equals(Key.PARENT_FEATURE_IDENTIFIER)) {
+                    return metadata.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getAbsolutePath() {
+        return configFile.getAbsolutePath();
+    }
+
+    public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues(String sensorURI) {
+        if (!hasReferenceValues()) {
+            return Collections.emptyMap();
+        }
+        Map<ObservedProperty, List<SimpleEntry<String, String>>> result = new HashMap<>();
+        for (Column column : getColumns()) {
+            // if sensor matches and reference value is available
+            if (!column.isSetRelatedSensor() ||
+                    !column.getRelatedSensor().isSetIdRef() ||
+                    !column.isSetRelatedObservedProperty() ||
+                    !column.getRelatedObservedProperty().isSetIdRef()) {
+                continue;
+            }
+            ResourceType resource = getRelatedSensor(column.getNumber()).getResource();
+            if (resource == null || !(resource instanceof ManualResourceType)) {
+                continue;
+            }
+            ManualResourceType relatedSensor = (ManualResourceType) resource;
+            if (!relatedSensor.getURI().getStringValue().equalsIgnoreCase(sensorURI)) {
+                continue;
+            }
+            // This column contains the correct sensor
+            ObservedProperty observedProperty = getObservedProperty(column.getRelatedObservedProperty());
+            if (observedProperty == null) {
+                continue;
+            }
+            if (column.sizeOfRelatedReferenceValueArray() < 1) {
+                continue;
+            }
+            // Next: check for reference values
+            for (RelatedReferenceValue refValue : column.getRelatedReferenceValueArray()) {
+                List<SimpleEntry<String, String>> list;
+                if (result.containsKey(observedProperty)) {
+                    list = result.get(observedProperty);
+                } else {
+                    list = Collections.synchronizedList(new LinkedList<>());
+                    result.put(observedProperty, list);
+                }
+                list.add(new SimpleEntry<>(refValue.getLabel(), refValue.getValue()));
+            }
+        }
+        return result;
+    }
+
+    private ObservedProperty getObservedProperty(RelatedObservedProperty relatedObservedProperty) {
+        ManualResourceType observedPropertyResource = getRelatedResourceById(relatedObservedProperty.getIdRef());
+        if (observedPropertyResource == null) {
+            return null;
+        }
+        return new ObservedProperty(observedPropertyResource.getName(),
+                observedPropertyResource.getURI().getStringValue());
+    }
+
+    private ManualResourceType getRelatedResourceById(String idRef) {
+        if (importConf.isSetAdditionalMetadata()) {
+            AdditionalMetadata additionalMetadata = importConf.getAdditionalMetadata();
+            // check features
+            for (FeatureOfInterestType feature : additionalMetadata.getFeatureOfInterestArray()) {
+                if (feature.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return feature.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) feature.getResource() :
+                                null;
+                }
+            }
+            // check sensors
+            for (SensorType sensor : additionalMetadata.getSensorArray()) {
+                if (sensor.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return sensor.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) sensor.getResource() :
+                                null;
+                }
+            }
+            // observed property
+            for (ObservedPropertyType property : additionalMetadata.getObservedPropertyArray()) {
+                if (property.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return property.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) property.getResource() :
+                                null;
+                }
+            }
+            // unitofmeasurement
+            for (UnitOfMeasurementType uom : additionalMetadata.getUnitOfMeasurementArray()) {
+                if (uom.getResource().getID().equalsIgnoreCase(idRef)) {
+                    return uom.getResource() instanceof ManualResourceType ?
+                            (ManualResourceType) uom.getResource() :
+                                null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean hasReferenceValues() {
+        Column[] cols = getColumns();
+        if (cols.length > 0) {
+            for (Column column : cols) {
+                if (column.sizeOfRelatedReferenceValueArray() > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Column[] getColumns() {
+        if (importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray() > 0) {
+            return importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
+        } else {
+            return new Column[0];
+        }
     }
 }

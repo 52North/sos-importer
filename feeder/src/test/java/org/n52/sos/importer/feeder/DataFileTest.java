@@ -29,7 +29,6 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -40,11 +39,12 @@ import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
-import org.n52.oxf.om.x20.BooleanParameter;
-import org.n52.oxf.om.x20.CountParameter;
-import org.n52.oxf.om.x20.OmParameter;
-import org.n52.oxf.om.x20.QuantityParameter;
-import org.n52.oxf.om.x20.TextParameter;
+import org.n52.shetland.ogc.om.NamedValue;
+import org.n52.shetland.ogc.om.values.BooleanValue;
+import org.n52.shetland.ogc.om.values.CategoryValue;
+import org.n52.shetland.ogc.om.values.CountValue;
+import org.n52.shetland.ogc.om.values.QuantityValue;
+import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.Position;
 
@@ -75,19 +75,22 @@ public class DataFileTest {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
-        Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(4,
+        Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(4,
                 new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "true", "false", "10"});
 
         Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
-        List<OmParameter<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(0).getName(), CoreMatchers.is("urn:ogc:number-of-reviews"));
-        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(BooleanParameter.class));
-        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(Boolean.class));
-        Assert.assertThat(((Boolean)omParameters.get(0).getValue()).booleanValue(), CoreMatchers.is(true));
-        Assert.assertThat(omParameters.get(1).getName(), CoreMatchers.is("urn:ogc:observation-quality-reviewed"));
-        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(BooleanParameter.class));
-        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(Boolean.class));
-        Assert.assertThat(((Boolean)omParameters.get(1).getValue()).booleanValue(), CoreMatchers.is(false));
+        List<NamedValue<?>> omParameters = omParameter.get();
+        Assert.assertThat(omParameters.get(0).getName().getTitleOrFromHref(), CoreMatchers.is("number-of-reviews"));
+        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(BooleanValue.class));
+        Assert.assertThat(((BooleanValue)omParameters.get(0).getValue()).getValue().booleanValue(),
+                CoreMatchers.is(true));
+        Assert.assertThat(omParameters.get(1).getName().getTitleOrFromHref(),
+                CoreMatchers.is("observation-quality-reviewed"));
+        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(BooleanValue.class));
+        Assert.assertThat(((BooleanValue)omParameters.get(1).getValue()).getValue().booleanValue(),
+                CoreMatchers.is(false));
     }
 
     @Test
@@ -95,15 +98,15 @@ public class DataFileTest {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-        Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
+        Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
         Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
-        List<OmParameter<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(0).getName(), CoreMatchers.is("count-parameter"));
-        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(CountParameter.class));
-        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(BigInteger.class));
-        Assert.assertThat(((BigInteger)omParameters.get(0).getValue()).intValue(), CoreMatchers.is(52));
+        List<NamedValue<?>> omParameters = omParameter.get();
+        Assert.assertThat(omParameters.get(0).getName().getTitleOrFromHref(), CoreMatchers.is("count-parameter"));
+        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(CountValue.class));
+        Assert.assertThat(((CountValue)omParameters.get(0).getValue()).getValue().intValue(), CoreMatchers.is(52));
     }
 
     @Test
@@ -111,16 +114,17 @@ public class DataFileTest {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-        Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
+        Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
         Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
-        List<OmParameter<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(1).getName(), CoreMatchers.is("numeric-parameter"));
-        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(QuantityParameter.class));
-        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(Double.class));
-        Assert.assertThat(((Double)omParameters.get(1).getValue()).doubleValue(), CoreMatchers.is(42.0));
-        Assert.assertThat(((QuantityParameter)omParameters.get(1)).getUOM(), CoreMatchers.is("test-uom-uri"));
+        List<NamedValue<?>> omParameters = omParameter.get();
+        Assert.assertThat(omParameters.get(1).getName().getTitleOrFromHref(), CoreMatchers.is("numeric-parameter"));
+        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(QuantityValue.class));
+        Assert.assertThat(((QuantityValue)omParameters.get(1).getValue()).getValue().doubleValue(),
+                CoreMatchers.is(42.0));
+        Assert.assertThat(((QuantityValue)omParameters.get(1).getValue()).getUom(), CoreMatchers.is("test-uom-uri"));
     }
 
     @Test
@@ -128,15 +132,15 @@ public class DataFileTest {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-        Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
+        Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
         Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
-        List<OmParameter<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(3).getName(), CoreMatchers.is("text-parameter"));
-        Assert.assertThat(omParameters.get(3), CoreMatchers.instanceOf(TextParameter.class));
-        Assert.assertThat(omParameters.get(3).getValue(), CoreMatchers.instanceOf(String.class));
-        Assert.assertThat(omParameters.get(3).getValue(), CoreMatchers.is("test-text"));
+        List<NamedValue<?>> omParameters = omParameter.get();
+        Assert.assertThat(omParameters.get(3).getName().getTitleOrFromHref(), CoreMatchers.is("text-parameter"));
+        Assert.assertThat(omParameters.get(3), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(3).getValue(), CoreMatchers.instanceOf(TextValue.class));
+        Assert.assertThat(((TextValue)omParameters.get(3).getValue()).getValue(), CoreMatchers.is("test-text"));
     }
 
     @Test
@@ -144,15 +148,15 @@ public class DataFileTest {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
-        Optional<List<OmParameter<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
+        Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
         Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
-        List<OmParameter<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(4).getName(), CoreMatchers.is("category-parameter"));
-        Assert.assertThat(omParameters.get(4), CoreMatchers.instanceOf(TextParameter.class));
-        Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.instanceOf(String.class));
-        Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.is("test-category"));
+        List<NamedValue<?>> omParameters = omParameter.get();
+        Assert.assertThat(omParameters.get(4).getName().getTitleOrFromHref(), CoreMatchers.is("category-parameter"));
+        Assert.assertThat(omParameters.get(4), CoreMatchers.instanceOf(NamedValue.class));
+        Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.instanceOf(CategoryValue.class));
+        Assert.assertThat(((CategoryValue)omParameters.get(4).getValue()).getValue(), CoreMatchers.is("test-category"));
     }
 
     @Test

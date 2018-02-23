@@ -70,11 +70,6 @@ import org.n52.sos.importer.model.table.Column;
 
 public class Step5aTest {
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON

@@ -37,30 +37,15 @@ import org.n52.sos.importer.model.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Class to test the methods of the position controller
- *
- * @author e.h.juerrens@52north.org
- * @since 0.5.0
- */
 public class PositionControllerTest {
 
     private static final Logger logger =
             LoggerFactory.getLogger(PositionControllerTest.class);
 
-    /**
-     * <p>main.</p>
-     *
-     * @param args an array of {@link java.lang.String} objects.
-     */
-    //CHECKSTYLE:OFF
     //CHECKSTYLE:OFF
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
-        //CHECKSTYLE:ON
-        if (logger.isDebugEnabled()) {
-            logger.debug("Start Test");
-        }
+        logger.debug("Start Test");
         final int firstLineWithData = 1;
         final String g = "1";
         final String pa1 = "LAT";
@@ -83,9 +68,7 @@ public class PositionControllerTest {
         ms.add(p1);
         ms.add(p2);
         //
-        if (logger.isDebugEnabled()) {
-            logger.debug("Example data created");
-        }
+        logger.debug("Example data created");
         //
         // Position controller
         final PositionController pc = new PositionController();

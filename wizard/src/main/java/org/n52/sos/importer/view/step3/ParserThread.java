@@ -67,10 +67,7 @@ public class ParserThread implements Runnable {
 
     @Override
     public void run() {
-        if (logger.isTraceEnabled()) {
-            logger.trace("[" + hashCode() + "]." +
-                    "run() <- parsing values ###########################################################");
-        }
+        logger.trace("[{}]." + "run() <- parsing values ###########", hashCode());
         if (values == null) {
             logger.error("Nothing to parser, hence stopped. Values: 'null'");
             return;
@@ -79,7 +76,7 @@ public class ParserThread implements Runnable {
         int currentLine = 0;
         final StringBuilder notParseable = new StringBuilder();
         String text = "";
-        final Set<String> notParseableStrings = new HashSet<String>();
+        final Set<String> notParseableStrings = new HashSet<>();
         //
         notParseable.append(HTML_OPEN);
         // do the test parsing
@@ -94,9 +91,7 @@ public class ParserThread implements Runnable {
                     notParseableValues++;
                 }
             } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("skipping line to parse #" + currentLine);
-                }
+                logger.debug("skipping line to parse #{}", currentLine);
             }
             currentLine++;
         }
@@ -111,8 +106,8 @@ public class ParserThread implements Runnable {
             text = Lang.l().step3ParseTestNFailed(notParseableValues);
             parseTestLabel.setForeground(Color.red);
         }
-        parseTestLabel.setText(HTML_OPEN + text + HTML_CLOSE);
         notParseable.append(HTML_CLOSE);
+        parseTestLabel.setText(HTML_OPEN + text + HTML_CLOSE);
         parseTestLabel.setToolTipText(notParseable.toString());
         // enabled next button after parsing
         // TODO maybe add check if no value could be parsed -> dialog and not enabling next

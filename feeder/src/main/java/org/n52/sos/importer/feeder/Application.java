@@ -70,32 +70,27 @@ public final class Application {
         logApplicationMetadata();
         if (checkArgs(args)) {
             // read configuration
-            final String configFile = args[1];
+            String configFile = args[1];
             try {
                 if (isConfigFileSet(args[0])) {
-                    final Configuration c = new Configuration(configFile);
+                    Configuration configuration = new Configuration(configFile);
                     // start application with valid configuration
                     // data file
                     if (args.length == 2) {
                         // Case: one time feeding with defined configuration
-                        Thread thread = new Thread(new FeedingTask(c), FeedingTask.class.getSimpleName());
-                        thread.start();
-                        thread.join();
+                        new FeedingTask(configuration).feedData();
                     } else if (args.length == 4) {
                         // Case: one time feeding with file override or period with file from configuration
                         if (isFileOverride(args[2])) {
                             // Case: file override
-                            new Thread(new FeedingTask(c,
-                                    new File(args[3])),
-                                    FeedingTask.class.getCanonicalName()).start();
-
+                            new FeedingTask(configuration, new File(args[3])).feedData();
                         } else if (isTimePeriodSet(args[2]))  {
                             // Case: repeated feeding
-                            repeatedFeeding(c, Integer.parseInt(args[3]));
+                            repeatedFeeding(configuration, Integer.parseInt(args[3]));
                         }
                     } else if (args.length == 6) {
                         // Case: repeated feeding with file override
-                        repeatedFeeding(c, new File(args[3]), Integer.parseInt(args[5]));
+                        repeatedFeeding(configuration, new File(args[3]), Integer.parseInt(args[5]));
                     }
                 } else {
                     if (args.length == 4 && shouldRunMultiFeederTask(args[0], args[1])) {
@@ -114,15 +109,12 @@ public final class Application {
                                 e.getMessage());
                 LOG.error(errorMsg);
                 LOG.debug("", e);
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 LOG.error("Exception thrown: {}", e.getMessage());
                 LOG.debug("", e);
-            } catch (final IllegalArgumentException iae) {
+            } catch (IllegalArgumentException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
                 LOG.debug("Exception Stack Trace:", iae);
-            } catch (InterruptedException e) {
-                // we are doing nothing here, just log in the case of debug level logging
-                LOG.debug("Exception thrown: ", e);
             }
         } else {
             showUsage();
@@ -148,7 +140,7 @@ public final class Application {
         repeatedFeeding(c, c.getDataFile(), periodInMinutes);
     }
 
-    /**
+    /*
      * Prints the usage test to the Standard-Output.
      * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
      */
@@ -170,14 +162,15 @@ public final class Application {
     /**
      * This method validates the input parameters from the user. If something
      * wrong, it will be logged.
+     *
      * @param args the parameters given by the user
+     *
      * @return <b>true</b> if the parameters are valid and the programm has all
      *              required information.<br>
      *          <b>false</b> if parameters are missing or not usable in the
      *              specified form.
      */
-    //
-    private static boolean checkArgs(final String[] args) {
+    private static boolean checkArgs(String[] args) {
         LOG.trace("checkArgs({})", Arrays.toString(args));
         if (args == null) {
             LOG.error("no parameters defined. null received as args!");
@@ -192,9 +185,9 @@ public final class Application {
                     isTimePeriodSet(args[2]))) {
                 return true;
             } else {
-               if (isMultiFeederTask(args[0])) {
-                   return true;
-               }
+                if (isMultiFeederTask(args[0])) {
+                    return true;
+                }
             }
         } else if (args.length == 6) {
             if (args[0].equals(ALLOWED_PARAMETERS[0]) &&
@@ -211,15 +204,15 @@ public final class Application {
         return parameter.equals(ALLOWED_PARAMETERS[3]);
     }
 
-    private static boolean isConfigFileSet(final String parameter) {
+    private static boolean isConfigFileSet(String parameter) {
         return ALLOWED_PARAMETERS[0].equals(parameter);
     }
 
-    private static boolean isFileOverride(final String parameter) {
+    private static boolean isFileOverride(String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[1]);
     }
 
-    private static boolean isTimePeriodSet(final String parameter) {
+    private static boolean isTimePeriodSet(String parameter) {
         return parameter.equals(ALLOWED_PARAMETERS[2]);
     }
 
@@ -228,16 +221,16 @@ public final class Application {
      */
     private static void logApplicationMetadata() {
         LOG.trace("logApplicationMetadata()");
-        final StringBuffer logMessage = new StringBuffer("Application started");
-        final InputStream manifestStream =
+        StringBuffer logMessage = new StringBuffer("Application started");
+        InputStream manifestStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
         try {
-            final Manifest manifest = new Manifest(manifestStream);
-            final Attributes attributes = manifest.getMainAttributes();
-            final Set<Object> keys = attributes.keySet();
-            for (final Object object : keys) {
+            Manifest manifest = new Manifest(manifestStream);
+            Attributes attributes = manifest.getMainAttributes();
+            Set<Object> keys = attributes.keySet();
+            for (Object object : keys) {
                 if (object instanceof Name) {
-                    final Name key = (Name) object;
+                    Name key = (Name) object;
                     logMessage.append(NEW_LINE_WITH_TABS)
                         .append(key)
                         .append(": ")
@@ -249,7 +242,7 @@ public final class Application {
                 .append(heapSizeInformation())
                 .append(NEW_LINE_WITH_TABS)
                 .append(operatingSystemInformation());
-        } catch (final IOException ex) {
+        } catch (IOException ex) {
             LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
         }
         LOG.info(logMessage.toString());
@@ -262,14 +255,9 @@ public final class Application {
                 System.getProperty("os.version"));
     }
 
-    /**
-     * <p>heapSizeInformation.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    protected static String heapSizeInformation() {
-        final long mb = 1024 * 1024;
-        final Runtime rt = Runtime.getRuntime();
+    public static String heapSizeInformation() {
+        long mb = 1024 * 1024;
+        Runtime rt = Runtime.getRuntime();
         return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
                 rt.maxMemory() / mb,
                 rt.totalMemory() / mb,

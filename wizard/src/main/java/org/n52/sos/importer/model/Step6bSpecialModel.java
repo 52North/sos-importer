@@ -59,6 +59,7 @@
  */
 package org.n52.sos.importer.model;
 
+import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
@@ -72,43 +73,37 @@ public class Step6bSpecialModel implements StepModel {
 
     private Sensor sensor;
 
-    /**
-     * <p>Constructor for Step6bSpecialModel.</p>
-     *
-     * @param foi a {@link org.n52.sos.importer.model.resources.FeatureOfInterest} object.
-     * @param obsProp a {@link org.n52.sos.importer.model.resources.ObservedProperty} object.
-     */
-    public Step6bSpecialModel(FeatureOfInterest foi, ObservedProperty obsProp) {
+    private MeasuredValue mv;
+
+    public Step6bSpecialModel(MeasuredValue mv, FeatureOfInterest foi, ObservedProperty obsProp) {
         this.foi = foi;
         this.obsProp = obsProp;
+        this.mv = mv;
         sensor = new Sensor();
     }
 
-    /**
-     * <p>Setter for the field <code>sensor</code>.</p>
-     *
-     * @param sensor a {@link org.n52.sos.importer.model.resources.Sensor} object.
-     */
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
     }
 
-    /**
-     * <p>Getter for the field <code>sensor</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.resources.Sensor} object.
-     */
     public Sensor getSensor() {
         return sensor;
     }
 
-    /**
-     * <p>getDescription.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getDescription() {
         return Lang.l().step6bSpecialModelDescription();
+    }
+
+    public FeatureOfInterest getFeatureOfInterest() {
+        return foi;
+    }
+
+    public ObservedProperty getObservedProperty() {
+        return obsProp;
+    }
+
+    public MeasuredValue getMeasuredValue() {
+        return mv;
     }
 
     @Override
@@ -117,11 +112,11 @@ public class Step6bSpecialModel implements StepModel {
         int result = 1;
         result = prime
                 * result
-                + ((foi == null) ? 0 : foi
+                + (foi == null ? 0 : foi
                         .hashCode());
         result = prime
                 * result
-                + ((obsProp == null) ? 0 : obsProp
+                + (obsProp == null ? 0 : obsProp
                         .hashCode());
         return result;
     }
@@ -153,24 +148,6 @@ public class Step6bSpecialModel implements StepModel {
             return false;
         }
         return true;
-    }
-
-    /**
-     * <p>getFeatureOfInterest.</p>
-     *
-     * @return the foi
-     */
-    public FeatureOfInterest getFeatureOfInterest() {
-        return foi;
-    }
-
-    /**
-     * <p>getObservedProperty.</p>
-     *
-     * @return the obsProp
-     */
-    public ObservedProperty getObservedProperty() {
-        return obsProp;
     }
 
 }

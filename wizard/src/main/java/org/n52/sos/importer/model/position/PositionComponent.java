@@ -229,4 +229,56 @@ public abstract class PositionComponent extends Component {
      * @return a {@link org.n52.sos.importer.model.position.PositionComponent} object.
      */
     public abstract PositionComponent forThis(Cell featureOfInterestPosition);
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (pattern == null ? 0 : pattern.hashCode());
+        result = prime * result + (tableElement == null ? 0 : tableElement.hashCode());
+        result = prime * result + (unit == null ? 0 : unit.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(value);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PositionComponent other = (PositionComponent) obj;
+        if (pattern == null) {
+            if (other.pattern != null) {
+                return false;
+            }
+        } else if (!pattern.equals(other.pattern)) {
+            return false;
+        }
+        if (tableElement == null) {
+            if (other.tableElement != null) {
+                return false;
+            }
+        } else if (!tableElement.equals(other.tableElement)) {
+            return false;
+        }
+        if (unit == null) {
+            if (other.unit != null) {
+                return false;
+            }
+        } else if (!unit.equals(other.unit)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value)) {
+            return false;
+        }
+        return true;
+    }
 }

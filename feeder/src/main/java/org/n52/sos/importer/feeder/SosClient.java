@@ -26,46 +26,47 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.csv;
+package org.n52.sos.importer.feeder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.AbstractMap.SimpleEntry;
 
-import org.n52.sos.importer.feeder.Configuration;
+import org.apache.xmlbeans.XmlException;
+import org.n52.sos.importer.feeder.model.InsertObservation;
+import org.n52.sos.importer.feeder.model.InsertSensor;
+import org.n52.sos.importer.feeder.model.TimeSeries;
+import org.n52.sos.importer.feeder.web.HttpClient;
+import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
- * Interface to allow different CSVParser implementations
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @since 0.5.0
  */
-public interface CsvParser {
+public interface SosClient {
 
-    /**
-     * Reads the next line and converts to a string array. Should return <code>null</code>
-     * if no further data is available.
-     *
-     * @return a string array with each comma-separated element as a separate
-     *         entry or <code>null</code> if no further data is available.
-     * @throws java.io.IOException
-     *             if errors happen during the read
-     */
-    String[] readNext() throws IOException;
+    boolean isInstanceAvailable();
 
-    /**
-     * MUST be called before first call of {@link #readNext()}!
-     *
-     * @param bufferedReader a {@link java.io.BufferedReader} object.
-     * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @throws java.io.IOException if any.
-     */
-    void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
+    boolean isInstanceTransactional();
 
-    /**
-     * Should return 0, if number of lines == number of observations,<br>
-     *              else the difference between line number and line index.
-     *
-     * @return a int.
-     */
-    int getSkipLimit();
+    boolean isSensorRegistered(String sensorURI);
+
+    SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
+            throws XmlException, IOException, EncodingException;
+
+    String insertObservation(InsertObservation insertObservation) throws IOException;
+
+    String insertSweArrayObservation(TimeSeries timeSeries) throws IOException;
+
+    void setHttpClient(HttpClient client);
+
+    void setConfiguration(Configuration configuration) throws MalformedURLException;
+
+    boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException;
+
+    String insertResultTemplate(TimeSeries timeseries);
+
+    boolean insertResult(TimeSeries ts);
 
 }

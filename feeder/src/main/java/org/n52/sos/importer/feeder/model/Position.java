@@ -61,13 +61,6 @@ public final class Position {
 
     private final int epsgCode;
 
-    /**
-     * <p>Constructor for Position.</p>
-     *
-     * @param values order: long, lat, alt
-     * @param units order: long, lat, alt
-     * @param epsgCode a int.
-     */
     public Position(final double[] values, final String[] units, final int epsgCode) {
         if (values == null || units == null) {
             throw new IllegalArgumentException("values/units must not be null");
@@ -77,65 +70,30 @@ public final class Position {
         this.epsgCode = epsgCode;
     }
 
-    /**
-     * <p>Getter for the field <code>epsgCode</code>.</p>
-     *
-     * @return a int.
-     */
     public int getEpsgCode() {
         return epsgCode;
     }
 
-    /**
-     * <p>getAltitude.</p>
-     *
-     * @return a double.
-     */
     public double getAltitude() {
         return values[Position.ALT];
     }
 
-    /**
-     * <p>getAltitudeUnit.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getAltitudeUnit() {
         return units[Position.ALT];
     }
 
-    /**
-     * <p>getLongitude.</p>
-     *
-     * @return a double.
-     */
     public double getLongitude() {
         return values[Position.LONG];
     }
 
-    /**
-     * <p>getLongitudeUnit.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getLongitudeUnit() {
         return units[Position.LONG];
     }
 
-    /**
-     * <p>getLatitude.</p>
-     *
-     * @return a double.
-     */
     public double getLatitude() {
         return values[Position.LAT];
     }
 
-    /**
-     * <p>getLatitudeUnit.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getLatitudeUnit() {
         return units[Position.LAT];
     }
