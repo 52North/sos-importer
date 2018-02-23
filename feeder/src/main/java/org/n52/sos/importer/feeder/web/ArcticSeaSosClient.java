@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
@@ -551,18 +552,18 @@ public class ArcticSeaSosClient implements SosClient {
         //    </sml:position>
         SweQuantity longitudeValue = new QuantityValue(insertSensor.getLongitudeValue(),
                 insertSensor.getLongitudeUnit());
-        SweCoordinate<Double> longitude = new SweCoordinate<>("longitude", longitudeValue);
+        SweCoordinate<BigDecimal> longitude = new SweCoordinate<>("longitude", longitudeValue);
 
         SweQuantity latitudeValue = new QuantityValue(insertSensor.getLatitudeValue(),
                 insertSensor.getLatitudeUnit());
-        SweCoordinate<Double> latitude = new SweCoordinate<>("latitude", latitudeValue);
+        SweCoordinate<BigDecimal> latitude = new SweCoordinate<>("latitude", latitudeValue);
 
-        List<SweCoordinate<Double>> coordinates;
+        List<SweCoordinate<BigDecimal>> coordinates;
 
         if (isAltitudeAvailable(insertSensor)) {
             SweQuantity altitudeValue = new QuantityValue(insertSensor.getAltitudeValue(),
                     insertSensor.getAltitudeUnit());
-            SweCoordinate<Double> altitude = new SweCoordinate<>("altitude", altitudeValue);
+            SweCoordinate<BigDecimal> altitude = new SweCoordinate<>("altitude", altitudeValue);
             coordinates = CollectionHelper.list(longitude, latitude, altitude);
         } else {
             coordinates = CollectionHelper.list(longitude, latitude);

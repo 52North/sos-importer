@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -1054,7 +1055,7 @@ public class DataFile {
                         omParameters.add(countParameter);
                         break;
                     case NUMERIC:
-                        NamedValue<Double> quantityParameter = new NamedValue<>();
+                        NamedValue<BigDecimal> quantityParameter = new NamedValue<>();
                         quantityParameter.setValue(new QuantityValue(Double.parseDouble(values[col.getNumber()]),
                                 getUnitOfMeasurement(col.getNumber(), values).getUri()));
                         quantityParameter.setName(new ReferenceType(getOmParameterName(col)));
