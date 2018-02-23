@@ -194,7 +194,7 @@ public class ArcticSeaSosClient implements SosClient {
 
     private String serviceVersion;
 
-    private String blockSeparator = "|";
+    private String blockSeparator = "@@";
 
     private String tokenSeparator = ";";
 
