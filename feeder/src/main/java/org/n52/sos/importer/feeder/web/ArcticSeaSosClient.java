@@ -115,6 +115,7 @@ import org.n52.shetland.ogc.swe.simpleType.SweCount;
 import org.n52.shetland.ogc.swe.simpleType.SweQuantity;
 import org.n52.shetland.ogc.swe.simpleType.SweText;
 import org.n52.shetland.ogc.swe.simpleType.SweTime;
+import org.n52.shetland.ogc.swes.SwesExtension;
 import org.n52.shetland.util.CollectionHelper;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.SosClient;
@@ -349,10 +350,17 @@ public class ArcticSeaSosClient implements SosClient {
 
     @Override
     public String insertSweArrayObservation(TimeSeries timeSeries) throws IOException {
+        SweBoolean sweBoolean = new SweBoolean();
+        sweBoolean.setValue(true);
+        sweBoolean.setDefinition(Sos2Constants.Extensions.SplitDataArrayIntoObservations.name());
+
+        SwesExtension<SweBoolean> swesExtension = new SwesExtension<>();
+        swesExtension.setValue(sweBoolean);
+
         InsertObservationRequest request = new InsertObservationRequest();
         request.setOfferings(Arrays.asList(timeSeries.getFirst().getOffering().getUri()));
         request.setAssignedSensorId(timeSeries.getFirst().getSensorURI());
-        request.addSweBooleanExtension(Sos2Constants.Extensions.SplitDataArrayIntoObservations.name(), true);
+        request.addExtension(swesExtension);
         try {
             request.setObservation(createSweArrayObservation(timeSeries));
             HttpResponse response = client.executePost(uri, encodeRequest(request));

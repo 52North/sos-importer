@@ -80,6 +80,7 @@
     <bean class="org.n52.svalbard.encode.SosInsertionMetadataTypeEncoder"/>
     <bean class="org.n52.svalbard.encode.SosRequestEncoderv20"/>
     <bean class="org.n52.svalbard.encode.SweCommonEncoderv20"/>
+    <bean class="org.n52.svalbard.encode.SwesExtensionEncoderv20"/>
     <bean class="org.n52.svalbard.encode.XlinkEncoderv1999"/>
     <!-- SOS operation specific loaded beans -->
     <!-- DECODER -->
