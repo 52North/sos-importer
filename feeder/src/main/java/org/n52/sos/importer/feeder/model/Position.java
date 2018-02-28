@@ -104,5 +104,13 @@ public final class Position {
                 Arrays.toString(values), Arrays.toString(units), epsgCode);
     }
 
+    public boolean isValid() {
+        return getLongitude() != Position.VALUE_NOT_SET &&
+                getLongitudeUnit() != null && !getLongitudeUnit().isEmpty() &&
+                getLatitude() != Position.VALUE_NOT_SET &&
+                getLatitudeUnit() != null && !getLatitudeUnit().isEmpty() &&
+                getEpsgCode() != -1;
+    }
+
 
 }

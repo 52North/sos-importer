@@ -761,8 +761,9 @@ public class Configuration {
         LOG.trace(String.format("getPosition(group:%s,..)", group));
         final Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
         // combine the values from the different columns
-        final String[] units = new String[3];
-        final double[] posValues = new double[3];
+        final String[] units = new String[] {"", "", ""};
+        final double[] posValues =
+                new double[] { Position.VALUE_NOT_SET, Position.VALUE_NOT_SET, Position.VALUE_NOT_SET };
         int epsgCode = -1;
         for (final Column c : cols) {
             for (final Metadata m : c.getMetadataArray()) {

@@ -64,6 +64,10 @@ public class InsertSensor {
         this.referenceValues = referenceValues;
     }
 
+    public boolean isPositionValid() {
+        return io.getFeatureOfInterest().isPositionValid();
+    }
+
     public String getAltitudeUnit() {
         return io.getFeatureOfInterest().getPosition().getAltitudeUnit();
     }
@@ -154,6 +158,11 @@ public class InsertSensor {
 
     public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues() {
         return referenceValues;
+    }
+
+    public boolean isFeatureAvailable() {
+        return !getFeatureOfInterestName().isEmpty() &&
+                !getFeatureOfInterestURI().isEmpty();
     }
 
 }

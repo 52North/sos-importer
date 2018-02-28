@@ -122,7 +122,6 @@ import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.SosClient;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
-import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
@@ -499,12 +498,11 @@ public class ArcticSeaSosClient implements SosClient {
             system.addCapabilities(createReferenceValueCapabilities(insertSensor));
         }
 
-        if (isPositionAvailable(insertSensor)) {
+        if (insertSensor.isPositionValid()) {
             addPosition(insertSensor, system);
-
-            if (isFeatureAvailable(insertSensor)) {
-                addFeature(insertSensor, system);
-            }
+        }
+        if (insertSensor.isFeatureAvailable()) {
+            addFeature(insertSensor, system);
         }
 
         InsertSensorRequest request = new InsertSensorRequest(SosConstants.SOS, serviceVersion);
@@ -590,31 +588,21 @@ public class ArcticSeaSosClient implements SosClient {
         system.setPosition(position);
     }
 
-    private boolean isPositionAvailable(InsertSensor insertSensor) {
-        return insertSensor.getLongitudeValue() != Position.VALUE_NOT_SET &&
-                insertSensor.getLongitudeUnit() != null && !insertSensor.getLongitudeUnit().isEmpty() &&
-                insertSensor.getLatitudeValue() != Position.VALUE_NOT_SET &&
-                insertSensor.getLatitudeUnit() != null && !insertSensor.getLatitudeUnit().isEmpty();
-    }
-
     private void addFeature(InsertSensor insertSensor, PhysicalSystem system) throws InvalidSridException,
             NumberFormatException, NoSuchAuthorityCodeException, ParseException, FactoryException {
         SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(insertSensor.getFeatureOfInterestURI()));
-        feature.setGeometry(CoordinateHelper.createPoint(
-                insertSensor.getLongitudeValue(),
-                insertSensor.getLatitudeValue(),
-                insertSensor.getAltitudeValue(),
-                Integer.parseInt(insertSensor.getEpsgCode())));
+        if (insertSensor.isPositionValid()) {
+            feature.setGeometry(CoordinateHelper.createPoint(
+                    insertSensor.getLongitudeValue(),
+                    insertSensor.getLatitudeValue(),
+                    insertSensor.getAltitudeValue(),
+                    Integer.parseInt(insertSensor.getEpsgCode())));
+        }
 
         SmlFeatureOfInterest featureOfInterest = new SmlFeatureOfInterest();
         featureOfInterest.addFeatureOfInterest(feature);
 
         system.setSmlFeatureOfInterest(featureOfInterest);
-    }
-
-    private boolean isFeatureAvailable(InsertSensor insertSensor) {
-        return !insertSensor.getFeatureOfInterestName().isEmpty() &&
-                !insertSensor.getFeatureOfInterestURI().isEmpty();
     }
 
     private boolean isAltitudeAvailable(InsertSensor insertSensor) {
@@ -783,15 +771,18 @@ public class ArcticSeaSosClient implements SosClient {
                     new CodeWithAuthority(insertObservation.getParentFeatureIdentifier()))));
         }
 
-        samplingFeature.setGeometry(insertObservation.isSetAltitudeValue() ?
-                CoordinateHelper.createPoint(insertObservation.getLongitudeValue(),
-                        insertObservation.getLatitudeValue(),
-                        insertObservation.getAltitudeValue(),
-                        Integer.parseInt(insertObservation.getEpsgCode())) :
-                            CoordinateHelper.createPoint(
-                                    insertObservation.getLongitudeValue(),
-                                    insertObservation.getLatitudeValue(),
-                                    Integer.parseInt(insertObservation.getEpsgCode())));
+        if (insertObservation.isFeaturePositionValid()) {
+            samplingFeature.setGeometry(insertObservation.isSetAltitudeValue() ?
+                    CoordinateHelper.createPoint(insertObservation.getLongitudeValue(),
+                            insertObservation.getLatitudeValue(),
+                            insertObservation.getAltitudeValue(),
+                            Integer.parseInt(insertObservation.getEpsgCode())) :
+                                CoordinateHelper.createPoint(
+                                        insertObservation.getLongitudeValue(),
+                                        insertObservation.getLatitudeValue(),
+                                        Integer.parseInt(insertObservation.getEpsgCode())));
+        }
+
         return samplingFeature;
     }
 

@@ -66,4 +66,8 @@ public final class FeatureOfInterest extends Resource {
         return parentFeatureIdentifier;
     }
 
+    public boolean isPositionValid() {
+        return position.isValid();
+    }
+
 }

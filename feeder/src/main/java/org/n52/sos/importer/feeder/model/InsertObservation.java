@@ -212,6 +212,10 @@ public class InsertObservation {
      *
      * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
      */
+    public boolean isFeaturePositionValid() {
+        return getFeatureOfInterest().isPositionValid();
+    }
+
     public ObservedProperty getObservedProperty() {
         return observedProperty;
     }
