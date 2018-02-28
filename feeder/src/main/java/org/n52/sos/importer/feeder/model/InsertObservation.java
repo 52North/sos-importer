@@ -52,19 +52,6 @@ public class InsertObservation {
     private final String measuredValueType;
     private List<NamedValue<?>> omParameters;
 
-    /**
-     * <p>Constructor for InsertObservation.</p>
-     *
-     * @param sensor a {@link org.n52.sos.importer.feeder.model.Sensor} object.
-     * @param foi a {@link org.n52.sos.importer.feeder.model.FeatureOfInterest} object.
-     * @param value a {@link java.lang.Object} object.
-     * @param timeStamp a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
-     * @param uom a {@link org.n52.sos.importer.feeder.model.UnitOfMeasurement} object.
-     * @param obsProp a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
-     * @param off a {@link org.n52.sos.importer.feeder.model.Offering} object.
-     * @param omParameters a optional list of {@link OmParameter}.
-     * @param mvType a {@link java.lang.String} object.
-     */
     public InsertObservation(final Sensor sensor,
             final FeatureOfInterest foi,
             final Object value,
@@ -89,129 +76,59 @@ public class InsertObservation {
         }
     }
 
-    /**
-     * <p>getSensorName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSensorName() {
         return sensor.getName();
     }
 
-    /**
-     * <p>getSensorURI.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSensorURI() {
         return sensor.getUri();
     }
 
-    /**
-     * <p>getFeatureOfInterestName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getFeatureOfInterestName() {
         return featureOfInterest.getName();
     }
 
-    /**
-     * <p>getFeatureOfInterestURI.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getFeatureOfInterestURI() {
         return featureOfInterest.getUri();
     }
 
-    /**
-     * <p>getObservedPropertyURI.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getObservedPropertyURI() {
         return observedProperty.getUri();
     }
 
-    /**
-     * <p>getUnitOfMeasurementCode.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getUnitOfMeasurementCode() {
         return unitOfMeasurement.getCode();
     }
 
-    /**
-     * <p>Getter for the field <code>resultValue</code>.</p>
-     *
-     * @return a {@link java.lang.Object} object.
-     */
     public Object getResultValue() {
         return resultValue;
     }
 
-    /**
-     * <p>Getter for the field <code>timeStamp</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
-     */
     public Timestamp getTimeStamp() {
         return timeStamp;
     }
 
-    /**
-     * <p>getEpsgCode.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getEpsgCode() {
         return Integer.toString(featureOfInterest.getPosition().getEpsgCode());
     }
 
-    /**
-     * <p>getLatitudeValue.</p>
-     *
-     * @return a double.
-     */
     public double getLatitudeValue() {
         return featureOfInterest.getPosition().getLatitude();
     }
 
-    /**
-     * <p>getLongitudeValue.</p>
-     *
-     * @return a double.
-     */
     public double getLongitudeValue() {
         return featureOfInterest.getPosition().getLongitude();
     }
 
-    /**
-     * <p>getAltitudeValue.</p>
-     *
-     * @return a double.
-     */
     public double getAltitudeValue() {
         return featureOfInterest.getPosition().getAltitude();
     }
 
 
-    /**
-     * <p>isSetAltitudeValue.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isSetAltitudeValue() {
         return featureOfInterest != null && featureOfInterest.getPosition().getAltitude() != Position.VALUE_NOT_SET;
     }
 
-    /**
-     * <p>Getter for the field <code>observedProperty</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.feeder.model.ObservedProperty} object.
-     */
     public boolean isFeaturePositionValid() {
         return getFeatureOfInterest().isPositionValid();
     }
@@ -220,38 +137,18 @@ public class InsertObservation {
         return observedProperty;
     }
 
-    /**
-     * <p>Getter for the field <code>featureOfInterest</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.feeder.model.FeatureOfInterest} object.
-     */
     protected FeatureOfInterest getFeatureOfInterest() {
         return featureOfInterest;
     }
 
-    /**
-     * <p>getUnitOfMeasurment.</p>
-     *
-     * @return a {@link org.n52.sos.importer.feeder.model.UnitOfMeasurement} object.
-     */
     protected UnitOfMeasurement getUnitOfMeasurment() {
         return unitOfMeasurement;
     }
 
-    /**
-     * <p>Getter for the field <code>offering</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.feeder.model.Offering} object.
-     */
     public Offering getOffering() {
         return offering;
     }
 
-    /**
-     * <p>Getter for the field <code>measuredValueType</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getMeasuredValueType() {
         return measuredValueType;
     }
