@@ -84,6 +84,7 @@ import org.n52.shetland.ogc.sensorML.elements.SmlIdentifier;
 import org.n52.shetland.ogc.sensorML.elements.SmlIo;
 import org.n52.shetland.ogc.sensorML.elements.SmlPosition;
 import org.n52.shetland.ogc.sensorML.v20.PhysicalSystem;
+import org.n52.shetland.ogc.sensorML.v20.SmlFeatureOfInterest;
 import org.n52.shetland.ogc.sos.Sos1Constants;
 import org.n52.shetland.ogc.sos.Sos2Constants;
 import org.n52.shetland.ogc.sos.SosCapabilities;
@@ -143,7 +144,6 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.locationtech.jts.io.ParseException;
 
 /**
@@ -312,7 +312,8 @@ public class ArcticSeaSosClient implements SosClient {
                         INSERTED_SENSORS.put(insertedSensor.getKey(), insertedSensor.getValue());
                         return insertedSensor;
                     }
-                } catch (IOException | DecodingException | OwsExceptionReport | XmlException e) {
+                } catch (IOException | DecodingException | OwsExceptionReport | XmlException |
+                        InvalidSridException | NumberFormatException | ParseException | FactoryException e) {
                     logException(e);
                 }
             } else {
@@ -451,7 +452,8 @@ public class ArcticSeaSosClient implements SosClient {
         return capabilitiesCache.isPresent();
     }
 
-    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) throws IOException {
+    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) throws IOException,
+    InvalidSridException, NumberFormatException, NoSuchAuthorityCodeException, ParseException, FactoryException {
 
         SosInsertionMetadata metadata = new SosInsertionMetadata();
         metadata.setFeatureOfInterestTypes(CollectionHelper.list(
@@ -483,8 +485,6 @@ public class ArcticSeaSosClient implements SosClient {
         offeringSweText.setValue(insertSensor.getOfferingUri());
         offeringCapabilities.addCapability(new SmlCapability("offeringID", offeringSweText));
 
-
-
         PhysicalSystem system = new PhysicalSystem();
         system.setIdentifier(insertSensor.getSensorURI());
         system.setIdentifications(CollectionHelper.list(
@@ -501,6 +501,10 @@ public class ArcticSeaSosClient implements SosClient {
 
         if (isPositionAvailable(insertSensor)) {
             addPosition(insertSensor, system);
+
+            if (isFeatureAvailable(insertSensor)) {
+                addFeature(insertSensor, system);
+            }
         }
 
         InsertSensorRequest request = new InsertSensorRequest(SosConstants.SOS, serviceVersion);
@@ -591,6 +595,26 @@ public class ArcticSeaSosClient implements SosClient {
                 insertSensor.getLongitudeUnit() != null && !insertSensor.getLongitudeUnit().isEmpty() &&
                 insertSensor.getLatitudeValue() != Position.VALUE_NOT_SET &&
                 insertSensor.getLatitudeUnit() != null && !insertSensor.getLatitudeUnit().isEmpty();
+    }
+
+    private void addFeature(InsertSensor insertSensor, PhysicalSystem system) throws InvalidSridException,
+            NumberFormatException, NoSuchAuthorityCodeException, ParseException, FactoryException {
+        SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(insertSensor.getFeatureOfInterestURI()));
+        feature.setGeometry(CoordinateHelper.createPoint(
+                insertSensor.getLongitudeValue(),
+                insertSensor.getLatitudeValue(),
+                insertSensor.getAltitudeValue(),
+                Integer.parseInt(insertSensor.getEpsgCode())));
+
+        SmlFeatureOfInterest featureOfInterest = new SmlFeatureOfInterest();
+        featureOfInterest.addFeatureOfInterest(feature);
+
+        system.setSmlFeatureOfInterest(featureOfInterest);
+    }
+
+    private boolean isFeatureAvailable(InsertSensor insertSensor) {
+        return !insertSensor.getFeatureOfInterestName().isEmpty() &&
+                !insertSensor.getFeatureOfInterestURI().isEmpty();
     }
 
     private boolean isAltitudeAvailable(InsertSensor insertSensor) {
