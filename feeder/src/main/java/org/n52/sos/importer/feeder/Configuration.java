@@ -238,13 +238,6 @@ public class Configuration {
 
     private Pattern[] ignorePatterns;
 
-    /**
-     * <p>Constructor for Configuration.</p>
-     *
-     * @param pathToFile a {@link java.lang.String} object.
-     * @throws org.apache.xmlbeans.XmlException if any.
-     * @throws java.io.IOException if any.
-     */
     public Configuration(final String pathToFile) throws XmlException, IOException {
         LOG.trace("Configuration({})", pathToFile);
         configFile = new File(pathToFile);
@@ -312,21 +305,10 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>Getter for the field <code>configFile</code>.</p>
-     *
-     * @return a {@link java.io.File} object.
-     */
     public File getConfigFile() {
         return configFile;
     }
 
-    /**
-     * Returns a truth value according to the presence of the remote file
-     * element in the xml document.
-     *
-     * @return true if it is a remote file
-     */
     public boolean isRemoteFile() {
         return importConf.getDataFile().getRemoteFile() != null;
     }
@@ -340,12 +322,6 @@ public class Configuration {
         return importConf.getDataFile().getReferenceIsARegularExpression();
     }
 
-    /**
-     * <p>getSosUrl.</p>
-     *
-     * @throws java.net.MalformedURLException if any.
-     * @return a {@link java.net.URL} object.
-     */
     public URL getSosUrl() throws MalformedURLException {
         LOG.trace("getSosUrl()");
         if (!importConf.getSosMetadata().getURL().equalsIgnoreCase("")) {
@@ -355,38 +331,18 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>getUser.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getUser() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getUserName();
     }
 
-    /**
-     * <p>getPassword.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getPassword() {
         return importConf.getDataFile().getRemoteFile().getCredentials().getPassword();
     }
 
-    /**
-     * The number of the first line with data. Line counting starts at 0.
-     *
-     * @return a int.
-     */
     public int getFirstLineWithData() {
         return importConf.getCsvMetadata().getFirstLineWithData();
     }
 
-    /**
-     * <p>getCsvSeparator.</p>
-     *
-     * @return a char.
-     */
     public char getCsvSeparator() {
         final String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
         if (sep.equals(Configuration.COLUMN_SEPARATOR_SPACE)) {
@@ -398,20 +354,10 @@ public class Configuration {
         }
     }
 
-    /**
-     * <p>getCsvQuoteChar.</p>
-     *
-     * @return a char.
-     */
     public char getCsvQuoteChar() {
         return importConf.getCsvMetadata().getParameter().getTextIndicator().charAt(0);
     }
 
-    /**
-     * <p>getCsvEscape.</p>
-     *
-     * @return a char.
-     */
     public char getCsvEscape() {
         return importConf.getCsvMetadata().getParameter().getCommentIndicator().charAt(0);
     }
@@ -443,11 +389,6 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>getIgnoredColumnIds.</p>
-     *
-     * @return an array of int.
-     */
     public int[] getIgnoredColumnIds() {
         LOG.trace("getIgnoredColumnIds()");
         final Column[] cols = getColumns();
@@ -515,12 +456,6 @@ public class Configuration {
         return -1;
     }
 
-    /**
-     * <p>getColumnById.</p>
-     *
-     * @param columnId a int.
-     * @return a ColumnDocument.Column object.
-     */
     public Column getColumnById(final int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
         final Column[] cols = getColumns();
@@ -584,13 +519,6 @@ public class Configuration {
                 s.getResource().getID().equals(sensorXmlId);
     }
 
-    /**
-     * <p>getColumnIdForFoi.</p>
-     *
-     * @param mvColumnId a int.
-     *
-     * @return a int.
-     */
     public int getColumnIdForFoi(final int mvColumnId) {
         LOG.trace(String.format("getColumnIdForFoi(%d)",
                 mvColumnId));
@@ -623,12 +551,6 @@ public class Configuration {
         return -1;
     }
 
-    /**
-     * <p>getFoiPosition.</p>
-     *
-     * @param foiUri a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
-     */
     public Position getFoiPosition(final String foiUri) {
         LOG.trace(String.format("getFoiPosition(%s)",
                 foiUri));
@@ -655,12 +577,6 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>getModelPositionXBPosition.</p>
-     *
-     * @param p PositionDocument.Position
-     * @return {@link org.n52.sos.importer.feeder.model.Position}
-     */
     public Position getModelPositionXBPosition(
             final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p) {
         LOG.trace("getPosition()");
@@ -684,12 +600,6 @@ public class Configuration {
         return new Position(values, units, epsgCode);
     }
 
-    /**
-     * <p>getRelatedFoi.</p>
-     *
-     * @param mvColumnId a int.
-     * @return a FeatureOfInterestType object.
-     */
     public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
                 mvColumnId));
@@ -725,13 +635,6 @@ public class Configuration {
                 foi.getResource().getID().equals(foiXmlId);
     }
 
-    /**
-     * <p>getPosition.</p>
-     *
-     * @param values an array of {@link java.lang.String} objects.
-     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
-     * @throws java.text.ParseException if any.
-     */
     public Position getPosition(final String[] values) throws ParseException {
         String group = "";
         // get first group in Document for position column
@@ -749,14 +652,6 @@ public class Configuration {
         return getPosition(group, values);
     }
 
-    /**
-     * <p>getPosition.</p>
-     *
-     * @param group a {@link java.lang.String} object.
-     * @param values an array of {@link java.lang.String} objects.
-     * @return a {@link org.n52.sos.importer.feeder.model.Position} object.
-     * @throws java.text.ParseException if any.
-     */
     public Position getPosition(final String group, final String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(group:%s,..)", group));
         final Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
@@ -927,13 +822,6 @@ public class Configuration {
         return result;
     }
 
-    /**
-     * <p>parseToDouble.</p>
-     *
-     * @param number a {@link java.lang.String} object.
-     * @return a double.
-     * @throws java.text.ParseException if any.
-     */
     public double parseToDouble(final String number) throws ParseException {
         LOG.trace(String.format("parseToDouble(%s)",
                 number));
@@ -1108,12 +996,6 @@ public class Configuration {
         return -1;
     }
 
-    /**
-     * <p>getOffering.</p>
-     *
-     * @param s a {@link org.n52.sos.importer.feeder.model.Sensor} object.
-     * @return a {@link org.n52.sos.importer.feeder.model.Offering} object.
-     */
     public Offering getOffering(final Sensor s) {
         LOG.trace("getOffering()");
         if (importConf.getSosMetadata().getOffering().isSetGenerate() &&
@@ -1125,11 +1007,6 @@ public class Configuration {
         }
     }
 
-    /**
-     * <p>getFileName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getFileName() {
         return configFile.getName();
     }
@@ -1139,12 +1016,6 @@ public class Configuration {
         return String.format("Configuration [file=%s]", configFile);
     }
 
-    /**
-     * <p>getType.</p>
-     *
-     * @param mVColumnId a int.
-     * @return a {@link java.lang.String} object.
-     */
     public String getType(final int mVColumnId) {
         for (final Column col : getColumns()) {
             if (col.getNumber() == mVColumnId) {
@@ -1158,11 +1029,6 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>getSensorFromAdditionalMetadata.</p>
-     *
-     * @return a SensorType object.
-     */
     public SensorType getSensorFromAdditionalMetadata() {
         LOG.trace("getSensorFromAdditionalMetadata()");
         if (importConf.getAdditionalMetadata() != null &&
@@ -1173,30 +1039,15 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>isOneMvColumn.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isOneMvColumn() {
         return getMeasureValueColumnIds().length == 1;
     }
 
-    /**
-     * <p>getSosVersion.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSosVersion() {
         LOG.trace("getSosVersion()");
         return importConf.getSosMetadata().getVersion();
     }
 
-    /**
-     * <p>getSosBinding.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSosBinding() {
         LOG.trace("getSosBinding()");
         if (importConf.getSosMetadata().isSetBinding()) {
@@ -1206,47 +1057,22 @@ public class Configuration {
         return null;
     }
 
-    /**
-     * <p>getExpectedColumnCount.</p>
-     *
-     * @return a int.
-     */
     public int getExpectedColumnCount() {
         return importConf.getCsvMetadata().getColumnAssignments().sizeOfColumnArray();
     }
 
-    /**
-     * <p>Getter for the field <code>localeFilePattern</code>.</p>
-     *
-     * @return a {@link java.util.regex.Pattern} object.
-     */
     public Pattern getLocaleFilePattern() {
         return localeFilePattern;
     }
 
-    /**
-     * <p>getRegExDateInfoInFileName.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getRegExDateInfoInFileName() {
         return importConf.getDataFile().getRegExDateInfoInFileName();
     }
 
-    /**
-     * <p>getDateInfoPattern.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getDateInfoPattern() {
         return importConf.getDataFile().getDateInfoPattern();
     }
 
-    /**
-     * <p>isDateInfoExtractionFromFileNameSetupValid.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isDateInfoExtractionFromFileNameSetupValid() {
         return importConf.getDataFile().isSetRegExDateInfoInFileName() &&
                 importConf.getDataFile().isSetRegExDateInfoInFileName() &&
@@ -1257,11 +1083,6 @@ public class Configuration {
                 !getDateInfoPattern().isEmpty();
     }
 
-    /**
-     * <p>isUseDateInfoFromFileModificationSet.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isUseDateInfoFromFileModificationSet() {
         return importConf.getDataFile().isSetUseDateFromLastModifiedDate() &&
                 importConf.getDataFile().getUseDateFromLastModifiedDate();
@@ -1296,11 +1117,6 @@ public class Configuration {
                 importConf.getDataFile().getSampleSizeRegEx().indexOf(")") > 1;
     }
 
-    /**
-     * <p>getSampleStartRegEx.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleStartRegEx() {
         if (importConf.getDataFile().isSetSampleStartRegEx() &&
                 !importConf.getDataFile().getSampleStartRegEx().isEmpty()) {
@@ -1309,11 +1125,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleIdRegEx' of <DataFile> not set.");
     }
 
-    /**
-     * <p>getSampleSizeRegEx.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleSizeRegEx() {
         if (importConf.getDataFile().isSetSampleSizeRegEx() &&
                 !importConf.getDataFile().getSampleSizeRegEx().isEmpty() &&
@@ -1324,11 +1135,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleSizeRegEx' of <DataFile> not set.");
     }
 
-    /**
-     * <p>getSampleSizeOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleSizeOffset() {
         if (importConf.getDataFile().isSetSampleSizeOffset()) {
             return importConf.getDataFile().getSampleSizeOffset();
@@ -1336,11 +1142,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleSizeOffset' of <DataFile> not set.");
     }
 
-    /**
-     * <p>getSampleDateOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleDateOffset() {
         if (importConf.getDataFile().isSetSampleDateOffset()) {
             return importConf.getDataFile().getSampleDateOffset();
@@ -1348,11 +1149,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleDateOffset' of <DataFile> not set.");
     }
 
-    /**
-     * <p>getSampleDataOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleDataOffset() {
         if (importConf.getDataFile().isSetSampleDataOffset()) {
             return importConf.getDataFile().getSampleDataOffset();
@@ -1361,11 +1157,6 @@ public class Configuration {
     }
 
 
-    /**
-     * <p>getSampleDatePattern.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleDatePattern() {
         if (importConf.getDataFile().isSetSampleDatePattern() &&
                 !importConf.getDataFile().getSampleDatePattern().isEmpty()) {
@@ -1374,11 +1165,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleDateInfoPattern' of <DataFile> not set.");
     }
 
-    /**
-     * <p>getSampleDateExtractionRegEx.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleDateExtractionRegEx() {
         if (importConf.getDataFile().isSetSampleDateExtractionRegEx() &&
                 !importConf.getDataFile().getSampleDateExtractionRegEx().isEmpty() &&
@@ -1390,12 +1176,6 @@ public class Configuration {
     }
 
 
-    /**
-     * <p>getLastModifiedDelta.</p>
-     *
-     * @return The configured value <b>&gt; 0</b>, if it is set<br>
-     *             else <b>-1</b>.
-     */
     public int getLastModifiedDelta() {
         if (importConf.getDataFile().isSetLastModifiedDelta()) {
             return importConf.getDataFile().getLastModifiedDelta();
@@ -1459,11 +1239,6 @@ public class Configuration {
         return ImportStrategy.SingleObservation;
     }
 
-    /**
-     * <p>getHunkSize.</p>
-     *
-     * @return a int.
-     */
     public int getHunkSize() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
             for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
@@ -1532,11 +1307,6 @@ public class Configuration {
         return false;
     }
 
-    /**
-     * <p>isIgnoreLineRegExSet.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isIgnoreLineRegExSet() {
         return importConf.getDataFile().getIgnoreLineRegExArray() != null &&
                 importConf.getDataFile().getIgnoreLineRegExArray().length > 0;
@@ -1569,20 +1339,10 @@ public class Configuration {
         return patterns.toArray(new Pattern[patterns.size()]);
     }
 
-    /**
-     * <p>isInsertSweArrayObservationTimeoutBufferSet.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isInsertSweArrayObservationTimeoutBufferSet() {
         return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
     }
 
-    /**
-     * <p>getInsertSweArrayObservationTimeoutBuffer.</p>
-     *
-     * @return a int.
-     */
     public int getInsertSweArrayObservationTimeoutBuffer() {
         if (isInsertSweArrayObservationTimeoutBufferSet()) {
             return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
@@ -1591,11 +1351,6 @@ public class Configuration {
                 "Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
     }
 
-    /**
-     * <p>getSampleSizeDivisor.</p>
-     *
-     * @return a int.
-     */
     public int getSampleSizeDivisor() {
         if (isSamplingFile() && importConf.getDataFile().isSetSampleSizeDivisor()) {
             return importConf.getDataFile().getSampleSizeDivisor();
@@ -1603,21 +1358,11 @@ public class Configuration {
         return 1;
     }
 
-    /**
-     * <p>isCsvParserDefined.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isCsvParserDefined() {
         return importConf.getCsvMetadata().isSetCsvParserClass() &&
                 !importConf.getCsvMetadata().getCsvParserClass().getStringValue().isEmpty();
     }
 
-    /**
-     * <p>getCsvParser.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getCsvParser() {
         return isCsvParserDefined()
                 ? importConf.getCsvMetadata().getCsvParserClass().getStringValue()
