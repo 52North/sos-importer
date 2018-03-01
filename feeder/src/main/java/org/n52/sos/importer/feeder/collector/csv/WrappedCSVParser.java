@@ -44,24 +44,25 @@ public class WrappedCSVParser implements CsvParser {
 
     private CSVReader csvReader;
 
+    private int skipLimit;
+
     @Override
     public String[] readNext() throws IOException {
         return csvReader.readNext();
     }
 
     @Override
-    public void init(final BufferedReader bufferedReader,
-            final Configuration configuration) {
-        final int flwd = configuration.getFirstLineWithData();
-        final char separator = configuration.getCsvSeparator();
-        final char quotechar = configuration.getCsvQuoteChar();
-        final char escape = configuration.getCsvEscape();
-        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, flwd);
+    public void init(BufferedReader bufferedReader, Configuration configuration) {
+        skipLimit = configuration.getFirstLineWithData();
+        char separator = configuration.getCsvSeparator();
+        char quotechar = configuration.getCsvQuoteChar();
+        char escape = configuration.getCsvEscape();
+        csvReader = new CSVReader(bufferedReader, separator, quotechar, escape, skipLimit);
     }
 
     @Override
     public int getSkipLimit() {
-        return 1;
+        return skipLimit;
     }
 
 }
