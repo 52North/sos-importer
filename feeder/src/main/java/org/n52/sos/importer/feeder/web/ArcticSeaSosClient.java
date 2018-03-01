@@ -60,6 +60,7 @@ import org.n52.shetland.ogc.gml.CodeWithAuthority;
 import org.n52.shetland.ogc.gml.time.Time;
 import org.n52.shetland.ogc.gml.time.TimeInstant;
 import org.n52.shetland.ogc.om.MultiObservationValues;
+import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.shetland.ogc.om.ObservationValue;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.OmObservableProperty;
@@ -330,7 +331,8 @@ public class ArcticSeaSosClient implements SosClient {
         request.setOfferings(Arrays.asList(io.getOffering().getUri()));
         request.setAssignedSensorId(io.getSensorURI());
         try {
-            request.setObservation(createOmObservation(io));
+            request.setObservation(createObservation(
+                    io, createObservationValue(io), getObservationType(io.getMeasuredValueType())));
             HttpResponse response = client.executePost(uri, encodeRequest(request));
             Object decodedResponse = decodeResponse(response);
             if (decodedResponse instanceof InsertObservationResponse) {
@@ -362,7 +364,10 @@ public class ArcticSeaSosClient implements SosClient {
         request.setAssignedSensorId(timeSeries.getFirst().getSensorURI());
         request.addExtension(swesExtension);
         try {
-            request.setObservation(createSweArrayObservation(timeSeries));
+            request.setObservation(createObservation(
+                    timeSeries.getFirst(),
+                    createSweArrayObservationValue(timeSeries),
+                    OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION));
             HttpResponse response = client.executePost(uri, encodeRequest(request));
             Object decodedResponse = decodeResponse(response);
             if (decodedResponse instanceof InsertObservationResponse) {
@@ -667,21 +672,20 @@ public class ArcticSeaSosClient implements SosClient {
         return observationTemplate;
     }
 
-    private List<OmObservation> createOmObservation(InsertObservation io)
-            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
-            FactoryException {
-        OmObservation omObservation = createOmObservationSkeleton(io);
-        omObservation.setValue(createObservationValue(io));
-        omObservation.getObservationConstellation().setObservationType(getObservationType(io.getMeasuredValueType()));
-        return Arrays.asList(omObservation);
-    }
+    private List<OmObservation> createObservation(InsertObservation insertObservation,
+            ObservationValue<?> value,
+            String observationType) throws InvalidSridException, NumberFormatException, NoSuchAuthorityCodeException,
+                ParseException, FactoryException {
+        OmObservation omObservation = createOmObservationSkeleton(insertObservation);
+        omObservation.setValue(value);
+        omObservation.getObservationConstellation().setObservationType(observationType);
 
-    private List<OmObservation> createSweArrayObservation(TimeSeries timeSeries)
-            throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
-            FactoryException {
-        OmObservation omObservation = createOmObservationSkeleton(timeSeries.getFirst());
-        omObservation.setValue(createSweArrayObservationValue(timeSeries));
-        omObservation.getObservationConstellation().setObservationType(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION);
+        if (insertObservation.isSetOmParameters()) {
+            for (NamedValue<?> omParameter : insertObservation.getOmParameters()) {
+                omObservation.addParameter(omParameter);
+            }
+        }
+
         return Arrays.asList(omObservation);
     }
 
@@ -741,6 +745,7 @@ public class ArcticSeaSosClient implements SosClient {
         OmObservation omObservation = new OmObservation();
         omObservation.setObservationConstellation(observationConstellation);
         omObservation.setResultTime(resultTime);
+
         return omObservation;
     }
 
