@@ -44,25 +44,16 @@ public class Step7ModelTest {
 
     private Step7Model model;
 
-    /**
-     * <p>init.</p>
-     */
     @Before
     public void init() {
         model = new Step7Model();
     }
 
-    /**
-     * <p>shouldReturnSingleObservationAsDefaultImportStrategie.</p>
-     */
     @Test
     public void shouldReturnSingleObservationAsDefaultImportStrategie() {
         Assert.assertThat(model.getImportStrategy(), Is.is(ImportStrategy.SingleObservation));
     }
 
-    /**
-     * <p>shouldReturnImportStrategie.</p>
-     */
     @Test
     public void shouldReturnImportStrategie() {
         model.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
@@ -71,34 +62,22 @@ public class Step7ModelTest {
                 Is.is(ImportStrategy.SweArrayObservationWithSplitExtension));
     }
 
-    /**
-     * <p>shouldReturn25AsDefaultSendBuffer.</p>
-     */
     @Test
-    public void shouldReturn25AsDefaultSendBuffer() {
-        Assert.assertThat(model.getSendBuffer(), Is.is(25));
+    public void shouldReturn25000AsDefaultSendBuffer() {
+        Assert.assertThat(model.getSendBuffer(), Is.is(25000));
     }
 
-    /**
-     * <p>shouldReturnSendBuffer.</p>
-     */
     @Test
     public void shouldReturnSendBuffer() {
         model.setSendBuffer(42);
         Assert.assertThat(model.getSendBuffer(), Is.is(42));
     }
 
-    /**
-     * <p>shouldReturn5000AsDefaultHunkSize.</p>
-     */
     @Test
     public void shouldReturn5000AsDefaultHunkSize() {
         Assert.assertThat(model.getHunkSize(), Is.is(5000));
     }
 
-    /**
-     * <p>shouldReturnHunkSize.</p>
-     */
     @Test
     public void shouldReturnHunkSize() {
         model.setHunkSize(52);

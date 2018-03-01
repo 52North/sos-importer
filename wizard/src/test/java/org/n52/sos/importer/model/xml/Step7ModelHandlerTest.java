@@ -49,9 +49,6 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
  */
 public class Step7ModelHandlerTest {
 
-    /**
-     * <p>shouldAddBindingIfSetInModel.</p>
-     */
     @Test
     public void shouldAddBindingIfSetInModel() {
         final String binding = "test-binding";
@@ -63,9 +60,6 @@ public class Step7ModelHandlerTest {
         Assert.assertThat(importConf.getSosMetadata().getBinding(), Is.is(binding));
     }
 
-    /**
-     * <p>shouldNotAddBindingIfEmptyOrNull.</p>
-     */
     @Test
     public void shouldNotAddBindingIfEmptyOrNull() {
         final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, null, "", false);
@@ -80,9 +74,6 @@ public class Step7ModelHandlerTest {
         Assert.assertThat(importConfNull.getSosMetadata().isSetBinding(), Is.is(false));
     }
 
-    /**
-     * <p>shouldAddVersionIfSetInModel.</p>
-     */
     @Test
     public void shouldAddVersionIfSetInModel() {
         final String version = "test-version";
@@ -93,9 +84,6 @@ public class Step7ModelHandlerTest {
         Assert.assertThat(importConf.getSosMetadata().getVersion(), Is.is(version));
     }
 
-    /**
-     * <p>shouldNotAddVersionIfEmptyOrNull.</p>
-     */
     @Test
     public void shouldNotAddVersionIfEmptyOrNull() {
         final Step7Model stepModelEmpty = new Step7Model(null, null, false, null, "", null, false);
@@ -110,24 +98,17 @@ public class Step7ModelHandlerTest {
         Assert.assertThat(importConfNull.getSosMetadata().getVersion(), Is.is(CoreMatchers.nullValue()));
     }
 
-    /**
-     * <p>shouldSetImportStrategy.</p>
-     */
     @Test
     public void shouldSetImportStrategy() {
         final Step7Model stepModel = new Step7Model(null, null, false, null, "", null, false);
-        stepModel.setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
+        stepModel.setImportStrategy(ImportStrategy.ResultHandling);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(getAdditionalMetadata(
-                importConf, Key.IMPORT_STRATEGY),
-                Is.is(ImportStrategy.SweArrayObservationWithSplitExtension.name()));
+        Assert.assertThat(importConf.getSosMetadata().getImporter(),
+                Is.is("org.n52.sos.importer.feeder.importer.ResultHandlingImporter"));
     }
 
-    /**
-     * <p>shouldSetHunkSize.</p>
-     */
     @Test
     public void shouldSetHunkSize() {
         final int hunkSize = 42;
@@ -159,20 +140,20 @@ public class Step7ModelHandlerTest {
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
         Assert.assertThat(
-                importConf.getCsvMetadata().isSetCsvParserClass(),
+                importConf.getCsvMetadata().getObservationCollector().isNil(),
+                Is.is(false));
+        Assert.assertThat(
+                importConf.getCsvMetadata().getObservationCollector().isSetIgnoreColumnCountMismatch(),
                 Is.is(true));
         Assert.assertThat(
-                importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch(),
-                Is.is(true));
-        Assert.assertThat(
-                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch(),
+                importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
                 Is.is(false));
 
         stepModel = new Step7Model(null, null, false, null, "", null, true);
         importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
         Assert.assertThat(
-                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch(),
+                importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
                 Is.is(true));
     }
 

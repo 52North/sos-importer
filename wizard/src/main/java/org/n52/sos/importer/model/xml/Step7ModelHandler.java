@@ -75,21 +75,27 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
             sosMeta.setVersion(stepModel.getVersion());
         }
         addImportStrategy(stepModel.getImportStrategy(), sosImportConf);
-        if (stepModel.getImportStrategy().equals(ImportStrategy.SweArrayObservationWithSplitExtension)) {
-            sosMeta.setInsertSweArrayObservationTimeoutBuffer(stepModel.getSendBuffer());
+        if (!stepModel.getImportStrategy().equals(ImportStrategy.SingleObservation)) {
+            addTimeoutBuffer(stepModel.getSendBuffer(), sosImportConf);
             addHunkSize(stepModel.getHunkSize(), sosImportConf);
         }
         addIgnoreColumnMismatch(stepModel.isIgnoreColumnMismatch(), sosImportConf);
+    }
+
+    private void addTimeoutBuffer(int sendBuffer, SosImportConfiguration sosImportConf) {
+        addAdditionalMetadata(sosImportConf, Key.TIMEOUT_BUFFER, Integer.toString(sendBuffer));
     }
 
     private void addIgnoreColumnMismatch(boolean ignoreColumnMismatch, SosImportConfiguration sosImportConf) {
         if (sosImportConf.getCsvMetadata() == null) {
             sosImportConf.addNewCsvMetadata();
         }
-        if (!sosImportConf.getCsvMetadata().isSetCsvParserClass()) {
-            sosImportConf.getCsvMetadata().addNewCsvParserClass();
+        if (sosImportConf.getCsvMetadata().getObservationCollector() == null ||
+                sosImportConf.getCsvMetadata().getObservationCollector().getStringValue().isEmpty()) {
+            sosImportConf.getCsvMetadata().addNewObservationCollector();
         }
-        sosImportConf.getCsvMetadata().getCsvParserClass().setIgnoreColumnCountMismatch(ignoreColumnMismatch);
+        sosImportConf.getCsvMetadata().getObservationCollector()
+            .setIgnoreColumnCountMismatch(ignoreColumnMismatch);
     }
 
     private void addHunkSize(final int hunkSize,
@@ -99,12 +105,20 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
 
     private void addImportStrategy(final ImportStrategy importStrategy,
             final SosImportConfiguration sosImportConf) {
-        final Enum key = Key.IMPORT_STRATEGY;
-        String value = "SingleObservation";
-        if (importStrategy == ImportStrategy.SweArrayObservationWithSplitExtension) {
-            value = "SweArrayObservationWithSplitExtension";
+        String importer = "";
+        switch (importStrategy) {
+            case ResultHandling:
+                importer = "org.n52.sos.importer.feeder.importer.ResultHandlingImporter";
+                break;
+            case SweArrayObservationWithSplitExtension:
+                importer = "org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter";
+                break;
+            case SingleObservation:
+            default:
+                importer = "org.n52.sos.importer.feeder.importer.SingleObservationImporter";
+                break;
         }
-        addAdditionalMetadata(sosImportConf, key, value);
+        sosImportConf.getSosMetadata().setImporter(importer);
     }
 
     private void addAdditionalMetadata(final SosImportConfiguration sosImportConf,

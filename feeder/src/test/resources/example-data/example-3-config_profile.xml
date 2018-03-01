@@ -8,11 +8,12 @@
 			<Encoding>UTF-8</Encoding>
 		</LocalFile>
 	</DataFile>
-	<SosMetadata insertSweArrayObservationTimeoutBuffer="25000">
+	<SosMetadata>
 		<URL>http://localhost:8080/52n-sos-webapp/service</URL>
 		<Offering generate="true" />
 		<Version>2.0.0</Version>
 		<Binding>POX</Binding>
+		<Importer>org.n52.sos.importer.feeder.importer.SingleObservationImporter</Importer>
 	</SosMetadata>
 	<CsvMetadata>
 		<ColumnAssignments>
@@ -161,19 +162,9 @@
 			<TextIndicator>"</TextIndicator>
 		</Parameter>
 		<UseHeader>false</UseHeader>
-		<CsvParserClass ignoreColumnCountMismatch="true" />
-		<ObservationCollectorClass>org.n52.sos.importer.feeder.collector.SingleProfileCollector</ObservationCollectorClass>
+		<ObservationCollector ignoreColumnCountMismatch="true">org.n52.sos.importer.feeder.collector.SingleProfileCollector</ObservationCollector>
 	</CsvMetadata>
 	<AdditionalMetadata>
-		<Metadata>
-			<Key>IMPORT_STRATEGY</Key>
-			<!--<Value>SweArrayObservationWithSplitExtension</Value> -->
-			<Value>SingleObservation</Value>
-		</Metadata>
-		<Metadata>
-			<Key>HUNK_SIZE</Key>
-			<Value>5000</Value>
-		</Metadata>
 		<Metadata>
 		    <Key>PARENT_FEATURE_IDENTIFIER</Key>
 		    <Value>profile-parent-feature</Value>

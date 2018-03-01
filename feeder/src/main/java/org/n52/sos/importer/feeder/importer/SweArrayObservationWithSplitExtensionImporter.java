@@ -66,7 +66,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                 + "Change "
                 + "<SosImportConfiguration><SosMetadata><InsertSweArrayObservationTimeoutBuffer>"
                 + " if required.",
-                configuration.getInsertSweArrayObservationTimeoutBuffer());
+                configuration.getTimeoutBuffer());
     }
 
     @Override

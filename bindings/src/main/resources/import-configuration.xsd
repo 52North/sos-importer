@@ -29,7 +29,7 @@
     Public License for more details.
 
 -->
-<!-- 
+<!--
     TODO: Longterm refactoring...
          Collector aka CsvMetadata
             |- Datafile
@@ -139,7 +139,7 @@
                 <xs:enumeration value="GROUP">
                     <xs:annotation>
                         <xs:documentation>
-                            Indicates the membership of this column in a 
+                            Indicates the membership of this column in a
                             POSITION or DATE_TIME group.
                         </xs:documentation>
                     </xs:annotation>
@@ -154,12 +154,14 @@
                 <xs:enumeration value="HUNK_SIZE">
                     <xs:annotation>
                         <xs:documentation>
-                           Use in combination with IMPORT_STRATEGY. Defines
-                           the number of observations to import per request.
+                           Use in combination with ImporterClases: e.g.
+                           - SweArrayObservationWithSplitExtensionImporter
+                           - ResultHandlingImporter
+                           Defines the number of observations to import
+                           per request.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:enumeration>
-                <xs:enumeration value="IMPORT_STRATEGY"/>
                 <xs:enumeration value="NAME">
                     <xs:annotation>
                         <xs:documentation>
@@ -169,6 +171,22 @@
                     </xs:annotation>
                 </xs:enumeration>
                 <xs:enumeration value="TIME"/>
+                <xs:enumeration value="TIMEOUT_BUFFER">
+                    <xs:annotation>
+                        <xs:documentation>
+	                        An additional timeout buffer for connect and socket
+	                        timeout when using import strategy
+	                        "SweArrayObservationWithSplitExtension". Scale is in
+	                        milliseconds, e.g. 1000 => 1s more connect and socket
+	                        timeout.
+	                        The size of this value is related to the set-up of the
+	                        SOS server, importer, and the HUNK_SIZE value.
+	                        The current OX-F SimpleHttpClient implementation uses
+	                        a default value of 5s, hence setting this to 25,000
+	                        results in 30s connection and socket timeout.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
                 <xs:enumeration value="TIME_DAY"/>
                 <xs:enumeration value="TIME_HOUR"/>
                 <xs:enumeration value="TIME_MINUTE"/>
@@ -245,7 +263,7 @@
             <xs:documentation>
                 Optional regular expression the data files have to match if
                 Path is pointing to an directory. Specify the expression in
-                conformance to 
+                conformance to
                 http://docs.oracle.com/javase/6/docs/api/index.html?java/util/regex/Pattern.html
             </xs:documentation>
         </xs:annotation>
@@ -344,8 +362,8 @@
     <xs:element name="Value">
         <xs:annotation>
             <xs:documentation>
-                The value of a key-value-pair. Potential values: 
-                    TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT; 
+                The value of a key-value-pair. Potential values:
+                    TYPE->MeasuredValue: NUMERIC | COUNT | BOOLEAN | TEXT;
                     TYPE->OM_PARAMETER: NUMERIC | COUNT | BOOLEAN | TEXT | CATEGORY
                     TYPE->DATE_TIME: (COMBINATION | UNIX_TIME).
             </xs:documentation>
@@ -378,7 +396,7 @@
     <xs:element name="URL" nillable="false">
         <xs:annotation>
             <xs:documentation>
-                Any URL compliant with RFC 3986 "URI" 
+                Any URL compliant with RFC 3986 "URI"
                 (https://tools.ietf.org/html/rfc3986) or
                 better RFC 1738 "URL"
                 (https://tools.ietf.org/html/rfc1738)
@@ -411,9 +429,9 @@
         </xs:simpleType>
     </xs:element>
     <!--
-         
+
             COMPLEX TYPES
-            
+
      -->
     <xs:element name="Resource" type="ResourceType" abstract="true"/>
     <xs:complexType name="ResourceType">
@@ -778,6 +796,36 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:element name="ObservationCollector" default="org.n52.sos.importer.feeder.DefaultCsvCollector">
+        <xs:annotation>
+            <xs:documentation>
+                The class that MUST be used for processing the data file. The
+                interface org.n52.sos.importer.feeder.Collector MUST be
+                implemented. The class name MUST contain the fully qualified
+                package name and a zero-argument constructor MUST be provided:
+                - org.n52.sos.importer.feeder.collector.DefaultCsvCollector
+                - ...SampleBasedObservationCollector
+                - ...SingleProfileCollector
+            </xs:documentation>
+        </xs:annotation>
+                <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="ignoreColumnCountMismatch" type="xs:boolean" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="CsvParser" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>
+                Specifies the parser class to be used by the
+                ObservationCollector. E.g.
+                - org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser
+                -...NSAMParser
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
     <xs:element name="CsvMetadata">
         <xs:annotation>
             <xs:documentation>
@@ -788,21 +836,12 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="ColumnAssignments"/>
-                <xs:element ref="DecimalSeparator">
-                    <xs:annotation>
-                        <xs:documentation>
-                            The global decimal mark. It delimits the decimal
-                            places of a numeric value. For example, '.' would
-                            be the decimal separator for the numeric value
-                            "1234.56".
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
+                <xs:element ref="DecimalSeparator"/>
                 <xs:element ref="FirstLineWithData"/>
                 <xs:element ref="Parameter"/>
                 <xs:element ref="UseHeader"/>
-                <xs:element ref="CsvParserClass" minOccurs="0"/>
-                <xs:element ref="ObservationCollectorClass" minOccurs="0"/>
+                <xs:element ref="ObservationCollector" nillable="false"/>
+                <xs:element ref="CsvParser" minOccurs="0"/>
                 <xs:element ref="UseLastTimestamp" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
@@ -815,34 +854,6 @@
                 to ignore data older than the specified time stamp.
                 The saved value is updated after processing an
                 entire datafile.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-    <xs:element name="CsvParserClass">
-        <xs:annotation>
-            <xs:documentation>
-                  The class that MUST be used for parsing the data file. The
-                  interface org.n52.sos.importer.feeder.CsvParser MUST be
-                  implemented. The class name MUST contain the fully qualified
-                  package name and a zero-argument constructor MUST be provided.
-              </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="ignoreColumnCountMismatch" type="xs:boolean" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="ObservationCollectorClass" type="xs:string"
-            default="org.n52.sos.importer.feeder.DefaultCsvCollector">
-        <xs:annotation>
-            <xs:documentation>
-                The class that MUST be used for processing the data file. The
-                interface org.n52.sos.importer.feeder.Collector MUST be
-                implemented. The class name MUST contain the fully qualified
-                package name and a zero-argument constructor MUST be provided.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
@@ -1061,7 +1072,7 @@
     <xs:element name="Group" nillable="false">
         <xs:annotation>
             <xs:documentation>
-                Reference to a position group defined in the 
+                Reference to a position group defined in the
                 CsvMetadata.ColumnAssignments
             </xs:documentation>
         </xs:annotation>
@@ -1074,7 +1085,7 @@
     <xs:element name="IgnoreLineRegEx">
         <xs:annotation>
             <xs:documentation>
-                A regular expression identifying lines that can be ignored 
+                A regular expression identifying lines that can be ignored
                 during the import process.
             </xs:documentation>
         </xs:annotation>
@@ -1134,13 +1145,10 @@
                 <xs:element ref="Value">
                     <xs:annotation>
                         <xs:documentation>
-                            The value of a key-value-pair. Potential values: 
-                                TYPE->MeasuredValue: 
+                            The value of a key-value-pair. Potential values:
+                                TYPE->MeasuredValue:
                                     NUMERIC | COUNT | BOOLEAN | TEXT
                                 TYPE->DATE_TIME: COMBINATION | UNIX_TIME
-                                IMPORT_STRATEGY->
-                                    SingleObservation | 
-                                    SweArrayObservationWithSplitExtension
                                 HUNK_SIZE->Integer value defining the number of
                                     rows that should be combined in one
                                     SWEArrayObservation.
@@ -1234,6 +1242,39 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:element name="Version" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>
+                Indicates the specification version
+                implemented by the SOS instance. E.g. 1.0.0,
+                2.0.0.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="Binding" type="xs:string">
+        <xs:annotation>
+            <xs:documentation>
+                If version 2.0.0 is used, the binding has to
+                be defined, e.g. SOAP, POX binding.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+   <xs:element name="Importer" type="xs:string"
+                    default="org.n52.sos.importer.feeder.importer.SingleObservationImporter">
+        <xs:annotation>
+            <xs:documentation>
+                Replaces the IMPORT_STRATEGY key value pair from
+                AdditionalMetadata tag. Example value are:
+                - org.n52.sos.importer.feeder.importer.SingleObservationImporter
+                - ...ResultHandlingImporter
+                - ...SweArrayObservationWithSplitExtensionImporter
+                  Requires Metadata elements in AdditionalMetadata
+                  with the following Keys:
+                  > HUNK_SIZE
+                  > TIMEOUT_BUFFER
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
     <xs:element name="SosMetadata">
         <xs:annotation>
             <xs:documentation>
@@ -1243,66 +1284,24 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="URL"/>
-                <xs:element ref="Offering">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Offering in the SOS which is used for the
-                            import. Might be generated from sensor id.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="Version" type="xs:string">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Indicates the specification version
-                            implemented by the SOS instance. E.g. 1.0.0,
-                            2.0.0.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="Binding" type="xs:string" minOccurs="0">
-                    <xs:annotation>
-                        <xs:documentation>
-                            If version 2.0.0 is used, the binding has to
-                            be defined, e.g. SOAP, POX binding.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
+                <xs:element ref="Offering"/>
+                <xs:element ref="Version"/>
+                <xs:element ref="Binding" minOccurs="0"/>
+                <xs:element ref="Importer"/>
             </xs:sequence>
-            <xs:attribute name="insertSweArrayObservationTimeoutBuffer">
-                <xs:annotation>
-                    <xs:documentation>
-                        An additional timeout buffer for connect and socket 
-                        timeout when using import strategy 
-                        "SweArrayObservationWithSplitExtension". Scale is in
-                        milliseconds, e.g. 1000 => 1s more connect and socket
-                        timeout.
-                        The size of this value is related to the set-up of the
-                        SOS server, importer, and the HUNK_SIZE value.
-                        The current OX-F SimpleHttpClient implementation uses
-                        a default value of 5s, hence setting this to 25,000 
-                        results in 30s connection and socket timeout.
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:int">
-                        <xs:minInclusive value="1"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <!--
-         
+
             ROOT ELEMENT
-            
+
      -->
     <xs:element name="SosImportConfiguration">
         <xs:annotation>
             <xs:documentation>
                 Configuration for a data file containing observations. These
                 observations should be imported to a running SOS instance using
-                the transactional interface. The configuration is used by the 
+                the transactional interface. The configuration is used by the
                 52n-sensorweb-importer to store the metadata and re-use it for
                 later import runs.
             </xs:documentation>

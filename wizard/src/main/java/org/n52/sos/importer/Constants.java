@@ -64,7 +64,12 @@ public class Constants {
          * SOS using the "SplitDataArrayIntoObservations" of the 52North
          * implementation.
          */
-        SweArrayObservationWithSplitExtension;
+        SweArrayObservationWithSplitExtension,
+        /**
+         * The collected observations will be inserted using the SOS
+         * Result Handling extension.
+         */
+        ResultHandling;
     }
 
     /** Constant <code>BOOLEAN="BOOLEAN"</code> */

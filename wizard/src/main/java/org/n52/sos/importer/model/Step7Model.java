@@ -79,7 +79,7 @@ public class Step7Model implements StepModel {
 
     private ImportStrategy importStrategy = ImportStrategy.SingleObservation;
 
-    private int sendBuffer = 25;
+    private int sendBuffer = 25000;
 
     private int hunkSize = 5000;
 

@@ -55,7 +55,6 @@ import org.n52.sos.importer.feeder.collector.DefaultCsvCollector;
 import org.n52.sos.importer.feeder.collector.SampleBasedObservationCollector;
 import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
 import org.n52.sos.importer.feeder.importer.SingleObservationImporter;
-import org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
@@ -1214,31 +1213,6 @@ public class Configuration {
         return DEFAULT_CHARSET;
     }
 
-    /**
-     * <p>getImportStrategy.</p>
-     *
-     * @return The ImportStrategy that could be configured in
-     *         <code>SosImportConfiguration/AdditionalMetadata/Metadata/Key=
-     *         IMPORT_STRATEGY/Value=The_import_strategy_to_use</code>
-     *         <br>Default if nothing matching is found: ImportStrategy#SingleObservation.
-     */
-    public ImportStrategy getImportStrategy() {
-        if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
-            for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
-                final Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
-                if (metadata.getKey().equals(Key.IMPORT_STRATEGY)) {
-                    if (metadata.getValue().equalsIgnoreCase(
-                            ImportStrategy.SweArrayObservationWithSplitExtension.name())) {
-                        return ImportStrategy.SweArrayObservationWithSplitExtension;
-                    } else {
-                        return ImportStrategy.SingleObservation;
-                    }
-                }
-            }
-        }
-        return ImportStrategy.SingleObservation;
-    }
-
     public int getHunkSize() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
             for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
@@ -1339,13 +1313,25 @@ public class Configuration {
         return patterns.toArray(new Pattern[patterns.size()]);
     }
 
-    public boolean isInsertSweArrayObservationTimeoutBufferSet() {
-        return importConf.getSosMetadata().isSetInsertSweArrayObservationTimeoutBuffer();
+    public boolean isTimeoutBufferSet() {
+        return getAdditionalMetadata(Key.TIMEOUT_BUFFER) != null;
     }
 
-    public int getInsertSweArrayObservationTimeoutBuffer() {
-        if (isInsertSweArrayObservationTimeoutBufferSet()) {
-            return importConf.getSosMetadata().getInsertSweArrayObservationTimeoutBuffer();
+    private Metadata getAdditionalMetadata(Key.Enum key) {
+        if (!importConf.isSetAdditionalMetadata()) {
+            return null;
+        }
+        for (Metadata metadata : importConf.getAdditionalMetadata().getMetadataArray()) {
+            if (metadata.getKey().equals(key) && !metadata.getValue().isEmpty()) {
+                return metadata;
+            }
+        }
+        return null;
+    }
+
+    public int getTimeoutBuffer() {
+        if (isTimeoutBufferSet()) {
+            return Integer.parseInt(getAdditionalMetadata(Key.TIMEOUT_BUFFER).getValue());
         }
         throw new IllegalArgumentException(
                 "Attribute 'insertSweArrayObservationTimeoutBuffer' of <SosMetadata> not set.");
@@ -1358,25 +1344,14 @@ public class Configuration {
         return 1;
     }
 
-    public boolean isCsvParserDefined() {
-        return importConf.getCsvMetadata().isSetCsvParserClass() &&
-                !importConf.getCsvMetadata().getCsvParserClass().getStringValue().isEmpty();
-    }
-
-    public String getCsvParser() {
-        return isCsvParserDefined()
-                ? importConf.getCsvMetadata().getCsvParserClass().getStringValue()
-                : WrappedCSVParser.class.getName();
-    }
-
     public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
         return EPSG_EASTING_FIRST_MAP;
     }
 
     public boolean isIgnoreColumnMismatch() {
-        return importConf.getCsvMetadata().isSetCsvParserClass() &&
-                importConf.getCsvMetadata().getCsvParserClass().isSetIgnoreColumnCountMismatch() &&
-                importConf.getCsvMetadata().getCsvParserClass().getIgnoreColumnCountMismatch();
+        return importConf.getCsvMetadata().getObservationCollector() != null &&
+                importConf.getCsvMetadata().getObservationCollector().isSetIgnoreColumnCountMismatch() &&
+                importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch();
     }
 
     public boolean isOmParameterAvailableFor(int mVColumnId) {
@@ -1493,22 +1468,16 @@ public class Configuration {
     }
 
     public String getImporterClassName() {
-        // TODO change to collection of all classes implementing an interface and search for matching one
-        switch (getImportStrategy()) {
-            case SingleObservation:
-                return SingleObservationImporter.class.getName();
-            case SweArrayObservationWithSplitExtension:
-                return SweArrayObservationWithSplitExtensionImporter.class.getName();
-            default:
-                LOG.error("Not supported strategy given '{}'.", getImportStrategy());
-                return "";
+        if (!importConf.getSosMetadata().getImporter().isEmpty()) {
+            return importConf.getSosMetadata().getImporter();
+        } else {
+            return SingleObservationImporter.class.getName();
         }
     }
 
-    // FIXME improve loading here
     public String getCollectorClassName() {
-        if (importConf.getCsvMetadata().isSetObservationCollectorClass()) {
-            return importConf.getCsvMetadata().getObservationCollectorClass();
+        if (!importConf.getCsvMetadata().getObservationCollector().getStringValue().isEmpty()) {
+            return importConf.getCsvMetadata().getObservationCollector().getStringValue();
         } else if (isSamplingFile()) {
             return SampleBasedObservationCollector.class.getName();
         } else {
@@ -1641,6 +1610,20 @@ public class Configuration {
             return importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         } else {
             return new Column[0];
+        }
+    }
+
+    public boolean isCsvParserDefined() {
+        return importConf.getCsvMetadata().isSetCsvParser();
+    }
+
+    public String getCsvParser() {
+        if (isCsvParserDefined()) {
+            return importConf.getCsvMetadata().getCsvParser();
+        } else {
+            String parser = WrappedCSVParser.class.getName();
+            LOG.info("No <CsvMetadata><CsvParser> found. Using default '{}'.", parser);
+            return parser;
         }
     }
 }

@@ -8,11 +8,12 @@
 			<Encoding>UTF-8</Encoding>
 		</LocalFile>
 	</DataFile>
-	<SosMetadata insertSweArrayObservationTimeoutBuffer="25000">
+	<SosMetadata>
 		<URL>http://localhost:8080/52n-sos-webapp/service</URL>
 		<Offering generate="true" />
 		<Version>2.0.0</Version>
 		<Binding>POX</Binding>
+		<Importer>org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter</Importer>
 	</SosMetadata>
 	<CsvMetadata>
 		<ColumnAssignments>
@@ -165,8 +166,8 @@
 	       <Value>parent-feature-identifier</Value>
 	    </Metadata>
 		<Metadata>
-			<Key>IMPORT_STRATEGY</Key>
-			<Value>SweArrayObservationWithSplitExtension</Value>
+			<Key>TIMEOUT_BUFFER</Key>
+			<Value>25000</Value>
 		</Metadata>
 		<Metadata>
 			<Key>HUNK_SIZE</Key>

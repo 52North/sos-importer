@@ -203,9 +203,9 @@ public class ArcticSeaSosClient implements SosClient {
     public void setHttpClient(HttpClient client) {
         if (client == null) {
             SimpleHttpClient simpleClient = new SimpleHttpClient();
-            if (configuration.getInsertSweArrayObservationTimeoutBuffer() > 0) {
-                simpleClient.setConnectionTimout(configuration.getInsertSweArrayObservationTimeoutBuffer());
-                simpleClient.setSocketTimout(configuration.getInsertSweArrayObservationTimeoutBuffer());
+            if (configuration.getTimeoutBuffer() > 0) {
+                simpleClient.setConnectionTimout(configuration.getTimeoutBuffer());
+                simpleClient.setSocketTimout(configuration.getTimeoutBuffer());
             }
             this.client = simpleClient;
         } else {
