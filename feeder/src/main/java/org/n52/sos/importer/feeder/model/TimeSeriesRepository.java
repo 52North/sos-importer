@@ -54,20 +54,11 @@ public class TimeSeriesRepository {
 
     private Configuration configuration;
 
-    /**
-     * <p>Constructor for TimeSeriesRepository.</p>
-     *
-     */
     public TimeSeriesRepository(Configuration configuration) {
         repo = Maps.newHashMap();
         this.configuration = configuration;
     }
 
-    /**
-     * <p>addObservations.</p>
-     *
-     * @param ios the {@link InsertObservation}s to add using the array index as timeseries id
-     */
     public void addObservations(final InsertObservation[] ios) {
         for (InsertObservation io : ios) {
             final TimeSeriesId timeSeriesId = new TimeSeriesId(io);
@@ -78,13 +69,6 @@ public class TimeSeriesRepository {
         }
     }
 
-
-
-    /**
-     * <p>getTimeSeries.</p>
-     *
-     * @return a {@link java.util.Collection} object.
-     */
     public Collection<TimeSeries> getTimeSeries() {
         return repo.values();
     }
