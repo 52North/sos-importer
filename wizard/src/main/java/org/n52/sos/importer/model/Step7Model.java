@@ -207,7 +207,7 @@ public class Step7Model implements StepModel {
      * @param newVersion a {@link java.lang.String} object.
      */
     public void setSosVersion(final String newVersion) {
-        this.version = newVersion;
+        version = newVersion;
     }
 
     /**
@@ -225,7 +225,7 @@ public class Step7Model implements StepModel {
      * @param newBinding a {@link java.lang.String} object.
      */
     public void setSosBinding(final String newBinding) {
-        this.binding = newBinding;
+        binding = newBinding;
     }
 
     /**
