@@ -33,7 +33,6 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
-
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
@@ -51,8 +50,6 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
 
     private List<String> storedResultTemplates = new LinkedList<>();
 
-    private List<TimeSeries> failedTimeSeries = new LinkedList<>();
-
     @Override
     protected void insertAllTimeSeries(TimeSeriesRepository timeSeriesRepository)
             throws XmlException, IOException {
@@ -60,11 +57,6 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
         ONE_IMPORTER_LOCK.lock();
         try {
             timeSeriesRepository.getTimeSeries().parallelStream().forEach(new InsertTimeSeries(timeSeriesRepository));
-            // process failedTimeSeries
-            if (!failedTimeSeries.isEmpty()) {
-                // FIXME do something useful here
-                LOG.error("Not all timeseries could be imported: {}", failedObservations.toString());
-            }
         } finally {
             ONE_IMPORTER_LOCK.unlock();
         }
@@ -94,12 +86,12 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
                 LOG.error("Could not check for result template for '{}', '{}' at sos instance",
                         ts.getSensorURI(),
                         ts.getObservedProperty().getUri());
-                failedTimeSeries.add(ts);
+                failedObservations.addAll(ts.getInsertObservations());
                 return;
             }
             // insert result
             if (!sosClient.insertResult(ts)) {
-                failedTimeSeries.add(ts);
+                failedObservations.addAll(ts.getInsertObservations());
             }
         }
 
