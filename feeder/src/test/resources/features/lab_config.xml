@@ -71,10 +71,6 @@
                     <Key>TYPE</Key>
                     <Value>NUMERIC</Value>
                 </Metadata>
-                <Metadata>
-                    <Key>NO_DATA_VALUE</Key>
-                    <Value>---</Value>
-                </Metadata>
                 <RelatedObservedProperty>
                     <IdRef>property0815</IdRef>
                 </RelatedObservedProperty>
@@ -330,11 +326,17 @@
             <Value>50000</Value>
         </Metadata>
         <Sensor>
-            <ManualResource>
+            <GeneratedResource>
+                <ID>sensor965319032</ID>
+                <Number>0</Number>
+                <URI useAsPrefix="true">amonium_</URI>
+                <ConcatString>_</ConcatString>
+            </GeneratedResource>
+            <!-- <ManualResource>
                 <ID>sensor965319032</ID>
                 <URI>lab-amonium-sensor</URI>
                 <Name>lab-amonium-sensor</Name>
-            </ManualResource>
+            </ManualResource> -->
         </Sensor>
         <ObservedProperty>
             <ManualResource>
