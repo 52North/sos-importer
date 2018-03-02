@@ -82,7 +82,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
             }
             String[] line;
             processSampleStart();
-            skipLines(2);
+            skipLines(1);
             while ((line = parser.readNext()) != null && !stopped) {
                 if (!configuration.isLineIgnorable(line) &&
                         configuration.containsData(line) &&
