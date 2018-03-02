@@ -58,7 +58,7 @@ public class SimpleHttpClient implements HttpClient {
     private static final int DEFAULT_SOCKET_TIMEOUT = 30000;
     private static final ContentType CONTENT_TYPE_TEXT_XML = ContentType.create("text/xml", Consts.UTF_8);
 
-    //TODO is this retry policy okay for us?
+    // TODO is this retry policy okay for us?
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(ConnectException.class)
             .withDelay(10, TimeUnit.SECONDS)

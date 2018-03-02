@@ -79,6 +79,7 @@ import org.n52.shetland.ogc.ows.OwsOperation;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.ows.service.GetCapabilitiesResponse;
 import org.n52.shetland.ogc.ows.service.OwsServiceRequest;
+import org.n52.shetland.ogc.sensorML.SensorMLConstants;
 import org.n52.shetland.ogc.sensorML.elements.SmlCapabilities;
 import org.n52.shetland.ogc.sensorML.elements.SmlCapability;
 import org.n52.shetland.ogc.sensorML.elements.SmlIdentifier;
@@ -520,9 +521,7 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private SmlCapabilities createReferenceValueCapabilities(InsertSensor insertSensor) throws IOException {
-        // FIXME is this identifier available as SOS constant? yes, but dependency wanted?
-        // @see SensorMLConstants.ELEMENT_NAME_REFERENCE_VALUES
-        SmlCapabilities refValueCapabilities = new SmlCapabilities("referenceValues");
+        SmlCapabilities refValueCapabilities = new SmlCapabilities(SensorMLConstants.ELEMENT_NAME_REFERENCE_VALUES);
         for (Entry<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMapping :
             insertSensor.getReferenceValues().entrySet()) {
             for (SimpleEntry<String, String> refValueLabelAndValue : referenceValueMapping.getValue()) {

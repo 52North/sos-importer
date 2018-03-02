@@ -31,7 +31,6 @@ package org.n52.sos.importer.feeder.model;
 import java.util.Objects;
 
 /**
- *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public class TimeSeriesId {
@@ -40,18 +39,18 @@ public class TimeSeriesId {
     private final String sensor;
     private final String feature;
 
-    TimeSeriesId(InsertObservation io) {
-        this.feature = io.getFeatureOfInterestURI();
-        this.sensor = io.getSensorURI();
-        this.property = io.getObservedPropertyURI();
+    protected TimeSeriesId(InsertObservation io) {
+        property = io.getFeatureOfInterestURI();
+        sensor = io.getSensorURI();
+        feature = io.getObservedPropertyURI();
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.property);
-        hash = 41 * hash + Objects.hashCode(this.sensor);
-        hash = 41 * hash + Objects.hashCode(this.feature);
+        hash = 41 * hash + Objects.hashCode(property);
+        hash = 41 * hash + Objects.hashCode(sensor);
+        hash = 41 * hash + Objects.hashCode(feature);
         return hash;
     }
 
@@ -67,13 +66,13 @@ public class TimeSeriesId {
             return false;
         }
         final TimeSeriesId other = (TimeSeriesId) obj;
-        if (!Objects.equals(this.property, other.property)) {
+        if (!Objects.equals(property, other.property)) {
             return false;
         }
-        if (!Objects.equals(this.sensor, other.sensor)) {
+        if (!Objects.equals(sensor, other.sensor)) {
             return false;
         }
-        return Objects.equals(this.feature, other.feature);
+        return Objects.equals(feature, other.feature);
     }
 
 }
