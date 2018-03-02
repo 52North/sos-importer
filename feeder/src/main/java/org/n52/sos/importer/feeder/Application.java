@@ -142,7 +142,7 @@ public final class Application {
 
     /*
      * Prints the usage test to the Standard-Output.
-     * TODO if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
+     * if number of arguments increase --> use JOpt Simple: http://pholser.github.com/jopt-simple/
      */
     private static void showUsage() {
         LOG.trace("showUsage()");

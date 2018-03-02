@@ -35,13 +35,13 @@ import java.util.concurrent.CountDownLatch;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 
 /**
- * Interface for observation Collectors.<br>
- *
- * Should collect {@link InsertObservation}s from the given {@link DataFile}
- * data source. The results of this process are provided via the
+ * Interface for observation Collectors<br>
+ * <br>
+ * Collects {@link InsertObservation}s from the given {@link DataFile}.
+ * The results of this process <b>MUST</b> be provided via the
  * {@link FeedingContext#addObservationForImporting(InsertObservation...)} method.
  *
- * @author <a href="mailto:e.h.juerrens@52north.org">J6uuml;rrens, Eike Hinderk</a>
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  * @since 0.5.0
  * @see Importer
  * @see FeedingContext

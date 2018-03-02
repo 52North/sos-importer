@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * TODO add more log statements
  *
  * @author <a href="mailto:m.radtke@52north.org">Maurin Radtke</a>
- * @author <a href="mailto:e.h.juerrens@52north.org">J6uuml;rrens, Eike Hinderk</a>
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  */
 public class MultiFeederTask {
 

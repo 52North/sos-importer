@@ -123,7 +123,6 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timeStamp)) {
             return null;
         }
-        // TODO implement using different templates in later version depending on the class of value
         LOG.debug("Timestamp: {}", timeStamp);
         // SENSOR
         Sensor sensor = dataFile.getSensorForColumn(measureValueColumn, line);
@@ -133,10 +132,9 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         LOG.debug("Feature of Interest: {}", foi);
         // VALUE
         Object value = dataFile.getValue(measureValueColumn, line);
-        if (value.equals(Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE)) {
+        if (value == null || value.equals(Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE)) {
             return null;
         }
-        // TODO implement handling for value == null => skip observation and log it, or logging is done in getValue(..)
         LOG.debug("Value: {}", value.toString());
         // UOM CODE
         UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(measureValueColumn, line);
