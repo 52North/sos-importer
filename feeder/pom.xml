@@ -286,11 +286,59 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}-bin</finalName>
+                            <filters>
+					            <filter>
+					                <artifact>*:*</artifact>
+					                <excludes>
+					                    <exclude>META-INF/*.SF</exclude>
+					                    <exclude>META-INF/*.DSA</exclude>
+					                    <exclude>META-INF/*.RSA</exclude>
+					                </excludes>
+					            </filter>
+					        </filters>
+			                <transformers>
+			                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+			                        <mainClass>${mainclass.feeder}</mainClass>
+			                        <manifestEntries>
+			                            <build-time>${timestamp}</build-time>
+			                            <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
+			                            <n52-arctic-sea-version>${version.arctic-sea}}</n52-arctic-sea-version>
+			                            <n52-common-xml-version>${version.common-xml}</n52-common-xml-version>
+			                            <geotools-version>${version.geotools}}</geotools-version>
+			                            <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+			                            <Implementation-Vendor>52°North</Implementation-Vendor>
+			                            <Implementation-URL>${project.url}</Implementation-URL>
+			                            <Implementation-Title>${project.name}</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                        <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+			                        </manifestEntries>
+			                    </transformer>
+			                    <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+			                        <resource>META-INF/spring.handlers</resource>
+			                    </transformer>
+			                    <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+			                        <resource>META-INF/spring.schemas</resource>
+			                    </transformer>
+			                </transformers>
+			            </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-<!--                    <descriptorRefs>-->
-<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
-<!--                    </descriptorRefs>-->
                     <descriptors>
                         <descriptor>assembly.xml</descriptor>
                     </descriptors>
@@ -305,8 +353,10 @@
                         <manifestEntries>
                             <build-time>${timestamp}</build-time>
                             <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                            <n52-oxf-version>${oxf.version}</n52-oxf-version>
-                            <geotools-version>${geotools.version}</geotools-version>
+                            <n52-arctic-sea-version>${version.arctic-sea}}</n52-arctic-sea-version>
+                            <n52-common-xml-version>${version.common-xml}</n52-common-xml-version>
+                            <geotools-version>${version.geotools}}</geotools-version>
+                            
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -319,7 +369,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
 </project>

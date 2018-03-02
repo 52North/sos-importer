@@ -35,15 +35,17 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
+        <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
         <version.common-xml>2.4.0</version.common-xml>
         <version.geotools>18.2</version.geotools>
         <version.arctic-sea>4.0.0</version.arctic-sea>
         <version.springframework>4.3.12.RELEASE</version.springframework>
+        <project.url>https://github.com/52North/sos-importer</project.url>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/52North/sos-importer.git</developerConnection>
-        <url>https://github.com/52North/sos-importer</url>
+        <url>${project.url}</url>
         <tag>HEAD</tag>
     </scm>
     <!-- here the repositories where this project should deployed to -->
