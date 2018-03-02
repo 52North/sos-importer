@@ -457,8 +457,9 @@ public class ArcticSeaSosClient implements SosClient {
         return capabilitiesCache.isPresent();
     }
 
-    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor) throws IOException,
-    InvalidSridException, NumberFormatException, NoSuchAuthorityCodeException, ParseException, FactoryException {
+    private InsertSensorRequest createInsertSensorRequest(InsertSensor insertSensor)
+            throws IOException, InvalidSridException, NumberFormatException, NoSuchAuthorityCodeException,
+            ParseException, FactoryException {
 
         SosInsertionMetadata metadata = new SosInsertionMetadata();
         metadata.setFeatureOfInterestTypes(CollectionHelper.list(
