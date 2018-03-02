@@ -686,6 +686,8 @@ public class ArcticSeaSosClient implements SosClient {
             }
         }
 
+        omObservation.setIdentifier(insertObservation.getTimeStamp() +  insertObservation.getObservedPropertyURI() +
+                insertObservation.getFeatureOfInterestURI());
         return Arrays.asList(omObservation);
     }
 
