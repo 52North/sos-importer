@@ -116,18 +116,23 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                         }
                     }
                     // insert observation
-                    final String observationId = sosClient.insertSweArrayObservation(timeSeries);
-                    if (observationId == null || observationId.equalsIgnoreCase("")) {
-                        LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
-                                timeSeries.getSensorName(),
-                                timeSeries.getSensorURI(),
-                                timeSeries));
+                    try {
+                        final String observationId = sosClient.insertSweArrayObservation(timeSeries);
+                        if (observationId == null || observationId.equalsIgnoreCase("")) {
+                            LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
+                                    timeSeries.getSensorName(),
+                                    timeSeries.getSensorURI(),
+                                    timeSeries));
+                            failedObservations.addAll(timeSeries.getInsertObservations());
+                        } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
+                            LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
+                                    timeSeries));
+                        } else if (configuration.isUseLastTimestamp()) {
+                            newLastUsedTimestamp = timeSeries.getYoungestTimestamp();
+                        }
+                    } catch (Exception e) {
                         failedObservations.addAll(timeSeries.getInsertObservations());
-                    } else if (observationId.equals(Configuration.SOS_OBSERVATION_ALREADY_CONTAINED)) {
-                        LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
-                                timeSeries));
-                    } else if (configuration.isUseLastTimestamp()) {
-                        newLastUsedTimestamp = timeSeries.getYoungestTimestamp();
+                        throw e;
                     }
                 }
             if (context.shouldUpdateLastUsedTimestamp(newLastUsedTimestamp)) {
