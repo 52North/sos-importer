@@ -70,8 +70,12 @@ public class MultiFeederTask {
     }
 
     public void startFeeding() {
-        int periodInMillis = period * 60 * 1000;
-        new Timer("multi-feeder-task").scheduleAtFixedRate(new PeriodicMultiFeederTask(), 0, periodInMillis);
+        if (period > 0) {
+            int periodInMillis = period * 60 * 1000;
+            new Timer("multi-feeder-task").scheduleAtFixedRate(new PeriodicMultiFeederTask(), 0, periodInMillis);
+        } else {
+            new PeriodicMultiFeederTask().run();
+        }
     }
 
     private class PeriodicMultiFeederTask extends TimerTask {

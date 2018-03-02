@@ -155,7 +155,8 @@ public final class Application {
                 .append("-m directory period threads:\n")
                 .append("            'directory' path containing configuration XML files that\n")
                 .append("            are every 'period' of minutes submitted as FeedingTasks\n")
-                .append("            into a ThreadPool of size 'threads'.")
+                .append("            into a ThreadPool of size 'threads'. A period < 1 results\n")
+                .append("            in a ontime run of the multi feeder.")
                 .toString());
     }
 
