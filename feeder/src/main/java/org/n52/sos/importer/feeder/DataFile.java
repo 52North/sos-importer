@@ -225,7 +225,7 @@ public class DataFile {
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link Sensor} object.
      */
-    public Sensor getSensorForColumn(int mvColumnId, String[] values) {
+    public Sensor getSensor(int mvColumnId, String[] values) {
         LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
         // check for sensor column and return new sensor
         Sensor sensor = getSensorFromColumn(mvColumnId, values);

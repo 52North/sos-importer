@@ -184,7 +184,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
         // TODO implement using different templates in later version depending on the class of value
         LOG.debug("Timestamp: {}", timeStamp);
         // SENSOR
-        final Sensor sensor = dataFile.getSensorForColumn(measureValueColumn, line);
+        final Sensor sensor = dataFile.getSensor(measureValueColumn, line);
         LOG.debug("Sensor: {}", sensor);
         // FEATURE OF INTEREST incl. Position
         final FeatureOfInterest foi = dataFile.getFoiForColumn(measureValueColumn, line);

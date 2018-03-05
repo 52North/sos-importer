@@ -125,7 +125,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         }
         LOG.debug("Timestamp: {}", timeStamp);
         // SENSOR
-        Sensor sensor = dataFile.getSensorForColumn(measureValueColumn, line);
+        Sensor sensor = dataFile.getSensor(measureValueColumn, line);
         LOG.debug("Sensor: {}", sensor);
         // FEATURE OF INTEREST incl. Position
         FeatureOfInterest foi = dataFile.getFoiForColumn(measureValueColumn, line);
