@@ -480,7 +480,8 @@ public class ArcticSeaSosClient implements SosClient {
             output.setIoValue(createSweType(
                     insertSensor.getMeasuredValueType(observedProperty),
                     insertSensor.getUnitOfMeasurementCode(observedProperty),
-                    observedProperty.getUri()));
+                    observedProperty.getUri().toString(),
+                    observedProperty.getName()));
             outputs.add(output);
         }
 
