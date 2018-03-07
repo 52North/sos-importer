@@ -616,7 +616,7 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private SweAbstractDataComponent createSweType(String measuredValueType, String unitOfMeasurementCode,
-            String definition) {
+            String definition, String label) {
         SweAbstractDataComponent sweType;
         switch (measuredValueType) {
             case Configuration.SOS_OBSERVATION_TYPE_TEXT:
@@ -634,6 +634,7 @@ public class ArcticSeaSosClient implements SosClient {
                 ((SweQuantity) sweType).setUom(unitOfMeasurementCode);
         }
         sweType.setDefinition(definition);
+        sweType.setLabel(label);
         return sweType;
     }
 
@@ -722,7 +723,8 @@ public class ArcticSeaSosClient implements SosClient {
                 createSweType(
                         first.getMeasuredValueType(),
                         first.getUnitOfMeasurementCode(),
-                        first.getObservedPropertyURI()));
+                        first.getObservedPropertyURI().toString(),
+                        first.getObservedProperty().getName()));
     }
 
     private SweField createSwePhenomenonTimeField() {
@@ -759,7 +761,8 @@ public class ArcticSeaSosClient implements SosClient {
                 timeseries.getObservedProperty().getUri(),
                 createSweType(timeseries.getMeasuredValueType(),
                         timeseries.getUnitOfMeasurementCode(),
-                        timeseries.getObservedProperty().getUri()));
+                        timeseries.getObservedProperty().getUri().toString(),
+                        timeseries.getObservedProperty().getName()));
 
         SweDataRecord dataRecord = new SweDataRecord();
         dataRecord.addField(timestampField);
