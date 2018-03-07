@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder.importer;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ResultHandlingImporter extends SweArrayObservationWithSplitExtensio
 
         private boolean registerSensor(TimeSeries ts) {
             // OPTIONAL: register/insertSensor
-            SimpleEntry<String, String> insertSensorResult = null;
+            SimpleEntry<URI, URI> insertSensorResult = null;
             try {
                 insertSensorResult =
                         sosClient.insertSensor(timeSeriesRepository.getInsertSensor(ts.getSensorURI()));

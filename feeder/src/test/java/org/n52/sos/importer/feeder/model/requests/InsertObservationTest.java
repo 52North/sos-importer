@@ -46,7 +46,7 @@ public class InsertObservationTest {
     public void shouldReturnTrueIfAltitudeIsAvailable() {
         double alt = 2.0;
         FeatureOfInterest foi =
-                new FeatureOfInterest(null, null,
+                new FeatureOfInterest(null, "uri",
                         new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
         InsertObservation insertObservation =
                 new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
@@ -57,7 +57,7 @@ public class InsertObservationTest {
     @Test
     public void shouldReturnFalseIfAltitudeIsNotAvailable() {
         FeatureOfInterest foi =
-                new FeatureOfInterest(null, null,
+                new FeatureOfInterest(null, "uri",
                         new Position(
                                 new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},
                                 new String[] {DEG, DEG, null},
@@ -79,7 +79,7 @@ public class InsertObservationTest {
 
     @Test
     public void shouldReturnTrueIfParentFeatureIdentifierIsSet() {
-        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        FeatureOfInterest foi = new FeatureOfInterest(null, "uri", null);
         foi.setParentFeature(DEG);
 
         InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
@@ -91,7 +91,7 @@ public class InsertObservationTest {
 
     @Test
     public void shouldReturnFalseIfParentFeatureIdentifierIsNullOrEmpty() {
-        FeatureOfInterest foi = new FeatureOfInterest(null, null, null);
+        FeatureOfInterest foi = new FeatureOfInterest(null, "uri", null);
         foi.setParentFeature(null);
 
         InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);

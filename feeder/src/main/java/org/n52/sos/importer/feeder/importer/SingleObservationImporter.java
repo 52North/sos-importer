@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder.importer;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +80,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
                                             getMeasuredValueTypes(io.getSensorURI(), insertObservations),
                                             getUnitsOfMeasurement(io.getSensorURI(), insertObservations),
                                             configuration.getReferenceValues(io.getSensorURI()));
-                                    assignedSensorId = sosClient.insertSensor(insertSensor).getKey();
+                                    assignedSensorId = sosClient.insertSensor(insertSensor).getKey().toString();
                                 } catch (XmlException | IOException | EncodingException e) {
                                     log(e);
                                 }
@@ -127,10 +128,10 @@ public class SingleObservationImporter extends ImporterSkeleton {
         });
     }
 
-    private Collection<ObservedProperty> getObservedProperties(String sensorURI, InsertObservation[] ios) {
+    private Collection<ObservedProperty> getObservedProperties(URI sensorURI, InsertObservation[] ios) {
         Set<ObservedProperty> observedProperties = new HashSet<>(ios.length);
         for (InsertObservation insertObservation : ios) {
-            if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
+            if (insertObservation.getSensorURI().equals(sensorURI)) {
                 observedProperties.add(insertObservation.getObservedProperty());
             }
         }
@@ -139,10 +140,10 @@ public class SingleObservationImporter extends ImporterSkeleton {
         return observedProperties;
     }
 
-    private Map<ObservedProperty, String> getMeasuredValueTypes(String sensorURI, InsertObservation[] ios) {
+    private Map<ObservedProperty, String> getMeasuredValueTypes(URI sensorURI, InsertObservation[] ios) {
         Map<ObservedProperty, String> measuredValueTypes = new HashMap<>(ios.length);
         for (InsertObservation insertObservation : ios) {
-            if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
+            if (insertObservation.getSensorURI().equals(sensorURI)) {
                 measuredValueTypes.put(
                         insertObservation.getObservedProperty(),
                         insertObservation.getMeasuredValueType());
@@ -153,10 +154,10 @@ public class SingleObservationImporter extends ImporterSkeleton {
         return measuredValueTypes;
     }
 
-    private Map<ObservedProperty, String> getUnitsOfMeasurement(String sensorURI, InsertObservation[] ios) {
+    private Map<ObservedProperty, String> getUnitsOfMeasurement(URI sensorURI, InsertObservation[] ios) {
         Map<ObservedProperty, String> unitsOfMeasurement = new HashMap<>(ios.length);
         for (InsertObservation insertObservation : ios) {
-            if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI)) {
+            if (insertObservation.getSensorURI().equals(sensorURI)) {
                 unitsOfMeasurement.put(
                         insertObservation.getObservedProperty(),
                         insertObservation.getUnitOfMeasurementCode());

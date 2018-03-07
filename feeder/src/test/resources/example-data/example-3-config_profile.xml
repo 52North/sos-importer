@@ -248,42 +248,42 @@
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-2</ID>
-                <URI>Degree Celsius</URI>
+                <URI>Degree_Celsius</URI>
                 <Name>degC</Name>
             </ManualResource>
         </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-3</ID>
-                <URI>MicroSiemens per Centimeter</URI>
+                <URI>MicroSiemens-per-Centimeter</URI>
                 <Name>µs/cm</Name>
             </ManualResource>
         </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-4</ID>
-                <URI>MicroSiemens per Centimeter</URI>
+                <URI>MicroSiemens-per-Centimeter</URI>
                 <Name>µs/cm</Name>
             </ManualResource>
         </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-5</ID>
-                <URI>Practical Salinity Scale</URI>
+                <URI>Practical-Salinity-Scale</URI>
                 <Name>PSS</Name>
             </ManualResource>
         </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-6</ID>
-                <URI>Meters per Second</URI>
+                <URI>Meters-per-Second</URI>
                 <Name>m/s</Name>
             </ManualResource>
         </UnitOfMeasurement>
         <UnitOfMeasurement>
             <ManualResource>
                 <ID>uom-7</ID>
-                <URI>Kilograms per Cubic Meter</URI>
+                <URI>Kilograms-per-Cubic-Meter</URI>
                 <Name>kg/m3</Name>
             </ManualResource>
         </UnitOfMeasurement>

@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder.collector;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -116,7 +117,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
 
     @Override
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
-            throws ParseException {
+            throws ParseException, URISyntaxException {
         LOG.trace("getInsertObservationForMeasuredValue(..)");
         // TIMESTAMP
         Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);

@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.concurrent.CountDownLatch;
 
@@ -51,7 +52,8 @@ public interface Collector {
 
     void setConfiguration(Configuration configuration);
 
-    void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException, ParseException;
+    void collectObservations(DataFile dataFile, CountDownLatch latch)
+            throws IOException, ParseException, URISyntaxException;
 
     void setFeedingContext(FeedingContext context);
 

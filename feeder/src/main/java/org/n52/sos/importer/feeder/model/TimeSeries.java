@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,10 +42,10 @@ public class TimeSeries {
 
     public static final String OBSERVED_PROPERTY_NOT_SET_CONST = "OBSERVED_PROPERTY_NOT_SET";
 
-    public static final String SENSOR_ID_NOT_SET = "SENSOR_ID_NOT_SET";
+    public static final URI SENSOR_ID_NOT_SET = URI.create("SENSOR_ID_NOT_SET");
 
     public static final ObservedProperty OBSERVED_PROPERTY_NOT_SET =
-            new ObservedProperty(OBSERVED_PROPERTY_NOT_SET_CONST, OBSERVED_PROPERTY_NOT_SET_CONST);
+            new ObservedProperty(OBSERVED_PROPERTY_NOT_SET_CONST, "property-not-set");
 
     public static final String UOM_CODE_NOT_SET = "UOM_CODE_NOT_SET";
 
@@ -58,12 +59,12 @@ public class TimeSeries {
         return timeseries.add(insertObservation);
     }
 
-    public String getSensorURI() {
+    public URI getSensorURI() {
         if (timeseries.isEmpty()) {
             return SENSOR_ID_NOT_SET;
         }
-        final String sensorURI = timeseries.getFirst().getSensorURI();
-        if (sensorURI == null || sensorURI.isEmpty()) {
+        final URI sensorURI = timeseries.getFirst().getSensorURI();
+        if (sensorURI == null || sensorURI.toString().isEmpty()) {
             return SENSOR_ID_NOT_SET;
         }
         return sensorURI;

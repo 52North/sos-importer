@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -206,7 +207,7 @@ public class DataFile {
         return configuration.getFirstLineWithData();
     }
 
-    public Sensor getSensor(int mvColumnId, String[] values) {
+    public Sensor getSensor(int mvColumnId, String[] values) throws URISyntaxException {
         LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
         // check for sensor column and return new sensor
         Sensor sensor = getSensorFromColumn(mvColumnId, values);
@@ -242,8 +243,7 @@ public class DataFile {
             } else if (sensorType.getResource() instanceof ManualResourceType) {
                 // manual sensor
                 ManualResourceType mRT = (ManualResourceType) sensorType.getResource();
-                sensor = new Sensor(mRT.getName(),
-                        mRT.getURI().getStringValue());
+                sensor = new Sensor(mRT.getName(), mRT.getURI().getStringValue());
             }
         }
         return sensor;
@@ -305,9 +305,7 @@ public class DataFile {
                 // manual foi
                 SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
                 Position p = getPosition(mSRT.getPosition(), values);
-                foi = new FeatureOfInterest(mSRT.getName(),
-                        mSRT.getURI().getStringValue(),
-                        p);
+                foi = new FeatureOfInterest(mSRT.getName(), mSRT.getURI().getStringValue(), p);
             }
         }
         if (!NcName.isValid(foi.getName())) {
@@ -833,7 +831,7 @@ public class DataFile {
         return result;
     }
 
-    private Sensor getSensorFromColumn(int mvColumnId, String[] values) {
+    private Sensor getSensorFromColumn(int mvColumnId, String[] values) throws URISyntaxException {
         LOG.trace(String.format("getSensorColumn(%d,%s)",
                 mvColumnId,
                 Arrays.toString(values)));
@@ -1012,7 +1010,8 @@ public class DataFile {
         return configuration.getDataFileEncoding();
     }
 
-    public Optional<List<NamedValue<?>>> getOmParameters(int mVColumnId, String[] values) {
+    public Optional<List<NamedValue<?>>> getOmParameters(int mVColumnId, String[] values)
+            throws NumberFormatException, URISyntaxException {
         if (mVColumnId < 0 || values == null || values.length == 0) {
             return Optional.empty();
         }
@@ -1037,8 +1036,12 @@ public class DataFile {
                         break;
                     case NUMERIC:
                         NamedValue<BigDecimal> quantityParameter = new NamedValue<>();
-                        quantityParameter.setValue(new QuantityValue(Double.parseDouble(values[col.getNumber()]),
-                                getUnitOfMeasurement(col.getNumber(), values).getUri()));
+                        quantityParameter.setValue(
+                                new QuantityValue(
+                                        Double.parseDouble(values[col.getNumber()]),
+                                        getUnitOfMeasurement(col.getNumber(), values).getUri().toString()
+                                        )
+                                );
                         quantityParameter.setName(new ReferenceType(getOmParameterName(col)));
                         omParameters.add(quantityParameter);
                         break;

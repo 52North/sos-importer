@@ -33,9 +33,7 @@ public final class FeatureOfInterest extends Resource {
     private Position position;
     private String parentFeatureIdentifier;
 
-    public FeatureOfInterest(String name,
-            String uri,
-            Position p) {
+    public FeatureOfInterest(String name, String uri, Position p) {
         super(name, uri);
         position = p;
     }

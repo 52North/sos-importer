@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
 import java.util.Objects;
 
 /**
@@ -35,9 +36,9 @@ import java.util.Objects;
  */
 public class TimeSeriesId {
 
-    private final String property;
-    private final String sensor;
-    private final String feature;
+    private final URI property;
+    private final URI sensor;
+    private final URI feature;
 
     protected TimeSeriesId(InsertObservation io) {
         property = io.getFeatureOfInterestURI();

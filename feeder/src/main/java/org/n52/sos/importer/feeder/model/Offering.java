@@ -35,7 +35,7 @@ package org.n52.sos.importer.feeder.model;
  */
 public class Offering extends Resource {
 
-    public Offering(final String name, final String uri) {
+    public Offering(String name, String uri) {
         super(name, uri);
     }
 

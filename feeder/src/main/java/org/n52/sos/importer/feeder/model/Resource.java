@@ -28,6 +28,10 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
+
+import org.n52.janmayen.NcName;
+
 /**
  * <p>Abstract Resource class.</p>
  *
@@ -37,11 +41,16 @@ public abstract class Resource {
 
     private String name;
 
-    private String uri;
+    private URI uri;
 
     public Resource(String name, String uri) {
         this.name = name;
-        this.uri = uri;
+        this.uri = URI.create(NcName.makeValid(uri.replace(",", "_")));
+    }
+
+    public Resource(Resource res) {
+        name = res.getName();
+        uri = res.getUri();
     }
 
     public String getName() {
@@ -52,7 +61,7 @@ public abstract class Resource {
         this.name = name;
     }
 
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
@@ -68,8 +77,8 @@ public abstract class Resource {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (uri == null ? 0 : uri.hashCode());
         return result;
     }
 

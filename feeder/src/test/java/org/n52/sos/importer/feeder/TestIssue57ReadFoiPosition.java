@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 
 import org.apache.xmlbeans.XmlException;
@@ -51,7 +52,7 @@ public class TestIssue57ReadFoiPosition {
 
 
     @Test
-    public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
+    public void testGetFoiForColumn() throws XmlException, IOException, ParseException, URISyntaxException {
         // given
         final Configuration config = new Configuration("src/test/resources/issue-057/data_config.xml");
         DataFile dataFile = new DataFile(config, config.getDataFile());
@@ -66,7 +67,7 @@ public class TestIssue57ReadFoiPosition {
         // then
         final String deg = "deg";
         Assert.assertThat(foi.getPosition(), Is.is(IsNull.notNullValue()));
-        Assert.assertThat(foi.getUri(), Is.is(foiId));
+        Assert.assertThat(foi.getUri().toString(), Is.is(foiId));
         Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
         Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
         Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));

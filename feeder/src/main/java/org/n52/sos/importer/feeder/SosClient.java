@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.AbstractMap.SimpleEntry;
 
 import org.apache.xmlbeans.XmlException;
@@ -50,9 +51,9 @@ public interface SosClient {
 
     boolean isInstanceTransactional();
 
-    boolean isSensorRegistered(String sensorURI);
+    boolean isSensorRegistered(URI sensorURI);
 
-    SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
+    SimpleEntry<URI, URI> insertSensor(InsertSensor insertSensor)
             throws XmlException, IOException, EncodingException;
 
     String insertObservation(InsertObservation insertObservation) throws IOException;
@@ -63,7 +64,7 @@ public interface SosClient {
 
     void setConfiguration(Configuration configuration) throws MalformedURLException;
 
-    boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException;
+    boolean isResultTemplateRegistered(URI sensorURI, URI observedPropertyUri) throws EncodingException;
 
     String insertResultTemplate(TimeSeries timeseries);
 

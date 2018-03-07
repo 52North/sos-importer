@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +55,7 @@ public class DataFileTest {
             new String[]{"0", "52", "42.0", "true", "test-text", "test-category"};
 
     @Test
-    public void shouldReturnEmptyListIfNothingIsAvailable() throws XmlException, IOException {
+    public void shouldReturnEmptyListIfNothingIsAvailable() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
 
@@ -71,7 +72,7 @@ public class DataFileTest {
     }
 
     @Test
-    public void shouldReturnBooleanParameter() throws XmlException, IOException {
+    public void shouldReturnBooleanParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
@@ -94,7 +95,7 @@ public class DataFileTest {
     }
 
     @Test
-    public void shouldReturnCountParameter() throws XmlException, IOException {
+    public void shouldReturnCountParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
@@ -110,7 +111,7 @@ public class DataFileTest {
     }
 
     @Test
-    public void shouldReturnQuantityParameter() throws XmlException, IOException {
+    public void shouldReturnQuantityParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
@@ -128,7 +129,7 @@ public class DataFileTest {
     }
 
     @Test
-    public void shouldReturnTextParameter() throws XmlException, IOException {
+    public void shouldReturnTextParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
@@ -144,7 +145,7 @@ public class DataFileTest {
     }
 
     @Test
-    public void shouldReturnCategoryParameter() throws XmlException, IOException {
+    public void shouldReturnCategoryParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
@@ -161,7 +162,7 @@ public class DataFileTest {
 
     @Test
     public void shouldReturnFeatureOfInterestWithParentFeatureIdentifier()
-            throws XmlException, IOException, ParseException {
+            throws XmlException, IOException, ParseException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
 
@@ -175,7 +176,7 @@ public class DataFileTest {
 
     @Test
     public void shouldReturnFeatureOfInterest()
-            throws XmlException, IOException, ParseException {
+            throws XmlException, IOException, ParseException, URISyntaxException {
         Configuration configuration =
                 new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
 
@@ -185,7 +186,7 @@ public class DataFileTest {
                                 "12/24/2002 12.40 PM"});
 
         Assert.assertThat(featureOfInterest.getName(), Is.is("feature"));
-        Assert.assertThat(featureOfInterest.getUri(), Is.is("feature"));
+        Assert.assertThat(featureOfInterest.getUri().toString(), Is.is("feature"));
         Assert.assertThat(featureOfInterest.getPosition(), Is.is(Matchers.notNullValue()));
         Position position = featureOfInterest.getPosition();
         Assert.assertThat(position.getEpsgCode(), Is.is(4326));

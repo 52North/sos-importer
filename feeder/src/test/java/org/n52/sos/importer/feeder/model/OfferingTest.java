@@ -28,21 +28,23 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
+
 import org.junit.Test;
 
 public class OfferingTest {
 
     @Test
-    public void should_set_name_for_offering() {
+    public void shouldSetNameForOffering() {
         final String name = "name";
-        final Offering offering = new Offering(name, null);
+        final Offering offering = new Offering(name, "offering");
         org.junit.Assert.assertThat(offering.getName(), org.hamcrest.CoreMatchers.is(name));
     }
 
     @Test
-    public void should_set_uri_for_offering() {
-        final String uri = "uri";
-        final Offering offering = new Offering(null, uri);
+    public void shouldSetUriForOffering() {
+        final URI uri = URI.create("uri");
+        final Offering offering = new Offering(null, uri.toString());
         org.junit.Assert.assertThat(offering.getUri(), org.hamcrest.CoreMatchers.is(uri));
     }
 }

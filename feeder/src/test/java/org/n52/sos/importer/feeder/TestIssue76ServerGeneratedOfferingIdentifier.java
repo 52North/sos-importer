@@ -29,7 +29,6 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
-
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -52,9 +51,9 @@ public class TestIssue76ServerGeneratedOfferingIdentifier {
         Assert.assertThat(sensor.getName(), Matchers.not(offering.getName()));
         Assert.assertThat(sensor.getUri(), Matchers.not(offering.getUri()));
         Assert.assertThat(offering.getName(), Matchers.startsWith(sensor.getName()));
-        Assert.assertThat(offering.getUri(), Matchers.startsWith(sensor.getUri()));
+        Assert.assertThat(offering.getUri().toString(), Matchers.startsWith(sensor.getUri().toString()));
         Assert.assertThat(offering.getName(), Matchers.is("test-sensor-name-offering"));
-        Assert.assertThat(offering.getUri(), Matchers.is("test-sensor-uri-offering"));
+        Assert.assertThat(offering.getUri().toString(), Matchers.is("test-sensor-uri-offering"));
     }
 
 }

@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +81,7 @@ public class InsertObservation {
         return sensor.getName();
     }
 
-    public String getSensorURI() {
+    public URI getSensorURI() {
         return sensor.getUri();
     }
 
@@ -88,11 +89,11 @@ public class InsertObservation {
         return featureOfInterest.getName();
     }
 
-    public String getFeatureOfInterestURI() {
+    public URI getFeatureOfInterestURI() {
         return featureOfInterest.getUri();
     }
 
-    public String getObservedPropertyURI() {
+    public URI getObservedPropertyURI() {
         return observedProperty.getUri();
     }
 

@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder.collector;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +63,8 @@ public class SingleProfileCollector extends CollectorSkeleton {
     private FeatureOfInterest foi;
 
     @Override
-    public void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException, ParseException {
+    public void collectObservations(DataFile dataFile, CountDownLatch latch)
+            throws IOException, ParseException, URISyntaxException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
             return;
@@ -108,7 +110,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
         }
     }
 
-    private void processSampleStart() throws IOException {
+    private void processSampleStart() throws IOException, URISyntaxException {
         String[] line;
         // long, lat, alt
         double[] values = new double[3];
@@ -148,7 +150,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
 
     @Override
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
-            throws ParseException {
+            throws ParseException, URISyntaxException {
         // TIMESTAMP
         if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timestamp)) {
             return null;

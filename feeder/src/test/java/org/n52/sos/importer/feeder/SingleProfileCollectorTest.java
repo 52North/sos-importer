@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.concurrent.CountDownLatch;
 
@@ -48,7 +49,7 @@ public class SingleProfileCollectorTest {
     InsertObservation[] insertObservations;
 
     @Before
-    public void setUpTestData() throws IOException, ParseException, XmlException {
+    public void setUpTestData() throws IOException, ParseException, XmlException, URISyntaxException {
         SingleProfileCollector collector = new SingleProfileCollector();
         Configuration configuration = new Configuration("src/test/resources/example-data/example-3-config_profile.xml");
         collector.setConfiguration(configuration);
@@ -65,7 +66,7 @@ public class SingleProfileCollectorTest {
         InsertObservation insertObservation = insertObservations[0];
         Assert.assertThat(insertObservation, Matchers.notNullValue());
         Assert.assertThat(insertObservation.getFeatureOfInterestName(), Is.is("profile-observation-at--25_1450175--48_8652158"));
-        Assert.assertThat(insertObservation.getFeatureOfInterestURI(), Is.is("profile-observation-at--25_1450175--48_8652158"));
+        Assert.assertThat(insertObservation.getFeatureOfInterestURI().toString(), Is.is("profile-observation-at--25_1450175--48_8652158"));
         Assert.assertThat(insertObservation.hasFeatureParentFeature(), Is.is(true));
         Assert.assertThat(insertObservation.getParentFeatureIdentifier(), Is.is("profile-parent-feature"));
         Assert.assertThat(insertObservation.getEpsgCode(), Is.is("4326"));
@@ -74,7 +75,7 @@ public class SingleProfileCollectorTest {
         Assert.assertThat(insertObservation.getAltitudeValue(), Is.is(790.719970703125));
         Assert.assertThat(insertObservation.getTimeStamp(), Is.is(new Timestamp("2013-03-12T18:52:11+00:00")));
         Assert.assertThat(insertObservation.getSensorName(), Is.is("CC1305009"));
-        Assert.assertThat(insertObservation.getSensorURI(), Is.is("CC1305009"));
+        Assert.assertThat(insertObservation.getSensorURI().toString(), Is.is("CC1305009"));
     }
 
     @Test
@@ -86,9 +87,9 @@ public class SingleProfileCollectorTest {
         Assert.assertThat(io.getUnitOfMeasurementCode(), Is.is("µs/cm"));
         Assert.assertThat(io.getResultValue(), Is.is(65.400440916474579));
         Assert.assertThat(io.getObservedProperty().getName(), Is.is("Conductivity"));
-        Assert.assertThat(io.getObservedProperty().getUri(), Is.is("Conductivity"));
-        Assert.assertThat(io.getOffering().getUri(), Is.is("CC1305009-offering"));
-        Assert.assertThat(io.getOffering().getName(), Is.is("CC1305009_offering"));
+        Assert.assertThat(io.getObservedProperty().getUri().toString(), Is.is("Conductivity"));
+        Assert.assertThat(io.getOffering().getUri().toString(), Is.is("CC1305009-offering"));
+        Assert.assertThat(io.getOffering().getName(), Is.is("CC1305009-offering"));
     }
 
     private class MyFeedingContext implements FeedingContext {

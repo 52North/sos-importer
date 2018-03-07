@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +169,7 @@ public class ArcticSeaSosClient implements SosClient {
 
     private static final Lock INSERT_SENSOR_LOCK = new ReentrantLock(true);
 
-    private static Map<String, String> INSERTED_SENSORS = new ConcurrentSkipListMap<>();
+    private static Map<URI, URI> INSERTED_SENSORS = new ConcurrentSkipListMap<>();
 
     private HttpClient client;
 
@@ -283,18 +284,18 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     @Override
-    public boolean isSensorRegistered(String sensorURI) {
+    public boolean isSensorRegistered(URI sensorURI) {
         return checkCache() &&
                 capabilitiesCache.get().getContents().isPresent() &&
                 !capabilitiesCache.get().getContents().get().stream()
                 .map(o -> o.getProcedures().first())
-                .filter(s -> s.equals(sensorURI))
+                .filter(s -> s.equals(sensorURI.toString()))
                 .collect(Collectors.toList())
                 .isEmpty() || INSERTED_SENSORS.containsKey(sensorURI);
     }
 
     @Override
-    public SimpleEntry<String, String> insertSensor(InsertSensor insertSensor)
+    public SimpleEntry<URI, URI> insertSensor(InsertSensor insertSensor)
             throws XmlException, IOException, EncodingException {
         INSERT_SENSOR_LOCK.lock();
         try {
@@ -307,9 +308,9 @@ public class ArcticSeaSosClient implements SosClient {
                     HttpResponse response = client.executePost(uri, encodeRequest(request));
                     Object decodeResponse = decodeResponse(response);
                     if (decodeResponse.getClass().isAssignableFrom(InsertSensorResponse.class)) {
-                        SimpleEntry<String, String> insertedSensor = new SimpleEntry<>(
-                                ((InsertSensorResponse) decodeResponse).getAssignedProcedure(),
-                                ((InsertSensorResponse) decodeResponse).getAssignedOffering());
+                        SimpleEntry<URI, URI> insertedSensor = new SimpleEntry<>(
+                                URI.create(((InsertSensorResponse) decodeResponse).getAssignedProcedure()),
+                                URI.create(((InsertSensorResponse) decodeResponse).getAssignedOffering()));
                         INSERTED_SENSORS.put(insertedSensor.getKey(), insertedSensor.getValue());
                         return insertedSensor;
                     }
@@ -329,8 +330,8 @@ public class ArcticSeaSosClient implements SosClient {
     @Override
     public String insertObservation(InsertObservation io) {
         InsertObservationRequest request = new InsertObservationRequest();
-        request.setOfferings(Arrays.asList(io.getOffering().getUri()));
-        request.setAssignedSensorId(io.getSensorURI());
+        request.setOfferings(Arrays.asList(io.getOffering().getUri().toString()));
+        request.setAssignedSensorId(io.getSensorURI().toString());
         try {
             request.setObservation(createObservation(
                     io, createObservationValue(io), getObservationType(io.getMeasuredValueType())));
@@ -361,8 +362,8 @@ public class ArcticSeaSosClient implements SosClient {
         swesExtension.setValue(sweBoolean);
 
         InsertObservationRequest request = new InsertObservationRequest();
-        request.setOfferings(Arrays.asList(timeSeries.getFirst().getOffering().getUri()));
-        request.setAssignedSensorId(timeSeries.getFirst().getSensorURI());
+        request.setOfferings(Arrays.asList(timeSeries.getFirst().getOffering().getUri().toString()));
+        request.setAssignedSensorId(timeSeries.getFirst().getSensorURI().toString());
         request.addExtension(swesExtension);
         try {
             request.setObservation(createObservation(
@@ -383,10 +384,10 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     @Override
-    public boolean isResultTemplateRegistered(String sensorURI, String observedPropertyUri) throws EncodingException {
+    public boolean isResultTemplateRegistered(URI sensorURI, URI observedPropertyUri) throws EncodingException {
         GetResultTemplateRequest request = new GetResultTemplateRequest();
         request.setOffering(getOfferingByProcedure(sensorURI));
-        request.setObservedProperty(observedPropertyUri);
+        request.setObservedProperty(observedPropertyUri.toString());
         try {
             HttpResponse response = client.executePost(uri, encodeRequest(request));
             Object decodedResponse = decodeResponse(response);
@@ -489,16 +490,16 @@ public class ArcticSeaSosClient implements SosClient {
         SweText offeringSweText = new SweText();
         offeringSweText.setDefinition("urn:ogc:def:identifier:OGC:offeringID");
         offeringSweText.setLabel(String.format("Offering of Sensor '%s'.", insertSensor.getSensorName()));
-        offeringSweText.setValue(insertSensor.getOfferingUri());
+        offeringSweText.setValue(insertSensor.getOfferingUri().toString());
         offeringCapabilities.addCapability(new SmlCapability("offeringID", offeringSweText));
 
         PhysicalSystem system = new PhysicalSystem();
-        system.setIdentifier(insertSensor.getSensorURI());
+        system.setIdentifier(insertSensor.getSensorURI().toString());
         system.setIdentifications(CollectionHelper.list(
                 new SmlIdentifier("longName", "urn:ogc:def:identifier:OGC:1.0:longName",
                         insertSensor.getSensorName()),
                 new SmlIdentifier("shortName", "urn:ogc:def:identifier:OGC:1.0:shortName",
-                        insertSensor.getSensorURI())));
+                        insertSensor.getSensorURI().toString())));
         system.setOutputs(outputs);
         system.addCapabilities(offeringCapabilities);
 
@@ -517,7 +518,7 @@ public class ArcticSeaSosClient implements SosClient {
         request.setProcedureDescriptionFormat("http://www.opengis.net/sensorml/2.0");
         request.setProcedureDescription(new SosProcedureDescription<>(system));
         request.setObservableProperty(insertSensor.getObservedProperties().stream()
-                .map(p -> p.getUri()).collect(Collectors.toList()));
+                .map(p -> p.getUri().toString()).collect(Collectors.toList()));
         request.setMetadata(metadata);
         return request;
     }
@@ -530,7 +531,7 @@ public class ArcticSeaSosClient implements SosClient {
                 try {
                     SweQuantity sweQuantity = new SweQuantity(Double.valueOf(refValueLabelAndValue.getValue()),
                             insertSensor.getUnitOfMeasurementCode(referenceValueMapping.getKey()));
-                    sweQuantity.setDefinition(referenceValueMapping.getKey().getUri());
+                    sweQuantity.setDefinition(referenceValueMapping.getKey().getUri().toString());
                     refValueCapabilities.addCapability(new SmlCapability(refValueLabelAndValue.getKey(), sweQuantity));
                 } catch (NumberFormatException nfe) {
                     throw new IOException(String.format(
@@ -596,7 +597,8 @@ public class ArcticSeaSosClient implements SosClient {
 
     private void addFeature(InsertSensor insertSensor, PhysicalSystem system) throws InvalidSridException,
             NumberFormatException, NoSuchAuthorityCodeException, ParseException, FactoryException {
-        SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(insertSensor.getFeatureOfInterestURI()));
+        SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(
+                insertSensor.getFeatureOfInterestURI().toString()));
         if (insertSensor.isPositionValid()) {
             feature.setGeometry(CoordinateHelper.createPoint(
                     insertSensor.getLongitudeValue(),
@@ -667,8 +669,10 @@ public class ArcticSeaSosClient implements SosClient {
             FactoryException {
         OmObservationConstellation observationTemplate = new OmObservationConstellation();
         observationTemplate.setObservationType(getObservationType(timeseries.getMeasuredValueType()));
-        observationTemplate.setProcedure(new SosProcedureDescriptionUnknownType(timeseries.getSensorURI()));
-        observationTemplate.setObservableProperty(new OmObservableProperty(timeseries.getObservedProperty().getUri()));
+        observationTemplate.setProcedure(
+                new SosProcedureDescriptionUnknownType(timeseries.getSensorURI().toString()));
+        observationTemplate.setObservableProperty(
+                new OmObservableProperty(timeseries.getObservedProperty().getUri().toString()));
         observationTemplate.addOffering(createOffering(timeseries));
         observationTemplate.setFeatureOfInterest(createFeature(timeseries.getFirst()));
         return observationTemplate;
@@ -688,8 +692,10 @@ public class ArcticSeaSosClient implements SosClient {
             }
         }
 
-        omObservation.setIdentifier(insertObservation.getTimeStamp() +  insertObservation.getObservedPropertyURI() +
-                insertObservation.getFeatureOfInterestURI());
+        omObservation.setIdentifier(
+                insertObservation.getTimeStamp() +
+                insertObservation.getObservedPropertyURI().toString() +
+                insertObservation.getFeatureOfInterestURI().toString());
 
         return Arrays.asList(omObservation);
     }
@@ -742,9 +748,11 @@ public class ArcticSeaSosClient implements SosClient {
             FactoryException {
         OmObservationConstellation observationConstellation = new OmObservationConstellation();
         observationConstellation.setGmlId("o1");
-        observationConstellation.setObservableProperty(new OmObservableProperty(io.getObservedPropertyURI()));
+        observationConstellation.setObservableProperty(
+                new OmObservableProperty(io.getObservedPropertyURI().toString()));
+        observationConstellation.setProcedure(
+                new SosProcedureDescriptionUnknownType(io.getSensorURI().toString()));
         observationConstellation.setFeatureOfInterest(createFeature(io));
-        observationConstellation.setProcedure(new SosProcedureDescriptionUnknownType(io.getSensorURI()));
 
         TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
 
@@ -759,7 +767,7 @@ public class ArcticSeaSosClient implements SosClient {
         SweField timestampField = createSwePhenomenonTimeField();
 
         SweField measuredValueField = new SweField(
-                timeseries.getObservedProperty().getUri(),
+                timeseries.getObservedProperty().getUri().toString(),
                 createSweType(timeseries.getMeasuredValueType(),
                         timeseries.getUnitOfMeasurementCode(),
                         timeseries.getObservedProperty().getUri().toString(),
@@ -776,7 +784,7 @@ public class ArcticSeaSosClient implements SosClient {
             throws InvalidSridException, NumberFormatException, ParseException, NoSuchAuthorityCodeException,
             FactoryException {
         SamplingFeature samplingFeature =
-                new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI()));
+                new SamplingFeature(new CodeWithAuthority(insertObservation.getFeatureOfInterestURI().toString()));
         samplingFeature.setName(new CodeType(insertObservation.getFeatureOfInterestName()));
         if (insertObservation.hasFeatureParentFeature()) {
             samplingFeature.setSampledFeatures(Arrays.asList(new SamplingFeature(
@@ -862,14 +870,14 @@ public class ArcticSeaSosClient implements SosClient {
         }
     }
 
-    private String getOfferingByProcedure(String sensorURI) {
+    private String getOfferingByProcedure(URI sensorURI) {
         NoSuchElementException noSuchElementException =
                 new NoSuchElementException("No offering for sensor '" + sensorURI + "'.");
         if (!checkCache() || !capabilitiesCache.get().getContents().isPresent()) {
             throw noSuchElementException;
         }
         List<String> offerings = capabilitiesCache.get().getContents().get().stream()
-                .filter(o -> o.getProcedures().first().equals(sensorURI))
+                .filter(o -> o.getProcedures().first().equals(sensorURI.toString()))
                 .map(o -> o.getIdentifier())
                 .collect(Collectors.toList());
         if (offerings.isEmpty()) {
@@ -906,9 +914,9 @@ public class ArcticSeaSosClient implements SosClient {
         return oer.getCause() != null &&
                 !oer.getExceptions().isEmpty() &&
                 oer.getExceptions().get(0).hasMessage() &&
-                oer.getExceptions().get(0).getMessage().contains(io.getSensorURI()) &&
-                oer.getExceptions().get(0).getMessage().contains(io.getObservedPropertyURI()) &&
-                oer.getExceptions().get(0).getMessage().contains(io.getFeatureOfInterestURI()) &&
+                oer.getExceptions().get(0).getMessage().contains(io.getSensorURI().toString()) &&
+                oer.getExceptions().get(0).getMessage().contains(io.getObservedPropertyURI().toString()) &&
+                oer.getExceptions().get(0).getMessage().contains(io.getFeatureOfInterestURI().toString()) &&
                 oer.getExceptions().get(0).getMessage().contains(new DateTime(io.getTimeStamp().toISO8601String())
                         .toString()) &&
                 oer.getExceptions().get(0).getMessage().endsWith("already exists in the database!");

@@ -37,6 +37,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -191,7 +192,7 @@ public abstract class CollectorSkeleton implements Collector {
                 if (io != null) {
                     result.add(io);
                 }
-            } catch (ParseException | NumberFormatException e) {
+            } catch (ParseException | NumberFormatException | URISyntaxException e) {
                 logExceptionThrownDuringParsing(e);
             }
         }
@@ -200,7 +201,7 @@ public abstract class CollectorSkeleton implements Collector {
     }
 
     protected abstract InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
-            throws ParseException;
+            throws ParseException, URISyntaxException;
 
     protected boolean verifyTimeStamp(Timestamp timeStamp) {
         if (context.getLastUsedTimestamp() == null || timeStamp.isAfter(context.getLastUsedTimestamp())) {

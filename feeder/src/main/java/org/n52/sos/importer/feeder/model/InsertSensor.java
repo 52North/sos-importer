@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
 import java.util.List;
@@ -100,7 +101,7 @@ public class InsertSensor {
         return io.getFeatureOfInterestName();
     }
 
-    public String getFeatureOfInterestURI() {
+    public URI getFeatureOfInterestURI() {
         return io.getFeatureOfInterestURI();
     }
 
@@ -132,7 +133,7 @@ public class InsertSensor {
         return io.getOffering().getName();
     }
 
-    public String getOfferingUri() {
+    public URI getOfferingUri() {
         return io.getOffering().getUri();
     }
 
@@ -140,7 +141,7 @@ public class InsertSensor {
         return io.getSensorName();
     }
 
-    public String getSensorURI() {
+    public URI getSensorURI() {
         return io.getSensorURI();
     }
 
@@ -162,7 +163,7 @@ public class InsertSensor {
 
     public boolean isFeatureAvailable() {
         return !getFeatureOfInterestName().isEmpty() &&
-                !getFeatureOfInterestURI().isEmpty();
+                !getFeatureOfInterestURI().toString().isEmpty();
     }
 
 }

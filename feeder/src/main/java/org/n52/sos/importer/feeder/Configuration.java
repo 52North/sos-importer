@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -1501,7 +1502,7 @@ public class Configuration {
         return configFile.getAbsolutePath();
     }
 
-    public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues(String sensorURI) {
+    public Map<ObservedProperty, List<SimpleEntry<String, String>>> getReferenceValues(URI sensorURI) {
         if (!hasReferenceValues()) {
             return Collections.emptyMap();
         }
@@ -1515,11 +1516,9 @@ public class Configuration {
                 continue;
             }
             ResourceType resource = getRelatedSensor(column.getNumber()).getResource();
-            if (resource == null || !(resource instanceof ManualResourceType)) {
-                continue;
-            }
-            ManualResourceType relatedSensor = (ManualResourceType) resource;
-            if (!relatedSensor.getURI().getStringValue().equalsIgnoreCase(sensorURI)) {
+            if (resource == null ||
+                    !(resource instanceof ManualResourceType) ||
+                    !URI.create(((ManualResourceType) resource).getURI().getStringValue()).equals(sensorURI)) {
                 continue;
             }
             // This column contains the correct sensor

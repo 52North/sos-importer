@@ -1157,7 +1157,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:simpleContent>
-                <xs:extension base="xs:string">
+                <xs:extension base="xs:anyURI">
                     <xs:attribute name="generate" type="xs:boolean" use="optional" default="true">
                         <xs:annotation>
                             <xs:documentation>

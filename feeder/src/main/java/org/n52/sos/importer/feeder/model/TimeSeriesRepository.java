@@ -29,6 +29,8 @@
 package org.n52.sos.importer.feeder.model;
 
 import com.google.common.collect.Maps;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -89,7 +91,7 @@ public class TimeSeriesRepository {
      * @throws java.lang.IllegalArgumentException if no timeseries for the given
      *          <code>sensorURI</code> are available in this repository.
      */
-    public InsertSensor getInsertSensor(final String sensorURI) {
+    public InsertSensor getInsertSensor(URI sensorURI) {
         // get all time series of sensor
         List<TimeSeries> timeseries = new ArrayList<>(repo.values().size());
         for (TimeSeries series : getTimeSeries()) {

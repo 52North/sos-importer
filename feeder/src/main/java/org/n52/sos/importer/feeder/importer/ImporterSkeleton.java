@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.importer;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +49,7 @@ public abstract class ImporterSkeleton implements Importer {
 
     protected List<InsertObservation> failedObservations = new LinkedList<>();
 
-    protected List<String> failedSensorInsertions = new LinkedList<>();
+    protected List<URI> failedSensorInsertions = new LinkedList<>();
 
     public ImporterSkeleton() {
     }

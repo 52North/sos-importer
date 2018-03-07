@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.feeder.model;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
@@ -41,11 +42,11 @@ public class TimeSeriesRepositoryTest {
     @Test
     public void shouldReturnRegisterSensorForCorrectSensor() {
         TimeSeriesRepository tsr = new TimeSeriesRepository(Mockito.mock(Configuration.class));
-        String sensorURI = "test-sensor-1-uri";
+        URI sensorURI = URI.create("test-sensor-1-uri");
         ObservedProperty observedProperty1 = new ObservedProperty("test-obs-prop-1-name", "test-obs-prop-1-uri");
         ObservedProperty observedProperty2 = new ObservedProperty("test-obs-prop-2-name", "test-obs-prop-2-uri");
         UnitOfMeasurement uom = new UnitOfMeasurement("uom-code", "uom-uri");
-        Sensor sensor = new Sensor("test-sensor-1-name", sensorURI);
+        Sensor sensor = new Sensor("test-sensor-1-name", sensorURI.toString());
         FeatureOfInterest foi = new FeatureOfInterest("foi-name", "foi-uri", null);
         Object value = 1;
         Timestamp timeStamp = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());

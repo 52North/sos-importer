@@ -29,6 +29,7 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +151,7 @@ public class ConfigurationTest {
     public void getReferenceValuesShouldReturnEmptyListWhenNoneAreAvailable() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_with.xml");
-        String sensorURI = "not-existing-sensor"; //"http://example.com/krypto-graph";
+        URI sensorURI = URI.create("not-existing-sensor"); //"http://example.com/krypto-graph";
         Assert.assertThat(configuration.getReferenceValues(sensorURI).size(), Matchers.is(0));
     }
 
@@ -158,7 +159,7 @@ public class ConfigurationTest {
     public void getReferenceValuesTest() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_with.xml");
-        String sensorURI = "http://example.com/krypto-graph";
+        URI sensorURI = URI.create("http://example.com/krypto-graph");
         Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMap = configuration.getReferenceValues(sensorURI);
         Assert.assertThat(referenceValueMap.size(), Matchers.is(1));
         List<SimpleEntry<String, String>> referenceValues = referenceValueMap.get(referenceValueMap.keySet().iterator().next());

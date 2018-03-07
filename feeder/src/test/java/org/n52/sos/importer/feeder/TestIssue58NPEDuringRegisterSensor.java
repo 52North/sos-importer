@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder;
 
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 
 import org.apache.xmlbeans.XmlException;
@@ -50,7 +51,7 @@ public class TestIssue58NPEDuringRegisterSensor {
 
 
     @Test
-    public void testGetFoiForColumn() throws XmlException, IOException, ParseException {
+    public void testGetFoiForColumn() throws XmlException, IOException, ParseException, URISyntaxException {
         // given
         final Configuration config = new Configuration("src/test/resources/issue-058/data_config.xml");
         DataFile dataFile = new DataFile(config, config.getDataFile());
@@ -65,7 +66,7 @@ public class TestIssue58NPEDuringRegisterSensor {
         // then
         final String deg = "deg";
         Assert.assertThat(foi.getPosition(), Is.is(org.hamcrest.core.IsNull.notNullValue()));
-        Assert.assertThat(foi.getUri(), Is.is(sensor));
+        Assert.assertThat(foi.getUri().toString(), Is.is(sensor));
         Assert.assertThat(foi.getPosition().getLatitude(), Is.is(48.14935));
         Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is(deg));
         Assert.assertThat(foi.getPosition().getLongitude(), Is.is(11.567826));

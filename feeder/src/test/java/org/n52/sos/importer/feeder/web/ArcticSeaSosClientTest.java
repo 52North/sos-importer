@@ -30,6 +30,7 @@ package org.n52.sos.importer.feeder.web;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
@@ -95,11 +96,10 @@ public class ArcticSeaSosClientTest {
     private SosCapabilities capabilitiesCache;
     private SosObservationOffering offering;
     private StatusLine status;
-    private String sensorUri;
-    private String propertyUri;
+    private URI sensorUri;
+    private URI propertyUri;
     private TimeSeries timeseries;
-
-    private String featureUri = "feature-uri";
+    private URI featureUri;
 
     @Before
     public void setUp() throws IOException {
@@ -121,9 +121,10 @@ public class ArcticSeaSosClientTest {
         sosClient.cleanCache();
 
         offering = new SosObservationOffering();
-        sensorUri = "test-sensor";
-        propertyUri = "prop-uri";
-        offering.setProcedures(CollectionHelper.list(sensorUri));
+        sensorUri = URI.create("test-sensor");
+        featureUri = URI.create("feature-uri");
+        propertyUri = URI.create("prop-uri");
+        offering.setProcedures(CollectionHelper.list(sensorUri.toString()));
         offering.setIdentifier("test-offering");
         TreeSet<SosObservationOffering> treeset = new TreeSet<>();
         treeset.add(offering);
@@ -177,8 +178,8 @@ public class ArcticSeaSosClientTest {
     @Test
     public void isSensorRegisteredShouldReturnTrueWhenContainedInContentsSection()
             throws UnsupportedOperationException, IOException, XmlException {
-        String sensorUri = "test-sensor";
-        CapabilitiesDocument capaDoc = createCapabilitiesWithOffering(sensorUri);
+        URI sensorUri = URI.create("test-sensor");
+        CapabilitiesDocument capaDoc = createCapabilitiesWithOffering(sensorUri.toString());
         Mockito.when(entity.getContent()).thenReturn(capaDoc.newInputStream());
 
         Assert.assertThat(sosClient.isSensorRegistered(sensorUri), Is.is(true));
@@ -190,7 +191,7 @@ public class ArcticSeaSosClientTest {
         CapabilitiesDocument capaDoc = createCapabilitiesWithOffering("test-sensor");
         Mockito.when(entity.getContent()).thenReturn(capaDoc.newInputStream());
 
-        Assert.assertThat(sosClient.isSensorRegistered("sensor-not-found"), Is.is(false));
+        Assert.assertThat(sosClient.isSensorRegistered(URI.create("sensor-not-found")), Is.is(false));
     }
 
     @Test
@@ -203,13 +204,13 @@ public class ArcticSeaSosClientTest {
                 new ObservedProperty("property-1-name", "porperty-1-uri"),
                 new ObservedProperty("property-2-name", "porperty-2-uri"));
         Mockito.when(registerSensor.getObservedProperties()).thenReturn(properties);
-        String offering = "offering-name";
+        URI offering = URI.create("offering-name");
         Mockito.when(registerSensor.getOfferingUri()).thenReturn(offering);
         Mockito.when(registerSensor.getMeasuredValueType(Mockito.any(ObservedProperty.class))).thenReturn("NUMERIC");
         Mockito.when(registerSensor.getUnitOfMeasurementCode(Mockito.any(ObservedProperty.class))).thenReturn("uom");
 
-        Mockito.when(entity.getContent()).thenReturn(createInsertSensorResponse(sensorUri, offering).newInputStream());
-        SimpleEntry<String, String> insertSensorResponse = sosClient.insertSensor(registerSensor);
+        Mockito.when(entity.getContent()).thenReturn(createInsertSensorResponse(sensorUri.toString(), offering.toString()).newInputStream());
+        SimpleEntry<URI, URI> insertSensorResponse = sosClient.insertSensor(registerSensor);
 
         Assert.assertThat(insertSensorResponse.getKey(), Is.is(sensorUri));
         Assert.assertThat(insertSensorResponse.getValue(), Is.is(offering));
@@ -353,13 +354,13 @@ public class ArcticSeaSosClientTest {
 
     private InsertObservation createInsertObservation(Object value, int offset) {
         return new InsertObservation(
-                new Sensor("sensor-name", sensorUri),
-                new FeatureOfInterest("feature-name", featureUri,
+                new Sensor("sensor-name", sensorUri.toString()),
+                new FeatureOfInterest("feature-name", featureUri.toString(),
                         new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
                 value,
                 new Timestamp().ofUnixTimeMillis(0 + offset),
                 new UnitOfMeasurement("uom-code", "uom-uri"),
-                new ObservedProperty("prop-name", propertyUri),
+                new ObservedProperty("prop-name", propertyUri.toString()),
                 new Offering("offering-name", "offering-uri"),
                 Optional.empty(),
                 "NUMERIC");
@@ -386,14 +387,14 @@ public class ArcticSeaSosClientTest {
                 "</sos:InsertResultTemplateResponse>");
     }
 
-    private CapabilitiesDocument createCapabilitiesWithOffering(String sensorUri) throws XmlException {
+    private CapabilitiesDocument createCapabilitiesWithOffering(String sensoorUri) throws XmlException {
         return CapabilitiesDocument.Factory.parse("<Capabilities version=\"2.0.0\" " +
                 "xmlns=\"http://www.opengis.net/sos/2.0\"  " +
                 "xmlns:swes=\"http://www.opengis.net/swes/2.0\">" +
                 "<contents><Contents><swes:offering><ObservationOffering>" +
                 "<swes:identifier>http://www.52north.org/test/offering/9</swes:identifier>" +
                 "<swes:procedure>" +
-                sensorUri +
+                sensoorUri +
                 "</swes:procedure>" +
                 "<swes:procedureDescriptionFormat>http://www.opengis.net/sensorml/2.0" +
                 "</swes:procedureDescriptionFormat>" +
