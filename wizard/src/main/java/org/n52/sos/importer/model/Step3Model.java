@@ -77,12 +77,6 @@ public class Step3Model implements StepModel {
 
     private final int firstLineWithData;
 
-    /**
-     * <p>Constructor for Step3Model.</p>
-     *
-     * @param markedColumn a int.
-     * @param firstLineWithData a int.
-     */
     public Step3Model(final int markedColumn,
             final int firstLineWithData) {
         this.markedColumn = markedColumn;

@@ -77,8 +77,6 @@ public class Step2Model implements StepModel {
 
     private int csvFileRowRount;
 
-    private boolean useHeader;
-
     private boolean isSampleBased;
 
     private String sampleBasedStartRegEx = "";
@@ -95,12 +93,6 @@ public class Step2Model implements StepModel {
 
     private String sampleBasedSampleSizeRegEx = "";
 
-    /**
-     * <p>Constructor for Step2Model.</p>
-     *
-     * @param csvFileContent a {@link java.lang.String} object.
-     * @param csvFileRowCount a int.
-     */
     public Step2Model(final String csvFileContent, final int csvFileRowCount) {
         this.csvFileContent = csvFileContent;
 
@@ -112,305 +104,139 @@ public class Step2Model implements StepModel {
         csvFileRowRount = csvFileRowCount;
     }
 
-    /**
-     * <p>Getter for the field <code>csvFileRowRount</code>.</p>
-     *
-     * @return a int.
-     */
     public int getCsvFileRowRount() {
         return csvFileRowRount;
     }
 
-    /**
-     * <p>Setter for the field <code>csvFileRowRount</code>.</p>
-     *
-     * @param csvFileRowRount a int.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setCsvFileRowRount(final int csvFileRowRount) {
         this.csvFileRowRount = csvFileRowRount;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>columnSeparator</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getColumnSeparator() {
         return columnSeparator;
     }
 
-    /**
-     * <p>Setter for the field <code>columnSeparator</code>.</p>
-     *
-     * @param selectedColumnSeparator a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setColumnSeparator(final String selectedColumnSeparator) {
         columnSeparator = selectedColumnSeparator;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>commentIndicator</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getCommentIndicator() {
         return commentIndicator;
     }
 
-    /**
-     * <p>Setter for the field <code>commentIndicator</code>.</p>
-     *
-     * @param selectedCommentIndicator a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setCommentIndicator(final String selectedCommentIndicator) {
         commentIndicator = selectedCommentIndicator;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>firstLineWithData</code>.</p>
-     *
-     * @return a int.
-     */
     public int getFirstLineWithData() {
         return firstLineWithData;
     }
 
-    /**
-     * <p>Setter for the field <code>firstLineWithData</code>.</p>
-     *
-     * @param firstLineWithData a int.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setFirstLineWithData(final int firstLineWithData) {
         this.firstLineWithData = firstLineWithData;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>textQualifier</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getTextQualifier() {
         return textQualifier;
     }
 
-    /**
-     * <p>Setter for the field <code>textQualifier</code>.</p>
-     *
-     * @param selectedTextQualifier a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setTextQualifier(final String selectedTextQualifier) {
         textQualifier = selectedTextQualifier;
         return this;
     }
 
-    /**
-     * <p>getCSVFileContent.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getCSVFileContent() {
         return csvFileContent;
     }
 
-    /**
-     * <p>setCSVFileContent.</p>
-     *
-     * @param cSVFileContent a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setCSVFileContent(final String cSVFileContent) {
         csvFileContent = cSVFileContent;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>decimalSeparator</code>.</p>
-     *
-     * @return a char.
-     */
     public char getDecimalSeparator() {
         return decimalSeparator;
     }
 
-    /**
-     * <p>Setter for the field <code>decimalSeparator</code>.</p>
-     *
-     * @param decimalSeparator a char.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setDecimalSeparator(final char decimalSeparator) {
         this.decimalSeparator = decimalSeparator;
         return this;
     }
 
-    /**
-     * <p>isSampleBased.</p>
-     *
-     * @return a boolean.
-     */
     public boolean isSampleBased() {
         return isSampleBased;
     }
 
-    /**
-     * <p>setSampleBased.</p>
-     *
-     * @param newIsSampleBased a boolean.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBased(final boolean newIsSampleBased) {
-        this.isSampleBased = newIsSampleBased;
+        isSampleBased = newIsSampleBased;
         return this;
     }
 
-    /**
-     * <p>Setter for the field <code>sampleBasedStartRegEx</code>.</p>
-     *
-     * @param sampleBasedStartRegEx a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
         this.sampleBasedStartRegEx = sampleBasedStartRegEx;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>sampleBasedStartRegEx</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleBasedStartRegEx() {
         return sampleBasedStartRegEx;
     }
 
-    /**
-     * <p>setSampleBasedDateOffset.</p>
-     *
-     * @param newDateOffset a int.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedDateOffset(final int newDateOffset) {
-        this.dateOffset = newDateOffset;
+        dateOffset = newDateOffset;
         return this;
     }
 
-    /**
-     * <p>getSampleBasedDateOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleBasedDateOffset() {
         return dateOffset;
     }
 
-    /**
-     * <p>Setter for the field <code>sampleBasedDateExtractionRegEx</code>.</p>
-     *
-     * @param sampleBasedDateExtractionRegEx a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
         this.sampleBasedDateExtractionRegEx  = sampleBasedDateExtractionRegEx;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>sampleBasedDateExtractionRegEx</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleBasedDateExtractionRegEx() {
         return sampleBasedDateExtractionRegEx;
     }
 
-    /**
-     * <p>Setter for the field <code>sampleBasedDatePattern</code>.</p>
-     *
-     * @param sampleBasedDateDatePattern a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedDatePattern(final String sampleBasedDateDatePattern) {
         sampleBasedDatePattern  = sampleBasedDateDatePattern;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>sampleBasedDatePattern</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleBasedDatePattern() {
         return sampleBasedDatePattern;
     }
 
-    /**
-     * <p>setSampleBasedDataOffset.</p>
-     *
-     * @param newDataOffset a int.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedDataOffset(final int newDataOffset) {
-        this.dataOffset = newDataOffset;
+        dataOffset = newDataOffset;
         return this;
     }
 
-    /**
-     * <p>getSampleBasedDataOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleBasedDataOffset() {
         return dataOffset;
     }
 
-    /**
-     * <p>setSampleBasedSampleSizeOffset.</p>
-     *
-     * @param newSampleSizeOffset a int.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedSampleSizeOffset(final int newSampleSizeOffset) {
-        this.sampleSizeOffset = newSampleSizeOffset;
+        sampleSizeOffset = newSampleSizeOffset;
         return this;
     }
 
-    /**
-     * <p>getSampleBasedSampleSizeOffset.</p>
-     *
-     * @return a int.
-     */
     public int getSampleBasedSampleSizeOffset() {
         return sampleSizeOffset;
     }
 
-    /**
-     * <p>Setter for the field <code>sampleBasedSampleSizeRegEx</code>.</p>
-     *
-     * @param sampleBasedSampleSizeRegEx a {@link java.lang.String} object.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
     public Step2Model setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
         this.sampleBasedSampleSizeRegEx  = sampleBasedSampleSizeRegEx;
         return this;
     }
 
-    /**
-     * <p>Getter for the field <code>sampleBasedSampleSizeRegEx</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getSampleBasedSampleSizeRegEx() {
         return sampleBasedSampleSizeRegEx;
     }
-
 
 }

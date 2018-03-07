@@ -64,13 +64,6 @@ public class Step3Controller extends StepController {
 
     private Step3Panel panel;
 
-    /**
-     * <p>Constructor for Step3Controller.</p>
-     *
-     * @param currentColumn a int.
-     * @param firstLineWithData a int.
-     * @param useHeader a boolean.
-     */
     public Step3Controller(int currentColumn, int firstLineWithData) {
         model = new Step3Model(currentColumn, firstLineWithData);
         panel = new Step3Panel(firstLineWithData);

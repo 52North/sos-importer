@@ -995,13 +995,13 @@ public class Configuration {
         return -1;
     }
 
-    public Offering getOffering(final Sensor s) {
+    public Offering getOffering(Sensor s) {
         LOG.trace("getOffering()");
         if (importConf.getSosMetadata().getOffering().isSetGenerate() &&
                 importConf.getSosMetadata().getOffering().getGenerate()) {
             return new Offering(s.getName() + OFFERING_SUFFIX, s.getUri() + OFFERING_SUFFIX);
         } else {
-            final String o = importConf.getSosMetadata().getOffering().getStringValue();
+            String o = importConf.getSosMetadata().getOffering().getStringValue();
             return new Offering(o, o);
         }
     }

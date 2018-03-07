@@ -111,12 +111,6 @@ public class DataFile {
 
     private final File dataFile;
 
-    /**
-     * <p>Constructor for DataFile.</p>
-     *
-     * @param configuration a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @param file a {@link java.io.File} object.
-     */
     public DataFile(Configuration configuration, File file) {
         this.configuration = configuration;
         dataFile = file;
@@ -208,23 +202,10 @@ public class DataFile {
         return configuration.getMeasureValueColumnIds();
     }
 
-    /**
-     * <p>getFirstLineWithData.</p>
-     *
-     * @see Configuration#getFirstLineWithData()
-     * @return a int.
-     */
     public int getFirstLineWithData() {
         return configuration.getFirstLineWithData();
     }
 
-    /**
-     * <p>getSensorForColumn.</p>
-     *
-     * @param mvColumnId a int.
-     * @param values an array of {@link java.lang.String} objects.
-     * @return a {@link Sensor} object.
-     */
     public Sensor getSensor(int mvColumnId, String[] values) {
         LOG.trace("getSensorForColumn({},{})", mvColumnId, Arrays.toString(values));
         // check for sensor column and return new sensor

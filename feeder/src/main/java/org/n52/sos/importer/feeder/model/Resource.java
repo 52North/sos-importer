@@ -39,40 +39,19 @@ public abstract class Resource {
 
     private String uri;
 
-    /**
-     * <p>Constructor for Resource.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     * @param uri a {@link java.lang.String} object.
-     */
     public Resource(String name, String uri) {
         this.name = name;
         this.uri = uri;
     }
 
-    /**
-     * <p>Getter for the field <code>name</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * <p>Setter for the field <code>name</code>.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * <p>Getter for the field <code>uri</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getUri() {
         return uri;
     }

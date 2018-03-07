@@ -34,12 +34,7 @@ package org.n52.sos.importer.feeder.model;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 public final class Sensor extends Resource {
-    /**
-     * <p>Constructor for Sensor.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     * @param uri a {@link java.lang.String} object.
-     */
+
     public Sensor(String name, String uri) {
         super(name, uri);
     }
