@@ -233,26 +233,6 @@ public class Step2Model implements StepModel {
     }
 
     /**
-     * <p>isUseHeader.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean isUseHeader() {
-        return useHeader;
-    }
-
-    /**
-     * <p>Setter for the field <code>useHeader</code>.</p>
-     *
-     * @param useHeader a boolean.
-     * @return a {@link org.n52.sos.importer.model.Step2Model} object.
-     */
-    public Step2Model setUseHeader(final boolean useHeader) {
-        this.useHeader = useHeader;
-        return this;
-    }
-
-    /**
      * <p>Getter for the field <code>decimalSeparator</code>.</p>
      *
      * @return a char.

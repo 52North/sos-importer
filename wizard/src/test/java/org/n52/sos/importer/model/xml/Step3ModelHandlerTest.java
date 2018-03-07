@@ -52,7 +52,7 @@ public class Step3ModelHandlerTest {
 
     @Test
     public void shouldStoreGroupWhenNotSet() {
-        Step3Model model = new Step3Model(0, 0, false);
+        Step3Model model = new Step3Model(0, 0);
         List<String> selection = new ArrayList<>();
         selection.add("Date & Time");
         selection.add("Combination");
@@ -72,7 +72,7 @@ public class Step3ModelHandlerTest {
     @Test
     public void shouldStoreGroupWhenSet() {
         String testGroup = "test-group";
-        Step3Model model = new Step3Model(0, 0, false);
+        Step3Model model = new Step3Model(0, 0);
         model.addSelection(Arrays.asList("Date & Time", "Combination", "M/d/yyyy h.mm aSEP" + testGroup));
 
         SosImportConfiguration sosImportConf = SosImportConfiguration.Factory.newInstance();
@@ -101,7 +101,7 @@ public class Step3ModelHandlerTest {
 
     @Test
     public void shouldSetOmParameterColumnAssignment() {
-        Step3Model model = new Step3Model(0, 0, false);
+        Step3Model model = new Step3Model(0, 0);
         model.addSelection(Arrays.asList("om:Parameter", "Category", "test-name"));
         model.setMarkedColumn(1);
         model.addSelection(Arrays.asList("om:Parameter", "Numeric Value", "test-name"));
@@ -163,7 +163,7 @@ public class Step3ModelHandlerTest {
 
     @Test
     public void shouldSetParentFeatureIdentifier() {
-        Step3Model model = new Step3Model(0, 0, false);
+        Step3Model model = new Step3Model(0, 0);
         model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "1", "test-parent-feature"));
 
         SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();
@@ -180,7 +180,7 @@ public class Step3ModelHandlerTest {
 
     @Test
     public void shouldAddFeatureColumnWithoutParentFeatureIdentifier() {
-        Step3Model model = new Step3Model(0, 0, false);
+        Step3Model model = new Step3Model(0, 0);
         model.addSelection(Arrays.asList(Lang.l().featureOfInterest(), "0", ""));
 
         SosImportConfiguration conf = SosImportConfiguration.Factory.newInstance();

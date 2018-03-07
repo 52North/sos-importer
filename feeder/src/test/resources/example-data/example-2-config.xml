@@ -156,7 +156,6 @@
 			<ColumnSeparator>,</ColumnSeparator>
 			<TextIndicator>"</TextIndicator>
 		</Parameter>
-		<UseHeader>false</UseHeader>
 		<CsvParserClass ignoreColumnCountMismatch="true" />
 		<ObservationCollectorClass>org.n52.sos.importer.feeder.SingleProfileCollector</ObservationCollectorClass>
 	</CsvMetadata>

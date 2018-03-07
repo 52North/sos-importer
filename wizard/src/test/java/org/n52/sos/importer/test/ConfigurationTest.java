@@ -102,7 +102,6 @@ public class ConfigurationTest {
         if (logger.isDebugEnabled()) {
             logger.debug("CSV metadata found:");
             //
-            final boolean useHeader = csvMeta.getUseHeader();
             final int firstLineWithData = csvMeta.getFirstLineWithData();
             final String commentIndicator = csvMeta.getParameter().getCommentIndicator();
             final String elemSep = csvMeta.getParameter().getColumnSeparator();
@@ -110,7 +109,6 @@ public class ConfigurationTest {
             final Column[] columns = csvMeta.getColumnAssignments().getColumnArray();
             Metadata[] colMetadata;
             //
-            logger.debug("useHeader: "         + useHeader);
             logger.debug("firstLineWithData: " + firstLineWithData);
             logger.debug("commentIndicator: "  + commentIndicator);
             logger.debug("elementSeparator: "  + elemSep);

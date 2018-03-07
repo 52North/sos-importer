@@ -71,10 +71,8 @@ public class Step3Controller extends StepController {
      * @param firstLineWithData a int.
      * @param useHeader a boolean.
      */
-    public Step3Controller(int currentColumn, int firstLineWithData, boolean useHeader) {
-        model = new Step3Model(currentColumn,
-                firstLineWithData,
-                useHeader);
+    public Step3Controller(int currentColumn, int firstLineWithData) {
+        model = new Step3Model(currentColumn, firstLineWithData);
         panel = new Step3Panel(firstLineWithData);
     }
 
@@ -225,8 +223,7 @@ public class Step3Controller extends StepController {
             return null;
         }
         return new Step3Controller(nextColumn,
-                model.getFirstLineWithData(),
-                model.getUseHeader());
+                model.getFirstLineWithData());
     }
 
     @Override

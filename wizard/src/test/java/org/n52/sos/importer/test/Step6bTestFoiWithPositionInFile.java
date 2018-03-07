@@ -111,7 +111,7 @@ public class Step6bTestFoiWithPositionInFile {
         /*
          * Set-Up Column metadata
          */
-        Step3Model s3M = new Step3Model(4, firstLineWithData, false);
+        Step3Model s3M = new Step3Model(4, firstLineWithData);
         List<String> selection = new ArrayList<>(3);
         selection.add(Lang.l().step3ColTypeMeasuredValue());
         selection.add(Lang.l().step3MeasuredValNumericValue());
@@ -126,7 +126,7 @@ public class Step6bTestFoiWithPositionInFile {
         final String group = "A";
         String pattern = "LON";
         int colId = 5;
-        s3M = new Step3Model(colId, firstLineWithData, false);
+        s3M = new Step3Model(colId, firstLineWithData);
         selection = new ArrayList<>(3);
         selection.add(Lang.l().position());
         selection.add(Lang.l().step3PositionCombination());
@@ -144,7 +144,7 @@ public class Step6bTestFoiWithPositionInFile {
         mC.removeProvider(s3M);
         // 2nd position column
         colId = 6;
-        s3M = new Step3Model(colId, firstLineWithData, false);
+        s3M = new Step3Model(colId, firstLineWithData);
         pattern = "LAT";
         tabE = new Column(colId, firstLineWithData);
         selection = new ArrayList<>(3);

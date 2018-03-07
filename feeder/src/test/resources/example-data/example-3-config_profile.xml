@@ -161,7 +161,6 @@
 			<ColumnSeparator>,</ColumnSeparator>
 			<TextIndicator>"</TextIndicator>
 		</Parameter>
-		<UseHeader>false</UseHeader>
 		<ObservationCollector ignoreColumnCountMismatch="true">org.n52.sos.importer.feeder.collector.SingleProfileCollector</ObservationCollector>
 	</CsvMetadata>
 	<AdditionalMetadata>

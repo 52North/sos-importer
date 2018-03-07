@@ -406,15 +406,6 @@
             <xs:restriction base="xs:anyURI"/>
         </xs:simpleType>
     </xs:element>
-    <xs:element name="UseHeader" type="xs:boolean" default="false">
-        <xs:annotation>
-            <xs:documentation>
-                Define to use (case "true") or not to use (case "false") the
-                potential header information to search for metadata in the data
-                file.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
     <xs:element name="UserName">
         <xs:annotation>
             <xs:documentation>
@@ -839,7 +830,6 @@
                 <xs:element ref="DecimalSeparator"/>
                 <xs:element ref="FirstLineWithData"/>
                 <xs:element ref="Parameter"/>
-                <xs:element ref="UseHeader"/>
                 <xs:element ref="ObservationCollector" nillable="false"/>
                 <xs:element ref="CsvParser" minOccurs="0"/>
                 <xs:element ref="UseLastTimestamp" minOccurs="0"/>

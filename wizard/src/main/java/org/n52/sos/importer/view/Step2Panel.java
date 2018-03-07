@@ -69,9 +69,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
-/*
- * To enable useHeader, search for USE_HEADER
- */
 public class Step2Panel extends JPanel {
 
     private static final String NEW_LINE = "\n";
@@ -90,9 +87,6 @@ public class Step2Panel extends JPanel {
     private SpinnerNumberModel lineModel;
     private JSpinner firstDataJS;
     private JLabel firstDataJL;
-
-    private JLabel useHeaderJL;
-    private JCheckBox useHeaderJCB;
 
     private int firstLineWithDataTmp = -1;
     private JCheckBox isSampleBasedCheckBox;
@@ -139,7 +133,6 @@ public class Step2Panel extends JPanel {
         addTextQualifier(csvSettingsPanel, items, gridY++);
         addFirstLineWithData(csvSettingsPanel, gridY++);
         addDecimalSeparator(csvSettingsPanel, gridY++);
-        addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
         addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
         final JPanel csvDataPanel = new JPanel();
         addCsvDataPanel(csvDataPanel);
@@ -370,14 +363,6 @@ public class Step2Panel extends JPanel {
                     setCSVFileHighlight(number);
                 } else {
                     setCSVFileHighlight(number);
-                    // USE_HEADER
-                    /*if (number > 0) {
-                        useHeaderJCB.setEnabled(true);
-                        useHeaderJL.setVisible(true);
-                    } else {
-                        useHeaderJCB.setEnabled(false);
-                        useHeaderJCB.setSelected(false);
-                    }*/
                 }
             }
         });
@@ -450,34 +435,6 @@ public class Step2Panel extends JPanel {
         gbc_columnSeparatorCombobox.gridx = 0;
         gbc_columnSeparatorCombobox.gridy = gridY;
         csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
-    }
-
-    private void addUseHeaderCheckbox(final Container csvSettingsPanel, final int gridY) {
-        useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
-        useHeaderJCB = new JCheckBox();
-        if (logger.isTraceEnabled()) {
-            useHeaderJCB.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    logger.trace("useHeader state changed. is selected?" +
-                            useHeaderJCB.isSelected());
-                }
-            });
-        }
-        useHeaderJCB.setSelected(false);
-        // will be enabled if firstLineWithdata is set to > 0
-        useHeaderJCB.setEnabled(false);
-        final JPanel useHeaderPanel = new JPanel();
-        useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        useHeaderPanel.add(useHeaderJL);
-        useHeaderPanel.add(useHeaderJCB);
-        // TODO uncomment to enable useHeader
-        // final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
-        // gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
-        // gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
-        // gbc_useHeaderPanel.gridx = 0;
-        // gbc_useHeaderPanel.gridy = gridY;
-        // csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
     }
 
     /**
@@ -647,24 +604,6 @@ public class Step2Panel extends JPanel {
      */
     public void setTextQualifier(final String textQualifier) {
         textQualifierCombobox.setSelectedItem(textQualifier);
-    }
-
-    /**
-     * <p>getUseHeader.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean getUseHeader() {
-        return useHeaderJCB.isSelected();
-    }
-
-    /**
-     * <p>setUseHeader.</p>
-     *
-     * @param useHeader a boolean.
-     */
-    public void setUseHeader(final boolean useHeader) {
-        useHeaderJCB.setSelected(useHeader);
     }
 
     /**

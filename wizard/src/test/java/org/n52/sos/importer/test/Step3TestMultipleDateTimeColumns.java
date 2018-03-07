@@ -50,10 +50,8 @@ public class Step3TestMultipleDateTimeColumns {
         tc.setContent(TestData.EXAMPLE_TABLE_MULTIPLE_DATE_TIME);
         final int markedColumn = 0;
         final int firstLineWithData = 1;
-        final boolean useHeader = false;
         final Step3Controller s3C = new Step3Controller(markedColumn,
-                firstLineWithData,
-                useHeader);
+                firstLineWithData);
         //
         f.setStepController(s3C);
     }

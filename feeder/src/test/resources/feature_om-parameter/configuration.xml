@@ -135,7 +135,6 @@
             <ColumnSeparator>,</ColumnSeparator>
             <TextIndicator>"</TextIndicator>
         </Parameter>
-        <UseHeader>false</UseHeader>
     </CsvMetadata>
     <AdditionalMetadata>
         <Metadata>

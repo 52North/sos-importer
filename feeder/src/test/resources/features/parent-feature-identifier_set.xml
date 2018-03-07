@@ -118,7 +118,6 @@
 			<ColumnSeparator>,</ColumnSeparator>
 			<TextIndicator>"</TextIndicator>
 		</Parameter>
-		<UseHeader>false</UseHeader>
 		<ObservationCollector>org.n52.sos.importer.feeder.collector.DefaultCsvCollector</ObservationCollector>
 	</CsvMetadata>
 </SosImportConfiguration>

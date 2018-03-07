@@ -76,21 +76,17 @@ public class Step3Model implements StepModel {
     private final HashMap<Integer, List<String>> columnAssignments;
 
     private final int firstLineWithData;
-    private final boolean useHeader;
 
     /**
      * <p>Constructor for Step3Model.</p>
      *
      * @param markedColumn a int.
      * @param firstLineWithData a int.
-     * @param useHeader a boolean.
      */
     public Step3Model(final int markedColumn,
-            final int firstLineWithData,
-            final boolean useHeader) {
+            final int firstLineWithData) {
         this.markedColumn = markedColumn;
         this.firstLineWithData = firstLineWithData;
-        this.useHeader = useHeader;
         columnAssignments = new HashMap<>();
     }
 
@@ -189,21 +185,11 @@ public class Step3Model implements StepModel {
         markedColumn = colIndex;
     }
 
-    /**
-     * <p>Getter for the field <code>useHeader</code>.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean getUseHeader() {
-        return useHeader;
-    }
-
     @Override
     public String toString() {
         final String s = "Step3Model" +
                 "[" + hashCode() + "]: " +
                 "fLWD: " + firstLineWithData + ", " +
-                "uH: " + useHeader + ", " +
                 "mC: " + markedColumn + ", " +
                 "cA: " + columnAssignments;
         return s;

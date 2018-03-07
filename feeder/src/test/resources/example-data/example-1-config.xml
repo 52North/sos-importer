@@ -154,7 +154,6 @@
       <ColumnSeparator>,</ColumnSeparator>
       <TextIndicator>"</TextIndicator>
     </Parameter>
-    <UseHeader>false</UseHeader>
     <CsvParserClass ignoreColumnCountMismatch="true"/>
   </CsvMetadata>
   <AdditionalMetadata>

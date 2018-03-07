@@ -106,7 +106,7 @@ public class Step6bTestFoiWithoutPositionInFile {
         /*
          * Set-Up Column metadata
          */
-        final Step3Model s3M = new Step3Model(4, firstLineWithData, false);
+        final Step3Model s3M = new Step3Model(4, firstLineWithData);
         final List<String> selection = new ArrayList<>(1);
         selection.add(Lang.l().step3ColTypeMeasuredValue());
         selection.add(Lang.l().step3MeasuredValNumericValue());

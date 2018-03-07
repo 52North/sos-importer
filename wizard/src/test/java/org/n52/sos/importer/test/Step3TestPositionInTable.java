@@ -77,10 +77,8 @@ public class Step3TestPositionInTable {
         tc.setContent(TestData.EXMAPLE_TABLE_GLDAS);
         final int markedColumn = 0;
         final int firstLineWithData = 1;
-        final boolean useHeader = false;
         final Step3Controller s3C = new Step3Controller(markedColumn,
-                firstLineWithData,
-                useHeader);
+                firstLineWithData);
         //
         f.setStepController(s3C);
     }

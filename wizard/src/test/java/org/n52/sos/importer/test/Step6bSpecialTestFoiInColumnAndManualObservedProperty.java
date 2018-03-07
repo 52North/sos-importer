@@ -120,7 +120,7 @@ public class Step6bSpecialTestFoiInColumnAndManualObservedProperty {
         /*
          * Set-Up Column metadata
          */
-        Step3Model s3M = new Step3Model(4, firstLineWithData, false);
+        Step3Model s3M = new Step3Model(4, firstLineWithData);
         List<String> selection = new ArrayList<>(1);
         selection.add(Lang.l().step3ColTypeMeasuredValue());
         selection.add(Lang.l().step3MeasuredValNumericValue());

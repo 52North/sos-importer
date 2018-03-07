@@ -88,7 +88,7 @@ public class Step2Controller extends StepController {
         }
         final int firstLineWithData = step2Panel.getFirstLineWithData();
         if (firstLineWithData < 0 ||
-                firstLineWithData > (step2Model.getCsvFileRowRount() - 1)) {
+                firstLineWithData > step2Model.getCsvFileRowRount() - 1) {
             return false;
         }
 
@@ -118,8 +118,7 @@ public class Step2Controller extends StepController {
         TableController.getInstance().setFirstLineWithData(
                 step2Model.getFirstLineWithData());
         return new Step3Controller(0,
-                step2Model.getFirstLineWithData(),
-                step2Model.isUseHeader());
+                step2Model.getFirstLineWithData());
     }
 
     @Override
@@ -143,10 +142,6 @@ public class Step2Controller extends StepController {
 
         final String csvFileContent = step2Model.getCSVFileContent();
         step2Panel.setCSVFileContent(csvFileContent);
-
-        final boolean useHeader = step2Model.isUseHeader();
-        step2Panel.setUseHeader(useHeader);
-        step2Panel.setCSVFileHighlight(firstLineWithData);
 
         final char decimalSeparator = step2Model.getDecimalSeparator();
         step2Panel.setDecimalSeparator(decimalSeparator + "");
@@ -178,15 +173,12 @@ public class Step2Controller extends StepController {
         step2Model.setTextQualifier(textQualifier);
 
         final int firstLineWithData = step2Panel.getFirstLineWithData();
-        if (firstLineWithData < 0 || firstLineWithData > (step2Model.getCsvFileRowRount() - 1)) {
+        if (firstLineWithData < 0 || firstLineWithData > step2Model.getCsvFileRowRount() - 1) {
             LOG.info("FirstLineWithData is to large. Set to 0");
             step2Model.setFirstLineWithData(0);
         } else {
             step2Model.setFirstLineWithData(firstLineWithData);
         }
-
-        final boolean useHeader = step2Panel.getUseHeader();
-        step2Model.setUseHeader(useHeader);
 
         final String csvFileContent = step2Panel.getCSVFileContent();
         step2Model.setCSVFileContent(csvFileContent);
@@ -301,15 +293,13 @@ public class Step2Controller extends StepController {
         final String quoteChar = step2Model.getCommentIndicator();
         final String escape = step2Model.getTextQualifier();
         final int firstLineWithData = step2Model.getFirstLineWithData();
-        final boolean useHeader = step2Model.isUseHeader();
 
         final String comma = "', ";
         LOG.info("Parse CSV file: " +
                 "column separator: '"    + separator         + comma +
                 "comment indicator: '"   + quoteChar         + comma +
                 "text qualifier: '"      + escape            + comma +
-                "first line with data: " + firstLineWithData + "; "  +
-                "use header? " + useHeader);
+                "first line with data: " + firstLineWithData);
 
         if (separator.equals("Tab")) {
             separator = "\t";
