@@ -52,6 +52,7 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
+import org.n52.janmayen.NcName;
 import org.n52.sos.importer.feeder.collector.DefaultCsvCollector;
 import org.n52.sos.importer.feeder.collector.SampleBasedObservationCollector;
 import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
@@ -1518,7 +1519,8 @@ public class Configuration {
             ResourceType resource = getRelatedSensor(column.getNumber()).getResource();
             if (resource == null ||
                     !(resource instanceof ManualResourceType) ||
-                    !URI.create(((ManualResourceType) resource).getURI().getStringValue()).equals(sensorURI)) {
+                    !NcName.makeValid(((ManualResourceType) resource).getURI().getStringValue())
+                    .equals(NcName.makeValid(sensorURI.toString()))) {
                 continue;
             }
             // This column contains the correct sensor
