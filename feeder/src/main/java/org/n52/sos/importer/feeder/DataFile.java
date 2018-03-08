@@ -306,6 +306,9 @@ public class DataFile {
                 SpatialResourceType mSRT = (SpatialResourceType) foiT.getResource();
                 Position p = getPosition(mSRT.getPosition(), values);
                 foi = new FeatureOfInterest(mSRT.getName(), mSRT.getURI().getStringValue(), p);
+            } else if (foiT.getResource() instanceof ManualResourceType) {
+                ManualResourceType mrt = (ManualResourceType) foiT.getResource();
+                foi = new FeatureOfInterest(mrt.getName(), mrt.getURI().getStringValue(), null);
             }
         }
         if (!NcName.isValid(foi.getName())) {
@@ -344,13 +347,13 @@ public class DataFile {
     }
 
     /**
-     * @return result[0] := newName<br> result[1] := originaleName
+     * @return result[0] := newName<br> result[1] := originalName
      */
     private String[] createCleanNCName(Resource res) {
         // implement check for NCName compliance and remove bad values
         String name = NcName.makeValid(res.getName(), Configuration.UNICODE_REPLACER);
-        String origName = name;
-        // check if name is only containing "_"
+        String origName = res.getName();
+        // check if name is only containing "_" and no other characters anymore
         Matcher matcher = Configuration.UNICODE_ONLY_REPLACER_LEFT_PATTERN.matcher(name);
         if (matcher.matches()) {
             // if yes -> change to "className" + res.getUri().hashCode()

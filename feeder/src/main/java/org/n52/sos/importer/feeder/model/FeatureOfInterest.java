@@ -65,7 +65,7 @@ public final class FeatureOfInterest extends Resource {
     }
 
     public boolean isPositionValid() {
-        return position.isValid();
+        return position != null && position.isValid();
     }
 
 }
