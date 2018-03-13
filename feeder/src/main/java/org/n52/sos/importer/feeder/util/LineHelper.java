@@ -28,6 +28,9 @@
  */
 package org.n52.sos.importer.feeder.util;
 
+/**
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ */
 public class LineHelper {
 
     public static void trimValues(String[] values) {

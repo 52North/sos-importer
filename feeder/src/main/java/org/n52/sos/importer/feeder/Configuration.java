@@ -87,7 +87,7 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 /**
  * This class holds the configuration XML file and provides easy access to all
  * parameters. In addition, it validates the configuration during
- * initialisation.
+ * initialization.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */

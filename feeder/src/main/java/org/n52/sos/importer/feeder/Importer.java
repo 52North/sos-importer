@@ -32,6 +32,15 @@ import java.util.List;
 
 import org.n52.sos.importer.feeder.model.InsertObservation;
 
+/**
+ * <b>Interface for Observation Importer</b><br>
+ * <br>
+ * Observations are received by {@link FeedingContext}{@link #addObservationForImporting(InsertObservation...)}.
+ * These should be imported using the given {@link Configuration} and {@link SosClient}. The process is managed by
+ * {@link #startImporting()} and {@link #stopImporting()}.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ */
 public interface Importer {
 
     void setConfiguration(Configuration configuration);

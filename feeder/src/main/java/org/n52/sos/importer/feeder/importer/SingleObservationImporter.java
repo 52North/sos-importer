@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.Importer;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.InsertSensor;
@@ -49,6 +50,14 @@ import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link Importer} implementation which imports each received {@link InsertObservation}
+ * directly as single observation into the SOS instance. This implementation uses 5 threads
+ * for parallel importing.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ *
+ */
 public class SingleObservationImporter extends ImporterSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleObservationImporter.class);

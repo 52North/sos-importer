@@ -34,6 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.Importer;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
@@ -42,6 +43,16 @@ import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link Importer} implementation which uses the SweArraySplitExtension of the
+ * 52N SOS implementation which imports the observation in chunks and not at once.
+ * The size of the chunks can be specified and requires the setting of an
+ * TIMEOUT_BUFFER &lt;metadata&gt; element. Delivers a better performance when
+ * used in combination with large datasets.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ *
+ */
 public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkeleton {
 
     protected static final Lock ONE_IMPORTER_LOCK = new ReentrantLock(true);

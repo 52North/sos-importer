@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>Application class</p>
  *
- * It handles the parameters and executes the according tasks.
+ * The starting point of the feeder module. It checks the command line parameters and starts the according Feeder types.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */

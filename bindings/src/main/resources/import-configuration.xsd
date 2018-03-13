@@ -951,7 +951,7 @@
                         data file. Requires the presence of the
                         following attributes: * sampleDateOffset *
                         sampleDateExtractionRegEx * sampleDatePattern *
-                        sampleDataOffset A "sample" is a single sampling
+                        sampleDataOffset. A "sample" is a single sampling
                         run having additional metadata like date
                         information which is not contained in the lines.
                     </xs:documentation>

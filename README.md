@@ -1,7 +1,7 @@
 # 52°North SOS Importer
 [:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
 
-**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;[![Dependency Status](https://www.versioneye.com/user/projects/53735b2114c158f4f3000002/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/53735b2114c158f4f3000002)&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;[![Requirements Status](https://requires.io/github/52North/sos-importer/requirements.svg?branch=develop)](https://requires.io/github/52North/sos-importer/requirements/?branch=master)&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;[![Requirements Status](https://requires.io/github/52North/sos-importer/requirements.svg?branch=develop)](https://requires.io/github/52North/sos-importer/requirements/?branch=develop)&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
@@ -9,11 +9,11 @@
 
 *The SOS Importer is a tool for importing observations into standardized observation repositories. This enables interoperable spatial data and information exchange.*
 
-The SOS Importer is a tool for importing observations from CSV files into a running SOS instance. Those CSV files can either be locally available or remotely (FTP support). The application makes use of the wizard design pattern which guides the user through different steps. These and their purposes are briefly characterized in the table below.
+The SOS Importer is a tool for importing observations from CSV files into a running SOS instance. Those CSV files can either be locally available or remotely (FTP support).
 
 **Wizard Module**
 
-The **Wizard Module** is the GUI wizard for creating the configurations (metadata about the CSV file).
+The **Wizard Module** is the GUI wizard for creating the configurations (metadata about the CSV file).  The application makes use of the wizard design pattern which guides the user through different steps. These and their purposes are briefly characterized in the table below.
 
 **Feeder Module**
 
@@ -28,7 +28,7 @@ Please check the [how to run](#how-to-run) section for instructions to start the
 
 ### Requirements
 
-The SOS Importer requires [JAVA](http://java.com/) 1.7+ and a running SOS instance (OGC SOS v1.0 or v2.0) to work. The wizard module requires a GUI capable system.
+The SOS Importer requires [JAVA](http://java.com/) 1.8+ and a running SOS instance (OGC SOS v2.0) to work. The wizard module requires a GUI capable system.
 
 
 ### Terminology
@@ -42,21 +42,6 @@ Several sensor web specific terms are used within this topic:
 
 If you are not familiar with them, please take a look at [this explaining OGC tutorial](http://www.ogcnetwork.net/sos_2_0/tutorial/om). It's short and easy to understand.
 
-
-### Step Description
-
-| *Step* | *Description* |
-| --- | --- |
-| 1 | Choose a CSV file from the file system to publish in a SOS instance. Alternatively you can also obtain a CSV file from a remote FTP server. |
-| 2 | Provide a preview of the CSV file and select settings for parsing (e.g. which character is used for separating columns) |
-| 3 | Display the CSV file in tabular format and assign metadata to each column (e.g. indicate that the second column consists of measured values). Offer customizable settings for parsing (e.g. for date/time patterns) |
-| 4 | In case of more than one date/time, feature of interest, observed property, unit of measurement, sensor identifier or position has been identified in step 3, select the correct associations to the according measured value columns (e.g. state that date/time in column 1 belongs to the measured values in column 3 and date/time in column 2 belongs to the measured values in column 4). When there is exactly one appearance of a certain type, automatically assign this type to all measured values |
-| 5 | Check available metadata for completeness and ask the user to add information in case something is missing (e.g. EPSG-code for positions) |
-| 6 | When there is no metadata of a particular type present in the CSV file (e.g. sensor id), let the user provide this information (e.g. name and URI of this sensor) |
-| 7 | Enter the URL of a Sensor Observation Service where measurements and sensor metadata in the CSV file shall be uploaded to |
-| 8 | Summarize the results of the configuration process and provide means for importing the data into the specified SOS instance |
-
-
 ## Design
 
 The SOS importer projects consists of three modules now:
@@ -65,17 +50,16 @@ The SOS importer projects consists of three modules now:
    * feeder
    * configuration xml bindings
 
-The first two are "applications" using the third to do their work: enabling the user to store metadata about his CSV file and import the contained data into a running SOS (OGC schema 1.0.0 or 2.0.0) instance for one time or repeatedly. In this process the wizard module is used to create the xml configuration documents. It depends on the `52n-sos-importer-bindings` module to write the configuration files (the XML schema: [stable](https://github.com/52North/sos-importer/blob/master/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd), [development](https://github.com/52North/sos-importer/blob/develop/52n-sos-importer-bindings/src/main/resources/import-configuration.xsd)). The feeder module reads this configuration file and the defined data file, creates the requests for inserting the data, and registers the defined sensors in the SOS if not done already. For communicating with the SOS some modules of the OxFramework are used:
+The first two use the third to do their work: enabling the user to store metadata about his CSV file and import the contained data into a running SOS instance once or repeatedly. In this process the wizard module is used to create the xml configuration documents. It depends on the `52n-sos-importer-bindings` module to write the configuration files (the XML schema: [stable](https://github.com/52North/sos-importer/blob/master/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd), [development](https://github.com/52North/sos-importer/blob/develop/52n-sos-importer-bindings/src/main/resources/import-configuration.xsd)). The feeder module reads this configuration file and the defined data file, creates the requests for inserting the data, and registers the defined sensors in the SOS if not done already. For communicating with the SOS some modules of the [arctic-sea project](https://52north.org/software/software-projects/arctic-sea/) are used:
 
-   * oxf-sos-adapter
-   * oxf-common
-   * oxf-feature
-   * oxf-adapter-api
-   * 52n-oxf-xmlbeans
+   * [Svalbard](https://github.com/52North/arctic-sea#svalbard-)
+   * [Shetland](https://github.com/52North/arctic-sea#shetland-)
+   * [Iceland](https://github.com/52North/arctic-sea#iceland-)
+   * [Jan Mayen](https://github.com/52North/arctic-sea#jan-mayen-)
 
-Thanks to the new structure of the OxFramework the number of modules and dependencies is reduced. The following figure shows this structure.
+Thanks to the use of arctic-sea the number of modules and dependencies is reduced and the code base re-used with-in 52N projects is increased. The following figure shows this structure.
 
-<img width="381" alt="sos-importer-structure.png" src="https://wiki.52north.org/pub/SensorWeb/SosImporter/sos-importer-structure.png" height="150" />
+<img src="src/site/images/sos-importer-structure.png" height="224" width="595" alt="Importer Modules Structure" />
 
 
 ### Wizard Module
@@ -89,14 +73,62 @@ A good starting point for new developers is to take a look at the `MainControlle
 
 All important constants are stored in `org.n52.sos.importer.Constants`.
 
+#### Step Description
+
+| *Step* | *Description* |
+| --- | --- |
+| 1 | Choose a CSV file from the file system to publish in a SOS instance. Alternatively you can also obtain a CSV file from a remote FTP server. |
+| 2 | Provide a preview of the CSV file and select settings for parsing (e.g. which character is used for separating columns) |
+| 3 | Display the CSV file in tabular format and assign metadata to each column (e.g. indicate that the second column consists of measured values). Offer customizable settings for parsing (e.g. for date/time patterns) |
+| 4 | In case of more than one date/time, feature of interest, observed property, unit of measurement, sensor identifier or position has been identified in step 3, select the correct associations to the according measured value columns (e.g. state that date/time in column 1 belongs to the measured values in column 3 and date/time in column 2 belongs to the measured values in column 4). When there is exactly one appearance of a certain type, automatically assign this type to all measured values |
+| 5 | Check available metadata for completeness and ask the user to add information in case something is missing (e.g. EPSG-code for positions) |
+| 6 | When there is no metadata of a particular type present in the CSV file (e.g. sensor id), let the user provide this information (e.g. name and URI of this sensor) |
+| 7 | Enter the URL of a Sensor Observation Service where measurements and sensor metadata in the CSV file shall be uploaded to |
+| 8 | Summarize the results of the configuration process and provide means for importing the data into the specified SOS instance |
+
 
 ### Feeder Module
 
-The *feeder module* contains the following major packages:
-   * `org.n52.sos.importer.feeder` - contains classes `Configuration` and `DataFile` which offer means accessing the xml configuration and the csv data file, the application's main class `Feeder` which controls the application workflow, and the `SensorObservationService` class, which imports the data using the `DataFile` and `Configuration` classes for creating the required requests.
-      * `model` - contains data holding classes for the resources like feature of interest, sensor, requests (insert observation, register/insert sensor)...
-      * `task` - contains controllers required for one time and repeated feeding used by the central `Feeder` class.
-A good starting point for new developers is to take a look at the `Feeder.main(String[])` and follow the path through the code. When changing something regarding communication with the SOS and data parsing, take a look at: `SensorObservationService`, `Configuration`, and `DataFile`.
+<img src="src/site/images/feeder-packages.png" height="349" width="818" alt="Feeder Module Major Class and Packages" />
+
+The *feeder module* contains the following major packages and classes
+   * `org.n52.sos.importer.feeder` - contains the following major classes and interfaces:
+     * `Application`<br/>
+       the starting point of the feeder module. It checks the command line parameters and starts the according Feeder types.
+     * `Configuration`<br />
+       holds the configuration XML file and provides easy access to all parameters. In addition, it validates the configuration during initialization.
+     * `DataFile`<br />
+       holds the datafile and provides easy to use interfaces to get certain required resources by using the given `Configuration`.
+     * `Feeder`<br />
+       manages the observation collection and import workflow using a multithreading approach. Observations are collected and imported in parallel. The details depend on the used _`Collector`_ and _`Importer`_ implementation. The _`SosClient`_ implementation bean is loaded here, too. Implements the _`FeedingContext`_ interface.
+     * _`Collector`_ <br />
+       collects `model.InsertObservation`s from the given `DataFile`. The results of this process __MUST__ be provided via the _`FeedingContext.addObservationForImporting(InsertObservation...)`_ method.
+     * _`Importer`_<br />
+       receives Observations by _`FeedingContext.addObservationForImporting(InsertObservation...)`_. These should be imported using the given _`Configuration`_ and _`SosClient`_. The process is managed by _`Importer.startImporting()`_ and _`Importer.stopImporting()`_.
+     * _`SosClient`_<br />
+       provides means for communicating with an SOS instance.
+     * _Package_ `collector`<br />
+       contains the available implementations of the _`Collector`_ interface. In addition, a abstract skeleton implementation is provided in _`CollectorSkeleton`_. Available implementations are:
+       * `DefaultCSVCollector`<br />
+         fits the most basic CSV files
+       * `SampleBasedObservationCollector`<br />
+         for sample based CSV files. A "sample" is a single sampling run having additional metadata like date information which is not contained in the lines.
+       * `SingleProfileCollecotr`<br />
+         for profile based CSV files. A profile is located at one location and contain several series at different depth levels, for example.
+    * _Pakcage_ `importer`<br />
+      contains the available implementations of the _`Importer`_ interface. In addition, a abstract skeleton implementation is provided in _`ImporterSkeleton`_. Available implementations are:
+      * `SingleObservationImporter`<br />
+        implementation which imports each received `model.InsertObservation` directly as single observation into the SOS instance. This implementation uses 5 threads for parallel importing.
+      * `SweArrayObservationWithSplitExtensionImporter`<br />
+        implementation which  uses the SweArraySplitExtension of the 52N SOS implementation which imports the observation in chunks and not at once. The size of the chunks can be specified and requires the setting of an `TIMEOUT_BUFFER` `<metadata>` element. Delivers a better performance when used in combination with large datasets.
+      * `ResultHandlingImporter`<br />
+        implementation which extends the `SweArrayObservationWithSplitExtensionImporter` by switching to the result handling profile of the SOS.
+    * _Package_ `model`<br />
+      contains data holding classes for the resources like feature of interest, sensor, and requests (insert observation, register/insert sensor).
+    * _Package_ `util`<br />
+      contains general utility classes.
+      * Package `web`<br />
+        contains web specific utiliy classes, e.g. an implementation of the _`SosClient`_ interface in the `ArcticSeaSosClient` class.
 
 
 ## Configuration Schema

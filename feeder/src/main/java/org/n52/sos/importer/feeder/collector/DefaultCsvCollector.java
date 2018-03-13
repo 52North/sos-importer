@@ -38,6 +38,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
+import org.n52.sos.importer.feeder.Collector;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
@@ -51,6 +52,12 @@ import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link Collector} implementation which fits the most basic CSV files.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ *
+ */
 public class DefaultCsvCollector extends CollectorSkeleton {
 
     static final Logger LOG = LoggerFactory.getLogger(DefaultCsvCollector.class);

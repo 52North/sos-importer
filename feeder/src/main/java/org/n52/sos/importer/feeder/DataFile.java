@@ -86,7 +86,7 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
 
 /**
  * Class holds the datafile and provides easy to use interfaces to get certain
- * required resources.
+ * required resources by using the given {@link Configuration}.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */

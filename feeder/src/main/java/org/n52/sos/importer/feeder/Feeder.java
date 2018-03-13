@@ -48,8 +48,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Handles connection to SOS and provides an easy to use interface.<br>
- * Now this class supports only OGC SOS <b>1.0.0</b>
+ * Manages the observation collection and import workflow using a multithreading approach. Hence,
+ * observations are collected and imported in parallel. The details depend on the used {@link Collector}
+ * and {@link Importer} implementation. In addition, the {@link SosClient} implementation bean is loaded.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */

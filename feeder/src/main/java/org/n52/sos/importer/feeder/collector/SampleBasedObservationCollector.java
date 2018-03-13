@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
+import org.n52.sos.importer.feeder.Collector;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
@@ -53,6 +54,13 @@ import org.n52.sos.importer.feeder.util.LineHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * {@link Collector} for sample based CSV files. A "sample" is a single sampling
+ * run having additional metadata like date information which is not contained in the lines.
+ *
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
+ *
+ */
 public class SampleBasedObservationCollector extends CollectorSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SampleBasedObservationCollector.class);

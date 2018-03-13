@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import org.apache.xmlbeans.XmlException;
+import org.n52.sos.importer.feeder.Importer;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.TimeSeriesRepository;
 import org.n52.svalbard.encode.exception.EncodingException;
@@ -42,6 +43,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * {@link Importer} which extends the {@link SweArrayObservationWithSplitExtensionImporter}
+ * by switching to the result handling profile of the SOS.
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  *
  */

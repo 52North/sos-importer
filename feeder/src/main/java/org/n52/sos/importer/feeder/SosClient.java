@@ -41,6 +41,10 @@ import org.n52.sos.importer.feeder.util.web.HttpClient;
 import org.n52.svalbard.encode.exception.EncodingException;
 
 /**
+ * <b>Interface for SosClients</b><br>
+ * <br>
+ * Provides means for communicating with an SOS instance.
+ *
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  *
  * @since 0.5.0
