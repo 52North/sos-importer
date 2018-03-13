@@ -49,13 +49,47 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
  */
 public interface Collector {
 
-    void setConfiguration(Configuration configuration);
-
+    /**
+     * Starts the observation collection process. It is called within its own thread
+     * in {@link Feeder#importData(DataFile)}. The collected observations <b>MUST</b>
+     * be provided using the {@link Feeder#addObservationForImporting(InsertObservation...)}
+     * method.
+     *
+     * @param dataFile the {@link DataFile} that contains the data to be collected.
+     * @param latch used to wait for this collector implementation.
+     *          {@link CountDownLatch#countDown()} MUST be called in <code>finally</code>
+     *          branch.
+     * @throws IOException when accessing the dataFile fails.
+     * @throws ParseException when interpreting the dataFile content fails.
+     */
     void collectObservations(DataFile dataFile, CountDownLatch latch)
             throws IOException, ParseException;
 
+    /**
+     * Sets the {@link Configuration} of this collector and it is called after
+     * the parameterless constructor in {@link Feeder#Feeder(Configuration)}.
+     *
+     * @param configuration the {@link Configuration} providing access to the
+     *        XML import configuration
+     */
+    void setConfiguration(Configuration configuration);
+
+    /**
+     * Sets the {@link FeedingContext} of this collector and it is called after
+     * the {@link #setConfiguration(Configuration)} method in
+     * {@link Feeder#Feeder(Configuration)}.
+     *
+     * @param context the {@link FeedingContext} providing a bridge between this
+     *        collector and the {@link Importer} implementation used.
+     */
     void setFeedingContext(FeedingContext context);
 
+    /**
+     * Called by {@link Feeder} in the case of an exception during handover of
+     * observations to the {@link Importer} implementation via
+     * {@link FeedingContext#addObservationForImporting(InsertObservation...)}.
+     * This collector should stop all operations asap including closing threads etc.
+     */
     void stopCollecting();
 
 }

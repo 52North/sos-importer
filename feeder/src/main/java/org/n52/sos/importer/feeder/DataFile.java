@@ -1044,7 +1044,7 @@ public class DataFile {
                                         Double.parseDouble(values[col.getNumber()]),
                                         getUnitOfMeasurement(col.getNumber(), values).getUri().toString()
                                         )
-                                );
+                        );
                         quantityParameter.setName(new ReferenceType(getOmParameterName(col)));
                         omParameters.add(quantityParameter);
                         break;

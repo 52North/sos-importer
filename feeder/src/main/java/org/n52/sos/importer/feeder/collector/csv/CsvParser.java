@@ -41,15 +41,12 @@ import org.n52.sos.importer.feeder.Configuration;
 public interface CsvParser {
 
     /**
-     * Reads the next line and converts to a string array. Should return <code>null</code>
-     * if no further data is available.
+     * Should return 0, if number of lines == number of observations,<br>
+     *              else the difference between line number and line index.
      *
-     * @return a string array with each comma-separated element as a separate
-     *         entry or <code>null</code> if no further data is available.
-     * @throws java.io.IOException
-     *             if errors happen during the read
+     * @return a int.
      */
-    String[] readNext() throws IOException;
+    int getSkipLimit();
 
     /**
      * MUST be called before first call of {@link #readNext()}!
@@ -61,11 +58,14 @@ public interface CsvParser {
     void init(BufferedReader bufferedReader, Configuration configuration) throws IOException;
 
     /**
-     * Should return 0, if number of lines == number of observations,<br>
-     *              else the difference between line number and line index.
+     * Reads the next line and converts to a string array. Should return <code>null</code>
+     * if no further data is available.
      *
-     * @return a int.
+     * @return a string array with each comma-separated element as a separate
+     *         entry or <code>null</code> if no further data is available.
+     * @throws java.io.IOException
+     *             if errors happen during the read
      */
-    int getSkipLimit();
+    String[] readNext() throws IOException;
 
 }

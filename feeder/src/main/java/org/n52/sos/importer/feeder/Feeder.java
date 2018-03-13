@@ -121,7 +121,7 @@ public final class Feeder implements FeedingContext {
         initCollectorThread(dataFile, latch).start();
         importer.startImporting();
         try {
-            // FIXME is this double synchronization? e.g. latch not required anymore
+            // FIXME is this double synchronization? e.g. latch not required anymore because of phaser
             latch.await();
             collectorPhaser.arriveAndAwaitAdvance();
         } catch (InterruptedException e) {
