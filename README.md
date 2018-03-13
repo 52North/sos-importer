@@ -1,7 +1,7 @@
 # 52°North SOS Importer
 [:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
 
-**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;[![Requirements Status](https://requires.io/github/52North/sos-importer/requirements.svg?branch=develop)](https://requires.io/github/52North/sos-importer/requirements/?branch=master)&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;[![Requirements Status](https://requires.io/github/52North/sos-importer/requirements.svg?branch=develop)](https://requires.io/github/52North/sos-importer/requirements/?branch=develop)&nbsp;&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
@@ -9,11 +9,11 @@
 
 *The SOS Importer is a tool for importing observations into standardized observation repositories. This enables interoperable spatial data and information exchange.*
 
-The SOS Importer is a tool for importing observations from CSV files into a running SOS instance. Those CSV files can either be locally available or remotely (FTP support).
+It supports importing observations from CSV files into a running SOS instance. Those CSV files can either be locally available or remotely (e.g. provided via FTP/HTTP server). The import is divided into two modules which are explained in the next two sections.
 
 **Wizard Module**
 
-The **Wizard Module** is the GUI wizard for creating the configurations (metadata about the CSV file).  The application makes use of the wizard design pattern which guides the user through different steps. These and their purposes are briefly characterized in the table below.
+The **Wizard Module** is the GUI application for creating the configurations (metadata about the CSV file).  The application makes use of the wizard design pattern which guides the user through different steps. These and their purposes are explained in the Wizard Module subsection of the design section.
 
 **Feeder Module**
 
@@ -166,20 +166,20 @@ The `DataFile` contains information about the file containing the observations. 
 
 ### SosMetadata
 
-<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/03_SosMetadata.png" alt="03_SosMetadata.png" width="383" height="238" />
+<img src="src/site/images/sos-metadata.png" alt="<SosMetadata>" />
 
 The `SosMetadata` section has one optional attribute `insertSweArrayObservationTimeoutBuffer`, three mandatory sections `URL`, `Offering` with attribute `generate`, and `Version`. The section `Binding` is optional. The `insertSweArrayObservationTimeoutBuffer` is required if the import strategy `SweArrayObservationWithSplitExtension` (more details later) is used. It defines an additional timeout that's used when sending the !InsertObservation requests to the SOS. The `URL` defines the service endpoint that receives the requests (e.g. !Insert!|RegisterSensor, !InsertObservation). The `Offering` should contain the offering identifier to use, or its attribute `generate` should be set to true. Than, the sensor identifier is used as offering identifier. The `Version` section defines the OGC specification version, that is understood by the SOS instance, e.g. 1.0.0, 2.0.0. The optional `Binding` section is required when selecting SOS version 2.0.0 and defines which binding should be used, e.g. SOAP, POX.
 
 
 ### CsvMetadata
 
-<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/04_CsvMetadata.png" alt="04_CsvMetadata.png" width='482' height='278' />
+<img src="src/site/images/csv-metadata.png" alt="<CsvMetadata>" />
 
-The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [Extend CsvParser](#extend-csvparser) section below for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections.
+_The `CsvMetadata` contains information for the CSV parsing. The mandatory sections `DecimalSeparator`, `Parameter/CommentIndicator`, `Parameter/ColumnSeparator` and `Parameter/TextIndicator` define, how to parse the raw data into columns and rows. The optional `CsvParserClass` is required if another `CsvParser` implementation than the default is used (see [Extend CsvParser](#extend-csvparser) section below for more details). The `FirstLineWithData` defines how many lines should be skipped before the data content starts. The most complex and important section is the `ColumnAssignments` sections with contains 1..&infin; `Column` sections._
 
-<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/05_Column.png" alt="05_Column.png" width='532' height='724' />
+<img src="src/site/images/csv-metadata-column.png" alt="05_Column.png" />
 
-The `Column` contains two mandatory sections `Number` and `Type`. The `Number` indicates to which column in the data file this metadata is related to. Counting starts with 0. The `Type` indicates the column type. The following types are supported:
+_The `Column` contains two mandatory sections `Number` and `Type`. The `Number` indicates to which column in the data file this metadata is related to. Counting starts with 0. The `Type` indicates the column type. The following types are supported:_
 
 **Type**
 
@@ -203,12 +203,16 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | --- | --- |
 | `GROUP` | Indicates the membership of this column in a `POSITION` or `DATE_TIME` group. |
 | `NAME` | Specifies the name of the `OM_PARAMETER` column it is used within. |
+| `NO_DATA_VALUE` | Indicates a value that will be ignored during import. |
+| `HUNK_SIZE` | Use in combination with ImporterClases: e.g. <ul><li> `SweArrayObservationWithSplitExtensionImporter`</li><li>`ResultHandlingImporter`</li></ul>Defines the number of observations to import per request. |
+| `TIMEOUT_BUFFER` | An additional timeout buffer for connect and socket timeout when using importer like `SweArrayObservationWithSplitExtension`. Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.<br /> The size of this value is related to the set-up of the SOS server, importer, and the `HUNK_SIZE` value. The current SimpleHttpClient implementation uses a default value of 5s, hence setting this to 25,000 results in 30s connection and socket timeout. |
 | `OTHER` | Not used. |
 | `PARSE_PATTERN` | Used to store the parse pattern of a `POSITION` or `DATE_TIME` column. |
 | `POSITION_ALTITUDE` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_EPSG_CODE` | The EPSG code for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_LATITUDE` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_LONGITUDE` | The longitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `PARENT_FEATURE_IDENTIFIER` | If present, the related feature of interest column will get this identifier set as sampled feature for each observation. |
 | `TIME` | Not used. |
 | `TIME_DAY` | The day value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_HOUR` | The hour value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
@@ -219,18 +223,17 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | `TIME_ZONE` | The time zone value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TYPE` | Supported values: <br />`MEASURED_VALUE` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. <br />`DATE_TIME` column: `COMBINATION`, `UNIX_TIME`. <br />`OM_PARAMETER` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`, `CATEGORY`. |
 
-The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links).
+The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links). The `RelatedOmParameter` contains an `integer` denoting the column with the values for the O&M Parameter. The `RelatedReferenceValue` contains a `<Label>` and `<Value>` as String which will be converted into the value of the measured value. It is a value with the same type, optional unit and observed property of the related column that defines an upper or lower limit. The label MUST be given.
 
 
 ### AdditionalMetadata
 
 <img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/06_AdditionalMetadata.png" alt="06_AdditionalMetadata.png" width='575' height='644' />
 
-The `AdditionalMetadata` is the last of the four top level sections and it is optional. The intention is to provide additional metadata. These are generic `Metadata` elements, `Resources` like `Sensor`, `ObservedProperty`, `FeatureOfInterest`, `UnitOfMeasurement` and <code>FOIPosition</code>s. The table below lists the supported values for the `Metadata` elements.
+The `AdditionalMetadata` is the last of the four top level sections and it is optional. The intention is to provide additional metadata. These are generic `Metadata` elements, `Resources` like `Sensor`, `ObservedProperty`, `FeatureOfInterest`, `UnitOfMeasurement` and `FOIPosition`s. The table below lists the supported values for the `Metadata` elements.
 
 | *Key* | *Value* |
 | --- | --- |
-| `IMPORT_STRATEGY` | The import strategy to use: `SingleObservation` (default strategy) or `SweArrayObservationWithSplitExtension`. The second one is only working if the SOS instance supports the [SplitDataArrayIntoObservations](https://wiki.52north.org/SensorWeb/SensorObservationServiceIVDocumentation#SplitDataArrayIntoObservations) request extension. It results in better performance and less data transfered. |
 | `HUNK_SIZE` | Integer value defining the number of rows that should be combined in one SWEArrayObservation. |
 | `OTHER` | Not used. Maybe used by other `CsvParser` implementations. |
 
@@ -249,27 +252,11 @@ A `ManualResource` has a `Name`, `URI` (when `useAsPrefix` is set, the `URI := U
 
 ## Road map
 
-*Legend*:
-   * :white_large_square: &rarr; denotes *future* versions and *not* implemented features
-   * :white_check_mark: &rarr; denotes *achieved* versions and *implemented* features
-   * [ ] &rarr; denotes open issues
-   * [x] &rarr; denotes closed issues
-
 :information_source: Dear developer, please update our [trello board](https://trello.com/b/kydEVMz3/sos-importer) accordingly!
 
 ### :white_large_square: Open Features
 
-:information_source: Please add feature requests as [new issue](https://github.com/52North/sos-importer/issues/new) with label **enhancement**.
-
-   * [ ] Allow regular expressions to describe dynamic directory/file names (repeated feeding)
-   * [ ] Generic web client for multiple protocol support
-   * [ ] Pushing new data directly into a SOS database through a database connection (via according SQL statements)
-   * [ ] Feed to multiple SOS instances
-   * [ ] Support SOAP binding (might be an OX-F task)
-   * [ ] Support KVP binding (might be an OX-F task)
-   * [x] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
-   * [ ] handle failing insertobservations, e.g. store in common csv format and re-import during next run.
-   * [ ] Switch wizard to Java FX.
+:information_source: Please add feature requests as [new issue](https://github.com/52North/sos-importer/issues/new) with label **enhancement**. Everything from this ssections is moved to github [issues with label **enhancement**](https://github.com/52North/sos-importer/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement).
 
 ### :white_large_square: Open Issues
 
@@ -279,12 +266,17 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Add support for reference values<br />
+       A reference value is a value with the same type, optional unit and observed property of the related column (timeseries) that defines an upper or lower limit.
      * Add support for profile observations
-     * Refactoring:
+     * Refactoring (aka Architecture Re-Design):
        * Introduced Importer and Collector interface to split code in Feeder and support multithreading
-         for parsing and feeding observation in the SOS
-       * <CsvMetadata><ObservationCollectorClass> for specifying the implementation of the Collector interface
-     * MultiFeederTask
+         for parsing and feeding observation in the SOS. In addition, different SosClient implementations can use different bindings provided by a SOS. This results in easier implementation of different import strategies or support of special CSV files.
+       * New: `<CsvMetadata><ObservationCollector>` for specifying the implementation of the Collector interface.
+       * Changed: `<CsvMetadata><CsvParser>` for specifying the implementation of the CsvParser interface.
+       * New: `<SosMetadata><Importer>` for specifying the implementation of the Importer interface.
+       * Switched from OX-Framework to arctic-sea
+     * MultiFeederTask:<br />
        This feature provides means for harvesting many observation data source at once. The required inputs are an folder with configurations, the number of importing threads, and the period in minutes when all import configurations are processed again. This includes the option for changing the content of the configuration directory between each run.
      * Add support for HTTP remote files incl. fix for FTP client
      * Add support for parent feature relations
@@ -303,6 +295,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
        * Bindings
        * Wizard
        * Feeder
+     * [x] Switch to `joda-time` or [EOL](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/package-summary.html][java 8 DateTime API]] &rArr; switch to java 8 because of [[http://www.oracle.com/technetwork/java/eol-135779.html)
    * *Changes:*
       * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
       * Updated to latest 52N parent &rarr; javadoc and dependency plugin cause a lot of minor adjustments
@@ -418,8 +411,9 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ## Contributors
 
-- Active
-  - [Eike J&uuml;rrens](https://github.com/EHJ-52n)
+* Active
+  * [Eike J&uuml;rrens](https://github.com/EHJ-52n)
+  * [Maurin Radtke](https://github.com/MojioMS)
   - Your name here!
 - Former
   - Eric Fiedler
@@ -431,11 +425,13 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 You may first get in touch using the [sensor web mailinglist](mailto:swe@52north.org) ([Mailman page including archive access](http://list.52north.org/mailman/listinfo/swe), [Forum view](http://sensorweb.forum.52north.org/) for browser addicted). In addition, you might follow the overall instruction about [getting involved with 52&#176;North](http://52north.org/about/get-involved/) which offers more than contributing as developer like designer, translator, writer, .... Your help is always welcome!
 
+Regarding the SOS-Importer project, you might take a look at the list of [open features](https://github.com/52North/sos-importer/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement), [open issues](https://github.com/52North/sos-importer/issues?q=is%3Aissue+is%3Aopen) and provide help using your experience. As developer, please take a look at the [how to build section](#how-to-build).
 
 ## Project Funding
 
 The project received funding by
 
+   * by the BMBF project [MuDak-WRM](htts://www.mudak-wrm.kit.edu/)
    * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="\_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
    * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="\_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
    * by University of Leicester during 2014.
@@ -464,7 +460,7 @@ The supported ways of encoding the metadata about the om:parameter values are th
   ```
 
 * Each `OM_PARAMETER` column requires two `<Metadata>` elements:
-  * The first one with `<Key>` `TYPE` defines the type.
+  * The first one with `<Key>` `TYPE` defines the type, e.g. `COUNT`, `NUMERIC`, `BOOLEAN`, `TEXT`, `CATEGORY`.
   * The second one with `<Key>` `NAME` defines the name of the `om:parameter` used for encoding the `om:parameter` as `<NamedValue>`.
 * A unit of measurement is required when choosing the `TYPE` `NUMERIC`. It can be encoded in two ways. A `<RelatedUnitOfMeasurement>` element, which is:
   * referencing another `<Column>` by its number, or
@@ -543,16 +539,19 @@ Here are some additional examples for encoding `om:parameter` columns:
 
    1. Have *datafile* and *configuration file* ready.
    1. Open command line tool.
-   1. Change to directory with `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar`.
-   1. Run `java -jar 52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` to see the latest supported and required parameters like this:<br />
+   1. Change to directory with `52n-sos-importer-feeder-bin.jar`.
+   1. Run `java -jar 52n-sos-importer-feeder-bin.jar` to see the latest supported and required parameters like this:<br />
 ```
-usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
-        options and arguments:
-        -c file     : read the config file and start the import process
-        -d datafile : OPTIONAL override of the datafile defined in config file
-        -p period   : OPTIONAL time period in minutes for repeated feeding
-        OR
-        -m directory period threads : directory path containing configuration XML files that are every period of minutes submitted as FeedingTasks into a ThreadPool of size threads
+usage: java -jar Feeder.jar [-c file [-d datafile] [-p period]]|-m directory period threads
+options and arguments:
+-c file     : read the config file and start the import process
+-d datafile : OPTIONAL override of the datafile defined in config file
+-p period   : OPTIONAL time period in minutes for repeated feeding
+-m directory period threads:
+            'directory' path containing configuration XML files that
+            are every 'period' of minutes submitted as FeedingTasks
+            into a ThreadPool of size 'threads'. A period < 1 results
+            in a ontime run of the multi feeder.
 ```
 
 
@@ -566,9 +565,9 @@ usage: java -jar Feeder.jar -c file [-d datafile] [-p period]
 ### Module _wizard_
 
    1. Open command line tool.
-   1. Change to directory with `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
-   1. Run `java -jar 52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
-   1. Follow the wizard to create a configuration file which can be used by the feeder module for repeated feeding or import the data once using the wizard (the second option requires the latest `52n-sos-importer-feeder-$VERSION_NUMBER$-bin.jar` in the same folder like the `52n-sos-importer-wizard-$VERSION_NUMBER$-bin.jar`.
+   1. Change to directory with `52n-sos-importer-wizard-bin.jar`.
+   1. Run `java -jar 52n-sos-importer-wizard-bin.jar`.
+   1. Follow the wizard to create a configuration file which can be used by the feeder module for repeated feeding or import the data once using the wizard (the second option requires the latest `52n-sos-importer-feeder-bin.jar` in the same folder like the `52n-sos-importer-wizard-bin.jar`.
 
 
 ## Quickstart
@@ -610,21 +609,21 @@ You can just download example files to see how the application works:
 ## How to Build
 
    1. Have jdk (>=1.8), maven (>=3.1.1), and git installed already.
-   1. _Optional_: Due to some updates to the OX-Framework done during the SOS-Importer development, you might need to build the OX-F from the branch *develop*. Please check in the `pom.xml` the value of `<oxf.version>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
+   1. _Optional_: Due to some updates to the arctic-sea project done during the SOS-Importer development, you might need to build by yourself. Please check in the `pom.xml` the value of `<version.arctic-sea>`. If it ends with `-SNAPSHOT`, continue here, else continue with step #3:
 
       ```
-      ~$ git clone https://github.com/52North/OX-Framework.git
-      ~$ cd OX-Framework
-      ~/OX-Framework$ mvn install
+      ~$ git clone https://github.com/52North/arctic-sea.git
+      ~$ cd arctic-sea
+      ~/arctic-sea$ mvn install -T1C
       ```
 
-      or this fork (please check for [open pull requests](https://github.com/52North/OX-Framework/pulls)!):
+      or this fork (please check for [open pull requests](https://github.com/52North/arctic-sea/pulls)!):
 
       ```
-      ~$ git remote add eike https://github.com/EHJ-52n/OX-Framework.git
+      ~$ git remote add eike https://github.com/EHJ-52n/arctic-sea.git
       ~/OX-Framework$ git fetch eike
       ~/OX-Framework$ git checkout -b eike-develop eike/develop
-      ~/OX-Framework$ mvn clean install
+      ~/OX-Framework$ mvn clean install -T1C
       ```
 
    1. Checkout latest version of SOS-Importer with:
@@ -643,7 +642,7 @@ You can just download example files to see how the application works:
    1. Build SOS importer modules:
 
       ```
-      ~/sos-importer$ mvn install
+      ~/sos-importer$ mvn install -Pcheck -T1C
       ```
 
    1. Find the jar files here:
@@ -662,23 +661,43 @@ You can just download example files to see how the application works:
 
 ## Dependencies
 
-   * JAVA 1.8+
-   * List of Dependencies (generated following our [best practice](https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus) documentation): [THIRD-PARTY.txt](https://wiki.52north.org/pub/SensorWeb/SosImporter/THIRD-PARTY.txt)
+ * JAVA 1.8+
+ * List of Dependencies (generated following our [best practice](https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus) documentation): [THIRD-PARTY.txt](https://wiki.52north.org/pub/SensorWeb/SosImporter/THIRD-PARTY.txt)
 
 
 ## Extend `CsvParser`
 
-*For providing your own `CsvParser` implementation*
+_For providing your own `CsvParser` implementation_
 
 Since version 0.4.0, it is possible to implement your own `CsvParser` type, if the current generic CSV parser implementation is not sufficient for your use case. Currently, one additional parser is implemented. The `NSAMParser` is able to handle CSV files that grow not from top to down but from left to right.
 
 To get your own parser implementation working, you need to implement the `CsvParser` interface (see the next Figure for more details).
 
-<img src="https://wiki.52north.org/pub/SensorWeb/SosImporter/sos-importer_csvparser.png" alt="sos-importer_csvparser.png" width='274' height='165' />
+<img src="src/site/images/interface-csv-parser.png" alt="CsvParser Interface with methods" />
 
-In addition, you need to add `<CsvParserClass>` in your configuration to `<CsvMetadata>`. The class that MUST be used for parsing the data file. The interface `org.n52.sos.importer.feeder.CsvParser` MUST be implemented. The class name MUST contain the fully qualified package name and a zero-argument constructor MUST be provided.
+In addition, you need to add `<CsvParser>` in your configuration to `<CsvMetadata>`. The class that MUST be used for parsing the data file. The interface `org.n52.sos.importer.feeder.CsvParser` MUST be implemented. The class name MUST contain the fully qualified package name and a zero-argument constructor MUST be provided.
 
 The `CsvParser.init(..)` is called after the constructor and should result in a ready-to-use parser instance. `CsvParser.readNext()` returns the next "line" of values that should be processed as `String[]`. An `IOException` could be thrown if something unexpected happens during the read operation. The `CsvParser.getSkipLimit()` should return 0, if number of lines == number of observations, or the difference between line number and line index.
+
+## Extend `Collector`
+
+_For providining your own `Collector` implementation_
+
+Since version 0.5.0, it is possible to implement your own `Collector` type, if the already implemented implementations are not sufficient for your use case.
+
+<img src="src/site/images/interface-collector.png" alt="Collector interface with methds" />
+
+You need to specifcy the qualified name in the `<CsvMetadata><ObservationCollector>` element.
+
+Methods to implement:
+  * `collectObservations(DataFile,CountDownLatch)`:<br />
+    Starts the observation collection process. It is called within its own thread in `Feeder.importData(DataFile)`. The collected observations <b>MUST</b> be provided using the `FeederContext.addObservationForImporting(InsertObservation...)` method.
+  * `setConfiguration(Configuration)`:<br/>
+    Sets the `Configuration` of the collector and it is called after the parameterless constructor in `Feeder.Feeder(Configuration)`.
+  * `setFeedingContext(FeedingContext)`:<br />
+    Sets the `FeedingContext` of this collector and it is called after the `setConfiguration(Configuration)` method in `Feeder.Feeder(Configuration)`.
+  * `stopCollecting()`:<br />
+  Called by `Feeder` in the case of an exception during handover of observations to the `Importer` implementation via `FeedingContext#addObservationForImporting(InsertObservation...)`. This collector should stop all operations asap including closing threads etc.
 
 
 # Troubleshooting/Bugs
