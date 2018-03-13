@@ -71,7 +71,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
 
     @Override
     public void collectObservations(DataFile dataFile, CountDownLatch latch)
-            throws IOException, ParseException, URISyntaxException {
+            throws IOException, ParseException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
             return;
@@ -117,7 +117,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
         }
     }
 
-    private void processSampleStart() throws IOException, URISyntaxException {
+    private void processSampleStart() throws IOException {
         String[] line;
         // long, lat, alt
         double[] values = new double[3];
