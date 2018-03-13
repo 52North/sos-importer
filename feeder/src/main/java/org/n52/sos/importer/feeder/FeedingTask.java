@@ -44,9 +44,9 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
-import org.n52.sos.importer.feeder.util.HTTPClient;
-import org.n52.sos.importer.feeder.util.FtpClient;
-import org.n52.sos.importer.feeder.util.WebClient;
+import org.n52.sos.importer.feeder.util.web.FtpClient;
+import org.n52.sos.importer.feeder.util.web.HTTPClient;
+import org.n52.sos.importer.feeder.util.web.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

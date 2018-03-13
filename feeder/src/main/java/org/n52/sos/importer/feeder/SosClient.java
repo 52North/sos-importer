@@ -37,7 +37,7 @@ import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
-import org.n52.sos.importer.feeder.web.HttpClient;
+import org.n52.sos.importer.feeder.util.web.HttpClient;
 import org.n52.svalbard.encode.exception.EncodingException;
 
 /**

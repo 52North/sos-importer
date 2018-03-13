@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.web;
+package org.n52.sos.importer.feeder.util.web;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -63,6 +63,8 @@ import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
+import org.n52.sos.importer.feeder.util.web.ArcticSeaSosClient;
+import org.n52.sos.importer.feeder.util.web.HttpClient;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;

@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder.util;
+package org.n52.sos.importer.feeder.util.web;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
