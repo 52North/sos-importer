@@ -66,7 +66,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
     private ExecutorService importerThreads = Executors.newFixedThreadPool(5);
 
     @Override
-    public void addObservationForImporting(InsertObservation... insertObservations)
+    public void addObservations(InsertObservation... insertObservations)
             throws XmlException, IOException {
         if (insertObservations == null) {
             return;

@@ -160,7 +160,7 @@ public final class Feeder implements FeedingContext {
             public void run() {
                 try {
                     collectorPhaser.register();
-                    importer.addObservationForImporting(insertObservations);
+                    importer.addObservations(insertObservations);
                 } catch (Exception e) {
                     exceptions.add(e);
                     collector.stopCollecting();

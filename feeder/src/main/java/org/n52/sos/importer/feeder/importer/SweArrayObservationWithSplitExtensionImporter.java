@@ -81,7 +81,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
     }
 
     @Override
-    public synchronized void addObservationForImporting(InsertObservation... insertObservations) throws Exception {
+    public synchronized void addObservations(InsertObservation... insertObservations) throws Exception {
         if (insertObservations == null) {
             return;
         }
