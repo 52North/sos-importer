@@ -154,7 +154,6 @@ public final class Feeder implements FeedingContext {
         if (insertObservations == null || insertObservations.length == 0) {
             return;
         }
-        increaseCollectedObservationsCount(insertObservations.length);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -167,6 +166,7 @@ public final class Feeder implements FeedingContext {
                 } finally {
                     collectorPhaser.arriveAndDeregister();
                 }
+                increaseCollectedObservationsCount(insertObservations.length);
             }
         }).start();
     }
