@@ -431,7 +431,7 @@ Regarding the SOS-Importer project, you might take a look at the list of [open f
 
 The project received funding by
 
-   * by the BMBF project [MuDak-WRM](htts://www.mudak-wrm.kit.edu/)
+   * by the BMBF project [MuDak-WRM](https://www.mudak-wrm.kit.edu/)
    * by the European FP7 research project <a href="http://www.eo2heaven.org/" target="\_blank">EO2HEAVEN</a> (co-funded by the European Commission under the grant agreement n&deg;244100).
    * by the European FP7 research project <a href="http://52north.org/resources/references/geostatistics/109-geoviqua" target="\_blank">GeoViQua</a> (co-funded by the European Commission under the grant agreement n&deg;265178).
    * by University of Leicester during 2014.
