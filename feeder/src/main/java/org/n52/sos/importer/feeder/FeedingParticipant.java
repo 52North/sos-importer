@@ -28,32 +28,28 @@
  */
 package org.n52.sos.importer.feeder;
 
-import java.util.List;
-
-import org.n52.sos.importer.feeder.model.InsertObservation;
-
 /**
- * <b>Interface for Observation Importer</b><br>
- * <br>
- * Observations are received by {@link FeedingContext}{@link #addObservationForImporting(InsertObservation...)}.
- * These should be imported using the given {@link Configuration} and {@link SosClient}. The process is managed by
- * {@link #startImporting()} and {@link #stopImporting()}.
- *
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  */
-public interface Importer extends FeedingParticipant {
+public interface FeedingParticipant {
 
-    void addObservations(InsertObservation... insertObservations) throws Exception;
+    /**
+     * Sets the {@link Configuration} of this collector and it is called after
+     * the parameterless constructor in {@link Feeder#Feeder(Configuration)}.
+     *
+     * @param configuration the {@link Configuration} providing access to the
+     *        XML import configuration
+     */
+    void setConfiguration(Configuration configuration);
 
-    List<InsertObservation> getFailedObservations();
-
-    boolean hasFailedObservations();
-
-    void setSosClient(SosClient sosClient);
-
-    void startImporting();
-
-    default void stopImporting() throws Exception {
-    }
+    /**
+     * Sets the {@link FeedingContext} of this collector and it is called after
+     * the {@link #setConfiguration(Configuration)} method in
+     * {@link Feeder#Feeder(Configuration)}.
+     *
+     * @param context the {@link FeedingContext} providing a bridge between this
+     *        collector and the {@link Importer} implementation used.
+     */
+    void setFeedingContext(FeedingContext context);
 
 }

@@ -47,7 +47,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
  * @see FeedingContext
  * @see InsertObservation
  */
-public interface Collector {
+public interface Collector extends FeedingParticipant {
 
     /**
      * Starts the observation collection process. It is called within its own thread
@@ -64,25 +64,6 @@ public interface Collector {
      */
     void collectObservations(DataFile dataFile, CountDownLatch latch)
             throws IOException, ParseException;
-
-    /**
-     * Sets the {@link Configuration} of this collector and it is called after
-     * the parameterless constructor in {@link Feeder#Feeder(Configuration)}.
-     *
-     * @param configuration the {@link Configuration} providing access to the
-     *        XML import configuration
-     */
-    void setConfiguration(Configuration configuration);
-
-    /**
-     * Sets the {@link FeedingContext} of this collector and it is called after
-     * the {@link #setConfiguration(Configuration)} method in
-     * {@link Feeder#Feeder(Configuration)}.
-     *
-     * @param context the {@link FeedingContext} providing a bridge between this
-     *        collector and the {@link Importer} implementation used.
-     */
-    void setFeedingContext(FeedingContext context);
 
     /**
      * Called by {@link Feeder} in the case of an exception during handover of
