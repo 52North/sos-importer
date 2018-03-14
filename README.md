@@ -1,7 +1,7 @@
 # 52°North SOS Importer
 [:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
 
-**Master**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+**Master**: [![Build Status](https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/)&nbsp;[![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
@@ -665,7 +665,7 @@ You can just download example files to see how the application works:
  * List of Dependencies (generated following our [best practice](https://wiki.52north.org/bin/view/Documentation/BestPracticeLicenseManagementInSoftwareProjects#maven_license_plugin_by_codehaus) documentation): [THIRD-PARTY.txt](https://wiki.52north.org/pub/SensorWeb/SosImporter/THIRD-PARTY.txt)
 
 
-## Extend `CsvParser`
+## Implement `CsvParser`
 
 _For providing your own `CsvParser` implementation_
 
@@ -679,26 +679,56 @@ In addition, you need to add `<CsvParser>` in your configuration to `<CsvMetadat
 
 The `CsvParser.init(..)` is called after the constructor and should result in a ready-to-use parser instance. `CsvParser.readNext()` returns the next "line" of values that should be processed as `String[]`. An `IOException` could be thrown if something unexpected happens during the read operation. The `CsvParser.getSkipLimit()` should return 0, if number of lines == number of observations, or the difference between line number and line index.
 
-## Extend `Collector`
+## Implement `Collector`
 
 _For providining your own `Collector` implementation_
 
 Since version 0.5.0, it is possible to implement your own `Collector` type, if the already implemented implementations are not sufficient for your use case.
 
-<img src="src/site/images/interface-collector.png" alt="Collector interface with methds" />
+<img src="src/site/images/interface-collector.png" alt="Collector interface with methods" />
 
 You need to specifcy the qualified name in the `<CsvMetadata><ObservationCollector>` element.
 
 Methods to implement:
   * `collectObservations(DataFile,CountDownLatch)`:<br />
     Starts the observation collection process. It is called within its own thread in `Feeder.importData(DataFile)`. The collected observations <b>MUST</b> be provided using the `FeederContext.addObservationForImporting(InsertObservation...)` method.
-  * `setConfiguration(Configuration)`:<br/>
-    Sets the `Configuration` of the collector and it is called after the parameterless constructor in `Feeder.Feeder(Configuration)`.
-  * `setFeedingContext(FeedingContext)`:<br />
-    Sets the `FeedingContext` of this collector and it is called after the `setConfiguration(Configuration)` method in `Feeder.Feeder(Configuration)`.
   * `stopCollecting()`:<br />
-  Called by `Feeder` in the case of an exception during handover of observations to the `Importer` implementation via `FeedingContext#addObservationForImporting(InsertObservation...)`. This collector should stop all operations asap including closing threads etc.
+     Called by `Feeder` in the case of an exception during handover of observations to the `Importer` implementation via `FeedingContext#addObservationForImporting(InsertObservation...)`. This collector should stop all operations asap including closing threads etc.
 
+
+## Implement `Importer`
+
+_For providing your own `Importer` implementation._
+
+Since version 0.5.0, it is possible to implement your own `Importer` type, if the already implemented implementations are not sufficient for your use case.
+
+<img src="src/site/images/interface-importer.png" alt="Importer interface with methods" />
+
+You need to specifcy the qualified name in the `<SosMetadata><Importer>` element.
+
+Methods to implement:
+  * `collectObservations(DataFile,CountDownLatch)`:<br />
+
+  * `addObservations(InsertObservation)`:<br />
+
+  * `getFailedObservations()`:<br />
+
+  * `hasFailedObservations()`:<br />
+
+  * `setSosClient(SosClient)`:<br />
+
+  * `startImporting()`:<br />
+
+  * `stopImporting()`:<br />
+
+
+## interfaces
+
+ * `FeedingParticipant`:<br/>
+   * `setConfiguration(Configuration)`:<br/>
+     Sets the `Configuration` of the collector and it is called after the parameterless constructor in `Feeder.Feeder(Configuration)`.
+   * `setFeedingContext(FeedingContext)`:<br />
+     Sets the `FeedingContext` of this collector and it is called after the `setConfiguration(Configuration)` method in `Feeder.Feeder(Configuration)`.
 
 # Troubleshooting/Bugs
 
@@ -713,10 +743,6 @@ If you have any problems, please check the issues section for the sos importer f
 This project follows the  [Gitflow branching model](http://nvie.com/posts/a-successful-git-branching-model/). "master" reflects the latest stable release.
 Ongoing development is done in branch [develop](../../tree/develop) and dedicated feature branches (feature-*).
 
-
-## Build Status
-
-* Master: [![Build Status](http://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](http://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/) [![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)
 
 ## License
 
