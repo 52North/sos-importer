@@ -115,7 +115,7 @@ The *feeder module* contains the following major packages and classes
          for sample based CSV files. A "sample" is a single sampling run having additional metadata like date information which is not contained in the lines.
        * `SingleProfileCollecotr`<br />
          for profile based CSV files. A profile is located at one location and contain several series at different depth levels, for example.
-    * _Pakcage_ `importer`<br />
+    * _Package_ `importer`<br />
       contains the available implementations of the _`Importer`_ interface. In addition, a abstract skeleton implementation is provided in _`ImporterSkeleton`_. Available implementations are:
       * `SingleObservationImporter`<br />
         implementation which imports each received `model.InsertObservation` directly as single observation into the SOS instance. This implementation uses 5 threads for parallel importing.
