@@ -342,7 +342,7 @@ public abstract class Lang {
      *
      * @return The latitude/northing can only be a decimal number so far.
      */
-    public abstract String latitudeDialogDecimalValue();
+    public abstract String coordinateDialogDecimalValue();
 
     /**
      * <p>latitudeNorthing.</p>

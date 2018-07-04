@@ -29,14 +29,15 @@
 package org.n52.sos.importer.feeder;
 
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 
 import org.apache.xmlbeans.XmlException;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsNull;
-import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 
@@ -60,19 +61,21 @@ public class TestIssue57ReadFoiPosition {
         // when
         int mvColumnId = 4;
         final String foiId = "SE10_0AB_1";
-        String[] values = { foiId, "Sensor1", "51.48790", "0.00441", "0.71",
+        double longValue = 0.00441;
+        double latValue = 51.48790;
+        String[] values = { foiId, "Sensor1", Double.toString(latValue), Double.toString(longValue), "0.71",
                 "Rel_Humidity", "Percent", "3/14/2016 1.30 PM", "", "", "", };
         FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
 
         // then
-        final String deg = "deg";
-        Assert.assertThat(foi.getPosition(), Is.is(IsNull.notNullValue()));
-        Assert.assertThat(foi.getUri().toString(), Is.is(foiId));
-        Assert.assertThat(foi.getPosition().getAltitude(), Is.is(0.0));
-        Assert.assertThat(foi.getPosition().getAltitudeUnit(), Is.is("m"));
-        Assert.assertThat(foi.getPosition().getLatitude(), Is.is(51.48790));
-        Assert.assertThat(foi.getPosition().getLatitudeUnit(), Is.is(deg));
-        Assert.assertThat(foi.getPosition().getLongitude(), Is.is(0.00441));
-        Assert.assertThat(foi.getPosition().getLongitudeUnit(), Is.is(deg));
+        final String deg = "°";
+        assertThat(foi.getPosition(), is(notNullValue()));
+        assertThat(foi.getUri().toString(), is(foiId));
+        assertThat(foi.getPosition().getValueByAxisAbbreviation("h"), is(0.0));
+        assertThat(foi.getPosition().getUnitByAxisAbbreviation("h"), is("m"));
+        assertThat(foi.getPosition().getValueByAxisAbbreviation("Lat"), is(latValue));
+        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Lat"), is(deg));
+        assertThat(foi.getPosition().getValueByAxisAbbreviation("Long"), is(longValue));
+        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Long"), is(deg));
     }
 }

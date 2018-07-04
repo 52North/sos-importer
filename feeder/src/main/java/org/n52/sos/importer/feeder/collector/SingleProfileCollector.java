@@ -41,6 +41,7 @@ import org.n52.sos.importer.feeder.Application;
 import org.n52.sos.importer.feeder.Collector;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
+import org.n52.sos.importer.feeder.model.Coordinate;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
@@ -60,6 +61,8 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  */
 public class SingleProfileCollector extends CollectorSkeleton {
+
+    private static final String DEG = "°";
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleProfileCollector.class);
 
@@ -139,8 +142,11 @@ public class SingleProfileCollector extends CollectorSkeleton {
                 break;
             }
         }
-        String deg = "deg";
-        Position position = new Position(values , new String[] {deg, deg, "m"}, 4326);
+        Position position = new Position(4979, new Coordinate[] {
+            new Coordinate("Long", DEG, values[0]),
+            new Coordinate("Lat", DEG, values[1]),
+            new Coordinate("h", "m", values[2]),
+        });
         String identifier = generateFeatureIdentifier(values);
         foi = new FeatureOfInterest(identifier, identifier, position);
         foi.setParentFeature(configuration.getParentFeatureFromAdditionalMetadata());

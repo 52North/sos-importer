@@ -208,7 +208,7 @@ public class De extends Lang {
     }
 
     @Override
-    public String latitudeDialogDecimalValue() {
+    public String coordinateDialogDecimalValue() {
         return DER + latitudeNorthing() + KANN_ZUR_ZEIT_NUR_ALS_DEZIMALZAHL_ANGEGEBEN_WERDEN;
     }
 

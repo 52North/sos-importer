@@ -35,7 +35,7 @@
         </Metadata>
         <Metadata>
           <Key>PARSE_PATTERN</Key>
-          <Value>LAT</Value>
+          <Value>COORD_0</Value>
         </Metadata>
         <Metadata>
           <Key>GROUP</Key>
@@ -51,14 +51,14 @@
         </Metadata>
         <Metadata>
           <Key>PARSE_PATTERN</Key>
-          <Value>LON</Value>
+          <Value>COORD_1</Value>
         </Metadata>
         <Metadata>
           <Key>GROUP</Key>
           <Value>A</Value>
         </Metadata>
         <Metadata>
-          <Key>POSITION_ALTITUDE</Key>
+          <Key>POSITION_COORD_2</Key>
           <Value>0.0</Value>
         </Metadata>
         <Metadata>

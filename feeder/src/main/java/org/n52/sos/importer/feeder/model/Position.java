@@ -29,6 +29,10 @@
 package org.n52.sos.importer.feeder.model;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.n52.sos.importer.feeder.util.EPSGHelper;
 
 /**
  * <p>Position class.</p>
@@ -37,79 +41,73 @@ import java.util.Arrays;
  */
 public final class Position {
 
-    /** Constant <code>LONG=0</code> */
-    public static final int LONG = 0;
-
-    /** Constant <code>LAT=1</code> */
-    public static final int LAT = 1;
-
-    /** Constant <code>ALT=2</code> */
-    public static final int ALT = 2;
-
-    /** Constant <code>DEFAULT_UNIT_LAT="null"</code> */
-    public static final String DEFAULT_UNIT_LAT = null;
-
     /** Constant <code>UNIT_NOT_SET="UNIT_NOT_SET"</code> */
     public static final String UNIT_NOT_SET = "UNIT_NOT_SET";
 
     /** Constant <code>VALUE_NOT_SET=Double.NEGATIVE_INFINITY</code> */
     public static final double VALUE_NOT_SET = Double.NEGATIVE_INFINITY;
 
-    private final double[] values;
-
-    private final String[] units;
+    private final Coordinate[] coordinates;
 
     private final int epsgCode;
 
-    public Position(final double[] values, final String[] units, final int epsgCode) {
-        if (values == null || units == null) {
-            throw new IllegalArgumentException("values/units must not be null");
+    public Position(int epsgCode, Coordinate[] coordinates) {
+        if (!EPSGHelper.isValidEPSGCode(epsgCode)) {
+            throw new IllegalArgumentException(String.format("EPSG code '%s' is invalid!", epsgCode));
         }
-        this.values = values.clone();
-        this.units = units.clone();
+        if (!EPSGHelper.areValid(epsgCode, coordinates)) {
+            throw new IllegalArgumentException(String.format("Coordinates '%s' for given EPSG code '%s' are invalid.",
+                    Arrays.toString(coordinates),
+                    epsgCode));
+        }
         this.epsgCode = epsgCode;
+        this.coordinates = coordinates.clone();
     }
 
     public int getEpsgCode() {
         return epsgCode;
     }
 
-    public double getAltitude() {
-        return values[Position.ALT];
+    public double getValueByAxisAbbreviation(String axisAbbreviation) {
+        Optional<Coordinate> findFirst = getCoordinateByAxisAbbreviation(axisAbbreviation);
+        return findFirst.get().getValue();
     }
 
-    public String getAltitudeUnit() {
-        return units[Position.ALT];
+    public String getUnitByAxisAbbreviation(String axisAbbreviation) {
+        Optional<Coordinate> findFirst = getCoordinateByAxisAbbreviation(axisAbbreviation);
+        return findFirst.get().getUnit();
     }
 
-    public double getLongitude() {
-        return values[Position.LONG];
+    private Optional<Coordinate> getCoordinateByAxisAbbreviation(String axisAbbreviation)
+            throws IllegalArgumentException {
+        if (!EPSGHelper.isAxisAbbreviationValid(epsgCode, axisAbbreviation)) {
+            throw new IllegalArgumentException(
+                    String.format("Axis abbreviation '%s' is invalid in combination with EPSG code '%s'!",
+                            axisAbbreviation, epsgCode));
+        }
+        Optional<Coordinate> firstMatchingCoordinate = Stream.of(coordinates)
+                .filter(c -> c.getAxisAbbrevation().equals(axisAbbreviation))
+                .findFirst();
+        if (!firstMatchingCoordinate.isPresent()) {
+            throw new IllegalArgumentException(
+                    String.format("Coordinate with axis abbreviation '%s' not found in '%s'!",
+                    axisAbbreviation, Arrays.toString(coordinates)));
+        }
+        return firstMatchingCoordinate;
     }
 
-    public String getLongitudeUnit() {
-        return units[Position.LONG];
-    }
-
-    public double getLatitude() {
-        return values[Position.LAT];
-    }
-
-    public String getLatitudeUnit() {
-        return units[Position.LAT];
+    public Coordinate[] getCoordinates() {
+        return coordinates.clone();
     }
 
     @Override
     public String toString() {
-        return String.format("Position [values=%s, units=%s, epsgCode=%s]",
-                Arrays.toString(values), Arrays.toString(units), epsgCode);
+        return String.format("Position [epsgCode=%s, coordinates=%s]", epsgCode, Arrays.toString(coordinates));
     }
 
     public boolean isValid() {
-        return getLongitude() != Position.VALUE_NOT_SET &&
-                getLongitudeUnit() != null && !getLongitudeUnit().isEmpty() &&
-                getLatitude() != Position.VALUE_NOT_SET &&
-                getLatitudeUnit() != null && !getLatitudeUnit().isEmpty() &&
-                getEpsgCode() != -1;
+        return EPSGHelper.isValidEPSGCode(epsgCode) &&
+                EPSGHelper.areValid(epsgCode, coordinates);
     }
 
 

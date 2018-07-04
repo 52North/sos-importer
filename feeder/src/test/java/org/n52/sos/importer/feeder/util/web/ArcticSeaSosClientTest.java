@@ -56,6 +56,10 @@ import org.n52.shetland.ogc.sos.SosCapabilities;
 import org.n52.shetland.ogc.sos.SosObservationOffering;
 import org.n52.shetland.util.CollectionHelper;
 import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.model.Coordinate;
+import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.InsertObservation;
+import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
@@ -63,11 +67,6 @@ import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
-import org.n52.sos.importer.feeder.util.web.ArcticSeaSosClient;
-import org.n52.sos.importer.feeder.util.web.HttpClient;
-import org.n52.sos.importer.feeder.model.FeatureOfInterest;
-import org.n52.sos.importer.feeder.model.InsertObservation;
-import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -358,7 +357,11 @@ public class ArcticSeaSosClientTest {
         return new InsertObservation(
                 new Sensor("sensor-name", sensorUri.toString()),
                 new FeatureOfInterest("feature-name", featureUri.toString(),
-                        new Position(new double[] {1.0,  2.0,  3.0}, new String[] {"deg", "deg", "deg"}, 4326)),
+                        new Position(4979, new Coordinate[] {
+                                new Coordinate("Lat", "°", 1.0),
+                                new Coordinate("Long", "°", 2.0),
+                                new Coordinate("h", "m", 3.0)
+                        })),
                 value,
                 new Timestamp().ofUnixTimeMillis(0 + offset),
                 new UnitOfMeasurement("uom-code", "uom-uri"),

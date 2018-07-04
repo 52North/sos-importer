@@ -55,19 +55,19 @@
         </Metadata>
         <Metadata>
           <Key>PARSE_PATTERN</Key>
-          <Value>LAT LON</Value>
+          <Value>COORD_0 COORD_1</Value>
         </Metadata>
         <Metadata>
           <Key>GROUP</Key>
           <Value>A</Value>
         </Metadata>
         <Metadata>
-          <Key>POSITION_ALTITUDE</Key>
+          <Key>POSITION_COORD_2</Key>
           <Value>524.0</Value>
         </Metadata>
         <Metadata>
           <Key>POSITION_EPSG_CODE</Key>
-          <Value>4326</Value>
+          <Value>4979</Value>
         </Metadata>
       </Column>
       <Column>

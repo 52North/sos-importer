@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.view.utils;
+package org.n52.sos.importer.wizard.utils;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

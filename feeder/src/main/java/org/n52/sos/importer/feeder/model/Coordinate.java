@@ -26,51 +26,47 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.model;
+package org.n52.sos.importer.feeder.model;
 
 /**
- * Represents composed objects (e.g. position) which consist
- * of individual parts (e.g. latitude and longitude)
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  *
- * @author Raimund
  */
-public abstract class Combination implements Formatable, Parseable {
+public class Coordinate {
 
-    /** for parsing */
-    private String pattern;
+    private double value;
+    private String unit;
+    private String axisAbbreviation;
 
-    /** for merging */
-    private String group;
+    public Coordinate(String axisAbbreviation, String unit, double value) {
+        this.axisAbbreviation = axisAbbreviation;
+        this.unit = unit;
+        this.value = value;
+    }
+
+    public String getAxisAbbrevation() {
+        return axisAbbreviation;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public double getValue() {
+        return value;
+    }
 
     @Override
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public String toString() {
+        return String.format("Coordinate [value=%s, unit=%s, axisAbbreviation=%s]", value, unit, axisAbbreviation);
     }
 
-    /**
-     * <p>Getter for the field <code>pattern</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getPattern() {
-        return pattern;
+    public void setAxisAbbreviation(String axisAbbreviation) {
+        this.axisAbbreviation = axisAbbreviation;
     }
 
-    /**
-     * <p>Setter for the field <code>group</code>.</p>
-     *
-     * @param group a {@link java.lang.String} object.
-     */
-    public void setGroup(String group) {
-        this.group = group;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
-    /**
-     * <p>Getter for the field <code>group</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
-    public String getGroup() {
-        return group;
-    }
 }

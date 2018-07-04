@@ -96,7 +96,7 @@ public class Step4bController extends StepController {
         final String orientation = tableController.getOrientationString();
 
         /*
-         * List how to replace the org.n52.sos.importer.view.utils.Constants.STRING_REPLACER in the correct order:
+         * List how to replace the org.n52.sos.importer.wizard.utils.Constants.STRING_REPLACER in the correct order:
          *  1 The table element type of the measured values, maybe "column"
          *  2 The resource type, that is linked to the measured value table element
          *  3 Table element of element to be selected

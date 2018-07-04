@@ -112,7 +112,7 @@ public final class Application {
             } catch (IOException e) {
                 LOG.error("Exception thrown: {}", e.getMessage());
                 LOG.debug("", e);
-            } catch (IllegalArgumentException iae) {
+            } catch (NumberFormatException iae) {
                 LOG.error("Given parameters could not be parsed! -p must be a number.");
                 LOG.debug("Exception Stack Trace:", iae);
             }

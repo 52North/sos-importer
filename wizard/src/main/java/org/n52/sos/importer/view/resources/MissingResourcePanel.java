@@ -100,8 +100,8 @@ import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.ArrayListTransferHandler;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ArrayListTransferHandler;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

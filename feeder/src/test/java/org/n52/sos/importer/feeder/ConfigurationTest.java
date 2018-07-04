@@ -28,21 +28,28 @@
  */
 package org.n52.sos.importer.feeder;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.xmlbeans.XmlException;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.Position;
+import org.n52.sos.importer.feeder.util.EPSGHelper;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.CoordinateDocument.Coordinate;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
+import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
 import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
 
 public class ConfigurationTest {
@@ -51,14 +58,14 @@ public class ConfigurationTest {
     public void isSetOmParameterShouldReturnFalseIfNotSet() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
-        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(false));
+        assertThat(configuration.isOmParameterAvailableFor(4), is(false));
     }
 
     @Test
     public void isSetOmParameterShoulodReturnTrueIfRelatedOmParameterIsSet() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
-        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
+        assertThat(configuration.isOmParameterAvailableFor(4), is(true));
     }
 
     @Test
@@ -66,15 +73,15 @@ public class ConfigurationTest {
             throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
-        Assert.assertThat(configuration.isOmParameterAvailableFor(4), CoreMatchers.is(true));
+        assertThat(configuration.isOmParameterAvailableFor(4), is(true));
     }
 
     @Test
     public void getColumnsForOmParametersShouldReturnEmptyListIfNotSet() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
-        Assert.assertThat(configuration.getColumnsForOmParameter(4), CoreMatchers.notNullValue());
-        Assert.assertThat(configuration.getColumnsForOmParameter(4).isEmpty(), CoreMatchers.is(true));
+        assertThat(configuration.getColumnsForOmParameter(4), notNullValue());
+        assertThat(configuration.getColumnsForOmParameter(4).isEmpty(), is(true));
     }
 
     @Test
@@ -83,30 +90,30 @@ public class ConfigurationTest {
                 "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
 
         List<Column> omParameterColumns = configuration.getColumnsForOmParameter(4);
-        Assert.assertThat(omParameterColumns.isEmpty(), CoreMatchers.is(false));
-        Assert.assertThat(omParameterColumns.size(), CoreMatchers.is(1));
+        assertThat(omParameterColumns.isEmpty(), is(false));
+        assertThat(omParameterColumns.size(), is(1));
         Column column = omParameterColumns.get(0);
-        Assert.assertThat(column.getType(), CoreMatchers.is(Type.OM_PARAMETER));
-        Assert.assertThat(column.getMetadataArray().length, CoreMatchers.is(1));
-        Assert.assertThat(column.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-        Assert.assertThat(column.getMetadataArray(0).getValue(), CoreMatchers.is("COUNT"));
+        assertThat(column.getType(), is(Type.OM_PARAMETER));
+        assertThat(column.getMetadataArray().length, is(1));
+        assertThat(column.getMetadataArray(0).getKey(), is(Key.TYPE));
+        assertThat(column.getMetadataArray(0).getValue(), is("COUNT"));
 
         Configuration configuration2 = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
         List<Column> omParameterColumns2 = configuration2.getColumnsForOmParameter(4);
-        Assert.assertThat(omParameterColumns2.isEmpty(), CoreMatchers.is(false));
-        Assert.assertThat(omParameterColumns2.size(), CoreMatchers.is(2));
+        assertThat(omParameterColumns2.isEmpty(), is(false));
+        assertThat(omParameterColumns2.size(), is(2));
         Column column2 = omParameterColumns2.get(0);
-        Assert.assertThat(column2.getType(), CoreMatchers.is(Type.OM_PARAMETER));
-        Assert.assertThat(column2.getMetadataArray().length, CoreMatchers.is(2));
-        Assert.assertThat(column2.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-        Assert.assertThat(column2.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
+        assertThat(column2.getType(), is(Type.OM_PARAMETER));
+        assertThat(column2.getMetadataArray().length, is(2));
+        assertThat(column2.getMetadataArray(0).getKey(), is(Key.TYPE));
+        assertThat(column2.getMetadataArray(0).getValue(), is("BOOLEAN"));
 
         Column column3 = omParameterColumns2.get(1);
-        Assert.assertThat(column3.getMetadataArray().length, CoreMatchers.is(2));
-        Assert.assertThat(column3.getMetadataArray(0).getKey(), CoreMatchers.is(Key.TYPE));
-        Assert.assertThat(column3.getMetadataArray(0).getValue(), CoreMatchers.is("BOOLEAN"));
+        assertThat(column3.getMetadataArray().length, is(2));
+        assertThat(column3.getMetadataArray(0).getKey(), is(Key.TYPE));
+        assertThat(column3.getMetadataArray(0).getValue(), is("BOOLEAN"));
     }
 
     @Test
@@ -114,7 +121,7 @@ public class ConfigurationTest {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_set_as_related.xml");
         Column column = configuration.getColumnById(4);
-        Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "14.8"), Is.is(false));
+        assertThat(configuration.isNoDataValueDefinedAndMatching(column, "14.8"), is(false));
     }
 
     @Test
@@ -122,7 +129,7 @@ public class ConfigurationTest {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/no_data_value_set.xml");
         Column column = configuration.getColumnById(4);
-        Assert.assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), Is.is(true));
+        assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), is(true));
     }
 
     @Test
@@ -130,42 +137,73 @@ public class ConfigurationTest {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/configWithRemoteFile.xml");
         // URL taken from config file
-        Assert.assertThat(configuration.getRemoteFileURL(), Is.is("http://www.example.com/my/fancy/directoryTree/data.csv"));
+        assertThat(configuration.getRemoteFileURL(), is("http://www.example.com/my/fancy/directoryTree/data.csv"));
     }
 
     @Test
     public void hasReferenceValuesShouldReturnFalse() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_without.xml");
-        Assert.assertThat(configuration.hasReferenceValues(), Is.is(false));
+        assertThat(configuration.hasReferenceValues(), is(false));
     }
 
     @Test
     public void hasReferenceValuesShouldReturnTrueIfPresent() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_with.xml");
-        Assert.assertThat(configuration.hasReferenceValues(), Is.is(true));
+        assertThat(configuration.hasReferenceValues(), is(true));
     }
 
     @Test
     public void getReferenceValuesShouldReturnEmptyListWhenNoneAreAvailable() throws XmlException, IOException {
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_with.xml");
-        URI sensorURI = URI.create("not-existing-sensor"); //"http://example.com/krypto-graph";
-        Assert.assertThat(configuration.getReferenceValues(sensorURI).size(), Matchers.is(0));
+        URI sensorURI = URI.create("not-existing-sensor"); // "http://example.com/krypto-graph";
+        assertThat(configuration.getReferenceValues(sensorURI).size(), is(0));
     }
 
     @Test
     public void getReferenceValuesTest() throws XmlException, IOException {
+        org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position position = SpatialResourceType.Factory.newInstance().addNewPosition();
+        position.setEPSGCode(4979);
+        Coordinate coordinate = position.addNewCoordinate();
+        coordinate.setUnit("unit");
+        coordinate.setAxisAbbreviation("axisabbrev");
+        coordinate.setDoubleValue(52.0);
+        coordinate = position.addNewCoordinate();
+        coordinate.setUnit("unit2");
+        coordinate.setAxisAbbreviation("axisabbrev2");
+        coordinate.setDoubleValue(52.02);
+        coordinate = position.addNewCoordinate();
+        coordinate.setUnit("unit3");
+        coordinate.setAxisAbbreviation("axisabbrev3");
+        coordinate.setDoubleValue(52.03);
         Configuration configuration = new Configuration(
                 "src/test/resources/features/reference-values_with.xml");
         URI sensorURI = URI.create("http://example.com/krypto-graph");
-        Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMap = configuration.getReferenceValues(sensorURI);
-        Assert.assertThat(referenceValueMap.size(), Matchers.is(1));
-        List<SimpleEntry<String, String>> referenceValues = referenceValueMap.get(referenceValueMap.keySet().iterator().next());
-        Assert.assertThat(referenceValues, Matchers.hasSize(2));
-        Assert.assertThat(referenceValues, Matchers.hasItem(new SimpleEntry<>("ref-value-1-label","42.0")));
-        Assert.assertThat(referenceValues, Matchers.hasItem(new SimpleEntry<>("ref-value-2-label","23.0")));
+        Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMap = configuration
+                .getReferenceValues(sensorURI);
+        assertThat(referenceValueMap.size(), is(1));
+        List<SimpleEntry<String, String>> referenceValues = referenceValueMap
+                .get(referenceValueMap.keySet().iterator().next());
+        assertThat(referenceValues, hasSize(2));
+        assertThat(referenceValues, hasItem(new SimpleEntry<>("ref-value-1-label", "42.0")));
+        assertThat(referenceValues, hasItem(new SimpleEntry<>("ref-value-2-label", "23.0")));
+    }
+
+    @Test
+    public void getPositionShouldReturnValidPosition() throws XmlException, IOException, ParseException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/feature-position-in-data.xml");
+        Position position = configuration.getPosition("A",
+                new String[] { "4326", "52.0", "42.0", "timestamp", "value"});
+        assertThat(position, notNullValue());
+        assertThat(position.getEpsgCode(), is(4326));
+        assertThat(EPSGHelper.isValidEPSGCode(position.getEpsgCode()), is(true));
+        assertThat(position.getValueByAxisAbbreviation("Lat"), is(52.0));
+        assertThat(position.getUnitByAxisAbbreviation("Lat"), is("°"));
+        assertThat(position.getValueByAxisAbbreviation("Long"), is(42.0));
+        assertThat(position.getUnitByAxisAbbreviation("Long"), is("°"));
     }
 
 }

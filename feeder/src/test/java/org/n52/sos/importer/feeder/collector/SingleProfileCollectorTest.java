@@ -26,7 +26,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.collector;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +39,11 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.DataFile;
+import org.n52.sos.importer.feeder.FeedingContext;
 import org.n52.sos.importer.feeder.collector.SingleProfileCollector;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
@@ -62,34 +66,34 @@ public class SingleProfileCollectorTest {
 
     @Test
     public void parseProfileHeader() {
-        Assert.assertThat(insertObservations, Matchers.notNullValue());
+        assertThat(insertObservations, Matchers.notNullValue());
         InsertObservation insertObservation = insertObservations[0];
-        Assert.assertThat(insertObservation, Matchers.notNullValue());
-        Assert.assertThat(insertObservation.getFeatureOfInterestName(), Is.is("profile-observation-at--25_1450175--48_8652158"));
-        Assert.assertThat(insertObservation.getFeatureOfInterestURI().toString(), Is.is("profile-observation-at--25_1450175--48_8652158"));
-        Assert.assertThat(insertObservation.hasFeatureParentFeature(), Is.is(true));
-        Assert.assertThat(insertObservation.getParentFeatureIdentifier(), Is.is("profile-parent-feature"));
-        Assert.assertThat(insertObservation.getEpsgCode(), Is.is("4326"));
-        Assert.assertThat(insertObservation.getLatitudeValue(), Is.is(-25.1450175));
-        Assert.assertThat(insertObservation.getLongitudeValue(), Is.is(-48.8652158));
-        Assert.assertThat(insertObservation.getAltitudeValue(), Is.is(790.719970703125));
-        Assert.assertThat(insertObservation.getTimeStamp(), Is.is(new Timestamp("2013-03-12T18:52:11+00:00")));
-        Assert.assertThat(insertObservation.getSensorName(), Is.is("CC1305009"));
-        Assert.assertThat(insertObservation.getSensorURI().toString(), Is.is("CC1305009"));
+        assertThat(insertObservation, Matchers.notNullValue());
+        assertThat(insertObservation.getFeatureOfInterestName(), is("profile-observation-at--25_1450175--48_8652158"));
+        assertThat(insertObservation.getFeatureOfInterestURI().toString(), is("profile-observation-at--25_1450175--48_8652158"));
+        assertThat(insertObservation.hasFeatureParentFeature(), is(true));
+        assertThat(insertObservation.getParentFeatureIdentifier(), is("profile-parent-feature"));
+        assertThat(insertObservation.getEpsgCode(), is(4979));
+        assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("Lat"), is(-25.1450175));
+        assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("Long"), is(-48.8652158));
+        assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("h"), is(790.719970703125));
+        assertThat(insertObservation.getTimeStamp(), is(new Timestamp("2013-03-12T18:52:11+00:00")));
+        assertThat(insertObservation.getSensorName(), is("CC1305009"));
+        assertThat(insertObservation.getSensorURI().toString(), is("CC1305009"));
     }
 
     @Test
     public void collectObservationsFromSampleData() {
-        Assert.assertThat(insertObservations, Matchers.notNullValue());
-        Assert.assertThat(insertObservations.length, Is.is(8));
+        assertThat(insertObservations, Matchers.notNullValue());
+        assertThat(insertObservations.length, is(8));
         InsertObservation io = insertObservations[3];
-        Assert.assertThat(io.getMeasuredValueType(), Is.is("NUMERIC"));
-        Assert.assertThat(io.getUnitOfMeasurementCode(), Is.is("µs/cm"));
-        Assert.assertThat(io.getResultValue(), Is.is(65.400440916474579));
-        Assert.assertThat(io.getObservedProperty().getName(), Is.is("Conductivity"));
-        Assert.assertThat(io.getObservedProperty().getUri().toString(), Is.is("Conductivity"));
-        Assert.assertThat(io.getOffering().getUri().toString(), Is.is("CC1305009-offering"));
-        Assert.assertThat(io.getOffering().getName(), Is.is("CC1305009-offering"));
+        assertThat(io.getMeasuredValueType(), is("NUMERIC"));
+        assertThat(io.getUnitOfMeasurementCode(), is("µs/cm"));
+        assertThat(io.getResultValue(), is(65.400440916474579));
+        assertThat(io.getObservedProperty().getName(), is("Conductivity"));
+        assertThat(io.getObservedProperty().getUri().toString(), is("Conductivity"));
+        assertThat(io.getOffering().getUri().toString(), is("CC1305009-offering"));
+        assertThat(io.getOffering().getName(), is("CC1305009-offering"));
     }
 
     private class MyFeedingContext implements FeedingContext {

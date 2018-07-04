@@ -37,6 +37,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
 
 import org.apache.xmlbeans.XmlException;
@@ -78,6 +80,9 @@ public final class Feeder implements FeedingContext {
     private ClassPathXmlApplicationContext applicationContext;
 
     private Phaser collectorPhaser;
+
+    // TODO Replace with thread pool naming the threaads
+    private ExecutorService adderThreads = Executors.newFixedThreadPool(5);
 
     /**
      * <p>Constructor for Feeder.</p>
@@ -128,6 +133,11 @@ public final class Feeder implements FeedingContext {
             log(e);
         }
         try {
+            adderThreads.shutdown();
+        } catch (Exception e) {
+            exceptions.add(e);
+        }
+        try {
             importer.stopImporting();
         } catch (Exception e) {
             exceptions.add(e);
@@ -154,7 +164,8 @@ public final class Feeder implements FeedingContext {
         if (insertObservations == null || insertObservations.length == 0) {
             return;
         }
-        new Thread(new Runnable() {
+
+        adderThreads.submit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -168,7 +179,7 @@ public final class Feeder implements FeedingContext {
                 }
                 increaseCollectedObservationsCount(insertObservations.length);
             }
-        }).start();
+        });
     }
 
     @Override

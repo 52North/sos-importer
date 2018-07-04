@@ -203,7 +203,7 @@ public class En extends Lang {
     }
 
     @Override
-    public String latitudeDialogDecimalValue() {
+    public String coordinateDialogDecimalValue() {
         return THE + latitudeNorthing() + CAN_ONLY_BE_A_DECIMAL_NUMBER_SO_FAR;
     }
 

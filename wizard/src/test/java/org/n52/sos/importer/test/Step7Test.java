@@ -73,10 +73,9 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
@@ -111,13 +110,13 @@ public class Step7Test {
 
         final Position p = new Position();
         p.setGroup("A");
-        final Latitude lat = new Latitude(52.5, "°");
-        final Longitude lon = new Longitude(7.5, "°");
-        final Height h = new Height(100, "m");
-        final EPSGCode epsgCode = new EPSGCode(4236);
-        p.setLatitude(lat);
-        p.setLongitude(lon);
-        p.setHeight(h);
+        final PositionComponent coord0 = new PositionComponent(Id.COORD_0, 52.5, "°");
+        final PositionComponent coord1 = new PositionComponent(Id.COORD_1, 7.5, "°");
+        final PositionComponent coord2 = new PositionComponent(Id.COORD_2, 100, "m");
+        final EPSGCode epsgCode = new EPSGCode(4979);
+        p.addCoordinate(coord0);
+        p.addCoordinate(coord1);
+        p.addCoordinate(coord2);
         p.setEPSGCode(epsgCode);
 
         final ObservedProperty op = new ObservedProperty();

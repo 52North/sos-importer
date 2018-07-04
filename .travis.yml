@@ -1,10 +1,8 @@
 language: java
-#notifications:
-# email: false
 jdk:
     - oraclejdk8
 install: true
-script: mvn clean install
+script: mvn clean install --activate-profiles check --quiet --batch-mode
 notifications:
   irc:
     channels:

@@ -50,7 +50,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- geotools dependencies required for map display -->
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
@@ -62,6 +61,10 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-opengis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jsr-275</groupId>
+            <artifactId>jsr-275</artifactId>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>

@@ -109,25 +109,8 @@ public class InsertObservation {
         return timeStamp;
     }
 
-    public String getEpsgCode() {
-        return Integer.toString(featureOfInterest.getPosition().getEpsgCode());
-    }
-
-    public double getLatitudeValue() {
-        return featureOfInterest.getPosition().getLatitude();
-    }
-
-    public double getLongitudeValue() {
-        return featureOfInterest.getPosition().getLongitude();
-    }
-
-    public double getAltitudeValue() {
-        return featureOfInterest.getPosition().getAltitude();
-    }
-
-
-    public boolean isSetAltitudeValue() {
-        return featureOfInterest != null && featureOfInterest.getPosition().getAltitude() != Position.VALUE_NOT_SET;
+    public int getEpsgCode() {
+        return featureOfInterest.getPosition().getEpsgCode();
     }
 
     public boolean isFeaturePositionValid() {
@@ -138,7 +121,7 @@ public class InsertObservation {
         return observedProperty;
     }
 
-    protected FeatureOfInterest getFeatureOfInterest() {
+    public FeatureOfInterest getFeatureOfInterest() {
         return featureOfInterest;
     }
 

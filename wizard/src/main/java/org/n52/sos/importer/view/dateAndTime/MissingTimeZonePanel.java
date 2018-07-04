@@ -38,7 +38,7 @@ import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * consists of a label and a JSpinner for the UTC offset

@@ -69,14 +69,6 @@ public class InsertSensor {
         return io.getFeatureOfInterest().isPositionValid();
     }
 
-    public String getAltitudeUnit() {
-        return io.getFeatureOfInterest().getPosition().getAltitudeUnit();
-    }
-
-    public double getAltitudeValue() {
-        return io.getFeatureOfInterest().getPosition().getAltitude();
-    }
-
     public String getDefaultValue() {
         if (io.getResultValue() instanceof Boolean) {
             return "false";
@@ -93,9 +85,10 @@ public class InsertSensor {
         return "notDefined";
     }
 
-    public String getEpsgCode() {
+    public int getEpsgCode() {
         return io.getEpsgCode();
     }
+
 
     public String getFeatureOfInterestName() {
         return io.getFeatureOfInterestName();
@@ -103,22 +96,6 @@ public class InsertSensor {
 
     public URI getFeatureOfInterestURI() {
         return io.getFeatureOfInterestURI();
-    }
-
-    public String getLatitudeUnit() {
-        return io.getFeatureOfInterest().getPosition().getLatitudeUnit();
-    }
-
-    public double getLatitudeValue() {
-        return io.getLatitudeValue();
-    }
-
-    public String getLongitudeUnit() {
-        return io.getFeatureOfInterest().getPosition().getLongitudeUnit();
-    }
-
-    public double getLongitudeValue() {
-        return io.getLongitudeValue();
     }
 
     public String getMeasuredValueType(final ObservedProperty observedProperty) {
@@ -149,10 +126,6 @@ public class InsertSensor {
         return unitOfMeasurements.get(observedProperty);
     }
 
-    public boolean isSetAltitude() {
-        return io.isSetAltitudeValue();
-    }
-
     public boolean isSetReferenceValues() {
         return referenceValues != null && !referenceValues.isEmpty();
     }
@@ -164,6 +137,10 @@ public class InsertSensor {
     public boolean isFeatureAvailable() {
         return !getFeatureOfInterestName().isEmpty() &&
                 !getFeatureOfInterestURI().toString().isEmpty();
+    }
+
+    public FeatureOfInterest getFeatureOfInterest() {
+        return io.getFeatureOfInterest();
     }
 
 }

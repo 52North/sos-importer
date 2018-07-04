@@ -90,11 +90,12 @@ public class DefaultCsvCollector extends CollectorSkeleton {
                 // pointing back on first line with data because we are skipping by date and not line
                 lastLine = dataFile.getFirstLineWithData();
             }
-            if (configuration.getFirstLineWithData() == 0) {
-                skipLines(lastLine + 1);
-            } else {
-                skipLines(lastLine);
-            }
+            // FIXME why is this here? files without header miss the first line!
+            //if (configuration.getFirstLineWithData() == 0) {
+            //    skipLines(lastLine + 1);
+            //} else {
+            skipLines(lastLine);
+            //}
             String[] line;
             while ((line = parser.readNext()) != null && !stopped) {
                 if (!configuration.isLineIgnorable(line) &&

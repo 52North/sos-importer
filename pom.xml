@@ -37,7 +37,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
         <version.common-xml>2.4.0</version.common-xml>
-        <version.geotools>18.2</version.geotools>
+        <version.geotools>19.1</version.geotools>
         <version.arctic-sea>5.0.0</version.arctic-sea>
         <version.springframework>4.3.12.RELEASE</version.springframework>
         <project.url>https://github.com/52North/sos-importer</project.url>
@@ -201,6 +201,11 @@
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-opengis</artifactId>
                 <version>${version.geotools}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.java.dev.jsr-275</groupId>
+                <artifactId>jsr-275</artifactId>
+                <version>1.0-beta-2</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools</groupId>

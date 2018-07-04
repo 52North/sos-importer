@@ -37,7 +37,7 @@ import org.n52.sos.importer.model.xml.Model;
 import org.n52.sos.importer.view.DescriptionPanel;
 import org.n52.sos.importer.view.MainFrame;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * controls the main frame of the application,

@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +45,6 @@ import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -53,6 +53,7 @@ import org.apache.http.HttpResponse;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.joda.time.DateTime;
+import org.locationtech.jts.io.ParseException;
 import org.n52.janmayen.http.MediaType;
 import org.n52.shetland.ogc.UoM;
 import org.n52.shetland.ogc.gml.AbstractFeature;
@@ -123,9 +124,10 @@ import org.n52.shetland.ogc.swes.SwesExtension;
 import org.n52.shetland.util.CollectionHelper;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.SosClient;
+import org.n52.sos.importer.feeder.model.Coordinate;
 import org.n52.sos.importer.feeder.model.InsertObservation;
-import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.InsertSensor;
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.CoordinateHelper;
@@ -146,7 +148,6 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.locationtech.jts.io.ParseException;
 
 /**
  * SosClient using the <a href="https://github.com/52North/arctic-sea">52&deg;North Arctic-Sea project</a>
@@ -205,7 +206,7 @@ public class ArcticSeaSosClient implements SosClient {
     public void setHttpClient(HttpClient client) {
         if (client == null) {
             SimpleHttpClient simpleClient = new SimpleHttpClient();
-            if (configuration.getTimeoutBuffer() > 0) {
+            if (configuration.isTimeoutBufferSet() && configuration.getTimeoutBuffer() > 0) {
                 simpleClient.setConnectionTimout(configuration.getTimeoutBuffer());
                 simpleClient.setSocketTimout(configuration.getTimeoutBuffer());
             }
@@ -468,6 +469,7 @@ public class ArcticSeaSosClient implements SosClient {
         List<String> observationTypes = insertSensor.getObservedProperties().stream()
                 .map(o -> getObservationType(insertSensor.getMeasuredValueType(o)))
                 .collect(Collectors.toList());
+        // FIXME this should only be done when using the SweArrayObservationImporter
         if (!observationTypes.isEmpty()
                 && !observationTypes.contains(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION)) {
             observationTypes.add(OmConstants.OBS_TYPE_SWE_ARRAY_OBSERVATION);
@@ -567,23 +569,11 @@ public class ArcticSeaSosClient implements SosClient {
         //            </swe:coordinate>
         //        </swe:Vector>
         //    </sml:position>
-        SweQuantity longitudeValue = new QuantityValue(insertSensor.getLongitudeValue(),
-                insertSensor.getLongitudeUnit());
-        SweCoordinate<BigDecimal> longitude = new SweCoordinate<>("longitude", longitudeValue);
-
-        SweQuantity latitudeValue = new QuantityValue(insertSensor.getLatitudeValue(),
-                insertSensor.getLatitudeUnit());
-        SweCoordinate<BigDecimal> latitude = new SweCoordinate<>("latitude", latitudeValue);
-
-        List<SweCoordinate<BigDecimal>> coordinates;
-
-        if (isAltitudeAvailable(insertSensor)) {
-            SweQuantity altitudeValue = new QuantityValue(insertSensor.getAltitudeValue(),
-                    insertSensor.getAltitudeUnit());
-            SweCoordinate<BigDecimal> altitude = new SweCoordinate<>("altitude", altitudeValue);
-            coordinates = CollectionHelper.list(longitude, latitude, altitude);
-        } else {
-            coordinates = CollectionHelper.list(longitude, latitude);
+        Coordinate[] foiCoordinates = insertSensor.getFeatureOfInterest().getPosition().getCoordinates();
+        List<SweCoordinate<BigDecimal>> coordinates = new ArrayList<>(foiCoordinates.length);
+        for (Coordinate coordinate : foiCoordinates) {
+            SweQuantity coordinateValue = new QuantityValue(coordinate.getValue(), coordinate.getUnit());
+            coordinates.add(new SweCoordinate<>(coordinate.getAxisAbbrevation(), coordinateValue));
         }
 
         SweVector vector = new SweVector();
@@ -600,22 +590,13 @@ public class ArcticSeaSosClient implements SosClient {
         SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(
                 insertSensor.getFeatureOfInterestURI().toString()));
         if (insertSensor.isPositionValid()) {
-            feature.setGeometry(CoordinateHelper.createPoint(
-                    insertSensor.getLongitudeValue(),
-                    insertSensor.getLatitudeValue(),
-                    insertSensor.getAltitudeValue(),
-                    Integer.parseInt(insertSensor.getEpsgCode())));
+            feature.setGeometry(CoordinateHelper.createPoint(insertSensor.getFeatureOfInterest().getPosition()));
         }
 
         SmlFeatureOfInterest featureOfInterest = new SmlFeatureOfInterest();
         featureOfInterest.addFeatureOfInterest(feature);
 
         system.setSmlFeatureOfInterest(featureOfInterest);
-    }
-
-    private boolean isAltitudeAvailable(InsertSensor insertSensor) {
-        return insertSensor.isSetAltitude() && insertSensor.getAltitudeUnit() != null &&
-                !insertSensor.getAltitudeUnit().isEmpty();
     }
 
     private SweAbstractDataComponent createSweType(String measuredValueType, String unitOfMeasurementCode,
@@ -792,15 +773,8 @@ public class ArcticSeaSosClient implements SosClient {
         }
 
         if (insertObservation.isFeaturePositionValid()) {
-            samplingFeature.setGeometry(insertObservation.isSetAltitudeValue() ?
-                    CoordinateHelper.createPoint(insertObservation.getLongitudeValue(),
-                            insertObservation.getLatitudeValue(),
-                            insertObservation.getAltitudeValue(),
-                            Integer.parseInt(insertObservation.getEpsgCode())) :
-                                CoordinateHelper.createPoint(
-                                        insertObservation.getLongitudeValue(),
-                                        insertObservation.getLatitudeValue(),
-                                        Integer.parseInt(insertObservation.getEpsgCode())));
+            samplingFeature.setGeometry(
+                    CoordinateHelper.createPoint(insertObservation.getFeatureOfInterest().getPosition()));
         }
 
         return samplingFeature;

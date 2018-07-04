@@ -30,14 +30,16 @@ package org.n52.sos.importer.feeder.util;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.n52.sos.importer.feeder.util.CoordinateHelper.createPoint;
 
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
+import org.n52.sos.importer.feeder.model.Coordinate;
+import org.n52.sos.importer.feeder.model.Position;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
@@ -54,7 +56,12 @@ public class CoordinateHelperTest {
     @Test
     public void testCreatePoint3DWGS84() throws ParseException, NoSuchAuthorityCodeException, FactoryException {
         int epsgCode = 4979;
-        Point jtsPoint = CoordinateHelper.createPoint(longitude, latitude, altitude, epsgCode);
+        Coordinate[] coordinates = new Coordinate[] {
+                new Coordinate("Long", "°", longitude),
+                new Coordinate("Lat", "°", latitude),
+                new Coordinate("h", "m", altitude)
+        };
+        Point jtsPoint = createPoint(new Position(epsgCode, coordinates));
 
         assertThat(jtsPoint, notNullValue());
         assertThat(jtsPoint.getX(), is(latitude));
@@ -66,7 +73,11 @@ public class CoordinateHelperTest {
     @Test
     public void testCreatePoint2DWGS84() throws ParseException, NoSuchAuthorityCodeException, FactoryException {
         int epsgCode = 4326;
-        Point jtsPoint = CoordinateHelper.createPoint(longitude, latitude, epsgCode);
+        Coordinate[] coordinates = new Coordinate[] {
+                new Coordinate("Long", "°", longitude),
+                new Coordinate("Lat", "°", latitude)
+        };
+        Point jtsPoint = createPoint(new Position(epsgCode, coordinates));
 
         assertThat(jtsPoint, notNullValue());
         assertThat(jtsPoint.getX(), is(latitude));

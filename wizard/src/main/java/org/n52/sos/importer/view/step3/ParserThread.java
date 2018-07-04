@@ -84,7 +84,7 @@ public class ParserThread implements Runnable {
             if (currentLine >= firstLineWithData) {
                 try {
                     parser.parse(value);
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     if (notParseableStrings.add(value)) {
                         notParseable.append(value + "<br>");
                     }

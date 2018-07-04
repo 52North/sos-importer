@@ -28,6 +28,11 @@
  */
 package org.n52.sos.importer.feeder;
 
+import static java.util.Optional.empty;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -35,10 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.xmlbeans.XmlException;
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.shetland.ogc.om.values.BooleanValue;
@@ -51,152 +53,155 @@ import org.n52.sos.importer.feeder.model.Position;
 
 public class DataFileTest {
 
-    private static final String[] EXAMPLE_DATA_ALL_PARAMETER_TYPES =
-            new String[]{"0", "52", "42.0", "true", "test-text", "test-category"};
+    private static final String[] EXAMPLE_DATA_ALL_PARAMETER_TYPES = new String[] {
+            "0", "52", "42.0", "true", "test-text", "test-category" };
 
     @Test
-    public void shouldReturnEmptyListIfNothingIsAvailable() throws XmlException, IOException, NumberFormatException, URISyntaxException {
+    public void shouldReturnEmptyListIfNothingIsAvailable()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
         Configuration configuration = new Configuration(
                 "src/test/resources/feature_om-parameter/omparameter_not_set.xml");
-
-        Assert.assertThat(
-                new DataFile(configuration, null).getOmParameters(4, null),
-                CoreMatchers.is(Optional.empty()));
-        Assert.assertThat(
-                new DataFile(configuration, null).getOmParameters(4, new String[0]),
-                CoreMatchers.is(Optional.empty()));
-        Assert.assertThat(
+        assertThat(new DataFile(configuration, null).getOmParameters(4, null), is(empty()));
+        assertThat(new DataFile(configuration, null).getOmParameters(4, new String[0]),
+                is(empty()));
+        assertThat(
                 new DataFile(configuration, null).getOmParameters(4,
-                        new String[]{"0", "1", "2", "3", "4", "5", "7", "8", "9"}),
-                CoreMatchers.is(Optional.empty()));
+                        new String[] { "0", "1", "2", "3", "4", "5", "7", "8", "9" }),
+                is(empty()));
     }
 
     @Test
-    public void shouldReturnBooleanParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
+    public void shouldReturnBooleanParameter()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column.xml");
 
         Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(4,
-                new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "true", "false", "10"});
+                new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "true", "false", "10" });
 
-        Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
+        assertThat(omParameter.isPresent(), is(true));
         List<NamedValue<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(0).getName().getTitleOrFromHref(), CoreMatchers.is("number-of-reviews"));
-        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(BooleanValue.class));
-        Assert.assertThat(((BooleanValue)omParameters.get(0).getValue()).getValue().booleanValue(),
-                CoreMatchers.is(true));
-        Assert.assertThat(omParameters.get(1).getName().getTitleOrFromHref(),
-                CoreMatchers.is("observation-quality-reviewed"));
-        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(BooleanValue.class));
-        Assert.assertThat(((BooleanValue)omParameters.get(1).getValue()).getValue().booleanValue(),
-                CoreMatchers.is(false));
+        assertThat(omParameters.get(0).getName().getTitleOrFromHref(), is("number-of-reviews"));
+        assertThat(omParameters.get(0), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(0).getValue(), instanceOf(BooleanValue.class));
+        assertThat(((BooleanValue) omParameters.get(0).getValue()).getValue().booleanValue(),
+                is(true));
+        assertThat(omParameters.get(1).getName().getTitleOrFromHref(),
+                is("observation-quality-reviewed"));
+        assertThat(omParameters.get(1), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(1).getValue(), instanceOf(BooleanValue.class));
+        assertThat(((BooleanValue) omParameters.get(1).getValue()).getValue().booleanValue(),
+                is(false));
     }
 
     @Test
-    public void shouldReturnCountParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
+    public void shouldReturnCountParameter()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
         Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
-        Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
+        assertThat(omParameter.isPresent(), is(true));
         List<NamedValue<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(0).getName().getTitleOrFromHref(), CoreMatchers.is("count-parameter"));
-        Assert.assertThat(omParameters.get(0), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(0).getValue(), CoreMatchers.instanceOf(CountValue.class));
-        Assert.assertThat(((CountValue)omParameters.get(0).getValue()).getValue().intValue(), CoreMatchers.is(52));
+        assertThat(omParameters.get(0).getName().getTitleOrFromHref(), is("count-parameter"));
+        assertThat(omParameters.get(0), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(0).getValue(), instanceOf(CountValue.class));
+        assertThat(((CountValue) omParameters.get(0).getValue()).getValue().intValue(), is(52));
     }
 
     @Test
-    public void shouldReturnQuantityParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
+    public void shouldReturnQuantityParameter()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
         Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
-        Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
+        assertThat(omParameter.isPresent(), is(true));
         List<NamedValue<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(1).getName().getTitleOrFromHref(), CoreMatchers.is("numeric-parameter"));
-        Assert.assertThat(omParameters.get(1), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(1).getValue(), CoreMatchers.instanceOf(QuantityValue.class));
-        Assert.assertThat(((QuantityValue)omParameters.get(1).getValue()).getValue().doubleValue(),
-                CoreMatchers.is(42.0));
-        Assert.assertThat(((QuantityValue)omParameters.get(1).getValue()).getUom(), CoreMatchers.is("test-uom-uri"));
+        assertThat(omParameters.get(1).getName().getTitleOrFromHref(), is("numeric-parameter"));
+        assertThat(omParameters.get(1), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(1).getValue(), instanceOf(QuantityValue.class));
+        assertThat(((QuantityValue) omParameters.get(1).getValue()).getValue().doubleValue(),
+                is(42.0));
+        assertThat(((QuantityValue) omParameters.get(1).getValue()).getUom(), is("test-uom-uri"));
     }
 
     @Test
-    public void shouldReturnTextParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
+    public void shouldReturnTextParameter()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
         Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
-        Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
+        assertThat(omParameter.isPresent(), is(true));
         List<NamedValue<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(3).getName().getTitleOrFromHref(), CoreMatchers.is("text-parameter"));
-        Assert.assertThat(omParameters.get(3), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(3).getValue(), CoreMatchers.instanceOf(TextValue.class));
-        Assert.assertThat(((TextValue)omParameters.get(3).getValue()).getValue(), CoreMatchers.is("test-text"));
+        assertThat(omParameters.get(3).getName().getTitleOrFromHref(), is("text-parameter"));
+        assertThat(omParameters.get(3), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(3).getValue(), instanceOf(TextValue.class));
+        assertThat(((TextValue) omParameters.get(3).getValue()).getValue(), is("test-text"));
     }
 
     @Test
-    public void shouldReturnCategoryParameter() throws XmlException, IOException, NumberFormatException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
+    public void shouldReturnCategoryParameter()
+            throws XmlException, IOException, NumberFormatException, URISyntaxException {
+        Configuration configuration = new Configuration(
+                "src/test/resources/feature_om-parameter/omparameter_set_in_column_all.xml");
 
         Optional<List<NamedValue<?>>> omParameter = new DataFile(configuration, null).getOmParameters(0,
                 EXAMPLE_DATA_ALL_PARAMETER_TYPES);
 
-        Assert.assertThat(omParameter.isPresent(), CoreMatchers.is(true));
+        assertThat(omParameter.isPresent(), is(true));
         List<NamedValue<?>> omParameters = omParameter.get();
-        Assert.assertThat(omParameters.get(4).getName().getTitleOrFromHref(), CoreMatchers.is("category-parameter"));
-        Assert.assertThat(omParameters.get(4), CoreMatchers.instanceOf(NamedValue.class));
-        Assert.assertThat(omParameters.get(4).getValue(), CoreMatchers.instanceOf(CategoryValue.class));
-        Assert.assertThat(((CategoryValue)omParameters.get(4).getValue()).getValue(), CoreMatchers.is("test-category"));
+        assertThat(omParameters.get(4).getName().getTitleOrFromHref(), is("category-parameter"));
+        assertThat(omParameters.get(4), instanceOf(NamedValue.class));
+        assertThat(omParameters.get(4).getValue(), instanceOf(CategoryValue.class));
+        assertThat(((CategoryValue) omParameters.get(4).getValue()).getValue(), is("test-category"));
     }
 
     @Test
     public void shouldReturnFeatureOfInterestWithParentFeatureIdentifier()
             throws XmlException, IOException, ParseException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/parent-feature-identifier_set.xml");
 
         FeatureOfInterest featureOfInterest = new DataFile(configuration, null)
                 .getFoiForColumn(4,
-                        new String[]{"feature", "sensor", "52.0", "42.0", "123.45", "property", "12/24/2002 12.40 PM"});
+                        new String[] { "feature", "sensor", "52.0", "42.0", "123.45", "property",
+                                "12/24/2002 12.40 PM" });
 
-        Assert.assertThat(featureOfInterest.hasParentFeature(), Is.is(true));
-        Assert.assertThat(featureOfInterest.getParentFeature(), Is.is("test-parent-feature"));
+        assertThat(featureOfInterest.hasParentFeature(), is(true));
+        assertThat(featureOfInterest.getParentFeature(), is("test-parent-feature"));
     }
 
     @Test
     public void shouldReturnFeatureOfInterest()
             throws XmlException, IOException, ParseException, URISyntaxException {
-        Configuration configuration =
-                new Configuration("src/test/resources/features/parent-feature-identifier_set.xml");
+        Configuration configuration = new Configuration(
+                "src/test/resources/features/parent-feature-identifier_set.xml");
 
         FeatureOfInterest featureOfInterest = new DataFile(configuration, null)
                 .getFoiForColumn(4,
-                        new String[]{"feature", "sensor", "52.0", "42.0", "123.45", "property", "uom",
-                                "12/24/2002 12.40 PM"});
+                        new String[] { "feature", "sensor", "52.0", "42.0", "123.45", "property", "uom",
+                                "12/24/2002 12.40 PM" });
 
-        Assert.assertThat(featureOfInterest.getName(), Is.is("feature"));
-        Assert.assertThat(featureOfInterest.getUri().toString(), Is.is("feature"));
-        Assert.assertThat(featureOfInterest.getPosition(), Is.is(Matchers.notNullValue()));
+        assertThat(featureOfInterest.getName(), is("feature"));
+        assertThat(featureOfInterest.getUri().toString(), is("feature"));
+        assertThat(featureOfInterest.getPosition(), is(Matchers.notNullValue()));
         Position position = featureOfInterest.getPosition();
-        Assert.assertThat(position.getEpsgCode(), Is.is(4326));
+        assertThat(position.getEpsgCode(), is(4979));
         // next value is from configuration file
-        Assert.assertThat(position.getAltitude(), Is.is(0.0));
-        Assert.assertThat(position.getAltitudeUnit(), Is.is("m"));
-        Assert.assertThat(position.getLatitude(), Is.is(52.0));
-        Assert.assertThat(position.getLatitudeUnit(), Is.is("deg"));
-        Assert.assertThat(position.getLongitude(), Is.is(42.0));
-        Assert.assertThat(position.getLongitudeUnit(), Is.is("deg"));
+        assertThat(position.getValueByAxisAbbreviation("h"), is(0.0));
+        assertThat(position.getUnitByAxisAbbreviation("h"), is("m"));
+        assertThat(position.getValueByAxisAbbreviation("Lat"), is(52.0));
+        assertThat(position.getUnitByAxisAbbreviation("Lat"), is("°"));
+        assertThat(position.getValueByAxisAbbreviation("Long"), is(42.0));
+        assertThat(position.getUnitByAxisAbbreviation("Long"), is("°"));
     }
 
 }

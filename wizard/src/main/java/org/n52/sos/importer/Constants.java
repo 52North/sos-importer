@@ -51,7 +51,7 @@ import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.So
 public class Constants {
 
     public static final String SANS_SERIF = "SansSerif";
-    public static final String DEG = "deg";
+    public static final String DEG = "°";
 
     public enum ImportStrategy {
         /**
@@ -172,9 +172,9 @@ public class Constants {
     public static final QName QNAME_MANUAL_SPATIAL_RESOURCE = new QName(XML_BINDINGS_NAMESPACE, "SpatialResource");
     /** Constant <code>DECIMAL_SEPARATORS="{.,,}"</code> */
     public static final List<String> DECIMAL_SEPARATORS = Collections.unmodifiableList(Arrays.asList(".", ","));
-    /** Constant <code>DEFAULT_LATITUDE_UNIT="deg"</code> */
+    /** Constant <code>DEFAULT_LATITUDE_UNIT="°"</code> */
     public static final String DEFAULT_LATITUDE_UNIT = DEG;
-    /** Constant <code>DEFAULT_LONGITUDE_UNIT="deg"</code> */
+    /** Constant <code>DEFAULT_LONGITUDE_UNIT="°"</code> */
     public static final String DEFAULT_LONGITUDE_UNIT = DEG;
     /** Constant <code>DEFAULT_ALTITUDE_UNIT="m"</code> */
     public static final String DEFAULT_ALTITUDE_UNIT = "m";
@@ -195,7 +195,7 @@ public class Constants {
     public static final double DEFAULT_HEIGHT_FOI_POSITION = 0.0;
     /** Constant <code>DEFAULT_HEIGHT_UNIT_FOI_POSITION="m"</code> */
     public static final String DEFAULT_HEIGHT_UNIT_FOI_POSITION = "m";
-    /** Constant <code>DEFAULT_UNIT_FOI_POSITION="deg"</code> */
+    /** Constant <code>DEFAULT_UNIT_FOI_POSITION="°"</code> */
     public static final String DEFAULT_UNIT_FOI_POSITION = DEG;
 
     /** Constant <code>DEFAULT_FEEDER_JAR_NAME_START="52n-sos-importer-feeder-"</code> */

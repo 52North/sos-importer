@@ -208,9 +208,9 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | `TIMEOUT_BUFFER` | An additional timeout buffer for connect and socket timeout when using importer like `SweArrayObservationWithSplitExtension`. Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.<br /> The size of this value is related to the set-up of the SOS server, importer, and the `HUNK_SIZE` value. The current SimpleHttpClient implementation uses a default value of 5s, hence setting this to 25,000 results in 30s connection and socket timeout. |
 | `OTHER` | Not used. |
 | `PARSE_PATTERN` | Used to store the parse pattern of a `POSITION` or `DATE_TIME` column. |
-| `POSITION_ALTITUDE` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `POSITION_COORD_2` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_EPSG_CODE` | The EPSG code for the positions for all observations in the related `MEASURED_VALUE` column. |
-| `POSITION_LATITUDE` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
+| `POSITION_COORD_0` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_LONGITUDE` | The longitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `PARENT_FEATURE_IDENTIFIER` | If present, the related feature of interest column will get this identifier set as sampled feature for each observation. |
 | `TIME` | Not used. |
@@ -266,6 +266,44 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Generic coordinate support<br />
+       This includes a schema update and the following replacements are required:
+         * `POSITION_LATITUDE` &rarr; `POSITION_COORD_0`
+         * `POSITION_LONGITUDE` &rarr; `POSITION_COORD_1`
+         * `POSITION_ALTITUDE` &rarr; `POSITION_COORD_2`
+         * `PARSE_PATTERN` updates for `POSITION` columns:
+           * `LAT` &rarr; `COORD_0`
+           * `LON` &rarr; `COORD_1`
+           * `ALT` &rarr; `COORD_2`
+         * The order of the `*COORD_0` to `*COORD_2` **MUST** match the axis
+           order defined by the EPSG code.
+         * **Spatial resource configuration**:
+           * *Old*:
+             ```
+             <Position>
+              <Alt unit="meters">0.0</Alt>
+              <EPSGCode>4326</EPSGCode>
+              <Lat unit="°">20.0</Lat>
+              <Long unit="°">12.0</Long>
+             </Position>
+             ```
+          * *New*:
+            ```
+            <Position>
+              <EPSGCode>4326</EPSGCode>
+              <Coordinate unit="°" axisAbbreviation="Lat">20.0</Coordinate>
+              <Coordinate unit="°" axisAbbreviation="Long">12.0</Coordinate>
+            </Position>
+            ```
+            or
+            ```
+            <Position>
+              <EPSGCode>4979</EPSGCode>
+              <Coordinate unit="°" axisAbbreviation="Lat">20.0</Coordinate>
+              <Coordinate unit="°" axisAbbreviation="Long">12.0</Coordinate>
+              <Coordinate unit="m" axisAbbreviation="h">0.0</Coordinate>
+            </Position>
+            ```
      * Add support for reference values<br />
        A reference value is a value with the same type, optional unit and observed property of the related column (timeseries) that defines an upper or lower limit.
      * Add support for profile observations

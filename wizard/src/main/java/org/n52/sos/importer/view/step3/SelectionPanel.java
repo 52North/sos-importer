@@ -160,7 +160,7 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * called when the child panel's selection changes
+     * called when the child panel's selection changes.
      *
      * @param childPanel a {@link org.n52.sos.importer.view.step3.SelectionPanel} object.
      */
@@ -169,7 +169,7 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * called when the child panel's selection changes
+     * Called when the child panel's selection changes.
      *
      * @param childPanelName a {@link java.lang.String} object.
      */
@@ -178,7 +178,7 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * adds a child panel to the list
+     * Adds a child panel to the list.
      *
      * @param childPanelName a {@link java.lang.String} object.
      * @param childPanel a {@link org.n52.sos.importer.view.step3.SelectionPanel} object.
@@ -188,8 +188,8 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * adds this and recursively the selected child panel
-     * to one of the container panels of step 3
+     * Adds this and recursively the selected child panel
+     * to one of the container panels of step 3.
      */
     public void addToContainerPanel() {
         getContainerPanel().add(this);
@@ -203,8 +203,8 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * removes this selection panel from its container
-     * and recursively all child selection panels
+     * Removes this selection panel from its container
+     * and recursively all child selection panels.
      */
     public void removeFromContainerPanel() {
         getContainerPanel().removeAll();
@@ -215,14 +215,14 @@ public abstract class SelectionPanel extends JPanel {
     }
 
     /**
-     * assigns this selection to a column, row or a cell
+     * Assigns this selection to a column, row or a cell.
      *
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */
     public abstract void assign(TableElement tableElement);
 
     /**
-     * unassigns this selection from a column, row or a cell
+     * Unassigns this selection from a column, row or a cell.
      *
      * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
      */

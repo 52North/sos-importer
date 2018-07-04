@@ -43,8 +43,8 @@ import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.Importer;
 import org.n52.sos.importer.feeder.model.InsertObservation;
-import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.InsertSensor;
+import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.svalbard.encode.exception.EncodingException;
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
             return;
         }
 
-        importerThreads.execute(new Runnable() {
+        importerThreads.submit(new Runnable() {
 
             @Override
             public void run() {

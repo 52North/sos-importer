@@ -66,6 +66,7 @@ import org.n52.sos.importer.feeder.model.Resource;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
+import org.n52.sos.importer.feeder.util.EPSGHelper;
 import org.n52.sos.importer.feeder.util.JavaApiBugJDL6203387Exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -855,17 +856,16 @@ public class DataFile {
         LOG.trace(String.format("getPosition(%s,%s)",
                 p.xmlText(), Arrays.toString(values)));
         // Case A: Position is in configuration
-        if (!p.isSetGroup() &&
-                //p.isSetAlt() &&
-                p.isSetEPSGCode() &&
-                p.isSetLat() &&
-                p.isSetLong()) {
+        if (!p.isSetGroup() && p.isSetEPSGCode()) {
+            if  (!EPSGHelper.isValidEPSGCode(p.getEPSGCode())) {
+                throw new IllegalArgumentException("given EPSG code is invalid! EPSG code:" + p.getEPSGCode());
+            } else if (!EPSGHelper.areValidXBCoordinates(p.getEPSGCode(), p.getCoordinateArray())) {
+                throw new IllegalArgumentException("Specified coordinates are invalid for EPSG code " +
+                        p.getEPSGCode());
+            }
             return configuration.getModelPositionXBPosition(p);
         } else if (p.isSetGroup() &&
-                //!p.isSetAlt() &&
-                !p.isSetEPSGCode() &&
-                !p.isSetLat() &&
-                !p.isSetLong()) {
+                !p.isSetEPSGCode()) {
             // Case B: Position is in data dataFile (and configuration [missing values])
             return configuration.getPosition(p.getGroup(), values);
         }
@@ -897,8 +897,7 @@ public class DataFile {
     }
 
     private ChronoField[] getChronoFields(String pattern) {
-        LOG.trace(String.format("getChronoFields(%s)",
-                pattern));
+        LOG.trace(String.format("getChronoFields(%s)", pattern));
         ArrayList<ChronoField> fields = new ArrayList<>();
         if (pattern.contains("y")) {
             fields.add(ChronoField.YEAR);

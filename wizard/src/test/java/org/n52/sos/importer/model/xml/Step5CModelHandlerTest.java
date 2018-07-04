@@ -34,10 +34,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.model.Step5cModel;
 import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.table.Column;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
@@ -60,13 +59,14 @@ public class Step5CModelHandlerTest {
         //given
         final double altitude = 52.0;
         final String unit = "m";
-        final String pattern = "LAT LON";
+        final String pattern = Id.COORD_0.name() + " " + Id.COORD_1.name();
         final int positionColumnId = 3;
         Position position = new Position(
-                new Latitude(new Column(positionColumnId, 0), pattern),
-                new Longitude(new Column(positionColumnId, 0), pattern),
-                new Height(altitude, unit),
-                new EPSGCode(4326));
+                new EPSGCode(4979),
+                new PositionComponent(Id.COORD_0, new Column(positionColumnId, 0), pattern),
+                new PositionComponent(Id.COORD_1, new Column(positionColumnId, 0), pattern),
+                new PositionComponent(Id.COORD_2, altitude, unit)
+                );
         position.setGroup("A");
         final Step5cModel stepModel = new Step5cModel(position);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
@@ -91,7 +91,7 @@ public class Step5CModelHandlerTest {
         Metadata altitudeMetadata = null;
         for (Metadata metadata :
                 importConf.getCsvMetadata().getColumnAssignments().getColumnArray(0).getMetadataArray()) {
-            if (metadata.getKey().equals(Key.POSITION_ALTITUDE)) {
+            if (metadata.getKey().equals(Key.POSITION_COORD_2)) {
                 altitudeMetadata = metadata;
                 break;
             }

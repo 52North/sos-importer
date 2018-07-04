@@ -47,7 +47,7 @@ import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * selection panel in step 3 for {@link DateAndTime} combinations

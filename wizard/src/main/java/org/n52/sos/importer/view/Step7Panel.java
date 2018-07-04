@@ -61,7 +61,7 @@ import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * chooses the URL of the Sensor Observation Service

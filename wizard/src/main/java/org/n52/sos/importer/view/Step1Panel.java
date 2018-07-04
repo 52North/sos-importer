@@ -69,7 +69,7 @@ import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.BackNextController;
 import org.n52.sos.importer.controller.Step1Controller;
 import org.n52.sos.importer.view.i18n.Lang;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

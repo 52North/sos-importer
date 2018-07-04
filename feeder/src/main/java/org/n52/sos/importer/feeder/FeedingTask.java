@@ -113,8 +113,7 @@ public class FeedingTask {
         try {
             lock.lock();
 
-            LOG.trace("startFeeding()");
-            LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getFileName());
+            LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getAbsolutePath());
             // local or remote
             if (config.isRemoteFile()) {
                 dataFile = downloadRemoteFile();

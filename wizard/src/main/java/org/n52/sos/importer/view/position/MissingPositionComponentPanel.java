@@ -36,8 +36,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.n52.sos.importer.model.Component;
-import org.n52.sos.importer.model.position.Height;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -45,85 +46,96 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * consists of a text field for the height and a combobox for the units
+ * Consists of a text field for the coordinate value and a combobox for the unit
  *
  * @author Raimund
  */
-public class MissingHeightPanel extends MissingComponentPanel {
+public class MissingPositionComponentPanel extends MissingComponentPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = LoggerFactory.getLogger(MissingHeightPanel.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(MissingPositionComponentPanel.class);
 
     private final Position position;
 
-    private final JLabel heightLabel;
-    private final JTextField heightTextField = new JTextField(8);
-    private final JLabel heightUnitLabel;
-    private final JComboBox<String> heightUnitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getHeightUnits());
+    private final JLabel label;
+    private final JTextField textField = new JTextField(8);
+    private final JLabel unitLabel;
+    private final JComboBox<String> unitComboBox = new JComboBox<>(ComboBoxItems.getInstance().getLatLonUnits());
+
+    private Id id;
 
     /**
-     * <p>Constructor for MissingHeightPanel.</p>
+     * <p>Constructor for MissingPositionComponentPanel.</p>
      *
      * @param position a {@link org.n52.sos.importer.model.position.Position} object.
      */
-    public MissingHeightPanel(final Position position) {
+    public MissingPositionComponentPanel(Id id, Position position) {
         super();
         this.position = position;
-        heightTextField.setText("0");
+        this.id = id;
+        textField.setText("0");
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
-
         final String labelSpacer = "   ";
         final String colon = ": ";
-        heightLabel = new JLabel(labelSpacer + Lang.l().altitude() + colon);
-        heightUnitLabel = new JLabel(labelSpacer + Lang.l().unit() + colon);
-
-        this.add(heightLabel);
-        this.add(heightTextField);
-        this.add(heightUnitLabel);
-        this.add(heightUnitComboBox);
+        label = new JLabel(labelSpacer + id.name() + colon);
+        this.add(label);
+        this.add(textField);
+        unitLabel = new JLabel(labelSpacer + Lang.l().unit() + colon);
+        this.add(unitLabel);
+        this.add(unitComboBox);
     }
 
     @Override
     public void assignValues() {
-        final double value = Double.parseDouble(heightTextField.getText());
-        final String unit = (String) heightUnitComboBox.getSelectedItem();
-        final Height h = new Height(value, unit);
-        position.setHeight(h);
+        final double value = Double.parseDouble(textField.getText());
+        final String unit = (String) unitComboBox.getSelectedItem();
+        final PositionComponent l = new PositionComponent(id, value, unit);
+        position.addCoordinate(l);
     }
 
     @Override
     public void unassignValues() {
-        position.setHeight(null);
+        position.removeCoordinate(id);
     }
 
     @Override
     public boolean checkValues() {
+        String val = null;
         try {
-            Double.parseDouble(heightTextField.getText());
+            val = textField.getText();
+            Double.parseDouble(val);
         } catch (final NumberFormatException e) {
+            logger.error("Coordinate value could not be parsed: " + val, e);
             JOptionPane.showMessageDialog(null,
-                    Lang.l().heightWarningDialogDecimalNumber(),
+                    Lang.l().coordinateDialogDecimalValue(),
                     Lang.l().warningDialogTitle(),
                     JOptionPane.WARNING_MESSAGE);
-            logger.error("The height has to be a decimal number.", e);
             return false;
         }
-
         return true;
     }
 
     @Override
     public Component getMissingComponent() {
-        final double value = Double.parseDouble(heightTextField.getText());
-        final String unit = (String) heightUnitComboBox.getSelectedItem();
-        return new Height(value, unit);
+        final double value = Double.parseDouble(textField.getText());
+        final String unit = (String) unitComboBox.getSelectedItem();
+        return new PositionComponent(id, value, unit);
     }
 
     @Override
     public void setMissingComponent(final Component c) {
-        final Height height = (Height) c;
-        heightTextField.setText(height.getValue() + "");
-        heightUnitComboBox.setSelectedItem(height.getUnit());
+        final PositionComponent coordinate = (PositionComponent) c;
+        textField.setText(coordinate.getValue() + "");
+        unitComboBox.setSelectedItem(coordinate.getUnit());
+    }
+
+    public Id getId() {
+        return id;
+    }
+
+    public void setId(Id id) {
+        this.id = id;
     }
 }

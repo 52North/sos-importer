@@ -1402,10 +1402,10 @@
         <URI>http://www.52north.org/dwd/featureOfInterest/01238</URI>
         <Name>FOKSTUA 2</Name>
         <Position>
-          <Alt unit="meters">973</Alt>
-          <EPSGCode>4326</EPSGCode>
-          <Lat unit="deg">62.12</Lat>
-          <Long unit="deg">9.28</Long>
+          <EPSGCode>4979</EPSGCode>
+          <Coordinate unit="°" axisAbbreviation="Lat">62.12</Coordinate>
+          <Coordinate unit="°" axisAbbreviation="Long">9.28</Coordinate>
+          <Coordinate unit="m" axisAbbreviation="h">973</Coordinate>
         </Position>
       </SpatialResource>
     </FeatureOfInterest>

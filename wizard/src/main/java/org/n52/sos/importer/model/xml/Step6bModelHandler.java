@@ -31,18 +31,20 @@ package org.n52.sos.importer.model.xml;
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step6bModel;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
+import org.n52.sos.importer.model.position.Position.Id;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.Resource;
+import org.n52.sos.importer.wizard.utils.EPSGHelper;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata;
-import org.x52North.sensorweb.sos.importer.x05.AltDocument.Alt;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
+import org.x52North.sensorweb.sos.importer.x05.CoordinateDocument.Coordinate;
 import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x05.GeneratedResourceType;
 import org.x52North.sensorweb.sos.importer.x05.GeneratedSpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x05.LatDocument.Lat;
-import org.x52North.sensorweb.sos.importer.x05.LongDocument.Long;
 import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
 import org.x52North.sensorweb.sos.importer.x05.ObservedPropertyType;
 import org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position;
@@ -292,17 +294,8 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
              */
             final String groupId = pos.getGroup();
             // check for old artifacts like alt/lat/long/epsg
-            if (posXB.isSetAlt()) {
-                posXB.unsetAlt();
-            }
             if (posXB.isSetEPSGCode()) {
                 posXB.unsetEPSGCode();
-            }
-            if (posXB.isSetLat()) {
-                posXB.unsetLat();
-            }
-            if (posXB.isSetLong()) {
-                posXB.unsetLong();
             }
             posXB.setGroup(groupId);
         } else {
@@ -314,35 +307,35 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             /*
              *  EPSG_CODE
              */
-            posXB.setEPSGCode(pos.getEPSGCode().getValue());
+            int epsgCode = pos.getEPSGCode().getValue();
+            posXB.setEPSGCode(epsgCode);
             /*
-             *  ALTITUDE
+             *  Coordinate values
              */
-            Alt alt = posXB.getAlt();
-            if (alt == null) {
-                alt = posXB.addNewAlt();
+            CoordinateSystem cs = EPSGHelper.getCoordinateSystem(epsgCode);
+            for (int i = 0; i < cs.getDimension(); i++) {
+                CoordinateSystemAxis axis = cs.getAxis(i);
+                Coordinate coordinate = getCoordinateByAxisAbbreviation(axis.getAbbreviation(), posXB);
+                if (coordinate == null) {
+                    coordinate = posXB.addNewCoordinate();
+                }
+                coordinate.setDoubleValue(pos.getCoordinate(Id.values()[i]).getValue());
+                coordinate.setAxisAbbreviation(axis.getAbbreviation());
+                coordinate.setUnit(axis.getUnit().toString());
             }
-            alt.setFloatValue((float) pos.getHeight().getValue());
-            /*
-             *  LATITUDE
-             */
-            Lat lat = posXB.getLat();
-            if (lat == null) {
-                lat = posXB.addNewLat();
-            }
-            lat.setFloatValue((float) pos.getLatitude().getValue());
-            /*
-             *  LONGITUDE
-             */
-            Long lon = posXB.getLong();
-            if (lon == null) {
-                lon = posXB.addNewLong();
-            }
-            lon.setFloatValue((float) pos.getLongitude().getValue());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("AFTER: posXB: " + posXB);
         }
+    }
+
+    private Coordinate getCoordinateByAxisAbbreviation(String abbreviation, Position posXB) {
+        for (Coordinate coordinate : posXB.getCoordinateArray()) {
+            if (coordinate != null && abbreviation.equals(coordinate.getAxisAbbreviation())) {
+                return coordinate;
+            }
+        }
+        return null;
     }
 
     private boolean addRelatedObservedProperty(

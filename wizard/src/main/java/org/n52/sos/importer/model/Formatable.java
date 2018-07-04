@@ -29,7 +29,7 @@
 package org.n52.sos.importer.model;
 
 /**
- * interface for objects which can be formatted along a
+ * Interface for objects which can be formatted along a
  * certain pattern into a String
  * (e.g. Java-Date + pattern "yyyy-MM-dd" --&gt; "2011-08-04")
  *
@@ -38,7 +38,7 @@ package org.n52.sos.importer.model;
 public interface Formatable {
 
     /**
-     * formats an object along a certain pattern into a String
+     * Formats an object along a certain pattern into a String
      *
      * @param o the object to format
      * @return a {@link java.lang.String} object.

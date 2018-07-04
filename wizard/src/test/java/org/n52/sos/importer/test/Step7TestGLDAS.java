@@ -74,10 +74,9 @@ import org.n52.sos.importer.model.dateAndTime.Second;
 import org.n52.sos.importer.model.dateAndTime.TimeZone;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.Sensor;
@@ -125,15 +124,13 @@ public class Step7TestGLDAS {
 
         final Position p = new Position();
         p.setGroup("A");
-        final String LAT = "LAT";
-        final Latitude lat = new Latitude(new Column(2, firstLineWithData), LAT);
-        final String LON = "LON";
-        final Longitude lon = new Longitude(new Column(1, firstLineWithData),LON);
-        final Height h = new Height(100, "m");
+        final PositionComponent lat = new PositionComponent(Id.COORD_0, new Column(2, firstLineWithData), Id.COORD_0.name());
+        final PositionComponent lon = new PositionComponent(Id.COORD_1, new Column(1, firstLineWithData), Id.COORD_1.name());
+        final PositionComponent h = new PositionComponent(Id.COORD_2, 100, "m");
         final EPSGCode epsgCode = new EPSGCode(4326);
-        p.setLatitude(lat);
-        p.setLongitude(lon);
-        p.setHeight(h);
+        p.addCoordinate(lat);
+        p.addCoordinate(lon);
+        p.addCoordinate(h);
         p.setEPSGCode(epsgCode);
 
         final ObservedProperty op = new ObservedProperty();

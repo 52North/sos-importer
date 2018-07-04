@@ -61,6 +61,8 @@ package org.n52.sos.importer.model.position;
 
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.n52.sos.importer.model.Combination;
 import org.slf4j.Logger;
@@ -68,10 +70,14 @@ import org.slf4j.LoggerFactory;
 
 public class Position extends Combination {
 
-    private static final String EPSG = "EPSG";
-    private static final String ALT = "ALT";
-    private static final String LON = "LON";
-    private static final String LAT = "LAT";
+    public static final String EPSG = "EPSG";
+
+    public enum Id {
+        COORD_0,
+        COORD_1,
+        COORD_2
+    }
+
     private static final String FROM = " from ";
     private static final String REMOVE = "Remove ";
     private static final String TO = " to ";
@@ -79,79 +85,46 @@ public class Position extends Combination {
 
     private static final Logger LOG = LoggerFactory.getLogger(Position.class);
 
-    private Latitude latitude;
-
-    private Longitude longitude;
-
-    private Height height;
+    private Map<Id, PositionComponent> coordinates = new HashMap<>(4);
 
     private EPSGCode epsgCode;
 
     private String group;
 
-    /**
-     * <p>Constructor for Position.</p>
-     */
     public Position() {
         super();
     }
 
-    /**
-     * <p>Constructor for Position.</p>
-     *
-     * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
-     * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
-     * @param height a {@link org.n52.sos.importer.model.position.Height} object.
-     * @param epsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-     */
-    public Position(final Latitude latitude, final Longitude longitude, final Height height,
-            final EPSGCode epsgCode) {
+    public Position(EPSGCode epsgCode, PositionComponent... coordinates) {
         super();
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.height = height;
         this.epsgCode = epsgCode;
-    }
-
-    /**
-     * <p>Getter for the field <code>height</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.position.Height} object.
-     */
-    public Height getHeight() {
-        return height;
-    }
-
-    /**
-     * <p>Setter for the field <code>height</code>.</p>
-     *
-     * @param height a {@link org.n52.sos.importer.model.position.Height} object.
-     */
-    public void setHeight(final Height height) {
-        if (getGroup() != null) {
-            if (height != null) {
-                LOG.info(ADD + height + TO + this);
-            } else {
-                LOG.info(REMOVE + this.height + FROM + this);
+        for (PositionComponent coordinate : coordinates) {
+            if (coordinate != null) {
+                this.coordinates.put(coordinate.getId(), coordinate);
             }
         }
-        this.height = height;
     }
 
-    /**
-     * <p>getEPSGCode.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-     */
+    public void addCoordinate(PositionComponent coordinate) {
+        if (getGroup() != null) {
+            if (coordinate != null) {
+                if (coordinates.containsKey(coordinate.getId())) {
+                    coordinates.remove(coordinate.getId());
+                }
+                coordinates.put(coordinate.getId(), coordinate);
+                LOG.info(ADD + coordinate + TO + this);
+            }
+        }
+    }
+
+    public PositionComponent getCoordinate(Id id) {
+        return coordinates.get(id);
+    }
+
     public EPSGCode getEPSGCode() {
         return epsgCode;
     }
 
-    /**
-     * <p>setEPSGCode.</p>
-     *
-     * @param newEpsgCode a {@link org.n52.sos.importer.model.position.EPSGCode} object.
-     */
     public void setEPSGCode(final EPSGCode newEpsgCode) {
         if (getGroup() != null) {
             if (newEpsgCode != null) {
@@ -161,56 +134,6 @@ public class Position extends Combination {
             }
         }
         epsgCode = newEpsgCode;
-    }
-
-    /**
-     * <p>Setter for the field <code>longitude</code>.</p>
-     *
-     * @param longitude a {@link org.n52.sos.importer.model.position.Longitude} object.
-     */
-    public void setLongitude(final Longitude longitude) {
-        if (getGroup() != null) {
-            if (longitude != null) {
-                LOG.info(ADD + longitude + TO + this);
-            } else {
-                LOG.info(REMOVE + this.longitude + FROM + this);
-            }
-        }
-        this.longitude = longitude;
-    }
-
-    /**
-     * <p>Getter for the field <code>longitude</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.position.Longitude} object.
-     */
-    public Longitude getLongitude() {
-        return longitude;
-    }
-
-    /**
-     * <p>Setter for the field <code>latitude</code>.</p>
-     *
-     * @param latitude a {@link org.n52.sos.importer.model.position.Latitude} object.
-     */
-    public void setLatitude(final Latitude latitude) {
-        if (getGroup() != null) {
-            if (latitude != null) {
-                LOG.info(ADD + latitude + TO + this);
-            } else {
-                LOG.info(REMOVE + this.latitude + FROM + this);
-            }
-        }
-        this.latitude = latitude;
-    }
-
-    /**
-     * <p>Getter for the field <code>latitude</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.position.Latitude} object.
-     */
-    public Latitude getLatitude() {
-        return latitude;
     }
 
     @Override
@@ -228,60 +151,68 @@ public class Position extends Combination {
         final Position p = (Position) o;
         String positionString = getPattern();
         // TODO remove explicit string from here
-        positionString = positionString.replaceAll(LAT, p.getLatitude().getValue() + p.getLatitude().getUnit());
-        positionString = positionString.replaceAll(LON, p.getLongitude().getValue() + p.getLongitude().getUnit());
-        positionString = positionString.replaceAll(ALT, p.getHeight().getValue() + p.getHeight().getUnit());
-        positionString = positionString.replaceAll(EPSG, p.getEPSGCode().getValue() + "");
+        positionString = positionString.replaceAll(Id.COORD_0.name(),
+                p.coordinates.get(Id.COORD_0).getValue() + p.coordinates.get(Id.COORD_0).getUnit());
+        positionString = positionString.replaceAll(Id.COORD_1.name(),
+                p.coordinates.get(Id.COORD_1).getValue() + p.coordinates.get(Id.COORD_1).getUnit());
+        if (p.coordinates.containsKey(Id.COORD_2)) {
+            positionString = positionString.replaceAll(Id.COORD_2.name(),
+                    p.coordinates.get(Id.COORD_2).getValue() + p.coordinates.get(Id.COORD_2).getUnit());
+        }
+        positionString = positionString.replaceAll(EPSG, Integer.toString(p.getEPSGCode().getValue()));
         return positionString;
     }
 
     @Override
-    public Position parse(final String s) {
-        LOG.trace("parse('{}')", s);
+    public Position parse(String cellValueToParse) {
+        LOG.trace("parse('{}')", cellValueToParse);
         String pattern = getPattern();
 
-        pattern = pattern.replaceAll(LAT, "{0}");
-        pattern = pattern.replaceAll(LON, "{1}");
-        pattern = pattern.replaceAll(ALT, "{2}");
+        pattern = pattern.replaceAll(Id.COORD_0.name(), "{0}");
+        pattern = pattern.replaceAll(Id.COORD_1.name(), "{1}");
+        pattern = pattern.replaceAll(Id.COORD_2.name(), "{2}");
         pattern = pattern.replaceAll(EPSG, "{3}");
 
         final MessageFormat mf = new MessageFormat(pattern);
-        Object[] o = null;
+        Object[] tokens = null;
         try {
-            o = mf.parse(s);
+            tokens = mf.parse(cellValueToParse);
         } catch (final ParseException e) {
-            throw new NumberFormatException();
+            throw new NumberFormatException(e.getMessage());
         }
 
-        if (o == null) {
-            throw new NumberFormatException();
+        if (tokens == null) {
+            throw new NumberFormatException(String.format(
+                    "could not parse position values from string '%s'.",
+                    cellValueToParse));
         }
 
-        Latitude newLatitude = null;
-        Longitude newLongitude = null;
-        Height newHeight = null;
+        PositionComponent newCoord0 = null;
+        PositionComponent newCoord1 = null;
+        PositionComponent newCoord2 = null;
         EPSGCode newEpsgCode = null;
 
-        if (o.length > 0 && o[0] != null) {
-            newLatitude = Latitude.parse((String) o[0]);
+        if (tokens.length > 0 && tokens[0] != null) {
+            newCoord0 = PositionComponent.parse(Id.COORD_0, (String) tokens[0]);
         }
-        if (o.length > 1 && o[1] != null) {
-            newLongitude = Longitude.parse((String) o[1]);
+        if (tokens.length > 1 && tokens[1] != null) {
+            newCoord1 = PositionComponent.parse(Id.COORD_1, (String) tokens[1]);
         }
-        if (o.length > 2 && o[2] != null) {
-            newHeight = Height.parse((String) o[2]);
+        if (tokens.length > 2 && tokens[2] != null) {
+            newCoord2 = PositionComponent.parse(Id.COORD_2, (String) tokens[2]);
         }
-        if (o.length > 3 && o[3] != null) {
-            newEpsgCode = EPSGCode.parse((String) o[3]);
+        if (tokens.length > 3 && tokens[3] != null) {
+            newEpsgCode = EPSGCode.parse((String) tokens[3]);
         }
-        return new Position(newLatitude, newLongitude, newHeight, newEpsgCode);
+
+        return new Position(newEpsgCode, newCoord0, newCoord1, newCoord2);
     }
 
     @Override
     public String toString() {
         if (getGroup() == null) {
-            return "Position (" + latitude + ", " + longitude + ", "
-                    + height + ", " + epsgCode + ")";
+            return "Position (" + coordinates.get(Id.COORD_0) + ", " + coordinates.get(Id.COORD_1) + ", "
+                    + coordinates.get(Id.COORD_2) + ", " + epsgCode + ")";
         } else {
             return "Position group " + getGroup();
         }
@@ -291,11 +222,9 @@ public class Position extends Combination {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (coordinates == null ? 0 : coordinates.hashCode());
         result = prime * result + (epsgCode == null ? 0 : epsgCode.hashCode());
         result = prime * result + (group == null ? 0 : group.hashCode());
-        result = prime * result + (height == null ? 0 : height.hashCode());
-        result = prime * result + (latitude == null ? 0 : latitude.hashCode());
-        result = prime * result + (longitude == null ? 0 : longitude.hashCode());
         return result;
     }
 
@@ -311,6 +240,13 @@ public class Position extends Combination {
             return false;
         }
         Position other = (Position) obj;
+        if (coordinates == null) {
+            if (other.coordinates != null) {
+                return false;
+            }
+        } else if (!coordinates.equals(other.coordinates)) {
+            return false;
+        }
         if (epsgCode == null) {
             if (other.epsgCode != null) {
                 return false;
@@ -325,28 +261,14 @@ public class Position extends Combination {
         } else if (!group.equals(other.group)) {
             return false;
         }
-        if (height == null) {
-            if (other.height != null) {
-                return false;
-            }
-        } else if (!height.equals(other.height)) {
-            return false;
-        }
-        if (latitude == null) {
-            if (other.latitude != null) {
-                return false;
-            }
-        } else if (!latitude.equals(other.latitude)) {
-            return false;
-        }
-        if (longitude == null) {
-            if (other.longitude != null) {
-                return false;
-            }
-        } else if (!longitude.equals(other.longitude)) {
-            return false;
-        }
         return true;
+    }
+
+    public PositionComponent removeCoordinate(Id id) {
+        if (coordinates.containsKey(id)) {
+            return coordinates.remove(id);
+        }
+        return null;
     }
 
 }

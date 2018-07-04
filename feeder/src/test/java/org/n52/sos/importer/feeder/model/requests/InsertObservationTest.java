@@ -28,64 +28,27 @@
  */
 package org.n52.sos.importer.feeder.model.requests;
 
-import java.util.Optional;
+import static java.util.Optional.empty;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
-import org.n52.sos.importer.feeder.model.Position;
 
 public class InsertObservationTest {
 
-    private static final String DEG = "deg";
-
-    @Test
-    public void shouldReturnTrueIfAltitudeIsAvailable() {
-        double alt = 2.0;
-        FeatureOfInterest foi =
-                new FeatureOfInterest(null, "uri",
-                        new Position(new double[] {0.0, 1.0, alt}, new String[] {DEG, DEG, "m"}, 4326));
-        InsertObservation insertObservation =
-                new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
-        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(true));
-        Assert.assertThat(insertObservation.getAltitudeValue(), CoreMatchers.is(alt));
-    }
-
-    @Test
-    public void shouldReturnFalseIfAltitudeIsNotAvailable() {
-        FeatureOfInterest foi =
-                new FeatureOfInterest(null, "uri",
-                        new Position(
-                                new double[] {0.0, 1.0, Double.NEGATIVE_INFINITY},
-                                new String[] {DEG, DEG, null},
-                                4326));
-        InsertObservation insertObservation = new InsertObservation(null,
-            foi,
-            null,
-            null,
-            null,
-            null,
-            null,
-            Optional.empty(),
-            null);
-        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
-
-        insertObservation = new InsertObservation(null, null, null, null, null, null, null, Optional.empty(), null);
-        Assert.assertThat(insertObservation.isSetAltitudeValue(), CoreMatchers.is(false));
-    }
 
     @Test
     public void shouldReturnTrueIfParentFeatureIdentifierIsSet() {
         FeatureOfInterest foi = new FeatureOfInterest(null, "uri", null);
-        foi.setParentFeature(DEG);
+        String parentFeatureId = "parentFeatureId";
+        foi.setParentFeature(parentFeatureId);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, empty(), null);
 
-        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(true));
-        Assert.assertThat(io.getParentFeatureIdentifier(), Is.is(DEG));
+        assertThat(io.hasFeatureParentFeature(), is(true));
+        assertThat(io.getParentFeatureIdentifier(), is(parentFeatureId));
     }
 
 
@@ -94,12 +57,12 @@ public class InsertObservationTest {
         FeatureOfInterest foi = new FeatureOfInterest(null, "uri", null);
         foi.setParentFeature(null);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, Optional.empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, empty(), null);
 
-        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
+        assertThat(io.hasFeatureParentFeature(), is(false));
 
         foi.setParentFeature("");
-        Assert.assertThat(io.hasFeatureParentFeature(), Is.is(false));
+        assertThat(io.hasFeatureParentFeature(), is(false));
     }
 
 }

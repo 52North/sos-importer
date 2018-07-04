@@ -37,10 +37,9 @@ import org.n52.sos.importer.model.CsvData;
 import org.n52.sos.importer.model.measuredValue.MeasuredValue;
 import org.n52.sos.importer.model.measuredValue.NumericValue;
 import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.resources.ObservedProperty;
 import org.n52.sos.importer.model.resources.OmParameter;
@@ -267,10 +266,11 @@ public class TestData {
         foi.setName("FOI_TEST_1");
         foi.setGenerated(false);
         foi.setPosition(new Position(
-                new Latitude(52.0, "deg"),
-                new Longitude(7.0, "deg"),
-                new Height(42.0, "m"),
-                new EPSGCode(4979)));
+                new EPSGCode(4979),
+                new PositionComponent(Id.COORD_0, 52.0, "°"),
+                new PositionComponent(Id.COORD_1, 7.0, "°"),
+                new PositionComponent(Id.COORD_2, 42.0, "m")
+                ));
         try {
             foi.setURI(new URI("http://example.com/spatial/fois/test/1"));
         } catch (final URISyntaxException e) {

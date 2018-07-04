@@ -29,17 +29,19 @@
 package org.n52.sos.importer.model.xml;
 
 import org.n52.sos.importer.model.Step6cModel;
+import org.n52.sos.importer.model.position.Position.Id;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.wizard.utils.EPSGHelper;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
-import org.x52North.sensorweb.sos.importer.x05.AltDocument.Alt;
+import org.x52North.sensorweb.sos.importer.x05.CoordinateDocument.Coordinate;
 import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
 import org.x52North.sensorweb.sos.importer.x05.GeneratedSpatialResourceType;
-import org.x52North.sensorweb.sos.importer.x05.LatDocument.Lat;
-import org.x52North.sensorweb.sos.importer.x05.LongDocument.Long;
 import org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position;
 import org.x52North.sensorweb.sos.importer.x05.ResourceType;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
@@ -274,34 +276,28 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         if (logger.isTraceEnabled()) {
             logger.trace("\t\t\tgetXBPosition()");
         }
-        final Position pos = Position.Factory.newInstance();
-        /*
-         *  ALTITUDE
-         */
-        final Alt altitude = pos.addNewAlt();
-        altitude.setUnit(position.getHeight().getUnit());
-        altitude.setFloatValue((float) position.getHeight().getValue());
+        final Position posXB = Position.Factory.newInstance();
         /*
          *  EPSG_CODE
          */
-        pos.setEPSGCode(position.getEPSGCode().getValue());
+        int epsgCode = position.getEPSGCode().getValue();
+        posXB.setEPSGCode(epsgCode);
         /*
-         *  LATITUDE
+         *  Coordinate values
          */
-        final Lat latitude = pos.addNewLat();
-        latitude.setUnit(position.getLatitude().getUnit());
-        latitude.setFloatValue((float) position.getLatitude().getValue());
-        /*
-         *  LONGITUDE
-         */
-        final Long longitude = pos.addNewLong();
-        longitude.setUnit(position.getLongitude().getUnit());
-        longitude.setFloatValue((float) position.getLongitude().getValue());
+        CoordinateSystem cs = EPSGHelper.getCoordinateSystem(epsgCode);
+        for (int i = 0; i < cs.getDimension(); i++) {
+            CoordinateSystemAxis axis = cs.getAxis(i);
+            Coordinate coordinate = posXB.addNewCoordinate();
+            coordinate.setDoubleValue(position.getCoordinate(Id.values()[i]).getValue());
+            coordinate.setAxisAbbreviation(axis.getAbbreviation());
+            coordinate.setUnit(axis.getUnit().toString());
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos created from model pos. Model Pos: " +
-                    position.toString() + XB_POS + pos.xmlText());
+                    position.toString() + XB_POS + posXB.xmlText());
         }
-        return pos;
+        return posXB;
     }
 
     private void updateXBPosition(final Position posXB,
@@ -317,46 +313,38 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         /*
          * EPSG code
          */
-        posXB.setEPSGCode(pos.getEPSGCode().getValue());
+        int epsgCode = pos.getEPSGCode().getValue();
+        posXB.setEPSGCode(epsgCode);
         /*
-         *  ALTITUDE
+         *  Coordinate values
          */
-        Alt alt = posXB.getAlt();
-        if (alt == null) {
-            alt = posXB.addNewAlt();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new Alt element to Position element");
+        CoordinateSystem cs = EPSGHelper.getCoordinateSystem(epsgCode);
+        for (int i = 0; i < cs.getDimension(); i++) {
+            CoordinateSystemAxis axis = cs.getAxis(i);
+            Coordinate coordinate = getCoordinateByAxisAbbreviation(axis.getAbbreviation(), posXB);
+            if (coordinate == null) {
+                coordinate = posXB.addNewCoordinate();
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Added new Coordinate for axis {} element to Position element",
+                            axis.getAbbreviation());
+                }
             }
+            coordinate.setDoubleValue(pos.getCoordinate(Id.values()[i]).getValue());
+            coordinate.setAxisAbbreviation(axis.getAbbreviation());
+            coordinate.setUnit(axis.getUnit().toString());
         }
-        alt.setFloatValue((float) pos.getHeight().getValue());
-        alt.setUnit(pos.getHeight().getUnit());
-        /*
-         *  LATITUDE
-         */
-        Lat lat = posXB.getLat();
-        if (lat == null) {
-            lat = posXB.addNewLat();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new Lat element to Position element");
-            }
-        }
-        lat.setFloatValue((float) pos.getLatitude().getValue());
-        lat.setUnit(pos.getLatitude().getUnit());
-        /*
-         *  LONGITUDE
-         */
-        Long longitude = posXB.getLong();
-        if (longitude == null) {
-            longitude = posXB.addNewLong();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new Long element to Position element");
-            }
-        }
-        longitude.setFloatValue((float) pos.getLongitude().getValue());
-        longitude.setUnit(pos.getLongitude().getUnit());
         if (logger.isDebugEnabled()) {
-            logger.debug("XB pos updated from model pos. Model Pos: " +
-                    pos.toString() + XB_POS + posXB.xmlText());
+            logger.debug("XB pos updated from model pos. Model Pos: {} {}{}",
+                    pos, XB_POS, posXB.xmlText());
         }
+    }
+
+    private Coordinate getCoordinateByAxisAbbreviation(String abbreviation, Position posXB) {
+        for (Coordinate coordinate : posXB.getCoordinateArray()) {
+            if (coordinate != null && abbreviation.equals(coordinate.getAxisAbbreviation())) {
+                return coordinate;
+            }
+        }
+        return null;
     }
 }

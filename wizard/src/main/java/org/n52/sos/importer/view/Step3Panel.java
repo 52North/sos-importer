@@ -51,7 +51,7 @@ import org.n52.sos.importer.view.step3.PositionCombinationPanel;
 import org.n52.sos.importer.view.step3.RadioButtonPanel;
 import org.n52.sos.importer.view.step3.ResourceSelectionPanel;
 import org.n52.sos.importer.view.step3.SelectionPanel;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * consists of the table and a radio button panel for

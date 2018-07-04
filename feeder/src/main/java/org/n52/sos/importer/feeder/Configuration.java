@@ -40,6 +40,7 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -57,17 +58,22 @@ import org.n52.sos.importer.feeder.collector.DefaultCsvCollector;
 import org.n52.sos.importer.feeder.collector.SampleBasedObservationCollector;
 import org.n52.sos.importer.feeder.collector.csv.WrappedCSVParser;
 import org.n52.sos.importer.feeder.importer.SingleObservationImporter;
+import org.n52.sos.importer.feeder.model.Coordinate;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
+import org.n52.sos.importer.feeder.util.EPSGHelper;
 import org.n52.sos.importer.feeder.util.InvalidColumnCountException;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata;
 import org.x52North.sensorweb.sos.importer.x05.AdditionalMetadataDocument.AdditionalMetadata.FOIPosition;
 import org.x52North.sensorweb.sos.importer.x05.ColumnDocument.Column;
 import org.x52North.sensorweb.sos.importer.x05.FeatureOfInterestType;
+import org.x52North.sensorweb.sos.importer.x05.GeneratedSpatialResourceType;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.ManualResourceType;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
@@ -80,6 +86,7 @@ import org.x52North.sensorweb.sos.importer.x05.ResourceType;
 import org.x52North.sensorweb.sos.importer.x05.SensorType;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument;
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
+import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
 import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type;
 import org.x52North.sensorweb.sos.importer.x05.TypeDocument.Type.Enum;
 import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
@@ -89,79 +96,136 @@ import org.x52North.sensorweb.sos.importer.x05.UnitOfMeasurementType;
  * parameters. In addition, it validates the configuration during
  * initialization.
  *
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk
+ *         J&uuml;rrens</a>
  */
 public class Configuration {
 
     /**
-     * Constant <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
+     * Constant
+     * <code>SOS_200_EPSG_CODE_PREFIX="http://www.opengis.net/def/crs/EPSG/0/"</code>
      */
     // TODO read from configuration file
     public static final String SOS_200_EPSG_CODE_PREFIX = "http://www.opengis.net/def/crs/EPSG/0/";
 
     /** Constant <code>SOS_100_EPSG_CODE_PREFIX="urn:ogc:def:crs:EPSG::"</code> */
-    public static final String SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
-    /** Constant <code>REGISTER_SENSOR_SML_SYSTEM_TEMPLATE="./SML_1.0.1_System_template.xml"</code> */
+    public static final String  SOS_100_EPSG_CODE_PREFIX = "urn:ogc:def:crs:EPSG::";
+
+    /**
+     * Constant
+     * <code>REGISTER_SENSOR_SML_SYSTEM_TEMPLATE="./SML_1.0.1_System_template.xml"</code>
+     */
     public static final String REGISTER_SENSOR_SML_SYSTEM_TEMPLATE = "./SML_1.0.1_System_template.xml";
+
     public static final String NS_SWE_1_0_1 = "http://www.opengis.net/swe/1.0.1";
+
     public static final String NS_SOS_1_0_0 = "http://www.opengis.net/sos/1.0";
+
     /** Constant <code>QN_SOS_1_0_OFFERING</code> */
     public static final QName QN_SOS_1_0_OFFERING = new QName(NS_SOS_1_0_0, "offering");
+
     /** Constant <code>QN_SOS_1_0_ID</code> */
     public static final QName QN_SOS_1_0_ID = new QName(NS_SOS_1_0_0, "id");
+
     /** Constant <code>QN_SOS_1_0_NAME</code> */
     public static final QName QN_SOS_1_0_NAME = new QName(NS_SOS_1_0_0, "name");
+
     /** Constant <code>QN_SWE_1_0_1_SIMPLE_DATA_RECORD</code> */
     public static final QName QN_SWE_1_0_1_SIMPLE_DATA_RECORD = new QName(NS_SWE_1_0_1, "SimpleDataRecord");
+
     /** Constant <code>QN_SWE_1_0_1_DATA_RECORD</code> */
-    public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName (NS_SWE_1_0_1, "DataRecord");
+    public static final QName QN_SWE_1_0_1_DATA_RECORD = new QName(NS_SWE_1_0_1, "DataRecord");
+
     /** Constant <code>QN_SWE_1_0_1_ENVELOPE</code> */
-    public static final QName QN_SWE_1_0_1_ENVELOPE = new QName (NS_SWE_1_0_1, "Envelope");
+    public static final QName QN_SWE_1_0_1_ENVELOPE = new QName(NS_SWE_1_0_1, "Envelope");
+
     /** Constant <code>SML_ATTRIBUTE_VERSION="version"</code> */
     public static final String SML_ATTRIBUTE_VERSION = "version";
+
     /** Constant <code>SML_VERSION="1.0.1"</code> */
     public static final String SML_VERSION = "1.0.1";
+
     /** Constant <code>UNICODE_REPLACER='_'</code> */
     public static final char UNICODE_REPLACER = '_';
+
     /** Constant <code>UNICODE_ONLY_REPLACER_LEFT_PATTERN</code> */
     public static final Pattern UNICODE_ONLY_REPLACER_LEFT_PATTERN = Pattern.compile(UNICODE_REPLACER + "+");
-    /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START="Sensor with ID"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START="Sensor with ID"</code>
+     */
     public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_START = "Sensor with ID";
-    /** Constant <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END="is already registered at this SOS"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END="is already registered at this SOS"</code>
+     */
     public static final String SOS_SENSOR_ALREADY_REGISTERED_MESSAGE_END = "is already registered at this SOS";
-    /** Constant <code>SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE="NoApplicableCode"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE="NoApplicableCode"</code>
+     */
     public static final String SOS_EXCEPTION_CODE_NO_APPLICABLE_CODE = "NoApplicableCode";
-    /** Constant <code>SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT="observation_time_stamp_key"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT="observation_time_stamp_key"</code>
+     */
     public static final String SOS_EXCEPTION_OBSERVATION_DUPLICATE_CONSTRAINT = "observation_time_stamp_key";
-    /** Constant <code>SOS_OBSERVATION_ALREADY_CONTAINED="observation already contained in sos"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_OBSERVATION_ALREADY_CONTAINED="observation already contained in sos"</code>
+     */
     public static final String SOS_OBSERVATION_ALREADY_CONTAINED = "observation already contained in sos";
+
     /** Constant <code>SOS_OBSERVATION_TYPE_NO_DATA_VALUE="NO_DATA_VALUE"</code> */
     public static final String SOS_OBSERVATION_TYPE_NO_DATA_VALUE = "NO_DATA_VALUE";
+
     /** Constant <code>SOS_OBSERVATION_TYPE_TEXT="TEXT"</code> */
     public static final String SOS_OBSERVATION_TYPE_TEXT = "TEXT";
+
     /** Constant <code>SOS_OBSERVATION_TYPE_COUNT="COUNT"</code> */
     public static final String SOS_OBSERVATION_TYPE_COUNT = "COUNT";
+
     /** Constant <code>SOS_OBSERVATION_TYPE_BOOLEAN="BOOLEAN"</code> */
     public static final String SOS_OBSERVATION_TYPE_BOOLEAN = "BOOLEAN";
+
+    /** Constant <code>SOS_OBSERVATION_TYPE_NUMERIC="NUMERIC"</code> */
     public static final String SOS_OBSERVATION_TYPE_NUMERIC = "NUMERIC";
-    /** Constant <code>OGC_DISCOVERY_ID_TERM_DEFINITION="urn:ogc:def:identifier:OGC:1.0:uniqueID"</code> */
+
+    /**
+     * Constant
+     * <code>OGC_DISCOVERY_ID_TERM_DEFINITION="urn:ogc:def:identifier:OGC:1.0:uniqueID"</code>
+     */
     public static final String OGC_DISCOVERY_ID_TERM_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:uniqueID";
-    /** Constant <code>OGC_DISCOVERY_LONG_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:longName"</code> */
+
+    /**
+     * Constant
+     * <code>OGC_DISCOVERY_LONG_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:longName"</code>
+     */
     public static final String OGC_DISCOVERY_LONG_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:longName";
-    /** Constant <code>OGC_DISCOVERY_SHORT_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:shortNam"{trunked}</code> */
-    public static final String OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
+
+    /**
+     * Constant
+     * <code>OGC_DISCOVERY_SHORT_NAME_DEFINITION="urn:ogc:def:identifier:OGC:1.0:shortNam"{trunked}</code>
+     */
+    public static final String  OGC_DISCOVERY_SHORT_NAME_DEFINITION = "urn:ogc:def:identifier:OGC:1.0:shortName";
+
     /**
      * Constant <code>OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION =
      * "urn:ogc:def:classifier:OGC:1.0:application"</code>
      */
     public static final String OGC_DISCOVERY_INTENDED_APPLICATION_DEFINITION =
             "urn:ogc:def:classifier:OGC:1.0:application";
+
     /**
      * Constant <code>OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION =
      * "urn:ogc:def:property:OGC:1.0:observedBBox"</code>
      */
-    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION =
-            "urn:ogc:def:property:OGC:1.0:observedBBOX";
+    public static final String OGC_DISCOVERY_OBSERVED_BBOX_DEFINITION = "urn:ogc:def:property:OGC:1.0:observedBBOX";
 
     /**
      * Constant <code>SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED =
@@ -169,21 +233,33 @@ public class Configuration {
      */
     public static final String SOS_EXCEPTION_OBSERVATION_ALREADY_CONTAINED =
             "This observation is already contained in SOS database!";
-    /** Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START="The offering with the identifier"</code> */
+
+    /**
+     * Constant
+     * <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START="The offering with the identifier"</code>
+     */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_START = "The offering with the identifier";
+
     /**
      * Constant <code>SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END =
      * "still exists in this service and it is not allowed to insert more than one procedure to an offering!"</code>
      */
     public static final String SOS_200_OFFERING_ALREADY_REGISTERED_MESSAGE_END =
             "still exists in this service and it is not allowed to insert more than one procedure to an offering!";
+
     /**
      * Constant <code>SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT =
-     * "observation_featureofinterestid_observablepropertyid_proced_key"</code> */
+     * "observation_featureofinterestid_observablepropertyid_proced_key"</code>
+     */
     public static final String SOS_200_DUPLICATE_OBSERVATION_CONSTRAINT =
             "observation_featureofinterestid_observablepropertyid_proced_key";
-    /** Constant <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code> */
-    public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION = "duplicate key value violates unique constraint";
+
+    /**
+     * Constant
+     * <code>SOS_UNIQUE_CONSTRAINT_VIOLATION="duplicate key value violates unique con"{trunked}</code>
+     */
+    public static final String SOS_UNIQUE_CONSTRAINT_VIOLATION =
+            "duplicate key value violates unique constraint";
 
     public static final String DEFAULT_CHARSET = "UTF-8";
 
@@ -191,78 +267,53 @@ public class Configuration {
 
     public static final String COUNTER_FILE_POSTFIX = ".counter";
 
-    /** Constant <code>EPSG_EASTING_FIRST_MAP</code> */
-    private static final HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP;
-
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
     private static final String OFFERING_SUFFIX = "-offering";
 
-    private static final String POSITION_PARSEPATTERN_LATITUDE = "LAT";
-    private static final String POSITION_PARSEPATTERN_LONGITUDE = "LON";
-    private static final String POSITION_PARSEPATTERN_ALTITUDE = "ALT";
+    private static final String POSITION_PARSEPATTERN_COORD_0 = "COORD_0";
+
+    private static final String POSITION_PARSEPATTERN_COORD_1 = "COORD_1";
+
+    private static final String POSITION_PARSEPATTERN_COORD_2 = "COORD_2";
+
     private static final String POSITION_PARSEPATTERN_EPSG = "EPSG";
+
     private static final String COLUMN_SEPARATOR_SPACE = "Space";
+
     private static final String COLUMN_SEPARATOR_TAB = "Tab";
-    private static final String DEG = "deg";
-    private static final String M = "m";
-    private static final String FT = "ft";
-    private static final String MI = "mi";
-    private static final String KM = "km";
-
-    static {
-        EPSG_EASTING_FIRST_MAP = new HashMap<>();
-        EPSG_EASTING_FIRST_MAP.put("default", false);
-        EPSG_EASTING_FIRST_MAP.put("4326", false);
-        EPSG_EASTING_FIRST_MAP.put("4979", false);
-        EPSG_EASTING_FIRST_MAP.put("21037", true);
-    }
-
-    public enum ImportStrategy {
-        /**
-         * Each value will be inserted as single observation into the SOS.
-         */
-        SingleObservation,
-        /**
-         * The file will be read at once. For each identified timeseries
-         * an OM_SWEArrayObservation will be created and inserted into the
-         * SOS using the "SplitDataArrayIntoObservations" of the 52North
-         * implementation.
-         */
-        SweArrayObservationWithSplitExtension;
-    }
 
     private SosImportConfiguration importConf;
-    private final File configFile;
+
+    private File configFile;
 
     private Pattern localeFilePattern;
 
     private Pattern[] ignorePatterns;
 
-    public Configuration(final String pathToFile) throws XmlException, IOException {
+    public Configuration(String pathToFile) throws XmlException, IOException, IllegalArgumentException {
         LOG.trace("Configuration({})", pathToFile);
         configFile = new File(pathToFile);
-        final SosImportConfigurationDocument sosImportDoc =
-                SosImportConfigurationDocument.Factory.parse(configFile);
+        SosImportConfigurationDocument sosImportDoc = SosImportConfigurationDocument.Factory.parse(configFile);
         // Create an XmlOptions instance and set the error listener.
-        final XmlOptions validateOptions = new XmlOptions();
-        final ArrayList<XmlError> errorList = new ArrayList<>();
+        XmlOptions validateOptions = new XmlOptions();
+        ArrayList<XmlError> errorList = new ArrayList<>();
         validateOptions.setErrorListener(errorList);
 
         // Validate the XML.
-        final boolean isValid = sosImportDoc.validate(validateOptions);
+        boolean isValid = sosImportDoc.validate(validateOptions);
 
         // If the XML isn't valid, loop through the listener's contents,
         // printing contained messages.
         if (!isValid) {
             for (int i = 0; i < errorList.size(); i++) {
-                final XmlError error = errorList.get(i);
+                XmlError error = errorList.get(i);
 
                 LOG.error("Message: {}; Location: {}",
                         error.getMessage(),
                         error.getCursorLocation().xmlText());
             }
-            final String msg = "Configuration is not valid and could not be parsed.";
+            String msg = "Configuration is not valid and could not be parsed.";
             throw new XmlException(msg, null, errorList);
         } else {
             importConf = sosImportDoc.getSosImportConfiguration();
@@ -270,12 +321,61 @@ public class Configuration {
         }
 
         ignorePatterns = getIgnoreLineRegExPatterns();
+        validateFeatures();
+    }
+
+    private void validateFeatures() {
+        if (!importConf.isSetAdditionalMetadata() ||
+                importConf.getAdditionalMetadata().sizeOfFeatureOfInterestArray() == 0 &&
+                importConf.getAdditionalMetadata().sizeOfFOIPositionArray() == 0) {
+            // nothing to check
+            return;
+        }
+        // first: check foi positions
+        FOIPosition[] positions = importConf.getAdditionalMetadata().getFOIPositionArray();
+        List<org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position> xbPositions = new LinkedList<>();
+        for (FOIPosition foiPosition : positions) {
+            if (foiPosition.getPosition() != null) {
+                xbPositions.add(foiPosition.getPosition());
+            }
+        }
+        // second: check features
+        for (FeatureOfInterestType foiType : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
+            ResourceType res = foiType.getResource();
+            if (res instanceof GeneratedSpatialResourceType) {
+                if (((GeneratedSpatialResourceType) res).getPosition() != null) {
+                    xbPositions.add(((GeneratedSpatialResourceType) res).getPosition());
+                }
+            } else if (res instanceof SpatialResourceType) {
+                if (((SpatialResourceType) res).getPosition() != null) {
+                    xbPositions.add(((SpatialResourceType) res).getPosition());
+                }
+            }
+        }
+        for (org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position position : xbPositions) {
+            int epsgCode = position.getEPSGCode();
+            if (!EPSGHelper.isValidEPSGCode(epsgCode)) {
+                logInvalidFeaturesFound();
+                throw new IllegalArgumentException("Given EPSG code " + epsgCode + " is invalid!");
+            }
+            if (!EPSGHelper.areValidXBCoordinates(epsgCode, position.getCoordinateArray())) {
+                logInvalidFeaturesFound();
+                throw new IllegalArgumentException("Given coordinates " +
+                        Arrays.toString(position.getCoordinateArray()) +
+                        " are invalid for given EPSG code " + epsgCode + "!");
+            }
+        }
+        LOG.info("Feature positions validated");
+    }
+
+    private void logInvalidFeaturesFound() {
+        LOG.error("Invalid feature positions found in configuration file!");
     }
 
     private void setLocaleFilePattern() {
         if (isRegularExpressionForLocalFileAvailable()) {
-            final String pattern = importConf.getDataFile().getLocalFile().getRegularExpressionForAllowedFileNames();
-            localeFilePattern  = Pattern.compile(pattern);
+            String pattern = importConf.getDataFile().getLocalFile().getRegularExpressionForAllowedFileNames();
+            localeFilePattern = Pattern.compile(pattern);
         }
     }
 
@@ -291,8 +391,8 @@ public class Configuration {
      * configuration.
      *
      * @return a <b><code>new File</code></b> instance pointing to
-     *             <code>DataFile.LocalFile.Path</code> or<br>
-     *             <b><code>null</code></b>, if element is not defined in config
+     *         <code>DataFile.LocalFile.Path</code> or<br>
+     *         <b><code>null</code></b>, if element is not defined in config
      */
     public File getDataFile() {
         LOG.trace("getDataFile()");
@@ -345,12 +445,12 @@ public class Configuration {
     }
 
     public char getCsvSeparator() {
-        final String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
+        String sep = importConf.getCsvMetadata().getParameter().getColumnSeparator();
         if (sep.equals(Configuration.COLUMN_SEPARATOR_SPACE)) {
             return ' ';
         } else if (sep.equals(Configuration.COLUMN_SEPARATOR_TAB)) {
             return '\t';
-        } else    {
+        } else {
             return sep.charAt(0);
         }
     }
@@ -366,8 +466,8 @@ public class Configuration {
     /**
      * Returns the ids of measured value columns.
      *
-     * @return An <code>int[]</code> if any measured value column is found. <code>null</code>
-     *         if no column is found.
+     * @return An <code>int[]</code> if any measured value column is found.
+     *         <code>null</code> if no column is found.
      */
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
@@ -392,9 +492,9 @@ public class Configuration {
 
     public int[] getIgnoredColumnIds() {
         LOG.trace("getIgnoredColumnIds()");
-        final Column[] cols = getColumns();
-        final ArrayList<Integer> ids = new ArrayList<>();
-        for (final Column column : cols) {
+        Column[] cols = getColumns();
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)) {
                 LOG.debug("Found ignored column: {}", column.getNumber());
                 ids.add(column.getNumber());
@@ -402,7 +502,7 @@ public class Configuration {
         }
         ids.trimToSize();
         if (ids.size() > 0) {
-            final int[] result = new int[ids.size()];
+            int[] result = new int[ids.size()];
             for (int i = 0; i < result.length; i++) {
                 result[i] = ids.get(i);
             }
@@ -412,20 +512,21 @@ public class Configuration {
     }
 
     /**
-     * Returns the column id for the given measured value column if available.
-     * If not -1.
+     * Returns the column id for the given measured value column if available. If
+     * not -1.
      *
-     * @param mvColumnId a int.
-     * @return The column id of the sensor related to this measure value column
-     *             or -1 if no sensor column is available for this column
+     * @param mvColumnId
+     *            a int.
+     * @return The column id of the sensor related to this measure value column or
+     *         -1 if no sensor column is available for this column
      */
-    public int getColumnIdForSensor(final int mvColumnId) {
+    public int getColumnIdForSensor(int mvColumnId) {
         LOG.trace(String.format("getColumnIdForSensor(%d)",
                 mvColumnId));
         // check for RelatedSensor element and if its a number -> return number
-        final Column c = getColumnById(mvColumnId);
+        Column c = getColumnById(mvColumnId);
         if (c.isSetRelatedSensor()) {
-            final RelatedSensor rS = c.getRelatedSensor();
+            RelatedSensor rS = c.getRelatedSensor();
             if (rS.isSetNumber()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Found RelatedSensor column for measured value column %d: %d",
@@ -442,9 +543,9 @@ public class Configuration {
             }
         }
         // if element is not set
-        //    get column id from ColumnAssignments
-        final Column[] cols = getColumns();
-        for (final Column column : cols) {
+        // get column id from ColumnAssignments
+        Column[] cols = getColumns();
+        for (Column column : cols) {
             if (column.getType().equals(Type.SENSOR)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Found related sensor column for measured value column %d: %d",
@@ -457,10 +558,10 @@ public class Configuration {
         return -1;
     }
 
-    public Column getColumnById(final int columnId) {
+    public Column getColumnById(int columnId) {
         LOG.trace(String.format("getColumnById(%d)", columnId));
-        final Column[] cols = getColumns();
-        for (final Column column : cols) {
+        Column[] cols = getColumns();
+        for (Column column : cols) {
             if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Column found for id %d",
@@ -475,24 +576,25 @@ public class Configuration {
     }
 
     /**
-     * Returns the SensorType linked to the column, identified by the given id,
-     * by its RelatedSensor.IdRef element. If no sensor could be found
+     * Returns the SensorType linked to the column, identified by the given id, by
+     * its RelatedSensor.IdRef element. If no sensor could be found
      * <code>null</code> is returned.
      *
-     * @param mvColumnId a int.
+     * @param mvColumnId
+     *            a int.
      * @return a SensorType object.
      */
-    public SensorType getRelatedSensor(final int mvColumnId) {
+    public SensorType getRelatedSensor(int mvColumnId) {
         LOG.trace(String.format("getRelatedSensor(%d)",
-                    mvColumnId));
-        final Column c = getColumnById(mvColumnId);
+                mvColumnId));
+        Column c = getColumnById(mvColumnId);
         if (c.isSetRelatedSensor() &&
                 c.getRelatedSensor().isSetIdRef()) {
-            final String sensorXmlId = c.getRelatedSensor().getIdRef();
+            String sensorXmlId = c.getRelatedSensor().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
                     importConf.getAdditionalMetadata().getSensorArray() != null &&
                     importConf.getAdditionalMetadata().getSensorArray().length > 0) {
-                for (final SensorType s : importConf.getAdditionalMetadata().getSensorArray()) {
+                for (SensorType s : importConf.getAdditionalMetadata().getSensorArray()) {
                     if (isSensorIdMatching(sensorXmlId, s)) {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug(String.format("Sensor found for id '%s': %s",
@@ -514,19 +616,19 @@ public class Configuration {
         return null;
     }
 
-    private boolean isSensorIdMatching(final String sensorXmlId, final SensorType s) {
+    private boolean isSensorIdMatching(String sensorXmlId, SensorType s) {
         return s.getResource() != null &&
                 s.getResource().getID() != null &&
                 s.getResource().getID().equals(sensorXmlId);
     }
 
-    public int getColumnIdForFoi(final int mvColumnId) {
+    public int getColumnIdForFoi(int mvColumnId) {
         LOG.trace(String.format("getColumnIdForFoi(%d)",
                 mvColumnId));
         // check for RelatedFOI element and if its a number -> return number
-        final Column c = getColumnById(mvColumnId);
+        Column c = getColumnById(mvColumnId);
         if (c.isSetRelatedFOI()) {
-            final RelatedFOI rF = c.getRelatedFOI();
+            RelatedFOI rF = c.getRelatedFOI();
             if (rF.isSetNumber()) {
                 LOG.debug(String.format("Found RelatedFOI column for measured value column %d: %d",
                         mvColumnId,
@@ -539,9 +641,9 @@ public class Configuration {
             }
         }
         // if element is not set
-        //    get column id from ColumnAssignments
-        final Column[] cols = getColumns();
-        for (final Column column : cols) {
+        // get column id from ColumnAssignments
+        Column[] cols = getColumns();
+        for (Column column : cols) {
             if (column.getType().equals(Type.FOI)) {
                 LOG.debug(String.format("Found related feature of interest column for measured value column %d: %d",
                         mvColumnId,
@@ -552,24 +654,28 @@ public class Configuration {
         return -1;
     }
 
-    public Position getFoiPosition(final String foiUri) {
+    public Position getFoiPosition(String foiUri) {
         LOG.trace(String.format("getFoiPosition(%s)",
                 foiUri));
         // get all elements from foi positions and compare the uri
         if (importConf.getAdditionalMetadata() != null &&
                 importConf.getAdditionalMetadata().getFOIPositionArray() != null &&
                 importConf.getAdditionalMetadata().getFOIPositionArray().length > 0) {
-            final FOIPosition[] foiPos = importConf.getAdditionalMetadata().getFOIPositionArray();
-            for (final FOIPosition pos : foiPos) {
+            FOIPosition[] foiPos = importConf.getAdditionalMetadata().getFOIPositionArray();
+            for (FOIPosition pos : foiPos) {
                 if (pos.getURI() != null &&
                         pos.getURI().getStringValue() != null &&
                         pos.getURI().getStringValue().equals(foiUri)) {
                     // if element is found -> fill position
-                    final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p = pos.getPosition();
-                    if (p.isSetAlt() &&
-                            p.isSetEPSGCode() &&
-                            p.isSetLat() &&
-                            p.isSetLong()) {
+                    org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p = pos.getPosition();
+                    if (p.isSetEPSGCode()) {
+                        if  (!EPSGHelper.isValidEPSGCode(p.getEPSGCode())) {
+                            throw new IllegalArgumentException("given EPSG code is invalid! EPSG code:" +
+                                    p.getEPSGCode());
+                        } else if (!EPSGHelper.areValidXBCoordinates(p.getEPSGCode(), p.getCoordinateArray())) {
+                            throw new IllegalArgumentException("Specified coordinates are invalid for EPSG code " +
+                                    p.getEPSGCode());
+                        }
                         return getModelPositionXBPosition(p);
                     }
                 }
@@ -579,38 +685,34 @@ public class Configuration {
     }
 
     public Position getModelPositionXBPosition(
-            final org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p) {
+            org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position p) {
         LOG.trace("getPosition()");
-        final String[] units = new String[3];
-        final double[] values = new double[3];
-
-        if (p.isSetAlt()) {
-            units[Position.ALT] = p.getAlt().getUnit();
-            values[Position.ALT] = p.getAlt().getFloatValue();
-        } else {
-            units[Position.ALT] = Position.UNIT_NOT_SET;
-            values[Position.ALT] = Position.VALUE_NOT_SET;
+        if (!EPSGHelper.isValidEPSGCode(p.getEPSGCode())) {
+            return null;
         }
-        units[Position.LAT] = p.getLat().getUnit();
-        values[Position.LAT] = p.getLat().getFloatValue();
-
-        units[Position.LONG] = p.getLong().getUnit();
-        values[Position.LONG] = p.getLong().getFloatValue();
-
-        final int epsgCode = p.getEPSGCode();
-        return new Position(values, units, epsgCode);
+        Coordinate[] coordinates = new Coordinate[p.sizeOfCoordinateArray()];
+        for (int i = 0; i < p.sizeOfCoordinateArray(); i++) {
+            org.x52North.sensorweb.sos.importer.x05.CoordinateDocument.Coordinate xbCoordinate = p
+                    .getCoordinateArray(i);
+            coordinates[i] = new Coordinate(xbCoordinate.getAxisAbbreviation(), xbCoordinate.getUnit(),
+                    xbCoordinate.getDoubleValue());
+        }
+        if (!EPSGHelper.areValid(p.getEPSGCode(), coordinates)) {
+            return null;
+        }
+        return new Position(p.getEPSGCode(), coordinates);
     }
 
-    public FeatureOfInterestType getRelatedFoi(final int mvColumnId) {
+    public FeatureOfInterestType getRelatedFoi(int mvColumnId) {
         LOG.trace(String.format("getRelatedFoi(%d)",
                 mvColumnId));
-        final Column c = getColumnById(mvColumnId);
+        Column c = getColumnById(mvColumnId);
         if (c.isSetRelatedFOI() &&
                 c.getRelatedFOI().isSetIdRef()) {
-            final String foiXmlId = c.getRelatedFOI().getIdRef();
+            String foiXmlId = c.getRelatedFOI().getIdRef();
             if (importConf.getAdditionalMetadata() != null &&
                     importConf.getAdditionalMetadata().sizeOfFeatureOfInterestArray() > 0) {
-                for (final FeatureOfInterestType foi : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
+                for (FeatureOfInterestType foi : importConf.getAdditionalMetadata().getFeatureOfInterestArray()) {
                     if (isFoiIdMatching(foiXmlId, foi)) {
                         LOG.debug(String.format("Feature of Interest found for id '%s': %s",
                                 foiXmlId,
@@ -630,17 +732,16 @@ public class Configuration {
         return null;
     }
 
-    private boolean isFoiIdMatching(final String foiXmlId, final FeatureOfInterestType foi) {
+    private boolean isFoiIdMatching(String foiXmlId, FeatureOfInterestType foi) {
         return foi.getResource() != null &&
                 foi.getResource().getID() != null &&
                 foi.getResource().getID().equals(foiXmlId);
     }
 
-    public Position getPosition(final String[] values) throws ParseException {
+    public Position getPosition(String[] values) throws ParseException {
         String group = "";
         // get first group in Document for position column
-        outerfor:
-        for (Column column : getColumns()) {
+        outerfor: for (Column column : getColumns()) {
             if (column.getType().equals(Type.POSITION)) {
                 for (Metadata metadata : column.getMetadataArray()) {
                     if (metadata.getKey().equals(Key.GROUP)) {
@@ -653,28 +754,26 @@ public class Configuration {
         return getPosition(group, values);
     }
 
-    public Position getPosition(final String group, final String[] values) throws ParseException {
+    public Position getPosition(String group, String[] values) throws ParseException {
         LOG.trace(String.format("getPosition(group:%s,..)", group));
-        final Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
+        Column[] cols = getAllColumnsForGroup(group, Type.POSITION);
         // combine the values from the different columns
-        final String[] units = new String[] {"", "", ""};
-        final double[] posValues =
-                new double[] { Position.VALUE_NOT_SET, Position.VALUE_NOT_SET, Position.VALUE_NOT_SET };
+        Coordinate[] coordinates = new Coordinate[3];
         int epsgCode = -1;
-        for (final Column c : cols) {
-            for (final Metadata m : c.getMetadataArray()) {
+        for (Column column : cols) {
+            for (Metadata m : column.getMetadataArray()) {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LATITUDE, "{0}");
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_LONGITUDE, "{1}");
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_ALTITUDE, "{2}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_0, "{0}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_1, "{1}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_2, "{2}");
                     pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_EPSG, "{3}");
 
-                    final MessageFormat mf = new MessageFormat(pattern);
+                    MessageFormat mf = new MessageFormat(pattern);
                     Object[] tokens = null;
                     try {
-                        tokens = mf.parse(values[c.getNumber()]);
-                    } catch (final ParseException e) {
+                        tokens = mf.parse(values[column.getNumber()]);
+                    } catch (ParseException e) {
                         throw new NumberFormatException();
                     }
 
@@ -682,164 +781,69 @@ public class Configuration {
                         throw new NumberFormatException();
                     }
 
-                    Object[] latitude;
-                    Object[] longitude;
-                    Object[] height;
-
                     if (tokens.length > 0 && tokens[0] != null) {
-                        latitude = parseLat((String) tokens[0]);
-                        posValues[Position.LAT] = (Double) latitude[0];
-                        units[Position.LAT] = (String) latitude[1];
+                        coordinates[0] = new Coordinate("", "", parseToDouble((String) tokens[0]));
                     }
                     if (tokens.length > 1 && tokens[1] != null) {
-                        longitude = parseLon((String) tokens[1]);
-                        posValues[Position.LONG] = (Double) longitude[0];
-                        units[Position.LONG] = (String) longitude[1];
+                        coordinates[1] = new Coordinate("", "", parseToDouble((String) tokens[1]));
                     }
                     if (tokens.length > 2 && tokens[2] != null) {
-                        height = parseAlt((String) tokens[2]);
-                        posValues[Position.ALT] = (Double) height[0];
-                        units[Position.ALT] = (String) height[1];
+                        coordinates[2] = new Coordinate("", "", parseToDouble((String) tokens[2]));
                     }
                     if (tokens.length > 3 && tokens[3] != null) {
                         epsgCode = Integer.parseInt((String) tokens[3]);
                     }
                     // get additional information
-                } else if (m.getKey().equals(Key.POSITION_LATITUDE)) {
-                    // LATITUDE
-                    final Object[] latitude = parseLat(m.getValue());
-                    posValues[Position.LAT] = (Double) latitude[0];
-                    units[Position.LAT] = (String) latitude[1];
-                } else if (m.getKey().equals(Key.POSITION_LONGITUDE)) {
-                    // LONGITUDE
-                    final Object[] longitude = parseLon(m.getValue());
-                    posValues[Position.LONG] = (Double) longitude[0];
-                    units[Position.LONG] = (String) longitude[1];
-                } else if (m.getKey().equals(Key.POSITION_ALTITUDE)) {
-                    // ALTITUDE
-                    final Object[] altitude = parseAlt(m.getValue());
-                    posValues[Position.ALT] = (Double) altitude[0];
-                    units[Position.ALT] = (String) altitude[1];
+                    // e.g. additional coordinate values
+                } else if (m.getKey().equals(Key.POSITION_COORD_0)) {
+                    coordinates[0] = new Coordinate("", "", parseToDouble(m.getValue()));
+                } else if (m.getKey().equals(Key.POSITION_COORD_1)) {
+                    coordinates[1] = new Coordinate("", "", parseToDouble(m.getValue()));
+                } else if (m.getKey().equals(Key.POSITION_COORD_2)) {
+                    coordinates[2] = new Coordinate("", "", parseToDouble(m.getValue()));
                 } else if (m.getKey().equals(Key.POSITION_EPSG_CODE)) {
                     // EPSG
                     epsgCode = Integer.parseInt(m.getValue());
                 }
             }
-
         }
-        return new Position(posValues, units, epsgCode);
-    }
-
-    private Object[] parseAlt(final String alt) throws ParseException {
-        LOG.trace(String.format("parseAlt(%s)",
-                alt));
-        double value = Position.VALUE_NOT_SET;
-        String unit = Position.UNIT_NOT_SET;
-
-        String number;
-        if (alt.contains(KM)) {
-            unit = KM;
-            number = alt.replace(KM, "");
-        } else if (alt.contains(MI)) {
-            unit = MI;
-            number = alt.replace(MI, "");
-        } else if (alt.contains(M)) {
-            unit = M;
-            number = alt.replace(M, "");
-        } else if (alt.contains(FT)) {
-            unit = FT;
-            number = alt.replace(FT, "");
-        } else {
-            number = alt;
-            // we are assuming "m" as default value
-            unit = M;
+        if (!EPSGHelper.isValidEPSGCode(epsgCode)) {
+            return null;
         }
-        value = parseToDouble(number);
-
-        return new Object[] {value, unit};
-    }
-
-    private Object[] parseLon(final String lon) throws ParseException {
-        LOG.trace(String.format("parseLon(%s)",
-                lon));
-        double value;
-        String unit = "";
-
-        String number;
-        //TODO handle inputs like degrees/minutes/seconds, n.Br.
-        if (lon.contains("°")) {
-            unit = "°";
-            final String[] part = lon.split("°");
-            number = part[0];
-        } else if (lon.contains(M)) {
-            unit = M;
-            number = lon.replace(M, "");
-        } else {
-            number = lon;
-        }
-        value = parseToDouble(number);
-
-        if (unit.equals("")) {
-            if (value <= 180.0 && value >= -180.0) {
-                unit = DEG;
-            } else {
-                unit = M;
+        CoordinateSystem cs = EPSGHelper.getCoordinateSystem(epsgCode);
+        Coordinate[] finalCoordinates = new Coordinate[cs.getDimension()];
+        for (int i = 0; i < cs.getDimension(); i++) {
+            if (coordinates[i] == null) {
+                continue;
             }
+            CoordinateSystemAxis axis = cs.getAxis(i);
+            coordinates[i].setAxisAbbreviation(axis.getAbbreviation());
+            coordinates[i].setUnit(axis.getUnit().toString());
+            finalCoordinates[i] = coordinates[i];
         }
-
-        final Object[] result = {value, unit};
-        return result;
+        if (!EPSGHelper.areValid(epsgCode, finalCoordinates)) {
+            return null;
+        }
+        return new Position(epsgCode, finalCoordinates);
     }
 
-    private Object[] parseLat(final String lat) throws ParseException {
-        LOG.trace(String.format("parseLat(%s)",
-                lat));
-        double value;
-        String unit = "";
-
-        String number;
-        //TODO handle inputs like degrees/minutes/seconds, n.Br.
-        if (lat.contains("°")) {
-            unit = "°";
-            final String[] part = lat.split("°");
-            number = part[0];
-        } else if (lat.contains(M)) {
-            unit = M;
-            number = lat.replace(M, "");
-        } else {
-            number = lat;
-        }
-        value = parseToDouble(number);
-
-        if (unit.equals("")) {
-            if (value <= 90.0 && value >= -90.0) {
-                unit = DEG;
-            } else {
-                unit = M;
-            }
-        }
-
-        final Object[] result = {value, unit};
-        return result;
-    }
-
-    public double parseToDouble(final String number) throws ParseException {
+    public double parseToDouble(String number) throws ParseException {
         LOG.trace(String.format("parseToDouble(%s)",
                 number));
-        final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        final char dSep = getDecimalSeparator();
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        char dSep = getDecimalSeparator();
         symbols.setDecimalSeparator(dSep);
         symbols.setGroupingSeparator(getThousandsSeparator(dSep));
 
         Number n;
-        final DecimalFormat formatter = new DecimalFormat();
+        DecimalFormat formatter = new DecimalFormat();
         formatter.setDecimalFormatSymbols(symbols);
         n = formatter.parse(number);
 
         return n.doubleValue();
     }
 
-    private char getThousandsSeparator(final char dSep) {
+    private char getThousandsSeparator(char dSep) {
         if (dSep == '.') {
             return ',';
         } else if (dSep == ',') {
@@ -856,33 +860,34 @@ public class Configuration {
     /**
      * Returns all columns of the corresponding <code>group</code>
      *
-     * @param group a <code>{@link java.lang.String String}</code> as group identifier
-     * @param t a TypeDocument.Type.Enum object.
-     * @return a <code>Column[]</code> having all the group id
-     *             <code>group</code> <b>or</b><br>
-     *             an empty <code>Column[]</code>
+     * @param group
+     *            a <code>{@link java.lang.String String}</code> as group identifier
+     * @param type
+     *            a TypeDocument.Type.Enum object.
+     * @return a <code>Column[]</code> having all the group id <code>group</code>
+     *         <b>or</b><br>
+     *         an empty <code>Column[]</code>
      */
-    public Column[] getAllColumnsForGroup(final String group, final Enum t) {
+    public Column[] getAllColumnsForGroup(String group, Enum type) {
         LOG.trace("getAllColumnsForGroup()");
         if (group == null) {
             return null;
         }
-        final Column[] allCols = getColumns();
-        final ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
-        for (final Column col : allCols) {
+        Column[] allCols = getColumns();
+        ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
+        for (Column col : allCols) {
             if (col.getType() != null &&
-                    col.getType().equals(t)) {
+                    col.getType().equals(type)) {
                 // we have a position or dateTime
                 // check the Metadata kvps
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
-                    findGroup:
-                        for (final Metadata meta : col.getMetadataArray()) {
-                            if (meta.getKey().equals(Key.GROUP) &&
-                                    meta.getValue().equals(group)) {
-                                tmpResultSet.add(col);
-                                break findGroup;
-                            }
+                    findGroup: for (Metadata meta : col.getMetadataArray()) {
+                        if (meta.getKey().equals(Key.GROUP) &&
+                                meta.getValue().equals(group)) {
+                            tmpResultSet.add(col);
+                            break findGroup;
                         }
+                    }
                 }
             }
         }
@@ -900,12 +905,12 @@ public class Configuration {
      */
     public String getFirstDateTimeGroup() {
         LOG.trace("getFirstDateTimeGroup()");
-        final Column[] cols = getColumns();
-        for (final Column col : cols) {
+        Column[] cols = getColumns();
+        for (Column col : cols) {
             if (col.getType().equals(Type.DATE_TIME)) {
                 // it's DATE_TIME -> get group id from metadata[]
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
-                    for (final Metadata m : col.getMetadataArray()) {
+                    for (Metadata m : col.getMetadataArray()) {
                         if (m.getKey().equals(Key.GROUP)) {
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug(String.format("First date time group found: %s",
@@ -924,15 +929,17 @@ public class Configuration {
     /**
      * Returns the uom with the given id or <code>null</code>
      *
-     * @param idRef a {@link java.lang.String} object.
+     * @param idRef
+     *            a {@link java.lang.String} object.
      * @return <code>UnitOfMeasurementType</code> instance with
-     *                 <code>id == idRef</code>,<br>or <code>null</code>
+     *         <code>id == idRef</code>,<br>
+     *         or <code>null</code>
      */
-    public UnitOfMeasurementType getUomById(final String idRef) {
+    public UnitOfMeasurementType getUomById(String idRef) {
         LOG.trace(String.format("getUomById('%s')",
                 idRef));
-        final UnitOfMeasurementType[] uoms = importConf.getAdditionalMetadata().getUnitOfMeasurementArray();
-        for (final UnitOfMeasurementType uom : uoms) {
+        UnitOfMeasurementType[] uoms = importConf.getAdditionalMetadata().getUnitOfMeasurementArray();
+        for (UnitOfMeasurementType uom : uoms) {
             if (uom.getResource().getID().equals(idRef)) {
                 return uom;
             }
@@ -941,17 +948,18 @@ public class Configuration {
     }
 
     /**
-     * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns
-     * the id of the first column with Type "UOM"
+     * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns the
+     * id of the first column with Type "UOM"
      *
-     * @param mVColumnId a int.
+     * @param mVColumnId
+     *            a int.
      * @return the id of the first uom column or -1 if not found
      */
-    public int getColumnIdForUom(final int mVColumnId) {
+    public int getColumnIdForUom(int mVColumnId) {
         LOG.trace(String.format("getColumnIdForUom(%s)",
                 mVColumnId));
-        final Column[] cols = getColumns();
-        for (final Column col : cols) {
+        Column[] cols = getColumns();
+        for (Column col : cols) {
             if (col.getType().equals(Type.UOM)) {
                 return col.getNumber();
             }
@@ -962,15 +970,15 @@ public class Configuration {
     /**
      * Returns the op with the given id or <code>null</code>
      *
-     * @param idRef a {@link java.lang.String} object.
+     * @param idRef
+     *            a {@link java.lang.String} object.
      * @return a ObservedPropertyType object.
      */
-    public ObservedPropertyType getObsPropById(final String idRef) {
+    public ObservedPropertyType getObsPropById(String idRef) {
         LOG.trace(String.format("getObsPropById('%s')",
                 idRef));
-        final ObservedPropertyType[] ops =
-                importConf.getAdditionalMetadata().getObservedPropertyArray();
-        for (final ObservedPropertyType op : ops) {
+        ObservedPropertyType[] ops = importConf.getAdditionalMetadata().getObservedPropertyArray();
+        for (ObservedPropertyType op : ops) {
             if (op.getResource().getID().equals(idRef)) {
                 return op;
             }
@@ -979,17 +987,18 @@ public class Configuration {
     }
 
     /**
-     * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns
-     * the id of the first column with Type "OBSERVED_PROPERTY"
+     * Checks all columns in CsvMetadata.ColumnAssignments.Column[] and returns the
+     * id of the first column with Type "OBSERVED_PROPERTY"
      *
-     * @param mVColumnId a int.
+     * @param mVColumnId
+     *            a int.
      * @return the id of the first op column or -1 if not found
      */
-    public int getColumnIdForOpsProp(final int mVColumnId) {
+    public int getColumnIdForOpsProp(int mVColumnId) {
         LOG.trace(String.format("getColumnIdForOpsProp(%s)",
                 mVColumnId));
-        final Column[] cols = getColumns();
-        for (final Column col : cols) {
+        Column[] cols = getColumns();
+        for (Column col : cols) {
             if (col.getType().equals(Type.OBSERVED_PROPERTY)) {
                 return col.getNumber();
             }
@@ -1017,10 +1026,10 @@ public class Configuration {
         return String.format("Configuration [file=%s]", configFile);
     }
 
-    public String getType(final int mVColumnId) {
-        for (final Column col : getColumns()) {
+    public String getType(int mVColumnId) {
+        for (Column col : getColumns()) {
             if (col.getNumber() == mVColumnId) {
-                for (final Metadata m : col.getMetadataArray()) {
+                for (Metadata m : col.getMetadataArray()) {
                     if (m.getKey().equals(Key.TYPE)) {
                         return m.getValue();
                     }
@@ -1094,11 +1103,13 @@ public class Configuration {
     }
 
     /**
-     * <p>isSamplingFile.</p>
+     * <p>
+     * isSamplingFile.
+     * </p>
      *
      * @return <code>true</code>, if all required attributes are available for
-     *          importing sample based files,<br>
-     *          else <code>false</code>.
+     *         importing sample based files,<br>
+     *         else <code>false</code>.
      */
     public boolean isSamplingFile() {
         return importConf.getDataFile().isSetSampleStartRegEx() &&
@@ -1157,7 +1168,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleDataOffset' of <DataFile> not set.");
     }
 
-
     public String getSampleDatePattern() {
         if (importConf.getDataFile().isSetSampleDatePattern() &&
                 !importConf.getDataFile().getSampleDatePattern().isEmpty()) {
@@ -1176,7 +1186,6 @@ public class Configuration {
         throw new IllegalArgumentException("Attribute 'sampleDateExtractionRegEx' of <DataFile> not set.");
     }
 
-
     public int getLastModifiedDelta() {
         if (importConf.getDataFile().isSetLastModifiedDelta()) {
             return importConf.getDataFile().getLastModifiedDelta();
@@ -1185,12 +1194,14 @@ public class Configuration {
     }
 
     /**
-     * <p>getHeaderLine.</p>
+     * <p>
+     * getHeaderLine.
+     * </p>
      *
-     * @return number of the line that contains the header information for the
-     *             first time, or<br>
-     *             <b>-1</b> if the optional attribute "headerLine" is not
-     *             set in DataFile element
+     * @return number of the line that contains the header information for the first
+     *         time, or<br>
+     *         <b>-1</b> if the optional attribute "headerLine" is not set in
+     *         DataFile element
      */
     public int getHeaderLine() {
         if (importConf.getDataFile().isSetHeaderLine()) {
@@ -1200,10 +1211,12 @@ public class Configuration {
     }
 
     /**
-     * <p>getDataFileEncoding.</p>
+     * <p>
+     * getDataFileEncoding.
+     * </p>
      *
      * @return Name of the data file encoding, or <br>
-     *             if not set, "UTF-8"
+     *         if not set, "UTF-8"
      */
     public String getDataFileEncoding() {
         if (importConf.getDataFile().isSetLocalFile() &&
@@ -1218,16 +1231,16 @@ public class Configuration {
     public int getHunkSize() {
         if (importConf.isSetAdditionalMetadata() && importConf.getAdditionalMetadata().getMetadataArray().length > 0) {
             for (int i = 0; i < importConf.getAdditionalMetadata().getMetadataArray().length; i++) {
-                final Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
+                Metadata metadata = importConf.getAdditionalMetadata().getMetadataArray(i);
                 if (metadata.getKey().equals(Key.HUNK_SIZE)) {
                     try {
                         return Integer.parseInt(metadata.getValue());
-                    } catch (final NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         LOG.error(
                                 String.format(
                                         "Value of metadata element with key "
-                                        + "'%s' could not be parsed to int: "
-                                        + "'%s'. Ignoring it.",
+                                                + "'%s' could not be parsed to int: "
+                                                + "'%s'. Ignoring it.",
                                         Key.HUNK_SIZE.toString(),
                                         metadata.getValue()),
                                 nfe);
@@ -1243,12 +1256,12 @@ public class Configuration {
             if (isIgnoreColumnMismatch()) {
                 return false;
             } else {
-                final String errorMsg = String.format(
+                String errorMsg = String.format(
                         "Number of Expected columns '%s' does not match number of "
                                 + "found columns '%s' -> Cancel import! Please update your "
                                 + "configuration to match the number of columns.",
-                                getExpectedColumnCount(),
-                                count);
+                        getExpectedColumnCount(),
+                        count);
                 LOG.error(errorMsg);
                 throw new InvalidColumnCountException(errorMsg);
             }
@@ -1256,10 +1269,10 @@ public class Configuration {
         return true;
     }
 
-    public boolean containsData(final String[] values) {
+    public boolean containsData(String[] values) {
         if (values != null && values.length > 0) {
             for (int i = 0; i < values.length; i++) {
-                final String value = values[i];
+                String value = values[i];
                 if (!isColumnIgnored(i) && (value == null || value.isEmpty())) {
                     LOG.debug("Value of column '{}' is null or empty but shouldn't.", i);
                     return false;
@@ -1271,10 +1284,10 @@ public class Configuration {
         return false;
     }
 
-    private boolean isColumnIgnored(final int i) {
+    private boolean isColumnIgnored(int i) {
         int[] ignoredColumns = getIgnoredColumnIds();
         if (ignoredColumns != null && ignoredColumns.length > 0) {
-            for (final int ignoredColumn : ignoredColumns) {
+            for (int ignoredColumn : ignoredColumns) {
                 if (i == ignoredColumn) {
                     return true;
                 }
@@ -1305,9 +1318,9 @@ public class Configuration {
         if (!isIgnoreLineRegExSet()) {
             return new Pattern[0];
         }
-        final String[] ignoreLineRegExArray = importConf.getDataFile().getIgnoreLineRegExArray();
-        final LinkedList<Pattern> patterns = new LinkedList<>();
-        for (final String regEx : ignoreLineRegExArray) {
+        String[] ignoreLineRegExArray = importConf.getDataFile().getIgnoreLineRegExArray();
+        LinkedList<Pattern> patterns = new LinkedList<>();
+        for (String regEx : ignoreLineRegExArray) {
             if (regEx != null && !regEx.isEmpty()) {
                 patterns.add(Pattern.compile(regEx));
             }
@@ -1344,10 +1357,6 @@ public class Configuration {
             return importConf.getDataFile().getSampleSizeDivisor();
         }
         return 1;
-    }
-
-    public static HashMap<String, Boolean> getEpsgEastingFirstMap() {
-        return EPSG_EASTING_FIRST_MAP;
     }
 
     public boolean isIgnoreColumnMismatch() {
@@ -1459,7 +1468,7 @@ public class Configuration {
         if (values == null || values.length == 0) {
             return "";
         }
-        final StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         for (int i = 0; i < values.length; i++) {
             sb.append(values[i]);
             if (i != values.length - 1) {
@@ -1520,7 +1529,7 @@ public class Configuration {
             if (resource == null ||
                     !(resource instanceof ManualResourceType) ||
                     !NcName.makeValid(((ManualResourceType) resource).getURI().getStringValue())
-                    .equals(NcName.makeValid(sensorURI.toString()))) {
+                            .equals(NcName.makeValid(sensorURI.toString()))) {
                 continue;
             }
             // This column contains the correct sensor
@@ -1561,33 +1570,32 @@ public class Configuration {
             // check features
             for (FeatureOfInterestType feature : additionalMetadata.getFeatureOfInterestArray()) {
                 if (feature.getResource().getID().equalsIgnoreCase(idRef)) {
-                    return feature.getResource() instanceof ManualResourceType ?
-                            (ManualResourceType) feature.getResource() :
-                                null;
+                    return feature.getResource() instanceof ManualResourceType
+                            ? (ManualResourceType) feature.getResource()
+                            : null;
                 }
             }
             // check sensors
             for (SensorType sensor : additionalMetadata.getSensorArray()) {
                 if (sensor.getResource().getID().equalsIgnoreCase(idRef)) {
-                    return sensor.getResource() instanceof ManualResourceType ?
-                            (ManualResourceType) sensor.getResource() :
-                                null;
+                    return sensor.getResource() instanceof ManualResourceType
+                            ? (ManualResourceType) sensor.getResource()
+                            : null;
                 }
             }
             // observed property
             for (ObservedPropertyType property : additionalMetadata.getObservedPropertyArray()) {
                 if (property.getResource().getID().equalsIgnoreCase(idRef)) {
-                    return property.getResource() instanceof ManualResourceType ?
-                            (ManualResourceType) property.getResource() :
-                                null;
+                    return property.getResource() instanceof ManualResourceType
+                            ? (ManualResourceType) property.getResource()
+                            : null;
                 }
             }
             // unitofmeasurement
             for (UnitOfMeasurementType uom : additionalMetadata.getUnitOfMeasurementArray()) {
                 if (uom.getResource().getID().equalsIgnoreCase(idRef)) {
-                    return uom.getResource() instanceof ManualResourceType ?
-                            (ManualResourceType) uom.getResource() :
-                                null;
+                    return uom.getResource() instanceof ManualResourceType ? (ManualResourceType) uom.getResource()
+                            : null;
                 }
             }
         }

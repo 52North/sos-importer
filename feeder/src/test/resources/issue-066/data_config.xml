@@ -84,10 +84,10 @@
         <URI>http://superman.me/home</URI>
         <Name>Superman's Home</Name>
         <Position>
-          <Alt unit="meters">0.0</Alt>
-          <EPSGCode>4326</EPSGCode>
-          <Lat unit="deg">0.0</Lat>
-          <Long unit="deg">0.0</Long>
+          <EPSGCode>4979</EPSGCode>
+          <Coordinate unit="°" axisAbbreviation="Lat">0.0</Coordinate>
+          <Coordinate unit="°" axisAbbreviation="Long">0.0</Coordinate>
+          <Coordinate unit="m" axisAbbreviation="h">0.0</Coordinate>
         </Position>
       </SpatialResource>
     </FeatureOfInterest>

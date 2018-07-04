@@ -59,15 +59,20 @@
  */
 package org.n52.sos.importer.model.position;
 
+import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.Component;
+import org.n52.sos.importer.model.measuredValue.NumericValue;
+import org.n52.sos.importer.model.position.Position.Id;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.MissingComponentPanel;
+import org.n52.sos.importer.view.position.MissingPositionComponentPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PositionComponent extends Component {
+public class PositionComponent extends Component {
 
-    private static final String DEGREE = "degree";
+    private static final String DEG = "°";
     private static final String FT = "ft";
     private static final String N_A = "n/a";
 
@@ -77,84 +82,46 @@ public abstract class PositionComponent extends Component {
 
     private String pattern;
 
-    private double value = -1;
+    private double value = Double.NaN;
 
     private String unit;
 
-    /**
-     * <p>Constructor for PositionComponent.</p>
-     *
-     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-     * @param pattern a {@link java.lang.String} object.
-     */
-    public PositionComponent(final TableElement tableElement, final String pattern) {
+    private final Id id;
+
+    public PositionComponent(Id id, TableElement tableElement, String pattern) {
         this.tableElement = tableElement;
         this.pattern = pattern;
+        this.id = id;
     }
 
-    /**
-     * <p>Constructor for PositionComponent.</p>
-     *
-     * @param value a double.
-     * @param unit a {@link java.lang.String} object.
-     */
-    public PositionComponent(final double value, final String unit) {
+    public PositionComponent(Id id, double value, String unit) {
         this.value = value;
         this.unit = unit;
+        this.id = id;
     }
 
-    /**
-     * <p>Setter for the field <code>value</code>.</p>
-     *
-     * @param value a double.
-     */
-    public void setValue(final double value) {
+    public void setValue(double value) {
         LOG.info("Assign Value to " + this.getClass().getName());
         this.value = value;
     }
 
-    /**
-     * <p>Getter for the field <code>value</code>.</p>
-     *
-     * @return a double.
-     */
     public double getValue() {
         return value;
     }
 
-    /**
-     * <p>Setter for the field <code>unit</code>.</p>
-     *
-     * @param unit a {@link java.lang.String} object.
-     */
-    public void setUnit(final String unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 
-    /**
-     * <p>Getter for the field <code>unit</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getUnit() {
         return unit;
     }
 
-    /**
-     * <p>Setter for the field <code>tableElement</code>.</p>
-     *
-     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-     */
-    public void setTableElement(final TableElement tableElement) {
+    public void setTableElement(TableElement tableElement) {
         LOG.info("Assign Column to " + this.getClass().getName());
         this.tableElement = tableElement;
     }
 
-    /**
-     * <p>Getter for the field <code>tableElement</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
-     */
     public TableElement getTableElement() {
         return tableElement;
     }
@@ -168,27 +135,21 @@ public abstract class PositionComponent extends Component {
         }
     }
 
-    /**
-     * <p>getParsedUnit.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getParsedUnit() {
         if (null == unit) {
             return N_A;
         } else {
             switch (unit) {
-                case "":
-                    return N_A;
                 case "m":
                 case "meters":
                     return "m";
                 case FT:
                 case "feet":
                     return FT;
-                case DEGREE:
-                case "°":
-                    return DEGREE;
+                case "degree":
+                case DEG:
+                    return DEG;
+                case "":
                 default:
                     return N_A;
             }
@@ -198,26 +159,16 @@ public abstract class PositionComponent extends Component {
     @Override
     public String toString() {
         if (getTableElement() == null) {
-            return " " + getValue() + getUnit();
+            return " " + getValue();
         } else {
             return " " + getTableElement();
         }
     }
 
-    /**
-     * <p>Setter for the field <code>pattern</code>.</p>
-     *
-     * @param pattern a {@link java.lang.String} object.
-     */
     public void setPattern(final String pattern) {
         this.pattern = pattern;
     }
 
-    /**
-     * <p>Getter for the field <code>pattern</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getPattern() {
         return pattern;
     }
@@ -228,7 +179,14 @@ public abstract class PositionComponent extends Component {
      * @param featureOfInterestPosition a {@link org.n52.sos.importer.model.table.Cell} object.
      * @return a {@link org.n52.sos.importer.model.position.PositionComponent} object.
      */
-    public abstract PositionComponent forThis(Cell featureOfInterestPosition);
+    public PositionComponent forThis(Id id, Cell featureOfInterestPosition) {
+        if (getTableElement() == null) {
+            return new PositionComponent(getId(), getValue(), getParsedUnit());
+        } else {
+            String positionString = getTableElement().getValueFor(featureOfInterestPosition);
+            return PositionComponent.parse(id, positionString);
+        }
+    }
 
     @Override
     public int hashCode() {
@@ -241,6 +199,45 @@ public abstract class PositionComponent extends Component {
         temp = Double.doubleToLongBits(value);
         result = prime * result + (int) (temp ^ temp >>> 32);
         return result;
+    }
+
+    /**
+     * Tries to convert a given String into a valid {@link PositionComponent} object
+     *
+     * @param s a {@link String} object.
+     * @return a {@link PositionComponent} object.
+     */
+    // TODO units and Strings -> Constants
+    public static PositionComponent parse(Id id, String s) {
+        double value = 0.0;
+        String unit = "";
+
+        String number;
+        //TODO handle inputs like degrees/minutes/seconds, n.Br.
+        if (s.contains(DEG)) {
+            unit = DEG;
+            String[] part = s.split(DEG);
+            number = part[0];
+        } else if (s.contains("m")) {
+            unit = "m";
+            number = s.replace("m", "");
+        } else {
+            number = s;
+        }
+
+        NumericValue nv = new NumericValue();
+
+        value = nv.parse(number);
+
+        if (unit.equals("")) {
+            if (value <= 90.0 && value >= -90.0) {
+                unit = DEG;
+            } else {
+                unit = "m";
+            }
+        }
+
+        return new PositionComponent(id, value, unit);
     }
 
     @Override
@@ -280,5 +277,14 @@ public abstract class PositionComponent extends Component {
             return false;
         }
         return true;
+    }
+
+    public Id getId() {
+        return id;
+    }
+
+    @Override
+    public MissingComponentPanel getMissingComponentPanel(Combination c) {
+        return new MissingPositionComponentPanel(id, (Position) c);
     }
 }

@@ -30,9 +30,8 @@ package org.n52.sos.importer.test;
 
 import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.ModelStore;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.table.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,19 +47,17 @@ public class PositionControllerTest {
         logger.debug("Start Test");
         final int firstLineWithData = 1;
         final String g = "1";
-        final String pa1 = "LAT";
-        final String pa2 = "LON";
         //
         // first element
         final Column c1 = new Column(0, firstLineWithData);
         final Position p1 = new Position();
-        p1.setLatitude(new Latitude(c1, pa1));
+        p1.addCoordinate(new PositionComponent(Position.Id.COORD_0, c1, Position.Id.COORD_0.name()));
         p1.setGroup(g);
         //
         // second element
         final Column c2 = new Column(1, firstLineWithData);
         final Position p2 = new Position();
-        p2.setLongitude(new Longitude(c2, pa2));
+        p2.addCoordinate(new PositionComponent(Position.Id.COORD_1, c2, Position.Id.COORD_1.name()));
         p2.setGroup(g);
         //
         // add elements to modelstore

@@ -1402,10 +1402,10 @@
         <URI>http://www.52north.org/dwd/featureOfInterest/02355</URI>
         <Name>KUGGOEREN AMOS</Name>
         <Position>
-          <Alt unit="meters">9</Alt>
-          <EPSGCode>4326</EPSGCode>
-          <Lat unit="deg">61.70</Lat>
-          <Long unit="deg">17.52</Long>
+          <EPSGCode>4979</EPSGCode>
+          <Coordinate unit="°" axisAbbreviation="Lat">61.70</Coordinate>
+          <Coordinate unit="°" axisAbbreviation="Long">17.52</Coordinate>
+          <Coordinate unit="m" axisAbbreviation="h">9</Coordinate>
         </Position>
       </SpatialResource>
     </FeatureOfInterest>

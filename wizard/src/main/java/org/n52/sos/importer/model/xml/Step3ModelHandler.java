@@ -196,8 +196,9 @@ public class Step3ModelHandler implements ModelHandler<Step3Model> {
         // delete old metadata
         Metadata[] metadata = col.getMetadataArray();
         if (metadata != null && metadata.length > 0) {
-            for (int i = 0; i < metadata.length; i++) {
-                col.removeMetadata(i);
+            int count = metadata.length;
+            while (count-- > 0) {
+                col.removeMetadata(0);
             }
         }
         metadata = null;

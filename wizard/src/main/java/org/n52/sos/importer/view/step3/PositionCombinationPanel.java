@@ -36,14 +36,13 @@ import org.n52.sos.importer.controller.PositionController;
 import org.n52.sos.importer.model.Combination;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.position.EPSGCode;
-import org.n52.sos.importer.model.position.Height;
-import org.n52.sos.importer.model.position.Latitude;
-import org.n52.sos.importer.model.position.Longitude;
 import org.n52.sos.importer.model.position.Position;
+import org.n52.sos.importer.model.position.Position.Id;
+import org.n52.sos.importer.model.position.PositionComponent;
 import org.n52.sos.importer.model.table.TableElement;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.combobox.EditableComboBoxItems;
-import org.n52.sos.importer.view.utils.ToolTips;
+import org.n52.sos.importer.wizard.utils.ToolTips;
 
 /**
  * selection panel in step 3 for position combinations
@@ -51,6 +50,8 @@ import org.n52.sos.importer.view.utils.ToolTips;
  * @author Raimund
  */
 public class PositionCombinationPanel extends CombinationPanel {
+
+    private static final String DEG = "";
 
     private static final long serialVersionUID = 1L;
 
@@ -78,11 +79,11 @@ public class PositionCombinationPanel extends CombinationPanel {
 
     @Override
     public Object getTestValue() {
-        Latitude latitude = new Latitude(52.4, "°");
-        Longitude longitude = new Longitude(7.52, "°");
-        Height height = new Height(126.2, "m");
-        EPSGCode epsgCode = new EPSGCode(4236);
-        Position p = new Position(latitude, longitude, height, epsgCode);
+        PositionComponent latitude = new PositionComponent(Id.COORD_0, 52.4, DEG);
+        PositionComponent longitude = new PositionComponent(Id.COORD_1, 7.52, DEG);
+        PositionComponent height = new PositionComponent(Id.COORD_2, 126.2, "m");
+        EPSGCode epsgCode = new EPSGCode(4979);
+        Position p = new Position(epsgCode, latitude, longitude, height);
         return p;
     }
 
@@ -121,15 +122,15 @@ public class PositionCombinationPanel extends CombinationPanel {
     public void unAssign(TableElement tableElement) {
         Position positionToRemove = null;
         for (Position p: ModelStore.getInstance().getPositions()) {
-            Latitude lat = p.getLatitude();
-            Longitude lon = p.getLongitude();
-            Height alt = p.getHeight();
+            PositionComponent coord0 = p.getCoordinate(Id.COORD_0);
+            PositionComponent coord1 = p.getCoordinate(Id.COORD_1);
+            PositionComponent coord2 = p.getCoordinate(Id.COORD_2);
             EPSGCode epsg = p.getEPSGCode();
 
-            if ((lat != null && tableElement.equals(lat.getTableElement())) ||
-                    (lon != null && tableElement.equals(lon.getTableElement())) ||
-                    (alt != null && tableElement.equals(alt.getTableElement())) ||
-                    (epsg != null && tableElement.equals(epsg.getTableElement()))) {
+            if (coord0 != null && tableElement.equals(coord0.getTableElement()) ||
+                    coord1 != null && tableElement.equals(coord1.getTableElement()) ||
+                    coord2 != null && tableElement.equals(coord2.getTableElement()) ||
+                    epsg != null && tableElement.equals(epsg.getTableElement())) {
                 positionToRemove = p;
                 break;
             }
