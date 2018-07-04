@@ -56,9 +56,9 @@ public class CoordinateHelper extends org.n52.shetland.util.JTSHelper {
     public static final String FORMAT_POINT_2D = org.n52.shetland.util.JTSHelper.WKT_POINT + "(%s %s)";
 
     /**
-     * Creates a JTS Point from given coordinate values in the order defined by the EPSG code.
-     * @param epsgCode EPSG code of the CRS to use
-     * @param coordinates the coordinate array to use for the point geometry
+     * Creates a JTS Point from given {@link Position}.
+     *
+     * @param position the <code>Position</code> to convert
      * @return a JTS Point with the coordinates in the order extracted from EPSG database.
      * @throws ParseException if the WKT could not be created.
      * @throws FactoryException if the creation of an internal object fails

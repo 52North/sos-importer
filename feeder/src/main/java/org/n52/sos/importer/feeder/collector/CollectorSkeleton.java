@@ -120,8 +120,10 @@ public abstract class CollectorSkeleton implements Collector {
     }
 
     /**
-     * Returns a CSVReader instance for the current DataFile using the configuration
+     * Returns a CSVReader instance for the given {@link DataFile} using the configuration
      * including the defined values for: first line with data, separator, escape, and text qualifier.
+     *
+     *@param dataFile the <code>DataFile</code> to read
      *
      * @return a <code>CSVReader</code> instance
      *
