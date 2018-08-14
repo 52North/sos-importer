@@ -111,7 +111,8 @@ public class MultiFeederTask {
                         }
                     }
                 } else {
-                    LOG.error("No config file found in directory '{}'", directory.getAbsolutePath());
+                    LOG.error("No files found in directory '{}' ending with '-config.xml'.",
+                            directory.getAbsolutePath());
                 }
             } finally {
                 ONE_PERIODIC_FEEDING_LOCK.unlock();
