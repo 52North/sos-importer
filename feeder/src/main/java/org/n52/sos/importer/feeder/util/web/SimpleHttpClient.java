@@ -53,6 +53,10 @@ import net.jodah.failsafe.RetryPolicy;
 
 public class SimpleHttpClient implements HttpClient {
 
+    private static final TimeUnit RETRY_MAX_DURATION_UNIT = TimeUnit.MINUTES;
+    private static final TimeUnit RETRY_DELAY_UNIT = TimeUnit.SECONDS;
+    private static final int RETRY_MAX_DURATION_AMOUNT = 5;
+    private static final int RETRY_DELAY_AMOUNT = 30;
     private static final Logger LOG = LoggerFactory.getLogger(SimpleHttpClient.class);
     private static final int DEFAULT_CONNECTION_TIMEOUT = 30000;
     private static final int DEFAULT_SOCKET_TIMEOUT = 30000;
@@ -61,8 +65,8 @@ public class SimpleHttpClient implements HttpClient {
     // TODO is this retry policy okay for us?
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(ConnectException.class)
-            .withDelay(10, TimeUnit.SECONDS)
-            .withMaxDuration(15, TimeUnit.MINUTES);
+            .withDelay(RETRY_DELAY_AMOUNT, RETRY_DELAY_UNIT)
+            .withMaxDuration(RETRY_MAX_DURATION_AMOUNT, RETRY_MAX_DURATION_UNIT);
     private CloseableHttpClient httpclient;
     private int connectionTimeout;
     private int socketTimeout;
@@ -132,7 +136,14 @@ public class SimpleHttpClient implements HttpClient {
     @Override
     public HttpResponse executeMethod(HttpRequestBase method) throws IOException {
         return Failsafe.with(RETRY_POLICY)
-                .onFailedAttempt(ex -> LOG.warn("Could not connect to host; retrying", ex))
+                .onFailedAttempt(ex -> {
+                    LOG.warn("Could not connect to host; retrying (for {} {} every {} {}.)",
+                            RETRY_MAX_DURATION_AMOUNT,
+                            RETRY_MAX_DURATION_UNIT.toString().toLowerCase(),
+                            RETRY_DELAY_AMOUNT,
+                            RETRY_DELAY_UNIT.toString().toLowerCase());
+                    LOG.debug("Exception stack trace:", ex);
+                })
                 .get(() -> httpclient.execute(method));
     }
 
