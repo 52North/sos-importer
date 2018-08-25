@@ -44,7 +44,8 @@ import org.n52.shetland.ogc.om.NamedValue;
 public class InsertObservation {
 
     private final Object resultValue;
-    private final Timestamp timeStamp;
+    private final Timestamp resultTime;
+    private final PhenomenonTime phenomenonTime;
     private final Sensor sensor;
     private final ObservedProperty observedProperty;
     private final FeatureOfInterest featureOfInterest;
@@ -56,7 +57,8 @@ public class InsertObservation {
     public InsertObservation(final Sensor sensor,
             final FeatureOfInterest foi,
             final Object value,
-            final Timestamp timeStamp,
+            final Timestamp resultTime,
+            final PhenomenonTime phenomenonTime,
             final UnitOfMeasurement uom,
             final ObservedProperty obsProp,
             final Offering off,
@@ -65,7 +67,8 @@ public class InsertObservation {
         featureOfInterest = foi;
         this.sensor = sensor;
         observedProperty = obsProp;
-        this.timeStamp = timeStamp;
+        this.resultTime = resultTime;
+        this.phenomenonTime = phenomenonTime;
         unitOfMeasurement = uom;
         resultValue = value;
         offering = off;
@@ -105,8 +108,12 @@ public class InsertObservation {
         return resultValue;
     }
 
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Timestamp getResultTime() {
+        return resultTime;
+    }
+
+    public PhenomenonTime getPhenomenonTime() {
+        return phenomenonTime;
     }
 
     public int getEpsgCode() {
@@ -142,8 +149,10 @@ public class InsertObservation {
         final StringBuilder builder = new StringBuilder();
         builder.append("InsertObservation [resultValue=");
         builder.append(resultValue);
-        builder.append(", timeStamp=");
-        builder.append(timeStamp);
+        builder.append(", resultTime=");
+        builder.append(resultTime);
+        builder.append(", phenomenonTime=");
+        builder.append(phenomenonTime);
         builder.append(", sensor=");
         builder.append(sensor);
         builder.append(", observedProperty=");
@@ -179,4 +188,5 @@ public class InsertObservation {
     public String getParentFeatureIdentifier() {
         return featureOfInterest.getParentFeature();
     }
+
 }

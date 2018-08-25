@@ -38,7 +38,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -61,6 +63,7 @@ import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Resource;
 import org.n52.sos.importer.feeder.model.Sensor;
@@ -411,25 +414,42 @@ public class DataFile {
     }
 
     /**
-     * <p>getTimeStamp.</p>
+     * Get ResultTime
      *
      * @param mVColumn a int.
      * @param values an array of {@link java.lang.String} objects.
      * @return a {@link org.n52.sos.importer.feeder.model.Timestamp} object.
      * @throws java.text.ParseException if any.
      */
-    public Timestamp getTimeStamp(int mVColumn, String[] values) throws ParseException {
+    public Timestamp getResultTime(int mVColumn, String[] values) throws ParseException {
         LOG.trace("getTimeStamp()");
         // if RelatedDateTimeGroup is set for mvColumn -> get group id
         Column col = configuration.getColumnById(mVColumn);
         String group = null;
-        if (col.isSetRelatedDateTimeGroup()) {
-            group = col.getRelatedDateTimeGroup();
+        if (col.sizeOfRelatedDateTimeGroupArray() > 0) {
+            findGroup : for (Column dateTimeColumn : configuration.getDateTimeColumnsForMeasureValue(mVColumn)) {
+                Optional<String> metadataValue = configuration.getMetadataValue(dateTimeColumn, Key.TIME_TYPE);
+                if (metadataValue.isPresent() && metadataValue.get().equals(Configuration.TIME_TYPE_RESULT)) {
+                    Optional<String> groupValue = configuration.getMetadataValue(dateTimeColumn, Key.GROUP);
+                    if (groupValue.isPresent() && !groupValue.get().isEmpty()) {
+                        group = groupValue.get();
+                        break findGroup;
+                    }
+                }
+            }
         }
         // else check all columns for Type::DATE_TIME -> get Metadata.Key::GROUP->Value
         if (group == null) {
             group = configuration.getFirstDateTimeGroup();
         }
+        return createTimestamp(group, values);
+    }
+
+    private Timestamp getTimestamp(Column column, String[] line) throws ParseException {
+        return createTimestamp(configuration.getMetadataValue(column, Key.GROUP).get(), line);
+    }
+
+    private Timestamp createTimestamp(String group, String[] values) throws ParseException {
         Column[] cols = configuration.getAllColumnsForGroup(group, Type.DATE_TIME);
         if (cols != null) {
             // Try to get timezone from configuration
@@ -539,6 +559,7 @@ public class DataFile {
             }
             for (Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
+                    LOG.warn("Using {} is DEPRECATED and will be removed soon!", Key.TIME_ZONE);
                     try {
                         for (String zoneId : TimeZone
                                 .getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
@@ -549,6 +570,9 @@ public class DataFile {
                         LOG.debug("Exception thrown: ", nfe);
                         return TimeZone.getDefault();
                     }
+                }
+                if (meta.getKey().equals(Key.TIME_ZONE_IDENTIFIER)) {
+                    return TimeZone.getTimeZone(meta.getValue());
                 }
                 if (meta.getKey().equals(Key.PARSE_PATTERN) && (meta.getValue().contains("Z") ||
                         meta.getValue().contains("X"))) {
@@ -571,9 +595,14 @@ public class DataFile {
      */
     private void enrichTimestampWithColumnMetadata(Timestamp ts, Column col) {
         if (col.getMetadataArray() != null) {
+            String zoneIdentifier = null;
             for (Metadata m : col.getMetadataArray()) {
                 if (m.getKey().equals(Key.TIME_ZONE)) {
                     ts.setTimezone(Byte.parseByte(m.getValue()));
+                    continue;
+                }
+                if (m.getKey().equals(Key.TIME_ZONE_IDENTIFIER)) {
+                    zoneIdentifier = m.getValue();
                     continue;
                 }
                 if (m.getKey().equals(Key.TIME_YEAR)) {
@@ -600,6 +629,12 @@ public class DataFile {
                     ts.setSeconds(Byte.parseByte(m.getValue()));
                     continue;
                 }
+            }
+            if (zoneIdentifier != null && !zoneIdentifier.isEmpty()) {
+                LocalDate date = LocalDate.of(ts.getYear(), ts.getMonth(), ts.getDay());
+                TimeZone timeZone = TimeZone.getTimeZone(zoneIdentifier);
+                ZonedDateTime dateWithTimezone = date.atStartOfDay(timeZone.toZoneId());
+                ts.setTimezone(dateWithTimezone.getOffset().getTotalSeconds() / 3600);
             }
         }
     }
@@ -1102,4 +1137,33 @@ public class DataFile {
     public String getAbsolutePath() {
         return dataFile.getAbsolutePath();
     }
+
+    public PhenomenonTime getPhenomenonTime(int measureValueColumn, String[] line) throws ParseException {
+        if (!configuration.arePhenomenonTimesAvailable(measureValueColumn)) {
+            return null;
+        }
+        List<Column> columns = configuration.getDateTimeColumnsForMeasureValue(measureValueColumn);
+        Timestamp start = null;
+        Timestamp end = null;
+        for (Column column : columns) {
+            Optional<String> timeType = configuration.getMetadataValue(column, Key.TIME_TYPE);
+            if (timeType.isPresent()) {
+                Timestamp timestamp = getTimestamp(column, line);
+                switch (timeType.get()) {
+                    case Configuration.TIME_TYPE_PHENOMENON_INSTANT:
+                        return new PhenomenonTime(timestamp);
+                    case Configuration.TIME_TYPE_PHENOMENON_START:
+                        start = timestamp;
+                        break;
+                    case Configuration.TIME_TYPE_PHENOMENON_END:
+                        end = timestamp;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return new PhenomenonTime(start, end);
+    }
+
 }

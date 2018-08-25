@@ -124,8 +124,8 @@ public class TimeSeries {
     public String getResultTime() {
         Timestamp resultTime = null;
         for (final InsertObservation io : timeseries) {
-            if (resultTime == null || resultTime.isBefore(io.getTimeStamp())) {
-                resultTime = io.getTimeStamp();
+            if (resultTime == null || resultTime.isBefore(io.getResultTime())) {
+                resultTime = io.getResultTime();
             }
         }
         if (resultTime == null || resultTime.toString().isEmpty()) {
@@ -134,31 +134,14 @@ public class TimeSeries {
         return resultTime.toString();
     }
 
-    public String getPhenomenonTime() {
-        Timestamp start = null;
-        Timestamp end = null;
-        for (final InsertObservation io : timeseries) {
-            if (start == null || start.isAfter(io.getTimeStamp())) {
-                start = io.getTimeStamp();
-            }
-            if (end == null || end.isBefore(io.getTimeStamp())) {
-                end = io.getTimeStamp();
-            }
-        }
-        if (start == null || start.toString().isEmpty() || end == null || end.toString().isEmpty()) {
-            return "Could not get start and/or end date of timeseries";
-        }
-        return new StringBuffer(start.toString()).append("/").append(end.toString()).toString();
-    }
-
-    public Timestamp getYoungestTimestamp() {
+    public Timestamp getYoungestResultTime() {
         if (isEmpty()) {
             return new Timestamp().ofUnixTimeMillis(Long.MIN_VALUE);
         }
-        Timestamp youngestTimestamp = getFirst().getTimeStamp();
+        Timestamp youngestTimestamp = getFirst().getResultTime();
         for (InsertObservation insertObservation : timeseries) {
-            if (insertObservation.getTimeStamp().isAfter(youngestTimestamp)) {
-                youngestTimestamp = insertObservation.getTimeStamp();
+            if (insertObservation.getResultTime().isAfter(youngestTimestamp)) {
+                youngestTimestamp = insertObservation.getResultTime();
             }
         }
         return youngestTimestamp;

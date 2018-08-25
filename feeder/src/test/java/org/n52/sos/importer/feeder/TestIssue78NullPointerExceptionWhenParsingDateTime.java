@@ -60,7 +60,7 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
         String[] values = {"2017-04-13T08:27:28","20.80","39.20"};
 
         // when
-        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        final Timestamp timeStamp = dataFile.getResultTime(mVColumnId, values);
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
@@ -84,7 +84,7 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
         String[] values = {"2017-04-13T08:27:28Z","20.80","39.20"};
 
         // when
-        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        final Timestamp timeStamp = dataFile.getResultTime(mVColumnId, values);
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));
@@ -114,7 +114,7 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
         thrown.expectMessage("Pattern 'z' not supported. Found in pattern 'yyyy-MM-dd'T'HH:mm:ssz'.");
 
         // when
-        dataFile.getTimeStamp(mVColumnId, values);
+        dataFile.getResultTime(mVColumnId, values);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class TestIssue78NullPointerExceptionWhenParsingDateTime {
         String[] values = {"2017-04-13T08:27:28+02:00","20.80","39.20"};
 
         // when
-        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        final Timestamp timeStamp = dataFile.getResultTime(mVColumnId, values);
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));

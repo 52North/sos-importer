@@ -49,6 +49,7 @@ import org.n52.shetland.ogc.om.values.CountValue;
 import org.n52.shetland.ogc.om.values.QuantityValue;
 import org.n52.shetland.ogc.om.values.TextValue;
 import org.n52.sos.importer.feeder.model.FeatureOfInterest;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Position;
 
 public class DataFileTest {
@@ -204,4 +205,27 @@ public class DataFileTest {
         assertThat(position.getUnitByAxisAbbreviation("Long"), is("°"));
     }
 
+    @Test
+    public void shouldReturnValidPhentimeForAnInterval()
+            throws IllegalArgumentException, XmlException, IOException, ParseException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_all_config.xml");
+        DataFile dataFile = new DataFile(configuration, null);
+        PhenomenonTime phenomenonTime = dataFile.getPhenomenonTime(1, new String[] {"lead", "0.87", "µg/l",
+                "lead-sensor-0815", "18-07-2018 12:00", "15-01-2018 12:00", "17-01-2018 12:00",
+                "http://example.com/feature/0815-52-42", "42.0815", ";7.52"});
+        assertThat(phenomenonTime.isInstant(), is(false));
+        assertThat(phenomenonTime.toISO8601String(), is("2018-01-15T12:00:00+01:00/2018-01-17T12:00:00+01:00"));
+    }
+
+    @Test
+    public void shouldReturnValidPhentimeForAnInstant()
+            throws IllegalArgumentException, XmlException, IOException, ParseException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        DataFile dataFile = new DataFile(configuration, null);
+        PhenomenonTime phenomenonTime = dataFile.getPhenomenonTime(1, new String[] {"lead", "0.87", "µg/l",
+                "lead-sensor-0815", "18-07-2018 12:00", "15-01-2018 12:00", "17-01-2018 12:00",
+                "http://example.com/feature/0815-52-42", "42.0815", ";7.52"});
+        assertThat(phenomenonTime.isInstant(), is(true));
+        assertThat(phenomenonTime.toISO8601String(), is("2018-01-15T12:00:00+01:00"));
+    }
 }

@@ -121,7 +121,7 @@ public class SingleObservationImporter extends ImporterSkeleton {
                                 LOG.debug(String.format("Observation was already contained in SOS: %s",
                                         io));
                             } else if (configuration.isUseLastTimestamp()) {
-                                newLastUsedTimestamp = io.getTimeStamp();
+                                newLastUsedTimestamp = io.getResultTime();
                             }
                         }
                     }

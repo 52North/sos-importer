@@ -46,6 +46,7 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
@@ -192,6 +193,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
                 foi,
                 value,
                 timestamp,
+                new PhenomenonTime(timestamp),
                 uom,
                 observedProperty,
                 offer,

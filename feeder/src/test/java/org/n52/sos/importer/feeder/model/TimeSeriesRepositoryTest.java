@@ -49,14 +49,16 @@ public class TimeSeriesRepositoryTest {
         Sensor sensor = new Sensor("test-sensor-1-name", sensorURI.toString());
         FeatureOfInterest foi = new FeatureOfInterest("foi-name", "foi-uri", null);
         Object value = 1;
-        Timestamp timeStamp = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());
+        Timestamp resultTime = new Timestamp().ofUnixTimeMillis(System.currentTimeMillis());
+        PhenomenonTime phenTime = new PhenomenonTime(resultTime);
         Offering off = new Offering("offering-name", "offering-uri");
         String mvType = "mv-type";
         InsertObservation io =
                 new InsertObservation(sensor,
                     foi,
                     value,
-                    timeStamp,
+                    resultTime,
+                    phenTime,
                     uom,
                     observedProperty1,
                     off,
@@ -65,7 +67,8 @@ public class TimeSeriesRepositoryTest {
         InsertObservation io2 = new InsertObservation(sensor,
             foi,
             2,
-            timeStamp,
+            resultTime,
+            phenTime,
             uom,
             observedProperty2,
             off,

@@ -44,7 +44,6 @@ import org.junit.Test;
 import org.n52.sos.importer.feeder.Configuration;
 import org.n52.sos.importer.feeder.DataFile;
 import org.n52.sos.importer.feeder.FeedingContext;
-import org.n52.sos.importer.feeder.collector.SingleProfileCollector;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.Timestamp;
 
@@ -77,7 +76,7 @@ public class SingleProfileCollectorTest {
         assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("Lat"), is(-25.1450175));
         assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("Long"), is(-48.8652158));
         assertThat(insertObservation.getFeatureOfInterest().getPosition().getValueByAxisAbbreviation("h"), is(790.719970703125));
-        assertThat(insertObservation.getTimeStamp(), is(new Timestamp("2013-03-12T18:52:11+00:00")));
+        assertThat(insertObservation.getResultTime(), is(new Timestamp("2013-03-12T18:52:11+00:00")));
         assertThat(insertObservation.getSensorName(), is("CC1305009"));
         assertThat(insertObservation.getSensorURI().toString(), is("CC1305009"));
     }

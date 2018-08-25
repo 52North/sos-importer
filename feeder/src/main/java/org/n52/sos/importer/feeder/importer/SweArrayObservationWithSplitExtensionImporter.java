@@ -139,7 +139,7 @@ public class SweArrayObservationWithSplitExtensionImporter extends ImporterSkele
                             LOG.debug(String.format("TimeSeries '%s' was already contained in SOS.",
                                     timeSeries));
                         } else if (configuration.isUseLastTimestamp()) {
-                            newLastUsedTimestamp = timeSeries.getYoungestTimestamp();
+                            newLastUsedTimestamp = timeSeries.getYoungestResultTime();
                         }
                     } catch (Exception e) {
                         failedObservations.addAll(timeSeries.getInsertObservations());

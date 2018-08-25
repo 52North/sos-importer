@@ -47,6 +47,7 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
@@ -180,18 +181,24 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
     @Override
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException, URISyntaxException {
-        // TIMESTAMP
-        final Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
-        if (sampleLastTimestamp != null && timeStamp.isBefore(sampleLastTimestamp)) {
+        // TIMESTAMPS
+        final Timestamp resultTime = dataFile.getResultTime(measureValueColumn, line);
+        if (sampleLastTimestamp != null && resultTime.isBefore(sampleLastTimestamp)) {
             sampleDate.applyDayDelta(1);
         }
-        sampleLastTimestamp = new Timestamp().enrich(timeStamp);
-        timeStamp.enrich(sampleDate);
-        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timeStamp)) {
+        sampleLastTimestamp = new Timestamp().enrich(resultTime);
+        resultTime.enrich(sampleDate);
+        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(resultTime)) {
             return null;
         }
-        // TODO implement using different templates in later version depending on the class of value
-        LOG.debug("Timestamp: {}", timeStamp);
+        LOG.debug("Result Time    : {}", resultTime);
+        PhenomenonTime phenomenonTime = null;
+        if (configuration.arePhenomenonTimesAvailable(measureValueColumn)) {
+            phenomenonTime = dataFile.getPhenomenonTime(measureValueColumn, line);
+        } else {
+            phenomenonTime = new PhenomenonTime(resultTime);
+        }
+        LOG.debug("Phenomenon Time: {}", phenomenonTime);
         // SENSOR
         final Sensor sensor = dataFile.getSensor(measureValueColumn, line);
         LOG.debug("Sensor: {}", sensor);
@@ -219,7 +226,8 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
         return new InsertObservation(sensor,
                 foi,
                 value,
-                timeStamp,
+                resultTime,
+                phenomenonTime,
                 uom,
                 observedProperty,
                 offer,

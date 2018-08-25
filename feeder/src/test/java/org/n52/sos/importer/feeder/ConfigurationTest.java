@@ -40,6 +40,7 @@ import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.xmlbeans.XmlException;
 import org.junit.Test;
@@ -126,45 +127,41 @@ public class ConfigurationTest {
 
     @Test
     public void isNoDataValueDefinedAndMatchingShouldReturnTrueIfSetAndMatching() throws XmlException, IOException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/no_data_value_set.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/no_data_value_set.xml");
         Column column = configuration.getColumnById(4);
         assertThat(configuration.isNoDataValueDefinedAndMatching(column, "---"), is(true));
     }
 
     @Test
     public void shouldReturnURLFromRemoteFileURL() throws XmlException, IOException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/configWithRemoteFile.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/configWithRemoteFile.xml");
         // URL taken from config file
         assertThat(configuration.getRemoteFileURL(), is("http://www.example.com/my/fancy/directoryTree/data.csv"));
     }
 
     @Test
     public void hasReferenceValuesShouldReturnFalse() throws XmlException, IOException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/reference-values_without.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/reference-values_without.xml");
         assertThat(configuration.hasReferenceValues(), is(false));
     }
 
     @Test
     public void hasReferenceValuesShouldReturnTrueIfPresent() throws XmlException, IOException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/reference-values_with.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/reference-values_with.xml");
         assertThat(configuration.hasReferenceValues(), is(true));
     }
 
     @Test
     public void getReferenceValuesShouldReturnEmptyListWhenNoneAreAvailable() throws XmlException, IOException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/reference-values_with.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/reference-values_with.xml");
         URI sensorURI = URI.create("not-existing-sensor"); // "http://example.com/krypto-graph";
         assertThat(configuration.getReferenceValues(sensorURI).size(), is(0));
     }
 
     @Test
     public void getReferenceValuesTest() throws XmlException, IOException {
-        org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position position = SpatialResourceType.Factory.newInstance().addNewPosition();
+        org.x52North.sensorweb.sos.importer.x05.PositionDocument.Position position =
+                SpatialResourceType.Factory.newInstance().addNewPosition();
         position.setEPSGCode(4979);
         Coordinate coordinate = position.addNewCoordinate();
         coordinate.setUnit("unit");
@@ -178,8 +175,7 @@ public class ConfigurationTest {
         coordinate.setUnit("unit3");
         coordinate.setAxisAbbreviation("axisabbrev3");
         coordinate.setDoubleValue(52.03);
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/reference-values_with.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/reference-values_with.xml");
         URI sensorURI = URI.create("http://example.com/krypto-graph");
         Map<ObservedProperty, List<SimpleEntry<String, String>>> referenceValueMap = configuration
                 .getReferenceValues(sensorURI);
@@ -193,8 +189,7 @@ public class ConfigurationTest {
 
     @Test
     public void getPositionShouldReturnValidPosition() throws XmlException, IOException, ParseException {
-        Configuration configuration = new Configuration(
-                "src/test/resources/features/feature-position-in-data.xml");
+        Configuration configuration = new Configuration("src/test/resources/features/feature-position-in-data.xml");
         Position position = configuration.getPosition("A",
                 new String[] { "4326", "52.0", "42.0", "timestamp", "value"});
         assertThat(position, notNullValue());
@@ -204,6 +199,73 @@ public class ConfigurationTest {
         assertThat(position.getUnitByAxisAbbreviation("Lat"), is("°"));
         assertThat(position.getValueByAxisAbbreviation("Long"), is(42.0));
         assertThat(position.getUnitByAxisAbbreviation("Long"), is("°"));
+    }
+
+    @Test
+    public void arePhenomenonTimeAvailableShouldReturnFalseIfNotDefined() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/feature-position-in-data.xml");
+        assertThat(configuration.arePhenomenonTimesAvailable(5), is(false));
+    }
+
+    @Test
+    public void arePhenomenonTimeAvailableShouldReturnTrueIfIntervalIsDefined() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_all_config.xml");
+        assertThat(configuration.arePhenomenonTimesAvailable(5), is(true));
+    }
+
+    @Test
+    public void arePhenomenonTimeAvailableShouldReturnTrueIfInstantIsDefined() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        assertThat(configuration.arePhenomenonTimesAvailable(5), is(true));
+    }
+
+
+    @Test
+    public void getColumnsByTypeShouldReturn1() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/example-data/example-1-config.xml");
+        assertThat(configuration.getColumnsByType(Type.DATE_TIME).size(), is(1));
+    }
+
+    @Test
+    public void getColumnsByTypeShouldReturn3() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_all_config.xml");
+        assertThat(configuration.getColumnsByType(Type.DATE_TIME).size(), is(3));
+    }
+
+    @Test
+    public void getColumnsByTypeShouldReturn5() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        assertThat(configuration.getColumnsByType(Type.DATE_TIME).size(), is(2));
+    }
+
+    @Test
+    public void getMetadataValueWithColumnShouldReturnAbsentValueIfNotAvailable() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        Column column = Column.Factory.newInstance();
+        assertThat(configuration.getMetadataValue(column, Key.GROUP).isPresent(), is(false));
+    }
+
+    @Test
+    public void getMetadataValueWithIndexShouldReturnAbsentValueIfNotAvailable() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        assertThat(configuration.getMetadataValue(0, Key.GROUP).isPresent(), is(false));
+    }
+
+    @Test
+    public void getMetadataValueWithIndexShouldReturnValueIfAvailable() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_instant_config.xml");
+        Optional<String> metadataValue = configuration.getMetadataValue(1, Key.TYPE);
+        assertThat(metadataValue.isPresent(), is(true));
+        assertThat(metadataValue.get(), is("NUMERIC"));
+    }
+
+    @Test
+    public void getDateTimeColumnsForMeasureValueShouldReturn3ColumnsWhenConfigured() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/timestamps_all_config.xml");
+        List<Column> columns = configuration.getDateTimeColumnsForMeasureValue(1);
+        assertThat(columns, is(notNullValue()));
+        assertThat(columns.size(), is(3));
+        columns.stream().forEach(c -> assertThat(c.getType(), is(Type.DATE_TIME)));
     }
 
 }

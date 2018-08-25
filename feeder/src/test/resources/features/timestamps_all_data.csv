@@ -1,0 +1,3 @@
+ObservedProperty;MeasuredValue;UnitOfMeasurement;SensorId;ResultTime;PhenTimeStart;PhenTimeEnd;FeatureOfInterest;Latitude;Longitude
+lead;0.87;µg/l;lead-sensor-0815;18-07-2018 12:00; 15-01-2018 12:00;17-01-2018 12:00;http://example.com/feature/0815-52-42;42.0815;7.52
+lead;2.5;µg/l;lead-sensor-0815;18-07-2018 12:00; 16-01-2018 12:00;18-01-2018 12:00;http://example.com/feature/0815-52-42;42.0815;7.52

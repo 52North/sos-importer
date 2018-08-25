@@ -45,6 +45,7 @@ import org.n52.sos.importer.feeder.model.FeatureOfInterest;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.model.UnitOfMeasurement;
@@ -86,16 +87,11 @@ public class DefaultCsvCollector extends CollectorSkeleton {
                 return;
             }
             int lastLine = context.getLastReadLine();
-            if (configuration.isUseLastTimestamp()) {
+            if (configuration.isUseLastTimestamp() || lastLine < configuration.getFirstLineWithData()) {
                 // pointing back on first line with data because we are skipping by date and not line
                 lastLine = dataFile.getFirstLineWithData();
             }
-            // FIXME why is this here? files without header miss the first line!
-            //if (configuration.getFirstLineWithData() == 0) {
-            //    skipLines(lastLine + 1);
-            //} else {
             skipLines(lastLine);
-            //}
             String[] line;
             while ((line = parser.readNext()) != null && !stopped) {
                 if (!configuration.isLineIgnorable(line) &&
@@ -127,12 +123,19 @@ public class DefaultCsvCollector extends CollectorSkeleton {
     protected InsertObservation getInsertObservationForMeasuredValue(int measureValueColumn, String[] line)
             throws ParseException, URISyntaxException {
         LOG.trace("getInsertObservationForMeasuredValue(..)");
-        // TIMESTAMP
-        Timestamp timeStamp = dataFile.getTimeStamp(measureValueColumn, line);
-        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(timeStamp)) {
+        // TIMESTAMPS
+        Timestamp resultTime = dataFile.getResultTime(measureValueColumn, line);
+        if (configuration.isUseLastTimestamp() && !verifyTimeStamp(resultTime)) {
             return null;
         }
-        LOG.debug("Timestamp: {}", timeStamp);
+        LOG.debug("Result Time    : {}", resultTime);
+        PhenomenonTime phenomenonTime = null;
+        if (configuration.arePhenomenonTimesAvailable(measureValueColumn)) {
+            phenomenonTime = dataFile.getPhenomenonTime(measureValueColumn, line);
+        } else {
+            phenomenonTime = new PhenomenonTime(resultTime);
+        }
+        LOG.debug("Phenomenon Time: {}", phenomenonTime);
         // SENSOR
         Sensor sensor = dataFile.getSensor(measureValueColumn, line);
         LOG.debug("Sensor: {}", sensor);
@@ -159,7 +162,8 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         return new InsertObservation(sensor,
                 foi,
                 value,
-                timeStamp,
+                resultTime,
+                phenomenonTime,
                 uom,
                 observedProperty,
                 offer,

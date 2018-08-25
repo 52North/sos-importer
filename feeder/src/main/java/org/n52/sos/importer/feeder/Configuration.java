@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -267,6 +268,14 @@ public class Configuration {
 
     public static final String COUNTER_FILE_POSTFIX = ".counter";
 
+    public static final String TIME_TYPE_RESULT = "RESULT";
+
+    public static final String TIME_TYPE_PHENOMENON_INSTANT = "OBSERVATION_INSTANT";
+
+    public static final String TIME_TYPE_PHENOMENON_START = "OBSERVATION_START";
+
+    public static final String TIME_TYPE_PHENOMENON_END = "OBSERVATION_END";
+
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
     private static final String OFFERING_SUFFIX = "-offering";
@@ -472,14 +481,13 @@ public class Configuration {
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
         Column[] cols = getColumns();
-        ArrayList<Integer> ids = new ArrayList<>();
+        LinkedList<Integer> ids = new LinkedList<>();
         for (Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)) {
                 LOG.debug("Found measured value column: {}", column.getNumber());
                 ids.add(column.getNumber());
             }
         }
-        ids.trimToSize();
         if (ids.size() > 0) {
             int[] result = new int[ids.size()];
             for (int i = 0; i < result.length; i++) {
@@ -741,14 +749,11 @@ public class Configuration {
     public Position getPosition(String[] values) throws ParseException {
         String group = "";
         // get first group in Document for position column
-        outerfor: for (Column column : getColumns()) {
-            if (column.getType().equals(Type.POSITION)) {
-                for (Metadata metadata : column.getMetadataArray()) {
-                    if (metadata.getKey().equals(Key.GROUP)) {
-                        group = metadata.getValue();
-                        break outerfor;
-                    }
-                }
+        for (Column column : getColumnsByType(Type.POSITION)) {
+            Optional<String> groupValue = getMetadataValue(column, Key.GROUP);
+            if (groupValue.isPresent() && !groupValue.get().isEmpty()) {
+                group = groupValue.get();
+                break;
             }
         }
         return getPosition(group, values);
@@ -764,10 +769,10 @@ public class Configuration {
             for (Metadata m : column.getMetadataArray()) {
                 if (m.getKey().equals(Key.PARSE_PATTERN)) {
                     String pattern = m.getValue();
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_0, "{0}");
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_1, "{1}");
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_2, "{2}");
-                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_EPSG, "{3}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_0, "{0,number}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_1, "{1,number}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_COORD_2, "{2,number}");
+                    pattern = pattern.replaceAll(Configuration.POSITION_PARSEPATTERN_EPSG, "{3,number}");
 
                     MessageFormat mf = new MessageFormat(pattern);
                     Object[] tokens = null;
@@ -782,16 +787,16 @@ public class Configuration {
                     }
 
                     if (tokens.length > 0 && tokens[0] != null) {
-                        coordinates[0] = new Coordinate("", "", parseToDouble((String) tokens[0]));
+                        coordinates[0] = new Coordinate("", "", parseToDouble(tokens[0] + ""));
                     }
                     if (tokens.length > 1 && tokens[1] != null) {
-                        coordinates[1] = new Coordinate("", "", parseToDouble((String) tokens[1]));
+                        coordinates[1] = new Coordinate("", "", parseToDouble(tokens[1] + ""));
                     }
                     if (tokens.length > 2 && tokens[2] != null) {
-                        coordinates[2] = new Coordinate("", "", parseToDouble((String) tokens[2]));
+                        coordinates[2] = new Coordinate("", "", parseToDouble(tokens[2] + ""));
                     }
                     if (tokens.length > 3 && tokens[3] != null) {
-                        epsgCode = Integer.parseInt((String) tokens[3]);
+                        epsgCode = Integer.parseInt(tokens[3] + "");
                     }
                     // get additional information
                     // e.g. additional coordinate values
@@ -828,8 +833,7 @@ public class Configuration {
     }
 
     public double parseToDouble(String number) throws ParseException {
-        LOG.trace(String.format("parseToDouble(%s)",
-                number));
+        LOG.trace(String.format("parseToDouble(%s)", number));
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         char dSep = getDecimalSeparator();
         symbols.setDecimalSeparator(dSep);
@@ -1440,10 +1444,10 @@ public class Configuration {
         return false;
     }
 
-    private boolean isColumnMetadataSet(Column column,
-            org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum key) {
+    private boolean isColumnMetadataSet(Column column, Key.Enum key) {
         return getMetadataValue(column, key) != null &&
-                !getMetadataValue(column, key).isEmpty();
+                getMetadataValue(column, key).isPresent() &&
+                !getMetadataValue(column, key).get().isEmpty();
     }
 
     public String getParentFeature(int featureColumnIndex) {
@@ -1451,17 +1455,21 @@ public class Configuration {
         if (column == null) {
             return "";
         }
-        return getMetadataValue(column, Key.PARENT_FEATURE_IDENTIFIER);
+        Optional<String> value = getMetadataValue(column, Key.PARENT_FEATURE_IDENTIFIER);
+        return value.isPresent() ? value.get() : "";
     }
 
-    private String getMetadataValue(Column column,
-            org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum key) {
+    public Optional<String> getMetadataValue(Column column, Key.Enum key) {
         for (Metadata metadata : column.getMetadataArray()) {
             if (metadata.getKey().equals(key)) {
-                return metadata.getValue();
+                return Optional.ofNullable(metadata.getValue());
             }
         }
-        return "";
+        return Optional.empty();
+    }
+
+    public Optional<String> getMetadataValue(int columnIndex, Key.Enum key) {
+        return getMetadataValue(getColumnById(columnIndex), key);
     }
 
     public String restoreLine(String[] values) {
@@ -1635,4 +1643,73 @@ public class Configuration {
             return parser;
         }
     }
+
+    public boolean arePhenomenonTimesAvailable(int measureValueColumnIndex) {
+        List<Column> dateTimeColumns;
+        if (getMeasureValueColumnIds().length == 1) {
+            dateTimeColumns = getColumnsByType(Type.DATE_TIME);
+        } else {
+            dateTimeColumns = getDateTimeColumnsForMeasureValue(measureValueColumnIndex);
+        }
+        boolean phenomenonTimeInstantFound = false;
+        boolean phenomenonTimeStartFound = false;
+        boolean phenomenonTimeEndFound = false;
+        for (Column column : dateTimeColumns) {
+            for (Metadata metadata : column.getMetadataArray()) {
+                if (metadata.getKey().equals(Key.TIME_TYPE)) {
+                    switch (metadata.getValue()) {
+                        case TIME_TYPE_PHENOMENON_INSTANT:
+                            phenomenonTimeInstantFound = true;
+                            break;
+                        case TIME_TYPE_PHENOMENON_START:
+                            phenomenonTimeStartFound = true;
+                            break;
+                        case TIME_TYPE_PHENOMENON_END:
+                            phenomenonTimeEndFound = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        if (phenomenonTimeInstantFound && !phenomenonTimeStartFound && !phenomenonTimeEndFound) {
+            return true;
+        }
+        if (!phenomenonTimeInstantFound && phenomenonTimeStartFound && phenomenonTimeEndFound) {
+            return true;
+        }
+        return false;
+    }
+
+    public List<Column> getDateTimeColumnsForMeasureValue(int measureValueColumn) {
+        Column mvColumn = getColumnById(measureValueColumn);
+        List<Column> dateTimeColumns = new LinkedList<>();
+        if (mvColumn.sizeOfRelatedDateTimeGroupArray() == 0) {
+            if (getMeasureValueColumnIds().length > 1) {
+                return Collections.emptyList();
+            }
+            return getColumnsByType(Type.DATE_TIME);
+        }
+        for (String dateTimeGroupIdentifier : mvColumn.getRelatedDateTimeGroupArray()) {
+            Column[] allColumnsForGroup = getAllColumnsForGroup(dateTimeGroupIdentifier, Type.DATE_TIME);
+            if (allColumnsForGroup.length == 0) {
+                return Collections.emptyList();
+            } else {
+                dateTimeColumns.add(allColumnsForGroup[0]);
+            }
+        }
+        return dateTimeColumns;
+    }
+
+    public List<Column> getColumnsByType(Enum columnType) {
+        List<Column> result = new LinkedList<>();
+        for (Column column : importConf.getCsvMetadata().getColumnAssignments().getColumnArray()) {
+            if (column.getType().toString().equalsIgnoreCase(columnType.toString())) {
+                result.add(column);
+            }
+        }
+        return result;
+    }
+
 }
