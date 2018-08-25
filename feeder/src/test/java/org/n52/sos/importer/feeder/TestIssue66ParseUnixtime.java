@@ -58,7 +58,7 @@ public class TestIssue66ParseUnixtime {
         String[] values = {"Wind Speed", "1465468180", "4.830000", "Kph"};
 
         // when
-        final Timestamp timeStamp = dataFile.getTimeStamp(mVColumnId, values);
+        final Timestamp timeStamp = dataFile.getResultTime(mVColumnId, values);
 
         // then
         Assert.assertThat(timeStamp, Is.is(Matchers.notNullValue()));

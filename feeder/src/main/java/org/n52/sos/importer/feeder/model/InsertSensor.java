@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Holds all information for the RegisterSensor request
+ * Holds all information for the InsertSensor request
  *
  * @author Raimund
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>

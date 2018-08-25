@@ -207,20 +207,22 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 | `HUNK_SIZE` | Use in combination with ImporterClases: e.g. <ul><li> `SweArrayObservationWithSplitExtensionImporter`</li><li>`ResultHandlingImporter`</li></ul>Defines the number of observations to import per request. |
 | `TIMEOUT_BUFFER` | An additional timeout buffer for connect and socket timeout when using importer like `SweArrayObservationWithSplitExtension`. Scale is in milliseconds, e.g. 1000 => 1s more connect and socket timeout.<br /> The size of this value is related to the set-up of the SOS server, importer, and the `HUNK_SIZE` value. The current SimpleHttpClient implementation uses a default value of 5s, hence setting this to 25,000 results in 30s connection and socket timeout. |
 | `OTHER` | Not used. |
+| `PARENT_FEATURE_IDENTIFIER` | If present, the related feature of interest column will get this identifier set as sampled feature for each observation. |
 | `PARSE_PATTERN` | Used to store the parse pattern of a `POSITION` or `DATE_TIME` column. |
 | `POSITION_COORD_2` | The altitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_EPSG_CODE` | The EPSG code for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_COORD_0` | The latitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
 | `POSITION_LONGITUDE` | The longitude value for the positions for all observations in the related `MEASURED_VALUE` column. |
-| `PARENT_FEATURE_IDENTIFIER` | If present, the related feature of interest column will get this identifier set as sampled feature for each observation. |
 | `TIME` | Not used. |
 | `TIME_DAY` | The day value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_HOUR` | The hour value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_MINUTE` | The minute value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_MONTH` | The month value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
 | `TIME_SECOND` | The second value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
+| `TIME_TYPE` | Used in a `DATE_TIME` column to specify the subtype. the allowed values are:<br /><ul><li>`RESULT`:<br />Used for columns providing the resultTime of the observations. Should only be used if another column is available using at least `TIME_TYPE_OBSERVATION_START` or `TIME_TYPE_OBSERVATION_END`. The result time is the point in time when the observation is performed by the sensor.</li><li>` OBSERVATION_START`:<br />Used for columns providing the start point in time of the observations in terms of when the observed event starts in opposite to the result time. Requires the presence of at least another column with TIME_TYPE_RESULT. When no TIME_TYPE_OBSERVATION_END is given, it will be set to "indeterminate" value.</li><li>`OBSERVATION_END`:<br />Used for columns providing the end point in time of the observations in terms of when the observed event starts in opposite to the result time. Requires the presence of at least another column with `TIME_TYPE_RESULT`. When no `TIME_TYPE_OBSERVATION_START` is given, it will be set to `indeterminate` value.</li><li>`OBSERVATION_INSTANT`:<br />Used for columns providing a single point in time of the observations in terms of when the observed events happened.</li></ul> |
 | `TIME_YEAR` | The year value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
-| `TIME_ZONE` | The time zone value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
+| `TIME_ZONE` | **DEPRECATED**: Use `TIME_ZONE_IDENTIFIER`! The time zone value for the time stamp for all observations in the related `MEASURED_VALUE` column. |
+| `TIME_ZONE_IDENTIFIER` | Allowed values are the time zone identifiers supported by the used java implementation. If the time zone is not found GMT will be used. See https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html for more details. |
 | `TYPE` | Supported values: <br />`MEASURED_VALUE` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`. <br />`DATE_TIME` column: `COMBINATION`, `UNIX_TIME`. <br />`OM_PARAMETER` column: `NUMERIC`, `COUNT`, `BOOLEAN`, `TEXT`, `CATEGORY`. |
 
 The `RelatedDateTimeGroup` is required by an `MEASURED_VALUE` column and identifies all columns that contain information about the time stamp for an observation. The `RelatedMeasuredValueColumn` identifies the `MEASURED_VALUE` column for columns of other types, e.g. `DATE_TIME`, `SENSOR`, `FOI`. The `Related(FOI|ObservedProperty|Sensor|UnitOfMeasurement)` sections contain either a `IdRef` or a `Number`. The number denotes the `Column` that contains the value. The `IdRef` links to a `Resource` in the `AdditionalMetadata` section (:information_source: The value of `IdRef` is unique within the document and only for document internal links). The `RelatedOmParameter` contains an `integer` denoting the column with the values for the O&M Parameter. The `RelatedReferenceValue` contains a `<Label>` and `<Value>` as String which will be converted into the value of the measured value. It is a value with the same type, optional unit and observed property of the related column that defines an upper or lower limit. The label MUST be given.
@@ -266,6 +268,8 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Support for time zone identifier, e.g. Europe/Berlin (see `TIME_ZONE_IDENTIFIER`).
+     * Support for different timestamps per observation (see `TIME_TYPE`)
      * Generic coordinate support<br />
        This includes a schema update and the following replacements are required:
          * `POSITION_LATITUDE` &rarr; `POSITION_COORD_0`

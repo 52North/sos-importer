@@ -70,7 +70,7 @@
           <Value>A</Value>
         </Metadata>
         <Metadata>
-          <Key>POSITION_ALTITUDE</Key>
+          <Key>POSITION_COORD_2</Key>
           <Value>60.0 m</Value>
         </Metadata>
         <Metadata>
@@ -154,7 +154,7 @@
       <ColumnSeparator>,</ColumnSeparator>
       <TextIndicator>"</TextIndicator>
     </Parameter>
-    <CsvParserClass ignoreColumnCountMismatch="true"/>
+    <ObservationCollector>org.n52.sos.importer.feeder.collector.DefaultCsvCollector</ObservationCollector>
   </CsvMetadata>
   <AdditionalMetadata>
     <Sensor>

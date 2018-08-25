@@ -62,6 +62,7 @@ import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
 import org.n52.sos.importer.feeder.model.Offering;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.Position;
 import org.n52.sos.importer.feeder.model.Sensor;
 import org.n52.sos.importer.feeder.model.TimeSeries;
@@ -354,6 +355,7 @@ public class ArcticSeaSosClientTest {
     }
 
     private InsertObservation createInsertObservation(Object value, int offset) {
+        Timestamp resultTime = new Timestamp().ofUnixTimeMillis(0 + offset);
         return new InsertObservation(
                 new Sensor("sensor-name", sensorUri.toString()),
                 new FeatureOfInterest("feature-name", featureUri.toString(),
@@ -363,7 +365,8 @@ public class ArcticSeaSosClientTest {
                                 new Coordinate("h", "m", 3.0)
                         })),
                 value,
-                new Timestamp().ofUnixTimeMillis(0 + offset),
+                resultTime,
+                new PhenomenonTime(resultTime),
                 new UnitOfMeasurement("uom-code", "uom-uri"),
                 new ObservedProperty("prop-name", propertyUri.toString()),
                 new Offering("offering-name", "offering-uri"),

@@ -45,7 +45,7 @@ public class InsertObservationTest {
         String parentFeatureId = "parentFeatureId";
         foi.setParentFeature(parentFeatureId);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, null, empty(), null);
 
         assertThat(io.hasFeatureParentFeature(), is(true));
         assertThat(io.getParentFeatureIdentifier(), is(parentFeatureId));
@@ -57,7 +57,7 @@ public class InsertObservationTest {
         FeatureOfInterest foi = new FeatureOfInterest(null, "uri", null);
         foi.setParentFeature(null);
 
-        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, empty(), null);
+        InsertObservation io = new InsertObservation(null, foi, null, null, null, null, null, null, empty(), null);
 
         assertThat(io.hasFeatureParentFeature(), is(false));
 

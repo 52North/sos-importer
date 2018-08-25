@@ -135,6 +135,7 @@
             <ColumnSeparator>,</ColumnSeparator>
             <TextIndicator>"</TextIndicator>
         </Parameter>
+        <ObservationCollector>org.n52.sos.importer.feeder.collector.DefaultCsvCollector</ObservationCollector>
     </CsvMetadata>
     <AdditionalMetadata>
         <Metadata>

@@ -36,6 +36,7 @@ import java.net.URI;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -61,6 +62,7 @@ import org.n52.shetland.ogc.gml.CodeType;
 import org.n52.shetland.ogc.gml.CodeWithAuthority;
 import org.n52.shetland.ogc.gml.time.Time;
 import org.n52.shetland.ogc.gml.time.TimeInstant;
+import org.n52.shetland.ogc.gml.time.TimePeriod;
 import org.n52.shetland.ogc.om.MultiObservationValues;
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.shetland.ogc.om.ObservationValue;
@@ -128,6 +130,7 @@ import org.n52.sos.importer.feeder.model.Coordinate;
 import org.n52.sos.importer.feeder.model.InsertObservation;
 import org.n52.sos.importer.feeder.model.InsertSensor;
 import org.n52.sos.importer.feeder.model.ObservedProperty;
+import org.n52.sos.importer.feeder.model.PhenomenonTime;
 import org.n52.sos.importer.feeder.model.TimeSeries;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.CoordinateHelper;
@@ -622,12 +625,25 @@ public class ArcticSeaSosClient implements SosClient {
         return sweType;
     }
 
-    private TimeInstant createTimeInstant(Timestamp timestamp) {
-        return new TimeInstant(new DateTime(timestamp.toISO8601String()));
+    private Time createPhenomenontime(PhenomenonTime phenomenonTime) {
+        if (phenomenonTime.isInstant()) {
+            return new TimeInstant(new DateTime(phenomenonTime.getStart().toISO8601String()));
+        } else {
+            return new TimePeriod(
+                    processPotentialIndeterminateValues(phenomenonTime.getStart()),
+                    processPotentialIndeterminateValues(phenomenonTime.getEnd()));
+        }
+    }
+
+    private String processPotentialIndeterminateValues(Timestamp timestamp) {
+        if (timestamp == null || timestamp.equals(PhenomenonTime.INDETERMINATE)) {
+            return null;
+        }
+        return timestamp.toISO8601String();
     }
 
     private ObservationValue<?> createObservationValue(InsertObservation io) {
-        Time phenomenonTime = createTimeInstant(io.getTimeStamp());
+        Time phenomenonTime = createPhenomenontime(io.getPhenomenonTime());
         switch (io.getMeasuredValueType()) {
             case Configuration.SOS_OBSERVATION_TYPE_BOOLEAN:
                 BooleanValue booleanValue = new BooleanValue((Boolean) io.getResultValue());
@@ -674,7 +690,8 @@ public class ArcticSeaSosClient implements SosClient {
         }
 
         omObservation.setIdentifier(
-                insertObservation.getTimeStamp() +
+                insertObservation.getResultTime().toISO8601String() +
+                insertObservation.getPhenomenonTime().toString() +
                 insertObservation.getObservedPropertyURI().toString() +
                 insertObservation.getFeatureOfInterestURI().toString());
 
@@ -694,9 +711,17 @@ public class ArcticSeaSosClient implements SosClient {
         dataArray.setElementType(elementType);
         dataArray.setEncoding(encoding);
 
-        timeSeries.getInsertObservations().forEach(io -> dataArray.add(Arrays.asList(
-                        io.getTimeStamp().toISO8601String(),
-                        io.getResultValue().toString())));
+        for (InsertObservation io : timeSeries.getInsertObservations()) {
+            List<String> tokens = new LinkedList<>();
+            if (io.getPhenomenonTime().isInstant()) {
+                tokens.add(io.getPhenomenonTime().getStart().toISO8601String());
+            } else {
+                processPhenomenonTimeForSweArrayObservation(tokens, io.getPhenomenonTime().getStart());
+                processPhenomenonTimeForSweArrayObservation(tokens, io.getPhenomenonTime().getEnd());
+            }
+            tokens.add(io.getResultValue().toString());
+            dataArray.add(tokens);
+        }
 
         MultiValue<SweDataArray> dataArrayValue = new SweDataArrayValue();
         dataArrayValue.setValue(dataArray);
@@ -704,6 +729,14 @@ public class ArcticSeaSosClient implements SosClient {
         MultiObservationValues<SweDataArray> value = new MultiObservationValues<>();
         value.setValue(dataArrayValue);
         return value;
+    }
+
+    private void processPhenomenonTimeForSweArrayObservation(List<String> tokens, Timestamp timestamp) {
+        if (timestamp == PhenomenonTime.INDETERMINATE) {
+            tokens.add("unknown");
+        } else {
+            tokens.add(timestamp.toISO8601String());
+        }
     }
 
     private SweField createObservedPropertyField(InsertObservation first) {
@@ -716,6 +749,7 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private SweField createSwePhenomenonTimeField() {
+        // FIXME support for multiple timestamps implementation
         SweTime sweTime = new SweTime();
         sweTime.setDefinition(OmConstants.PHENOMENON_TIME);
         sweTime.setUom(new UoM(OmConstants.PHEN_UOM_ISO8601));
@@ -735,7 +769,7 @@ public class ArcticSeaSosClient implements SosClient {
                 new SosProcedureDescriptionUnknownType(io.getSensorURI().toString()));
         observationConstellation.setFeatureOfInterest(createFeature(io));
 
-        TimeInstant resultTime = createTimeInstant(io.getTimeStamp());
+        TimeInstant resultTime = new TimeInstant(new DateTime(io.getResultTime().toISO8601String()));
 
         OmObservation omObservation = new OmObservation();
         omObservation.setObservationConstellation(observationConstellation);
@@ -745,6 +779,7 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private SosResultStructure createResultStructure(TimeSeries timeseries) {
+        // FIXME support for multiple timestamps implementation
         SweField timestampField = createSwePhenomenonTimeField();
 
         SweField measuredValueField = new SweField(
@@ -829,9 +864,15 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private String encodeResultValues(TimeSeries ts) {
+        // FIXME support for multiple timestamps implementation
+        // TODO check if this solution is working
         return ts.getInsertObservations().stream()
-                .map(io -> io.getTimeStamp() + tokenSeparator + io.getResultValue().toString())
+                .map(io -> createResultValueTimestamp(io))
                 .collect(Collectors.joining(blockSeparator));
+    }
+
+    private String createResultValueTimestamp(InsertObservation io) {
+        return io.getPhenomenonTime().toISO8601String() + tokenSeparator + io.getResultValue().toString();
     }
 
     private Enum<?> getOperationNameEnum(OwsServiceRequest request) {
@@ -891,7 +932,7 @@ public class ArcticSeaSosClient implements SosClient {
                 oer.getExceptions().get(0).getMessage().contains(io.getSensorURI().toString()) &&
                 oer.getExceptions().get(0).getMessage().contains(io.getObservedPropertyURI().toString()) &&
                 oer.getExceptions().get(0).getMessage().contains(io.getFeatureOfInterestURI().toString()) &&
-                oer.getExceptions().get(0).getMessage().contains(new DateTime(io.getTimeStamp().toISO8601String())
+                oer.getExceptions().get(0).getMessage().contains(new DateTime(io.getResultTime().toISO8601String())
                         .toString()) &&
                 oer.getExceptions().get(0).getMessage().endsWith("already exists in the database!");
     }
