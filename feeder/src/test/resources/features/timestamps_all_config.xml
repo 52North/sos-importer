@@ -7,7 +7,7 @@
   </DataFile>
   <SosMetadata>
     <URL>http://localhost:8080/52n-sos-webapp/service</URL>
-    <Offering generate="true">sensor-id_observations</Offering>
+    <Offering generate="true" />
     <Version>2.0.0</Version>
     <Binding>POX</Binding>
     <Importer>org.n52.sos.importer.feeder.importer.SingleObservationImporter</Importer>
