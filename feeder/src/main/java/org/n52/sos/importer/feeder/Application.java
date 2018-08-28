@@ -78,7 +78,7 @@ public final class Application {
                     // data file
                     if (args.length == 2) {
                         // Case: one time feeding with defined configuration
-                        new FeedingTask(configuration).feedData();
+                        new FeedingTask(configuration.enableOneTimeFeeding()).feedData();
                     } else if (args.length == 4) {
                         // Case: one time feeding with file override or period with file from configuration
                         if (isFileOverride(args[2])) {

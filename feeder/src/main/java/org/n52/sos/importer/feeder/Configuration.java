@@ -300,6 +300,8 @@ public class Configuration {
 
     private Pattern[] ignorePatterns;
 
+    private boolean oneTimeFeeding;
+
     public Configuration(String pathToFile) throws XmlException, IOException, IllegalArgumentException {
         LOG.trace("Configuration({})", pathToFile);
         configFile = new File(pathToFile);
@@ -1710,6 +1712,15 @@ public class Configuration {
             }
         }
         return result;
+    }
+
+    public boolean isOneTimeFeeding() {
+        return oneTimeFeeding;
+    }
+
+    public Configuration enableOneTimeFeeding() {
+        oneTimeFeeding = true;
+        return this;
     }
 
 }

@@ -159,7 +159,7 @@ public class FeedingTask {
                         } else {
                             LOG.debug("Timestamp file does not exist.");
                         }
-                    } else {
+                    } else if (!config.isOneTimeFeeding()) {
                         counterFile = FileHelper.createFileInImporterHomeWithUniqueFileName(
                                 generateFileNameWithPostfix(Configuration.COUNTER_FILE_POSTFIX));
                         LOG.debug("Check counter file '{}'.", counterFile.getCanonicalPath());
@@ -180,7 +180,7 @@ public class FeedingTask {
                     // read and log lastUsedTimestamp
                     if (config.isUseLastTimestamp() && timeStampFile != null) {
                         Timestamp timestamp = feeder.getLastUsedTimestamp();
-                        LOG.info("OneTimeFeeder: save read lastUsedTimestamp: '{}' to '{}'",
+                        LOG.info("Save read lastUsedTimestamp: '{}' to '{}'",
                                 timestamp,
                                 timeStampFile.getCanonicalPath());
                         // override lastUsedTimestamp file
@@ -191,9 +191,9 @@ public class FeedingTask {
                                 PrintWriter out = new PrintWriter(timeStampFileWriter);) {
                             out.println(timestamp.toISO8601String());
                         }
-                    } else {
+                    } else if (!config.isOneTimeFeeding()) {
                         int lastLine = feeder.getLastReadLine();
-                        LOG.info("OneTimeFeeder: save read lines count: '{}' to '{}'",
+                        LOG.info("Save read lines count: '{}' to '{}'",
                                 lastLine,
                                 counterFile.getCanonicalPath());
                         /*
