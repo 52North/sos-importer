@@ -160,7 +160,7 @@ public abstract class CollectorSkeleton implements Collector {
             parser = new WrappedCSVParser();
         }
         Reader fr = new InputStreamReader(
-                new FileInputStream(dataFile.getCanonicalPath()), Configuration.DEFAULT_CHARSET);
+                new FileInputStream(dataFile.getCanonicalPath()), dataFile.getEncoding());
         BufferedReader br = new BufferedReader(fr);
         parser.init(br, configuration);
         return parser;

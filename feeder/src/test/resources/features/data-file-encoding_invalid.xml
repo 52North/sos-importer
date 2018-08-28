@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SosImportConfiguration
+	xsi:schemaLocation="https://raw.githubusercontent.com/52North/sos-importer/master/bindings/src/main/resources/import-configuration.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://52north.org/sensorweb/sos/importer/0.5/">
+	<DataFile referenceIsARegularExpression="false">
+		<LocalFile>
+			<Path>i-do-not-exist.csv</Path>
+			<Encoding>I-am-an-invalid-encoding-name!</Encoding>
+		</LocalFile>
+	</DataFile>
+	<SosMetadata>
+		<URL>http://localhost:8080/52n-sos-webapp/service</URL>
+		<Offering generate="true" />
+		<Version>2.0.0</Version>
+		<Binding>POX</Binding>
+		<Importer>org.n52.sos.importer.feeder.importer.SingleObservationImporter</Importer>
+	</SosMetadata>
+	<CsvMetadata>
+		<ColumnAssignments>
+			<Column>
+				<Number>0</Number>
+				<Type>DO_NOT_EXPORT</Type>
+			</Column>
+		</ColumnAssignments>
+		<DecimalSeparator>.</DecimalSeparator>
+		<FirstLineWithData>0</FirstLineWithData>
+		<Parameter>
+			<CommentIndicator>#</CommentIndicator>
+			<ColumnSeparator>,</ColumnSeparator>
+			<TextIndicator>"</TextIndicator>
+		</Parameter>
+		<ObservationCollector>org.n52.sos.importer.feeder.collector.DefaultCsvCollector</ObservationCollector>
+	</CsvMetadata>
+</SosImportConfiguration>

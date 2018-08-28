@@ -34,6 +34,8 @@ import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
@@ -1228,9 +1230,18 @@ public class Configuration {
         if (importConf.getDataFile().isSetLocalFile() &&
                 importConf.getDataFile().getLocalFile().isSetEncoding() &&
                 !importConf.getDataFile().getLocalFile().getEncoding().isEmpty()) {
-            return importConf.getDataFile().getLocalFile().getEncoding();
+            String encoding = importConf.getDataFile().getLocalFile().getEncoding();
+            try {
+                if (Charset.isSupported(encoding)) {
+                    return encoding;
+                }
+            } catch (IllegalCharsetNameException e) {
+                String msg = String.format("The specified data file encoding name '%s' is invalid!", encoding);
+                LOG.error(msg);
+                throw new IllegalArgumentException(e);
+            }
         }
-        LOG.debug("Using default encoding 'UTF-8'");
+        LOG.info("Data file encoding not set, hence using default encoding '{}'.", DEFAULT_CHARSET);
         return DEFAULT_CHARSET;
     }
 

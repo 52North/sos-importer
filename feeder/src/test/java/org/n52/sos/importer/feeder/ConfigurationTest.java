@@ -268,4 +268,22 @@ public class ConfigurationTest {
         columns.stream().forEach(c -> assertThat(c.getType(), is(Type.DATE_TIME)));
     }
 
+    @Test
+    public void getDataFileEncodingShouldReturnLatin1IfSetInConfguration() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/data-file-encoding_latin1.xml");
+        assertThat(configuration.getDataFileEncoding(), is("Latin1"));
+    }
+
+    @Test
+    public void getDataFileEncodingShouldReturnUTF8IfNotSetInConfguration() throws IllegalArgumentException, XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/data-file-encoding_not-set.xml");
+        assertThat(configuration.getDataFileEncoding(), is("UTF-8"));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void getDataFileEncodingShouldThrowIllegalArgumentExpectionIfInvalidCharsetNameSetInConfguration() throws XmlException, IOException {
+        Configuration configuration = new Configuration("src/test/resources/features/data-file-encoding_invalid.xml");
+        configuration.getDataFileEncoding();
+    }
+
 }
