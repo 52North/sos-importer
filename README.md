@@ -268,6 +268,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Better handling of one time feeding
      * Support for time zone identifier, e.g. Europe/Berlin (see `TIME_ZONE_IDENTIFIER`).
      * Support for different timestamps per observation (see `TIME_TYPE`)
      * Generic coordinate support<br />
@@ -342,11 +343,12 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
       * Moved documentation to github, hence content of README.md and https://wiki.52north.org/bin/view/SensorWeb/SosImporter merged
       * Updated to latest 52N parent &rarr; javadoc and dependency plugin cause a lot of minor adjustments
    * *[Fixed issues](https://github.com/52North/sos-importer/issues?utf8=%E2%9C%93&q=is%3Aclosed+milestone%3A0.5.0+)*
-      * \#nn: Fix problem with count values containing double
-      * \#nn: Fix handling of timestamp columns without any group assignment
-      * \#nn: Fix handling of data files with multiple date & time columns
-      * \#nn: Fix bug in unix time parsing
-      * \#nn: Fix typo in xml schema: expresssion -> expression
+      * \#nn: Fixed usage of `<DataFile><LocalFile><Encoding`
+      * \#nn: Fixed problem with count values containing double
+      * \#nn: Fixed handling of timestamp columns without any group assignment
+      * \#nn: Fixed handling of data files with multiple date & time columns
+      * \#nn: Fixed bug in unix time parsing
+      * \#nn: Fixed typo in xml schema: expresssion -> expression
       * [x] [#78](https://github.com/52North/sos-importer/issues/78): NullPointerException when parsing Date/Time
       * [x] [#76](https://github.com/52North/sos-importer/issues/76): Server generated offering identifier
       * [x] [#67](https://github.com/52North/sos-importer/issues/67): Fix/parsing unixtime  bug
