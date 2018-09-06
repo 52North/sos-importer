@@ -1329,8 +1329,7 @@
             </xs:documentation>
         </xs:annotation>
     </xs:element>
-    <xs:element name="Importer" type="xs:string"
-        default="org.n52.sos.importer.feeder.importer.SingleObservationImporter">
+    <xs:element name="Importer" default="org.n52.sos.importer.feeder.importer.SingleObservationImporter">
         <xs:annotation>
             <xs:documentation>
                 Replaces the IMPORT_STRATEGY key value pair from
@@ -1344,6 +1343,21 @@
                 > TIMEOUT_BUFFER
             </xs:documentation>
         </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="importerThreads" type="xs:integer"
+                        use="optional" default="5">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Defines the number of importer
+                                running in parallel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
     </xs:element>
     <xs:element name="SosMetadata">
         <xs:annotation>

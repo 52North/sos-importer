@@ -105,7 +105,7 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(importConf.getSosMetadata().getImporter(),
+        Assert.assertThat(importConf.getSosMetadata().getImporter().getStringValue(),
                 Is.is("org.n52.sos.importer.feeder.importer.ResultHandlingImporter"));
     }
 

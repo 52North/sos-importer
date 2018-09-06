@@ -118,7 +118,7 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
                 importer = "org.n52.sos.importer.feeder.importer.SingleObservationImporter";
                 break;
         }
-        sosImportConf.getSosMetadata().setImporter(importer);
+        sosImportConf.getSosMetadata().addNewImporter().setStringValue(importer);
     }
 
     private void addAdditionalMetadata(final SosImportConfiguration sosImportConf,

@@ -62,14 +62,17 @@ public class SingleObservationImporter extends ImporterSkeleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleObservationImporter.class);
 
-    // TODO Replace with thread pool naming the threaads
-    private ExecutorService importerThreads = Executors.newFixedThreadPool(5);
+    private ExecutorService importerThreads;
 
     @Override
     public void addObservations(InsertObservation... insertObservations)
             throws XmlException, IOException {
         if (insertObservations == null) {
             return;
+        }
+        if (importerThreads == null) {
+            // TODO Replace with thread pool naming the threaads
+            importerThreads = Executors.newFixedThreadPool(configuration.getImporterThreadsCount());
         }
 
         importerThreads.submit(new Runnable() {

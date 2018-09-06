@@ -1500,8 +1500,8 @@ public class Configuration {
     }
 
     public String getImporterClassName() {
-        if (!importConf.getSosMetadata().getImporter().isEmpty()) {
-            return importConf.getSosMetadata().getImporter();
+        if (!importConf.getSosMetadata().getImporter().getStringValue().isEmpty()) {
+            return importConf.getSosMetadata().getImporter().getStringValue();
         } else {
             return SingleObservationImporter.class.getName();
         }
@@ -1732,6 +1732,13 @@ public class Configuration {
     public Configuration enableOneTimeFeeding() {
         oneTimeFeeding = true;
         return this;
+    }
+
+    public int getImporterThreadsCount() {
+        if (importConf.getSosMetadata().getImporter().isSetImporterThreads()) {
+            return importConf.getSosMetadata().getImporter().getImporterThreads().intValue();
+        }
+        return 5;
     }
 
 }

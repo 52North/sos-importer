@@ -268,6 +268,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Support for specifing the number of importer threads via <SosMetadata><Importer importerThreads="#-of-threads">
      * Better handling of one time feeding
      * Support for time zone identifier, e.g. Europe/Berlin (see `TIME_ZONE_IDENTIFIER`).
      * Support for different timestamps per observation (see `TIME_TYPE`)
