@@ -101,8 +101,8 @@ public final class Application {
                         mft.startFeeding();
                     }
                 }
-            } catch (final XmlException e) {
-                final String errorMsg =
+            } catch (XmlException e) {
+                String errorMsg =
                         String.format("Configuration file '%s' could not be " +
                                 "parsed. Exception thrown: %s",
                                 configFile,
