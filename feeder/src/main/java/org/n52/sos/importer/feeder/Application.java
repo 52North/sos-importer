@@ -67,8 +67,8 @@ public final class Application {
     public static void main(final String[] args) {
         //CHECKSTYLE:ON
         LOG.trace("main()");
-        logApplicationMetadata();
         if (checkArgs(args)) {
+            logApplicationMetadata();
             // read configuration
             String configFile = args[1];
             try {
@@ -175,7 +175,6 @@ public final class Application {
     private static boolean checkArgs(String[] args) {
         LOG.trace("checkArgs({})", Arrays.toString(args));
         if (args == null) {
-            LOG.error("no parameters defined. null received as args!");
             return false;
         } else if (args.length == 2) {
             if (isConfigFileSet(args[0])) {
@@ -198,7 +197,6 @@ public final class Application {
                 return true;
             }
         }
-        LOG.error("Given parameters do not match programm specification. ");
         return false;
     }
 
