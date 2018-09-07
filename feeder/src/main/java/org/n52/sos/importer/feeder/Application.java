@@ -85,7 +85,7 @@ public final class Application {
                         // Case: one time feeding with file override or period with file from configuration
                         if (isFileOverride(args[2])) {
                             // Case: file override
-                            new FeedingTask(configuration, new File(args[3])).feedData();
+                            new FeedingTask(configuration.enableOneTimeFeeding(), new File(args[3])).feedData();
                         } else if (isTimePeriodSet(args[2]))  {
                             // Case: repeated feeding
                             repeatedFeeding(configuration, Integer.parseInt(args[3]));
