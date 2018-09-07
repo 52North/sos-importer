@@ -1741,4 +1741,16 @@ public class Configuration {
         return 5;
     }
 
+    public boolean isFeedingClassSet() {
+        Metadata meta = getAdditionalMetadata(Key.FEEDER_CLASS);
+        if (meta != null && !meta.getValue().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getFeederClassName() {
+        return getAdditionalMetadata(Key.FEEDER_CLASS).getValue();
+    }
+
 }

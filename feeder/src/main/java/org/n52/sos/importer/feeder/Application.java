@@ -31,6 +31,8 @@ package org.n52.sos.importer.feeder;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.Timer;
@@ -263,6 +265,26 @@ public final class Application {
                 rt.totalMemory() / mb,
                 rt.freeMemory() / mb,
                 (rt.totalMemory() - rt.freeMemory()) / mb);
+    }
+
+    public static Object initObjectByClassName(String className) {
+        try {
+            Class<?> clazz = Class.forName(className);
+            Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
+            return constructor.newInstance();
+        } catch (ClassNotFoundException |
+                NoSuchMethodException |
+                SecurityException |
+                InstantiationException |
+                IllegalAccessException |
+                IllegalArgumentException |
+                InvocationTargetException e) {
+            String errorMsg = String.format("Could not load defined type implementation class '%s'. Cancel import",
+                    className);
+            LOG.error(errorMsg);
+            LOG.debug("Stacktrace:", e);
+            throw new IllegalArgumentException(errorMsg, e);
+        }
     }
 
 }

@@ -201,6 +201,7 @@ Some of these types require several `Metadata` elements, consisting of a `Key` a
 
 | *Key* | *Value* |
 | --- | --- |
+| `FEEDER_CLASS` | **Optional**: Indicates which feeder implemenation to use. Currently implemented: `org.n52.sos.importer.feeder.Feeder` (default) or `org.n52.sos.importer.feeder.SingleThreadFeeder`. |
 | `GROUP` | Indicates the membership of this column in a `POSITION` or `DATE_TIME` group. |
 | `NAME` | Specifies the name of the `OM_PARAMETER` column it is used within. |
 | `NO_DATA_VALUE` | Indicates a value that will be ignored during import. |
@@ -268,6 +269,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_large_square: 0.5
 
    * *Features*
+     * Support for specifing the Feeder class, e.g. multi or single threaded versions are avialable (see `FEEDER_CLASS`).
      * Support for specifing the number of importer threads via <SosMetadata><Importer importerThreads="#-of-threads">
      * Better handling of one time feeding
      * Support for time zone identifier, e.g. Europe/Berlin (see `TIME_ZONE_IDENTIFIER`).

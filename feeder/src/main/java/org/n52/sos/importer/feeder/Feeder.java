@@ -29,8 +29,6 @@
 package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -57,7 +55,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
 @Configurable
-public final class Feeder implements FeedingContext {
+public class Feeder implements FeedingContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(Feeder.class);
 
@@ -96,25 +94,25 @@ public final class Feeder implements FeedingContext {
 
         configuration = config;
 
-        applicationContext = new ClassPathXmlApplicationContext("/application-context.xml");
+        setApplicationContext(new ClassPathXmlApplicationContext("/application-context.xml"));
 
-        sosClient = (SosClient) applicationContext.getBean("sosClient");
+        sosClient = (SosClient) getApplicationContext().getBean("sosClient");
         sosClient.setConfiguration(configuration);
         sosClient.setHttpClient(null);
 
-        importer = (Importer) initObjectByClassName(configuration.getImporterClassName());
-        importer.setConfiguration(configuration);
-        importer.setFeedingContext(this);
-        importer.setSosClient(sosClient);
+        importer = (Importer) Application.initObjectByClassName(configuration.getImporterClassName());
+        getImporter().setConfiguration(configuration);
+        getImporter().setFeedingContext(this);
+        getImporter().setSosClient(sosClient);
 
-        collector = (Collector) initObjectByClassName(configuration.getCollectorClassName());
-        collector.setConfiguration(configuration);
-        collector.setFeedingContext(this);
+        collector = (Collector) Application.initObjectByClassName(configuration.getCollectorClassName());
+        getCollector().setConfiguration(configuration);
+        getCollector().setFeedingContext(this);
 
         collectedObservationsCount = 0;
 
-        collectorPhaser = new Phaser();
-        collectorPhaser.register();
+        setCollectorPhaser(new Phaser());
+        getCollectorPhaser().register();
     }
 
     public void importData(DataFile dataFile)
@@ -122,36 +120,36 @@ public final class Feeder implements FeedingContext {
         LOG.trace("importData()");
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
-        exceptions = new ArrayList<>();
+        setExceptions(new ArrayList<>());
         initCollectorThread(dataFile, latch).start();
-        importer.startImporting();
+        getImporter().startImporting();
         try {
             // FIXME is this double synchronization? e.g. latch not required anymore because of phaser
             latch.await();
-            collectorPhaser.arriveAndAwaitAdvance();
+            getCollectorPhaser().arriveAndAwaitAdvance();
         } catch (InterruptedException e) {
             log(e);
         }
         try {
-            adderThreads.shutdown();
+            getAdderThreads().shutdown();
         } catch (Exception e) {
-            exceptions.add(e);
+            getExceptions().add(e);
         }
         try {
-            importer.stopImporting();
+            getImporter().stopImporting();
         } catch (Exception e) {
-            exceptions.add(e);
+            getExceptions().add(e);
         }
-        if (!exceptions.isEmpty()) {
+        if (!getExceptions().isEmpty()) {
             handleExceptions();
         }
-        if (importer.hasFailedObservations()) {
-            handleFailedObservations(importer.getFailedObservations());
+        if (getImporter().hasFailedObservations()) {
+            handleFailedObservations(getImporter().getFailedObservations());
         }
-        if (applicationContext != null) {
-            applicationContext.close();
+        if (getApplicationContext() != null) {
+            getApplicationContext().close();
         }
-        int failedObservations = importer.getFailedObservations().size();
+        int failedObservations = getImporter().getFailedObservations().size();
         final int newObservationsCount = getCollectedObservationsCount() - failedObservations;
         LOG.info("New observations in SOS: {}. Failed observations: {}.",
                 newObservationsCount,
@@ -165,17 +163,17 @@ public final class Feeder implements FeedingContext {
             return;
         }
 
-        adderThreads.submit(new Runnable() {
+        getAdderThreads().submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    collectorPhaser.register();
-                    importer.addObservations(insertObservations);
+                    getCollectorPhaser().register();
+                    getImporter().addObservations(insertObservations);
                 } catch (Exception e) {
-                    exceptions.add(e);
-                    collector.stopCollecting();
+                    getExceptions().add(e);
+                    getCollector().stopCollecting();
                 } finally {
-                    collectorPhaser.arriveAndDeregister();
+                    getCollectorPhaser().arriveAndDeregister();
                 }
                 increaseCollectedObservationsCount(insertObservations.length);
             }
@@ -226,32 +224,12 @@ public final class Feeder implements FeedingContext {
         return sosClient.isInstanceTransactional();
     }
 
-    private synchronized void increaseCollectedObservationsCount(int collectedObservations) {
+    protected synchronized void increaseCollectedObservationsCount(int collectedObservations) {
         collectedObservationsCount += collectedObservations;
     }
 
-    private synchronized int getCollectedObservationsCount() {
+    protected synchronized int getCollectedObservationsCount() {
         return collectedObservationsCount;
-    }
-
-    private Object initObjectByClassName(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            Constructor<?> constructor = clazz.getConstructor((Class<?>[]) null);
-            return constructor.newInstance();
-        } catch (ClassNotFoundException |
-                NoSuchMethodException |
-                SecurityException |
-                InstantiationException |
-                IllegalAccessException |
-                IllegalArgumentException |
-                InvocationTargetException e) {
-            String errorMsg = String.format("Could not load defined type implementation class '%s'. Cancel import",
-                    className);
-            LOG.error(errorMsg);
-            log(e);
-            throw new IllegalArgumentException(errorMsg, e);
-        }
     }
 
     private Thread initCollectorThread(DataFile dataFile, CountDownLatch latch) {
@@ -259,18 +237,18 @@ public final class Feeder implements FeedingContext {
             @Override
             public void run() {
                 try {
-                    collector.collectObservations(dataFile, latch);
+                    getCollector().collectObservations(dataFile, latch);
                 } catch (Exception e) {
                     try {
-                        importer.stopImporting();
+                        getImporter().stopImporting();
                     } catch (Exception e2) {
-                        exceptions.add(e2);
+                        getExceptions().add(e2);
                     } finally {
-                        exceptions.add(e);
+                        getExceptions().add(e);
                     }
                 }
             }
-        }, "collector-" + collector.getClass().getSimpleName());
+        }, "collector-" + getCollector().getClass().getSimpleName());
     }
 
     private void log(Exception exception) {
@@ -278,16 +256,56 @@ public final class Feeder implements FeedingContext {
         LOG.debug("Stacktrace:", exception);
     }
 
-    private void handleExceptions() {
+    protected void handleExceptions() {
         // FIXME implement better handling than logging
         // first level of handling: logging
-        for (Exception exception : exceptions) {
+        for (Exception exception : getExceptions()) {
             log(exception);
         }
     }
 
-    private void handleFailedObservations(List<InsertObservation> failedObservations) {
+    protected void handleFailedObservations(List<InsertObservation> failedObservations) {
         // TODO the failed insert observations should be handled here!
         // FIXME implement
+    }
+
+    protected Phaser getCollectorPhaser() {
+        return collectorPhaser;
+    }
+
+    protected void setCollectorPhaser(Phaser collectorPhaser) {
+        this.collectorPhaser = collectorPhaser;
+    }
+
+    protected ExecutorService getAdderThreads() {
+        return adderThreads;
+    }
+
+    protected void setAdderThreads(ExecutorService adderThreads) {
+        this.adderThreads = adderThreads;
+    }
+
+    protected List<Exception> getExceptions() {
+        return exceptions;
+    }
+
+    protected void setExceptions(List<Exception> exceptions) {
+        this.exceptions = exceptions;
+    }
+
+    protected ClassPathXmlApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    protected void setApplicationContext(ClassPathXmlApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    protected Collector getCollector() {
+        return collector;
+    }
+
+    protected Importer getImporter() {
+        return importer;
     }
 }

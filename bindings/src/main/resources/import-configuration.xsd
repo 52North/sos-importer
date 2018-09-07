@@ -146,6 +146,14 @@
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
+                <xs:enumeration value="FEEDER_CLASS">
+                    <xs:annotation>
+                        <xs:documentation>
+                            OPTIONAL: Defines the Feeder implementation class.
+                            Default is org.n52.sos.importer.feeder.Feeder
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:enumeration>
                 <xs:enumeration value="GROUP">
                     <xs:annotation>
                         <xs:documentation>
