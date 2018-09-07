@@ -65,9 +65,9 @@ public class Feeder implements FeedingContext {
 
     private Timestamp lastUsedTimestamp;
 
-    private final Importer importer;
+    private Importer importer;
 
-    private final Collector collector;
+    private Collector collector;
 
     private int collectedObservationsCount;
 
@@ -82,15 +82,10 @@ public class Feeder implements FeedingContext {
     // TODO Replace with thread pool naming the threaads
     private ExecutorService adderThreads = Executors.newFixedThreadPool(5);
 
-    /**
-     * <p>Constructor for Feeder.</p>
-     *
-     * @param config a {@link org.n52.sos.importer.feeder.Configuration} object.
-     * @throws java.net.MalformedURLException if any.
-     */
-    public Feeder(final Configuration config)
-            throws MalformedURLException {
-        LOG.trace(String.format("Feeder(%s)", config.toString()));
+    public Feeder() {}
+
+    public Feeder init(Configuration config) throws MalformedURLException {
+        LOG.trace(String.format("init(%s)", config.toString()));
 
         configuration = config;
 
@@ -113,6 +108,7 @@ public class Feeder implements FeedingContext {
 
         setCollectorPhaser(new Phaser());
         getCollectorPhaser().register();
+        return this;
     }
 
     public void importData(DataFile dataFile)

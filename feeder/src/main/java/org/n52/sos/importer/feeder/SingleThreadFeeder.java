@@ -46,10 +46,13 @@ public class SingleThreadFeeder extends Feeder {
 
     private static final Logger LOG = LoggerFactory.getLogger(SingleThreadFeeder.class);
 
-    public SingleThreadFeeder(Configuration config) throws MalformedURLException {
-        super(config);
+
+    @Override
+    public Feeder init(Configuration config) throws MalformedURLException {
+        super.init(config);
         setCollectorPhaser(null);
         setAdderThreads(null);
+        return this;
     }
 
     @Override

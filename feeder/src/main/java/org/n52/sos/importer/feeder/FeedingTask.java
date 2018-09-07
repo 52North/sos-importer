@@ -137,8 +137,9 @@ public class FeedingTask {
                 if (config.isFeedingClassSet()) {
                     feeder = (Feeder) Application.initObjectByClassName(config.getFeederClassName());
                 } else {
-                    feeder = new Feeder(config);
+                    feeder = new Feeder();
                 }
+                feeder.init(config);
                 if (feeder == null || !feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
                 } else if (!feeder.isSosTransactional()) {
