@@ -135,12 +135,18 @@ public class FeedingTask {
                 Feeder feeder = null;
                 String sosURL = config.getSosUrl().toString();
                 if (config.isFeedingClassSet()) {
-                    feeder = (Feeder) Application.initObjectByClassName(config.getFeederClassName());
+                    String feederClassName = config.getFeederClassName();
+                    feeder = (Feeder) Application.initObjectByClassName(feederClassName);
+                    if (feeder == null) {
+                        String msg = String.format("Could not create Feeder instance from class '%s'", feederClassName);
+                        LOG.error(msg);
+                        throw new IllegalStateException(msg);
+                    }
                 } else {
                     feeder = new Feeder();
                 }
                 feeder.init(config);
-                if (feeder == null || !feeder.isSosAvailable()) {
+                if (!feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
                 } else if (!feeder.isSosTransactional()) {
                     LOG.error(String.format("SOS '%s' does not support required transactional operations: "

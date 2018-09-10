@@ -58,7 +58,7 @@ public class SingleThreadFeeder extends Feeder {
     @Override
     public void importData(DataFile dataFile)
             throws IOException, XmlException, IllegalArgumentException, ParseException {
-        LOG.trace("importData()");
+        LOG.info("Start importing data via '{}'", this.getClass().getName());
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
         setExceptions(new ArrayList<>());

@@ -108,12 +108,13 @@ public class Feeder implements FeedingContext {
 
         setCollectorPhaser(new Phaser());
         getCollectorPhaser().register();
+        LOG.info("Instance of Feeder '{}' created.", this.getClass().getName());
         return this;
     }
 
     public void importData(DataFile dataFile)
             throws IOException, XmlException, IllegalArgumentException, ParseException {
-        LOG.trace("importData()");
+        LOG.info("Start importing data via '{}'", this.getClass().getName());
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
         setExceptions(new ArrayList<>());
