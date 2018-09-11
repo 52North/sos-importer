@@ -40,6 +40,8 @@ public class PhenomenonTime {
 
     public static final Timestamp INDETERMINATE = new Timestamp();
 
+    private static final String OPEN_START = "../";
+    private static final String OPEN_END = "/..";
     private final Timestamp start;
     private final Timestamp end;
 
@@ -95,10 +97,10 @@ public class PhenomenonTime {
         }
         // FIXME the next two forms might be not supported by ISO8601 decoder
         if (end == null) {
-            return start.toISO8601String() + "/..";
+            return start.toISO8601String() + OPEN_END;
         }
         if (start == null) {
-            return "../" + end.toISO8601String();
+            return OPEN_START + end.toISO8601String();
         }
         return start.toISO8601String() + "/" + end.toISO8601String();
     }
@@ -106,6 +108,20 @@ public class PhenomenonTime {
     @Override
     public String toString() {
         return toISO8601String();
+    }
+
+    public String toEpochSeconds() {
+        if (isInstant()) {
+            return Long.toString(start.toEpochSeconds());
+        }
+        // FIXME the next two forms might be not supported by ISO8601 decoder
+        if (end == null) {
+            return start.toEpochSeconds() + OPEN_END;
+        }
+        if (start == null) {
+            return OPEN_START + end.toEpochSeconds();
+        }
+        return start.toEpochSeconds() + "/" + end.toEpochSeconds();
     }
 
 }

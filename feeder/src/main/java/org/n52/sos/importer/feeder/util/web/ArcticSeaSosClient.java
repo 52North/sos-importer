@@ -690,8 +690,8 @@ public class ArcticSeaSosClient implements SosClient {
         }
 
         omObservation.setIdentifier(
-                insertObservation.getResultTime().toISO8601String() +
-                insertObservation.getPhenomenonTime().toString() +
+                insertObservation.getResultTime().toEpochSeconds() +
+                insertObservation.getPhenomenonTime().toEpochSeconds() +
                 insertObservation.getObservedPropertyURI().toString() +
                 insertObservation.getFeatureOfInterestURI().toString());
 

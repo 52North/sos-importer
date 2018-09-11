@@ -537,4 +537,8 @@ public class Timestamp {
         return true;
     }
 
+    public long toEpochSeconds() {
+        return toInstant().getEpochSecond();
+    }
+
 }
