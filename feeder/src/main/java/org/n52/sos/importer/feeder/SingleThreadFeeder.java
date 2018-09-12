@@ -64,9 +64,6 @@ public class SingleThreadFeeder extends Feeder {
         setExceptions(new ArrayList<>());
         getImporter().startImporting();
         getCollector().collectObservations(dataFile, latch);
-        if (!getExceptions().isEmpty()) {
-            handleExceptions();
-        }
         if (getImporter().hasFailedObservations()) {
             handleFailedObservations(getImporter().getFailedObservations());
         }
@@ -79,6 +76,9 @@ public class SingleThreadFeeder extends Feeder {
                 newObservationsCount,
                 failedObservations);
         LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
+        if (!getExceptions().isEmpty()) {
+            handleExceptions();
+        }
     }
 
     @Override

@@ -137,9 +137,6 @@ public class Feeder implements FeedingContext {
         } catch (Exception e) {
             getExceptions().add(e);
         }
-        if (!getExceptions().isEmpty()) {
-            handleExceptions();
-        }
         if (getImporter().hasFailedObservations()) {
             handleFailedObservations(getImporter().getFailedObservations());
         }
@@ -152,6 +149,9 @@ public class Feeder implements FeedingContext {
                 newObservationsCount,
                 failedObservations);
         LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
+        if (!getExceptions().isEmpty()) {
+            handleExceptions();
+        }
     }
 
     @Override
@@ -254,11 +254,16 @@ public class Feeder implements FeedingContext {
     }
 
     protected void handleExceptions() {
-        // FIXME implement better handling than logging
+        if (getExceptions().isEmpty()) {
+            // Nothing to handle
+            return;
+        }
         // first level of handling: logging
         for (Exception exception : getExceptions()) {
             log(exception);
         }
+        // FIXME implement better handling than logging
+        throw new RuntimeException("Excpetion thrown during feeding -> feeder stopped.");
     }
 
     protected void handleFailedObservations(List<InsertObservation> failedObservations) {

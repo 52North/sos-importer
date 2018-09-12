@@ -109,6 +109,7 @@ public final class InsertObservationTask implements Runnable {
                         observationId = sosClient.insertObservation(io);
                     } catch (IOException e) {
                         log(e);
+                        failedObservations.add(io);
                     }
                     if (observationId == null || observationId.equalsIgnoreCase("")) {
                         LOG.error(String.format("Insert observation failed for sensor '%s'[%s]. Store: %s",
