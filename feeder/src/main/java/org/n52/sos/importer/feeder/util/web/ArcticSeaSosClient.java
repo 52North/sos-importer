@@ -96,6 +96,7 @@ import org.n52.shetland.ogc.sos.Sos2Constants;
 import org.n52.shetland.ogc.sos.SosCapabilities;
 import org.n52.shetland.ogc.sos.SosConstants;
 import org.n52.shetland.ogc.sos.SosInsertionMetadata;
+import org.n52.shetland.ogc.sos.SosObservationOffering;
 import org.n52.shetland.ogc.sos.SosProcedureDescription;
 import org.n52.shetland.ogc.sos.SosProcedureDescriptionUnknownType;
 import org.n52.shetland.ogc.sos.SosResultEncoding;
@@ -289,13 +290,19 @@ public class ArcticSeaSosClient implements SosClient {
 
     @Override
     public boolean isSensorRegistered(URI sensorURI) {
-        return checkCache() &&
-                capabilitiesCache.get().getContents().isPresent() &&
-                !capabilitiesCache.get().getContents().get().stream()
-                .map(o -> o.getProcedures().first())
-                .filter(s -> s.equals(sensorURI.toString()))
-                .collect(Collectors.toList())
-                .isEmpty() || INSERTED_SENSORS.containsKey(sensorURI);
+        if (checkCache() && capabilitiesCache.get().getContents().isPresent()) {
+            for (SosObservationOffering offering : capabilitiesCache.get().getContents().get()) {
+                for (String procedureId : offering.getProcedures()) {
+                    if (procedureId.equalsIgnoreCase(sensorURI.toString())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        if (INSERTED_SENSORS.containsKey(sensorURI)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
