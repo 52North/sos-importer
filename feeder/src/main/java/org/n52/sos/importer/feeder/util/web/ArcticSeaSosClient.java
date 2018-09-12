@@ -693,7 +693,8 @@ public class ArcticSeaSosClient implements SosClient {
                 insertObservation.getResultTime().toEpochSeconds() +
                 insertObservation.getPhenomenonTime().toEpochSeconds() +
                 insertObservation.getObservedPropertyURI().toString() +
-                insertObservation.getFeatureOfInterestURI().toString());
+                insertObservation.getFeatureOfInterestURI().toString() +
+                insertObservation.getSensorURI().toString());
 
         return Arrays.asList(omObservation);
     }
