@@ -837,11 +837,13 @@ public class Configuration {
     }
 
     public double parseToDouble(String number) throws ParseException {
-        LOG.trace(String.format("parseToDouble(%s)", number));
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         char dSep = getDecimalSeparator();
+        char tSep = getThousandsSeparator(dSep);
+        LOG.trace(String.format("parseToDouble(%s) with decimal separator '%s' and thousands separator '%s'",
+                number, dSep, tSep));
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator(dSep);
-        symbols.setGroupingSeparator(getThousandsSeparator(dSep));
+        symbols.setGroupingSeparator(tSep);
 
         Number n;
         DecimalFormat formatter = new DecimalFormat();

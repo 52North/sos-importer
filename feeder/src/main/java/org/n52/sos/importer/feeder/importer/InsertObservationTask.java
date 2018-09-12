@@ -100,6 +100,8 @@ public final class InsertObservationTask implements Runnable {
                             failedSensorInsertions.add(io.getSensorURI());
                             continue insertObservations;
                         }
+                    } else {
+                        LOG.debug("Sensor '{}' already registered.", io.getSensorURI());
                     }
                     String observationId = null;
                     try {
