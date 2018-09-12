@@ -62,8 +62,8 @@ public class SingleThreadFeeder extends Feeder {
         CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
         setExceptions(new ArrayList<>());
-        getCollector().collectObservations(dataFile, latch);
         getImporter().startImporting();
+        getCollector().collectObservations(dataFile, latch);
         if (!getExceptions().isEmpty()) {
             handleExceptions();
         }
@@ -88,11 +88,11 @@ public class SingleThreadFeeder extends Feeder {
         }
         try {
             getImporter().addObservations(insertObservations);
+            increaseCollectedObservationsCount(insertObservations.length);
         } catch (Exception e) {
             getExceptions().add(e);
             getCollector().stopCollecting();
         }
-        increaseCollectedObservationsCount(insertObservations.length);
     }
 
 }

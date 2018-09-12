@@ -166,13 +166,13 @@ public class Feeder implements FeedingContext {
                 try {
                     getCollectorPhaser().register();
                     getImporter().addObservations(insertObservations);
+                    increaseCollectedObservationsCount(insertObservations.length);
                 } catch (Exception e) {
                     getExceptions().add(e);
                     getCollector().stopCollecting();
                 } finally {
                     getCollectorPhaser().arriveAndDeregister();
                 }
-                increaseCollectedObservationsCount(insertObservations.length);
             }
         });
     }
