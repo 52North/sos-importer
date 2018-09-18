@@ -143,15 +143,20 @@ public class Feeder implements FeedingContext {
         if (getApplicationContext() != null) {
             getApplicationContext().close();
         }
-        int failedObservations = getImporter().getFailedObservations().size();
-        final int newObservationsCount = getCollectedObservationsCount() - failedObservations;
-        LOG.info("New observations in SOS: {}. Failed observations: {}.",
-                newObservationsCount,
-                failedObservations);
-        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
+        logFeedingResults(startImportingData);
         if (!getExceptions().isEmpty()) {
             handleExceptions();
         }
+    }
+
+    protected void logFeedingResults(LocalDateTime startImportingData) {
+        int failedObservations = getImporter().getFailedObservations().size();
+        final int newObservationsCount = getCollectedObservationsCount() - failedObservations;
+        LOG.info("Observations: collected: {};  imported: {}; failed: {}.",
+                getCollectedObservationsCount(),
+                newObservationsCount,
+                failedObservations);
+        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
     }
 
     @Override
@@ -165,16 +170,30 @@ public class Feeder implements FeedingContext {
             public void run() {
                 try {
                     getCollectorPhaser().register();
-                    getImporter().addObservations(insertObservations);
-                    increaseCollectedObservationsCount(insertObservations.length);
+                    importObservations(insertObservations);
                 } catch (Exception e) {
-                    getExceptions().add(e);
-                    getCollector().stopCollecting();
+                    handleExceptionThrownByImporter(e, insertObservations);
                 } finally {
                     getCollectorPhaser().arriveAndDeregister();
                 }
             }
+
         });
+    }
+
+    protected void importObservations(InsertObservation... insertObservations) throws Exception {
+        getImporter().addObservations(insertObservations);
+        increaseCollectedObservationsCount(insertObservations.length);
+    }
+
+    protected void handleExceptionThrownByImporter(Exception e, InsertObservation... insertObservations) {
+        getExceptions().add(e);
+        getCollector().stopCollecting();
+        for (InsertObservation insertObservation : insertObservations) {
+            if (!getImporter().getFailedObservations().contains(insertObservation)) {
+                getImporter().getFailedObservations().add(insertObservation);
+            }
+        }
     }
 
     @Override

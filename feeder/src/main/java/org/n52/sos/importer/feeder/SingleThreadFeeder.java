@@ -70,12 +70,7 @@ public class SingleThreadFeeder extends Feeder {
         if (getApplicationContext() != null) {
             getApplicationContext().close();
         }
-        int failedObservations = getImporter().getFailedObservations().size();
-        final int newObservationsCount = getCollectedObservationsCount() - failedObservations;
-        LOG.info("New observations in SOS: {}. Failed observations: {}.",
-                newObservationsCount,
-                failedObservations);
-        LOG.debug("Import Timing:\nStart : {}\nEnd   : {}", startImportingData, LocalDateTime.now());
+        logFeedingResults(startImportingData);
         if (!getExceptions().isEmpty()) {
             handleExceptions();
         }
@@ -87,11 +82,9 @@ public class SingleThreadFeeder extends Feeder {
             return;
         }
         try {
-            getImporter().addObservations(insertObservations);
-            increaseCollectedObservationsCount(insertObservations.length);
+            importObservations(insertObservations);
         } catch (Exception e) {
-            getExceptions().add(e);
-            getCollector().stopCollecting();
+            handleExceptionThrownByImporter(e, insertObservations);
         }
     }
 
