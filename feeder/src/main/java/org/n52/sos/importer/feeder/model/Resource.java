@@ -30,8 +30,6 @@ package org.n52.sos.importer.feeder.model;
 
 import java.net.URI;
 
-import org.n52.janmayen.NcName;
-
 /**
  * <p>Abstract Resource class.</p>
  *
@@ -45,7 +43,7 @@ public abstract class Resource {
 
     public Resource(String name, String uri) {
         this.name = name;
-        this.uri = URI.create(NcName.makeValid(uri.replace(",", "_")));
+        this.uri = /*URI.create(NcName.makeValid(*/URI.create(uri)/*.replace(",", "_")))*/;
     }
 
     public Resource(Resource res) {
