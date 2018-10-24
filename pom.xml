@@ -36,11 +36,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
-        <version.common-xml>2.4.0</version.common-xml>
-        <version.geotools>19.1</version.geotools>
+        <version.common-xml>[2.0,3.0)</version.common-xml>
+        <version.geotools>[19.0,20.0)</version.geotools>
         <version.arctic-sea>5.0.0</version.arctic-sea>
+        <version.java>1.8</version.java>
         <version.springframework>4.3.12.RELEASE</version.springframework>
         <project.url>https://github.com/52North/sos-importer</project.url>
+        <maven.compiler.source>${version.java}</maven.compiler.source>
+        <maven.compiler.target>${version.java}</maven.compiler.target>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
@@ -130,17 +133,17 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.5</version>
+                <version>4.5.6</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.4.9</version>
+                <version>4.4.10</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.xmlbeans</groupId>
                 <artifactId>xmlbeans</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.opencsv</groupId>
@@ -151,6 +154,11 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>52n-sos-importer-bindings</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.measure</groupId>
+                <artifactId>unit-api</artifactId>
+                <version>1.0</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -175,7 +183,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.25</version>
+                <version>1.8.0-beta2</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -190,7 +198,7 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.9.9</version>
+                <version>2.10</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools</groupId>
@@ -201,11 +209,6 @@
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-opengis</artifactId>
                 <version>${version.geotools}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.java.dev.jsr-275</groupId>
-                <artifactId>jsr-275</artifactId>
-                <version>1.0-beta-2</version>
             </dependency>
             <dependency>
                 <groupId>org.geotools</groupId>
@@ -298,17 +301,17 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>24.0-jre</version>
+                <version>26.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>net.jodah</groupId>
                 <artifactId>failsafe</artifactId>
-                <version>1.0.5</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
 	           <groupId>org.mockito</groupId>
                <artifactId>mockito-core</artifactId>
-               <version>2.13.0</version>
+               <version>2.23.0</version>
 	           <scope>test</scope>
             </dependency>
             <dependency>
@@ -465,7 +468,7 @@
             <dependency>
                 <groupId>org.locationtech.jts</groupId>
                 <artifactId>jts-core</artifactId>
-                <version>1.15.0</version>
+                <version>1.16.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>xerces</groupId>
@@ -513,8 +516,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.7.0</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${version.java}</source>
+                        <target>${version.java}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -618,6 +621,9 @@
                                     <id>n52-releases</id>
                                 </allowedRepositories>
                             </requireNoRepositories>
+	                       <requireMavenVersion>
+		                      <version>[3.0,4.0)</version>
+	                       </requireMavenVersion>
                         </rules>
                     </configuration>
                 </plugin>
