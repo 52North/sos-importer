@@ -1402,8 +1402,8 @@
         <Name>KUGGOEREN AMOS</Name>
         <Position>
           <EPSGCode>4979</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">61.70</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">17.52</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">61.70</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">17.52</Coordinate>
           <Coordinate unit="m" axisAbbreviation="h">9</Coordinate>
         </Position>
       </SpatialResource>

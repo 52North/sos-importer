@@ -1402,8 +1402,8 @@
         <Name>UTSIRA FYR</Name>
         <Position>
           <EPSGCode>4979</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">59.32</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">4.87</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">59.32</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">4.87</Coordinate>
           <Coordinate unit="m" axisAbbreviation="h">55</Coordinate>
         </Position>
       </SpatialResource>

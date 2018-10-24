@@ -85,8 +85,8 @@
         <Name>Superman's Home</Name>
         <Position>
           <EPSGCode>4979</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">0.0</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">0.0</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">0.0</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">0.0</Coordinate>
           <Coordinate unit="m" axisAbbreviation="h">0.0</Coordinate>
         </Position>
       </SpatialResource>

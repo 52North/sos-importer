@@ -31,6 +31,7 @@ package org.n52.sos.importer.feeder.util;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.n52.sos.importer.feeder.Configuration.COORDINATE_UNIT;
 import static org.n52.sos.importer.feeder.util.CoordinateHelper.createPoint;
 
 import org.junit.Test;
@@ -57,8 +58,8 @@ public class CoordinateHelperTest {
     public void testCreatePoint3DWGS84() throws ParseException, NoSuchAuthorityCodeException, FactoryException {
         int epsgCode = 4979;
         Coordinate[] coordinates = new Coordinate[] {
-                new Coordinate("Long", "°", longitude),
-                new Coordinate("Lat", "°", latitude),
+                new Coordinate("Long", COORDINATE_UNIT, longitude),
+                new Coordinate("Lat", COORDINATE_UNIT, latitude),
                 new Coordinate("h", "m", altitude)
         };
         Point jtsPoint = createPoint(new Position(epsgCode, coordinates));
@@ -66,7 +67,7 @@ public class CoordinateHelperTest {
         assertThat(jtsPoint, notNullValue());
         assertThat(jtsPoint.getX(), is(latitude));
         assertThat(jtsPoint.getY(), is(longitude));
-        assertThat(jtsPoint.getCoordinates()[0].z, is(altitude));
+        assertThat(jtsPoint.getCoordinates()[0].getZ(), is(altitude));
         assertThat(jtsPoint.getSRID(), is(epsgCode));
     }
 
@@ -74,15 +75,15 @@ public class CoordinateHelperTest {
     public void testCreatePoint2DWGS84() throws ParseException, NoSuchAuthorityCodeException, FactoryException {
         int epsgCode = 4326;
         Coordinate[] coordinates = new Coordinate[] {
-                new Coordinate("Long", "°", longitude),
-                new Coordinate("Lat", "°", latitude)
+                new Coordinate("Long", COORDINATE_UNIT, longitude),
+                new Coordinate("Lat", COORDINATE_UNIT, latitude)
         };
         Point jtsPoint = createPoint(new Position(epsgCode, coordinates));
 
         assertThat(jtsPoint, notNullValue());
         assertThat(jtsPoint.getX(), is(latitude));
         assertThat(jtsPoint.getY(), is(longitude));
-        assertThat(jtsPoint.getCoordinates()[0].z, is(Double.NaN));
+        assertThat(jtsPoint.getCoordinates()[0].getZ(), is(Double.NaN));
         assertThat(jtsPoint.getSRID(), is(epsgCode));
     }
 

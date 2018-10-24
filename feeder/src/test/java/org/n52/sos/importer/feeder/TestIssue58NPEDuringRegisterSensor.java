@@ -29,9 +29,10 @@
 package org.n52.sos.importer.feeder;
 
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.n52.sos.importer.feeder.Configuration.COORDINATE_UNIT;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -68,14 +69,13 @@ public class TestIssue58NPEDuringRegisterSensor {
         FeatureOfInterest foi = dataFile.getFoiForColumn(mvColumnId, values);
 
         // then
-        final String deg = "°";
         assertThat(foi.getPosition(), is(notNullValue()));
         assertThat(foi.getUri().toString(), is(sensor));
 
         assertThat(foi.getPosition().getValueByAxisAbbreviation("Lat"), is(latValue));
-        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Lat"), is(deg));
+        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Lat"), is(COORDINATE_UNIT));
         assertThat(foi.getPosition().getValueByAxisAbbreviation("Long"), is(longValue));
-        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Long"), is(deg));
+        assertThat(foi.getPosition().getUnitByAxisAbbreviation("Long"), is(COORDINATE_UNIT));
         // the next two values are coming from the configuration
         assertThat(foi.getPosition().getValueByAxisAbbreviation("h"), is(524.0));
         assertThat(foi.getPosition().getUnitByAxisAbbreviation("h"), is("m"));

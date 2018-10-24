@@ -270,6 +270,8 @@ public class Configuration {
 
     public static final String COUNTER_FILE_POSTFIX = ".counter";
 
+    public static final String COORDINATE_UNIT = "deg";
+
     public static final String TIME_TYPE_RESULT = "RESULT";
 
     public static final String TIME_TYPE_PHENOMENON_INSTANT = "OBSERVATION_INSTANT";

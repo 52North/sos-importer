@@ -152,8 +152,8 @@
         <Name>foi1</Name>
         <Position>
           <EPSGCode>4326</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">20.0</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">12.0</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">20.0</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">12.0</Coordinate>
         </Position>
       </SpatialResource>
     </FeatureOfInterest>

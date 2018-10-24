@@ -1403,8 +1403,8 @@
         <Name>LA CORUNA</Name>
         <Position>
           <EPSGCode>4979</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">43.37</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">-8.42</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">43.37</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">-8.42</Coordinate>
           <Coordinate unit="m" axisAbbreviation="h">58</Coordinate>
         </Position>
       </SpatialResource>

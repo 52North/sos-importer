@@ -1403,8 +1403,8 @@
         <Name>FOKSTUA 2</Name>
         <Position>
           <EPSGCode>4979</EPSGCode>
-          <Coordinate unit="°" axisAbbreviation="Lat">62.12</Coordinate>
-          <Coordinate unit="°" axisAbbreviation="Long">9.28</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Lat">62.12</Coordinate>
+          <Coordinate unit="deg" axisAbbreviation="Long">9.28</Coordinate>
           <Coordinate unit="m" axisAbbreviation="h">973</Coordinate>
         </Position>
       </SpatialResource>
