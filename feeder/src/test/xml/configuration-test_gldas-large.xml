@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
@@ -28,7 +29,6 @@
     Public License for more details.
 
 -->
-﻿<?xml version="1.0" encoding="UTF-8"?>
 <SosImportConfiguration xsi:schemaLocation="http://52north.org/sensorweb/sos/importer/0.2/ http://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/52n-sos-importer/52n-sos-importer-bindings/src/main/xsd/datafile_configuration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://52north.org/sensorweb/sos/importer/0.2/">
     <DataFile>
         <LocalFile>

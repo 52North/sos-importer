@@ -36,8 +36,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
-        <version.common-xml>[2.0,3.0)</version.common-xml>
-        <version.geotools>[19.0,20.0)</version.geotools>
+        <version.common-xml>2.5.0</version.common-xml>
+        <version.geotools>20.0</version.geotools>
         <version.arctic-sea>5.0.0</version.arctic-sea>
         <version.java>1.8</version.java>
         <version.springframework>4.3.12.RELEASE</version.springframework>

@@ -28,8 +28,6 @@
  */
 package org.n52.sos.importer.feeder.collector;
 
-import static org.n52.sos.importer.feeder.Configuration.COORDINATE_UNIT;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -144,8 +142,8 @@ public class SingleProfileCollector extends CollectorSkeleton {
             }
         }
         Position position = new Position(4979, new Coordinate[] {
-            new Coordinate("Long", COORDINATE_UNIT, values[0]),
-            new Coordinate("Lat", COORDINATE_UNIT, values[1]),
+            new Coordinate("Long", Configuration.COORDINATE_UNIT, values[0]),
+            new Coordinate("Lat", Configuration.COORDINATE_UNIT, values[1]),
             new Coordinate("h", "m", values[2]),
         });
         String identifier = generateFeatureIdentifier(values);

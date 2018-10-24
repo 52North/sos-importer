@@ -56,13 +56,13 @@
     <swe:Vector>
       <swe:coordinate name="easting">
         <swe:Quantity axisID="x">
-          <swe:uom code="°"/>
+          <swe:uom code="deg"/>
           <swe:value>12.0</swe:value>
         </swe:Quantity>
       </swe:coordinate>
       <swe:coordinate name="northing">
         <swe:Quantity axisID="y">
-          <swe:uom code="°"/>
+          <swe:uom code="deg"/>
           <swe:value>20.0</swe:value>
         </swe:Quantity>
       </swe:coordinate>
@@ -72,13 +72,13 @@
     <swe:Vector>
       <swe:coordinate name="easting">
         <swe:Quantity axisID="x">
-          <swe:uom code="°"/>
+          <swe:uom code="deg"/>
           <swe:value>12.0</swe:value>
         </swe:Quantity>
       </swe:coordinate>
       <swe:coordinate name="northing">
         <swe:Quantity axisID="y">
-          <swe:uom code="°"/>
+          <swe:uom code="deg"/>
           <swe:value>20.0</swe:value>
         </swe:Quantity>
       </swe:coordinate>
@@ -121,13 +121,13 @@
 <swe:Vector ns20:id="SYSTEM_LOCATION">
   <swe:coordinate name="easting">
     <swe:Quantity axisID="x">
-      <swe:uom code="°"/>
+      <swe:uom code="deg"/>
       <swe:value>12.0</swe:value>
     </swe:Quantity>
   </swe:coordinate>
   <swe:coordinate name="northing">
     <swe:Quantity axisID="y">
-      <swe:uom code="°"/>
+      <swe:uom code="deg"/>
       <swe:value>20.0</swe:value>
     </swe:Quantity>
   </swe:coordinate>
