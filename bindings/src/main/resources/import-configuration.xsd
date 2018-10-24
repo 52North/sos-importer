@@ -940,7 +940,7 @@
                 <xs:element ref="DecimalSeparator" />
                 <xs:element ref="FirstLineWithData" />
                 <xs:element ref="Parameter" />
-                <xs:element ref="ObservationCollector" nillable="false" />
+                <xs:element ref="ObservationCollector" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="CsvParser" minOccurs="0" />
                 <xs:element ref="UseLastTimestamp" minOccurs="0" />
             </xs:sequence>
@@ -1291,7 +1291,7 @@
         <xs:complexType>
             <xs:choice>
                 <xs:sequence>
-                    <xs:element ref="EPSGCode" nillable="false" />
+                    <xs:element ref="EPSGCode" minOccurs="1" maxOccurs="1"/>
                     <xs:element ref="Coordinate" minOccurs="2" maxOccurs="3" />
                 </xs:sequence>
                 <xs:element ref="Group">
