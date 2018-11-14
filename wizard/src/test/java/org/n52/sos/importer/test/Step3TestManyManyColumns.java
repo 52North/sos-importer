@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
+/*
+ * Copyright (C) 2011-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,11 +26,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-
-/*
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- * @since 0.5.0
- */
 package org.n52.sos.importer.test;
 
 import org.n52.sos.importer.Constants;
@@ -38,6 +33,10 @@ import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step3Controller;
 import org.n52.sos.importer.controller.TableController;
 
+/**
+ * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ * @since 0.5.0
+ */
 public class Step3TestManyManyColumns {
 
     //CHECKSTYLE:OFF
