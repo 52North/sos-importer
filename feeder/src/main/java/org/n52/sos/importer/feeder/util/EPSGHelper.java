@@ -98,7 +98,6 @@ public class EPSGHelper {
                 // check that a matching axis is available
                 // check that the matching axis has the matching unit
                 if (cs.getAxis(i).getAbbreviation().equals(coordinate.getAxisAbbreviation()) &&
-                        cs.getAxis(i).getUnit().toString().equals(coordinate.getUnit()) &&
                         inRange(coordinate.getDoubleValue(),
                                 cs.getAxis(i).getMinimumValue(),
                                 cs.getAxis(i).getMaximumValue())) {
@@ -144,7 +143,6 @@ public class EPSGHelper {
                 // check that a matching axis is available
                 // check that the matching axis has the matching unit
                 if (cs.getAxis(i).getAbbreviation().equals(coordinate.getAxisAbbrevation()) &&
-                        cs.getAxis(i).getUnit().toString().equals(coordinate.getUnit()) &&
                         inRange(coordinate.getValue(),
                                 cs.getAxis(i).getMinimumValue(),
                                 cs.getAxis(i).getMaximumValue())) {

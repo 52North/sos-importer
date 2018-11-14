@@ -148,6 +148,7 @@ public class PositionComponent extends Component {
     /**
      * returns the corresponding position component for a feature of interest cell
      *
+     * @param id an {@link Id}
      * @param featureOfInterestPosition a {@link org.n52.sos.importer.model.table.Cell} object.
      * @return a {@link org.n52.sos.importer.model.position.PositionComponent} object.
      */
@@ -176,6 +177,7 @@ public class PositionComponent extends Component {
     /**
      * Tries to convert a given String into a valid {@link PositionComponent} object
      *
+     * @param id an {@link Id}
      * @param s a {@link String} object.
      * @return a {@link PositionComponent} object.
      */

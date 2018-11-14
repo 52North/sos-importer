@@ -68,6 +68,7 @@ public class MissingPositionComponentPanel extends MissingComponentPanel {
     /**
      * <p>Constructor for MissingPositionComponentPanel.</p>
      *
+     * @param id an {@link Id}  that indicates the role of the missing component
      * @param position a {@link org.n52.sos.importer.model.position.Position} object.
      */
     public MissingPositionComponentPanel(Id id, Position position) {
