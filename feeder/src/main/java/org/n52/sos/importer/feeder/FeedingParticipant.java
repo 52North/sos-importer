@@ -35,7 +35,7 @@ public interface FeedingParticipant {
 
     /**
      * Sets the {@link Configuration} of this collector and it is called after
-     * the parameterless constructor in {@link Feeder#Feeder(Configuration)}.
+     * the parameterless constructor in {@link Feeder#Feeder()}.
      *
      * @param configuration the {@link Configuration} providing access to the
      *        XML import configuration
@@ -45,7 +45,7 @@ public interface FeedingParticipant {
     /**
      * Sets the {@link FeedingContext} of this collector and it is called after
      * the {@link #setConfiguration(Configuration)} method in
-     * {@link Feeder#Feeder(Configuration)}.
+     * {@link Feeder#Feeder()}.
      *
      * @param context the {@link FeedingContext} providing a bridge between this
      *        collector and the {@link Importer} implementation used.
