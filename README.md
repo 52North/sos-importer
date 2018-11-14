@@ -1,7 +1,7 @@
 # 52°North SOS Importer
 [:arrow_forward: How to Run](#how-to-run)&nbsp;&nbsp;&nbsp;[:nut_and_bolt: How to Build](#how-to-build)&nbsp;&nbsp;&nbsp;[:pencil: How to Develop](#developers)
 
-**Master**: [![Build Status](https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/)&nbsp;[![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: <a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
+**Master**: [![Build Status](https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/)&nbsp;[![volkswagen status](https://auchenberg.github.io/volkswagen/volkswargen_ci.svg?v=1)](https://github.com/auchenberg/volkswagen)&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=master" /></a>&nbsp;&nbsp;&nbsp;**Develop**: [![Build Status](https://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer_develop)](https://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer_develop/)&nbsp;<a href="https://travis-ci.org/52North/sos-importer"><img src="https://travis-ci.org/52North/sos-importer.svg?branch=develop" /></a>&nbsp;<sup><a href="#branches"><b>*</b></a></sup>
 
 ## Description
 
