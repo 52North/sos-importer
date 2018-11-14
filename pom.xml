@@ -29,11 +29,12 @@
     </modules>
     <properties>
         <!-- manual setting -->
-        <currentYear>2016</currentYear>
+        <currentYear>2018</currentYear>
         <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
         <currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <license.encoding>${project.build.sourceEncoding}</license.encoding>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
         <version.common-xml>2.5.0</version.common-xml>

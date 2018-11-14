@@ -267,7 +267,32 @@
                         <exclude>**/*.md</exclude>
                         <exclude>**/RELEASE_NOTES</exclude>
                         <exclude>**/LICENSE.gpl-2.0</exclude>
+                        <exclude>**/XMLTools.java</exclude>
                     </excludes>
+                    <strictCheck>true</strictCheck>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                    <licenseMerges>
+                        <licenseMerge>The Apache Software License, Version 2.0|Apache
+                            2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
+                        <licenseMerge>The Apache Software License|Apache Software
+                            License|Apache Software Licenses|Apache License</licenseMerge>
+                        <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC
+                            LICENSE Version 2, June 1991|GNU General Public License, Version
+                            2.0|GNU General Public License v2.0 only</licenseMerge>
+                        <licenseMerge>Common Development and Distribution License (CDDL),
+                            version 1.0| Common Development and Distribution License (CDDL)
+                            v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version
+                            1.0</licenseMerge>
+                        <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL
+                            2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+                        <licenseMerge>GNU Lesser General Public License|GNU LESSER
+                            GENERAL PUBLIC LICENSE</licenseMerge>
+                        <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
+                        <licenseMerge>BSD Style License|BSD License|BSD style|BSD style
+                            License|Aduna BSD-style license</licenseMerge>
+                    </licenseMerges>
                 </configuration>
                 <executions>
                     <execution>
@@ -340,40 +365,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <finalName>${project.artifactId}</finalName>
-                    <archive>
-                        <index>false</index>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>org.n52.sos.importer.feeder.Application</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <build-time>${timestamp}</build-time>
-                            <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                            <n52-arctic-sea-version>${version.arctic-sea}}</n52-arctic-sea-version>
-                            <n52-common-xml-version>${version.common-xml}</n52-common-xml-version>
-                            <geotools-version>${version.geotools}}</geotools-version>
-                            
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
         </plugins>
     </build>
 </project>
