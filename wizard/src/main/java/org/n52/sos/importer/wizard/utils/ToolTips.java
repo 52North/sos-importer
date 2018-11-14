@@ -83,7 +83,7 @@ public final class ToolTips {
     /** Constant <code>THOUSANDS_SEPARATOR="ThousandsSeparator"</code> */
     public static final String THOUSANDS_SEPARATOR = "ThousandsSeparator";
     /** Constant <code>TIME_ZONE="UTCOffset"</code> */
-    public static final String TIME_ZONE = "UTCOffset";
+    public static final String TIME_ZONE = "TimeZone";
     /** Constant <code>EPSG="EPSG"</code> */
     public static final String EPSG = "EPSG";
     /** Constant <code>REFERENCE_SYSTEMS="ReferenceSystem"</code> */

@@ -62,6 +62,7 @@ package org.n52.sos.importer.test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneOffset;
 
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
@@ -106,7 +107,7 @@ public class Step7Test {
 
         final DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
         dtm.setSecond(new Second(0));
-        dtm.setTimeZone(new TimeZone(0));
+        dtm.setTimeZone(new TimeZone(ZoneOffset.ofHours(0)));
 
         final Position p = new Position();
         p.setGroup("A");

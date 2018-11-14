@@ -60,6 +60,8 @@
  */
 package org.n52.sos.importer.test;
 
+import java.time.ZoneOffset;
+
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
@@ -92,7 +94,7 @@ public class Step6bTestObservedProperty {
         dtm1.setHour(new Hour(0));
         dtm1.setMinute(new Minute(0));
         dtm1.setSecond(new Second(0));
-        dtm1.setTimeZone(new TimeZone(1));
+        dtm1.setTimeZone(new TimeZone(ZoneOffset.ofHours(1)));
         ModelStore.getInstance().add(dtm1);
 
         final FeatureOfInterest foi = new FeatureOfInterest();

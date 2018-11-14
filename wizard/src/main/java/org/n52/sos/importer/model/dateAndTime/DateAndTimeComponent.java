@@ -65,19 +65,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.n52.sos.importer.Constants;
-import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.table.Cell;
 import org.n52.sos.importer.model.table.TableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class DateAndTimeComponent extends Component {
+public abstract class DateAndTimeComponent extends ParsebleTableComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DateAndTimeComponent.class);
-
-    private TableElement tableElement;
-
-    private String pattern;
+    static final Logger LOG = LoggerFactory.getLogger(DateAndTimeComponent.class);
 
     private int value = Constants.NO_INPUT_INT;
 
@@ -88,8 +83,7 @@ public abstract class DateAndTimeComponent extends Component {
      * @param pattern a {@link java.lang.String} object.
      */
     public DateAndTimeComponent(final TableElement tableElement, final String pattern) {
-        this.tableElement = tableElement;
-        this.pattern = pattern;
+        super(tableElement, pattern);
     }
 
     /**
@@ -121,34 +115,6 @@ public abstract class DateAndTimeComponent extends Component {
     }
 
     /**
-     * <p>Setter for the field <code>tableElement</code>.</p>
-     *
-     * @param tableElement a {@link org.n52.sos.importer.model.table.TableElement} object.
-     */
-    public void setTableElement(final TableElement tableElement) {
-        LOG.info("Assign Column to " + this.getClass().getName());
-        this.tableElement = tableElement;
-    }
-
-    /**
-     * <p>Getter for the field <code>tableElement</code>.</p>
-     *
-     * @return a {@link org.n52.sos.importer.model.table.TableElement} object.
-     */
-    public TableElement getTableElement() {
-        return tableElement;
-    }
-
-    /**
-     * Colours the particular date&amp;time component
-     */
-    public void mark() {
-        if (tableElement != null) {
-            tableElement.mark();
-        }
-    }
-
-    /**
      * Returns either the manually set value or
      * the value of this component in the table
      *
@@ -157,10 +123,10 @@ public abstract class DateAndTimeComponent extends Component {
      * @return a int.
      */
     public int getParsedValue(final Cell measuredValuePosition) throws ParseException {
-        if (tableElement == null) {
+        if (getTableElement() == null) {
             return getValue();
         } else {
-            return parse(tableElement.getValueFor(measuredValuePosition));
+            return parse(getTableElement().getValueFor(measuredValuePosition));
         }
     }
 
@@ -173,7 +139,7 @@ public abstract class DateAndTimeComponent extends Component {
      */
     public int parse(final String s) throws ParseException {
         Date date = null;
-        final SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        final SimpleDateFormat formatter = new SimpleDateFormat(getPattern());
 
         try {
             date = formatter.parse(s);
@@ -187,14 +153,6 @@ public abstract class DateAndTimeComponent extends Component {
 
         return gc.get(getGregorianCalendarField());
     }
-
-    /**
-     * Returns the corresponding Gregorian calendar field
-     * for this component
-     *
-     * @return a int.
-     */
-    public abstract int getGregorianCalendarField();
 
     @Override
     public String toString() {

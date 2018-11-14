@@ -60,6 +60,8 @@
  */
 package org.n52.sos.importer.test;
 
+import java.time.ZoneOffset;
+
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6cController;
@@ -92,7 +94,7 @@ public class Step6cTestFoiColumn {
         dtm.setHour(new Hour(0));
         dtm.setMinute(new Minute(0));
         dtm.setSecond(new Second(0));
-        dtm.setTimeZone(new TimeZone(1));
+        dtm.setTimeZone(new TimeZone(ZoneOffset.ofHours(1)));
 
         final FeatureOfInterest foi = new FeatureOfInterest();
         foi.setTableElement(new Column(1, firstLineWithData));

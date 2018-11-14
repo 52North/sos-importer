@@ -28,6 +28,8 @@
  */
 package org.n52.sos.importer.model.dateAndTime;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.GregorianCalendar;
 
 import org.n52.sos.importer.model.Combination;
@@ -36,11 +38,16 @@ import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.dateAndTime.MissingTimeZonePanel;
 
 /**
- * UTC offset
+ * TimeZone wrapper
  *
  * @author Raimund
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  */
-public class TimeZone extends DateAndTimeComponent {
+public class TimeZone extends ParsebleTableComponent {
+
+    private ZoneId zoneId;
+
+    private ZoneOffset offset;
 
     /**
      * <p>Constructor for TimeZone.</p>
@@ -52,13 +59,40 @@ public class TimeZone extends DateAndTimeComponent {
         super(tableElement, pattern);
     }
 
-    /**
-     * <p>Constructor for TimeZone.</p>
-     *
-     * @param value a int.
-     */
-    public TimeZone(int value) {
-        super(value);
+    public TimeZone(ZoneId zoneId) {
+        super();
+        this.zoneId = zoneId;
+    }
+
+    public TimeZone(ZoneOffset offset) {
+        super();
+        this.offset = offset;
+    }
+
+    public void setValue(ZoneId zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public ZoneId getValue() {
+        return zoneId;
+    }
+
+    @Override
+    public void setTableElement(TableElement tableElement) {
+        // TODO Auto-generated method stub
+        super.setTableElement(tableElement);
+    }
+
+    @Override
+    public TableElement getTableElement() {
+        // TODO Auto-generated method stub
+        return super.getTableElement();
+    }
+
+    @Override
+    public void mark() {
+        // TODO Auto-generated method stub
+        super.mark();
     }
 
     @Override
