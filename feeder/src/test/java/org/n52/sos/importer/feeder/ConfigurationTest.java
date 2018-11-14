@@ -33,7 +33,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.n52.sos.importer.feeder.Configuration.COORDINATE_UNIT;
 
 import java.io.IOException;
 import java.net.URI;
@@ -197,9 +196,7 @@ public class ConfigurationTest {
         assertThat(position.getEpsgCode(), is(4326));
         assertThat(EPSGHelper.isValidEPSGCode(position.getEpsgCode()), is(true));
         assertThat(position.getValueByAxisAbbreviation("Lat"), is(52.0));
-        assertThat(position.getUnitByAxisAbbreviation("Lat"), is(COORDINATE_UNIT));
         assertThat(position.getValueByAxisAbbreviation("Long"), is(42.0));
-        assertThat(position.getUnitByAxisAbbreviation("Long"), is(COORDINATE_UNIT));
     }
 
     @Test

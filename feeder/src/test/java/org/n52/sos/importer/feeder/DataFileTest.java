@@ -32,7 +32,6 @@ import static java.util.Optional.empty;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.n52.sos.importer.feeder.Configuration.COORDINATE_UNIT;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -201,9 +200,7 @@ public class DataFileTest {
         assertThat(position.getValueByAxisAbbreviation("h"), is(0.0));
         assertThat(position.getUnitByAxisAbbreviation("h"), is("m"));
         assertThat(position.getValueByAxisAbbreviation("Lat"), is(52.0));
-        assertThat(position.getUnitByAxisAbbreviation("Lat"), is(COORDINATE_UNIT));
         assertThat(position.getValueByAxisAbbreviation("Long"), is(42.0));
-        assertThat(position.getUnitByAxisAbbreviation("Long"), is(COORDINATE_UNIT));
     }
 
     @Test
