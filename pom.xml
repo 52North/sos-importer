@@ -10,7 +10,7 @@
     <groupId>org.n52.sensorweb</groupId>
     <artifactId>52n-sos-importer</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
     <name>52North SOS-Importer</name>
     <description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
     <licenses>
@@ -26,9 +26,10 @@
         <module>feeder</module>
     </modules>
     <scm>
-        <connection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.52north.org/svn/swe/incubation/SOS-importer/trunk/</developerConnection>
-        <url>https://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/trunk/?root=sensorweb</url>
+        <connection>scm:git:https://github.com/52North/sos-importer.git</connection>
+        <developerConnection>scm:git:https://github.com/52North/sos-importer.git</developerConnection>
+        <url>${project.url}</url>
+        <tag>HEAD</tag>
     </scm>
     <organization>
         <name>52°North</name>
@@ -51,19 +52,14 @@
             <organizationUrl>http://ifgi.uni-muenster.de/</organizationUrl>
         </developer>
     </developers>
-    <mailingLists>
-        <mailingList>
-            <name>Sensor Web Mailing List</name>
-            <post>swe@52north.org</post>
-            <subscribe>http://list.52north.org/mailman/listinfo/swe</subscribe>
-            <unsubscribe>http://list.52north.org/mailman/listinfo/swe#subscribers</unsubscribe>
-            <archive>http://list.52north.org/pipermail/swe/</archive>
-        </mailingList>
-    </mailingLists>
     <issueManagement>
-        <system>Bugzilla</system>
-        <url>https://bugzilla.52north.org/</url>
+        <system>GitHub issues</system>
+        <url>https://github.com/52North/sos-importer/issues?state=open</url>
     </issueManagement>
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/52North/sos-importer</url>
+    </ciManagement>
     <contributors>
         <contributor>
             <name>Eike Hinderk Jürrens</name>
@@ -101,6 +97,7 @@
         <oxf.version>2.0.0-alpha.4</oxf.version>
         <importer.xml.binding.version>0.2</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
+        <project.url>https://github.com/52North/sos-importer</project.url>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -112,7 +109,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.2.3</version>
+                <version>4.5.6</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -209,6 +206,11 @@
     <build>
        <pluginManagement>
            <plugins>
+               <plugin>
+                   <groupId>org.apache.maven.plugins</groupId>
+                   <artifactId>maven-release-plugin</artifactId>
+                   <version>2.5.3</version>
+               </plugin>
                <plugin>
                    <groupId>org.jasig.maven</groupId>
                    <artifactId>maven-notice-plugin</artifactId>
