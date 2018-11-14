@@ -32,8 +32,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
-import org.n52.sos.importer.model.Step7Model;
-import org.n52.sos.importer.view.Step7Panel;
 
 /**
  * <p>Step7ControllerTest class.</p>
@@ -60,12 +58,12 @@ public class Step7ControllerTest {
     @Test
     public void shouldSetHunkSizeInModel() {
         controller.loadSettings();
-        ((Step7Panel) controller.getStepPanel())
+        controller.getStepPanel()
             .setHunkSize(42)
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
         org.junit.Assert.assertThat(
-                ((Step7Model) controller.getModel()).getHunkSize(),
+                controller.getModel().getHunkSize(),
                 org.hamcrest.CoreMatchers.is(42));
     }
 
@@ -75,12 +73,12 @@ public class Step7ControllerTest {
     @Test
     public void shouldSetSendBufferInModel() {
         controller.loadSettings();
-        ((Step7Panel) controller.getStepPanel())
+        controller.getStepPanel()
             .setSendBuffer(42)
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
         org.junit.Assert.assertThat(
-                ((Step7Model) controller.getModel()).getSendBuffer(),
+                controller.getModel().getSendBuffer(),
                 org.hamcrest.CoreMatchers.is(42));
     }
 
@@ -90,11 +88,11 @@ public class Step7ControllerTest {
     @Test
     public void shouldSetImportStrategyInModel() {
         controller.loadSettings();
-        ((Step7Panel) controller.getStepPanel())
+        controller.getStepPanel()
             .setImportStrategy(ImportStrategy.SweArrayObservationWithSplitExtension);
         controller.saveSettings();
         org.junit.Assert.assertThat(
-                ((Step7Model) controller.getModel()).getImportStrategy(),
+                controller.getModel().getImportStrategy(),
                 org.hamcrest.CoreMatchers.is(ImportStrategy.SweArrayObservationWithSplitExtension));
     }
 
