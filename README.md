@@ -370,6 +370,16 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
       * [x] [#86](https://github.com/52North/sos-importer/issues/86): Wizard module ClassCastException
 
 
+### :white_check_mark: 0.4.1
+
+   * *Release* [github](https://github.com/52North/sos-importer/releases/tag/v0.4.1)
+   * *Code:* [github](https://github.com/52North/sos-importer/tree/v0.4.1)
+   * *Fixed Bugs*:
+      * [x] \#NN: Fixed security of moderate severity issue by updating apache httpclient to latest version:
+         * [CVE-2014-3577](https://nvd.nist.gov/vuln/detail/CVE-2014-3577)
+         * [CVE-2015-5262](https://nvd.nist.gov/vuln/detail/CVE-2015-5262)
+
+
 ### :white_check_mark: 0.4
 
    * *Code:* [github](https://github.com/52North/sos-importer/tree/v0.4.0)
