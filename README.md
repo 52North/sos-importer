@@ -372,7 +372,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 
 ### :white_check_mark: 0.4
 
-   * *Code:* [github](https://github.com/52North/sos-importer/tree/52n-sos-importer-0.4.0)
+   * *Code:* [github](https://github.com/52North/sos-importer/tree/v0.4.0)
    * *Features*
       * Rename *Core* module to *Wizard*
       * Support for SOS 2.0 incl. Binding definition
@@ -425,7 +425,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_check_mark: 0.3
 
    * *Release file:* [Core Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.3.0/52n-sos-importer-core-0.3.0-bin.jar.md5), [Feeding Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.3.0/52n-sos-importer-feeder-0.3.0-bin.jar.md5)
-   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.3.0)
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/v0.3.0)
    * *Features*
       * [x] Use SOSWrapper from OXF
       * [x] Support more observation types
@@ -437,7 +437,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_check_mark: 0.2
 
    * *Release file:* [Core Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-core/0.2.0/52n-sos-importer-core-0.2.0-bin.jar.md5), [Feeding Module](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar) [md5](http://52north.org/maven/repo/releases/org/n52/sensorweb/52n-sos-importer-feeder/0.2.0/52n-sos-importer-feeder-0.2.0-bin.jar.md5)
-   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.2.0)
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/v0.2.0)
    * *Features*
       * [x] maven build
       * [x] multi language support
@@ -449,7 +449,7 @@ Please take a look at the [github issues list](https://github.com/52North/sos-im
 ### :white_check_mark: 0.1
 
    * *Release file:* <a target="\_blank" href="http://svn.52north.org/cgi-bin/viewvc.cgi/incubation/SOS-importer/tags/SOS-Importer-v0.1.zip?view=co&root=sensorweb" title="52n-sensorweb-sos-importer-0.1">52n-sensorweb-sos-importer-0.1</a>
-   * *Code:* [Github](https://github.com/52North/sos-importer/tree/0.1.0)
+   * *Code:* [Github](https://github.com/52North/sos-importer/tree/v0.1.0)
    * *Features*
       * [x] Swing GUI
       * [x] CSV file support
