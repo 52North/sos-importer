@@ -107,8 +107,7 @@ public class MissingPositionPanel extends JPanel {
     }
 
     public void saveSettings() {
-        java.awt.Component[] subPanels = manualInputPanel.getComponents();
-        for (java.awt.Component component : subPanels) {
+        for (java.awt.Component component : manualInputPanel.getComponents()) {
             if (component instanceof MissingComponentPanel) {
                 MissingComponentPanel mcp = (MissingComponentPanel) component;
                 mcp.assignValues();
