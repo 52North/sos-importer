@@ -93,9 +93,10 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
             public void actionPerformed(ActionEvent e) {
                 String selectedText = (String) EPSGCodeComboBox.getSelectedItem();
                 if (selectedText == null || selectedText.isEmpty()) {
-                    hidePanels();
+                    this_.componentPanels.stream().forEach(p -> p.setVisible(false));
                     return;
                 }
+                this_.componentPanels.stream().forEach(p -> p.setVisible(true));
                 int selectedItem = Integer.parseInt(selectedText);
                 // get CS
                 if (EPSGHelper.isValidEPSGCode(selectedItem)) {
@@ -110,12 +111,6 @@ public class MissingEPSGCodePanel extends MissingComponentPanel {
                     triggerCoord2Panel(true);
                 }
 
-            }
-
-            private void hidePanels() {
-                for (MissingPositionComponentPanel mpcp : this_.componentPanels) {
-                    mpcp.setVisible(false);
-                }
             }
 
             private void triggerCoord2Panel(boolean value) {
