@@ -483,6 +483,7 @@ public class Step7Panel extends JPanel {
         offeringInputTextField = new JTextField();
         offeringInputTextField.setColumns(10);
         offeringInputTextField.setVisible(false);
+        offeringInputTextField.setComponentPopupMenu(new CutCopyPasteContextMenu());
 
         offeringPanel = new JPanel();
         offeringPanel.setBorder(new TitledBorder(null,

@@ -66,6 +66,7 @@ import org.n52.sos.importer.model.resources.Sensor;
 import org.n52.sos.importer.model.resources.UnitOfMeasurement;
 import org.n52.sos.importer.model.table.Column;
 import org.n52.sos.importer.model.table.TableElement;
+import org.n52.sos.importer.view.CutCopyPasteContextMenu;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.EditableJComboBoxPanel;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -282,6 +283,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
         uriOrPrefixTextField = new JTextField();
         uriOrPrefixTextField.setColumns(10);
+        uriOrPrefixTextField.setComponentPopupMenu(new CutCopyPasteContextMenu());
         final GridBagConstraints gbc_uriOrPrefixTextField = new GridBagConstraints();
         gbc_uriOrPrefixTextField.insets = new Insets(0, 0, 5, 0);
         gbc_uriOrPrefixTextField.anchor = GridBagConstraints.NORTH;
@@ -357,6 +359,7 @@ public class MissingResourcePanel extends MissingComponentPanel {
 
         columnConcationationString = new JTextField();
         columnConcationationString.setColumns(10);
+        columnConcationationString.setComponentPopupMenu(new CutCopyPasteContextMenu());
         final GridBagConstraints gbc_columnConcationationString = new GridBagConstraints();
         gbc_columnConcationationString.anchor = GridBagConstraints.NORTH;
         gbc_columnConcationationString.fill = GridBagConstraints.HORIZONTAL;

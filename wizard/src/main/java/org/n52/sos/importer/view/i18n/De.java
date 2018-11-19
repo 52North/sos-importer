@@ -1200,4 +1200,19 @@ public class De extends Lang {
         return "Jahr";
     }
 
+    @Override
+    public String cut() {
+        return "ausschneiden";
+    }
+
+    @Override
+    public String copy() {
+        return "kopieren";
+    }
+
+    @Override
+    public String paste() {
+        return "einfügen";
+    }
+
 }

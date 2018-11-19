@@ -104,7 +104,7 @@ public class Step1Panel extends JPanel {
     private final JTextField jtfFilenameSchema = new JTextField();
     private final JPasswordField jpfPassword = new JPasswordField();
     private final JCheckBox jcbRegex = new JCheckBox();
-    private final JComboBox<String> jcbChooseInputType = new JComboBox<String>(feedingTypes);
+    private final JComboBox<String> jcbChooseInputType = new JComboBox<>(feedingTypes);
     private final Step1Panel _this = this;
     private final JPanel cardPanel = new JPanel(new CardLayout());
 
@@ -150,7 +150,7 @@ public class Step1Panel extends JPanel {
         final JLabel encodingLabel = new JLabel(Lang.l().step1EncodingLabel() + ":");
         encodingLabel.setFont(Constants.DEFAULT_INSTRUCTIONS_FONT_LARGE_BOLD);
         final Set<String> charsets = getCharsets();
-        encodingCB = new JComboBox<String>(charsets.toArray(new String[charsets.size()]));
+        encodingCB = new JComboBox<>(charsets.toArray(new String[charsets.size()]));
         encodingCB.setSelectedIndex(getIndexOfEncoding(Constants.DEFAULT_FILE_ENCODING));
 
         final GridBagConstraints gbcOneTimeFeed =  new GridBagConstraints(0, 0, 1, 1, 0, 0,
@@ -183,10 +183,14 @@ public class Step1Panel extends JPanel {
 
         // this keylistener instantly checks whether the input data is sufficient
         jtfUrl.addKeyListener(keyListener);
+        jtfUrl.setComponentPopupMenu(new CutCopyPasteContextMenu());
         jtfUser.addKeyListener(keyListener);
+        jtfUser.setComponentPopupMenu(new CutCopyPasteContextMenu());
         jpfPassword.addKeyListener(keyListener);
         jtfDirectory.addKeyListener(keyListener);
+        jtfDirectory.setComponentPopupMenu(new CutCopyPasteContextMenu());
         jtfFilenameSchema.addKeyListener(keyListener);
+        jtfFilenameSchema.setComponentPopupMenu(new CutCopyPasteContextMenu());
 
         final GridBagConstraints gbcLabel =  new GridBagConstraints(0, 0, 2, 1, 0, 0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2,
@@ -284,7 +288,7 @@ public class Step1Panel extends JPanel {
      * @return a int.
      */
     public int getFeedingType() {
-        return (jcbChooseInputType.getSelectedIndex() == CSV_FILE) ? CSV_FILE : FTP_FILE;
+        return jcbChooseInputType.getSelectedIndex() == CSV_FILE ? CSV_FILE : FTP_FILE;
     }
 
     /**
@@ -473,7 +477,7 @@ public class Step1Panel extends JPanel {
     private JPanel initLanguagePanel() {
         final JPanel panel = new JPanel();
         final JLabel label = new JLabel(Lang.l().step1SelectLanguage());
-        final JComboBox<Locale> jcb = new JComboBox<Locale>(Lang.getAvailableLocales());
+        final JComboBox<Locale> jcb = new JComboBox<>(Lang.getAvailableLocales());
         jcb.setSelectedItem(Lang.getCurrentLocale());
         jcb.setEditable(false);
         //

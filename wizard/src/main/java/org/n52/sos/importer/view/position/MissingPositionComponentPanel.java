@@ -39,6 +39,7 @@ import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.position.Position;
 import org.n52.sos.importer.model.position.Position.Id;
 import org.n52.sos.importer.model.position.PositionComponent;
+import org.n52.sos.importer.view.CutCopyPasteContextMenu;
 import org.n52.sos.importer.view.MissingComponentPanel;
 import org.n52.sos.importer.view.combobox.ComboBoxItems;
 import org.n52.sos.importer.view.i18n.Lang;
@@ -76,6 +77,7 @@ public class MissingPositionComponentPanel extends MissingComponentPanel {
         this.position = position;
         this.id = id;
         textField.setText("0");
+        textField.setComponentPopupMenu(new CutCopyPasteContextMenu());
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
         final String labelSpacer = "   ";

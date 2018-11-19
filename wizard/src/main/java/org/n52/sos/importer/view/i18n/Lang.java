@@ -1687,7 +1687,7 @@ public abstract class Lang {
      */
     public abstract String url();
 
-    /**
+    /**~/
      * <p>version.</p>
      *
      * @return Version
@@ -1714,5 +1714,26 @@ public abstract class Lang {
      * @return Year
      */
     public abstract String year();
+
+    /**
+     * <p>cut.</p>
+     *
+     * @return cut
+     */
+    public abstract String cut();
+
+    /**
+     * <p>copy.</p>
+     *
+     * @return copy
+     */
+    public abstract String copy();
+
+    /**
+     * <p>paste.</p>
+     *
+     * @return paste
+     */
+    public abstract String paste();
 
 }

@@ -1193,4 +1193,19 @@ public class En extends Lang {
         return "Year";
     }
 
+    @Override
+    public String cut() {
+        return "cut";
+    }
+
+    @Override
+    public String copy() {
+        return "copy";
+    }
+
+    @Override
+    public String paste() {
+        return "paste";
+    }
+
 }
