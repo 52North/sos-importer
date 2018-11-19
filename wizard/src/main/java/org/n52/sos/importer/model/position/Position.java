@@ -61,8 +61,6 @@ public class Position extends Combination {
 
     private EPSGCode epsgCode;
 
-    private String group;
-
     public Position() {
         super();
     }
@@ -106,16 +104,6 @@ public class Position extends Combination {
             }
         }
         epsgCode = newEpsgCode;
-    }
-
-    @Override
-    public void setGroup(final String group) {
-        this.group = group;
-    }
-
-    @Override
-    public String getGroup() {
-        return group;
     }
 
     @Override
@@ -196,7 +184,7 @@ public class Position extends Combination {
         int result = 1;
         result = prime * result + (coordinates == null ? 0 : coordinates.hashCode());
         result = prime * result + (epsgCode == null ? 0 : epsgCode.hashCode());
-        result = prime * result + (group == null ? 0 : group.hashCode());
+        result = prime * result + (getGroup() == null ? 0 : getGroup().hashCode());
         return result;
     }
 
@@ -226,11 +214,11 @@ public class Position extends Combination {
         } else if (!epsgCode.equals(other.epsgCode)) {
             return false;
         }
-        if (group == null) {
-            if (other.group != null) {
+        if (getGroup() == null) {
+            if (other.getGroup() != null) {
                 return false;
             }
-        } else if (!group.equals(other.group)) {
+        } else if (!getGroup().equals(other.getGroup())) {
             return false;
         }
         return true;
