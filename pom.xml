@@ -14,7 +14,7 @@
     <!-- when updating this version, please update wizard::org.n52.sos.importer.Constants.VERSION, too -->
     <version>0.5.0-SNAPSHOT</version>
     <name>52North SOS-Importer</name>
-    <description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
+    <description>52North SOS-Importer - for details see https://52north.org/software/software-projects/sos-importer</description>
     <licenses>
         <license>
             <name>GNU General Public License v2.0 only</name>
@@ -35,6 +35,10 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.encoding>${project.build.sourceEncoding}</license.encoding>
+        <logger.file.name>logs/${project.artifactId}</logger.file.name>
+        <logger.file.maxSize>2M</logger.file.maxSize>
+        <!-- keep 7 days' worth of history -->
+        <logger.maxHistory>7</logger.maxHistory>
         <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
         <version.common-xml>2.5.0</version.common-xml>
@@ -45,6 +49,7 @@
         <project.url>https://github.com/52North/sos-importer</project.url>
         <maven.compiler.source>${version.java}</maven.compiler.source>
         <maven.compiler.target>${version.java}</maven.compiler.target>
+        <version.logback>1.2.3</version.logback>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
@@ -184,17 +189,17 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.8.0-beta2</version>
+                <version>1.7.25</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.3</version>
+                <version>${version.logback}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.2.3</version>
+                <version>${version.logback}</version>
             </dependency>
             <dependency>
                 <groupId>joda-time</groupId>

@@ -3,7 +3,7 @@
     <!-- refer to http://logback.qos.ch/manual/appenders.html -->
 
     <!-- sync with Step8Controller.java -->
-    <property name="logFile" value="logs/sos-importer-wizard" />
+    <property name="logger.file.name" value="logs/sos-importer-wizard" />
 
     <!--
         the following assumptions are made by the Adminstrator:
@@ -19,10 +19,10 @@
     -->
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logFile}.log</file>
+        <file>${logger.file.name}.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logFile}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <fileNamePattern>${logger.file.name}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

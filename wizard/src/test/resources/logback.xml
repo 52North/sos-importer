@@ -3,7 +3,7 @@
     <!-- refer to http://logback.qos.ch/manual/appenders.html -->
 
     <!-- sync with Step8Controller.java -->
-    <property name="logFile" value="logs/sos-importer-core" />
+    <property name="logger.file.name" value="logs/sos-importer-core" />
 
     <!--
         the following assumptions are made by the Adminstrator:
@@ -19,14 +19,14 @@
     -->
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logFile}.log</file>
+        <file>${logger.file.name}.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logFile}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
-            <!-- keep ${config.logger.history.max} days' worth of history -->
-            <maxHistory>${config.logger.history.max}</maxHistory>
+            <fileNamePattern>${logger.file.name}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <!-- keep ${logger.maxHistory} days' worth of history -->
+            <maxHistory>${logger.maxHistory}</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>${config.logger.maxFileSize}</maxFileSize>
+                <maxFileSize>${logger.file.maxSize}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
