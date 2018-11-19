@@ -26,69 +26,77 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.test;
+package org.n52.sos.importer.controller;
 
-import org.n52.sos.importer.controller.DateAndTimeController;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
 import org.n52.sos.importer.model.dateAndTime.Day;
 import org.n52.sos.importer.model.dateAndTime.Hour;
+import org.n52.sos.importer.model.dateAndTime.Minute;
 import org.n52.sos.importer.model.dateAndTime.Month;
 import org.n52.sos.importer.model.dateAndTime.Year;
 import org.n52.sos.importer.model.table.Column;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DateAndTimeControllerTest {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(DateAndTimeControllerTest.class);
-
-    //CHECKSTYLE:OFF
-    public static void main(final String[] args) {
-        //CHECKSTYLE:ON
-        if (logger.isDebugEnabled()) {
-            logger.debug("Start Test");
-        }
-        final int firstLineWithData = 1;
-        final String g = "1";
+    @Test
+    public void testMergeDateAndTimes() {
+        int firstLineWithData = 1;
+        String groupId = "1";
         //
         // first element
-        final String p1 = "d.M.yyyy";
-        final Column c1 = new Column(0, firstLineWithData);
-        final DateAndTime dt1 = new DateAndTime();
-        dt1.setDay(new Day(c1, p1));
-        dt1.setMonth(new Month(c1, p1));
-        dt1.setYear(new Year(c1, p1));
-        dt1.setGroup(g);
+        String p1 = "d.M.yyyy";
+        Column c1 = new Column(0, firstLineWithData);
+        DateAndTime dt1 = new DateAndTime();
+        Day day = new Day(c1, p1);
+        dt1.setDay(day);
+        Month month = new Month(c1, p1);
+        dt1.setMonth(month);
+        Year year = new Year(c1, p1);
+        dt1.setYear(year);
+        dt1.setGroup(groupId);
         //
         // second element
-        final String p2 = "HH,00";
-        final Column c2 = new Column(1, firstLineWithData);
-        final DateAndTime dt2 = new DateAndTime();
-        dt2.setHour(new Hour(c2, p2));
-        dt2.setGroup(g);
+        String p2 = "HH,00";
+        Column c2 = new Column(1, firstLineWithData);
+        DateAndTime dt2 = new DateAndTime();
+        Hour hour = new Hour(c2, p2);
+        dt2.setHour(hour);
+        dt2.setGroup(groupId);
         //
         // third element
-        final String p3 = "mm,00";
-        final Column c3 = new Column(2, firstLineWithData);
-        final DateAndTime dt3 = new DateAndTime();
-        dt3.setHour(new Hour(c3, p3));
-        dt3.setGroup(g);
+        String p3 = "mm,00";
+        Column c3 = new Column(2, firstLineWithData);
+        DateAndTime dt3 = new DateAndTime();
+        Minute minute = new Minute(c3, p3);
+        dt3.setMinute(minute);
+        dt3.setGroup(groupId);
         //
         // add elements to modelstore
-        final ModelStore ms = ModelStore.getInstance();
+        ModelStore ms = ModelStore.getInstance();
         ms.add(dt1);
         ms.add(dt2);
         ms.add(dt3);
         //
-        if (logger.isDebugEnabled()) {
-            logger.debug("Example data created");
-        }
-        //
         // DateAndTimeController
-        final DateAndTimeController dtc = new DateAndTimeController();
+        DateAndTimeController dtc = new DateAndTimeController();
         dtc.mergeDateAndTimes();
+
+        assertThat(ms.getDateAndTimes(), is(notNullValue()));
+        assertThat(ms.getDateAndTimes().size(), is(1));
+        DateAndTime dat = ms.getDateAndTimes().get(0);
+        assertThat(dat.getGroup(), is(groupId));
+        assertThat(dat.getYear(), is(year));
+        assertThat(dat.getMonth(), is(month));
+        assertThat(dat.getDay(), is(day));
+        assertThat(dat.getHour(), is(hour));
+        assertThat(dat.getMinute(), is(minute));
+
     }
 
 }

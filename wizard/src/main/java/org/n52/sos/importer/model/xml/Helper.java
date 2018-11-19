@@ -148,6 +148,9 @@ public class Helper {
     }
 
     protected static boolean isIdOfRelatedSensorMatching(final RelatedSensor relatedSensor, final String sensorXmlId) {
+        if (relatedSensor == null || sensorXmlId == null || sensorXmlId.isEmpty()) {
+            return false;
+        }
         return relatedSensor.isSetIdRef() && relatedSensor.getIdRef().equalsIgnoreCase(sensorXmlId);
     }
 }

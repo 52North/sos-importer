@@ -263,6 +263,10 @@ public class PositionController {
     }
 
     public void merge(final Position position1, final Position position2) {
+        if (position1.getGroup() == null || position2.getGroup() == null) {
+            throw new IllegalArgumentException(String.format("Position Groups are not matching: '%s', '%s'.",
+                    position1.getGroup(), position2.getGroup()));
+        }
         for (Id id : Position.Id.values()) {
             if (position1.getCoordinate(id) == null && position2.getCoordinate(id) != null) {
                 position1.addCoordinate(position2.getCoordinate(id));

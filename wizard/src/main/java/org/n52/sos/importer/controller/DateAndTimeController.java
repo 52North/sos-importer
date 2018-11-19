@@ -55,6 +55,7 @@ import org.slf4j.LoggerFactory;
  * Handles operations on DateAndTime objects
  *
  * @author Raimund
+ * @author <a href="mailto:e.h.juerrens@52north.org">J&uuml;rrens, Eike Hinderk</a>
  */
 public class DateAndTimeController {
 
@@ -66,9 +67,6 @@ public class DateAndTimeController {
 
     private final List<MissingComponentPanel> missingComponentPanels;
 
-    /**
-     * <p>Constructor for DateAndTimeController.</p>
-     */
     public DateAndTimeController() {
         dateAndTime = new DateAndTime();
         missingComponentPanels = new ArrayList<>();
@@ -155,11 +153,6 @@ public class DateAndTimeController {
         return missingComponentPanels;
     }
 
-    /**
-     * <p>setMissingComponents.</p>
-     *
-     * @param components a {@link java.util.List} object.
-     */
     public void setMissingComponents(final List<Component> components) {
         for (final Component c: components) {
             final MissingComponentPanel mcp = c.getMissingComponentPanel(dateAndTime);
@@ -168,11 +161,6 @@ public class DateAndTimeController {
         }
     }
 
-    /**
-     * <p>getMissingComponents.</p>
-     *
-     * @return a {@link java.util.List} object.
-     */
     public List<Component> getMissingComponents() {
         final List<Component> components = new ArrayList<>();
         for (final MissingComponentPanel mcp: missingComponentPanels) {
@@ -208,9 +196,6 @@ public class DateAndTimeController {
         }
     }
 
-    /**
-     * <p>unassignMissingComponentValues.</p>
-     */
     public void unassignMissingComponentValues() {
         for (final MissingComponentPanel mcp: missingComponentPanels) {
             mcp.unassignValues();
@@ -273,9 +258,6 @@ public class DateAndTimeController {
         return null;
     }
 
-    /**
-     * <p>markComponents.</p>
-     */
     public void markComponents() {
         if (dateAndTime.getSeconds() != null) {
             dateAndTime.getSeconds().mark();
@@ -398,10 +380,6 @@ public class DateAndTimeController {
         }
     }
 
-
-    /**
-     * <p>mergeDateAndTimes.</p>
-     */
     public void mergeDateAndTimes() {
         LOG.info("Merge Date & Times");
         final List<DateAndTime> dateAndTimes = ModelStore.getInstance().getDateAndTimes();

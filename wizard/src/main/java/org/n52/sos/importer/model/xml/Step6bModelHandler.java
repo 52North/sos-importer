@@ -617,14 +617,23 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
     }
 
     private boolean isIdOfRelatedFOIMatching(RelatedFOI relatedFOI, String foiXmlId) {
+        if (relatedFOI == null || foiXmlId == null || foiXmlId.isEmpty()) {
+            return false;
+        }
         return relatedFOI.isSetIdRef() && relatedFOI.getIdRef().equalsIgnoreCase(foiXmlId);
     }
 
     private boolean isIdOfObservedPropertyMatching(RelatedObservedProperty relatedObsProp, String obsPropXmlId) {
+        if (relatedObsProp == null || obsPropXmlId == null || obsPropXmlId.isEmpty()) {
+            return false;
+        }
         return relatedObsProp.isSetIdRef() && relatedObsProp.getIdRef().equalsIgnoreCase(obsPropXmlId);
     }
 
     private boolean isIdOfRelatedUnitOfMeasurementMatching(RelatedUnitOfMeasurement relatedUOM, String uomUriXmlId) {
+        if (relatedUOM == null || uomUriXmlId == null || uomUriXmlId .isEmpty()) {
+            return false;
+        }
         return relatedUOM.isSetIdRef() && relatedUOM.getIdRef().equalsIgnoreCase(uomUriXmlId);
     }
 }
