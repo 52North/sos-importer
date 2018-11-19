@@ -30,6 +30,8 @@ package org.n52.sos.importer.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.n52.janmayen.NcName;
 import org.n52.sos.importer.model.ModelStore;
 import org.n52.sos.importer.model.Step7Model;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
@@ -286,8 +287,14 @@ public class Step7Controller extends StepController {
     }
 
     private boolean isOfferingNameInvalid() {
-        return !panel.isGenerateOfferingFromSensorName() &&
-                !NcName.isValid(panel.getOfferingName());
+        if (!panel.isGenerateOfferingFromSensorName()) {
+            try {
+                new URL(panel.getOfferingName());
+            } catch (MalformedURLException e) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isOfferingNameNotGiven() {
