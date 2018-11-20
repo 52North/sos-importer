@@ -103,7 +103,7 @@ public class MainFrame extends JFrame {
         }
         pack();
         // this centers the dialog on the current screen of the user
-        setBounds(0, 0, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
+        // setBounds(0, 0, Constants.DIALOG_WIDTH, Constants.DIALOG_HEIGHT);
         setLocationRelativeTo(null);
         setVisible(true);
     }

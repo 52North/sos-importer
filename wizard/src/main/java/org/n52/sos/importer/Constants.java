@@ -30,6 +30,7 @@ package org.n52.sos.importer;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +53,9 @@ public class Constants {
 
     public static final String SANS_SERIF = "SansSerif";
     public static final String DEG = "°";
+
+    public static final String EXTERNAL_FILE_PATH =
+            System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
 
     public enum ImportStrategy {
         /**
@@ -201,11 +205,11 @@ public class Constants {
     /** Constant <code>DEFAULT_FEEDER_JAR_NAME_START="52n-sos-importer-feeder-"</code> */
     public static final String DEFAULT_FEEDER_JAR_NAME_START = "52n-sos-importer-feeder-";
 
-    /** Constant <code>DIALOG_WIDTH=800</code> */
-    public static final int DIALOG_WIDTH = 800;
+    /** Constant <code>DIALOG_WIDTH=1024</code> */
+    public static final int DIALOG_WIDTH = 1024;
 
-    /** Constant <code>DIALOG_HEIGHT=600</code> */
-    public static final int DIALOG_HEIGHT = 600;
+    /** Constant <code>DIALOG_HEIGHT=1024</code> */
+    public static final int DIALOG_HEIGHT = 1024;
 
     /** Constant <code>WMS_DEFAULT_BACKGROUND_LAYER_NAME="OSMBackground"</code> */
     public static final String WMS_DEFAULT_BACKGROUND_LAYER_NAME = "OSMBackground";

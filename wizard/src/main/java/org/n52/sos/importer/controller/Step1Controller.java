@@ -31,17 +31,22 @@ package org.n52.sos.importer.controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPHTTPClient;
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step1Model;
 import org.n52.sos.importer.model.Step2Model;
 import org.n52.sos.importer.model.StepModel;
@@ -132,11 +137,34 @@ public class Step1Controller extends StepController {
      * <p>browseButtonClicked.</p>
      */
     public void browseButtonClicked() {
-        final JFileChooser fc = new JFileChooser();
+        // try to read last openend directory
+        File lastDir = new File(Constants.EXTERNAL_FILE_PATH + "wizard_lastdir");
+        String currentDirectoryPath = null;
+        if (lastDir.exists() && lastDir.canRead()) {
+            try (Scanner sc = new Scanner(lastDir, Constants.DEFAULT_FILE_ENCODING)) {
+                currentDirectoryPath = sc.nextLine();
+            } catch (FileNotFoundException e) {
+                LOG.error("File not found after java told me that it exists and I can read it: '{}'",
+                        lastDir.getAbsolutePath());
+                currentDirectoryPath = null;
+            }
+        }
+        final JFileChooser fc = new JFileChooser(currentDirectoryPath);
         fc.setFileFilter(new CSVFileFilter());
         if (fc.showOpenDialog(getStepPanel()) == JFileChooser.APPROVE_OPTION) {
-            step1Panel.setCSVFilePath(fc.getSelectedFile().getAbsolutePath());
+            File selectedFile = fc.getSelectedFile();
+            step1Panel.setCSVFilePath(selectedFile.getAbsolutePath());
             checkInputFileValue();
+            currentDirectoryPath = selectedFile.getParentFile().getAbsolutePath();
+            try (
+                    FileWriterWithEncoding counterFileWriter = new FileWriterWithEncoding(
+                            lastDir, Constants.DEFAULT_FILE_ENCODING);
+                    PrintWriter out = new PrintWriter(counterFileWriter);
+                    ) {
+                out.println(currentDirectoryPath);
+            } catch (IOException e) {
+                LOG.error("Could not save last directory: {}", e.getMessage());
+            }
         }
     }
 
@@ -208,7 +236,7 @@ public class Step1Controller extends StepController {
                 return false;
             }
             readFile(dataFile, step1Panel.getFileEncoding());
-        } else if (step1Panel != null && (step1Panel.getFeedingType() == Step1Panel.FTP_FILE)) {
+        } else if (step1Panel != null && step1Panel.getFeedingType() == Step1Panel.FTP_FILE) {
             // checks repetitive feed input data for validity
             if (step1Panel.getUrl() == null || step1Panel.getUrl().equals("")) {
                 JOptionPane.showMessageDialog(null,

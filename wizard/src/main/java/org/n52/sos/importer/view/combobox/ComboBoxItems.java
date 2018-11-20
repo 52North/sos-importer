@@ -74,9 +74,6 @@ public final class ComboBoxItems {
 
     private static ComboBoxItems instance;
 
-    private static final String EXTERNAL_FILE_PATH =
-            System.getProperty("user.home") + File.separator + ".SOSImporter" + File.separator;
-
     private static final String INTERNAL_FILE_PATH = "/org/n52/sos/importer/combobox/";
 
     private static final String FILE_NAME = "52n-sensorweb-sos-importer.properties";
@@ -108,7 +105,7 @@ public final class ComboBoxItems {
     private ComboBoxItems() {
         InputStream is = null;
         try {
-            String filePath = EXTERNAL_FILE_PATH + FILE_NAME;
+            String filePath = Constants.EXTERNAL_FILE_PATH + FILE_NAME;
             final File file = new File(filePath);
             if (!file.exists()) {
                 logger.info(LOAD_DEFAULT_SETTINGS_FROM_JAR_FILE);
@@ -231,7 +228,7 @@ public final class ComboBoxItems {
                 format(EditableComboBoxItems.getInstance().getUnitOfMeasurementURIs()));
         props.setProperty(SENSOR_URIS, format(EditableComboBoxItems.getInstance().getSensorURIs()));
 
-        final File folder = new File(EXTERNAL_FILE_PATH);
+        final File folder = new File(Constants.EXTERNAL_FILE_PATH);
         if (!folder.exists()) {
 
             final boolean successful = folder.mkdir();
@@ -242,7 +239,7 @@ public final class ComboBoxItems {
             }
         }
 
-        final File file = new File(EXTERNAL_FILE_PATH + FILE_NAME);
+        final File file = new File(Constants.EXTERNAL_FILE_PATH + FILE_NAME);
         logger.info("Save settings at " + file.getAbsolutePath());
 
         //save properties
