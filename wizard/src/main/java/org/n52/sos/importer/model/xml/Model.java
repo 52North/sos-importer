@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.n52.sos.importer.Constants;
@@ -269,8 +271,33 @@ public class Model {
         //
         final SosImportConfigurationDocument doc = SosImportConfigurationDocument.Factory.newInstance();
         doc.setSosImportConfiguration(sosImpConf);
-        if (!doc.validate()) {
-            logger.error("The model is not valid. Please update your values.");
+        // Create an XmlOptions instance and set the error listener.
+        final XmlOptions validateOptions = new XmlOptions();
+        final ArrayList<XmlError> errorList = new ArrayList<>();
+        validateOptions.setErrorListener(errorList);
+
+        // Validate the XML
+        // If the XML isn't valid, loop through the listener's contents and print error messages.
+        if (!doc.validate(validateOptions)) {
+            for (int i = 0; i < errorList.size(); i++) {
+                final XmlError error = errorList.get(i);
+
+                logger.error("Message: {}; Location: {}",
+                        error.getMessage(),
+                        error.getCursorLocation().xmlText());
+            }
+            String tempConfigurationFileName = new StringBuilder(255)
+                    .append(System.getProperty("java.io.tmpdir"))
+                    .append(File.separator)
+                    .append("configuration-")
+                    .append(System.currentTimeMillis())
+                    .append(".xml")
+                    .toString();
+            logger.error("Failed configuration stored in temporary file '{}'.", tempConfigurationFileName);
+            try (FileWriterWithEncoding fwwe = new FileWriterWithEncoding(tempConfigurationFileName, "UTF-8")) {
+                fwwe.write(doc.xmlText());
+            } catch (IOException e) {
+            }
             return false;
         }
         return true;
