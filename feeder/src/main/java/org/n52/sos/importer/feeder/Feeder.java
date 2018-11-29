@@ -108,7 +108,7 @@ public class Feeder implements FeedingContext {
 
         setCollectorPhaser(new Phaser());
         getCollectorPhaser().register();
-        LOG.info("Instance of Feeder '{}' created.", this.getClass().getName());
+        LOG.info("Instance of Feeder '{}' initialized.", this.getClass().getName());
         return this;
     }
 
