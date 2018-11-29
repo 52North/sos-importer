@@ -28,11 +28,12 @@
  */
 package org.n52.sos.importer.model.xml;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.NoSuchElementException;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
 import org.junit.Test;
 import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
@@ -56,8 +57,8 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(importConf.getSosMetadata().isSetBinding(), Is.is(true));
-        Assert.assertThat(importConf.getSosMetadata().getBinding(), Is.is(binding));
+        assertThat(importConf.getSosMetadata().isSetBinding(), is(true));
+        assertThat(importConf.getSosMetadata().getBinding(), is(binding));
     }
 
     @Test
@@ -70,8 +71,8 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
 
-        Assert.assertThat(importConfEmpty.getSosMetadata().isSetBinding(), Is.is(false));
-        Assert.assertThat(importConfNull.getSosMetadata().isSetBinding(), Is.is(false));
+        assertThat(importConfEmpty.getSosMetadata().isSetBinding(), is(false));
+        assertThat(importConfNull.getSosMetadata().isSetBinding(), is(false));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(importConf.getSosMetadata().getVersion(), Is.is(version));
+        assertThat(importConf.getSosMetadata().getVersion(), is(version));
     }
 
     @Test
@@ -94,19 +95,25 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConfNull = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModelNull, importConfNull);
 
-        Assert.assertThat(importConfEmpty.getSosMetadata().getVersion(), Is.is(CoreMatchers.nullValue()));
-        Assert.assertThat(importConfNull.getSosMetadata().getVersion(), Is.is(CoreMatchers.nullValue()));
+        assertThat(importConfEmpty.getSosMetadata().getVersion(), is(CoreMatchers.nullValue()));
+        assertThat(importConfNull.getSosMetadata().getVersion(), is(CoreMatchers.nullValue()));
     }
 
     @Test
     public void shouldSetImportStrategy() {
         final Step7Model stepModel = new Step7Model(null, null, false, null, "", null, false);
-        stepModel.setImportStrategy(ImportStrategy.ResultHandling);
+        stepModel.setImportStrategy(ImportStrategy.SingleObservation);
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(importConf.getSosMetadata().getImporter().getStringValue(),
-                Is.is("org.n52.sos.importer.feeder.importer.ResultHandlingImporter"));
+        assertThat(importConf.getSosMetadata().getImporter().getStringValue(),
+                is("org.n52.sos.importer.feeder.importer.SingleObservationImporter"));
+
+        stepModel.setImportStrategy(ImportStrategy.ResultHandling);
+        new Step7ModelHandler().handleModel(stepModel, importConf);
+
+        assertThat(importConf.getSosMetadata().getImporter().getStringValue(),
+                is("org.n52.sos.importer.feeder.importer.ResultHandlingImporter"));
     }
 
     @Test
@@ -118,9 +125,8 @@ public class Step7ModelHandlerTest {
         final SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(
-                getAdditionalMetadata(importConf, Key.HUNK_SIZE),
-                Is.is(Integer.toString(hunkSize)));
+        assertThat(getAdditionalMetadata(importConf, Key.HUNK_SIZE),
+                is(Integer.toString(hunkSize)));
     }
 
     private String getAdditionalMetadata(final SosImportConfiguration importConf,
@@ -139,22 +145,18 @@ public class Step7ModelHandlerTest {
         SosImportConfiguration importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
 
-        Assert.assertThat(
-                importConf.getCsvMetadata().getObservationCollector().isNil(),
-                Is.is(false));
-        Assert.assertThat(
-                importConf.getCsvMetadata().getObservationCollector().isSetIgnoreColumnCountMismatch(),
-                Is.is(true));
-        Assert.assertThat(
-                importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
-                Is.is(false));
+        assertThat(importConf.getCsvMetadata().getObservationCollector().isNil(),
+                is(false));
+        assertThat(importConf.getCsvMetadata().getObservationCollector().isSetIgnoreColumnCountMismatch(),
+                is(true));
+        assertThat(importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
+                is(false));
 
         stepModel = new Step7Model(null, null, false, null, "", null, true);
         importConf = SosImportConfiguration.Factory.newInstance();
         new Step7ModelHandler().handleModel(stepModel, importConf);
-        Assert.assertThat(
-                importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
-                Is.is(true));
+        assertThat(importConf.getCsvMetadata().getObservationCollector().getIgnoreColumnCountMismatch(),
+                is(true));
     }
 
 }

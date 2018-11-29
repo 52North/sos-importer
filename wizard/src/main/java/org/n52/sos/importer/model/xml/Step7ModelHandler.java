@@ -32,6 +32,7 @@ import org.n52.sos.importer.Constants.ImportStrategy;
 import org.n52.sos.importer.model.Step7Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.x52North.sensorweb.sos.importer.x05.ImporterDocument.Importer;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key;
 import org.x52North.sensorweb.sos.importer.x05.KeyDocument.Key.Enum;
 import org.x52North.sensorweb.sos.importer.x05.MetadataDocument.Metadata;
@@ -74,7 +75,7 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
         if (stepModel.getVersion() != null && !stepModel.getVersion().isEmpty()) {
             sosMeta.setVersion(stepModel.getVersion());
         }
-        addImportStrategy(stepModel.getImportStrategy(), sosImportConf);
+        addImportStrategy(stepModel.getImportStrategy(), sosMeta);
         if (!stepModel.getImportStrategy().equals(ImportStrategy.SingleObservation)) {
             addTimeoutBuffer(stepModel.getSendBuffer(), sosImportConf);
             addHunkSize(stepModel.getHunkSize(), sosImportConf);
@@ -104,21 +105,25 @@ public class Step7ModelHandler implements ModelHandler<Step7Model> {
     }
 
     private void addImportStrategy(final ImportStrategy importStrategy,
-            final SosImportConfiguration sosImportConf) {
-        String importer = "";
+            final SosMetadata sosMeta) {
+        String importerClass = "";
         switch (importStrategy) {
             case ResultHandling:
-                importer = "org.n52.sos.importer.feeder.importer.ResultHandlingImporter";
+                importerClass = "org.n52.sos.importer.feeder.importer.ResultHandlingImporter";
                 break;
             case SweArrayObservationWithSplitExtension:
-                importer = "org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter";
+                importerClass = "org.n52.sos.importer.feeder.importer.SweArrayObservationWithSplitExtensionImporter";
                 break;
             case SingleObservation:
             default:
-                importer = "org.n52.sos.importer.feeder.importer.SingleObservationImporter";
+                importerClass = "org.n52.sos.importer.feeder.importer.SingleObservationImporter";
                 break;
         }
-        sosImportConf.getSosMetadata().addNewImporter().setStringValue(importer);
+        Importer importer = sosMeta.getImporter();
+        if (importer == null) {
+            importer = sosMeta.addNewImporter();
+        }
+        importer.setStringValue(importerClass);
     }
 
     private void addAdditionalMetadata(final SosImportConfiguration sosImportConf,
