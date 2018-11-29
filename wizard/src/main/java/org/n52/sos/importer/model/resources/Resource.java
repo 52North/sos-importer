@@ -58,14 +58,15 @@ public abstract class Resource extends Component {
 
     private static final Logger LOG = LoggerFactory.getLogger(Resource.class);
 
-    private TableElement tableElement;
-    private String name;
-    private URI uri;
-    private String uriPrefix;
-    private TableElement[] relatedCols;
-    private String concatString;
-    private boolean useNameAfterPrefixAsURI;
     private boolean generated;
+    private boolean useNameAfterPrefixAsURI;
+    private String concatString;
+    private String name;
+    private String uriPrefix;
+    private String xmlId = null;
+    private TableElement tableElement;
+    private TableElement[] relatedCols;
+    private URI uri;
 
     /**
      * <p>Setter for the field <code>name</code>.</p>
@@ -108,7 +109,7 @@ public abstract class Resource extends Component {
      *
      * @return should be xml:ID valid
      */
-    public abstract String XML_PREFIX();
+    public abstract String getXMLPrefix();
 
     /**
      * <p>getTypeName.</p>
@@ -237,7 +238,10 @@ public abstract class Resource extends Component {
     public abstract Resource forThis(Cell measuredValuePosition);
 
     public String getXMLId() {
-        return XML_PREFIX() + hashCode();
+        if (xmlId == null) {
+            xmlId = String.valueOf(hashCode());
+        }
+        return getXMLPrefix() + xmlId;
     }
 
     @Override
@@ -246,7 +250,7 @@ public abstract class Resource extends Component {
             return " " + getTableElement();
         }
         if (getName() != null) {
-            return " \"" + getName() + "\"";
+            return " \"" + getName() + "\" [" + getXMLId() + "]";
         }
         return "";
     }

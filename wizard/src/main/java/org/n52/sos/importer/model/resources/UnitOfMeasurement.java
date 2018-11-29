@@ -109,7 +109,7 @@ public class UnitOfMeasurement extends Resource {
     }
 
     @Override
-    public String XML_PREFIX() {
+    public String getXMLPrefix() {
         return "uom";
     }
 }

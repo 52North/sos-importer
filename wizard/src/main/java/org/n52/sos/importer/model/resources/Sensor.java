@@ -110,7 +110,7 @@ public class Sensor extends Resource {
     }
 
     @Override
-    public String XML_PREFIX() {
+    public String getXMLPrefix() {
         return "sensor";
     }
 }

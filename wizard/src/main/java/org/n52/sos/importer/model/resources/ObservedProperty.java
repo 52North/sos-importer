@@ -111,7 +111,7 @@ public class ObservedProperty extends Resource {
     }
 
     @Override
-    public String XML_PREFIX() {
+    public String getXMLPrefix() {
         return "obsprop";
     }
 }

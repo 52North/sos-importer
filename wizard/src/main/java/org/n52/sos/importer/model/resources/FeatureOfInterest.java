@@ -227,7 +227,7 @@ public class FeatureOfInterest extends Resource implements Comparable<FeatureOfI
     }
 
     @Override
-    public String XML_PREFIX() {
+    public String getXMLPrefix() {
         return "foi";
     }
 

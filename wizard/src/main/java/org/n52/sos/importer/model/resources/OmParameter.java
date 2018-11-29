@@ -47,7 +47,7 @@ public class OmParameter extends Resource {
     }
 
     @Override
-    public String XML_PREFIX() {
+    public String getXMLPrefix() {
         return "omparameter";
     }
 
