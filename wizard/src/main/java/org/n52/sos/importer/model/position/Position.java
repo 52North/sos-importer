@@ -39,6 +39,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
+ *
+ * Is group optional or mandatory?
+ * optional, because it's used to link values spread over various columns
  */
 public class Position extends Combination {
 
@@ -49,11 +52,6 @@ public class Position extends Combination {
         COORD_1,
         COORD_2
     }
-
-    private static final String FROM = " from ";
-    private static final String REMOVE = "Remove ";
-    private static final String TO = " to ";
-    private static final String ADD = "Add ";
 
     private static final Logger LOG = LoggerFactory.getLogger(Position.class);
 
@@ -76,14 +74,12 @@ public class Position extends Combination {
     }
 
     public void addCoordinate(PositionComponent coordinate) {
-        if (getGroup() != null) {
-            if (coordinate != null) {
-                if (coordinates.containsKey(coordinate.getId())) {
-                    coordinates.remove(coordinate.getId());
-                }
-                coordinates.put(coordinate.getId(), coordinate);
-                LOG.info(ADD + coordinate + TO + this);
+        if (coordinate != null) {
+            if (coordinates.containsKey(coordinate.getId())) {
+                coordinates.remove(coordinate.getId());
             }
+            coordinates.put(coordinate.getId(), coordinate);
+            LOG.info("Add {} {} to {}", coordinate.getId(), coordinate.getValue(), this);
         }
     }
 
@@ -98,9 +94,9 @@ public class Position extends Combination {
     public void setEPSGCode(final EPSGCode newEpsgCode) {
         if (getGroup() != null) {
             if (newEpsgCode != null) {
-                LOG.info(ADD + newEpsgCode + TO + this);
+                LOG.info("Add {} to {}", newEpsgCode, this);
             } else {
-                LOG.info(REMOVE + epsgCode + FROM + this);
+                LOG.info("Remove {} from {}", epsgCode, this);
             }
         }
         epsgCode = newEpsgCode;
