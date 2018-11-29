@@ -63,7 +63,7 @@ public abstract class Resource extends Component {
     private String concatString;
     private String name;
     private String uriPrefix;
-    private String xmlId = null;
+    private String xmlId;
     private TableElement tableElement;
     private TableElement[] relatedCols;
     private URI uri;

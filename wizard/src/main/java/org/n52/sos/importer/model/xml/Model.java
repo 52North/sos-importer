@@ -293,10 +293,11 @@ public class Model {
                     .append(System.currentTimeMillis())
                     .append(".xml")
                     .toString();
-            logger.error("Failed configuration stored in temporary file '{}'.", tempConfigurationFileName);
             try (FileWriterWithEncoding fwwe = new FileWriterWithEncoding(tempConfigurationFileName, "UTF-8")) {
                 fwwe.write(doc.xmlText());
+                logger.error("Failed configuration stored in temporary file '{}'.", tempConfigurationFileName);
             } catch (IOException e) {
+                logger.error("Exception thrown.", e);
             }
             return false;
         }
