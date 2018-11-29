@@ -896,7 +896,7 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="ObservationCollector"
-        default="org.n52.sos.importer.feeder.DefaultCsvCollector">
+        default="org.n52.sos.importer.feeder.collector.DefaultCsvCollector">
         <xs:annotation>
             <xs:documentation>
                 The class that MUST be used for processing the data file. The
