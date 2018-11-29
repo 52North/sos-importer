@@ -41,6 +41,9 @@ import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
 import org.apache.xmlbeans.XmlException;
+import org.n52.sos.importer.feeder.tasks.FeedingTask;
+import org.n52.sos.importer.feeder.tasks.MultiFeederTask;
+import org.n52.sos.importer.feeder.tasks.ScheduledFeedingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

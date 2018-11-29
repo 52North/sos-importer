@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.tasks;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -39,6 +39,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.xmlbeans.XmlException;
+import org.n52.sos.importer.feeder.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

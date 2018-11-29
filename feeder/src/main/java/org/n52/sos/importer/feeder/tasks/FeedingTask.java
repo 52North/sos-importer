@@ -26,7 +26,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer.feeder;
+package org.n52.sos.importer.feeder.tasks;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +42,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlException;
+import org.n52.sos.importer.feeder.Application;
+import org.n52.sos.importer.feeder.Configuration;
+import org.n52.sos.importer.feeder.DataFile;
+import org.n52.sos.importer.feeder.Feeder;
 import org.n52.sos.importer.feeder.model.Timestamp;
 import org.n52.sos.importer.feeder.util.FileHelper;
 import org.n52.sos.importer.feeder.util.web.FtpClient;
