@@ -28,6 +28,9 @@
  */
 package org.n52.sos.importer.model.xml;
 
+import java.util.Optional;
+
+import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.model.Step6cModel;
 import org.n52.sos.importer.model.position.Position.Id;
 import org.n52.sos.importer.model.resources.FeatureOfInterest;
@@ -106,15 +109,14 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         logger.trace("addToFeatureOfInterestElement()");
         // Get Foi by foi.getXMLId()
         final String xmlId = foi.getXMLId();
-        FeatureOfInterestType foiXB;
-        foiXB = getFoiByXmlId(xmlId, sosImportConf);
+        Optional<FeatureOfInterestType> foiXB = getFoiByXmlId(xmlId, sosImportConf);
         Position posXB;
         // is foi generated or manual input
         if (foi.isGenerated()) {
             GeneratedSpatialResourceType foiGSRT = null;
-            if (foiXB.getResource() != null &&
-                    foiXB.getResource() instanceof GeneratedSpatialResourceType) {
-                foiGSRT = (GeneratedSpatialResourceType) foiXB.getResource();
+            if (foiXB.isPresent() && foiXB.get().getResource() != null &&
+                    foiXB.get().getResource() instanceof GeneratedSpatialResourceType) {
+                foiGSRT = (GeneratedSpatialResourceType) foiXB.get().getResource();
             } else {
                 logger.error("FeatureOfInterest element not defined correct: '{}'", foiXB.get().xmlText());
                 // TODO how to handle this case?
@@ -124,27 +126,34 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             // Check, if position is already there
             if (posXB == null) {
                 // if not, add a new position
-                foiGSRT.setPosition(getXBPosition(pos));
+                foiGSRT.setPosition(createXBPosition(pos));
             } else {
                 // if yes, update
                 updateXBPosition(posXB, pos);
             }
         } else {
             SpatialResourceType foiSRT = null;
-            if (foiXB.getResource() != null &&
-                    foiXB.getResource() instanceof SpatialResourceType) {
-                foiSRT = (SpatialResourceType) foiXB.getResource();
+            if (foiXB.isPresent() && foiXB.get().getResource() != null &&
+                    foiXB.get().getResource() instanceof SpatialResourceType) {
+                foiSRT = (SpatialResourceType) foiXB.get().getResource();
             } else {
-                logger.error(FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT +
-                        foiXB.xmlText());
-                // TODO how to handle this case?
-                return;
+                // Case: feature of interest completely generated from user input
+                if (!sosImportConf.isSetAdditionalMetadata()) {
+                    sosImportConf.addNewAdditionalMetadata();
+                }
+                FeatureOfInterestType foiXb = sosImportConf.getAdditionalMetadata().addNewFeatureOfInterest();
+                foiSRT = (SpatialResourceType) foiXb.addNewResource().
+                        substitute(Constants.QNAME_MANUAL_SPATIAL_RESOURCE,
+                                SpatialResourceType.type);
+                foiSRT.addNewURI().setStringValue(foi.getURI().toASCIIString());
+                foiSRT.setName(foi.getName());
+                foiSRT.setID(foi.getXMLId());
             }
             posXB = foiSRT.getPosition();
             // Check, if position is already there
             if (posXB == null) {
                 // if not, add a new position
-                foiSRT.setPosition(getXBPosition(pos));
+                foiSRT.setPosition(createXBPosition(pos));
             } else {
                 // if yes, update
                 updateXBPosition(posXB, pos);
@@ -159,7 +168,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
      *          <code>xmlId</code> or<br>
      *          <code>null</code> if the element is not found.
      */
-    private FeatureOfInterestType getFoiByXmlId(final String xmlId,
+    private Optional<FeatureOfInterestType> getFoiByXmlId(final String xmlId,
             final SosImportConfiguration sosImportConf) {
         logger.trace("getFoiByXmlId('{}'),...)", xmlId);
         // get all feature of interests from additional metadata element
@@ -177,7 +186,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                                 foiRes.getID().equalsIgnoreCase(xmlId)) {
                             logger.debug("foi found");
                             // return if found
-                            return foi;
+                            return Optional.of(foi);
                         } else {
                             logger.debug("foiRes has wrong id");
                         }
@@ -191,7 +200,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         } else {
             logger.debug("no AdditionalMetadata element found");
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -243,7 +252,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             // new foi -> new position
             foiPos = addiMeta.addNewFOIPosition();
             foiPos.addNewURI().setStringValue(name);
-            foiPos.setPosition(getXBPosition(pos));
+            foiPos.setPosition(createXBPosition(pos));
             if (logger.isDebugEnabled()) {
                 logger.debug("New foi pos added: '{}'", foiPos.xmlText());
             }
@@ -256,9 +265,9 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         }
     }
 
-    private Position getXBPosition(
+    private Position createXBPosition(
             final org.n52.sos.importer.model.position.Position position) {
-        logger.trace("\t\t\tgetXBPosition()");
+        logger.trace("\t\t\tcreateXBPosition()");
         final Position posXB = Position.Factory.newInstance();
         /*
          *  EPSG_CODE

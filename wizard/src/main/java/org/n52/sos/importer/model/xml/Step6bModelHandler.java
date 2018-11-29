@@ -103,7 +103,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         }
         mVColumn = Helper.getColumnById(mVColumnID, sosImportConf);
         // add resource to model
-        if (addRelatedResource(res, mVColumn, addiMeta)) {
+        if (addOrUpdateRelatedResource(res, mVColumn, addiMeta)) {
             logger.info("Related resource updated/added: '{}[{}]'", res, res.getXMLId());
         }
     }
@@ -113,7 +113,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
      * measure value column having id <code>mVColumnID</code>.
      * @param res the related <code>Resource</code>
      */
-    private boolean addRelatedResource(final Resource res, final Column mVColumn, final AdditionalMetadata addiMeta) {
+    private boolean addOrUpdateRelatedResource(Resource res, Column mVColumn, AdditionalMetadata addiMeta) {
         logger.trace("\t\taddRelatedResource()");
         /*
          *  ADD FEATURE_OF_INTEREST
@@ -121,41 +121,39 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         if (res instanceof org.n52.sos.importer.model.resources.FeatureOfInterest) {
             final org.n52.sos.importer.model.resources.FeatureOfInterest foi =
                     (org.n52.sos.importer.model.resources.FeatureOfInterest) res;
-            return addRelatedFOI(foi, mVColumn, addiMeta);
+            return addOrUpdateRelatedFOI(foi, mVColumn, addiMeta);
             /*
              *  ADD OBSERVED_PROPERTY
              */
         } else if (res instanceof org.n52.sos.importer.model.resources.ObservedProperty) {
             final org.n52.sos.importer.model.resources.ObservedProperty obsProp =
                     (org.n52.sos.importer.model.resources.ObservedProperty) res;
-            return addRelatedObservedProperty(obsProp, mVColumn, addiMeta);
+            return addOrUpdateRelatedObservedProperty(obsProp, mVColumn, addiMeta);
             /*
              *  ADD SENSOR
              */
         } else if (res instanceof org.n52.sos.importer.model.resources.Sensor) {
             final org.n52.sos.importer.model.resources.Sensor sensor =
                     (org.n52.sos.importer.model.resources.Sensor) res;
-            return addRelatedSensor(sensor, mVColumn, addiMeta);
+            return addOrUpdateRelatedSensor(sensor, mVColumn, addiMeta);
             /*
              *  ADD UNIT_OF_MEASUREMENT
              */
         } else if (res instanceof org.n52.sos.importer.model.resources.UnitOfMeasurement) {
             final org.n52.sos.importer.model.resources.UnitOfMeasurement uOM =
                     (org.n52.sos.importer.model.resources.UnitOfMeasurement) res;
-            return addRelatedUOM(uOM, mVColumn, addiMeta);
+            return addOrUpdateRelatedUOM(uOM, mVColumn, addiMeta);
         }
         return false;
     }
 
-    private boolean addRelatedFOI(final FeatureOfInterest foi,
+    private boolean addOrUpdateRelatedFOI(final FeatureOfInterest foi,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
         logger.trace("\t\taddRelatedFOI()");
 
         FeatureOfInterestType foiXB = null;
         final FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
-        org.n52.sos.importer.model.position.Position pos;
-        Position posXB = null;
 
         if (foisXB != null && foisXB.length > 0) {
 
@@ -172,70 +170,9 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             foiXB = addiMeta.addNewFeatureOfInterest();
         }
         if (foi.isGenerated()) {
-            /*
-             * GENERATED
-             */
-            GeneratedSpatialResourceType foiGRT = null;
-            if (foiXB.getResource() instanceof GeneratedResourceType) {
-                foiGRT = (GeneratedSpatialResourceType) foiXB.getResource();
-            }
-            if (foiGRT == null) {
-                foiGRT = (GeneratedSpatialResourceType) foiXB.addNewResource().
-                        substitute(Constants.QNAME_GENERATED_SPATIAL_RESOURCE,
-                                GeneratedSpatialResourceType.type);
-            }
-            foiGRT.setID(foi.getXMLId());
-            URI uri = foiGRT.getURI();
-            if (uri == null) {
-                uri = foiGRT.addNewURI();
-            }
-            uri.setUseAsPrefix(foi.isUseNameAfterPrefixAsURI());
-            if (foi.isUseNameAfterPrefixAsURI()) {
-                uri.setStringValue(foi.getUriPrefix());
-            }
-            foiGRT.setConcatString(foi.getConcatString());
-            final org.n52.sos.importer.model.table.Column[] relCols =
-                    (org.n52.sos.importer.model.table.Column[]) foi.getRelatedCols();
-            final int[] numbers = new int[relCols.length];
-            for (int i = 0; i < relCols.length; i++) {
-                final org.n52.sos.importer.model.table.Column c = relCols[i];
-                numbers[i] = c.getNumber();
-            }
-            foiGRT.setNumberArray(numbers);
-            // add position to FOI
-            pos = foi.getPosition();
-            posXB = foiGRT.getPosition();
-            if (posXB == null) {
-                posXB = foiGRT.addNewPosition();
-            }
-            fillXBPosition(posXB, pos);
+            addOrUpdateGeneratedFeatureOfInterest(foi, foiXB);
         } else {
-            /*
-             * MANUAL
-             */
-            SpatialResourceType foiSRT = null;
-            if (foiXB.getResource() instanceof SpatialResourceType) {
-                foiSRT = (SpatialResourceType) foiXB.getResource();
-            }
-            if (foiSRT == null) {
-                foiSRT = (SpatialResourceType) foiXB.addNewResource().
-                        substitute(Constants.QNAME_MANUAL_SPATIAL_RESOURCE,
-                                SpatialResourceType.type);
-            }
-            foiSRT.setName(foi.getName());
-            foiSRT.setID(foi.getXMLId());
-            URI uri = foiSRT.getURI();
-            if (uri == null) {
-                uri = foiSRT.addNewURI();
-            }
-            uri.setStringValue(foi.getURIString());
-            // add position to FOI
-            pos = foi.getPosition();
-            posXB = foiSRT.getPosition();
-            if (posXB == null) {
-                posXB = foiSRT.addNewPosition();
-            }
-            fillXBPosition(posXB, pos);
+            addOrUpdateManualFeatureOfInterest(foi, foiXB);
         }
         /*
          * the FOI is in the model.
@@ -250,6 +187,95 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         }
         relatedFOI = mVColumn.getRelatedFOI();
         return isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
+    }
+
+    protected void addOrUpdateManualFeatureOfInterest(final FeatureOfInterest foi, FeatureOfInterestType foiXB) {
+        org.n52.sos.importer.model.position.Position pos;
+        Position posXB;
+        /*
+         * MANUAL
+         */
+        logger.trace("\t\t\tadding manual foi");
+        SpatialResourceType foiSRT = null;
+        if (foiXB.getResource() instanceof SpatialResourceType) {
+            foiSRT = (SpatialResourceType) foiXB.getResource();
+        }
+        if (foiSRT == null) {
+            foiSRT = (SpatialResourceType) foiXB.addNewResource().
+                    substitute(Constants.QNAME_MANUAL_SPATIAL_RESOURCE,
+                            SpatialResourceType.type);
+        }
+        if (foiSRT.getName() == null || foiSRT.getName().isEmpty() || !foiSRT.getName().equals(foi.getName())) {
+            logger.debug("Updated name of foi: '{}' -> '{}'", foiSRT.getName(), foi.getName());
+            foiSRT.setName(foi.getName());
+        }
+        if (foiSRT.getID() == null || foiSRT.getID().isEmpty() || !foiSRT.getID().equals(foi.getXMLId())) {
+            logger.debug("Updated xml reference id of foi: '{}' -> '{}'", foiSRT.getID(), foi.getXMLId());
+            foiSRT.setID(foi.getXMLId());
+        }
+        URI uri = foiSRT.getURI();
+        if (uri == null) {
+            uri = foiSRT.addNewURI();
+        }
+        if (uri.getStringValue() == null || uri.getStringValue().isEmpty() ||
+                !uri.getStringValue().equals(foi.getURIString())) {
+            logger.debug("Updated URI of foi: '{}' -> '{}'", uri.getStringValue(), foi.getURIString());
+            uri.setStringValue(foi.getURIString());
+        }
+        // add position to FOI
+        pos = foi.getPosition();
+        posXB = foiSRT.getPosition();
+        if (posXB == null) {
+            posXB = foiSRT.addNewPosition();
+        }
+        if (pos == null) {
+            logger.debug("Feature position is null: skip filling.");
+            return;
+        }
+        fillXBPosition(posXB, pos);
+    }
+
+    protected void addOrUpdateGeneratedFeatureOfInterest(final FeatureOfInterest foi, FeatureOfInterestType foiXB) {
+        org.n52.sos.importer.model.position.Position pos;
+        Position posXB;
+        /*
+         * GENERATED
+         */
+        logger.trace("\t\t\tadding generated foi");
+        GeneratedSpatialResourceType foiGRT = null;
+        if (foiXB.getResource() instanceof GeneratedResourceType) {
+            foiGRT = (GeneratedSpatialResourceType) foiXB.getResource();
+        }
+        if (foiGRT == null) {
+            foiGRT = (GeneratedSpatialResourceType) foiXB.addNewResource().
+                    substitute(Constants.QNAME_GENERATED_SPATIAL_RESOURCE,
+                            GeneratedSpatialResourceType.type);
+        }
+        foiGRT.setID(foi.getXMLId());
+        URI uri = foiGRT.getURI();
+        if (uri == null) {
+            uri = foiGRT.addNewURI();
+        }
+        uri.setUseAsPrefix(foi.isUseNameAfterPrefixAsURI());
+        if (foi.isUseNameAfterPrefixAsURI()) {
+            uri.setStringValue(foi.getUriPrefix());
+        }
+        foiGRT.setConcatString(foi.getConcatString());
+        final org.n52.sos.importer.model.table.Column[] relCols =
+                (org.n52.sos.importer.model.table.Column[]) foi.getRelatedCols();
+        final int[] numbers = new int[relCols.length];
+        for (int i = 0; i < relCols.length; i++) {
+            final org.n52.sos.importer.model.table.Column c = relCols[i];
+            numbers[i] = c.getNumber();
+        }
+        foiGRT.setNumberArray(numbers);
+        // add position to FOI
+        pos = foi.getPosition();
+        posXB = foiGRT.getPosition();
+        if (posXB == null) {
+            posXB = foiGRT.addNewPosition();
+        }
+        fillXBPosition(posXB, pos);
     }
 
     private void fillXBPosition(final Position posXB,
@@ -311,7 +337,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         return null;
     }
 
-    private boolean addRelatedObservedProperty(
+    private boolean addOrUpdateRelatedObservedProperty(
             final org.n52.sos.importer.model.resources.ObservedProperty obsProp,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
@@ -400,7 +426,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         return isIdOfObservedPropertyMatching(relatedObsProp, obsProp.getXMLId());
     }
 
-    private boolean addRelatedSensor(
+    private boolean addOrUpdateRelatedSensor(
             final org.n52.sos.importer.model.resources.Sensor sensor,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
@@ -492,7 +518,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         return Helper.isIdOfRelatedSensorMatching(relatedSensor, sensor.getXMLId());
     }
 
-    private boolean addRelatedUOM(
+    private boolean addOrUpdateRelatedUOM(
             final org.n52.sos.importer.model.resources.UnitOfMeasurement uOM,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
