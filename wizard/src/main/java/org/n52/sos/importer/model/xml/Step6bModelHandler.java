@@ -74,9 +74,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
     @Override
     public void handleModel(final Step6bModel stepModel,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("handleModel()");
-        }
+        logger.trace("handleModel()");
         /*
          *  LOCAL FIELDS
          */
@@ -93,31 +91,20 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
          */
         mV = stepModel.getMeasuredValue();
         res = stepModel.getResource();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Measured value: \"" +
-                    mV + "\"; Resource: \"" +
-                    res + "\"");
-        }
+        logger.debug("Measured value: '{}'; Resource: '{}'", mV, res);
         if (mV != null && mV.getTableElement() != null) {
             mVColumnID = Helper.getColumnIdFromTableElement(mV.getTableElement());
-            if (logger.isDebugEnabled()) {
-                logger.debug("Column ID of measured value: " + mVColumnID);
-            }
+            logger.debug("Column ID of measured value: {}", mVColumnID);
         }
         addiMeta = sosImportConf.getAdditionalMetadata();
         if (addiMeta == null) {
             addiMeta = sosImportConf.addNewAdditionalMetadata();
-            if (logger.isDebugEnabled()) {
-                logger.debug("added new AddtionalMetadata element");
-            }
+            logger.debug("added new AddtionalMetadata element");
         }
         mVColumn = Helper.getColumnById(mVColumnID, sosImportConf);
         // add resource to model
         if (addRelatedResource(res, mVColumn, addiMeta)) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Related resource updated/added: "
-                        + res + "[" + res.getXMLId() + "]");
-            }
+            logger.info("Related resource updated/added: '{}[{}]'", res, res.getXMLId());
         }
     }
 
@@ -127,9 +114,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
      * @param res the related <code>Resource</code>
      */
     private boolean addRelatedResource(final Resource res, final Column mVColumn, final AdditionalMetadata addiMeta) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\taddRelatedResource()");
-        }
+        logger.trace("\t\taddRelatedResource()");
         /*
          *  ADD FEATURE_OF_INTEREST
          */
@@ -165,14 +150,10 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
     private boolean addRelatedFOI(final FeatureOfInterest foi,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\taddRelatedFOI()");
-        }
+        logger.trace("\t\taddRelatedFOI()");
 
         FeatureOfInterestType foiXB = null;
         final FeatureOfInterestType[] foisXB = addiMeta.getFeatureOfInterestArray();
-        RelatedFOI relatedFOI;
-        boolean addNew;
         org.n52.sos.importer.model.position.Position pos;
         Position posXB = null;
 
@@ -258,15 +239,14 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
         }
         /*
          * the FOI is in the model.
-         * Next is to link measure value column to this entity by its URI
+         * Next is to link measured value column to this entity by its XML id
          */
-        relatedFOI = mVColumn.getRelatedFOI();
-        addNew = !isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
+        RelatedFOI relatedFOI = mVColumn.getRelatedFOI();
+        boolean addNew = !isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
         if (addNew) {
             mVColumn.addNewRelatedFOI().setIdRef(foi.getXMLId());
-            if (logger.isDebugEnabled()) {
-                logger.debug("Added new related FOI element");
-            }
+            logger.debug("Added new related FOI element to column #{} with id '{}'",
+                    mVColumn.getNumber(), foi.getXMLId());
         }
         relatedFOI = mVColumn.getRelatedFOI();
         return isIdOfRelatedFOIMatching(relatedFOI, foi.getXMLId());
@@ -274,18 +254,13 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
 
     private void fillXBPosition(final Position posXB,
             final org.n52.sos.importer.model.position.Position pos) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\t\taddOrUpdatePosition()");
-        }
+        logger.trace("\t\t\t\taddOrUpdatePosition()");
         if (pos == null || posXB == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("One position is null: skip filling: pos? " + pos
-                        + "; posXB? " + posXB);
-            }
+            logger.debug("One position is null: skip filling: pos? {}; posXB? {}", pos, posXB);
             return;
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("BEFORE: pos: " + pos + "; posXB: " + posXB);
+            logger.debug("BEFORE: pos: {}; posXB: {}", pos, posXB);
         }
         if (pos.getGroup() != null && !pos.getGroup().equalsIgnoreCase("")) {
             /*
@@ -324,9 +299,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
                 coordinate.setUnit(axis.getUnit().toString());
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("AFTER: posXB: " + posXB);
-        }
+        logger.debug("AFTER: posXB: {}", posXB);
     }
 
     private Coordinate getCoordinateByAxisAbbreviation(String abbreviation, Position posXB) {
@@ -342,9 +315,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             final org.n52.sos.importer.model.resources.ObservedProperty obsProp,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\taddRelatedObservedProperty()");
-        }
+        logger.trace("\t\taddRelatedObservedProperty()");
 
         ObservedPropertyType obsPropXB = null;
         final ObservedPropertyType[] obsPropsXB = addiMeta.getObservedPropertyArray();
@@ -433,9 +404,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             final org.n52.sos.importer.model.resources.Sensor sensor,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\taddRelatedSensor()");
-        }
+        logger.trace("\t\t\taddRelatedSensor()");
 
         SensorType sensorXB = null;
         final SensorType[] sensorsXB = addiMeta.getSensorArray();
@@ -527,9 +496,7 @@ public class Step6bModelHandler implements ModelHandler<Step6bModel> {
             final org.n52.sos.importer.model.resources.UnitOfMeasurement uOM,
             final Column mVColumn,
             final AdditionalMetadata addiMeta) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\taddRelatedUOM()");
-        }
+        logger.trace("\t\t\taddRelatedUOM()");
 
         UnitOfMeasurementType uOMXB = null;
         final UnitOfMeasurementType[] uOMsXB = addiMeta.getUnitOfMeasurementArray();

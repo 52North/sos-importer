@@ -45,7 +45,8 @@ import org.x52North.sensorweb.sos.importer.x05.RelatedUnitOfMeasurementDocument.
 import org.x52North.sensorweb.sos.importer.x05.SosImportConfigurationDocument.SosImportConfiguration;
 
 /**
- * During this step, the relations between resource columns and the measured
+ * During this step, the relations between resource columns (feature of interest,
+ * observed property, unit of measurement or sensor) and the measured
  * value column are saved.
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>

@@ -70,16 +70,12 @@ import org.x52North.sensorweb.sos.importer.x05.SpatialResourceType;
 public class Step6cModelHandler implements ModelHandler<Step6cModel> {
 
     private static final String XB_POS = "; XB pos: ";
-    private static final String FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT =
-            "FeatureOfInterest element not defined correct: ";
     private static final Logger logger = LoggerFactory.getLogger(Step6cModelHandler.class);
 
     @Override
     public void handleModel(final Step6cModel stepModel,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("handleModel()");
-        }
+        logger.trace("handleModel()");
         FeatureOfInterest foi;
         TableElement tabE = null;
         org.n52.sos.importer.model.position.Position pos;
@@ -107,9 +103,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             final FeatureOfInterest foi,
             final org.n52.sos.importer.model.position.Position pos,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("addToFeatureOfInterestElement()");
-        }
+        logger.trace("addToFeatureOfInterestElement()");
         // Get Foi by foi.getXMLId()
         final String xmlId = foi.getXMLId();
         FeatureOfInterestType foiXB;
@@ -122,8 +116,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                     foiXB.getResource() instanceof GeneratedSpatialResourceType) {
                 foiGSRT = (GeneratedSpatialResourceType) foiXB.getResource();
             } else {
-                logger.error(FEATURE_OF_INTEREST_ELEMENT_NOT_DEFINED_CORRECT +
-                        foiXB.xmlText());
+                logger.error("FeatureOfInterest element not defined correct: '{}'", foiXB.get().xmlText());
                 // TODO how to handle this case?
                 return;
             }
@@ -168,9 +161,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
      */
     private FeatureOfInterestType getFoiByXmlId(final String xmlId,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("getFoiByXmlId(" + xmlId + ",...)");
-        }
+        logger.trace("getFoiByXmlId('{}'),...)", xmlId);
         // get all feature of interests from additional metadata element
         final AdditionalMetadata addiMeta = sosImportConf.getAdditionalMetadata();
         if (addiMeta != null) {
@@ -184,22 +175,20 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                         if (foiRes.getID() != null &&
                                 !foiRes.getID().equalsIgnoreCase("") &&
                                 foiRes.getID().equalsIgnoreCase(xmlId)) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("foi found");
-                            }
+                            logger.debug("foi found");
                             // return if found
                             return foi;
-                        } else if (logger.isDebugEnabled()) {
+                        } else {
                             logger.debug("foiRes has wrong id");
                         }
-                    } else if (logger.isDebugEnabled()) {
+                    } else {
                         logger.debug("foi has no resource defined");
                     }
                 }
-            } else if (logger.isDebugEnabled()) {
+            } else {
                 logger.debug("no fois found in AdditionalMetadata element");
             }
-        } else if (logger.isDebugEnabled()) {
+        } else {
             logger.debug("no AdditionalMetadata element found");
         }
         return null;
@@ -214,9 +203,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
     private void addToFoiPositionsElement(final FeatureOfInterest foi,
             final org.n52.sos.importer.model.position.Position pos,
             final SosImportConfiguration sosImportConf) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("addToFoiPositionsElement()");
-        }
+        logger.trace("addToFoiPositionsElement()");
         FOIPosition[] foiPositions;
         FOIPosition foiPos = null;
         AdditionalMetadata addiMeta;
@@ -234,9 +221,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
         if (addiMeta == null) {
             addiMeta = sosImportConf.addNewAdditionalMetadata();
             addNewMeta = true;
-            if (logger.isDebugEnabled()) {
-                logger.debug("New AdditionalMetadata element created");
-            }
+            logger.debug("New AdditionalMetadata element created");
         }
         if (!addNewMeta) {
             foiPositions = addiMeta.getFOIPositionArray();
@@ -247,7 +232,7 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
                         addNewFoi = false;
                         foiPos = foiPosition;
                         if (logger.isDebugEnabled()) {
-                            logger.debug("foi pos found: " + foiPos.xmlText());
+                            logger.debug("foi pos found: '{}'", foiPos.xmlText());
                         }
                     }
                 }
@@ -260,22 +245,20 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             foiPos.addNewURI().setStringValue(name);
             foiPos.setPosition(getXBPosition(pos));
             if (logger.isDebugEnabled()) {
-                logger.debug("New foi pos added: " + foiPos.xmlText());
+                logger.debug("New foi pos added: '{}'", foiPos.xmlText());
             }
             // foi is there, update position
         } else {
             updateXBPosition(foiPos.getPosition(), pos);
             if (logger.isDebugEnabled()) {
-                logger.debug("foi pos updated: " + foiPos.xmlText());
+                logger.debug("foi pos updated: '{}'", foiPos.xmlText());
             }
         }
     }
 
     private Position getXBPosition(
             final org.n52.sos.importer.model.position.Position position) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\tgetXBPosition()");
-        }
+        logger.trace("\t\t\tgetXBPosition()");
         final Position posXB = Position.Factory.newInstance();
         /*
          *  EPSG_CODE
@@ -294,17 +277,15 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             coordinate.setUnit(axis.getUnit().toString());
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("XB pos created from model pos. Model Pos: " +
-                    position.toString() + XB_POS + posXB.xmlText());
+            logger.debug("XB pos created from model pos. Model Pos: '{}'; XB pos: '{}'",
+                    position.toString(), posXB.xmlText());
         }
         return posXB;
     }
 
     private void updateXBPosition(final Position posXB,
             final org.n52.sos.importer.model.position.Position pos) {
-        if (logger.isTraceEnabled()) {
-            logger.trace("\t\t\tupdateXBPosition()");
-        }
+        logger.trace("\t\t\tupdateXBPosition()");
         if (posXB == null || pos == null) {
             logger.error("at least one parameter is null but MUST NOT: pos? {}; posXB? {}", pos, posXB);
             return;
@@ -324,14 +305,16 @@ public class Step6cModelHandler implements ModelHandler<Step6cModel> {
             Coordinate coordinate = getCoordinateByAxisAbbreviation(axis.getAbbreviation(), posXB);
             if (coordinate == null) {
                 coordinate = posXB.addNewCoordinate();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Added new Coordinate for axis {} element to Position element",
-                            axis.getAbbreviation());
-                }
+                logger.debug("Added new Coordinate for axis '{}' element to Position element",
+                        axis.getAbbreviation());
             }
             coordinate.setDoubleValue(pos.getCoordinate(Id.values()[i]).getValue());
             coordinate.setAxisAbbreviation(axis.getAbbreviation());
             coordinate.setUnit(axis.getUnit().toString());
+            logger.debug("Coordinate[value='{}',unit='{}',axisAbbrev='{}']",
+                    coordinate.getDoubleValue(),
+                    coordinate.getUnit(),
+                    coordinate.getAxisAbbreviation());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("XB pos updated from model pos. Model Pos: {} {}{}",
