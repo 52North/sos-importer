@@ -33,6 +33,9 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -696,14 +699,29 @@ public class ArcticSeaSosClient implements SosClient {
             }
         }
 
-        omObservation.setIdentifier(
+        omObservation.setIdentifier(hashSha256(
                 insertObservation.getResultTime().toEpochSeconds() +
                 insertObservation.getPhenomenonTime().toEpochSeconds() +
                 insertObservation.getObservedPropertyURI().toString() +
                 insertObservation.getFeatureOfInterestURI().toString() +
-                insertObservation.getSensorURI().toString());
+                insertObservation.getSensorURI().toString()));
 
         return Arrays.asList(omObservation);
+    }
+
+    private String hashSha256(String string) {
+        try {
+            byte[] bytes = MessageDigest.getInstance("SHA-256")
+                    .digest(string.getBytes(StandardCharsets.UTF_8));
+            StringBuffer sb = new StringBuffer(64);
+            for (byte b : bytes) {
+                sb.append(String.format("%02x:", b));
+            }
+            return sb.toString().substring(0, sb.length()-1);
+        } catch (NoSuchAlgorithmException e) {
+            // LOG.error("Algorithm SHA-2546 not supported, hence returning original value reduced to 250 characters");
+            return string.substring(0, 250);
+        }
     }
 
     private MultiObservationValues<SweDataArray> createSweArrayObservationValue(TimeSeries timeSeries) {
