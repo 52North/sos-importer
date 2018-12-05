@@ -58,7 +58,7 @@ public class ScheduledFeedingTask extends TimerTask {
     private static final String EXCEPTION_THROWN = "Exception thrown: {}";
     private static final String PROPERTIES_FILE_EXTENSION = ".properties";
     private static final String LAST_FEED_FILE = "lastFeedFile";
-    private static File lastUsedDataFile;
+    private static File LAST_USED_DATA_FILE;
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledFeedingTask.class);
     private static final Lock ONE_FEEDER_LOCK = new ReentrantLock(true);
@@ -77,7 +77,7 @@ public class ScheduledFeedingTask extends TimerTask {
     public void run() {
         LOG.trace("run()");
         File datafile;
-        // used to sync access to lastUsedDataFile and to not have more than one feeder at a time.
+        // used to sync access to LAST_USED_DATA_FILE and to not have more than one feeder at a time.
         ONE_FEEDER_LOCK.lock();
         try {
             /*
@@ -89,22 +89,22 @@ public class ScheduledFeedingTask extends TimerTask {
              */
             // if file is a directory, get latest from file list
             if (file.isDirectory()) {
-                final ArrayList<File> filesToFeed = new ArrayList<>();
+                ArrayList<File> filesToFeed = new ArrayList<>();
                 getLastFeedFile();
                 if (getLastUsedDataFile() != null) {
                     filesToFeed.add(getLastUsedDataFile());
                 }
                 addNewerFiles(filesToFeed);
-                for (final File fileToFeed : filesToFeed) {
+                for (File fileToFeed : filesToFeed) {
                     LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
                         new FeedingTask(configuration, fileToFeed).feedData();
                         setLastUsedDataFile(fileToFeed);
                         saveLastFeedFile();
                         LOG.info("Finished feeding file {}.", fileToFeed.getName());
-                    } catch (final InvalidColumnCountException iae) {
+                    } catch (InvalidColumnCountException iae) {
                         // Exception is already logged -> nothing to do
-                    } catch (final JavaApiBugJDL6203387Exception e) {
+                    } catch (JavaApiBugJDL6203387Exception e) {
                         // Exception is already logged -> nothing to do
                     }
                 }
@@ -117,9 +117,9 @@ public class ScheduledFeedingTask extends TimerTask {
                         periodInMinutes,
                         periodInMinutes > 1 ? "s" : "");
             }
-        } catch (final InvalidColumnCountException | JavaApiBugJDL6203387Exception e) {
+        } catch (InvalidColumnCountException | JavaApiBugJDL6203387Exception e) {
             // Exception is already logged -> nothing to do
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOG.error("Exception catched. Switch logging to debug for more details: {}", e.getMessage());
             LOG.debug("StackTrace:", e);
         } finally {
@@ -160,7 +160,7 @@ public class ScheduledFeedingTask extends TimerTask {
     }
 
     private void saveLastFeedFile() {
-        final Properties prop = new Properties();
+        Properties prop = new Properties();
         prop.put(LAST_FEED_FILE, getLastUsedDataFile().getAbsolutePath());
         try (FileWriterWithEncoding fw = new FileWriterWithEncoding(
                     FileHelper.getHome().getAbsolutePath() + File.separator +
@@ -169,13 +169,13 @@ public class ScheduledFeedingTask extends TimerTask {
                 Configuration.DEFAULT_CHARSET)) {
             prop.store(fw, null);
             LOG.info("Saved last used data file: {}", getLastUsedDataFile().getName());
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOG.error(EXCEPTION_THROWN, e.getMessage(), e);
         }
     }
 
     private void getLastFeedFile() {
-        final Properties prop = new Properties();
+        Properties prop = new Properties();
         String lastFeedFilePropertiesPath = FileHelper.getHome().getAbsolutePath() + File.separator +
                 FileHelper.cleanPathToCreateFileName(configuration.getConfigFile().getAbsolutePath()) +
                 PROPERTIES_FILE_EXTENSION;
@@ -184,15 +184,15 @@ public class ScheduledFeedingTask extends TimerTask {
             try (Reader fr = new InputStreamReader(
                     new FileInputStream(lastFeedPropertiesFile), Configuration.DEFAULT_CHARSET)) {
                 prop.load(fr);
-            } catch (final IOException e) {
+            } catch (IOException e) {
                 // only on DEBUG because it is not a problem if this file does not exist
                 LOG.debug(EXCEPTION_THROWN, e.getMessage(), e);
             }
-            final String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
+            String lastFeedFileName = prop.getProperty(LAST_FEED_FILE);
             if (lastFeedFileName == null) {
                 return;
             }
-            final File lastFeedFile = new File(lastFeedFileName);
+            File lastFeedFile = new File(lastFeedFileName);
             if (lastFeedFile.canRead()) {
                 setLastUsedDataFile(lastFeedFile);
             } else {
@@ -204,11 +204,11 @@ public class ScheduledFeedingTask extends TimerTask {
     }
 
     private static synchronized File getLastUsedDataFile() {
-        return lastUsedDataFile;
+        return LAST_USED_DATA_FILE;
     }
 
     private static synchronized void setLastUsedDataFile(File lastUsedDataFile) {
-        ScheduledFeedingTask.lastUsedDataFile = lastUsedDataFile;
+        ScheduledFeedingTask.LAST_USED_DATA_FILE = lastUsedDataFile;
     }
 
 

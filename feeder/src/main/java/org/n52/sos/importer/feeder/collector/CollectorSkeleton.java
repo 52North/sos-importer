@@ -188,9 +188,10 @@ public abstract class CollectorSkeleton implements Collector {
     protected InsertObservation[] getInsertObservationsForOneLine(String[] line) {
         final ArrayList<InsertObservation> result = new ArrayList<>(line.length);
         int[] measuredValueColumnIds = dataFile.getMeasuredValueColumnIds();
+        int index = 1;
         for (int measureValueColumn : measuredValueColumnIds) {
             LOG.debug("Parsing values for measured value column #{}/{}",
-                    measureValueColumn,
+                    index++,
                     measuredValueColumnIds.length);
             try {
                 final InsertObservation io = getInsertObservationForMeasuredValue(measureValueColumn, line);
