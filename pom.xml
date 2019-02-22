@@ -98,6 +98,8 @@
         <importer.xml.binding.version>0.2</importer.xml.binding.version>
         <geotools.version>9.5</geotools.version>
         <project.url>https://github.com/52North/sos-importer</project.url>
+        <java.source.version>1.8</java.source.version>
+        <java.target.version>1.8</java.target.version>
     </properties>
     <dependencyManagement>
         <dependencies>
