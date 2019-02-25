@@ -878,15 +878,28 @@ public final class Configuration {
     }
 
     /**
+     * Returns the group id of the first position group found in
+     * <code>CsvMetadata.ColumnAssignments.Column[]</code>
+     * @return a <code>{@link java.lang.String String}</code>
+     */
+    public String getFirstPositionGroup() {
+        return getFirstGroup(Type.POSITION);
+    }
+
+    /**
      * Returns the group id of the first date time group found in
      * <code>CsvMetadata.ColumnAssignments.Column[]</code>
      * @return a <code>{@link java.lang.String String}</code>
      */
     public String getFirstDateTimeGroup() {
-        LOG.trace("getFirstDateTimeGroup()");
+        return getFirstGroup(Type.DATE_TIME);
+    }
+
+    public String getFirstGroup(Enum type) {
+        LOG.trace("getFirstGroup()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column col : cols) {
-            if (col.getType().equals(Type.DATE_TIME)){
+            if (col.getType().equals(type)){
                 // it's DATE_TIME -> get group id from metadata[]
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
                     for (final Metadata m : col.getMetadataArray()) {

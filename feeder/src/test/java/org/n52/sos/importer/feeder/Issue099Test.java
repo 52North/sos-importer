@@ -28,12 +28,22 @@
  */
 package org.n52.sos.importer.feeder;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+
+import org.apache.xmlbeans.XmlException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.n52.oxf.OXFException;
 import org.n52.oxf.ows.ExceptionReport;
 import org.n52.oxf.sos.adapter.ISOSRequestBuilder.Binding;
 import org.n52.oxf.sos.adapter.wrapper.SosWrapperFactory;
+import org.n52.sos.importer.feeder.model.Position;
 
 public class Issue099Test {
 
@@ -44,6 +54,31 @@ public class Issue099Test {
         } catch (NoSuchMethodError e) {
             Assert.fail("NoSuchMethodError still happening: " + e.getLocalizedMessage());
         }
+    }
+
+
+    @Test
+    public void getPositionShouldReturnValidPosition() throws XmlException, IOException, ParseException {
+        Configuration configuration = new Configuration("src/test/resources/issue-099/config-2.xml");
+        Position position = configuration.getPosition("A",
+                new String[] { "4326", "52.0", "42.0", "timestamp", "value"});
+        assertThat(position, notNullValue());
+        assertThat(position.getEpsgCode(), is(4326));
+        assertThat(position.getLatitude(), is(52.0));
+        assertThat(position.getLongitude(), is(42.0));
+    }
+
+    @Test
+    public void getFoiForColumnShouldReturnValidFoiWithPosition() throws XmlException, IOException, ParseException {
+        Configuration configuration = new Configuration("src/test/resources/issue-099/config-2.xml");
+        DataFile dataFile = new DataFile(configuration, new File("src/test/resources/issue-099/data.csv"));
+        Position position = dataFile.getFoiForColumn(3,
+                new String[] { "4326", "51.141977", "7.369473", "805", "property", "uom", "1970-01-01T11:00:00", "1"})
+                .getPosition();
+        assertThat(position, notNullValue());
+        assertThat(position.getEpsgCode(), is(4326));
+        assertThat(position.getLatitude(), is(51.141977));
+        assertThat(position.getLongitude(), is(7.369473));
     }
 
 }
