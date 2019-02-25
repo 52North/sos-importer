@@ -125,7 +125,7 @@ public final class Configuration {
 
     public static HashMap<String, Boolean> EPSG_EASTING_FIRST_MAP = null;
     static {
-        EPSG_EASTING_FIRST_MAP = new HashMap<String, Boolean>();
+        EPSG_EASTING_FIRST_MAP = new HashMap<>();
         EPSG_EASTING_FIRST_MAP.put("default", false);
         EPSG_EASTING_FIRST_MAP.put("4326",false);
         EPSG_EASTING_FIRST_MAP.put("4979",false);
@@ -159,7 +159,7 @@ public final class Configuration {
                 SosImportConfigurationDocument.Factory.parse(configFile);
         // Create an XmlOptions instance and set the error listener.
         final XmlOptions validateOptions = new XmlOptions();
-        final ArrayList<XmlError> errorList = new ArrayList<XmlError>();
+        final ArrayList<XmlError> errorList = new ArrayList<>();
         validateOptions.setErrorListener(errorList);
 
         // Validate the XML.
@@ -222,7 +222,7 @@ public final class Configuration {
                 importConf.getDataFile().isSetLocalFile() &&
                 !importConf.getDataFile().getLocalFile().getPath().equalsIgnoreCase("") ) {
             // Path for LocalFile set to something, so return a new File using is
-            return new File(importConf.getDataFile().getLocalFile().getPath());
+            return new File(importConf.getDataFile().getLocalFile().getPath().trim());
         }
         LOG.error("DataFile.LocalFile.Path not set!");
         return null;
@@ -357,7 +357,7 @@ public final class Configuration {
     public int[] getMeasureValueColumnIds() {
         LOG.trace("getMeasureValueColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.MEASURED_VALUE)){
             	LOG.debug("Found measured value column: {}", column.getNumber());
@@ -378,7 +378,7 @@ public final class Configuration {
     public int[] getIgnoredColumnIds() {
     	LOG.trace("getIgnoredColumnIds()");
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Integer> ids = new ArrayList<Integer>();
+        final ArrayList<Integer> ids = new ArrayList<>();
         for (final Column column : cols) {
             if (column.getType().equals(Type.DO_NOT_EXPORT)){
             	LOG.debug("Found ignored column: {}", column.getNumber());
@@ -441,25 +441,20 @@ public final class Configuration {
         return -1;
     }
 
-    /**
-     *
-     * @param mvColumnId
-     * @return
-     */
-    public Column getColumnById(final int mvColumnId) {
-        LOG.trace(String.format("getColumnById(%d)",mvColumnId));
+    public Column getColumnById(final int columnId) {
+        LOG.trace(String.format("getColumnById(%d)", columnId));
         final Column[] cols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
         for (final Column column : cols) {
-            if (column.getNumber() == mvColumnId) {
+            if (column.getNumber() == columnId) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format("Column found for id %d",
-                            mvColumnId));
+                            columnId));
                 }
                 return column;
             }
         }
         LOG.error(String.format("CsvMetadat.ColumnAssignments not set properly. Could not find Column for id %d.",
-                mvColumnId));
+                columnId));
         return null;
     }
 
@@ -854,14 +849,14 @@ public final class Configuration {
      * @return a <code>Column[]</code> having all the group id
      *             <code>group</code> <b>or</or><br />
      */
-    public Column[] getAllColumnsForGroup(final String group, final Enum t) {
+    public Column[] getAllColumnsForGroup(final String group, final Enum type) {
         LOG.trace("getAllColumnsForGroup()");
         if (group == null) { return null; }
         final Column[] allCols = importConf.getCsvMetadata().getColumnAssignments().getColumnArray();
-        final ArrayList<Column> tmpResultSet = new ArrayList<Column>(allCols.length);
+        final ArrayList<Column> tmpResultSet = new ArrayList<>(allCols.length);
         for (final Column col : allCols) {
             if (col.getType() != null &&
-                    col.getType().equals(t) ) {
+                    col.getType().equals(type) ) {
                 // we have a position or dateTime
                 // check the Metadata kvps
                 if (col.getMetadataArray() != null && col.getMetadataArray().length > 0) {
@@ -1028,7 +1023,7 @@ public final class Configuration {
     }
 
     public boolean isOneMvColumn() {
-        return (getMeasureValueColumnIds().length == 1);
+        return getMeasureValueColumnIds().length == 1;
     }
 
     public String getSosVersion() {

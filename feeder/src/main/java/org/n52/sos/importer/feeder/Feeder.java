@@ -68,7 +68,7 @@ public final class Feeder {
 				// data file
 				if (args.length == 2) {
 					// Case: one time feeding with defined configuration
-					new Thread(new OneTimeFeeder(c),OneTimeFeeder.class.getSimpleName()).start();
+					new Thread(new OneTimeFeeder(c), OneTimeFeeder.class.getSimpleName()).start();
 				}
 				else if (args.length == 4) {
 					// Case: one time feeding with file override or period with file from configuration

@@ -28,7 +28,9 @@
  */
 package org.n52.sos.importer.feeder;
 
-import static org.n52.sos.importer.feeder.Configuration.*;
+import static org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_BOOLEAN;
+import static org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_COUNT;
+import static org.n52.sos.importer.feeder.Configuration.SOS_OBSERVATION_TYPE_TEXT;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -54,11 +56,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.opengis.sos.x10.InsertObservationResponseDocument;
-import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
-import net.opengis.sos.x10.RegisterSensorResponseDocument;
-import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.oxf.OXFException;
@@ -100,6 +97,11 @@ import org.n52.sos.importer.feeder.model.requests.RegisterSensor;
 import org.n52.sos.importer.feeder.util.DescriptionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.opengis.sos.x10.InsertObservationResponseDocument;
+import net.opengis.sos.x10.InsertObservationResponseDocument.InsertObservationResponse;
+import net.opengis.sos.x10.RegisterSensorResponseDocument;
+import net.opengis.swes.x20.InsertSensorResponseDocument;
 
 /**
  * Handles connection to SOS and provides an easy to use interface.<br />
@@ -170,7 +172,7 @@ public final class SensorObservationService {
 	private int sweArrayObservationTimeOutBuffer = 25000;
 
 	private int sampleSizeDivisor;
-	
+
 	private String skipReason = "";
 
 	public SensorObservationService(final Configuration config) throws ExceptionReport, OXFException, MalformedURLException {
@@ -201,10 +203,10 @@ public final class SensorObservationService {
 		} else {
 			sensorDescBuilder = new DescriptionBuilder();
 		}
-		failedInsertObservations = new LinkedList<InsertObservation>();
-		registeredSensors = new LinkedList<String>();
+		failedInsertObservations = new LinkedList<>();
+		registeredSensors = new LinkedList<>();
 		if (sosVersion.equals("2.0.0")) {
-			offerings = new HashMap<String, String>();
+			offerings = new HashMap<>();
 		}
 		if (config.getHunkSize() > 0) {
 			hunkSize = config.getHunkSize();
@@ -305,7 +307,7 @@ public final class SensorObservationService {
 					LOG.debug(Feeder.heapSizeInformation());
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
-							(lineCounter+1),
+							lineCounter+1,
 							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
 							Arrays.toString(values)));
 					skipReason = "";
@@ -353,7 +355,7 @@ public final class SensorObservationService {
 					}
 				} else {
 					LOG.trace(String.format("\t\tSkip CSV line #%d; %s; Raw data: '%s'",
-							(lineCounter+1),
+							lineCounter+1,
 							!skipReason.isEmpty()?String.format("Reason: %s", skipReason):"",
 							Arrays.toString(values)));
 					skipReason = "";
@@ -365,7 +367,7 @@ public final class SensorObservationService {
 				if (isSampleBasedDataFile) {
 					LOG.debug("SampleFile: {}; isInSample: {}; lineCounter: {}; sampleStartLine: {}; sampleSize: {}; sampleDataOffset: {}",
 						isSampleBasedDataFile, isInSample, lineCounter, sampleStartLine, sampleSize, sampleDataOffset);
-					
+
 					if (isInSample && isSampleEndReached(sampleStartLine)) {
 						isInSample = false;
 						LOG.debug("Current sample left");
@@ -475,7 +477,7 @@ public final class SensorObservationService {
 		int skipLimit = cr.getSkipLimit();
 		while (skipCount > skipLimit) {
 			values = cr.readNext();
-			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",(lineCounter+1),restoreLine(values)));
+			LOG.trace(String.format("\t\tSkip CSV line #%d: %s",lineCounter+1,restoreLine(values)));
 			skipCount--;
 			lineCounter++;
 		}
@@ -550,9 +552,9 @@ public final class SensorObservationService {
 			LOG.error("Method called with bad arguments: values: {}, mVColumns: {}", Arrays.toString(values), Arrays.toString(mVColumns));
 			return null;
 		}
-		final ArrayList<InsertObservation> result = new ArrayList<InsertObservation>(mVColumns.length);
+		final ArrayList<InsertObservation> result = new ArrayList<>(mVColumns.length);
 		for (final int mVColumn : mVColumns) {
-			LOG.debug("Parsing measured value column {}",mVColumn);
+			LOG.debug("Parsing measured value column {}", mVColumn);
 			try {
 				final InsertObservation io = getInsertObservationForColumnIdFromValues(mVColumn,values,df);
 				if (io != null) {
@@ -697,7 +699,7 @@ public final class SensorObservationService {
 
 	private Map<ObservedProperty, String> getUnitsOfMeasurement(final String sensorURI,
 			final InsertObservation[] ios) {
-		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<ObservedProperty, String>(ios.length);
+		final Map<ObservedProperty,String> unitsOfMeasurement = new HashMap<>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
 			{
@@ -710,7 +712,7 @@ public final class SensorObservationService {
 	}
 
 	private Map<ObservedProperty, String> getMeasuredValueTypes(final String sensorURI, final InsertObservation[] ios) {
-		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<ObservedProperty, String>(ios.length);
+		final Map<ObservedProperty,String> measuredValueTypes = new HashMap<>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
 			{
@@ -723,7 +725,7 @@ public final class SensorObservationService {
 	}
 
 	private Collection<ObservedProperty> getObservedProperties(final String sensorURI, final InsertObservation[] ios) {
-		final Set<ObservedProperty> observedProperties = new HashSet<ObservedProperty>(ios.length);
+		final Set<ObservedProperty> observedProperties = new HashSet<>(ios.length);
 		for (final InsertObservation insertObservation : ios) {
 			if (insertObservation.getSensorURI().equalsIgnoreCase(sensorURI))
 			{
@@ -1026,7 +1028,7 @@ public final class SensorObservationService {
 		if (rs == null || rs.getObservedProperties() == null || rs.getObservedProperties().size() < 1) {
 			return Collections.emptyList();
 		}
-		final Set<String> tmp = new HashSet<String>(rs.getObservedProperties().size());
+		final Set<String> tmp = new HashSet<>(rs.getObservedProperties().size());
 		for (final ObservedProperty obsProp : rs.getObservedProperties()) {
 			final String measuredValueType = rs.getMeasuredValueType(obsProp);
 			if (measuredValueType != null) {
@@ -1058,7 +1060,7 @@ public final class SensorObservationService {
 		if (observedProperties == null || observedProperties.size() < 1) {
 			return Collections.emptyList();
 		}
-		final Collection<String> result = new ArrayList<String>(observedProperties.size());
+		final Collection<String> result = new ArrayList<>(observedProperties.size());
 		for (final ObservedProperty observedProperty : observedProperties) {
 			result.add(observedProperty.getUri());
 		}

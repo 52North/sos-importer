@@ -266,7 +266,7 @@ public class DataFile {
 					mvColumnId,
 					Arrays.toString(values)));
 		// check for foi column and return new sensor
-		FeatureOfInterest foi = getFoiColumn(mvColumnId,values);
+		FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
 		if (foi == null) {
 			LOG.debug(String.format("Could not find foi column for column id %d",
 					mvColumnId));
@@ -850,7 +850,7 @@ public class DataFile {
 	private int[] getGregorianCalendarFields(final String pattern) {
 		LOG.trace(String.format("getGregorianCalendarFields(%s)",
 					pattern));
-		final ArrayList<Integer> fields = new ArrayList<Integer>();
+		final ArrayList<Integer> fields = new ArrayList<>();
 		if (pattern.indexOf("y") != -1) {
     		fields.add(GregorianCalendar.YEAR);
 		}
@@ -860,13 +860,13 @@ public class DataFile {
     		fields.add(GregorianCalendar.MONTH);
     	}
     	if (pattern.indexOf("d") != -1 ||
-    			(pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
+    			pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1) {
     		fields.add(GregorianCalendar.DAY_OF_MONTH);
     	}
     	if (pattern.indexOf("H") != -1 ||
     			pattern.indexOf("k") != -1 ||
-    			((pattern.indexOf("K") != -1 ||
-    			(pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
+    			pattern.indexOf("K") != -1 ||
+    			pattern.indexOf("h") != -1 && pattern.indexOf("a") != -1) {
     		fields.add(GregorianCalendar.HOUR_OF_DAY);
     	}
     	if (pattern.indexOf("m") != -1) {
