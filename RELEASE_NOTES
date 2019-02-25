@@ -2,6 +2,12 @@ For a complete Release Notes overview visit
 
   https://wiki.52north.org/bin/view/SensorWeb/SosImporter#Road_map
 
+Release Notes for SOS-Importer 0.4.2
+====================================
+ Bugfixes:
+---------
+ * https://github.com/52North/sos-importer/issues/99
+
 Release Notes for SOS-Importer 0.4.1
 ====================================
  Bugfixes:
