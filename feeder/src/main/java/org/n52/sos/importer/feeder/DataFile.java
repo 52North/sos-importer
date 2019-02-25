@@ -125,10 +125,11 @@ public class DataFile {
 		return false;
 	}
 
-	private boolean checkWindowsJavaApiBugJDK6203387(final File file) {
+	private boolean checkWindowsJavaApiBugJDK6203387(File file) {
 		if (isWindows()) {
+		    FileReader fr = null;
 			try {
-				new FileReader(file);
+				fr = new FileReader(file);
 			}
 			catch (final FileNotFoundException fnfe) {
 				// TODO add more language specific versions of this error message
@@ -143,6 +144,14 @@ public class DataFile {
 				{
 					return true;
 				}
+			} finally {
+			    if (fr != null) {
+			        try {
+                        fr.close();
+                    } catch (IOException e) {
+                        LOG.error("Exception thrown", e);
+                    }
+			    }
 			}
 		}
 		return false;
@@ -266,7 +275,7 @@ public class DataFile {
 					mvColumnId,
 					Arrays.toString(values)));
 		// check for foi column and return new sensor
-		FeatureOfInterest foi = getFoiColumn(mvColumnId,values);
+		FeatureOfInterest foi = getFoiColumn(mvColumnId, values);
 		if (foi == null) {
 			LOG.debug(String.format("Could not find foi column for column id %d",
 					mvColumnId));
@@ -784,17 +793,21 @@ public class DataFile {
 		}
 	}
 
-	private FeatureOfInterest getFoiColumn(final int mvColumnId, final String[] values) {
+	private FeatureOfInterest getFoiColumn(int mvColumnId, String[] values) throws ParseException {
 		LOG.trace(String.format("getFoiColumn(%d,%s)",
 					mvColumnId,
 					Arrays.toString(values)));
-		final int i = configuration.getColumnIdForFoi(mvColumnId);
+		int i = configuration.getColumnIdForFoi(mvColumnId);
 		if (i < 0) {
 			// foi is not in the data file -> return null
 			return null;
 		} else {
-			final Position p = configuration.getFoiPosition(values[i]);
-			final FeatureOfInterest s = new FeatureOfInterest(values[i],
+			Position p = configuration.getFoiPosition(values[i]);
+			if (p == null) {
+			    String group = configuration.getFirstPositionGroup();
+			    p = configuration.getPosition(group, values);
+			}
+			FeatureOfInterest s = new FeatureOfInterest(values[i],
 					values[i],
 					p);
 			LOG.debug(String.format("Feature of Interst found in datafile: %s", s));
@@ -850,7 +863,7 @@ public class DataFile {
 	private int[] getGregorianCalendarFields(final String pattern) {
 		LOG.trace(String.format("getGregorianCalendarFields(%s)",
 					pattern));
-		final ArrayList<Integer> fields = new ArrayList<Integer>();
+		final ArrayList<Integer> fields = new ArrayList<>();
 		if (pattern.indexOf("y") != -1) {
     		fields.add(GregorianCalendar.YEAR);
 		}
@@ -860,13 +873,13 @@ public class DataFile {
     		fields.add(GregorianCalendar.MONTH);
     	}
     	if (pattern.indexOf("d") != -1 ||
-    			(pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1)) {
+    			pattern.indexOf("W") != -1 && pattern.indexOf("d") != -1) {
     		fields.add(GregorianCalendar.DAY_OF_MONTH);
     	}
     	if (pattern.indexOf("H") != -1 ||
     			pattern.indexOf("k") != -1 ||
-    			((pattern.indexOf("K") != -1 ||
-    			(pattern.indexOf("h") != -1) && pattern.indexOf("a") != -1))) {
+    			pattern.indexOf("K") != -1 ||
+    			pattern.indexOf("h") != -1 && pattern.indexOf("a") != -1) {
     		fields.add(GregorianCalendar.HOUR_OF_DAY);
     	}
     	if (pattern.indexOf("m") != -1) {
