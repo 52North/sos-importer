@@ -10,7 +10,7 @@
     <groupId>org.n52.sensorweb</groupId>
     <artifactId>52n-sos-importer</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.1</version>
+    <version>0.4.2-SNAPSHOT</version>
     <name>52North SOS-Importer</name>
     <description>52North SOS-Importer - for details see https://wiki.52north.org/bin/view/Sensornet/SosImporter</description>
     <licenses>
@@ -27,7 +27,7 @@
     </modules>
     <scm>
         <connection>scm:git:https://github.com/52North/sos-importer.git</connection>
-        <developerConnection>scm:git:https://github.com/52North/sos-importer.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/52North/sos-importer.git</developerConnection>
         <url>${project.url}</url>
         <tag>v0.4.1</tag>
     </scm>
