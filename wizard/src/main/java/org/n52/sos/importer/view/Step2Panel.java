@@ -337,7 +337,8 @@ public class Step2Panel extends JPanel {
 
     private void addDecimalSeparator(final JPanel csvSettingsPanel, final int gridY) {
         final JLabel decimalSeparatorLabel = new JLabel(Lang.l().step2DecimalSeparator() + " : ");
-        decimalSeparatorCombobox = new JComboBox<>((String[]) Constants.DECIMAL_SEPARATORS.toArray());
+        decimalSeparatorCombobox = new JComboBox<>(Constants.DECIMAL_SEPARATORS.toArray(
+                new String[Constants.DECIMAL_SEPARATORS.size()]));
         decimalSeparatorCombobox.setSelectedIndex(0);
         final JPanel decimalSeparatorPanel = new JPanel();
         decimalSeparatorPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
