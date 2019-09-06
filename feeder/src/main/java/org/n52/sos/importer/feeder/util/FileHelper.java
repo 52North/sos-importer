@@ -33,8 +33,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.n52.sos.importer.feeder.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +66,11 @@ public class FileHelper {
         try {
             LOG.trace("shortenStringViaMD5Hash({})", longString);
             final MessageDigest md5 = MessageDigest.getInstance("MD5");
-            String shortString = DatatypeConverter.printHexBinary(
-                    md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))).toLowerCase();
+            StringBuilder hex = new StringBuilder();
+            for (byte b : md5.digest(longString.getBytes(Configuration.DEFAULT_CHARSET))) {
+                hex.append(String.format("%02x", b));
+            }
+            String shortString = hex.toString();
             LOG.debug("Shortened String '{}' to '{}'", longString, shortString);
             return shortString;
         } catch (final NoSuchAlgorithmException e) {

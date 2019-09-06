@@ -34,11 +34,14 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.xmlbeans.XmlException;
@@ -80,9 +83,9 @@ public class FeedingTask {
         this.config = config;
     }
 
-    public FeedingTask(final Configuration config, final File datafile) {
+    public FeedingTask(final Configuration config, final File fileWithData) {
         this(config);
-        dataFile = new DataFile(config, datafile);
+        dataFile = new DataFile(config, fileWithData);
     }
 
     private DataFile downloadRemoteFile() {
@@ -117,7 +120,6 @@ public class FeedingTask {
         try {
             lock.lock();
 
-            LOG.info("Starting feeding data via configuration '{}' to SOS instance.", config.getAbsolutePath());
             // local or remote
             if (config.isRemoteFile()) {
                 dataFile = downloadRemoteFile();
@@ -190,7 +192,30 @@ public class FeedingTask {
                     }
 
                     // SOS is available and transactional
-                    feeder.importData(dataFile);
+                    // if is directory:
+                    List<DataFile> dataFiles;
+                    if (dataFile.isDirectory()) {
+                        dataFiles = new TaskHelper(config).getFiles(new File(dataFile.getAbsolutePath()))
+                                .parallelStream()
+                                .map(f -> {
+                                    return new DataFile(config, f);
+                                })
+                                .collect(Collectors.toList());
+                    } else {
+                        dataFiles = Collections.singletonList(dataFile);
+                    }
+                    int current = 1;
+                    for (DataFile myDataFile : dataFiles) {
+                        LOG.info("Start feeding file [{}/{}]: '{}' ",
+                                current,
+                                dataFiles.size(),
+                                myDataFile.getAbsolutePath());
+                        feeder.importData(myDataFile);
+                        LOG.info("Finished feeding file [{}/{}]: '{}' ",
+                                current++,
+                                dataFiles.size(),
+                                myDataFile.getAbsolutePath());
+                    }
 
                     // read and log lastUsedTimestamp
                     if (config.isUseLastTimestamp() && timeStampFile != null) {

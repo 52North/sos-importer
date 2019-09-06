@@ -29,12 +29,12 @@
 package org.n52.sos.importer.feeder.tasks;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
@@ -66,17 +66,18 @@ public class ScheduledFeedingTask extends TimerTask {
     private final Configuration configuration;
     private final File file;
     private final int periodInMinutes;
+    private TaskHelper taskHelper;
 
     public ScheduledFeedingTask(Configuration configuration, File file, int periodInMinutes) {
         this.configuration = configuration;
         this.file = file;
         this.periodInMinutes = periodInMinutes;
+        taskHelper = new TaskHelper(configuration);
     }
 
     @Override
     public void run() {
         LOG.trace("run()");
-        File datafile;
         // used to sync access to LAST_USED_DATA_FILE and to not have more than one feeder at a time.
         ONE_FEEDER_LOCK.lock();
         try {
@@ -94,7 +95,22 @@ public class ScheduledFeedingTask extends TimerTask {
                 if (getLastUsedDataFile() != null) {
                     filesToFeed.add(getLastUsedDataFile());
                 }
-                addNewerFiles(filesToFeed);
+                // TODO if last feed file is null: add all (OR only the newest?) files in directory to "filesToFeed"
+                // TODO else: get all files newer than last feed file and add to list "filesToFeed"
+                List<File> files = taskHelper.getFiles(file);
+                for (File fileToCheck : files) {
+                    if (getLastUsedDataFile() == null ||
+                            fileToCheck.lastModified() >= getLastUsedDataFile().lastModified()) {
+                        filesToFeed.add(fileToCheck);
+                    }
+                }
+                if (filesToFeed.size() < 1) {
+                    LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
+                            file.getAbsolutePath(),
+                            getLastUsedDataFile() != null
+                            ? getLastUsedDataFile().getName()
+                                    : "none");
+                }
                 for (File fileToFeed : filesToFeed) {
                     LOG.info("Start feeding file {}", fileToFeed.getName());
                     try {
@@ -109,11 +125,10 @@ public class ScheduledFeedingTask extends TimerTask {
                     }
                 }
             } else {
-                datafile = file;
                 // OneTimeFeeder with file override used not as thread
-                new FeedingTask(configuration, datafile).feedData();
+                new FeedingTask(configuration, file).feedData();
                 LOG.info("Finished feeding file {}. Next run in {} minute{}.",
-                        datafile.getName(),
+                        file.getName(),
                         periodInMinutes,
                         periodInMinutes > 1 ? "s" : "");
             }
@@ -124,38 +139,6 @@ public class ScheduledFeedingTask extends TimerTask {
             LOG.debug("StackTrace:", e);
         } finally {
             ONE_FEEDER_LOCK.unlock();
-        }
-    }
-
-    private void addNewerFiles(final ArrayList<File> filesToFeed) {
-        // TODO if last feed file is null: add all (OR only the newest?) files in directory to list "filesToFeed"
-        // TODO else: get all files newer than last feed file and add to list "filesToFeed"
-        final File[] files = file.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(final File pathname) {
-                return pathname.isFile() &&
-                        pathname.canRead() &&
-                        (configuration.getLocaleFilePattern() != null
-                        ? configuration.getLocaleFilePattern().matcher(pathname.getName()).matches()
-                                : true);
-            }
-        });
-        if (files != null) {
-            for (final File fileToCheck : files) {
-                if (getLastUsedDataFile() == null ||
-                        fileToCheck.lastModified() >= getLastUsedDataFile().lastModified()) {
-                    filesToFeed.add(fileToCheck);
-                }
-            }
-            if (filesToFeed.size() < 1) {
-                LOG.error("No new file found in directory '{}'. Last used file was '{}'.",
-                        file.getAbsolutePath(),
-                        getLastUsedDataFile() != null
-                        ? getLastUsedDataFile().getName()
-                                : "none");
-            }
-        } else {
-            LOG.error("No file found in directory '{}'", file.getAbsolutePath());
         }
     }
 

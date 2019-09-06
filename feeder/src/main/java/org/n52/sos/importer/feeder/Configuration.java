@@ -337,6 +337,7 @@ public class Configuration {
 
         ignorePatterns = getIgnoreLineRegExPatterns();
         validateFeatures();
+        LOG.info("Configuration loaded successfully from: '{}'", configFile.getAbsolutePath());
     }
 
     private void validateFeatures() {
@@ -1436,7 +1437,7 @@ public class Configuration {
         for (Metadata md : column.getMetadataArray()) {
             if (md.getKey().equals(Key.NO_DATA_VALUE)) {
                 if (value.equals(md.getValue())) {
-                    LOG.trace("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
+                    LOG.debug("value '{}' is matching NO_DATA_VALUE '{}'.", value, md.getValue());
                     return true;
                 }
                 return false;

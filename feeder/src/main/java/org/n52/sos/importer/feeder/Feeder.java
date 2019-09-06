@@ -282,7 +282,9 @@ public class Feeder implements FeedingContext {
             log(exception);
         }
         // FIXME implement better handling than logging
-        throw new RuntimeException("Excpetion thrown during feeding -> feeder stopped.");
+        String msg = "Excpetion thrown during feeding -> feeder stopped.";
+        LOG.error(msg);
+        throw new RuntimeException(msg);
     }
 
     protected void handleFailedObservations(List<InsertObservation> failedObservations) {

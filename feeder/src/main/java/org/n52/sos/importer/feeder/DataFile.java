@@ -135,8 +135,9 @@ public class DataFile {
             LOG.error(String.format("File '%s' specified in '%s' does not exist.",
                     dataFile.getAbsolutePath(),
                     configuration.getConfigFile().getAbsolutePath()));
-        } else if (!dataFile.isFile()) {
-            LOG.error(String.format("File '%s' is not a file!",
+            return false;
+        } else if (!dataFile.isFile() && !dataFile.isDirectory()) {
+            LOG.error(String.format("File '%s' is not a file or directory!",
                     dataFile.getAbsolutePath()));
         } else if (!dataFile.canRead()) {
             LOG.error(String.format("File '%s' can not be accessed, please check file permissions!",
@@ -559,7 +560,6 @@ public class DataFile {
             }
             for (Metadata meta : column.getMetadataArray()) {
                 if (meta.getKey().equals(Key.TIME_ZONE)) {
-                    LOG.warn("Using {} is DEPRECATED and will be removed soon!", Key.TIME_ZONE);
                     try {
                         for (String zoneId : TimeZone
                                 .getAvailableIDs(Integer.parseInt(meta.getValue()) * MILLIES_PER_HOUR)) {
@@ -1164,6 +1164,10 @@ public class DataFile {
             }
         }
         return new PhenomenonTime(start, end);
+    }
+
+    public boolean isDirectory() {
+        return dataFile.isDirectory();
     }
 
 }

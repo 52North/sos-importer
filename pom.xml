@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>parent</artifactId>
         <groupId>org.n52</groupId>
         <relativePath />
-        <version>12</version>
+        <version>14</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.n52.sensorweb</groupId>
     <artifactId>52n-sos-importer</artifactId>
     <packaging>pom</packaging>
-    <!-- when updating this version, please update wizard::org.n52.sos.importer.Constants.VERSION, too -->
+    <!--
+      when updating this version,
+      please update wizard::org.n52.sos.importer.Constants.VERSION, too
+    -->
     <version>0.5.0-SNAPSHOT</version>
     <name>52North SOS-Importer</name>
-    <description>52North SOS-Importer - for details see https://52north.org/software/software-projects/sos-importer</description>
+    <description>
+      52North SOS-Importer - for details see
+      https://52north.org/software/software-projects/sos-importer
+    </description>
     <licenses>
         <license>
             <name>GNU General Public License v2.0 only</name>
@@ -28,9 +35,18 @@
         <module>feeder</module>
     </modules>
     <properties>
-        <!-- manual setting -->
+        <version.common-xml>2.5.0</version.common-xml>
+        <version.geotools>20.0</version.geotools>
+        <version.arctic-sea>5.0.0</version.arctic-sea>
+        <version.java>8</version.java>
+        <java.version>${version.java}</java.version>
+        <version.springframework>4.3.12.RELEASE</version.springframework>
+        <version.logback>1.2.3</version.logback>
         <currentYear>2018</currentYear>
         <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+        <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
+        <maven.compiler.source>${version.java}</maven.compiler.source>
+        <maven.compiler.target>${version.java}</maven.compiler.target>
         <currentYearDynamic>${maven.build.timestamp}</currentYearDynamic>
         <timestamp>${maven.build.timestamp}</timestamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,17 +55,8 @@
         <logger.file.maxSize>2M</logger.file.maxSize>
         <!-- keep 7 days' worth of history -->
         <logger.maxHistory>7</logger.maxHistory>
-        <maven.build.timestamp.format>yyyy-MM-dd_HH-mm</maven.build.timestamp.format>
         <mainclass.feeder>org.n52.sos.importer.feeder.Application</mainclass.feeder>
-        <version.common-xml>2.5.0</version.common-xml>
-        <version.geotools>20.0</version.geotools>
-        <version.arctic-sea>5.0.0</version.arctic-sea>
-        <version.java>1.8</version.java>
-        <version.springframework>4.3.12.RELEASE</version.springframework>
         <project.url>https://github.com/52North/sos-importer</project.url>
-        <maven.compiler.source>${version.java}</maven.compiler.source>
-        <maven.compiler.target>${version.java}</maven.compiler.target>
-        <version.logback>1.2.3</version.logback>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/52North/sos-importer.git</connection>
@@ -242,7 +249,8 @@
                 <version>1.0.1</version>
             </dependency>
             <dependency>
-                <!-- keep this version because the newer ones have a bug that breaks the software -->
+                <!-- keep this version because the newer ones have a bug
+                    that breaks the software -->
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
                 <version>1.4.01</version>
@@ -315,10 +323,10 @@
                 <version>1.1.0</version>
             </dependency>
             <dependency>
-	           <groupId>org.mockito</groupId>
-               <artifactId>mockito-core</artifactId>
-               <version>2.23.0</version>
-	           <scope>test</scope>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.0</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.n52.arctic-sea</groupId>
@@ -330,17 +338,17 @@
                         <artifactId>jsr305</artifactId>
                     </exclusion>
                     <exclusion>
-				        <groupId>commons-codec</groupId>
-				        <artifactId>commons-codec</artifactId>
-			        </exclusion>
-			        <exclusion>
-			            <groupId>org.locationtech.jts</groupId>
-			            <artifactId>jts</artifactId>
-			        </exclusion>
-			        <exclusion>
-			            <groupId>org.n52.faroe</groupId>
-			            <artifactId>faroe-annotations</artifactId>
-			        </exclusion>
+                        <groupId>commons-codec</groupId>
+                        <artifactId>commons-codec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.locationtech.jts</groupId>
+                        <artifactId>jts</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.n52.faroe</groupId>
+                        <artifactId>faroe-annotations</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -487,6 +495,21 @@
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
             </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.2.11</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>2.2.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>1.1.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -515,15 +538,6 @@
                             <versionTagPrefix>v</versionTagPrefix>
                         </flowInitContext>
                         <useReleaseProfile>false</useReleaseProfile>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
-                    <configuration>
-                        <source>${version.java}</source>
-                        <target>${version.java}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -574,23 +588,36 @@
                             <java>SLASHSTAR_STYLE</java>
                         </mapping>
                         <licenseMerges>
-                            <licenseMerge>The Apache Software License, Version 2.0|Apache
-                                2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
-                            <licenseMerge>The Apache Software License|Apache Software
-                                License|Apache Software Licenses|Apache License</licenseMerge>
-                            <licenseMerge>GNU General Public License, v2.0|GNU GENERAL PUBLIC
-                                LICENSE Version 2, June 1991|GNU General Public License, Version
-                                2.0|GNU General Public License v2.0 only</licenseMerge>
-                            <licenseMerge>Common Development and Distribution License (CDDL),
-                                version 1.0| Common Development and Distribution License (CDDL)
-                                v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version
+                            <licenseMerge>The Apache Software License,
+                                Version 2.0|Apache 2|Apache License,
+                                Version 2.0|Apache Public License 2.0</licenseMerge>
+                            <licenseMerge>The Apache Software
+                                License|Apache Software License|Apache
+                                Software Licenses|Apache License</licenseMerge>
+                            <licenseMerge>GNU General Public License,
+                                v2.0|GNU GENERAL PUBLIC LICENSE Version
+                                2, June 1991|GNU General Public License,
+                                Version 2.0|GNU General Public License
+                                v2.0 only</licenseMerge>
+                            <licenseMerge>Common Development and
+                                Distribution License (CDDL),
+                                version 1.0|
+                                Common Development and Distribution
+                                License (CDDL)
+                                v1.0|COMMON DEVELOPMENT
+                                AND DISTRIBUTION LICENSE (CDDL), Version
                                 1.0</licenseMerge>
-                            <licenseMerge>GNU Lesser General Public License, version 2.1|LGPL
-                                2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
-                            <licenseMerge>GNU Lesser General Public License|GNU LESSER
+                            <licenseMerge>GNU Lesser General Public
+                                License, version 2.1|LGPL
+                                2.1|GNU LESSER
+                                GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
+                            <licenseMerge>GNU Lesser General Public
+                                License|GNU LESSER
                                 GENERAL PUBLIC LICENSE</licenseMerge>
-                            <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
-                            <licenseMerge>BSD Style License|BSD License|BSD style|BSD style
+                            <licenseMerge>Mozilla Public License version
+                                1.1|MPL 1.1</licenseMerge>
+                            <licenseMerge>BSD Style License|BSD
+                                License|BSD style|BSD style
                                 License|Aduna BSD-style license</licenseMerge>
                         </licenseMerges>
                     </configuration>
@@ -627,9 +654,9 @@
                                     <id>n52-releases</id>
                                 </allowedRepositories>
                             </requireNoRepositories>
-	                       <requireMavenVersion>
-		                      <version>[3.0,4.0)</version>
-	                       </requireMavenVersion>
+                            <requireMavenVersion>
+                                <version>[3.0,4.0)</version>
+                            </requireMavenVersion>
                         </rules>
                     </configuration>
                 </plugin>
@@ -692,8 +719,8 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
                         <configuration>
-                            <!-- no build in release:prepare (takes to long time), so in bad cases
-                                release fails on perform -->
+                            <!-- no build in release:prepare (takes to long
+                                time), so in bad cases release fails on perform -->
                             <preparationGoals>clean</preparationGoals>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
                             <allowTimestampedSnapshots>true</allowTimestampedSnapshots>
@@ -713,23 +740,46 @@
                             <useMissingFile>true</useMissingFile>
                             <!--<fileTemplate>misc/licenses/license-as-csv.ftl</fileTemplate> -->
                             <licenseMerges>
-                                <licenseMerge>The Apache Software License, Version 2.0|Apache
-                                    2|Apache License, Version 2.0|Apache Public License 2.0</licenseMerge>
-                                <licenseMerge>The Apache Software License|Apache Software
-                                    License|Apache Software Licenses|Apache License</licenseMerge>
-                                <licenseMerge>GNU General Public License, v2.0|GNU GENERAL
-                                    PUBLIC LICENSE Version 2, June 1991|GNU General Public License,
-                                    Version 2.0|GNU General Public License v2.0 only</licenseMerge>
-                                <licenseMerge>Common Development and Distribution License
-                                    (CDDL), version 1.0| Common Development and Distribution
-                                    License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE
-                                    (CDDL), Version 1.0</licenseMerge>
-                                <licenseMerge>GNU Lesser General Public License, version
-                                    2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</licenseMerge>
-                                <licenseMerge>GNU Lesser General Public License|GNU LESSER
-                                    GENERAL PUBLIC LICENSE</licenseMerge>
-                                <licenseMerge>Mozilla Public License version 1.1|MPL 1.1</licenseMerge>
-                                <licenseMerge>BSD Style License|BSD License|BSD style|BSD style
+                                <licenseMerge>The Apache Software
+                                    License, Version 2.0|Apache
+                                    2|Apache
+                                    License, Version 2.0|Apache Public
+                                    License 2.0</licenseMerge>
+                                <licenseMerge>The Apache Software
+                                    License|Apache Software
+                                    License|Apache Software
+                                    Licenses|Apache License</licenseMerge>
+                                <licenseMerge>GNU General Public
+                                    License, v2.0|GNU GENERAL
+                                    PUBLIC
+                                    LICENSE Version 2, June 1991|GNU
+                                    General Public License,
+                                    Version
+                                    2.0|GNU General Public License v2.0
+                                    only</licenseMerge>
+                                <licenseMerge>Common Development and
+                                    Distribution License
+                                    (CDDL), version
+                                    1.0| Common Development and
+                                    Distribution
+                                    License (CDDL)
+                                    v1.0|COMMON DEVELOPMENT AND
+                                    DISTRIBUTION LICENSE
+                                    (CDDL), Version
+                                    1.0</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public
+                                    License, version
+                                    2.1|LGPL 2.1|GNU
+                                    LESSER GENERAL PUBLIC LICENSE,
+                                    Version 2.1</licenseMerge>
+                                <licenseMerge>GNU Lesser General Public
+                                    License|GNU LESSER
+                                    GENERAL PUBLIC
+                                    LICENSE</licenseMerge>
+                                <licenseMerge>Mozilla Public License
+                                    version 1.1|MPL 1.1</licenseMerge>
+                                <licenseMerge>BSD Style License|BSD
+                                    License|BSD style|BSD style
                                     License|Aduna BSD-style license</licenseMerge>
                             </licenseMerges>
                             <excludedScopes>test</excludedScopes>

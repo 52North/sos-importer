@@ -60,8 +60,7 @@
     </xs:element>
     <xs:element name="Coordinate">
         <xs:annotation>
-            <xs:documentation>Coordiniate element of a position
-            </xs:documentation>
+            <xs:documentation>Coordinate element of a position</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:simpleContent>

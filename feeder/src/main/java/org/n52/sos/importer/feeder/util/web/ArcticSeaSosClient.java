@@ -710,6 +710,7 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private String hashSha256(String string) {
+        String identifier = string.substring(0, Math.min(250, string.length() - 1));
         try {
             byte[] bytes = MessageDigest.getInstance("SHA-256")
                     .digest(string.getBytes(StandardCharsets.UTF_8));
@@ -717,11 +718,12 @@ public class ArcticSeaSosClient implements SosClient {
             for (byte b : bytes) {
                 sb.append(String.format("%02x:", b));
             }
-            return sb.toString().substring(0, sb.length()-1);
+            identifier = sb.toString().substring(0, sb.length() - 1);
         } catch (NoSuchAlgorithmException e) {
-            // LOG.error("Algorithm SHA-2546 not supported, hence returning original value reduced to 250 characters");
-            return string.substring(0, 250);
+            LOG.error("Algorithm SHA-256 not supported, hence returning original value reduced to 250 characters");
         }
+        LOG.trace("Observation Identifier: input: '{}'; output: '{}'.", string, identifier);
+        return identifier;
     }
 
     private MultiObservationValues<SweDataArray> createSweArrayObservationValue(TimeSeries timeSeries) {
