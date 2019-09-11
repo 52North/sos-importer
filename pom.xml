@@ -37,7 +37,7 @@
     <properties>
         <version.common-xml>2.5.0</version.common-xml>
         <version.geotools>20.0</version.geotools>
-        <version.arctic-sea>5.0.0</version.arctic-sea>
+        <version.arctic-sea>7.1.0</version.arctic-sea>
         <version.java>8</version.java>
         <java.version>${version.java}</java.version>
         <version.springframework>4.3.12.RELEASE</version.springframework>
