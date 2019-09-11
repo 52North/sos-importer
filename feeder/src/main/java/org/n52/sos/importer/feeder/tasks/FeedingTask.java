@@ -151,6 +151,7 @@ public class FeedingTask {
                 } else {
                     feeder = new Feeder();
                 }
+                LOG.info("Feeder class '{}'", feeder.getClass().getName());
                 feeder.init(config);
                 if (!feeder.isSosAvailable()) {
                     LOG.error(String.format("SOS '%s' is not available. Please check the configuration!", sosURL));
