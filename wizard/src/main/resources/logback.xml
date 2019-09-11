@@ -41,6 +41,7 @@
     </appender>
 
     <logger name="org.n52" level="TRACE" />
+    <logger name="ch.qos.logback" level="ERROR" />
 
     <root level="INFO">
         <appender-ref ref="FILE" />

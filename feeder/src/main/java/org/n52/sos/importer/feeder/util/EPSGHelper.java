@@ -61,7 +61,8 @@ public class EPSGHelper {
             CRS.decode(EPSG + epsgCode);
             return true;
         } catch (NoSuchAuthorityCodeException e) {
-            LOG.error("Given EPSG code '{}' not supported!", epsgCode);
+            LOG.error("Given EPSG code '{}' not supported! {}", epsgCode, e.getMessage());
+            LOG.debug(EXCEPTION_THROWN, e);
         } catch (FactoryException e) {
             LOG.error("Error in EPSG code library: '{}'!", e.getMessage());
             LOG.debug(EXCEPTION_THROWN, e);
