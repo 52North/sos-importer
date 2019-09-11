@@ -1,6 +1,5 @@
 language: java
 jdk:
-    - oraclejdk8
     - openjdk8
 install: true
 script: mvn clean install --activate-profiles check --quiet --batch-mode
