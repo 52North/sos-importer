@@ -35,7 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.apache.xmlbeans.XmlException;
 import org.hamcrest.Matchers;
@@ -59,8 +59,8 @@ public class SingleProfileCollectorTest {
         FeedingContext context = new MyFeedingContext();
         collector.setFeedingContext(context);
         DataFile dataFile = new DataFile(configuration, new File("src/test/resources/example-data/example-3-data_profile.csv"));
-        CountDownLatch latch = new CountDownLatch(1);
-        collector.collectObservations(dataFile, latch);
+        Phaser phaser = new Phaser(1);
+        collector.collectObservations(dataFile, phaser);
     }
 
     @Test

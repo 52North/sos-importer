@@ -34,7 +34,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
@@ -72,8 +72,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
     private FeatureOfInterest foi;
 
     @Override
-    public void collectObservations(DataFile dataFile, CountDownLatch latch)
-            throws IOException, ParseException {
+    public void collectObservations(DataFile dataFile, Phaser phaser) throws IOException, ParseException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
             return;
@@ -83,6 +82,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
             return;
         }
         try {
+            phaser.register();
             parser = getCSVReader(dataFile);
             String[] headerLine = new String[0];
             this.dataFile = dataFile;
@@ -115,7 +115,7 @@ public class SingleProfileCollector extends CollectorSkeleton {
                 }
             }
         } finally {
-            latch.countDown();
+            phaser.arriveAndDeregister();
         }
     }
 

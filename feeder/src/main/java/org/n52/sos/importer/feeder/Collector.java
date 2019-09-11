@@ -30,7 +30,7 @@ package org.n52.sos.importer.feeder;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.n52.sos.importer.feeder.model.InsertObservation;
 
@@ -56,13 +56,13 @@ public interface Collector extends FeedingParticipant {
      * method.
      *
      * @param dataFile the {@link DataFile} that contains the data to be collected.
-     * @param latch used to wait for this collector implementation.
-     *          {@link CountDownLatch#countDown()} MUST be called in <code>finally</code>
+     * @param phaser used to wait for this collector implementation.
+     *          {@link Phaser#arriveAndDeregister()} MUST be called in <code>finally</code>
      *          branch.
      * @throws IOException when accessing the dataFile fails.
      * @throws ParseException when interpreting the dataFile content fails.
      */
-    void collectObservations(DataFile dataFile, CountDownLatch latch)
+    void collectObservations(DataFile dataFile, Phaser phaser)
             throws IOException, ParseException;
 
     /**

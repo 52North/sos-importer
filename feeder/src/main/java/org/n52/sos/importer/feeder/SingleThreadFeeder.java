@@ -33,7 +33,7 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
@@ -59,11 +59,13 @@ public class SingleThreadFeeder extends Feeder {
     public void importData(DataFile dataFile)
             throws IOException, XmlException, IllegalArgumentException, ParseException {
         LOG.info("Start importing data via '{}'", this.getClass().getName());
-        CountDownLatch latch = new CountDownLatch(1);
+        Phaser phaser = new Phaser();
+        phaser.register();
         LocalDateTime startImportingData = LocalDateTime.now();
         setExceptions(new ArrayList<>());
         getImporter().startImporting();
-        getCollector().collectObservations(dataFile, latch);
+        getCollector().collectObservations(dataFile, phaser);
+        phaser.arriveAndAwaitAdvance();
         if (getImporter().hasFailedObservations()) {
             handleFailedObservations(getImporter().getFailedObservations());
         }

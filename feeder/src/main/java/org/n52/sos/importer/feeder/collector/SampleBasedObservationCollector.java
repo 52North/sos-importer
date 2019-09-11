@@ -34,7 +34,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -103,7 +103,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
     }
 
     @Override
-    public void collectObservations(DataFile dataFile, CountDownLatch latch) throws IOException, ParseException {
+    public void collectObservations(DataFile dataFile, Phaser phaser) throws IOException, ParseException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
             return;
@@ -113,6 +113,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
             return;
         }
         try {
+            phaser.register();
             parser = getCSVReader(dataFile);
             String[] headerLine = new String[0];
             this.dataFile = dataFile;
@@ -174,7 +175,7 @@ public class SampleBasedObservationCollector extends CollectorSkeleton {
             }
             context.setLastReadLine(lineCounter);
         } finally {
-            latch.countDown();
+            phaser.arriveAndDeregister();
         }
     }
 

@@ -34,7 +34,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 
 import org.n52.shetland.ogc.om.NamedValue;
 import org.n52.sos.importer.feeder.Application;
@@ -64,7 +64,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
     static final Logger LOG = LoggerFactory.getLogger(DefaultCsvCollector.class);
 
     @Override
-    public void collectObservations(DataFile dataFile, CountDownLatch latch)
+    public void collectObservations(DataFile dataFile, Phaser phaser)
             throws IOException {
         if (configuration == null) {
             LOG.error("Configuration not set!");
@@ -75,6 +75,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
             return;
         }
         try {
+            phaser.register();
             parser = getCSVReader(dataFile);
             String[] headerLine = new String[0];
             this.dataFile = dataFile;
@@ -115,7 +116,7 @@ public class DefaultCsvCollector extends CollectorSkeleton {
             }
             context.setLastReadLine(lineCounter);
         } finally {
-            latch.countDown();
+            phaser.arriveAndDeregister();
         }
     }
 
@@ -128,17 +129,17 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         if (configuration.isUseLastTimestamp() && !verifyTimeStamp(resultTime)) {
             return null;
         }
-        LOG.debug("Result Time    : {}", resultTime);
+        LOG.debug("Result Time        : {}", resultTime);
         PhenomenonTime phenomenonTime = null;
         if (configuration.arePhenomenonTimesAvailable(measureValueColumn)) {
             phenomenonTime = dataFile.getPhenomenonTime(measureValueColumn, line);
         } else {
             phenomenonTime = new PhenomenonTime(resultTime);
         }
-        LOG.debug("Phenomenon Time: {}", phenomenonTime);
+        LOG.debug("Phenomenon Time    : {}", phenomenonTime);
         // SENSOR
         Sensor sensor = dataFile.getSensor(measureValueColumn, line);
-        LOG.debug("Sensor: {}", sensor);
+        LOG.debug("Sensor             : {}", sensor);
         // FEATURE OF INTEREST incl. Position
         FeatureOfInterest foi = dataFile.getFoiForColumn(measureValueColumn, line);
         LOG.debug("Feature of Interest: {}", foi);
@@ -147,16 +148,16 @@ public class DefaultCsvCollector extends CollectorSkeleton {
         if (value == null || value.equals(Configuration.SOS_OBSERVATION_TYPE_NO_DATA_VALUE)) {
             return null;
         }
-        LOG.debug("Value: {}", value.toString());
+        LOG.debug("Value              : {}", value.toString());
         // UOM CODE
         UnitOfMeasurement uom = dataFile.getUnitOfMeasurement(measureValueColumn, line);
-        LOG.debug("UomCode: '{}'", uom);
+        LOG.debug("UomCode            : '{}'", uom);
         // OBSERVED_PROPERTY
         ObservedProperty observedProperty = dataFile.getObservedProperty(measureValueColumn, line);
-        LOG.debug("ObservedProperty: {}", observedProperty);
+        LOG.debug("ObservedProperty   : {}", observedProperty);
         // OFFERING
         Offering offer = dataFile.getOffering(sensor);
-        LOG.debug("Offering: {}", offer);
+        LOG.debug("Offering           : {}", offer);
         // OM:PARAMETER
         Optional<List<NamedValue<?>>> omParameter = dataFile.getOmParameters(measureValueColumn, line);
         return new InsertObservation(sensor,

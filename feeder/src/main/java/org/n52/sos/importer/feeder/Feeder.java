@@ -34,10 +34,10 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.xmlbeans.XmlException;
 import org.n52.sos.importer.feeder.model.InsertObservation;
@@ -115,20 +115,14 @@ public class Feeder implements FeedingContext {
     public void importData(DataFile dataFile)
             throws IOException, XmlException, IllegalArgumentException, ParseException {
         LOG.info("Start importing data via '{}'", this.getClass().getName());
-        CountDownLatch latch = new CountDownLatch(1);
         LocalDateTime startImportingData = LocalDateTime.now();
         setExceptions(new ArrayList<>());
-        initCollectorThread(dataFile, latch).start();
+        initCollectorThread(dataFile).start();
         getImporter().startImporting();
-        try {
-            // FIXME is this double synchronization? e.g. latch not required anymore because of phaser
-            latch.await();
-            getCollectorPhaser().arriveAndAwaitAdvance();
-        } catch (InterruptedException e) {
-            log(e);
-        }
+        getCollectorPhaser().awaitAdvance(getCollectorPhaser().arriveAndDeregister());
         try {
             getAdderThreads().shutdown();
+            getAdderThreads().awaitTermination(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             getExceptions().add(e);
         }
@@ -169,12 +163,9 @@ public class Feeder implements FeedingContext {
             @Override
             public void run() {
                 try {
-                    getCollectorPhaser().register();
                     importObservations(insertObservations);
                 } catch (Exception e) {
                     handleExceptionThrownByImporter(e, insertObservations);
-                } finally {
-                    getCollectorPhaser().arriveAndDeregister();
                 }
             }
 
@@ -248,12 +239,12 @@ public class Feeder implements FeedingContext {
         return collectedObservationsCount;
     }
 
-    private Thread initCollectorThread(DataFile dataFile, CountDownLatch latch) {
+    private Thread initCollectorThread(DataFile dataFile) {
         return new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    getCollector().collectObservations(dataFile, latch);
+                    getCollector().collectObservations(dataFile, getCollectorPhaser());
                 } catch (Exception e) {
                     try {
                         getImporter().stopImporting();
