@@ -29,10 +29,12 @@
 package org.n52.sos.importer.view.dateAndTime;
 
 import java.awt.FlowLayout;
+import java.time.ZoneId;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 import org.n52.sos.importer.model.Component;
 import org.n52.sos.importer.model.dateAndTime.DateAndTime;
@@ -51,9 +53,7 @@ public class MissingTimeZonePanel extends MissingDateAndTimePanel {
 
     private JLabel timeZoneLabel;
 
-    private SpinnerNumberModel timeZoneModel = new SpinnerNumberModel(0, -12, 12, 1);
-    private JSpinner timeZoneSpinner = new JSpinner(timeZoneModel);
-
+    private JComboBox<ZoneId> timeZoneDropDown;
     /**
      * <p>Constructor for MissingTimeZonePanel.</p>
      *
@@ -61,11 +61,19 @@ public class MissingTimeZonePanel extends MissingDateAndTimePanel {
      */
     public MissingTimeZonePanel(DateAndTime dateAndTime) {
         super(dateAndTime);
-        timeZoneSpinner.setToolTipText(ToolTips.get(ToolTips.TIME_ZONE));
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
-        this.timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
-        this.add(timeZoneLabel);
-        this.add(timeZoneSpinner);
+        String tooltipText = ToolTips.get(ToolTips.TIME_ZONE);
+        Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
+        ZoneId[] zoneIds = availableZoneIds.stream()
+                .map(z -> ZoneId.of(z))
+                .collect(Collectors.toList())
+                .toArray(new ZoneId[availableZoneIds.size()]);
+        timeZoneDropDown = new JComboBox<>(zoneIds);
+        timeZoneDropDown.setToolTipText(tooltipText);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        timeZoneLabel  = new JLabel(Lang.l().timeZone() + ": ");
+        timeZoneLabel.setToolTipText(tooltipText);
+        add(timeZoneLabel);
+        add(timeZoneDropDown);
     }
 
     @Override

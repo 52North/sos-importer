@@ -30,6 +30,7 @@ package org.n52.sos.importer.test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneOffset;
 
 import org.n52.sos.importer.Constants;
 import org.n52.sos.importer.controller.DateAndTimeController;
@@ -92,7 +93,7 @@ public class Step7TestGLDAS {
 
         final DateAndTime dtm = ModelStore.getInstance().getDateAndTimes().get(0);
         dtm.setSecond(new Second(0));
-        dtm.setTimeZone(new TimeZone(1));
+        dtm.setTimeZone(new TimeZone(ZoneOffset.ofHours(1)));
 
         final Position p = new Position();
         p.setGroup("A");

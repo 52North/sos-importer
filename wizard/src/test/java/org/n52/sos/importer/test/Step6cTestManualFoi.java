@@ -28,6 +28,8 @@
  */
 package org.n52.sos.importer.test;
 
+import java.time.ZoneOffset;
+
 import org.n52.sos.importer.controller.DateAndTimeController;
 import org.n52.sos.importer.controller.MainController;
 import org.n52.sos.importer.controller.Step6cController;
@@ -59,7 +61,7 @@ public class Step6cTestManualFoi {
         final DateAndTimeController dtc = new DateAndTimeController(dtm);
         dtc.assignPattern("dd/MM/yyyy HH:mm", new Column(0, firstLineWithData));
         dtm.setSecond(new Second(0));
-        dtm.setTimeZone(new TimeZone(1));
+        dtm.setTimeZone(new TimeZone(ZoneOffset.ofHours(1)));
 
         final ObservedProperty op = new ObservedProperty();
         op.setName("Temperature");

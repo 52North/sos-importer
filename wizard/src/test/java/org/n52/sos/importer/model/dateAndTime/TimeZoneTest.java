@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2011-2018 52°North Initiative for Geospatial Open Source
+/**
+ * Copyright (C) 2011-2016 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,22 +26,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
  * Public License for more details.
  */
-package org.n52.sos.importer;
+package org.n52.sos.importer.model.dateAndTime;
 
-import org.n52.sos.importer.controller.MainController;
-import org.n52.sos.importer.controller.Step1Controller;
+import static org.junit.Assert.fail;
 
-/**
- * Starts the SOS-Importer
- *
- * @author Raimund Schn&uuml;rer
- * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
- */
-public class Start {
+import org.junit.Test;
 
-    //CHECKSTYLE:OFF
-    public static void main(String[] args) {
-        //CHECKSTYLE:ON
-        MainController.getInstance().setStepController(new Step1Controller());
+public class TimeZoneTest {
+
+    @Test
+    public void continueImplementationHere() throws Exception {
+        fail("continue implementation here: Finish TimeZone class");
     }
+
 }
