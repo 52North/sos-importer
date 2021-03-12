@@ -246,6 +246,8 @@ public final class Application {
             logMessage.append(NEW_LINE_WITH_TABS)
                 .append(heapSizeInformation())
                 .append(NEW_LINE_WITH_TABS)
+                .append(jvmInformation())
+                .append(NEW_LINE_WITH_TABS)
                 .append(operatingSystemInformation());
         } catch (IOException ex) {
             LOG.warn("Error while reading manifest file from application jar file: " + ex.getMessage());
@@ -253,21 +255,41 @@ public final class Application {
         LOG.info(logMessage.toString());
     }
 
+    private static String jvmInformation() {
+        return String.format("java.home: '%s'%sjava.vendor: '%s'%sjava.vendor.url: '%s'%sjava.version: '%s'",
+                System.getProperty("java.home"),
+                NEW_LINE_WITH_TABS,
+                System.getProperty("java.vendor"),
+                NEW_LINE_WITH_TABS,
+                System.getProperty("java.vendor.url"),
+                NEW_LINE_WITH_TABS,
+                System.getProperty("java.version")
+                );
+    }
+
     private static String operatingSystemInformation() {
-        return String.format("os.name: %s; os.arch: %s; os.version: %s",
+        return String.format("os.name: %s%sos.arch: %s%sos.version: %s",
                 System.getProperty("os.name"),
+                NEW_LINE_WITH_TABS,
                 System.getProperty("os.arch"),
-                System.getProperty("os.version"));
+                NEW_LINE_WITH_TABS,
+                System.getProperty("os.version")
+                );
     }
 
     public static String heapSizeInformation() {
         long mb = 1024 * 1024;
         Runtime rt = Runtime.getRuntime();
-        return String.format("HeapSize Information: max: %sMB; total now: %sMB; free now: %sMB; used now: %sMB",
+        return String.format("HeapSize Information:%smax: %sMB%stotal now: %sMB%sfree now: %sMB%sused now: %sMB",
+                NEW_LINE_WITH_TABS,
                 rt.maxMemory() / mb,
+                NEW_LINE_WITH_TABS,
                 rt.totalMemory() / mb,
+                NEW_LINE_WITH_TABS,
                 rt.freeMemory() / mb,
-                (rt.totalMemory() - rt.freeMemory()) / mb);
+                NEW_LINE_WITH_TABS,
+                (rt.totalMemory() - rt.freeMemory()) / mb
+                );
     }
 
     public static Object initObjectByClassName(String className) {
