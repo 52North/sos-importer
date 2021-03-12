@@ -667,7 +667,7 @@
         <repository>
             <id>osgeo</id>
             <name>Open Source Geospatial Foundation Repository</name>
-            <url>http://download.osgeo.org/webdav/geotools/</url>
+            <url>https://repo.osgeo.org/repository/release/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -676,9 +676,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>boundless</id>
-            <name>Boundless, formerly OpenGeo</name>
-            <url>http://repo.boundlessgeo.com/main/</url>
+            <id>osgeo-snapshots</id>
+            <name>OsGeo SNAPSHOTS</name>
+            <url>https://repo.osgeo.org/repository/snapshot/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
