@@ -375,17 +375,17 @@
                                     <mainClass>${mainclass.feeder}</mainClass>
                                     <manifestEntries>
                                         <build-time>${timestamp}</build-time>
-                                        <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>
-                                        <n52-arctic-sea-version>${version.arctic-sea}}</n52-arctic-sea-version>
+                                        <!-- <n52-sos-importer-xmlbeans-version>${importer.xml.binding.version}</n52-sos-importer-xmlbeans-version>-->
+                                        <n52-arctic-sea-version>${version.arctic-sea}</n52-arctic-sea-version>
                                         <n52-common-xml-version>${version.common-xml}</n52-common-xml-version>
-                                        <geotools-version>${version.geotools}}</geotools-version>
+                                        <geotools-version>${version.geotools}</geotools-version>
                                         <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
                                         <Implementation-Vendor>52°North</Implementation-Vendor>
                                         <Implementation-URL>${project.url}</Implementation-URL>
                                         <Implementation-Title>${project.name}</Implementation-Title>
                                         <Implementation-Version>${project.version}</Implementation-Version>
-                                        <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
-                                        <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                        <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                                        <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
                                     </manifestEntries>
                                 </transformer>
                                 <transformer
