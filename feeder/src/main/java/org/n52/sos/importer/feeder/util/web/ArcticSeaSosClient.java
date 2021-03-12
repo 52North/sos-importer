@@ -710,7 +710,9 @@ public class ArcticSeaSosClient implements SosClient {
     }
 
     private String hashSha256(String string) {
-        String identifier = string.substring(0, Math.min(250, string.length() - 1));
+        LOG.trace("Input            : '{}'", string);
+        String identifier = string.substring(0, Math.min(250, string.length()));
+        LOG.trace("Trimmed Input    : '{}'", identifier);
         try {
             byte[] bytes = MessageDigest.getInstance("SHA-256")
                     .digest(string.getBytes(StandardCharsets.UTF_8));
@@ -718,7 +720,9 @@ public class ArcticSeaSosClient implements SosClient {
             for (byte b : bytes) {
                 sb.append(String.format("%02x:", b));
             }
+            LOG.trace("Raw String Buffer: '{}'", sb);
             identifier = sb.toString().substring(0, sb.length() - 1);
+            LOG.trace("Final Identifier : '{}'", identifier);
         } catch (NoSuchAlgorithmException e) {
             LOG.error("Algorithm SHA-256 not supported, hence returning original value reduced to 250 characters");
         }
