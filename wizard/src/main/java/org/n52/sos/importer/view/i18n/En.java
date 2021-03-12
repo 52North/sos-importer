@@ -528,6 +528,11 @@ public class En extends Lang {
     }
 
     @Override
+    public String step2UseLastTimestamp() {
+        return "<html>Should observations be<br> skipped using their timestamp?</html>";
+    }
+
+    @Override
     public String step3Description() {
         return step() + " 3: Choose Metadata for the selected column";
     }

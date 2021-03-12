@@ -143,6 +143,10 @@ public class Step2Controller extends StepController {
         final String csvFileContent = step2Model.getCSVFileContent();
         step2Panel.setCSVFileContent(csvFileContent);
 
+        final boolean useHeader = step2Model.isUseHeader();
+        step2Panel.setUseHeader(useHeader);
+        step2Panel.setCSVFileHighlight(firstLineWithData);
+
         final char decimalSeparator = step2Model.getDecimalSeparator();
         step2Panel.setDecimalSeparator(decimalSeparator + "");
 
@@ -179,6 +183,9 @@ public class Step2Controller extends StepController {
         } else {
             step2Model.setFirstLineWithData(firstLineWithData);
         }
+
+        final boolean useHeader = step2Panel.getUseHeader();
+        step2Model.setUseHeader(useHeader);
 
         final String csvFileContent = step2Panel.getCSVFileContent();
         step2Model.setCSVFileContent(csvFileContent);

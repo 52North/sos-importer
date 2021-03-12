@@ -28,6 +28,7 @@
  */
 package org.n52.sos.importer.view;
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -68,6 +69,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author <a href="mailto:e.h.juerrens@52north.org">Eike Hinderk J&uuml;rrens</a>
  */
+/*
+ * To enable useHeader, search for USE_HEADER
+ */
 public class Step2Panel extends JPanel {
 
     private static final String NEW_LINE = "\n";
@@ -86,6 +90,9 @@ public class Step2Panel extends JPanel {
     private SpinnerNumberModel lineModel;
     private JSpinner firstDataJS;
     private JLabel firstDataJL;
+
+    private JLabel useHeaderJL;
+    private JCheckBox useHeaderJCB;
 
     private int firstLineWithDataTmp = -1;
     private JCheckBox isSampleBasedCheckBox;
@@ -132,6 +139,7 @@ public class Step2Panel extends JPanel {
         addTextQualifier(csvSettingsPanel, items, gridY++);
         addFirstLineWithData(csvSettingsPanel, gridY++);
         addDecimalSeparator(csvSettingsPanel, gridY++);
+        addUseHeaderCheckbox(csvSettingsPanel, gridY/*++*/);
         addElementsForSampleBasedFiles(csvSettingsPanel, gridY++);
         final JPanel csvDataPanel = new JPanel();
         addCsvDataPanel(csvDataPanel);
@@ -363,6 +371,14 @@ public class Step2Panel extends JPanel {
                     setCSVFileHighlight(number);
                 } else {
                     setCSVFileHighlight(number);
+                    // USE_HEADER
+                    /*if (number > 0) {
+                        useHeaderJCB.setEnabled(true);
+                        useHeaderJL.setVisible(true);
+                    } else {
+                        useHeaderJCB.setEnabled(false);
+                        useHeaderJCB.setSelected(false);
+                    }*/
                 }
             }
         });
@@ -437,30 +453,93 @@ public class Step2Panel extends JPanel {
         csvSettingsPanel.add(columnSeparatorCombobox, gbc_columnSeparatorCombobox);
     }
 
+    private void addUseHeaderCheckbox(final Container csvSettingsPanel, final int gridY) {
+        useHeaderJL = new JLabel(Lang.l().step2ParseHeader() + "?");
+        useHeaderJCB = new JCheckBox();
+        if (logger.isTraceEnabled()) {
+            useHeaderJCB.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    logger.trace("useHeader state changed. is selected?" +
+                            useHeaderJCB.isSelected());
+                }
+            });
+        }
+        useHeaderJCB.setSelected(false);
+        // will be enabled if firstLineWithdata is set to > 0
+        useHeaderJCB.setEnabled(false);
+        final JPanel useHeaderPanel = new JPanel();
+        useHeaderPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        useHeaderPanel.add(useHeaderJL);
+        useHeaderPanel.add(useHeaderJCB);
+        // TODO uncomment to enable useHeader
+        // final GridBagConstraints gbc_useHeaderPanel = new GridBagConstraints();
+        // gbc_useHeaderPanel.fill = GridBagConstraints.BOTH;
+        // gbc_useHeaderPanel.insets = new Insets(0, 0, 5, 0);
+        // gbc_useHeaderPanel.gridx = 0;
+        // gbc_useHeaderPanel.gridy = gridY;
+        // csvSettingsPanel.add(useHeaderPanel, gbc_useHeaderPanel);
+    }
+
+    /**
+     * <p>getCommentIndicator.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getCommentIndicator() {
         return (String) commentIndicatorCombobox.getSelectedItem();
     }
 
+    /**
+     * <p>setCommentIndicator.</p>
+     *
+     * @param commentIndicator a {@link java.lang.String} object.
+     */
     public void setCommentIndicator(final String commentIndicator) {
         commentIndicatorCombobox.setSelectedItem(commentIndicator);
     }
 
+    /**
+     * <p>getDecimalSeparator.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getDecimalSeparator() {
         return decimalSeparatorCombobox.getSelectedItem().toString();
     }
 
+    /**
+     * <p>setDecimalSeparator.</p>
+     *
+     * @param decimalSeparator a {@link java.lang.String} object.
+     */
     public void setDecimalSeparator(final String decimalSeparator) {
         decimalSeparatorCombobox.setSelectedItem(decimalSeparator);
     }
 
+    /**
+     * <p>getColumnSeparator.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getColumnSeparator() {
         return (String) columnSeparatorCombobox.getSelectedItem();
     }
 
+    /**
+     * <p>setColumnSeparator.</p>
+     *
+     * @param columnSeparator a {@link java.lang.String} object.
+     */
     public void setColumnSeparator(final String columnSeparator) {
         columnSeparatorCombobox.setSelectedItem(columnSeparator);
     }
 
+    /**
+     * <p>getCSVFileContent.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getCSVFileContent() {
         // remove line numbers from each row before returning data
         final String txt = csvFileTextArea.getText();
@@ -477,6 +556,11 @@ public class Step2Panel extends JPanel {
         return buf.toString();
     }
 
+    /**
+     * <p>setCSVFileContent.</p>
+     *
+     * @param content a {@link java.lang.String} object.
+     */
     public void setCSVFileContent(final String content) {
         // add line numbers to content
         final String[] lines = content.split(NEW_LINE);
@@ -506,6 +590,11 @@ public class Step2Panel extends JPanel {
         csvFileTextArea.setCaretPosition(0);
     }
 
+    /**
+     * <p>setCSVFileHighlight.</p>
+     *
+     * @param number a int.
+     */
     public void setCSVFileHighlight(final int number) {
         if (logger.isTraceEnabled()) {
             logger.trace("setCSVFileHighlight()");
@@ -525,90 +614,216 @@ public class Step2Panel extends JPanel {
         }
     }
 
+    /**
+     * <p>getFirstLineWithData.</p>
+     *
+     * @return user input or <code>-1</code> if invalid input is defined
+     */
     public int getFirstLineWithData() {
         return lineModel.getNumber().intValue();
     }
 
+    /**
+     * <p>setFirstLineWithData.</p>
+     *
+     * @param firstLineWithData a int.
+     */
     public void setFirstLineWithData(final int firstLineWithData) {
         lineModel.setValue(firstLineWithData);
     }
 
+    /**
+     * <p>getTextQualifier.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getTextQualifier() {
         return (String) textQualifierCombobox.getSelectedItem();
     }
 
+    /**
+     * <p>setTextQualifier.</p>
+     *
+     * @param textQualifier a {@link java.lang.String} object.
+     */
     public void setTextQualifier(final String textQualifier) {
         textQualifierCombobox.setSelectedItem(textQualifier);
     }
 
+    /**
+     * <p>getUseHeader.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean getUseHeader() {
+        return useHeaderJCB.isSelected();
+    }
+
+    /**
+     * <p>setUseHeader.</p>
+     *
+     * @param useHeader a boolean.
+     */
+    public void setUseHeader(final boolean useHeader) {
+        useHeaderJCB.setSelected(useHeader);
+    }
+
+    /**
+     * <p>setSampleBased.</p>
+     *
+     * @param isSampleBased a boolean.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBased(final boolean isSampleBased) {
         isSampleBasedCheckBox.setSelected(isSampleBased);
         setSampleBasedElementsEnabled(isSampleBased);
         return this;
     }
 
+    /**
+     * <p>isSampleBased.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isSampleBased() {
         return isSampleBasedCheckBox.isSelected();
     }
 
+    /**
+     * <p>getSampleBasedStartRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSampleBasedStartRegEx() {
         return startRegExTF.getText();
     }
 
+    /**
+     * <p>setSampleBasedStartRegEx.</p>
+     *
+     * @param sampleBasedStartRegEx a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedStartRegEx(final String sampleBasedStartRegEx) {
         startRegExTF.setText(sampleBasedStartRegEx);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedDateOffset.</p>
+     *
+     * @return a int.
+     */
     public int getSampleBasedDateOffset() {
         return dateOffsetModel.getNumber().intValue();
     }
 
+    /**
+     * <p>setSampleBasedDateOffset.</p>
+     *
+     * @param newDateOffset a int.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedDateOffset(final int newDateOffset) {
         dateOffsetModel.setValue(newDateOffset);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedDateExtractionRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSampleBasedDateExtractionRegEx() {
         return dateExtractionRegExTF.getText();
     }
 
+    /**
+     * <p>setSampleBasedDateExtractionRegEx.</p>
+     *
+     * @param sampleBasedDateExtractionRegEx a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedDateExtractionRegEx(final String sampleBasedDateExtractionRegEx) {
         dateExtractionRegExTF.setText(sampleBasedDateExtractionRegEx);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedDatePattern.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSampleBasedDatePattern() {
         return datePatternTF.getText();
     }
 
+    /**
+     * <p>setSampleBasedDatePattern.</p>
+     *
+     * @param sampleBasedDatePattern a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedDatePattern(final String sampleBasedDatePattern) {
         datePatternTF.setText(sampleBasedDatePattern);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedDataOffset.</p>
+     *
+     * @return a int.
+     */
     public int getSampleBasedDataOffset() {
         return dataOffsetModel.getNumber().intValue();
     }
 
+    /**
+     * <p>setSampleBasedDataOffset.</p>
+     *
+     * @param newDataOffset a int.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedDataOffset(final int newDataOffset) {
         dataOffsetModel.setValue(newDataOffset);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedSampleSizeOffset.</p>
+     *
+     * @return a int.
+     */
     public int getSampleBasedSampleSizeOffset() {
         return sampleSizeOffsetModel.getNumber().intValue();
     }
 
+    /**
+     * <p>setSampleBasedSampleSizeOffset.</p>
+     *
+     * @param newSampleSizeOffset a int.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedSampleSizeOffset(final int newSampleSizeOffset) {
         sampleSizeOffsetModel.setValue(newSampleSizeOffset);
         return this;
     }
 
+    /**
+     * <p>getSampleBasedSampleSizeRegEx.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSampleBasedSampleSizeRegEx() {
         return sampleSizeRegExTF.getText();
     }
 
+    /**
+     * <p>setSampleBasedSampleSizeRegEx.</p>
+     *
+     * @param sampleBasedSampleSizeRegEx a {@link java.lang.String} object.
+     * @return a {@link org.n52.sos.importer.view.Step2Panel} object.
+     */
     public Step2Panel setSampleBasedSampleSizeRegEx(final String sampleBasedSampleSizeRegEx) {
         sampleSizeRegExTF.setText(sampleBasedSampleSizeRegEx);
         return this;

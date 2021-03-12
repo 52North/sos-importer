@@ -793,6 +793,13 @@ public abstract class Lang {
     public abstract String step2TextQualifier();
 
     /**
+     * <p>step2UseLastTimestamp.</p>
+     *
+     * @return Should observations skipped using their timestamp
+     */
+    public abstract String step2UseLastTimestamp();
+
+    /**
      * <p>step3Description.</p>
      *
      * @return Step 3: Choose Metadata for the selected column
