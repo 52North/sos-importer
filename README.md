@@ -1,6 +1,8 @@
-# 52°North SOS Importer
+# ARCHIVED
 
-[![Build Status](http://build.dev.52north.org/jenkins/buildStatus/icon?job=sos-importer)](http://build.dev.52north.org/jenkins/view/Sensor%20Web/job/sos-importer/)
+This project is no longer maintained and will not receive any further updates. If you plan to continue using it, please be aware that future security issues will not be addressed.
+
+# 52°North SOS Importer
 
 For information on this project visit [its homepage](https://wiki.52north.org/bin/view/SensorWeb/SosImporter).
 
